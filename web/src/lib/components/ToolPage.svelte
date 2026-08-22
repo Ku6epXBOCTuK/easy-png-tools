@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { imageInfo, type ImageInfo } from '$lib/core/analyze';
-	import { decodeFile } from '$lib/core/io';
+	import { decodeFile, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
 	import { defaultParams, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
 	import Button from './ui/Button.svelte';
@@ -73,7 +73,27 @@
 		status = 'idle';
 		values = defaultParams(tool);
 	}
+
+	function handlePaste(event: ClipboardEvent) {
+		const items = event.clipboardData?.items;
+		if (!items) return;
+		for (const item of items) {
+			if (!item.type.startsWith('image/')) continue;
+			const file = item.getAsFile();
+			if (file) {
+				event.preventDefault();
+				if (!isSupportedImage(file)) {
+					errorText = unsupportedImageMessage(file);
+					return;
+				}
+				handleFile(file);
+			}
+			return;
+		}
+	}
 </script>
+
+<svelte:window onpaste={handlePaste} />
 
 <section>
 	<h1>{tool.title}</h1>

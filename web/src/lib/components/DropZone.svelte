@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ACCEPTED_IMAGE_TYPES, isSupportedImage } from '$lib/core/io';
+	import { ACCEPTED_IMAGE_TYPES, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
 
 	interface Props {
 		onFile: (file: File) => void;
@@ -16,9 +16,7 @@
 	function accept(file: File | undefined | null) {
 		if (!file) return;
 		if (!isSupportedImage(file)) {
-			onError?.(
-				`Неподдерживаемый формат файла (${file.type || 'неизвестный'}). Поддерживаются PNG, JPEG, WebP, GIF и BMP.`
-			);
+			onError?.(unsupportedImageMessage(file));
 			return;
 		}
 		onFile(file);

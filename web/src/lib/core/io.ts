@@ -11,6 +11,10 @@ export function isSupportedImage(file: File): boolean {
 	return SUPPORTED_MIME_TYPES.has(file.type);
 }
 
+export function unsupportedImageMessage(file: File): string {
+	return `Неподдерживаемый формат файла (${file.type || 'неизвестный'}). Поддерживаются PNG, JPEG, WebP, GIF и BMP.`;
+}
+
 export async function decodeFile(file: File): Promise<PixelImage> {
 	const bitmap = await createImageBitmap(file);
 	try {
