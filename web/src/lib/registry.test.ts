@@ -43,6 +43,9 @@ describe('реестр инструментов', () => {
 
 	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: run определён', (_, tool) => {
 		expect(typeof tool.run).toBe('function');
+		if (tool.preview) {
+			expect(typeof tool.preview).toBe('function');
+		}
 		expect(tool.title.length).toBeGreaterThan(0);
 		expect(tool.description.length).toBeGreaterThan(0);
 	});

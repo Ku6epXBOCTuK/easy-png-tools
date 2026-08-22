@@ -1,11 +1,12 @@
 <script lang="ts">
+	import CheckboxField from '../ui/CheckboxField.svelte';
+	import DownloadButton from '../DownloadButton.svelte';
+	import EmptyState from '../ui/EmptyState.svelte';
+	import InfoPanel from '../InfoPanel.svelte';
+	import Preview from '../Preview.svelte';
 	import type { ImageInfo } from '$lib/core/analyze';
 	import type { PixelImage } from '$lib/core/types';
 	import { outputOf, type ToolEntry } from '$lib/registry';
-	import DownloadButton from '../DownloadButton.svelte';
-	import InfoPanel from '../InfoPanel.svelte';
-	import Preview from '../Preview.svelte';
-	import EmptyState from '../ui/EmptyState.svelte';
 
 	type Status = 'idle' | 'loaded' | 'processing' | 'error';
 
@@ -14,6 +15,8 @@
 		sourceLoaded: boolean;
 		status: Status;
 		result: PixelImage | null;
+		previewResult: PixelImage | null;
+		showMask: boolean;
 		info: ImageInfo | null;
 		isInfo: boolean;
 		params: Record<string, unknown>;
@@ -25,11 +28,16 @@
 		sourceLoaded,
 		status,
 		result,
+		previewResult,
+		showMask = $bindable(false),
 		info,
 		isInfo,
 		params,
 		onDownloadError
 	}: Props = $props();
+
+	const hasPreview = $derived(typeof tool.preview === 'function');
+	const shown = $derived(showMask && previewResult ? previewResult : result);
 </script>
 
 <div class="container">
@@ -55,8 +63,11 @@
 			{/if}
 		</div>
 	{:else}
+		{#if hasPreview}
+			<CheckboxField id="show-mask" label="Показать маску" bind:checked={showMask} />
+		{/if}
 		<div class="media">
-			<Preview image={result} />
+			<Preview image={shown} />
 			{#if status === 'processing'}
 				<span class="recalc" aria-live="polite">Пересчёт…</span>
 			{/if}

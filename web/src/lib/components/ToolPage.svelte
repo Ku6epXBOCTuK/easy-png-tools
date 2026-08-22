@@ -14,6 +14,8 @@
 	let status = $state<Status>('idle');
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
+	let previewResult = $state<PixelImage | null>(null);
+	let showMask = $state(false);
 	let info = $state<ImageInfo | null>(null);
 	let errorText = $state('');
 	let values = $state<Record<string, any>>({});
@@ -32,6 +34,8 @@
 			source = await decodeFile(file);
 			values = defaultParams(tool);
 			result = null;
+			previewResult = null;
+			showMask = false;
 			info = isInfo ? imageInfo(source) : null;
 			if (isInfo) {
 				status = 'loaded';
@@ -50,8 +54,17 @@
 		lastRunValuesJson = JSON.stringify(sanitized);
 		try {
 			const next = await tool.run(source, sanitized);
+			let nextPreview: PixelImage | null = null;
+			if (tool.preview) {
+				try {
+					nextPreview = await tool.preview(source, sanitized);
+				} catch {
+					nextPreview = null;
+				}
+			}
 			if (token !== runToken) return;
 			result = next;
+			previewResult = nextPreview;
 			status = 'loaded';
 		} catch (e) {
 			if (token !== runToken) return;
@@ -75,6 +88,8 @@
 	function reset() {
 		source = null;
 		result = null;
+		previewResult = null;
+		showMask = false;
 		info = null;
 		errorText = '';
 		status = 'idle';
@@ -125,6 +140,8 @@
 				sourceLoaded={!!source}
 				{status}
 				{result}
+				{previewResult}
+				bind:showMask
 				{info}
 				{isInfo}
 				params={sanitized}

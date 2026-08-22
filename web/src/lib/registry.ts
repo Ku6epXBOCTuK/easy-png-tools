@@ -1,5 +1,5 @@
 import type { CategoryId } from './categories';
-import { flattenOntoColor, removeColorToAlpha } from './core/alpha';
+import { colorMask, flattenOntoColor, removeColorToAlpha } from './core/alpha';
 import { brightnessContrast, grayscale, invert } from './core/color';
 import { crop, flip, resize, rotate90 } from './core/geometry';
 import type { OutputMime } from './core/io';
@@ -38,6 +38,10 @@ export type ToolEntry = {
 	category: CategoryId;
 	params: ParamDef[];
 	run: (img: PixelImage, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
+	preview?: (
+		img: PixelImage,
+		params: Record<string, unknown>
+	) => Promise<PixelImage> | PixelImage;
 	resultType?: 'image' | 'info';
 	output?: OutputFormat;
 };
@@ -212,7 +216,8 @@ export const TOOLS: ToolEntry[] = [
 			{ id: 'targetColor', label: 'Цвет для удаления', type: 'color', default: '#00ff00' },
 			{ id: 'tolerance', label: 'Порог похожести, %', type: 'number', min: 0, max: 100, step: 1, default: 10 }
 		],
-		run: (img, p) => removeColorToAlpha(img, str(p, 'targetColor'), num(p, 'tolerance'))
+		run: (img, p) => removeColorToAlpha(img, str(p, 'targetColor'), num(p, 'tolerance')),
+		preview: (img, p) => colorMask(img, str(p, 'targetColor'), num(p, 'tolerance'))
 	},
 	{
 		id: 'png-info',

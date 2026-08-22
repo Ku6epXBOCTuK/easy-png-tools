@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { flattenOntoColor, parseHex, removeColorToAlpha } from './alpha';
+import { colorMask, flattenOntoColor, parseHex, removeColorToAlpha } from './alpha';
 import { makeImage } from './test-helpers';
 
 describe('removeColorToAlpha', () => {
@@ -52,6 +52,34 @@ describe('removeColorToAlpha', () => {
 			255, 255, 255, 255,
 			255, 0, 0, 255
 		]);
+	});
+});
+
+describe('colorMask', () => {
+	it('удаляемые пиксели белые, остальные чёрные, маска непрозрачная', () => {
+		const out = colorMask(
+			makeImage(2, 1, [
+				[255, 0, 0, 255],
+				[0, 255, 0, 255]
+			]),
+			'#ff0000',
+			0
+		);
+		expect([...out.data]).toEqual([
+			255, 255, 255, 255,
+			0, 0, 0, 255
+		]);
+	});
+
+	it('порог совпадает с removeColorToAlpha', () => {
+		const img = makeImage(2, 1, [
+			[0, 0, 0, 255],
+			[128, 128, 128, 255]
+		]);
+		const kept = colorMask(img, '#000000', 40);
+		const removed = colorMask(img, '#000000', 60);
+		expect(kept.data[4]).toBe(0);
+		expect(removed.data[4]).toBe(255);
 	});
 });
 
