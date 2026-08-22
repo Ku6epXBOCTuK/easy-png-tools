@@ -7,6 +7,7 @@
 		disabled?: boolean;
 		busy?: boolean;
 		busyText?: string;
+		fullWidth?: boolean;
 		onclick?: () => void;
 		children: Snippet;
 	}
@@ -17,6 +18,7 @@
 		disabled = false,
 		busy = false,
 		busyText = '',
+		fullWidth = false,
 		onclick,
 		children
 	}: Props = $props();
@@ -24,7 +26,7 @@
 
 <button
 	{type}
-	class={variant}
+	class={fullWidth ? `${variant} fullwidth` : variant}
 	aria-busy={busy}
 	disabled={disabled || busy}
 	onclick={onclick}
@@ -73,5 +75,9 @@
 	button:disabled {
 		opacity: 0.55;
 		cursor: not-allowed;
+	}
+
+	.fullwidth {
+		width: 100%;
 	}
 </style>

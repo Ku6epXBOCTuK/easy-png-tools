@@ -1,21 +1,18 @@
 <script lang="ts">
+	import Button from './ui/Button.svelte';
 	import { downloadBlob, encode } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
 	import type { OutputFormat } from '$lib/registry';
 
-	let {
-		image,
-		format,
-		baseName,
-		params,
-		onError
-	}: {
+	interface Props {
 		image: PixelImage | null;
 		format?: OutputFormat;
 		baseName: string;
 		params: Record<string, unknown>;
 		onError?: (e: unknown) => void;
-	} = $props();
+	}
+
+	let { image, format, baseName, params, onError }: Props = $props();
 
 	let busy = $state(false);
 
@@ -36,6 +33,13 @@
 	}
 </script>
 
-<button class="primary" onclick={download} disabled={!image || !format || busy}>
-	{busy ? 'Готовим файл…' : `Скачать .${format?.ext ?? 'png'}`}
-</button>
+<Button
+	variant="primary"
+	fullWidth
+	disabled={!image || !format}
+	{busy}
+	busyText="Готовим файл…"
+	onclick={download}
+>
+	Скачать .{format?.ext ?? 'png'}
+</Button>

@@ -1,20 +1,24 @@
 <script lang="ts">
 	import type { ImageInfo } from '$lib/core/analyze';
 
-	let { info }: { info: ImageInfo | null } = $props();
+	interface Props {
+		info: ImageInfo | null;
+	}
+
+	let { info }: Props = $props();
 </script>
 
 {#if info}
 	<dl>
-		<div>
+		<div class="panel">
 			<dt>Размеры</dt>
 			<dd>{info.width} × {info.height} px</dd>
 		</div>
-		<div>
+		<div class="panel">
 			<dt>Альфа-канал</dt>
 			<dd>{info.hasAlpha ? 'есть — есть полупрозрачные пиксели' : 'нет'}</dd>
 		</div>
-		<div>
+		<div class="panel">
 			<dt>Уникальных цветов (RGBA)</dt>
 			<dd>{info.colorCount.toLocaleString('ru-RU')}</dd>
 		</div>
@@ -33,9 +37,6 @@
 		justify-content: space-between;
 		gap: var(--space-3);
 		padding: var(--space-2) var(--space-3);
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-s);
 	}
 
 	dt {

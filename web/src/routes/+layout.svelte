@@ -25,7 +25,9 @@
 	</main>
 
 	<footer>
-		<p>Все операции выполняются локально в вашем браузере — файлы никуда не отправляются.</p>
+		<p class="text-caption text-muted">
+			Все операции выполняются локально в вашем браузере — файлы никуда не отправляются.
+		</p>
 	</footer>
 </div>
 
@@ -66,7 +68,7 @@
 
 	.nav-link {
 		color: var(--text-muted);
-		font-size: 0.9rem;
+		font-size: var(--text-s);
 		padding: var(--space-1) var(--space-2);
 		border-radius: var(--radius-s);
 	}
@@ -88,8 +90,6 @@
 	footer {
 		padding: var(--space-3) var(--space-4);
 		border-top: 1px solid var(--border);
-		color: var(--text-muted);
-		font-size: 0.85rem;
 		text-align: center;
 	}
 </style>

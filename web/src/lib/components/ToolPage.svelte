@@ -3,8 +3,10 @@
 	import { decodeFile } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
 	import { defaultParams, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
+	import Button from './ui/Button.svelte';
 	import DownloadButton from './DownloadButton.svelte';
 	import DropZone from './DropZone.svelte';
+	import EmptyState from './ui/EmptyState.svelte';
 	import InfoPanel from './InfoPanel.svelte';
 	import ParamForm from './ParamForm.svelte';
 	import Preview from './Preview.svelte';
@@ -75,10 +77,10 @@
 
 <section>
 	<h1>{tool.title}</h1>
-	<p class="description">{tool.description}</p>
+	<p class="description text-muted">{tool.description}</p>
 
 	{#if errorText}
-		<div class="error" role="alert">{errorText}</div>
+		<div class="error-banner" role="alert">{errorText}</div>
 	{/if}
 
 	{#if !source}
@@ -86,28 +88,37 @@
 	{:else}
 		<div class="layout">
 			<div class="result-col">
-				<h2>{isInfo ? 'Изображение' : 'Результат'}</h2>
+				<h2 class="heading-section">{isInfo ? 'Изображение' : 'Результат'}</h2>
 				{#if status === 'processing' && !result}
-					<p class="hint">Обработка…</p>
+					<EmptyState title="Обработка…" hint="Изображение обрабатывается, это займёт немного времени" />
 				{:else}
 					<Preview image={isInfo ? source : result} />
 				{/if}
 				{#if isInfo && info}
 					<InfoPanel {info} />
 				{/if}
-				<button class="secondary" onclick={reset}>Загрузить другое изображение</button>
+				<div class="reset-row">
+					<Button variant="secondary" onclick={reset}>Загрузить другое изображение</Button>
+				</div>
 			</div>
 
 			{#if !isInfo}
 				<div class="params-col">
-					<h2>Параметры</h2>
+					<h2 class="heading-section">Параметры</h2>
 					{#if tool.params.length > 0}
 						<ParamForm params={tool.params} bind:values />
-						<button class="primary" onclick={apply} disabled={status === 'processing'}>
-							{status === 'processing' ? 'Обработка…' : 'Применить'}
-						</button>
+						<Button
+							onclick={apply}
+							busy={status === 'processing'}
+							busyText="Обработка…"
+							fullWidth
+						>
+							Применить
+						</Button>
 					{:else}
-						<p class="hint">У этого инструмента нет параметров — результат уже готов.</p>
+						<p class="hint text-caption text-muted">
+							У этого инструмента нет параметров — результат уже готов.
+						</p>
 					{/if}
 					<div class="download-row">
 						<DownloadButton
@@ -130,19 +141,12 @@
 	}
 
 	.description {
-		color: var(--text-muted);
 		max-width: 48rem;
 		margin-bottom: var(--space-4);
 	}
 
-	.error {
-		padding: var(--space-2) var(--space-3);
+	.error-banner {
 		margin-bottom: var(--space-3);
-		border: 1px solid #e5484d;
-		border-radius: var(--radius-s);
-		background: color-mix(in srgb, #e5484d 8%, var(--surface));
-		color: #b3261e;
-		font-size: 0.9rem;
 	}
 
 	.layout {
@@ -161,18 +165,10 @@
 	.result-col h2,
 	.params-col h2 {
 		margin-bottom: var(--space-2);
-		font-size: 1rem;
-		color: var(--text-muted);
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
 	}
 
-	.result-col button.secondary {
+	.reset-row {
 		margin-top: var(--space-3);
-	}
-
-	.params-col button.primary {
-		width: 100%;
 	}
 
 	.download-row {
@@ -181,13 +177,7 @@
 		border-top: 1px solid var(--border);
 	}
 
-	.download-row :global(button) {
-		width: 100%;
-	}
-
 	.hint {
-		color: var(--text-muted);
-		font-size: 0.9rem;
 		margin-bottom: var(--space-3);
 	}
 </style>

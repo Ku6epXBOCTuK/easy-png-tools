@@ -12,7 +12,7 @@
 </svelte:head>
 
 <h1>easy-png-tools</h1>
-<p class="lead">
+<p class="lead text-muted">
 	Набор утилит для работы с PNG. Все операции выполняются локально в браузере — файлы никуда не
 	отправляются.
 </p>
@@ -21,12 +21,12 @@
 	{@const categoryTools = TOOLS.filter((tool) => tool.category === category.id)}
 	{#if categoryTools.length > 0}
 		<section id={category.id} class="category" aria-labelledby="{category.id}-heading">
-			<h2 id="{category.id}-heading">{category.label}</h2>
+			<h2 id="{category.id}-heading" class="heading-section">{category.label}</h2>
 			<div class="grid">
 				{#each categoryTools as tool (tool.id)}
-					<a class="card" href="/tools/{tool.id}">
+					<a class="card panel" href="/tools/{tool.id}">
 						<span class="card-title">{tool.title}</span>
-						<span class="card-desc">{tool.description}</span>
+						<span class="card-desc text-caption text-muted">{tool.description}</span>
 					</a>
 				{/each}
 			</div>
@@ -40,7 +40,6 @@
 	}
 
 	.lead {
-		color: var(--text-muted);
 		max-width: 48rem;
 		margin-bottom: var(--space-5);
 	}
@@ -51,10 +50,6 @@
 	}
 
 	h2 {
-		font-size: 1.1rem;
-		color: var(--text-muted);
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
 		margin-bottom: var(--space-3);
 	}
 
@@ -69,27 +64,23 @@
 		flex-direction: column;
 		gap: var(--space-2);
 		padding: var(--space-3) var(--space-3) var(--space-4);
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-m);
-		text-decoration: none;
 		color: inherit;
 		transition:
-			border-color 120ms ease,
-			box-shadow 120ms ease,
-			transform 120ms ease;
+			border-color var(--transition-fast),
+			box-shadow var(--transition-fast),
+			transform var(--transition-fast);
 	}
 
 	.card:hover {
 		text-decoration: none;
 		border-color: var(--accent);
-		box-shadow: 0 4px 14px rgb(37 99 235 / 12%);
+		box-shadow: var(--shadow-card);
 		transform: translateY(-1px);
 	}
 
 	.card-title {
 		font-weight: 600;
-		font-size: 0.95rem;
+		font-size: var(--text-m);
 	}
 
 	.card:hover .card-title {
@@ -97,8 +88,6 @@
 	}
 
 	.card-desc {
-		font-size: 0.85rem;
-		color: var(--text-muted);
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
 		line-clamp: 3;

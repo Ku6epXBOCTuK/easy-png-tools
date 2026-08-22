@@ -33,7 +33,7 @@
 </script>
 
 <div
-	class="dropzone"
+	class="dropzone panel"
 	class:dragging
 	role="button"
 	tabindex="0"
@@ -81,16 +81,14 @@
 		gap: var(--space-2);
 		min-height: 14rem;
 		padding: var(--space-4);
-		border: 2px dashed var(--border);
-		border-radius: var(--radius-m);
-		background: var(--surface);
+		border-style: dashed;
 		color: var(--text-muted);
 		text-align: center;
 		cursor: pointer;
 		user-select: none;
 		transition:
-			border-color 120ms ease,
-			background 120ms ease;
+			border-color var(--transition-fast),
+			background var(--transition-fast);
 	}
 
 	.dropzone:hover,
