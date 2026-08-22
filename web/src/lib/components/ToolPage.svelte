@@ -33,23 +33,28 @@
 			if (isInfo) {
 				status = 'loaded';
 			} else {
-				await apply();
+				await runTool();
 			}
 		} catch (e) {
 			showError(e);
 		}
 	}
 
-	async function apply() {
-		if (!source || isInfo || status === 'processing') return;
-		errorText = '';
-		status = 'processing';
+	async function runTool() {
+		if (!source || isInfo) return;
 		try {
 			result = await tool.run(source, values);
 			status = 'loaded';
 		} catch (e) {
 			showError(e);
 		}
+	}
+
+	function apply() {
+		if (!source || isInfo || status === 'processing') return;
+		errorText = '';
+		status = 'processing';
+		runTool();
 	}
 
 	function showError(e: unknown) {
