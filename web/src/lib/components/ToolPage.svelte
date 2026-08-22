@@ -21,6 +21,10 @@
 	const isInfo = $derived(tool.resultType === 'info');
 	const sanitized = $derived(sanitizeParams(tool, values));
 
+	let runToken = 0;
+	let lastRunSource: PixelImage | null = null;
+	let lastRunValuesJson = '';
+
 	async function handleFile(file: File) {
 		errorText = '';
 		status = 'processing';
@@ -41,20 +45,27 @@
 
 	async function runTool() {
 		if (!source || isInfo) return;
+		const token = ++runToken;
+		lastRunSource = source;
+		lastRunValuesJson = JSON.stringify(sanitized);
 		try {
-			result = await tool.run(source, sanitized);
+			const next = await tool.run(source, sanitized);
+			if (token !== runToken) return;
+			result = next;
 			status = 'loaded';
 		} catch (e) {
+			if (token !== runToken) return;
 			showError(e);
 		}
 	}
 
-	function apply() {
-		if (!source || isInfo || status === 'processing') return;
-		errorText = '';
-		status = 'processing';
-		runTool();
-	}
+	$effect(() => {
+		const valuesJson = JSON.stringify(sanitized);
+		if (source === lastRunSource && valuesJson === lastRunValuesJson) return;
+		if (!source || isInfo) return;
+		const timer = setTimeout(() => void runTool(), 300);
+		return () => clearTimeout(timer);
+	});
 
 	function showError(e: unknown) {
 		status = source ? 'loaded' : 'idle';
@@ -123,7 +134,7 @@
 	</div>
 
 	{#if source && !isInfo}
-		<ParamsCard params={tool.params} bind:values busy={status === 'processing'} onApply={apply} />
+		<ParamsCard params={tool.params} bind:values />
 	{/if}
 </section>
 

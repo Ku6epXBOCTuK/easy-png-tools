@@ -57,6 +57,9 @@
 	{:else}
 		<div class="media">
 			<Preview image={result} />
+			{#if status === 'processing'}
+				<span class="recalc" aria-live="polite">Пересчёт…</span>
+			{/if}
 		</div>
 		<DownloadButton
 			image={result}
@@ -88,5 +91,17 @@
 		align-items: center;
 		justify-content: center;
 		min-height: 16rem;
+		position: relative;
+	}
+
+	.recalc {
+		position: absolute;
+		top: var(--space-2);
+		right: var(--space-2);
+		padding: 2px var(--space-2);
+		border-radius: var(--radius-s);
+		background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+		color: var(--accent);
+		font-size: var(--text-xs);
 	}
 </style>
