@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { CATEGORIES } from './categories';
-import { defaultParams, getTool, outputOf, TOOLS, type ParamDef, type ToolEntry } from './registry';
+import {
+	defaultParams,
+	getTool,
+	outputOf,
+	sanitizeParams,
+	TOOLS,
+	type ParamDef,
+	type ToolEntry
+} from './registry';
 
 const PLAN_TOOL_IDS = [
 	'resize-png',
@@ -86,6 +94,71 @@ describe('реестр инструментов', () => {
 	it('defaultParams собирает значения по умолчанию', () => {
 		const resize = getToolOrThrow('resize-png');
 		expect(defaultParams(resize)).toEqual({ width: 0, height: 0, keepAspect: true });
+	});
+});
+
+describe('sanitizeParams', () => {
+	it('заменяет пустые и невалидные числа на дефолт', () => {
+		const resize = getToolOrThrow('resize-png');
+		expect(sanitizeParams(resize, { width: undefined, height: null, keepAspect: true })).toEqual({
+			width: 0,
+			height: 0,
+			keepAspect: true
+		});
+	});
+
+	it('клампит числа в диапазон параметра', () => {
+		const bc = getToolOrThrow('adjust-brightness-contrast-png');
+		expect(sanitizeParams(bc, { brightness: 5000, contrast: -999 })).toEqual({
+			brightness: 100,
+			contrast: -100
+		});
+	});
+
+	it('возвращает дефолт для невалидных select, checkbox и color', () => {
+		const rotate = getToolOrThrow('rotate-png');
+		expect(sanitizeParams(rotate, { angle: '45' })).toEqual({ angle: '90' });
+		const resize = getToolOrThrow('resize-png');
+		expect(sanitizeParams(resize, { width: 10, height: 10, keepAspect: 'yes' })).toEqual({
+			width: 10,
+			height: 10,
+			keepAspect: true
+		});
+		const jpg = getToolOrThrow('convert-png-to-jpg');
+		expect(sanitizeParams(jpg, { background: 'red', quality: 50 })).toEqual({
+			background: '#ffffff',
+			quality: 50
+		});
+	});
+});
+
+describe('run инструмента resize-png', () => {
+	const img = { width: 100, height: 50, data: new Uint8ClampedArray(100 * 50 * 4) };
+	const runResize = async (params: Record<string, unknown>) =>
+		getToolOrThrow('resize-png').run(img, params);
+
+	it('keepAspect + одна сторона — вторая считается по пропорции', async () => {
+		const out = await runResize({ width: 200, height: 0, keepAspect: true });
+		expect(out.width).toBe(200);
+		expect(out.height).toBe(100);
+	});
+
+	it('keepAspect + обе стороны — вписывание в размеры без искажения', async () => {
+		const out = await runResize({ width: 50, height: 50, keepAspect: true });
+		expect(out.width).toBe(50);
+		expect(out.height).toBe(25);
+	});
+
+	it('без keepAspect — обе стороны как задано', async () => {
+		const out = await runResize({ width: 30, height: 40, keepAspect: false });
+		expect(out.width).toBe(30);
+		expect(out.height).toBe(40);
+	});
+
+	it('обе стороны 0 — человекочитаемая ошибка', async () => {
+		await expect(runResize({ width: 0, height: 0, keepAspect: true })).rejects.toThrow(
+			'Укажите ширину'
+		);
 	});
 });
 

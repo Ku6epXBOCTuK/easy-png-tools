@@ -65,7 +65,7 @@ export const TOOLS: ToolEntry[] = [
 		id: 'resize-png',
 		title: 'Изменить размер PNG',
 		description:
-			'Масштабирование изображения с билинейной интерполяцией. При сохранении пропорций укажите только ширину или только высоту — вторая сторона рассчитается автоматически.',
+			'Масштабирование изображения с билинейной интерполяцией. При сохранении пропорций одна сторона задаёт масштаб, а если указаны обе — изображение вписывается в эти размеры.',
 		category: 'geometry',
 		params: [
 			{ id: 'width', label: 'Ширина (0 — авто)', type: 'number', min: 0, max: 20000, step: 1, default: 0 },
@@ -78,9 +78,10 @@ export const TOOLS: ToolEntry[] = [
 			let h = Math.trunc(num(p, 'height'));
 			if (keepAspect) {
 				if (w > 0 && h > 0) {
-					throw new Error('При сохранении пропорций укажите только ширину или только высоту');
-				}
-				if (w > 0) {
+					const scale = Math.min(w / img.width, h / img.height);
+					w = Math.max(1, Math.round(img.width * scale));
+					h = Math.max(1, Math.round(img.height * scale));
+				} else if (w > 0) {
 					h = Math.max(1, Math.round((img.height / img.width) * w));
 				} else if (h > 0) {
 					w = Math.max(1, Math.round((img.width / img.height) * h));
@@ -231,6 +232,44 @@ export function getTool(id: string): ToolEntry | undefined {
 
 export function defaultParams(tool: ToolEntry): Record<string, unknown> {
 	return Object.fromEntries(tool.params.map((p) => [p.id, p.default]));
+}
+
+export function sanitizeParams(
+	tool: ToolEntry,
+	values: Record<string, unknown>
+): Record<string, unknown> {
+	const out: Record<string, unknown> = {};
+	for (const param of tool.params) {
+		const raw = values[param.id];
+		switch (param.type) {
+			case 'number': {
+				const n =
+					typeof raw === 'number' && Number.isFinite(raw) ? raw : param.default;
+				out[param.id] = clampRange(n, param.min, param.max);
+				break;
+			}
+			case 'select':
+				out[param.id] =
+					typeof raw === 'string' && param.options.some((o) => o.value === raw)
+						? raw
+						: param.default;
+				break;
+			case 'checkbox':
+				out[param.id] = typeof raw === 'boolean' ? raw : param.default;
+				break;
+			case 'color':
+				out[param.id] =
+					typeof raw === 'string' && /^#[0-9a-f]{6}$/i.test(raw) ? raw : param.default;
+				break;
+		}
+	}
+	return out;
+}
+
+function clampRange(value: number, min?: number, max?: number): number {
+	if (min !== undefined && value < min) return min;
+	if (max !== undefined && value > max) return max;
+	return value;
 }
 
 export function outputOf(tool: ToolEntry): OutputFormat | undefined {

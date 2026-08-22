@@ -2,7 +2,7 @@
 	import { imageInfo, type ImageInfo } from '$lib/core/analyze';
 	import { decodeFile } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
-	import { defaultParams, outputOf, type ToolEntry } from '$lib/registry';
+	import { defaultParams, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
 	import DownloadButton from './DownloadButton.svelte';
 	import DropZone from './DropZone.svelte';
 	import InfoPanel from './InfoPanel.svelte';
@@ -21,6 +21,7 @@
 	let values = $state<Record<string, any>>({});
 
 	const isInfo = $derived(tool.resultType === 'info');
+	const sanitized = $derived(sanitizeParams(tool, values));
 
 	async function handleFile(file: File) {
 		errorText = '';
@@ -43,7 +44,7 @@
 	async function runTool() {
 		if (!source || isInfo) return;
 		try {
-			result = await tool.run(source, values);
+			result = await tool.run(source, sanitized);
 			status = 'loaded';
 		} catch (e) {
 			showError(e);
@@ -113,7 +114,7 @@
 							image={result}
 							format={outputOf(tool)}
 							baseName={tool.id}
-							params={values}
+							params={sanitized}
 							onError={showError}
 						/>
 					</div>
