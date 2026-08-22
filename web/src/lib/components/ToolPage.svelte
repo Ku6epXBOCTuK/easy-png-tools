@@ -83,53 +83,68 @@
 		<div class="error-banner" role="alert">{errorText}</div>
 	{/if}
 
-	{#if !source}
-		<DropZone onFile={handleFile} onError={(message) => (errorText = message)} />
-	{:else}
-		<div class="layout">
-			<div class="result-col">
-				<h2 class="heading-section">{isInfo ? 'Изображение' : 'Результат'}</h2>
-				{#if status === 'processing' && !result}
-					<EmptyState title="Обработка…" hint="Изображение обрабатывается, это займёт немного времени" />
-				{:else}
-					<Preview image={isInfo ? source : result} />
-				{/if}
-				{#if isInfo && info}
-					<InfoPanel {info} />
-				{/if}
-				<div class="reset-row">
-					<Button variant="secondary" onclick={reset}>Загрузить другое изображение</Button>
+	<div class="stage panel">
+		<div class="side">
+			<h2 class="heading-section">Исходник</h2>
+			{#if !source}
+				<DropZone onFile={handleFile} onError={(message) => (errorText = message)} />
+			{:else}
+				<div class="media">
+					<Preview image={source} />
 				</div>
-			</div>
+				<Button variant="secondary" onclick={reset}>Заменить изображение</Button>
+			{/if}
+		</div>
 
-			{#if !isInfo}
-				<div class="params-col">
-					<h2 class="heading-section">Параметры</h2>
-					{#if tool.params.length > 0}
-						<ParamForm params={tool.params} bind:values />
-						<Button
-							onclick={apply}
-							busy={status === 'processing'}
-							busyText="Обработка…"
-							fullWidth
-						>
-							Применить
-						</Button>
-					{:else}
-						<p class="hint text-caption text-muted">
-							У этого инструмента нет параметров — результат уже готов.
-						</p>
-					{/if}
-					<div class="download-row">
-						<DownloadButton
-							image={result}
-							format={outputOf(tool)}
-							baseName={tool.id}
-							params={sanitized}
-							onError={showError}
-						/>
-					</div>
+		<div class="side">
+			<h2 class="heading-section">{isInfo ? 'Сводка' : 'Результат'}</h2>
+			{#if !source}
+				<div class="media">
+					<EmptyState
+						title="Результат появится здесь"
+						hint="Сначала загрузите исходное изображение слева"
+					/>
 				</div>
+			{:else if !isInfo && status === 'processing' && !result}
+				<div class="media">
+					<EmptyState
+						title="Обработка…"
+						hint="Изображение обрабатывается, это займёт немного времени"
+					/>
+				</div>
+			{:else if isInfo}
+				<div class="media">
+					{#if info}
+						<InfoPanel {info} />
+					{/if}
+				</div>
+			{:else}
+				<div class="media">
+					<Preview image={result} />
+				</div>
+				<DownloadButton
+					image={result}
+					format={outputOf(tool)}
+					baseName={tool.id}
+					params={sanitized}
+					onError={showError}
+				/>
+			{/if}
+		</div>
+	</div>
+
+	{#if source && !isInfo}
+		<div class="params-card panel">
+			<h2 class="heading-section">Параметры</h2>
+			{#if tool.params.length > 0}
+				<ParamForm params={tool.params} bind:values />
+				<Button onclick={apply} busy={status === 'processing'} busyText="Обработка…" fullWidth>
+					Применить
+				</Button>
+			{:else}
+				<p class="hint text-caption text-muted">
+					У этого инструмента нет параметров — результат уже готов.
+				</p>
 			{/if}
 		</div>
 	{/if}
@@ -149,32 +164,58 @@
 		margin-bottom: var(--space-3);
 	}
 
-	.layout {
+	.stage {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem);
-		gap: var(--space-5);
-		align-items: start;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-4);
+		padding: var(--space-4);
+	}
+
+	.side {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+		min-width: 0;
+	}
+
+	.side + .side {
+		border-left: 1px solid var(--border);
+		padding-left: var(--space-4);
+	}
+
+	.side h2 {
+		margin-bottom: var(--space-1);
+	}
+
+	.media {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-height: 16rem;
+	}
+
+	.params-card {
+		margin-top: var(--space-4);
+		padding: var(--space-4);
 	}
 
 	@media (max-width: 48rem) {
-		.layout {
+		.stage {
 			grid-template-columns: 1fr;
+		}
+
+		.side + .side {
+			border-left: none;
+			padding-left: 0;
+			border-top: 1px solid var(--border);
+			padding-top: var(--space-4);
 		}
 	}
 
-	.result-col h2,
-	.params-col h2 {
-		margin-bottom: var(--space-2);
-	}
-
-	.reset-row {
-		margin-top: var(--space-3);
-	}
-
-	.download-row {
-		margin-top: var(--space-4);
-		padding-top: var(--space-3);
-		border-top: 1px solid var(--border);
+	.hint {
+		margin-bottom: var(--space-3);
 	}
 
 	.hint {

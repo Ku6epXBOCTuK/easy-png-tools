@@ -82,9 +82,7 @@
 	main {
 		flex: 1;
 		width: 100%;
-		max-width: 64rem;
-		margin: 0 auto;
-		padding: var(--space-5) var(--space-4);
+		padding: var(--space-4) var(--space-5);
 	}
 
 	footer {
