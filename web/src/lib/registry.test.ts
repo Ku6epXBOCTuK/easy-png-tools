@@ -1,0 +1,96 @@
+import { describe, expect, it } from 'vitest';
+import { CATEGORIES } from './categories';
+import { defaultParams, getTool, outputOf, TOOLS, type ParamDef, type ToolEntry } from './registry';
+
+const PLAN_TOOL_IDS = [
+	'resize-png',
+	'crop-png',
+	'rotate-png',
+	'flip-png',
+	'grayscale-png',
+	'invert-colors-png',
+	'adjust-brightness-contrast-png',
+	'convert-png-to-jpg',
+	'convert-png-to-webp',
+	'remove-color-from-png',
+	'png-info'
+];
+
+describe('реестр инструментов', () => {
+	it('содержит ровно 11 инструментов из плана MVP', () => {
+		expect(TOOLS.map((t) => t.id).sort()).toEqual([...PLAN_TOOL_IDS].sort());
+	});
+
+	it('id уникальны и в kebab-case', () => {
+		const ids = TOOLS.map((t) => t.id);
+		expect(new Set(ids).size).toBe(ids.length);
+		for (const id of ids) {
+			expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+		}
+	});
+
+	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: категория валидна', (_, tool) => {
+		expect(CATEGORIES.map((c) => c.id)).toContain(tool.category);
+	});
+
+	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: run определён', (_, tool) => {
+		expect(typeof tool.run).toBe('function');
+		expect(tool.title.length).toBeGreaterThan(0);
+		expect(tool.description.length).toBeGreaterThan(0);
+	});
+
+	it('у select дефолт входит в options, у number дефолт в диапазоне', () => {
+		for (const tool of TOOLS) {
+			for (const param of tool.params) {
+				if (param.type === 'select') {
+					expect(param.options.map((o) => o.value)).toContain(param.default);
+					expect(param.options.length).toBeGreaterThan(0);
+				}
+				if (param.type === 'number') {
+					expect(param.min === undefined || param.default >= param.min).toBe(true);
+					expect(param.max === undefined || param.default <= param.max).toBe(true);
+				}
+				if (param.type === 'color') {
+					expect(param.default).toMatch(/^#[0-9a-f]{6}$/i);
+				}
+			}
+		}
+	});
+
+	it('id параметров уникальны внутри инструмента', () => {
+		for (const tool of TOOLS) {
+			const ids = tool.params.map((p) => p.id);
+			expect(new Set(ids).size).toBe(ids.length);
+		}
+	});
+
+	it('qualityParamId ссылается на существующий числовой параметр', () => {
+		for (const tool of TOOLS) {
+			const output = outputOf(tool);
+			if (output?.qualityParamId) {
+				const param = tool.params.find(
+					(p): p is Extract<ParamDef, { type: 'number' }> => p.id === output.qualityParamId
+				);
+				expect(param).toBeDefined();
+			}
+		}
+	});
+
+	it('png-info не имеет формата вывода, конвертеры имеют jpeg/webp, остальные — png', () => {
+		expect(outputOf(getToolOrThrow('png-info'))).toBeUndefined();
+		expect(outputOf(getToolOrThrow('convert-png-to-jpg'))?.mime).toBe('image/jpeg');
+		expect(outputOf(getToolOrThrow('convert-png-to-webp'))?.mime).toBe('image/webp');
+		expect(outputOf(getToolOrThrow('grayscale-png'))).toEqual({ mime: 'image/png', ext: 'png' });
+	});
+
+	it('defaultParams собирает значения по умолчанию', () => {
+		const resize = getToolOrThrow('resize-png');
+		expect(defaultParams(resize)).toEqual({ width: 0, height: 0, keepAspect: true });
+	});
+});
+
+function getToolOrThrow(id: string): ToolEntry {
+	const tool = getTool(id);
+	if (!tool) throw new Error(`Инструмент "${id}" не найден`);
+	return tool;
+}

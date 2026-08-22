@@ -1,4 +1,4 @@
-import type { PixelImage } from './types';
+import { createPixelImage, type PixelImage } from './types';
 
 const MAX_COLOR_DISTANCE = Math.sqrt(3 * 255 * 255);
 
@@ -18,6 +18,20 @@ export function removeColorToAlpha(
 		if (dr * dr + dg * dg + db * db <= thresholdSq) {
 			out.data[i + 3] = 0;
 		}
+	}
+	return out;
+}
+
+export function flattenOntoColor(img: PixelImage, hex: string): PixelImage {
+	const [bgR, bgG, bgB] = parseHex(hex);
+	const out = createPixelImage(img.width, img.height);
+	for (let i = 0; i < out.data.length; i += 4) {
+		const a = img.data[i + 3] / 255;
+		const inv = 1 - a;
+		out.data[i] = img.data[i] * a + bgR * inv;
+		out.data[i + 1] = img.data[i + 1] * a + bgG * inv;
+		out.data[i + 2] = img.data[i + 2] * a + bgB * inv;
+		out.data[i + 3] = 255;
 	}
 	return out;
 }

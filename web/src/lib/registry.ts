@@ -1,0 +1,239 @@
+import type { CategoryId } from './categories';
+import { flattenOntoColor, removeColorToAlpha } from './core/alpha';
+import { brightnessContrast, grayscale, invert } from './core/color';
+import { crop, flip, resize, rotate90 } from './core/geometry';
+import type { OutputMime } from './core/io';
+import { clonePixelImage, type PixelImage } from './core/types';
+
+export type ParamDef =
+	| {
+			id: string;
+			label: string;
+			type: 'number';
+			min?: number;
+			max?: number;
+			step?: number;
+			default: number;
+	  }
+	| {
+			id: string;
+			label: string;
+			type: 'select';
+			options: { value: string; label: string }[];
+			default: string;
+	  }
+	| { id: string; label: string; type: 'checkbox'; default: boolean }
+	| { id: string; label: string; type: 'color'; default: string };
+
+export type OutputFormat = {
+	mime: OutputMime;
+	ext: string;
+	qualityParamId?: string;
+};
+
+export type ToolEntry = {
+	id: string;
+	title: string;
+	description: string;
+	category: CategoryId;
+	params: ParamDef[];
+	run: (img: PixelImage, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
+	resultType?: 'image' | 'info';
+	output?: OutputFormat;
+};
+
+const PNG_OUTPUT: OutputFormat = { mime: 'image/png', ext: 'png' };
+
+function num(params: Record<string, unknown>, id: string): number {
+	const v = params[id];
+	if (typeof v !== 'number' || !Number.isFinite(v)) {
+		throw new Error(`Параметр "${id}" должен быть числом`);
+	}
+	return v;
+}
+
+function str(params: Record<string, unknown>, id: string): string {
+	const v = params[id];
+	if (typeof v !== 'string') {
+		throw new Error(`Параметр "${id}" должен быть строкой`);
+	}
+	return v;
+}
+
+export const TOOLS: ToolEntry[] = [
+	{
+		id: 'resize-png',
+		title: 'Изменить размер PNG',
+		description:
+			'Масштабирование изображения с билинейной интерполяцией. При сохранении пропорций укажите только ширину или только высоту — вторая сторона рассчитается автоматически.',
+		category: 'geometry',
+		params: [
+			{ id: 'width', label: 'Ширина (0 — авто)', type: 'number', min: 0, max: 20000, step: 1, default: 0 },
+			{ id: 'height', label: 'Высота (0 — авто)', type: 'number', min: 0, max: 20000, step: 1, default: 0 },
+			{ id: 'keepAspect', label: 'Сохранять пропорции', type: 'checkbox', default: true }
+		],
+		run: (img, p) => {
+			const keepAspect = p['keepAspect'] === true;
+			let w = Math.trunc(num(p, 'width'));
+			let h = Math.trunc(num(p, 'height'));
+			if (keepAspect) {
+				if (w > 0 && h > 0) {
+					throw new Error('При сохранении пропорций укажите только ширину или только высоту');
+				}
+				if (w > 0) {
+					h = Math.max(1, Math.round((img.height / img.width) * w));
+				} else if (h > 0) {
+					w = Math.max(1, Math.round((img.width / img.height) * h));
+				}
+			}
+			if (w <= 0 || h <= 0) {
+				throw new Error('Укажите ширину и/или высоту нового размера');
+			}
+			return resize(img, w, h);
+		}
+	},
+	{
+		id: 'crop-png',
+		title: 'Обрезать PNG',
+		description:
+			'Вырезает прямоугольную область. Координаты и размеры выходят за границы изображения — область усекается до пересечения с картинкой.',
+		category: 'geometry',
+		params: [
+			{ id: 'x', label: 'X (слева)', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
+			{ id: 'y', label: 'Y (сверху)', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
+			{ id: 'width', label: 'Ширина области', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
+			{ id: 'height', label: 'Высота области', type: 'number', min: -100000, max: 100000, step: 1, default: 0 }
+		],
+		run: (img, p) => {
+			const w = Math.trunc(num(p, 'width'));
+			const h = Math.trunc(num(p, 'height'));
+			if (w <= 0 || h <= 0) {
+				throw new Error('Укажите ширину и высоту области обрезки');
+			}
+			return crop(img, Math.trunc(num(p, 'x')), Math.trunc(num(p, 'y')), w, h);
+		}
+	},
+	{
+		id: 'rotate-png',
+		title: 'Повернуть PNG',
+		description: 'Поворот на 90°, 180° или 270° по часовой стрелке без потери качества.',
+		category: 'geometry',
+		params: [
+			{
+				id: 'angle',
+				label: 'Угол поворота',
+				type: 'select',
+				default: '90',
+				options: [
+					{ value: '90', label: '90° по часовой' },
+					{ value: '180', label: '180°' },
+					{ value: '270', label: '270° по часовой' }
+				]
+			}
+		],
+		run: (img, p) => rotate90(img, Number(str(p, 'angle')) / 90)
+	},
+	{
+		id: 'flip-png',
+		title: 'Отразить PNG',
+		description: 'Зеркальное отражение по горизонтали или вертикали без потери качества.',
+		category: 'geometry',
+		params: [
+			{
+				id: 'axis',
+				label: 'Ось отражения',
+				type: 'select',
+				default: 'horizontal',
+				options: [
+					{ value: 'horizontal', label: 'По горизонтали (слева направо)' },
+					{ value: 'vertical', label: 'По вертикали (сверху вниз)' }
+				]
+			}
+		],
+		run: (img, p) => flip(img, str(p, 'axis') === 'vertical' ? 'vertical' : 'horizontal')
+	},
+	{
+		id: 'grayscale-png',
+		title: 'Чёрно-белый PNG',
+		description: 'Переводит изображение в оттенки серого по яркостной формуле BT.601. Альфа сохраняется.',
+		category: 'color',
+		params: [],
+		run: (img) => grayscale(img)
+	},
+	{
+		id: 'invert-colors-png',
+		title: 'Инвертировать цвета PNG',
+		description: 'Обращает каждый цветовой канал (255 − значение). Альфа не меняется.',
+		category: 'color',
+		params: [],
+		run: (img) => invert(img)
+	},
+	{
+		id: 'adjust-brightness-contrast-png',
+		title: 'Яркость и контраст PNG',
+		description: 'Изменяет яркость и контраст в диапазоне от −100 до +100. Значение 0 — без изменений.',
+		category: 'color',
+		params: [
+			{ id: 'brightness', label: 'Яркость', type: 'number', min: -100, max: 100, step: 1, default: 0 },
+			{ id: 'contrast', label: 'Контраст', type: 'number', min: -100, max: 100, step: 1, default: 0 }
+		],
+		run: (img, p) => brightnessContrast(img, num(p, 'brightness'), num(p, 'contrast'))
+	},
+	{
+		id: 'convert-png-to-jpg',
+		title: 'Конвертировать PNG в JPG',
+		description:
+			'Прозрачность накладывается на выбранный цвет подложки (по умолчанию белый), результат сохраняется в JPEG.',
+		category: 'convert',
+		params: [
+			{ id: 'background', label: 'Цвет подложки', type: 'color', default: '#ffffff' },
+			{ id: 'quality', label: 'Качество JPEG', type: 'number', min: 1, max: 100, step: 1, default: 90 }
+		],
+		output: { mime: 'image/jpeg', ext: 'jpg', qualityParamId: 'quality' },
+		run: (img, p) => flattenOntoColor(img, str(p, 'background'))
+	},
+	{
+		id: 'convert-png-to-webp',
+		title: 'Конвертировать PNG в WebP',
+		description: 'Перекодирует изображение в WebP с настраиваемым качеством. Прозрачность сохраняется.',
+		category: 'convert',
+		params: [{ id: 'quality', label: 'Качество WebP', type: 'number', min: 1, max: 100, step: 1, default: 90 }],
+		output: { mime: 'image/webp', ext: 'webp', qualityParamId: 'quality' },
+		run: (img) => clonePixelImage(img)
+	},
+	{
+		id: 'remove-color-from-png',
+		title: 'Удалить цвет из PNG (прозрачность)',
+		description:
+			'Делает прозрачными все пиксели, близкие к выбранному цвету. Порог задаёт допустимое отклонение в процентах от максимального цветового расстояния.',
+		category: 'alpha',
+		params: [
+			{ id: 'targetColor', label: 'Цвет для удаления', type: 'color', default: '#00ff00' },
+			{ id: 'tolerance', label: 'Порог похожести, %', type: 'number', min: 0, max: 100, step: 1, default: 10 }
+		],
+		run: (img, p) => removeColorToAlpha(img, str(p, 'targetColor'), num(p, 'tolerance'))
+	},
+	{
+		id: 'png-info',
+		title: 'Информация о PNG',
+		description:
+			'Показывает размеры, наличие альфа-канала и количество уникальных цветов загруженного изображения.',
+		category: 'analyze',
+		params: [],
+		resultType: 'info',
+		run: (img) => clonePixelImage(img)
+	}
+];
+
+export function getTool(id: string): ToolEntry | undefined {
+	return TOOLS.find((tool) => tool.id === id);
+}
+
+export function defaultParams(tool: ToolEntry): Record<string, unknown> {
+	return Object.fromEntries(tool.params.map((p) => [p.id, p.default]));
+}
+
+export function outputOf(tool: ToolEntry): OutputFormat | undefined {
+	if (tool.resultType === 'info') return undefined;
+	return tool.output ?? PNG_OUTPUT;
+}

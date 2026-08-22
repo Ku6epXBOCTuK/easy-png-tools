@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseHex, removeColorToAlpha } from './alpha';
+import { flattenOntoColor, parseHex, removeColorToAlpha } from './alpha';
 import { makeImage } from './test-helpers';
 
 describe('removeColorToAlpha', () => {
@@ -52,6 +52,23 @@ describe('removeColorToAlpha', () => {
 			255, 255, 255, 255,
 			255, 0, 0, 255
 		]);
+	});
+});
+
+describe('flattenOntoColor', () => {
+	it('непрозрачный пиксель не меняется, альфа становится 255', () => {
+		const out = flattenOntoColor(makeImage(1, 1, [[10, 20, 30, 255]]), '#ffffff');
+		expect([...out.data]).toEqual([10, 20, 30, 255]);
+	});
+
+	it('полностью прозрачный пиксель становится цветом подложки', () => {
+		const out = flattenOntoColor(makeImage(1, 1, [[99, 99, 99, 0]]), '#ff8040');
+		expect([...out.data]).toEqual([255, 128, 64, 255]);
+	});
+
+	it('полупрозрачный пиксель смешивается с подложкой', () => {
+		const out = flattenOntoColor(makeImage(1, 1, [[10, 20, 30, 128]]), '#ffffff');
+		expect([...out.data]).toEqual([132, 137, 142, 255]);
 	});
 });
 
