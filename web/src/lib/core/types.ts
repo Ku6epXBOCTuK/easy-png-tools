@@ -11,3 +11,7 @@ export function createPixelImage(width: number, height: number): PixelImage {
 		data: new Uint8ClampedArray(width * height * 4)
 	};
 }
+
+export function clonePixelImage(img: PixelImage): PixelImage {
+	return { width: img.width, height: img.height, data: img.data.slice() };
+}
