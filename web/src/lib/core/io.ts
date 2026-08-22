@@ -5,6 +5,12 @@ export type OutputMime = 'image/png' | 'image/jpeg' | 'image/webp';
 export const ACCEPTED_IMAGE_TYPES =
 	'image/png,image/jpeg,image/webp,image/gif,image/bmp,image/x-icon';
 
+const SUPPORTED_MIME_TYPES = new Set(ACCEPTED_IMAGE_TYPES.split(','));
+
+export function isSupportedImage(file: File): boolean {
+	return SUPPORTED_MIME_TYPES.has(file.type);
+}
+
 export async function decodeFile(file: File): Promise<PixelImage> {
 	const bitmap = await createImageBitmap(file);
 	try {

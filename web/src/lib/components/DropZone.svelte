@@ -1,24 +1,21 @@
 <script lang="ts">
-	import { ACCEPTED_IMAGE_TYPES } from '$lib/core/io';
+	import { ACCEPTED_IMAGE_TYPES, isSupportedImage } from '$lib/core/io';
 
-	let {
-		onFile,
-		onError,
-		label = 'Перетащите изображение сюда или нажмите, чтобы выбрать файл'
-	}: {
+	interface Props {
 		onFile: (file: File) => void;
 		onError?: (message: string) => void;
 		label?: string;
-	} = $props();
+	}
+
+	let { onFile, onError, label = 'Перетащите изображение сюда или нажмите, чтобы выбрать файл' }: Props =
+		$props();
 
 	let input = $state<HTMLInputElement | undefined>();
 	let dragging = $state(false);
 
-	const acceptedMimes = new Set(ACCEPTED_IMAGE_TYPES.split(','));
-
 	function accept(file: File | undefined | null) {
 		if (!file) return;
-		if (!acceptedMimes.has(file.type)) {
+		if (!isSupportedImage(file)) {
 			onError?.(
 				`Неподдерживаемый формат файла (${file.type || 'неизвестный'}). Поддерживаются PNG, JPEG, WebP, GIF и BMP.`
 			);
