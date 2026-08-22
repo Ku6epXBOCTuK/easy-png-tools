@@ -11,7 +11,24 @@
 		$props();
 
 	let input = $state<HTMLInputElement | undefined>();
-	let dragging = $state(false);
+	let depth = $state(0);
+	const dragging = $derived(depth > 0);
+
+	function enter() {
+		depth += 1;
+	}
+
+	function leave() {
+		depth = Math.max(0, depth - 1);
+	}
+
+	function over(event: DragEvent) {
+		event.preventDefault();
+	}
+
+	function end() {
+		depth = 0;
+	}
 
 	function accept(file: File | undefined | null) {
 		if (!file) return;
@@ -40,14 +57,13 @@
 			openPicker();
 		}
 	}}
-	ondragover={(e) => {
-		e.preventDefault();
-		dragging = true;
-	}}
-	ondragleave={() => (dragging = false)}
+	ondragenter={enter}
+	ondragleave={leave}
+	ondragover={over}
+	ondragend={end}
 	ondrop={(e) => {
 		e.preventDefault();
-		dragging = false;
+		depth = 0;
 		accept(e.dataTransfer?.files[0]);
 	}}
 >

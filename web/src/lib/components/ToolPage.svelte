@@ -5,6 +5,7 @@
 	import { defaultParams, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
 	import Button from './ui/Button.svelte';
 	import DownloadButton from './DownloadButton.svelte';
+	import DropOverlay from './DropOverlay.svelte';
 	import DropZone from './DropZone.svelte';
 	import EmptyState from './ui/EmptyState.svelte';
 	import InfoPanel from './InfoPanel.svelte';
@@ -109,10 +110,12 @@
 			{#if !source}
 				<DropZone onFile={handleFile} onError={(message) => (errorText = message)} />
 			{:else}
-				<div class="media">
-					<Preview image={source} />
-				</div>
-				<Button variant="secondary" onclick={reset}>Заменить изображение</Button>
+				<DropOverlay onFile={handleFile} onError={(message) => (errorText = message)}>
+					<div class="media">
+						<Preview image={source} />
+					</div>
+					<Button variant="secondary" onclick={reset}>Заменить изображение</Button>
+				</DropOverlay>
 			{/if}
 		</div>
 
