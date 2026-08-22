@@ -2,15 +2,10 @@
 	import { imageInfo, type ImageInfo } from '$lib/core/analyze';
 	import { decodeFile, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
-	import { defaultParams, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
-	import Button from './ui/Button.svelte';
-	import DownloadButton from './DownloadButton.svelte';
-	import DropOverlay from './DropOverlay.svelte';
-	import DropZone from './DropZone.svelte';
-	import EmptyState from './ui/EmptyState.svelte';
-	import InfoPanel from './InfoPanel.svelte';
-	import ParamForm from './ParamForm.svelte';
-	import Preview from './Preview.svelte';
+	import { defaultParams, sanitizeParams, type ToolEntry } from '$lib/registry';
+	import ParamsCard from './tool/ParamsCard.svelte';
+	import ResultCard from './tool/ResultCard.svelte';
+	import SourceCard from './tool/SourceCard.svelte';
 
 	let { tool }: { tool: ToolEntry } = $props();
 
@@ -105,71 +100,30 @@
 	{/if}
 
 	<div class="stage panel">
-		<div class="side">
-			<h2 class="heading-section">Исходник</h2>
-			{#if !source}
-				<DropZone onFile={handleFile} onError={(message) => (errorText = message)} />
-			{:else}
-				<DropOverlay onFile={handleFile} onError={(message) => (errorText = message)}>
-					<div class="media">
-						<Preview image={source} />
-					</div>
-					<Button variant="secondary" onclick={reset}>Заменить изображение</Button>
-				</DropOverlay>
-			{/if}
+		<div class="cell">
+			<SourceCard
+				{source}
+				onFile={handleFile}
+				onError={(message) => (errorText = message)}
+				onReset={reset}
+			/>
 		</div>
-
-		<div class="side">
-			<h2 class="heading-section">{isInfo ? 'Сводка' : 'Результат'}</h2>
-			{#if !source}
-				<div class="media">
-					<EmptyState
-						title="Результат появится здесь"
-						hint="Сначала загрузите исходное изображение слева"
-					/>
-				</div>
-			{:else if !isInfo && status === 'processing' && !result}
-				<div class="media">
-					<EmptyState
-						title="Обработка…"
-						hint="Изображение обрабатывается, это займёт немного времени"
-					/>
-				</div>
-			{:else if isInfo}
-				<div class="media">
-					{#if info}
-						<InfoPanel {info} />
-					{/if}
-				</div>
-			{:else}
-				<div class="media">
-					<Preview image={result} />
-				</div>
-				<DownloadButton
-					image={result}
-					format={outputOf(tool)}
-					baseName={tool.id}
-					params={sanitized}
-					onError={showError}
-				/>
-			{/if}
+		<div class="cell">
+			<ResultCard
+				{tool}
+				sourceLoaded={!!source}
+				{status}
+				{result}
+				{info}
+				{isInfo}
+				params={sanitized}
+				onDownloadError={showError}
+			/>
 		</div>
 	</div>
 
 	{#if source && !isInfo}
-		<div class="params-card panel">
-			<h2 class="heading-section">Параметры</h2>
-			{#if tool.params.length > 0}
-				<ParamForm params={tool.params} bind:values />
-				<Button onclick={apply} busy={status === 'processing'} busyText="Обработка…" fullWidth>
-					Применить
-				</Button>
-			{:else}
-				<p class="hint text-caption text-muted">
-					У этого инструмента нет параметров — результат уже готов.
-				</p>
-			{/if}
-		</div>
+		<ParamsCard params={tool.params} bind:values busy={status === 'processing'} onApply={apply} />
 	{/if}
 </section>
 
@@ -194,34 +148,14 @@
 		padding: var(--space-4);
 	}
 
-	.side {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2);
+	.cell {
 		min-width: 0;
+		display: flex;
 	}
 
-	.side + .side {
+	.cell + .cell {
 		border-left: 1px solid var(--border);
 		padding-left: var(--space-4);
-	}
-
-	.side h2 {
-		margin-bottom: var(--space-1);
-	}
-
-	.media {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		min-height: 16rem;
-	}
-
-	.params-card {
-		margin-top: var(--space-4);
-		padding: var(--space-4);
 	}
 
 	@media (max-width: 48rem) {
@@ -229,19 +163,11 @@
 			grid-template-columns: 1fr;
 		}
 
-		.side + .side {
+		.cell + .cell {
 			border-left: none;
 			padding-left: 0;
 			border-top: 1px solid var(--border);
 			padding-top: var(--space-4);
 		}
-	}
-
-	.hint {
-		margin-bottom: var(--space-3);
-	}
-
-	.hint {
-		margin-bottom: var(--space-3);
 	}
 </style>
