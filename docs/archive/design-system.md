@@ -1,6 +1,6 @@
 # План: единая дизайн-система
 
-Статус: план к выполнению. Следующий этап после MVP, до UX-работ из backlog (реактивные параметры, слайдеры/пипетка, раскладка).
+> **СТАТУС: ВЫПОЛНЕН 2026-08-22.**
 
 ## 1. Цели и принципы
 
@@ -13,7 +13,7 @@
 
 - **«Приглушённый текст»** (`--text-muted` + размер 0.85–0.95rem) — повторён в семи местах: `ToolPage` (.description, .hint), главная (.lead, .card-desc), лейаут (.nav-link, footer), `Preview` (.dims), `ParamForm` (label), `InfoPanel` (dt).
 - **«Заголовок секции капсом»** (uppercase, letter-spacing, muted) — точная копипаста в `ToolPage` и на главной.
-- **Базовые инпуты** (padding, border, radius) — живут только внутри `ParamForm`; слайдеры/пипетка из backlog потребуют копирования.
+- **Базовые инпуты** (padding, border, radius) — живут только внутри `ParamForm`; любые новые типы контролов (слайдеры, пипетка цвета) пришлось бы копировать вручную.
 - **Блок «label + отступы»** — дублировался бы в каждом `*Field`; решается обёрткой `Field.svelte`.
 - **«Панель»** (surface + border + radius) — три ручные реализации одного паттерна: `DropZone`, карточки главной, строки `InfoPanel`.
 - **Кнопки** — глобальные классы `.primary`/`.secondary` без компонента; состояния «занят/недоступен» каждый описывает заново.
@@ -70,11 +70,11 @@
 | `Field.svelte`         | `id`, `label`, `hint?`, слот контрола                                            | label + раскладка поля; единая точка для hint'ов и ошибок валидации    |
 | `Button.svelte`        | `variant: 'primary' \| 'secondary'`, `disabled`, `busy`, слот текста             | глобальные `.primary`/`.secondary`, локальный busy в `DownloadButton`  |
 | `TextField.svelte`     | `id`, `label`, `type: 'number' \| 'text'`, `min/max/step`, `value = $bindable()` | number/text ветки `ParamForm`                                          |
-| `SliderField.svelte`   | `id`, `label`, `min/max/step`, `value = $bindable()`, показ значения рядом       | ничего — база для backlog п.2 (яркость, качество, порог)               |
+| `SliderField.svelte`   | `id`, `label`, `min/max/step`, `value = $bindable()`, показ значения рядом       | ничего — готовая база для будущих слайдеров (яркость, качество, порог) |
 | `SelectField.svelte`   | `id`, `label`, `options`, `value = $bindable()`                                  | select-ветка `ParamForm`                                               |
 | `CheckboxField.svelte` | `id`, `label`, `checked = $bindable()`                                           | чекбокс `ParamForm`                                                    |
 | `ColorField.svelte`    | `id`, `label`, `value = $bindable()`                                             | color-ветка `ParamForm`; точка будущего расширения пипеткой            |
-| `EmptyState.svelte`    | `title`, `hint`, слот действия                                                   | «Обработка…», будущие пустые панели исходника/результата (backlog п.3) |
+| `EmptyState.svelte`    | `title`, `hint`, слот действия                                                   | «Обработка…», будущие пустые панели исходника/результата               |
 
 `Field` — чисто раскладочная обёртка (`<div class="field"><label for>…</label><slot /></div>`), ничего не знает о типе контрола. На ней построены `TextField`, `SliderField`, `SelectField`, `ColorField`. Исключение — `CheckboxField`: у чекбокса label оборачивает контрол (кликабельная строка), поэтому у него своя раскладка.
 
