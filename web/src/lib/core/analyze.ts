@@ -24,3 +24,27 @@ export function imageInfo(img: PixelImage): ImageInfo {
 	}
 	return { width: img.width, height: img.height, hasAlpha, colorCount: seen.size };
 }
+
+export function isGrayscale(img: PixelImage): boolean {
+	for (let i = 0; i < img.data.length; i += 4) {
+		if (img.data[i] !== img.data[i + 1] || img.data[i + 1] !== img.data[i + 2]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+export function hasTransparency(img: PixelImage): boolean {
+	for (let i = 3; i < img.data.length; i += 4) {
+		if (img.data[i] < 255) return true;
+	}
+	return false;
+}
+
+export type Orientation = 'portrait' | 'landscape' | 'square';
+
+export function orientationOf(img: PixelImage): Orientation {
+	if (img.height > img.width) return 'portrait';
+	if (img.width > img.height) return 'landscape';
+	return 'square';
+}

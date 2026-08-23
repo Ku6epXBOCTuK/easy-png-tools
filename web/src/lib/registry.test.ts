@@ -51,11 +51,18 @@ const PLAN_TOOL_IDS = [
 	'remove-alpha-channel-png',
 	'set-alpha-channel-png',
 	'extract-alpha-mask-png',
-	'round-corners-png'
+	'round-corners-png',
+	'create-empty-png',
+	'single-color-png',
+	'random-noise-png',
+	'linear-gradient-png',
+	'png-is-grayscale',
+	'png-is-transparent',
+	'png-orientation'
 ];
 
 describe('реестр инструментов', () => {
-	it('содержит ровно 41 инструмент из плана', () => {
+	it('содержит ровно 48 инструментов из плана', () => {
 		expect(TOOLS.map((t) => t.id).sort()).toEqual([...PLAN_TOOL_IDS].sort());
 	});
 
@@ -74,6 +81,8 @@ describe('реестр инструментов', () => {
 	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: исполнители определены', (_, tool) => {
 		if (tool.resultType === 'text') {
 			expect(typeof tool.toText).toBe('function');
+		} else if (tool.sourceMode === 'none') {
+			expect(typeof tool.generate).toBe('function');
 		} else {
 			expect(typeof tool.run).toBe('function');
 		}

@@ -9,6 +9,12 @@ import {
 	setAlphaChannel
 } from './core/alpha';
 import {
+	hasTransparency,
+	isGrayscale,
+	orientationOf
+} from './core/analyze';
+import { gradientImage, noiseImage, solidImage } from './core/generate';
+import {
 	brightnessContrast,
 	changeHue,
 	extractChannel,
@@ -111,6 +117,20 @@ function decodeToPng(id: string, title: string, description: string): ToolEntry 
 		params: [],
 		run: (img) => clonePixelImage(img)
 	};
+}
+
+function hexToRgba(hex: string, alpha = 255): [number, number, number, number] {
+	const match = /^#([0-9a-f]{6})$/i.exec(hex.trim());
+	if (!match) {
+		throw new Error(`Некорректный HEX-цвет: "${hex}"`);
+	}
+	const d = match[1];
+	return [
+		parseInt(d.slice(0, 2), 16),
+		parseInt(d.slice(2, 4), 16),
+		parseInt(d.slice(4, 6), 16),
+		alpha
+	];
 }
 
 export const TOOLS: ToolEntry[] = [
@@ -599,6 +619,132 @@ export const TOOLS: ToolEntry[] = [
 		params: [],
 		resultType: 'info',
 		run: (img) => clonePixelImage(img)
+	},
+	{
+		id: 'create-empty-png',
+		title: 'Создать пустой PNG',
+		description: 'Генерирует холст выбранного размера — прозрачный или залитый цветом.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'width', label: 'Ширина', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
+			{ id: 'height', label: 'Высота', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
+			{ id: 'transparent', label: 'Прозрачный', type: 'checkbox', default: true },
+			{ id: 'color', label: 'Цвет', type: 'color', default: '#ffffff' }
+		],
+		generate: (p) =>
+			solidImage(
+				Math.trunc(num(p, 'width')),
+				Math.trunc(num(p, 'height')),
+				p['transparent'] === true
+					? [0, 0, 0, 0]
+					: hexToRgba(str(p, 'color'))
+			)
+	},
+	{
+		id: 'single-color-png',
+		title: 'Создать одноцветный PNG',
+		description: 'Генерирует прямоугольник заданного размера и цвета.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'width', label: 'Ширина', type: 'number', min: 1, max: 20000, step: 1, default: 256 },
+			{ id: 'height', label: 'Высота', type: 'number', min: 1, max: 20000, step: 1, default: 256 },
+			{ id: 'color', label: 'Цвет', type: 'color', default: '#ff0000' }
+		],
+		generate: (p) =>
+			solidImage(
+				Math.trunc(num(p, 'width')),
+				Math.trunc(num(p, 'height')),
+				hexToRgba(str(p, 'color'))
+			)
+	},
+	{
+		id: 'random-noise-png',
+		title: 'Создать случайный шум PNG',
+		description:
+			'Генерирует картинку со случайными пикселями. Зерно фиксирует результат: одно зерно — одна картинка.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'width', label: 'Ширина', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
+			{ id: 'height', label: 'Высота', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
+			{ id: 'seed', label: 'Зерно', type: 'number', min: 0, max: 999999999, step: 1, default: 1 }
+		],
+		generate: (p) => noiseImage(Math.trunc(num(p, 'width')), Math.trunc(num(p, 'height')), num(p, 'seed'))
+	},
+	{
+		id: 'linear-gradient-png',
+		title: 'Создать градиент PNG',
+		description: 'Генерирует плавный переход между двумя цветами по горизонтали или вертикали.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'width', label: 'Ширина', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
+			{ id: 'height', label: 'Высота', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
+			{ id: 'fromColor', label: 'Цвет начала', type: 'color', default: '#000000' },
+			{ id: 'toColor', label: 'Цвет конца', type: 'color', default: '#ffffff' },
+			{
+				id: 'direction',
+				label: 'Направление',
+				type: 'select',
+				default: 'horizontal',
+				options: [
+					{ value: 'horizontal', label: 'По горизонтали' },
+					{ value: 'vertical', label: 'По вертикали' }
+				]
+			}
+		],
+		generate: (p) =>
+			gradientImage(
+				Math.trunc(num(p, 'width')),
+				Math.trunc(num(p, 'height')),
+				hexToRgba(str(p, 'fromColor')),
+				hexToRgba(str(p, 'toColor')),
+				str(p, 'direction') === 'vertical' ? 'vertical' : 'horizontal'
+			)
+	},
+	{
+		id: 'png-is-grayscale',
+		title: 'Проверить: PNG монохромный?',
+		description: 'Сообщает, состоит ли изображение только из оттенков серого.',
+		category: 'analyze',
+		params: [],
+		resultType: 'text',
+		toText: (img) =>
+			isGrayscale(img)
+				? 'Да — все пиксели являются оттенками серого.'
+				: 'Нет — найдены цветные пиксели.'
+	},
+	{
+		id: 'png-is-transparent',
+		title: 'Проверить: PNG прозрачный?',
+		description: 'Сообщает, есть ли в изображении прозрачные или полупрозрачные пиксели.',
+		category: 'analyze',
+		params: [],
+		resultType: 'text',
+		toText: (img) =>
+			hasTransparency(img)
+				? 'Да — есть прозрачные или полупрозрачные пиксели.'
+				: 'Нет — все пиксели полностью непрозрачны.'
+	},
+	{
+		id: 'png-orientation',
+		title: 'Ориентация PNG',
+		description: 'Сообщает, портрет это, ландшафт или квадрат.',
+		category: 'analyze',
+		params: [],
+		resultType: 'text',
+		toText: (img) => {
+			switch (orientationOf(img)) {
+				case 'portrait':
+					return 'Портрет — высота больше ширины.';
+				case 'landscape':
+					return 'Ландшафт — ширина больше высоты.';
+				default:
+					return 'Квадрат — стороны равны.';
+			}
+		}
 	}
 ];
 
