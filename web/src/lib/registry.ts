@@ -1,5 +1,13 @@
 import type { CategoryId } from './categories';
-import { colorMask, flattenOntoColor, invertAlpha, removeColorToAlpha } from './core/alpha';
+import {
+	colorMask,
+	extractAlphaMask,
+	flattenOntoColor,
+	invertAlpha,
+	removeColorToAlpha,
+	roundCorners,
+	setAlphaChannel
+} from './core/alpha';
 import {
 	brightnessContrast,
 	changeHue,
@@ -15,7 +23,7 @@ import {
 	type ChannelSwapPair,
 	type RgbChannel
 } from './core/color';
-import { crop, flip, resize, rotate90 } from './core/geometry';
+import { centerByAlpha, crop, expandCanvas, flip, resize, rotate90, tile } from './core/geometry';
 import { decodeTextImage, toBase64, toDataUrl, type OutputMime } from './core/io';
 import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
@@ -294,6 +302,87 @@ export const TOOLS: ToolEntry[] = [
 		run: (img, p) => flip(img, str(p, 'axis') === 'vertical' ? 'vertical' : 'horizontal')
 	},
 	{
+		id: 'add-padding-png',
+		title: 'Добавить поля PNG',
+		description: 'Расширяет холст во все стороны на выбранное число пикселей.',
+		category: 'geometry',
+		params: [
+			{ id: 'padding', label: 'Поля, px', type: 'number', min: 1, max: 2000, step: 1, default: 10 },
+			{ id: 'transparent', label: 'Прозрачные поля', type: 'checkbox', default: true },
+			{ id: 'color', label: 'Цвет полей', type: 'color', default: '#ffffff' }
+		],
+		run: (img, p) =>
+			expandCanvas(
+				img,
+				num(p, 'padding'),
+				num(p, 'padding'),
+				num(p, 'padding'),
+				num(p, 'padding'),
+				p['transparent'] === true ? undefined : str(p, 'color')
+			)
+	},
+	{
+		id: 'add-border-png',
+		title: 'Добавить рамку PNG',
+		description: 'Рисует цветную рамку вокруг изображения выбранной толщины.',
+		category: 'geometry',
+		params: [
+			{ id: 'thickness', label: 'Толщина рамки, px', type: 'number', min: 1, max: 500, step: 1, default: 5 },
+			{ id: 'color', label: 'Цвет рамки', type: 'color', default: '#000000' }
+		],
+		run: (img, p) => expandCanvas(img, num(p, 'thickness'), num(p, 'thickness'), num(p, 'thickness'), num(p, 'thickness'), str(p, 'color'))
+	},
+	{
+		id: 'fit-on-background-png',
+		title: 'Вписать PNG на фон',
+		description:
+			'Помещает изображение по центру полотна заданного размера с прозрачным или цветным фоном.',
+		category: 'geometry',
+		params: [
+			{ id: 'width', label: 'Ширина полотна', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
+			{ id: 'height', label: 'Высота полотна', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
+			{ id: 'transparent', label: 'Прозрачный фон', type: 'checkbox', default: false },
+			{ id: 'color', label: 'Цвет фона', type: 'color', default: '#ffffff' }
+		],
+		run: (img, p) => {
+			const width = Math.trunc(num(p, 'width'));
+			const height = Math.trunc(num(p, 'height'));
+			if (width <= 0 || height <= 0) {
+				throw new Error('Укажите положительные размеры полотна');
+			}
+			const left = Math.max(0, Math.floor((width - img.width) / 2));
+			const top = Math.max(0, Math.floor((height - img.height) / 2));
+			return expandCanvas(
+				img,
+				left,
+				top,
+				Math.max(0, width - img.width - left),
+				Math.max(0, height - img.height - top),
+				p['transparent'] === true ? undefined : str(p, 'color')
+			);
+		}
+	},
+	{
+		id: 'tile-png',
+		title: 'Замостить PNG',
+		description: 'Повторяет изображение сеткой из выбранного числа столбцов и строк.',
+		category: 'geometry',
+		params: [
+			{ id: 'columns', label: 'Столбцов', type: 'number', min: 1, max: 50, step: 1, default: 2 },
+			{ id: 'rows', label: 'Строк', type: 'number', min: 1, max: 50, step: 1, default: 2 }
+		],
+		run: (img, p) => tile(img, num(p, 'columns'), num(p, 'rows'))
+	},
+	{
+		id: 'center-by-alpha-png',
+		title: 'Центрировать PNG по содержимому',
+		description:
+			'Находит непрозрачную часть изображения и размещает её по центру прежнего холста.',
+		category: 'geometry',
+		params: [],
+		run: (img) => centerByAlpha(img)
+	},
+	{
 		id: 'grayscale-png',
 		title: 'Чёрно-белый PNG',
 		description: 'Переводит изображение в оттенки серого по яркостной формуле BT.601. Альфа сохраняется.',
@@ -442,6 +531,43 @@ export const TOOLS: ToolEntry[] = [
 		params: [{ id: 'quality', label: 'Качество WebP', type: 'slider', min: 1, max: 100, step: 1, default: 90 }],
 		output: { mime: 'image/webp', ext: 'webp', qualityParamId: 'quality' },
 		run: (img) => clonePixelImage(img)
+	},
+	{
+		id: 'remove-alpha-channel-png',
+		title: 'Убрать альфа-канал PNG',
+		description: 'Накладывает изображение на белый фон и сохраняет без прозрачности.',
+		category: 'alpha',
+		params: [],
+		run: (img) => flattenOntoColor(img, '#ffffff')
+	},
+	{
+		id: 'set-alpha-channel-png',
+		title: 'Задать альфа-канал PNG',
+		description: 'Присваивает всем пикселям одинаковую прозрачность, цвета не меняются.',
+		category: 'alpha',
+		params: [
+			{ id: 'percent', label: 'Прозрачность, %', type: 'slider', min: 0, max: 100, step: 1, default: 100 }
+		],
+		run: (img, p) => setAlphaChannel(img, num(p, 'percent'))
+	},
+	{
+		id: 'extract-alpha-mask-png',
+		title: 'Извлечь маску альфы PNG',
+		description: 'Превращает прозрачность в чёрно-белую непрозрачную маску.',
+		category: 'alpha',
+		params: [],
+		run: (img) => extractAlphaMask(img)
+	},
+	{
+		id: 'round-corners-png',
+		title: 'Скруглить углы PNG',
+		description:
+			'Обрезает углы по радиусу, заданному в процентах от половины меньшей стороны.',
+		category: 'alpha',
+		params: [
+			{ id: 'radius', label: 'Радиус скругления, %', type: 'slider', min: 0, max: 50, step: 1, default: 10 }
+		],
+		run: (img, p) => roundCorners(img, num(p, 'radius'))
 	},
 	{
 		id: 'invert-alpha-png',

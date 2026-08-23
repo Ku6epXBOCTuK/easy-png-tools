@@ -22,6 +22,46 @@ export function removeColorToAlpha(
 	return out;
 }
 
+export function setAlphaChannel(img: PixelImage, percent: number): PixelImage {
+	const alpha = Math.round((clamp(percent, 0, 100) / 100) * 255);
+	const out: PixelImage = { width: img.width, height: img.height, data: img.data.slice() };
+	for (let i = 3; i < out.data.length; i += 4) {
+		out.data[i] = alpha;
+	}
+	return out;
+}
+
+export function extractAlphaMask(img: PixelImage): PixelImage {
+	const out = createPixelImage(img.width, img.height);
+	for (let i = 0; i < out.data.length; i += 4) {
+		const v = img.data[i + 3];
+		out.data[i] = v;
+		out.data[i + 1] = v;
+		out.data[i + 2] = v;
+		out.data[i + 3] = 255;
+	}
+	return out;
+}
+
+export function roundCorners(img: PixelImage, radiusPercent: number): PixelImage {
+	const radius = (clamp(radiusPercent, 0, 50) / 100) * (Math.min(img.width, img.height) / 2);
+	if (radius < 1) return { width: img.width, height: img.height, data: img.data.slice() };
+	const out: PixelImage = { width: img.width, height: img.height, data: img.data.slice() };
+	const r2 = radius * radius;
+	for (let y = 0; y < out.height; y++) {
+		for (let x = 0; x < out.width; x++) {
+			const cx = clamp(x, radius, out.width - 1 - radius);
+			const cy = clamp(y, radius, out.height - 1 - radius);
+			const dx = x - cx;
+			const dy = y - cy;
+			if (dx * dx + dy * dy > r2) {
+				out.data[(y * out.width + x) * 4 + 3] = 0;
+			}
+		}
+	}
+	return out;
+}
+
 export function invertAlpha(img: PixelImage): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < out.data.length; i += 4) {

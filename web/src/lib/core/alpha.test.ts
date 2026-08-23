@@ -1,6 +1,55 @@
 import { describe, expect, it } from 'vitest';
-import { colorMask, flattenOntoColor, invertAlpha, parseHex, removeColorToAlpha } from './alpha';
+import {
+	colorMask,
+	extractAlphaMask,
+	flattenOntoColor,
+	invertAlpha,
+	parseHex,
+	removeColorToAlpha,
+	roundCorners,
+	setAlphaChannel
+} from './alpha';
 import { makeImage } from './test-helpers';
+
+describe('setAlphaChannel', () => {
+	it('задаёт константную альфу', () => {
+		const out = setAlphaChannel(makeImage(2, 1, [
+			[1, 2, 3, 255],
+			[4, 5, 6, 0]
+		]), 50);
+		expect(out.data[3]).toBe(128);
+		expect(out.data[7]).toBe(128);
+		expect(out.data[0]).toBe(1);
+	});
+});
+
+describe('extractAlphaMask', () => {
+	it('переводит альфу в чёрно-белую непрозрачную маску', () => {
+		const out = extractAlphaMask(makeImage(2, 1, [
+			[10, 20, 30, 255],
+			[40, 50, 60, 0]
+		]));
+		expect([...out.data]).toEqual([
+			255, 255, 255, 255,
+			0, 0, 0, 255
+		]);
+	});
+});
+
+describe('roundCorners', () => {
+	it('срезает углы, центр и середины сторон остаются', () => {
+		const img = makeImage(11, 11, new Array(121).fill([100, 100, 100, 255]));
+		const out = roundCorners(img, 40);
+		expect(out.data[(0 * 11 + 0) * 4 + 3]).toBe(0);
+		expect(out.data[(5 * 11 + 5) * 4 + 3]).toBe(255);
+		expect(out.data[(5 * 11 + 0) * 4 + 3]).toBe(255);
+	});
+
+	it('нулевой радиус ничего не меняет', () => {
+		const img = makeImage(2, 2, new Array(4).fill([1, 2, 3, 255]));
+		expect([...roundCorners(img, 0).data]).toEqual([...img.data]);
+	});
+});
 
 describe('invertAlpha', () => {
 	it('обращает альфу, RGB не трогает', () => {

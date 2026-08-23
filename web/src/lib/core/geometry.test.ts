@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { crop, flip, resize, rotate90 } from './geometry';
+import { centerByAlpha, crop, expandCanvas, flip, resize, rotate90, tile } from './geometry';
 import { makeImage } from './test-helpers';
 
 const square = () =>
@@ -123,6 +123,64 @@ describe('crop', () => {
 
 	it('бросает RangeError для области вне изображения', () => {
 		expect(() => crop(grid(), 5, 5, 2, 2)).toThrow(RangeError);
+	});
+});
+
+describe('expandCanvas', () => {
+	const pixel = () => makeImage(1, 1, [[10, 20, 30, 255]]);
+
+	it('прозрачное расширение кладёт пиксель со смещением', () => {
+		const out = expandCanvas(pixel(), 1, 2, 3, 4);
+		expect(out.width).toBe(5);
+		expect(out.height).toBe(7);
+		expect([...out.data.slice(0, 4)]).toEqual([0, 0, 0, 0]);
+		expect([...out.data.slice((2 * 5 + 1) * 4, (2 * 5 + 1) * 4 + 4)]).toEqual([10, 20, 30, 255]);
+	});
+
+	it('цветной фон заливает всё вокруг', () => {
+		const out = expandCanvas(pixel(), 1, 0, 0, 0, '#ffffff');
+		expect(out.data[0]).toBe(255);
+		expect(out.data[3]).toBe(255);
+		expect(out.data[(0 * 2 + 1) * 4 + 3]).toBe(255);
+	});
+});
+
+describe('tile', () => {
+	it('повторяет изображение по сетке', () => {
+		const out = tile(makeImage(1, 1, [[9, 9, 9, 255]]), 3, 2);
+		expect(out.width).toBe(3);
+		expect(out.height).toBe(2);
+		expect([...out.data].filter((_, i) => i % 4 === 0)).toEqual([9, 9, 9, 9, 9, 9]);
+	});
+});
+
+describe('centerByAlpha', () => {
+	it('вырезает непрозрачный блок и центрирует на прежнем холсте', () => {
+		const img = makeImage(3, 3, [
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[5, 5, 5, 255],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0]
+		]);
+		const out = centerByAlpha(img);
+		expect(out.width).toBe(3);
+		expect(out.height).toBe(3);
+		const alphaAt = (x: number, y: number) => out.data[(y * 3 + x) * 4 + 3];
+		expect(alphaAt(0, 0)).toBe(0);
+		expect(alphaAt(1, 1)).toBe(255);
+	});
+
+	it('полностью прозрачное изображение возвращается без изменений', () => {
+		const img = makeImage(2, 1, [
+			[0, 0, 0, 0],
+			[0, 0, 0, 0]
+		]);
+		expect([...centerByAlpha(img).data]).toEqual([...img.data]);
 	});
 });
 

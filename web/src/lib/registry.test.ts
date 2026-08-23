@@ -15,6 +15,11 @@ const PLAN_TOOL_IDS = [
 	'crop-png',
 	'rotate-png',
 	'flip-png',
+	'add-padding-png',
+	'add-border-png',
+	'fit-on-background-png',
+	'tile-png',
+	'center-by-alpha-png',
 	'grayscale-png',
 	'invert-colors-png',
 	'adjust-brightness-contrast-png',
@@ -42,11 +47,15 @@ const PLAN_TOOL_IDS = [
 	'swap-channels-png',
 	'black-and-white-png',
 	'posterize-png',
-	'two-colors-png'
+	'two-colors-png',
+	'remove-alpha-channel-png',
+	'set-alpha-channel-png',
+	'extract-alpha-mask-png',
+	'round-corners-png'
 ];
 
 describe('реестр инструментов', () => {
-	it('содержит ровно 32 инструмента из плана', () => {
+	it('содержит ровно 41 инструмент из плана', () => {
 		expect(TOOLS.map((t) => t.id).sort()).toEqual([...PLAN_TOOL_IDS].sort());
 	});
 

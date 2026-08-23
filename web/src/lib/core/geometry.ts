@@ -1,4 +1,84 @@
+import { parseHex } from './alpha';
 import { clonePixelImage, createPixelImage, type PixelImage } from './types';
+
+export function expandCanvas(
+	img: PixelImage,
+	left: number,
+	top: number,
+	right: number,
+	bottom: number,
+	backgroundHex?: string
+): PixelImage {
+	const l = Math.max(0, Math.trunc(left));
+	const t = Math.max(0, Math.trunc(top));
+	const r = Math.max(0, Math.trunc(right));
+	const b = Math.max(0, Math.trunc(bottom));
+	const out = createPixelImage(img.width + l + r, img.height + t + b);
+	if (backgroundHex !== undefined) {
+		const [cr, cg, cb] = parseHex(backgroundHex);
+		for (let i = 0; i < out.data.length; i += 4) {
+			out.data[i] = cr;
+			out.data[i + 1] = cg;
+			out.data[i + 2] = cb;
+			out.data[i + 3] = 255;
+		}
+	}
+	for (let y = 0; y < img.height; y++) {
+		const srcStart = y * img.width * 4;
+		out.data.set(
+			img.data.subarray(srcStart, srcStart + img.width * 4),
+			((y + t) * out.width + l) * 4
+		);
+	}
+	return out;
+}
+
+export function tile(img: PixelImage, columns: number, rows: number): PixelImage {
+	const cols = Math.max(1, Math.trunc(columns));
+	const rowsCount = Math.max(1, Math.trunc(rows));
+	const out = createPixelImage(img.width * cols, img.height * rowsCount);
+	for (let ty = 0; ty < rowsCount; ty++) {
+		for (let tx = 0; tx < cols; tx++) {
+			for (let y = 0; y < img.height; y++) {
+				const srcStart = y * img.width * 4;
+				out.data.set(
+					img.data.subarray(srcStart, srcStart + img.width * 4),
+					((ty * img.height + y) * out.width + tx * img.width) * 4
+				);
+			}
+		}
+	}
+	return out;
+}
+
+export function centerByAlpha(img: PixelImage): PixelImage {
+	let minX = img.width;
+	let minY = img.height;
+	let maxX = -1;
+	let maxY = -1;
+	for (let y = 0; y < img.height; y++) {
+		for (let x = 0; x < img.width; x++) {
+			if (img.data[(y * img.width + x) * 4 + 3] > 0) {
+				if (x < minX) minX = x;
+				if (y < minY) minY = y;
+				if (x > maxX) maxX = x;
+				if (y > maxY) maxY = y;
+			}
+		}
+	}
+	if (maxX < 0) return clonePixelImage(img);
+	const content = crop(img, minX, minY, maxX - minX + 1, maxY - minY + 1);
+	const out = createPixelImage(img.width, img.height);
+	const dx = Math.floor((img.width - content.width) / 2);
+	const dy = Math.floor((img.height - content.height) / 2);
+	for (let y = 0; y < content.height; y++) {
+		out.data.set(
+			content.data.subarray(y * content.width * 4, (y + 1) * content.width * 4),
+			((y + dy) * out.width + dx) * 4
+		);
+	}
+	return out;
+}
 
 export type FlipAxis = 'horizontal' | 'vertical';
 
