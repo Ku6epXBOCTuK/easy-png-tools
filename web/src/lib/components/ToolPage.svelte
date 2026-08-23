@@ -6,6 +6,7 @@
 	import ParamsCard from './tool/ParamsCard.svelte';
 	import ResultCard from './tool/ResultCard.svelte';
 	import SourceCard from './tool/SourceCard.svelte';
+	import TextInputCard from './tool/TextInputCard.svelte';
 
 	let { tool }: { tool: ToolEntry } = $props();
 
@@ -15,15 +16,19 @@
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
 	let previewResult = $state<PixelImage | null>(null);
+	let textResult = $state<string | null>(null);
 	let showMask = $state(false);
 	let info = $state<ImageInfo | null>(null);
 	let errorText = $state('');
 	let values = $state<Record<string, any>>({});
 
 	const isInfo = $derived(tool.resultType === 'info');
+	const isSourceless = $derived(tool.sourceMode === 'none');
+	const isTextSource = $derived(tool.sourceMode === 'text');
 	const sanitized = $derived(sanitizeParams(tool, values));
 
 	let runToken = 0;
+	let hasLastRun = false;
 	let lastRunSource: PixelImage | null = null;
 	let lastRunValuesJson = '';
 	let pipetteTargetId = $state<string | null>(null);
@@ -59,24 +64,55 @@
 		}
 	}
 
+	async function handleTextSubmit(text: string) {
+		if (!isTextSource || !tool.runFromText) return;
+		errorText = '';
+		status = 'processing';
+		try {
+			source = await tool.runFromText(text, defaultParams(tool));
+			values = defaultParams(tool);
+			result = null;
+			textResult = null;
+			previewResult = null;
+			showMask = false;
+			pipetteTargetId = null;
+			info = null;
+			await runTool();
+		} catch (e) {
+			showError(e);
+		}
+	}
+
 	async function runTool() {
-		if (!source || isInfo) return;
+		if (isInfo) return;
+		if (!source && !isSourceless) return;
 		const token = ++runToken;
+		hasLastRun = true;
 		lastRunSource = source;
 		lastRunValuesJson = JSON.stringify(sanitized);
 		try {
-			const next = await tool.run(source, sanitized);
+			let next: PixelImage;
+			if (isSourceless) {
+				next = await tool.generate!(sanitized);
+			} else {
+				next = await tool.run(source!, sanitized);
+			}
 			let nextPreview: PixelImage | null = null;
-			if (tool.preview) {
+			if (tool.preview && source) {
 				try {
 					nextPreview = await tool.preview(source, sanitized);
 				} catch {
 					nextPreview = null;
 				}
 			}
+			let nextText: string | null = null;
+			if (tool.toText && source) {
+				nextText = await tool.toText(source, sanitized);
+			}
 			if (token !== runToken) return;
 			result = next;
 			previewResult = nextPreview;
+			textResult = nextText;
 			status = 'loaded';
 		} catch (e) {
 			if (token !== runToken) return;
@@ -86,8 +122,9 @@
 
 	$effect(() => {
 		const valuesJson = JSON.stringify(sanitized);
-		if (source === lastRunSource && valuesJson === lastRunValuesJson) return;
-		if (!source || isInfo) return;
+		if (hasLastRun && source === lastRunSource && valuesJson === lastRunValuesJson) return;
+		if (!source && !isSourceless) return;
+		if (isInfo) return;
 		const timer = setTimeout(() => void runTool(), 300);
 		return () => clearTimeout(timer);
 	});
@@ -101,6 +138,7 @@
 		source = null;
 		result = null;
 		previewResult = null;
+		textResult = null;
 		showMask = false;
 		pipetteTargetId = null;
 		info = null;
@@ -138,21 +176,27 @@
 		<div class="error-banner" role="alert">{errorText}</div>
 	{/if}
 
-	<div class="stage panel">
-		<div class="cell">
-			<SourceCard
-				{source}
-				onFile={handleFile}
-				onError={(message) => (errorText = message)}
-				onReset={reset}
-				pipetteActive={!!pipetteTargetId}
-				onPickColor={handlePickColor}
-			/>
-		</div>
+	<div class="stage panel" class:single={isSourceless}>
+		{#if !isSourceless}
+			<div class="cell">
+				{#if isTextSource && !source}
+					<TextInputCard onSubmit={handleTextSubmit} />
+				{:else}
+					<SourceCard
+						{source}
+						onFile={handleFile}
+						onError={(message) => (errorText = message)}
+						onReset={reset}
+						pipetteActive={!!pipetteTargetId}
+						onPickColor={handlePickColor}
+					/>
+				{/if}
+			</div>
+		{/if}
 		<div class="cell">
 			<ResultCard
 				{tool}
-				sourceLoaded={!!source}
+				sourceLoaded={isSourceless ? true : !!source}
 				{status}
 				{result}
 				{previewResult}
@@ -160,12 +204,13 @@
 				{info}
 				{isInfo}
 				params={sanitized}
+				{textResult}
 				onDownloadError={showError}
 			/>
 		</div>
 	</div>
 
-	{#if source && !isInfo}
+	{#if (source || isSourceless) && !isInfo}
 		<ParamsCard
 			params={tool.params}
 			bind:values
@@ -194,6 +239,10 @@
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: var(--space-4);
 		padding: var(--space-4);
+	}
+
+	.stage.single {
+		grid-template-columns: 1fr;
 	}
 
 	.cell {

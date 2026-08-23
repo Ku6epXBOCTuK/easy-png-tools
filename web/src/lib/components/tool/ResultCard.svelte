@@ -4,6 +4,7 @@
 	import EmptyState from '../ui/EmptyState.svelte';
 	import InfoPanel from '../InfoPanel.svelte';
 	import Preview from '../Preview.svelte';
+	import TextResult from './TextResult.svelte';
 	import type { ImageInfo } from '$lib/core/analyze';
 	import type { PixelImage } from '$lib/core/types';
 	import { outputOf, type ToolEntry } from '$lib/registry';
@@ -20,6 +21,7 @@
 		info: ImageInfo | null;
 		isInfo: boolean;
 		params: Record<string, unknown>;
+		textResult: string | null;
 		onDownloadError: (e: unknown) => void;
 	}
 
@@ -33,6 +35,7 @@
 		info,
 		isInfo,
 		params,
+		textResult,
 		onDownloadError
 	}: Props = $props();
 
@@ -60,6 +63,12 @@
 		<div class="media">
 			{#if info}
 				<InfoPanel {info} />
+			{/if}
+		</div>
+	{:else if tool.resultType === 'text'}
+		<div class="media">
+			{#if textResult !== null}
+				<TextResult text={textResult} filename={tool.id} />
 			{/if}
 		</div>
 	{:else}

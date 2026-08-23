@@ -1,6 +1,7 @@
+import { encodeBmpBytes } from './bmp';
 import { type PixelImage } from './types';
 
-export type OutputMime = 'image/png' | 'image/jpeg' | 'image/webp';
+export type OutputMime = 'image/png' | 'image/jpeg' | 'image/webp' | 'image/bmp';
 
 export const ACCEPTED_IMAGE_TYPES =
 	'image/png,image/jpeg,image/webp,image/gif,image/bmp,image/x-icon';
@@ -38,6 +39,9 @@ export async function encode(
 	mime: OutputMime = 'image/png',
 	quality?: number
 ): Promise<Blob> {
+	if (mime === 'image/bmp') {
+		return new Blob([encodeBmpBytes(img)], { type: mime });
+	}
 	if (mime === 'image/jpeg' || mime === 'image/webp') {
 		if (quality !== undefined && (quality < 0 || quality > 1)) {
 			throw new RangeError('quality должен быть в диапазоне 0..1');

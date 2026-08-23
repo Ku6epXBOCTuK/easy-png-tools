@@ -40,18 +40,24 @@ export type OutputFormat = {
 	qualityParamId?: string;
 };
 
+export type SourceMode = 'file' | 'none' | 'text';
+
 export type ToolEntry = {
 	id: string;
 	title: string;
 	description: string;
 	category: CategoryId;
+	sourceMode?: SourceMode;
 	params: ParamDef[];
 	run: (img: PixelImage, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
+	generate?: (params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
+	toText?: (img: PixelImage, params: Record<string, unknown>) => Promise<string> | string;
+	runFromText?: (text: string, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
 	preview?: (
 		img: PixelImage,
 		params: Record<string, unknown>
 	) => Promise<PixelImage> | PixelImage;
-	resultType?: 'image' | 'info';
+	resultType?: 'image' | 'info' | 'text';
 	output?: OutputFormat;
 };
 
