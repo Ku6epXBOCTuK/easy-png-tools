@@ -1,7 +1,14 @@
 <script lang="ts">
+	import { rgbToHex } from '$lib/core/color';
 	import type { PixelImage } from '$lib/core/types';
 
-	let { image }: { image: PixelImage | null } = $props();
+	interface Props {
+		image: PixelImage | null;
+		pipetteActive?: boolean;
+		onPickColor?: (hex: string) => void;
+	}
+
+	let { image, pipetteActive = false, onPickColor }: Props = $props();
 
 	let canvas = $state<HTMLCanvasElement | undefined>();
 
@@ -13,10 +20,29 @@
 		if (!ctx) return;
 		ctx.putImageData(new ImageData(image.data, image.width, image.height), 0, 0);
 	});
+
+	function pickColor(event: MouseEvent) {
+		if (!pipetteActive || !onPickColor || !canvas) return;
+		const rect = canvas.getBoundingClientRect();
+		if (rect.width === 0 || rect.height === 0) return;
+		const x = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
+		const y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
+		if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return;
+		const [r, g, b] = ctx.getImageData(x, y, 1, 1).data;
+		onPickColor(rgbToHex(r, g, b));
+	}
 </script>
 
 {#if image}
-	<canvas bind:this={canvas} title="{image.width} × {image.height}"></canvas>
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<canvas
+		bind:this={canvas}
+		title="{image.width} × {image.height}"
+		class:pipette={pipetteActive}
+		onclick={pickColor}
+	></canvas>
 	<p class="dims">{image.width} × {image.height} px</p>
 {/if}
 
@@ -32,9 +58,13 @@
 		border-radius: var(--radius-m);
 	}
 
+	canvas.pipette {
+		cursor: crosshair;
+	}
+
 	.dims {
 		margin-top: var(--space-1);
 		color: var(--text-muted);
-		font-size: 0.85rem;
+		font-size: var(--text-s);
 	}
 </style>

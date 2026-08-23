@@ -9,42 +9,52 @@
 	interface Props {
 		params: ParamDef[];
 		values: Record<string, any>;
+		pipetteTargetId?: string | null;
+		onPipetteToggle?: (id: string) => void;
 	}
 
-	let { params, values = $bindable() }: Props = $props();
+	let { params, values = $bindable(), pipetteTargetId = null, onPipetteToggle }: Props = $props();
 </script>
 
 {#each params as param (param.id)}
-	{#if param.type === 'checkbox'}
-		<CheckboxField id={param.id} label={param.label} bind:checked={values[param.id]} />
-	{:else if param.type === 'number'}
-		<TextField
-			id={param.id}
-			label={param.label}
-			type="number"
-			min={param.min}
-			max={param.max}
-			step={param.step}
-			bind:value={values[param.id]}
-		/>
-	{:else if param.type === 'slider'}
-		<SliderField
-			id={param.id}
-			label={param.label}
-			min={param.min}
-			max={param.max}
-			step={param.step}
-			default={param.default}
-			bind:value={values[param.id]}
-		/>
-	{:else if param.type === 'select'}
-		<SelectField
-			id={param.id}
-			label={param.label}
-			options={param.options}
-			bind:value={values[param.id]}
-		/>
-	{:else if param.type === 'color'}
-		<ColorField id={param.id} label={param.label} bind:value={values[param.id]} />
-	{/if}
+	<div class="field">
+		{#if param.type === 'checkbox'}
+			<CheckboxField id={param.id} label={param.label} bind:checked={values[param.id]} />
+		{:else if param.type === 'number'}
+			<TextField
+				id={param.id}
+				label={param.label}
+				type="number"
+				min={param.min}
+				max={param.max}
+				step={param.step}
+				bind:value={values[param.id]}
+			/>
+		{:else if param.type === 'slider'}
+			<SliderField
+				id={param.id}
+				label={param.label}
+				min={param.min}
+				max={param.max}
+				step={param.step}
+				default={param.default}
+				bind:value={values[param.id]}
+			/>
+		{:else if param.type === 'select'}
+			<SelectField
+				id={param.id}
+				label={param.label}
+				options={param.options}
+				bind:value={values[param.id]}
+			/>
+		{:else if param.type === 'color'}
+			<ColorField
+				id={param.id}
+				label={param.label}
+				bind:value={values[param.id]}
+				pipetteActive={pipetteTargetId === param.id}
+				onPipetteToggle={() => onPipetteToggle?.(param.id)}
+			/>
+		{/if}
+	</div>
 {/each}

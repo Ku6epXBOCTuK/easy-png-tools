@@ -5,15 +5,17 @@
 	interface Props {
 		params: ParamDef[];
 		values: Record<string, any>;
+		pipetteTargetId?: string | null;
+		onPipetteToggle?: (id: string) => void;
 	}
 
-	let { params, values = $bindable() }: Props = $props();
+	let { params, values = $bindable(), pipetteTargetId = null, onPipetteToggle }: Props = $props();
 </script>
 
 <div class="panel root">
 	<h2 class="heading-section">Параметры</h2>
 	{#if params.length > 0}
-		<ParamForm {params} bind:values />
+		<ParamForm {params} bind:values {pipetteTargetId} {onPipetteToggle} />
 	{:else}
 		<p class="hint text-caption text-muted">
 			У этого инструмента нет параметров — результат уже готов.

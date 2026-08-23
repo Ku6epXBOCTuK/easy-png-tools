@@ -10,9 +10,11 @@
 		onFile: (file: File) => void;
 		onError: (message: string) => void;
 		onReset: () => void;
+		pipetteActive?: boolean;
+		onPickColor?: (hex: string) => void;
 	}
 
-	let { source, onFile, onError, onReset }: Props = $props();
+	let { source, onFile, onError, onReset, pipetteActive = false, onPickColor }: Props = $props();
 </script>
 
 <div class="container">
@@ -22,7 +24,7 @@
 	{:else}
 		<DropOverlay {onFile} {onError}>
 			<div class="media">
-				<Preview image={source} />
+				<Preview image={source} pipetteActive={pipetteActive} onPickColor={onPickColor} />
 			</div>
 			<Button variant="secondary" onclick={onReset}>Заменить изображение</Button>
 		</DropOverlay>

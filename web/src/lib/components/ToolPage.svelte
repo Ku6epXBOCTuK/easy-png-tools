@@ -26,6 +26,17 @@
 	let runToken = 0;
 	let lastRunSource: PixelImage | null = null;
 	let lastRunValuesJson = '';
+	let pipetteTargetId = $state<string | null>(null);
+
+	function handlePipetteToggle(id: string) {
+		pipetteTargetId = pipetteTargetId === id ? null : id;
+	}
+
+	function handlePickColor(hex: string) {
+		if (!pipetteTargetId) return;
+		values[pipetteTargetId] = hex;
+		pipetteTargetId = null;
+	}
 
 	async function handleFile(file: File) {
 		errorText = '';
@@ -36,6 +47,7 @@
 			result = null;
 			previewResult = null;
 			showMask = false;
+			pipetteTargetId = null;
 			info = isInfo ? imageInfo(source) : null;
 			if (isInfo) {
 				status = 'loaded';
@@ -90,6 +102,7 @@
 		result = null;
 		previewResult = null;
 		showMask = false;
+		pipetteTargetId = null;
 		info = null;
 		errorText = '';
 		status = 'idle';
@@ -132,6 +145,8 @@
 				onFile={handleFile}
 				onError={(message) => (errorText = message)}
 				onReset={reset}
+				pipetteActive={!!pipetteTargetId}
+				onPickColor={handlePickColor}
 			/>
 		</div>
 		<div class="cell">
@@ -151,7 +166,12 @@
 	</div>
 
 	{#if source && !isInfo}
-		<ParamsCard params={tool.params} bind:values />
+		<ParamsCard
+			params={tool.params}
+			bind:values
+			{pipetteTargetId}
+			onPipetteToggle={handlePipetteToggle}
+		/>
 	{/if}
 </section>
 
