@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { rgbToHex } from '$lib/core/color';
 	import type { PixelImage } from '$lib/core/types';
+	import PipetteLoupe from './tool/PipetteLoupe.svelte';
 
 	interface Props {
 		image: PixelImage | null;
@@ -11,6 +12,9 @@
 	let { image, pipetteActive = false, onPickColor }: Props = $props();
 
 	let canvas = $state<HTMLCanvasElement | undefined>();
+	let hover = $state<{ clientX: number; clientY: number; px: number; py: number; hex: string } | null>(
+		null
+	);
 
 	$effect(() => {
 		if (!canvas || !image) return;
@@ -21,17 +25,40 @@
 		ctx.putImageData(new ImageData(image.data, image.width, image.height), 0, 0);
 	});
 
-	function pickColor(event: MouseEvent) {
-		if (!pipetteActive || !onPickColor || !canvas) return;
+	function pixelAt(event: MouseEvent): { px: number; py: number; hex: string } | null {
+		if (!canvas || !image) return null;
 		const rect = canvas.getBoundingClientRect();
-		if (rect.width === 0 || rect.height === 0) return;
-		const x = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
-		const y = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
-		if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return;
+		if (rect.width === 0 || rect.height === 0) return null;
+		const px = Math.floor((event.clientX - rect.left) * (canvas.width / rect.width));
+		const py = Math.floor((event.clientY - rect.top) * (canvas.height / rect.height));
+		if (px < 0 || py < 0 || px >= canvas.width || py >= canvas.height) return null;
 		const ctx = canvas.getContext('2d');
-		if (!ctx) return;
-		const [r, g, b] = ctx.getImageData(x, y, 1, 1).data;
-		onPickColor(rgbToHex(r, g, b));
+		if (!ctx) return null;
+		const [r, g, b] = ctx.getImageData(px, py, 1, 1).data;
+		return { px, py, hex: rgbToHex(r, g, b) };
+	}
+
+	function pickColor(event: MouseEvent) {
+		if (!pipetteActive || !onPickColor) return;
+		const pixel = pixelAt(event);
+		if (pixel) {
+			onPickColor(pixel.hex);
+		}
+	}
+
+	function trackHover(event: MouseEvent) {
+		if (!pipetteActive) {
+			hover = null;
+			return;
+		}
+		const pixel = pixelAt(event);
+		hover = pixel
+			? { clientX: event.clientX, clientY: event.clientY, px: pixel.px, py: pixel.py, hex: pixel.hex }
+			: null;
+	}
+
+	function clearHover() {
+		hover = null;
 	}
 </script>
 
@@ -42,8 +69,20 @@
 		title="{image.width} × {image.height}"
 		class:pipette={pipetteActive}
 		onclick={pickColor}
+		onmousemove={trackHover}
+		onmouseleave={clearHover}
 	></canvas>
 	<p class="dims">{image.width} × {image.height} px</p>
+	{#if pipetteActive && hover && image}
+		<PipetteLoupe
+			{image}
+			px={hover.px}
+			py={hover.py}
+			hex={hover.hex}
+			clientX={hover.clientX}
+			clientY={hover.clientY}
+		/>
+	{/if}
 {/if}
 
 <style>
