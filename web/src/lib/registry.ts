@@ -90,7 +90,7 @@ export type ToolEntry = {
 	output?: OutputFormat;
 };
 
-const PNG_OUTPUT: OutputFormat = { mime: 'image/png', ext: 'png' };
+export const PNG_OUTPUT: OutputFormat = { mime: 'image/png', ext: 'png' };
 
 function num(params: Record<string, unknown>, id: string): number {
 	const v = params[id];

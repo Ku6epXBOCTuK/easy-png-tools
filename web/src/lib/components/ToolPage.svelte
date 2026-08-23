@@ -3,6 +3,7 @@
 	import { decodeFile, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
 	import { defaultParams, sanitizeParams, type ToolEntry } from '$lib/registry';
+	import { createAutoRunner } from '$lib/tools/auto-run';
 	import ParamsCard from './tool/ParamsCard.svelte';
 	import ResultCard from './tool/ResultCard.svelte';
 	import SourceCard from './tool/SourceCard.svelte';
@@ -27,7 +28,7 @@
 	const isTextSource = $derived(tool.sourceMode === 'text');
 	const sanitized = $derived(sanitizeParams(tool, values));
 
-	let runToken = 0;
+	const runner = createAutoRunner();
 	let hasLastRun = false;
 	let lastRunSource: PixelImage | null = null;
 	let lastRunValuesJson = '';
@@ -86,7 +87,7 @@
 	async function runTool() {
 		if (isInfo) return;
 		if (!source && !isSourceless) return;
-		const token = ++runToken;
+		const token = runner.next();
 		hasLastRun = true;
 		lastRunSource = source;
 		lastRunValuesJson = JSON.stringify(sanitized);
@@ -111,13 +112,13 @@
 				}
 			}
 
-			if (token !== runToken) return;
+			if (!runner.isCurrent(token)) return;
 			result = next;
 			previewResult = nextPreview;
 			textResult = nextText;
 			status = 'loaded';
 		} catch (e) {
-			if (token !== runToken) return;
+			if (!runner.isCurrent(token)) return;
 			showError(e);
 		}
 	}
@@ -127,8 +128,7 @@
 		if (hasLastRun && source === lastRunSource && valuesJson === lastRunValuesJson) return;
 		if (!source && !isSourceless) return;
 		if (isInfo) return;
-		const timer = setTimeout(() => void runTool(), 300);
-		return () => clearTimeout(timer);
+		return runner.schedule(() => void runTool());
 	});
 
 	function showError(e: unknown) {
