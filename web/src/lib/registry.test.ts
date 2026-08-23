@@ -22,6 +22,7 @@ const PLAN_TOOL_IDS = [
 	'convert-png-to-webp',
 	'remove-color-from-png',
 	'png-info',
+	'invert-alpha-png',
 	'jpg-to-png',
 	'webp-to-png',
 	'gif-to-png',
@@ -33,11 +34,19 @@ const PLAN_TOOL_IDS = [
 	'png-to-data-uri',
 	'data-uri-to-png',
 	'png-to-hex',
-	'hex-to-png'
+	'hex-to-png',
+	'change-png-opacity',
+	'sepia-png',
+	'change-png-hue',
+	'extract-channel-png',
+	'swap-channels-png',
+	'black-and-white-png',
+	'posterize-png',
+	'two-colors-png'
 ];
 
 describe('реестр инструментов', () => {
-	it('содержит ровно 23 инструмента из плана', () => {
+	it('содержит ровно 32 инструмента из плана', () => {
 		expect(TOOLS.map((t) => t.id).sort()).toEqual([...PLAN_TOOL_IDS].sort());
 	});
 

@@ -1,6 +1,20 @@
 import type { CategoryId } from './categories';
-import { colorMask, flattenOntoColor, removeColorToAlpha } from './core/alpha';
-import { brightnessContrast, grayscale, invert } from './core/color';
+import { colorMask, flattenOntoColor, invertAlpha, removeColorToAlpha } from './core/alpha';
+import {
+	brightnessContrast,
+	changeHue,
+	extractChannel,
+	grayscale,
+	invert,
+	posterize,
+	sepia,
+	setOpacity,
+	swapChannels,
+	thresholdBlackWhite,
+	twoColors,
+	type ChannelSwapPair,
+	type RgbChannel
+} from './core/color';
 import { crop, flip, resize, rotate90 } from './core/geometry';
 import { decodeTextImage, toBase64, toDataUrl, type OutputMime } from './core/io';
 import { hexToPixels, pixelsToHex } from './core/text';
@@ -307,6 +321,107 @@ export const TOOLS: ToolEntry[] = [
 		run: (img, p) => brightnessContrast(img, num(p, 'brightness'), num(p, 'contrast'))
 	},
 	{
+		id: 'change-png-opacity',
+		title: 'Изменить прозрачность PNG',
+		description:
+			'Умножает альфа-канал на процент: 0% — полностью прозрачный, 100% — без изменений.',
+		category: 'color',
+		params: [
+			{ id: 'percent', label: 'Прозрачность, %', type: 'slider', min: 0, max: 100, step: 1, default: 100 }
+		],
+		run: (img, p) => setOpacity(img, num(p, 'percent'))
+	},
+	{
+		id: 'sepia-png',
+		title: 'Эффект сепии',
+		description: 'Тонирует изображение в тёплые коричневые тона классической сепии.',
+		category: 'color',
+		params: [],
+		run: (img) => sepia(img)
+	},
+	{
+		id: 'change-png-hue',
+		title: 'Сменить оттенок PNG',
+		description: 'Сдвиг цветового тона по кругу. Насыщенность и яркость сохраняются.',
+		category: 'color',
+		params: [
+			{ id: 'degrees', label: 'Сдвиг тона, °', type: 'slider', min: -180, max: 180, step: 1, default: 0 }
+		],
+		run: (img, p) => changeHue(img, num(p, 'degrees'))
+	},
+	{
+		id: 'extract-channel-png',
+		title: 'Извлечь канал PNG',
+		description: 'Оставляет выбранный канал — красный, зелёный или синий — в оттенках серого.',
+		category: 'color',
+		params: [
+			{
+				id: 'channel',
+				label: 'Канал',
+				type: 'select',
+				default: 'red',
+				options: [
+					{ value: 'red', label: 'Красный' },
+					{ value: 'green', label: 'Зелёный' },
+					{ value: 'blue', label: 'Синий' }
+				]
+			}
+		],
+		run: (img, p) => extractChannel(img, str(p, 'channel') as RgbChannel)
+	},
+	{
+		id: 'swap-channels-png',
+		title: 'Переставить каналы PNG',
+		description: 'Меняет местами два цветовых канала — быстрый способ получить необычный окрас.',
+		category: 'color',
+		params: [
+			{
+				id: 'pair',
+				label: 'Пара каналов',
+				type: 'select',
+				default: 'r-g',
+				options: [
+					{ value: 'r-g', label: 'Красный ↔ Зелёный' },
+					{ value: 'r-b', label: 'Красный ↔ Синий' },
+					{ value: 'g-b', label: 'Зелёный ↔ Синий' }
+				]
+			}
+		],
+		run: (img, p) => swapChannels(img, str(p, 'pair') as ChannelSwapPair)
+	},
+	{
+		id: 'black-and-white-png',
+		title: 'Чёрно-белый PNG по порогу',
+		description: 'Жёсткая бинаризация по яркости: каждый пиксель становится чёрным или белым.',
+		category: 'color',
+		params: [
+			{ id: 'threshold', label: 'Порог яркости, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+		],
+		run: (img, p) => thresholdBlackWhite(img, num(p, 'threshold'))
+	},
+	{
+		id: 'posterize-png',
+		title: 'Постеризация PNG',
+		description: 'Уменьшает число уровней каждого канала — плакатный эффект.',
+		category: 'color',
+		params: [
+			{ id: 'levels', label: 'Уровней на канал', type: 'slider', min: 2, max: 16, step: 1, default: 4 }
+		],
+		run: (img, p) => posterize(img, num(p, 'levels'))
+	},
+	{
+		id: 'two-colors-png',
+		title: 'Два цвета PNG',
+		description: 'Перекрашивает изображение в два выбранных цвета по порогу яркости.',
+		category: 'color',
+		params: [
+			{ id: 'lightColor', label: 'Цвет светлых участков', type: 'color', default: '#ffffff' },
+			{ id: 'darkColor', label: 'Цвет тёмных участков', type: 'color', default: '#000000' },
+			{ id: 'threshold', label: 'Порог яркости, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+		],
+		run: (img, p) => twoColors(img, str(p, 'lightColor'), str(p, 'darkColor'), num(p, 'threshold'))
+	},
+	{
 		id: 'convert-png-to-jpg',
 		title: 'Конвертировать PNG в JPG',
 		description:
@@ -327,6 +442,14 @@ export const TOOLS: ToolEntry[] = [
 		params: [{ id: 'quality', label: 'Качество WebP', type: 'slider', min: 1, max: 100, step: 1, default: 90 }],
 		output: { mime: 'image/webp', ext: 'webp', qualityParamId: 'quality' },
 		run: (img) => clonePixelImage(img)
+	},
+	{
+		id: 'invert-alpha-png',
+		title: 'Инвертировать альфа-канал PNG',
+		description: 'Непрозрачные области становятся прозрачными и наоборот.',
+		category: 'alpha',
+		params: [],
+		run: (img) => invertAlpha(img)
 	},
 	{
 		id: 'remove-color-from-png',

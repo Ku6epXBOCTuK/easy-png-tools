@@ -22,6 +22,17 @@ export function removeColorToAlpha(
 	return out;
 }
 
+export function invertAlpha(img: PixelImage): PixelImage {
+	const out = createPixelImage(img.width, img.height);
+	for (let i = 0; i < out.data.length; i += 4) {
+		out.data[i] = img.data[i];
+		out.data[i + 1] = img.data[i + 1];
+		out.data[i + 2] = img.data[i + 2];
+		out.data[i + 3] = 255 - img.data[i + 3];
+	}
+	return out;
+}
+
 export function colorMask(img: PixelImage, hex: string, tolerancePercent = 0): PixelImage {
 	const [targetR, targetG, targetB] = parseHex(hex);
 	const tolerance = (clamp(tolerancePercent, 0, 100) / 100) * MAX_COLOR_DISTANCE;

@@ -1,5 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { brightnessContrast, grayscale, invert, rgbToHex } from './color';
+import {
+	brightnessContrast,
+	changeHue,
+	extractChannel,
+	grayscale,
+	invert,
+	posterize,
+	rgbToHex,
+	sepia,
+	setOpacity,
+	swapChannels,
+	thresholdBlackWhite,
+	twoColors
+} from './color';
 import { makeImage } from './test-helpers';
 
 describe('rgbToHex', () => {
@@ -10,6 +23,98 @@ describe('rgbToHex', () => {
 
 	it('округляет дробные значения и клампит диапазон', () => {
 		expect(rgbToHex(127.6, -5, 300)).toBe('#8000ff');
+	});
+});
+
+describe('setOpacity', () => {
+	it('умножает альфу на процент, RGB не трогает', () => {
+		const out = setOpacity(makeImage(1, 1, [[10, 20, 30, 128]]), 50);
+		expect([...out.data]).toEqual([10, 20, 30, 64]);
+	});
+
+	it('100% не меняет, 0% делает полностью прозрачным', () => {
+		expect(setOpacity(makeImage(1, 1, [[1, 2, 3, 200]]), 100).data[3]).toBe(200);
+		expect(setOpacity(makeImage(1, 1, [[1, 2, 3, 200]]), 0).data[3]).toBe(0);
+	});
+});
+
+describe('sepia', () => {
+	it('применяет классическую матрицу с клампом', () => {
+		const out = sepia(makeImage(2, 1, [
+			[255, 0, 0, 255],
+			[255, 255, 255, 255]
+		]));
+		const px = (n: number) => [...out.data.slice(n * 4, n * 4 + 4)];
+		expect(px(0)).toEqual([100, 89, 69, 255]);
+		expect(px(1)[0]).toBe(255);
+		expect(out.data[7]).toBe(255);
+	});
+});
+
+describe('changeHue', () => {
+	it('чистый красный при +120° становится чистым зелёным', () => {
+		const out = changeHue(makeImage(1, 1, [[255, 0, 0, 255]]), 120);
+		expect([...out.data]).toEqual([0, 255, 0, 255]);
+	});
+
+	it('сдвиг 360° возвращает исходные цвета', () => {
+		const img = makeImage(1, 1, [[90, 140, 210, 255]]);
+		expect([...changeHue(img, 360).data]).toEqual([...img.data]);
+	});
+});
+
+describe('extractChannel', () => {
+	it('выдаёт выбранный канал оттенками серого', () => {
+		const out = extractChannel(makeImage(1, 1, [[10, 20, 30, 40]]), 'green');
+		expect([...out.data]).toEqual([20, 20, 20, 40]);
+	});
+});
+
+describe('swapChannels', () => {
+	it('переставляет каналы парами', () => {
+		expect([...swapChannels(makeImage(1, 1, [[10, 20, 30, 40]]), 'r-b').data]).toEqual([
+			30, 20, 10, 40
+		]);
+		expect([...swapChannels(makeImage(1, 1, [[10, 20, 30, 40]]), 'g-b').data]).toEqual([
+			10, 30, 20, 40
+		]);
+	});
+});
+
+describe('thresholdBlackWhite', () => {
+	it('серый 128 относительно порога 50% — белый', () => {
+		expect(thresholdBlackWhite(makeImage(1, 1, [[128, 128, 128, 255]]), 50).data[0]).toBe(255);
+		expect(thresholdBlackWhite(makeImage(1, 1, [[128, 128, 128, 255]]), 60).data[0]).toBe(0);
+	});
+});
+
+describe('posterize', () => {
+	it('два уровня квантуют в чёрное и белое', () => {
+		const out = posterize(
+			makeImage(2, 1, [
+				[100, 100, 100, 255],
+				[200, 200, 200, 255]
+			]),
+			2
+		);
+		expect(out.data[0]).toBe(0);
+		expect(out.data[4]).toBe(255);
+	});
+});
+
+describe('twoColors', () => {
+	it('яркие пиксели получают светлый цвет, тёмные — тёмный', () => {
+		const out = twoColors(
+			makeImage(2, 1, [
+				[250, 250, 250, 255],
+				[10, 10, 10, 128]
+			]),
+			'#ff0000',
+			'#00ff00',
+			50
+		);
+		expect([...out.data.slice(0, 4)]).toEqual([255, 0, 0, 255]);
+		expect([...out.data.slice(4, 8)]).toEqual([0, 255, 0, 128]);
 	});
 });
 

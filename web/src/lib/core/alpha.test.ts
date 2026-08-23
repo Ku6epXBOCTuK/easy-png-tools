@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { colorMask, flattenOntoColor, parseHex, removeColorToAlpha } from './alpha';
+import { colorMask, flattenOntoColor, invertAlpha, parseHex, removeColorToAlpha } from './alpha';
 import { makeImage } from './test-helpers';
+
+describe('invertAlpha', () => {
+	it('обращает альфу, RGB не трогает', () => {
+		const out = invertAlpha(makeImage(1, 1, [[10, 20, 30, 128]]));
+		expect([...out.data]).toEqual([10, 20, 30, 127]);
+	});
+});
 
 describe('removeColorToAlpha', () => {
 	const fixture = () =>
