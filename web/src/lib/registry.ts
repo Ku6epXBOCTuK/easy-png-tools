@@ -92,6 +92,10 @@ export type ToolEntry = {
 
 export const PNG_OUTPUT: OutputFormat = { mime: 'image/png', ext: 'png' };
 
+export function isChainable(tool: ToolEntry): boolean {
+	return (tool.resultType ?? 'image') === 'image' && (!tool.sourceMode || tool.sourceMode === 'file');
+}
+
 function num(params: Record<string, unknown>, id: string): number {
 	const v = params[id];
 	if (typeof v !== 'number' || !Number.isFinite(v)) {

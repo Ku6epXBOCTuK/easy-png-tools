@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
-	import { CATEGORIES } from '$lib/categories';
 
 	let { children } = $props();
 </script>
@@ -13,11 +12,9 @@
 <div class="app">
 	<header>
 		<a href="/" class="brand">easy-png-tools</a>
-		<nav aria-label="Категории инструментов">
-			<a class="nav-link workspace-link" href="/workspace">Рабочая область</a>
-			{#each CATEGORIES as category (category.id)}
-				<a class="nav-link" href="/#{category.id}">{category.label}</a>
-			{/each}
+		<nav aria-label="Разделы">
+			<a class="nav-link workspace-link" href="/">Рабочая область</a>
+			<a class="nav-link" href="/list-tools">Каталог</a>
 		</nav>
 	</header>
 
