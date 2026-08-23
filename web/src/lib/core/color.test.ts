@@ -1,6 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { brightnessContrast, grayscale, invert } from './color';
+import { brightnessContrast, grayscale, invert, rgbToHex } from './color';
 import { makeImage } from './test-helpers';
+
+describe('rgbToHex', () => {
+	it('форматирует базовые цвета', () => {
+		expect(rgbToHex(255, 0, 0)).toBe('#ff0000');
+		expect(rgbToHex(1, 2, 3)).toBe('#010203');
+	});
+
+	it('округляет дробные значения и клампит диапазон', () => {
+		expect(rgbToHex(127.6, -5, 300)).toBe('#8000ff');
+	});
+});
 
 describe('grayscale', () => {
 	it('считает luma по весам BT.601 с округлением', () => {

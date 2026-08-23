@@ -8,15 +8,52 @@
 		min?: number;
 		max?: number;
 		step?: number;
+		default?: number;
 		hint?: string;
 	}
 
-	let { id, label, value = $bindable(0), min, max, step, hint }: Props = $props();
+	let {
+		id,
+		label,
+		value = $bindable(0),
+		min,
+		max,
+		step,
+		default: defaultValue,
+		hint
+	}: Props = $props();
+
+	function decrement() {
+		if (min !== undefined && value <= min) return;
+		value = Math.max(min ?? -Infinity, value - (step ?? 1));
+	}
+
+	function increment() {
+		if (max !== undefined && value >= max) return;
+		value = Math.min(max ?? Infinity, value + (step ?? 1));
+	}
+
+	function reset() {
+		if (defaultValue !== undefined) value = defaultValue;
+	}
+
+	const resetDisabled = $derived(defaultValue === undefined || value === defaultValue);
 </script>
 
 <Field {id} {label} {hint}>
 	<div class="row">
+		<button type="button" class="step" aria-label="Уменьшить" onclick={decrement}>−</button>
 		<input id={id} type="range" min={min} max={max} step={step} bind:value />
+		<button type="button" class="step" aria-label="Увеличить" onclick={increment}>+</button>
+		<button
+			type="button"
+			class="step"
+			aria-label="Сбросить"
+			disabled={resetDisabled}
+			onclick={reset}
+		>
+			↺
+		</button>
 		<output>{value}</output>
 	</div>
 </Field>
@@ -25,16 +62,48 @@
 	.row {
 		display: flex;
 		align-items: center;
-		gap: var(--space-2);
+		gap: var(--space-1);
 		max-width: var(--control-max-width);
 	}
 
 	input[type='range'] {
 		flex: 1;
+		min-width: 0;
 		accent-color: var(--accent);
 	}
 
+	.step {
+		flex: none;
+		width: 1.7rem;
+		height: 1.7rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-s);
+		background: var(--surface);
+		color: var(--text);
+		font-size: 0.9rem;
+		line-height: 1;
+		cursor: pointer;
+		transition:
+			border-color var(--transition-fast),
+			color var(--transition-fast);
+	}
+
+	.step:hover:not(:disabled) {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+
+	.step:disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
+	}
+
 	output {
+		flex: none;
 		min-width: 3ch;
 		text-align: right;
 		font-family: var(--font-mono);

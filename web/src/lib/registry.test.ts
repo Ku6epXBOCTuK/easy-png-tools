@@ -50,7 +50,7 @@ describe('реестр инструментов', () => {
 		expect(tool.description.length).toBeGreaterThan(0);
 	});
 
-	it('у select дефолт входит в options, у number дефолт в диапазоне', () => {
+	it('у select дефолт входит в options, у number/slider дефолт в диапазоне', () => {
 		for (const tool of TOOLS) {
 			for (const param of tool.params) {
 				if (param.type === 'select') {
@@ -60,6 +60,11 @@ describe('реестр инструментов', () => {
 				if (param.type === 'number') {
 					expect(param.min === undefined || param.default >= param.min).toBe(true);
 					expect(param.max === undefined || param.default <= param.max).toBe(true);
+				}
+				if (param.type === 'slider') {
+					expect(param.min).toBeLessThan(param.max);
+					expect(param.default).toBeGreaterThanOrEqual(param.min);
+					expect(param.default).toBeLessThanOrEqual(param.max);
 				}
 				if (param.type === 'color') {
 					expect(param.default).toMatch(/^#[0-9a-f]{6}$/i);
@@ -80,7 +85,8 @@ describe('реестр инструментов', () => {
 			const output = outputOf(tool);
 			if (output?.qualityParamId) {
 				const param = tool.params.find(
-					(p): p is Extract<ParamDef, { type: 'number' }> => p.id === output.qualityParamId
+					(p): p is Extract<ParamDef, { type: 'number' | 'slider' }> =>
+						p.id === output.qualityParamId
 				);
 				expect(param).toBeDefined();
 			}

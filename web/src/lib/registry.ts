@@ -18,6 +18,15 @@ export type ParamDef =
 	| {
 			id: string;
 			label: string;
+			type: 'slider';
+			min: number;
+			max: number;
+			step?: number;
+			default: number;
+	  }
+	| {
+			id: string;
+			label: string;
 			type: 'select';
 			options: { value: string; label: string }[];
 			default: string;
@@ -179,8 +188,8 @@ export const TOOLS: ToolEntry[] = [
 		description: 'Изменяет яркость и контраст в диапазоне от −100 до +100. Значение 0 — без изменений.',
 		category: 'color',
 		params: [
-			{ id: 'brightness', label: 'Яркость', type: 'number', min: -100, max: 100, step: 1, default: 0 },
-			{ id: 'contrast', label: 'Контраст', type: 'number', min: -100, max: 100, step: 1, default: 0 }
+			{ id: 'brightness', label: 'Яркость', type: 'slider', min: -100, max: 100, step: 1, default: 0 },
+			{ id: 'contrast', label: 'Контраст', type: 'slider', min: -100, max: 100, step: 1, default: 0 }
 		],
 		run: (img, p) => brightnessContrast(img, num(p, 'brightness'), num(p, 'contrast'))
 	},
@@ -192,7 +201,7 @@ export const TOOLS: ToolEntry[] = [
 		category: 'convert',
 		params: [
 			{ id: 'background', label: 'Цвет подложки', type: 'color', default: '#ffffff' },
-			{ id: 'quality', label: 'Качество JPEG', type: 'number', min: 1, max: 100, step: 1, default: 90 }
+			{ id: 'quality', label: 'Качество JPEG', type: 'slider', min: 1, max: 100, step: 1, default: 90 }
 		],
 		output: { mime: 'image/jpeg', ext: 'jpg', qualityParamId: 'quality' },
 		run: (img, p) => flattenOntoColor(img, str(p, 'background'))
@@ -202,7 +211,7 @@ export const TOOLS: ToolEntry[] = [
 		title: 'Конвертировать PNG в WebP',
 		description: 'Перекодирует изображение в WebP с настраиваемым качеством. Прозрачность сохраняется.',
 		category: 'convert',
-		params: [{ id: 'quality', label: 'Качество WebP', type: 'number', min: 1, max: 100, step: 1, default: 90 }],
+		params: [{ id: 'quality', label: 'Качество WebP', type: 'slider', min: 1, max: 100, step: 1, default: 90 }],
 		output: { mime: 'image/webp', ext: 'webp', qualityParamId: 'quality' },
 		run: (img) => clonePixelImage(img)
 	},
@@ -214,7 +223,7 @@ export const TOOLS: ToolEntry[] = [
 		category: 'alpha',
 		params: [
 			{ id: 'targetColor', label: 'Цвет для удаления', type: 'color', default: '#00ff00' },
-			{ id: 'tolerance', label: 'Порог похожести, %', type: 'number', min: 0, max: 100, step: 1, default: 10 }
+			{ id: 'tolerance', label: 'Порог похожести, %', type: 'slider', min: 0, max: 100, step: 1, default: 10 }
 		],
 		run: (img, p) => removeColorToAlpha(img, str(p, 'targetColor'), num(p, 'tolerance')),
 		preview: (img, p) => colorMask(img, str(p, 'targetColor'), num(p, 'tolerance'))
@@ -247,7 +256,8 @@ export function sanitizeParams(
 	for (const param of tool.params) {
 		const raw = values[param.id];
 		switch (param.type) {
-			case 'number': {
+			case 'number':
+			case 'slider': {
 				const n =
 					typeof raw === 'number' && Number.isFinite(raw) ? raw : param.default;
 				out[param.id] = clampRange(n, param.min, param.max);

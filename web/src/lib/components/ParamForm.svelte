@@ -2,6 +2,7 @@
 	import CheckboxField from './ui/CheckboxField.svelte';
 	import ColorField from './ui/ColorField.svelte';
 	import SelectField from './ui/SelectField.svelte';
+	import SliderField from './ui/SliderField.svelte';
 	import TextField from './ui/TextField.svelte';
 	import type { ParamDef } from '$lib/registry';
 
@@ -24,6 +25,16 @@
 			min={param.min}
 			max={param.max}
 			step={param.step}
+			bind:value={values[param.id]}
+		/>
+	{:else if param.type === 'slider'}
+		<SliderField
+			id={param.id}
+			label={param.label}
+			min={param.min}
+			max={param.max}
+			step={param.step}
+			default={param.default}
 			bind:value={values[param.id]}
 		/>
 	{:else if param.type === 'select'}

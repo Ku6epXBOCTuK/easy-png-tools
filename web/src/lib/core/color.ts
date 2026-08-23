@@ -42,6 +42,11 @@ export function brightnessContrast(
 	return out;
 }
 
+export function rgbToHex(r: number, g: number, b: number): string {
+	const byte = (v: number) => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0');
+	return `#${byte(r)}${byte(g)}${byte(b)}`;
+}
+
 function clamp(value: number, min: number, max: number): number {
 	return Math.min(max, Math.max(min, value));
 }
