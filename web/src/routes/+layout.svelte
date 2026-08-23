@@ -14,6 +14,7 @@
 	<header>
 		<a href="/" class="brand">easy-png-tools</a>
 		<nav aria-label="Категории инструментов">
+			<a class="nav-link workspace-link" href="/workspace">Рабочая область</a>
 			{#each CATEGORIES as category (category.id)}
 				<a class="nav-link" href="/#{category.id}">{category.label}</a>
 			{/each}
@@ -77,6 +78,11 @@
 		color: var(--accent);
 		background: var(--bg);
 		text-decoration: none;
+	}
+
+	.workspace-link {
+		font-weight: 600;
+		color: var(--accent);
 	}
 
 	main {
