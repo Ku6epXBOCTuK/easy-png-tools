@@ -21,11 +21,23 @@ const PLAN_TOOL_IDS = [
 	'convert-png-to-jpg',
 	'convert-png-to-webp',
 	'remove-color-from-png',
-	'png-info'
+	'png-info',
+	'jpg-to-png',
+	'webp-to-png',
+	'gif-to-png',
+	'bmp-to-png',
+	'ico-to-png',
+	'png-to-bmp',
+	'png-to-base64',
+	'base64-to-png',
+	'png-to-data-uri',
+	'data-uri-to-png',
+	'png-to-hex',
+	'hex-to-png'
 ];
 
 describe('реестр инструментов', () => {
-	it('содержит ровно 11 инструментов из плана MVP', () => {
+	it('содержит ровно 23 инструмента из плана', () => {
 		expect(TOOLS.map((t) => t.id).sort()).toEqual([...PLAN_TOOL_IDS].sort());
 	});
 
@@ -41,8 +53,12 @@ describe('реестр инструментов', () => {
 		expect(CATEGORIES.map((c) => c.id)).toContain(tool.category);
 	});
 
-	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: run определён', (_, tool) => {
-		expect(typeof tool.run).toBe('function');
+	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: исполнители определены', (_, tool) => {
+		if (tool.resultType === 'text') {
+			expect(typeof tool.toText).toBe('function');
+		} else {
+			expect(typeof tool.run).toBe('function');
+		}
 		if (tool.preview) {
 			expect(typeof tool.preview).toBe('function');
 		}
@@ -144,7 +160,7 @@ describe('sanitizeParams', () => {
 describe('run инструмента resize-png', () => {
 	const img = { width: 100, height: 50, data: new Uint8ClampedArray(100 * 50 * 4) };
 	const runResize = async (params: Record<string, unknown>) =>
-		getToolOrThrow('resize-png').run(img, params);
+		getToolOrThrow('resize-png').run!(img, params);
 
 	it('keepAspect + одна сторона — вторая считается по пропорции', async () => {
 		const out = await runResize({ width: 200, height: 0, keepAspect: true });

@@ -16,22 +16,62 @@ export function unsupportedImageMessage(file: File): string {
 	return `Неподдерживаемый формат файла (${file.type || 'неизвестный'}). Поддерживаются PNG, JPEG, WebP, GIF и BMP.`;
 }
 
+async function decodeBitmap(bitmap: ImageBitmap): Promise<PixelImage> {
+	const canvas = document.createElement('canvas');
+	canvas.width = bitmap.width;
+	canvas.height = bitmap.height;
+	const ctx = canvas.getContext('2d', { willReadFrequently: true });
+	if (!ctx) {
+		throw new Error('Canvas 2D context недоступен в этом браузере');
+	}
+	ctx.drawImage(bitmap, 0, 0);
+	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	return { width: imageData.width, height: imageData.height, data: imageData.data };
+}
+
 export async function decodeFile(file: File): Promise<PixelImage> {
 	const bitmap = await createImageBitmap(file);
 	try {
-		const canvas = document.createElement('canvas');
-		canvas.width = bitmap.width;
-		canvas.height = bitmap.height;
-		const ctx = canvas.getContext('2d', { willReadFrequently: true });
-		if (!ctx) {
-			throw new Error('Canvas 2D context недоступен в этом браузере');
-		}
-		ctx.drawImage(bitmap, 0, 0);
-		const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-		return { width: imageData.width, height: imageData.height, data: imageData.data };
+		return await decodeBitmap(bitmap);
 	} finally {
 		bitmap.close();
 	}
+}
+
+export async function decodeBytes(bytes: Uint8Array<ArrayBuffer>): Promise<PixelImage> {
+	const blob = new Blob([bytes]);
+	const bitmap = await createImageBitmap(blob);
+	try {
+		return await decodeBitmap(bitmap);
+	} finally {
+		bitmap.close();
+	}
+}
+
+export function toDataUrl(img: PixelImage): string {
+	const canvas = document.createElement('canvas');
+	canvas.width = img.width;
+	canvas.height = img.height;
+	const ctx = canvas.getContext('2d');
+	if (!ctx) {
+		throw new Error('Canvas 2D context недоступен в этом браузере');
+	}
+	ctx.putImageData(new ImageData(img.data, img.width, img.height), 0, 0);
+	return canvas.toDataURL('image/png');
+}
+
+export function toBase64(img: PixelImage): string {
+	return toDataUrl(img).slice('data:image/png;base64,'.length);
+}
+
+export async function decodeTextImage(text: string): Promise<PixelImage> {
+	const cleaned = text.trim().replace(/^data:[^,]*,/, '');
+	if (cleaned.length === 0) {
+		throw new Error('Вставьте base64-строку или data-uri изображения');
+	}
+	const binary = atob(cleaned);
+	const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
+	return await decodeBytes(bytes);
 }
 
 export async function encode(

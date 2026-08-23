@@ -91,12 +91,17 @@
 		lastRunSource = source;
 		lastRunValuesJson = JSON.stringify(sanitized);
 		try {
-			let next: PixelImage;
-			if (isSourceless) {
+			let next: PixelImage | null = null;
+			let nextText: string | null = null;
+
+			if (tool.resultType === 'text') {
+				nextText = await tool.toText!(source!, sanitized);
+			} else if (isSourceless) {
 				next = await tool.generate!(sanitized);
 			} else {
-				next = await tool.run(source!, sanitized);
+				next = await tool.run!(source!, sanitized);
 			}
+
 			let nextPreview: PixelImage | null = null;
 			if (tool.preview && source) {
 				try {
@@ -105,10 +110,7 @@
 					nextPreview = null;
 				}
 			}
-			let nextText: string | null = null;
-			if (tool.toText && source) {
-				nextText = await tool.toText(source, sanitized);
-			}
+
 			if (token !== runToken) return;
 			result = next;
 			previewResult = nextPreview;

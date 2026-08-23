@@ -2,7 +2,8 @@ import type { CategoryId } from './categories';
 import { colorMask, flattenOntoColor, removeColorToAlpha } from './core/alpha';
 import { brightnessContrast, grayscale, invert } from './core/color';
 import { crop, flip, resize, rotate90 } from './core/geometry';
-import type { OutputMime } from './core/io';
+import { decodeTextImage, toBase64, toDataUrl, type OutputMime } from './core/io';
+import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
 
 export type ParamDef =
@@ -49,7 +50,7 @@ export type ToolEntry = {
 	category: CategoryId;
 	sourceMode?: SourceMode;
 	params: ParamDef[];
-	run: (img: PixelImage, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
+	run?: (img: PixelImage, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
 	generate?: (params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
 	toText?: (img: PixelImage, params: Record<string, unknown>) => Promise<string> | string;
 	runFromText?: (text: string, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
@@ -79,7 +80,113 @@ function str(params: Record<string, unknown>, id: string): string {
 	return v;
 }
 
+function decodeToPng(id: string, title: string, description: string): ToolEntry {
+	return {
+		id,
+		title,
+		description,
+		category: 'convert',
+		params: [],
+		run: (img) => clonePixelImage(img)
+	};
+}
+
 export const TOOLS: ToolEntry[] = [
+	decodeToPng(
+		'jpg-to-png',
+		'Конвертировать JPG в PNG',
+		'Открывает JPEG и сохраняет его как PNG без потерь. Прозрачность, если была, сохраняется.'
+	),
+	decodeToPng(
+		'webp-to-png',
+		'Конвертировать WebP в PNG',
+		'Перекодирует WebP-изображение в универсальный PNG.'
+	),
+	decodeToPng(
+		'gif-to-png',
+		'Конвертировать GIF в PNG',
+		'Dостаёт первый кадр GIF-анимации и сохраняет его как PNG.'
+	),
+	decodeToPng(
+		'bmp-to-png',
+		'Конвертировать BMP в PNG',
+		'Перекодирует BMP в компактный PNG без потерь.'
+	),
+	decodeToPng(
+		'ico-to-png',
+		'Конвертировать ICO в PNG',
+		'Превращает иконку .ico в обычный PNG нужного размера.'
+	),
+	{
+		id: 'png-to-bmp',
+		title: 'Конвертировать PNG в BMP',
+		description:
+			'Sохраняет изображение в 24-битный BMP без альфа-канала: прозрачность заменяется чёрным фоном.',
+		category: 'convert',
+		params: [],
+		run: (img) => flattenOntoColor(img, '#000000'),
+		output: { mime: 'image/bmp', ext: 'bmp' }
+	},
+	{
+		id: 'png-to-base64',
+		title: 'PNG в Base64',
+		description: 'Кодирует изображение в base64-строку для вставки в код или стили.',
+		category: 'convert',
+		params: [],
+		resultType: 'text',
+		toText: (img) => toBase64(img)
+	},
+	{
+		id: 'base64-to-png',
+		title: 'Base64 в PNG',
+		description:
+			'Dекодирует base64-строку или data-uri обратно в картинку. Вставьте строку слева.',
+		category: 'convert',
+		sourceMode: 'text',
+		params: [],
+		run: (img) => clonePixelImage(img)
+	},
+	{
+		id: 'png-to-data-uri',
+		title: 'PNG в Data URI',
+		description: 'Строит полный data-uri (data:image/png;base64,…) для встраивания в HTML/CSS.',
+		category: 'convert',
+		params: [],
+		resultType: 'text',
+		toText: (img) => toDataUrl(img)
+	},
+	{
+		id: 'data-uri-to-png',
+		title: 'Data URI в PNG',
+		description: 'Dекодирует data:image/…;base64,… обратно в файл картинки.',
+		category: 'convert',
+		sourceMode: 'text',
+		params: [],
+		run: (img) => clonePixelImage(img)
+	},
+	{
+		id: 'png-to-hex',
+		title: 'PNG в HEX-пиксели',
+		description:
+			'Показывает все пиксели как hex-значения rrggbbaa — по строкам, через пробел.',
+		category: 'convert',
+		params: [],
+		resultType: 'text',
+		toText: (img) => pixelsToHex(img)
+	},
+	{
+		id: 'hex-to-png',
+		title: 'HEX-пиксели в PNG',
+		description:
+			'Sобирает картинку из hex-значений rrggbbaa (через пробел). Укажите ширину — высота рассчитается сама.',
+		category: 'convert',
+		sourceMode: 'text',
+		params: [
+			{ id: 'width', label: 'Ширина изображения', type: 'number', min: 1, max: 10000, step: 1, default: 1 }
+		],
+		runFromText: (text, p) => hexToPixels(text, Math.trunc(Number(p['width']))),
+		run: (img) => clonePixelImage(img)
+	},
 	{
 		id: 'resize-png',
 		title: 'Изменить размер PNG',
