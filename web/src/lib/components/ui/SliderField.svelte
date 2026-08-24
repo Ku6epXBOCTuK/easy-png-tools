@@ -63,19 +63,21 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-1);
-		max-width: var(--control-max-width);
+		width: 100%;
+		max-width: 22rem;
 	}
 
 	input[type='range'] {
 		flex: 1;
-		min-width: 0;
+		min-width: 3rem;
 		accent-color: var(--accent);
+		margin: 0;
 	}
 
 	.step {
 		flex: none;
-		width: 1.7rem;
-		height: 1.7rem;
+		width: 1.5rem;
+		height: 1.5rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -84,7 +86,7 @@
 		border-radius: var(--radius-s);
 		background: var(--surface);
 		color: var(--text);
-		font-size: 0.9rem;
+		font-size: 0.85rem;
 		line-height: 1;
 		cursor: pointer;
 		transition:

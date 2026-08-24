@@ -9,34 +9,48 @@
 	let { id, label, checked = $bindable(false), hint }: Props = $props();
 </script>
 
-<div class="checkbox">
-	<input id={id} type="checkbox" bind:checked />
-	<label for={id}>{label}</label>
+<div class="checkbox-row">
+	<label class="checkbox" for={id}>
+		<input id={id} type="checkbox" bind:checked />
+		{label}
+	</label>
+	{#if hint}
+		<p class="hint text-caption text-muted">{hint}</p>
+	{/if}
 </div>
-{#if hint}
-	<p class="hint text-caption text-muted">{hint}</p>
-{/if}
 
 <style>
+	.checkbox-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+		padding: calc(var(--space-1) + 2px) 0;
+		border-bottom: 1px dashed var(--border);
+	}
+
 	.checkbox {
 		display: flex;
 		align-items: center;
 		gap: var(--space-2);
-		margin-bottom: var(--space-3);
+		cursor: pointer;
+		font-size: var(--text-caption, var(--text-s));
+		color: var(--text-muted);
 	}
 
 	input[type='checkbox'] {
 		width: 1rem;
 		height: 1rem;
 		cursor: pointer;
+		accent-color: var(--accent);
 	}
 
-	label {
-		font-size: var(--text-m);
-		cursor: pointer;
+	label:hover {
+		color: var(--text);
 	}
 
 	.hint {
-		margin: calc(-1 * var(--space-3)) 0 var(--space-3);
+		margin: 0;
+		text-align: right;
 	}
 </style>

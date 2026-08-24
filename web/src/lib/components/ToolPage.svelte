@@ -258,24 +258,29 @@
 		<div class="error-banner" role="alert">{errorText}</div>
 	{/if}
 
-	<div class="panel tool-stage" class:single={isSourceless}>
-		{#if !isSourceless}
+	<div class="panel tool-block">
+		<div class="tool-stage" class:single={isSourceless}>
+			{#if !isSourceless}
+				<span class="edge-legend source-legend" aria-hidden="true">Исходник</span>
+				<div class="cell">
+					{#if isTextSource && !source}
+						<TextInputCard onSubmit={handleTextSubmit} />
+					{:else}
+						<SourceCard
+							{source}
+							onFile={handleFile}
+							onError={(message) => (errorText = message)}
+							onReset={reset}
+							pipetteActive={!!pipetteTargetId}
+							onPickColor={handlePickColor}
+						/>
+					{/if}
+				</div>
+			{/if}
+			<span class="edge-legend result-legend" aria-hidden="true">
+				{isInfo ? 'Сводка' : 'Результат'}
+			</span>
 			<div class="cell">
-				{#if isTextSource && !source}
-					<TextInputCard onSubmit={handleTextSubmit} />
-				{:else}
-					<SourceCard
-						{source}
-						onFile={handleFile}
-						onError={(message) => (errorText = message)}
-						onReset={reset}
-						pipetteActive={!!pipetteTargetId}
-						onPickColor={handlePickColor}
-					/>
-				{/if}
-			</div>
-		{/if}
-		<div class="cell">
 			<ResultCard
 				{tool}
 				sourceLoaded={isSourceless ? true : !!source}
@@ -293,18 +298,20 @@
 		</div>
 	</div>
 
-	{#if (source || isSourceless) && !isInfo}
-		<div class="base-params">
-			<ParamsCard
-				params={tool.params}
-				bind:values
-				{pipetteTargetId}
-				onPipetteToggle={handlePipetteToggle}
-				hasMask={hasMask}
-				bind:showMask
-			/>
+	{#if (source || isSourceless) && !isInfo && (tool.params.length > 0 || hasMask)}
+		<div class="params-sep">
+			<span class="edge-legend" aria-hidden="true">Параметры</span>
 		</div>
+		<ParamsCard
+			params={tool.params}
+			bind:values
+			{pipetteTargetId}
+			onPipetteToggle={handlePipetteToggle}
+			hasMask={hasMask}
+			bind:showMask
+		/>
 	{/if}
+	</div>
 
 	<div class="chain-stack">
 		{#each chain as step, index (step.id)}
@@ -357,8 +364,25 @@
 		margin-bottom: var(--space-3);
 	}
 
-	.base-params {
-		margin-top: var(--space-4);
+	.tool-stage {
+		position: relative;
+	}
+
+	.source-legend {
+		left: 25%;
+		transform: translateX(-50%);
+	}
+
+	.result-legend {
+		left: 75%;
+		transform: translateX(-50%);
+	}
+
+	@media (max-width: 48rem) {
+		.source-legend,
+		.result-legend {
+			display: none;
+		}
 	}
 
 	.empty-slot {

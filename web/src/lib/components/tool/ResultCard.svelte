@@ -43,7 +43,6 @@
 </script>
 
 <div class="container">
-	<h2 class="heading-section">{isInfo ? 'Сводка' : 'Результат'}</h2>
 	{#if !sourceLoaded}
 		<div class="media">
 			<EmptyState
@@ -101,10 +100,6 @@
 		gap: var(--space-2);
 		min-width: 0;
 		height: 100%;
-	}
-
-	h2 {
-		margin-bottom: var(--space-1);
 	}
 
 	.media {

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import CheckboxField from '../ui/CheckboxField.svelte';
 	import ParamForm from '../ParamForm.svelte';
 	import type { ParamDef } from '$lib/registry';
 
@@ -22,14 +21,17 @@
 	}: Props = $props();
 </script>
 
-<div class="panel root">
-	<h2 class="heading-section">Параметры</h2>
-	{#if hasMask}
-		<CheckboxField id="show-mask" label="Показать маску" bind:checked={showMask} />
-	{/if}
-	{#if params.length > 0}
-		<ParamForm {params} bind:values {pipetteTargetId} {onPipetteToggle} />
-	{:else if !hasMask}
+<div class="root">
+	{#if params.length > 0 || hasMask}
+		<ParamForm
+			{params}
+			bind:values
+			{pipetteTargetId}
+			{onPipetteToggle}
+			{hasMask}
+			bind:showMask
+		/>
+	{:else}
 		<p class="hint text-caption text-muted">
 			У этого инструмента нет параметров — результат уже готов.
 		</p>
@@ -38,11 +40,7 @@
 
 <style>
 	.root {
-		padding: var(--space-4);
-	}
-
-	h2 {
-		margin-bottom: var(--space-2);
+		padding: 0 var(--space-4) var(--space-3);
 	}
 
 	.hint {

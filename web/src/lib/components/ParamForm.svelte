@@ -11,50 +11,84 @@
 		values: Record<string, any>;
 		pipetteTargetId?: string | null;
 		onPipetteToggle?: (id: string) => void;
+		hasMask?: boolean;
+		showMask?: boolean;
 	}
 
-	let { params, values = $bindable(), pipetteTargetId = null, onPipetteToggle }: Props = $props();
+	let {
+		params,
+		values = $bindable(),
+		pipetteTargetId = null,
+		onPipetteToggle,
+		hasMask = false,
+		showMask = $bindable(false)
+	}: Props = $props();
 </script>
 
-{#each params as param (param.id)}
-	<div class="field">
-		{#if param.type === 'checkbox'}
-			<CheckboxField id={param.id} label={param.label} bind:checked={values[param.id]} />
-		{:else if param.type === 'number'}
-			<TextField
-				id={param.id}
-				label={param.label}
-				type="number"
-				min={param.min}
-				max={param.max}
-				step={param.step}
-				bind:value={values[param.id]}
-			/>
-		{:else if param.type === 'slider'}
-			<SliderField
-				id={param.id}
-				label={param.label}
-				min={param.min}
-				max={param.max}
-				step={param.step}
-				default={param.default}
-				bind:value={values[param.id]}
-			/>
-		{:else if param.type === 'select'}
-			<SelectField
-				id={param.id}
-				label={param.label}
-				options={param.options}
-				bind:value={values[param.id]}
-			/>
-		{:else if param.type === 'color'}
-			<ColorField
-				id={param.id}
-				label={param.label}
-				bind:value={values[param.id]}
-				pipetteActive={pipetteTargetId === param.id}
-				onPipetteToggle={() => onPipetteToggle?.(param.id)}
-			/>
-		{/if}
-	</div>
-{/each}
+<div class="params-grid">
+	{#if hasMask}
+		<CheckboxField id="show-mask" label="Показать маску" bind:checked={showMask} />
+	{/if}
+	{#each params as param (param.id)}
+		<div class="field">
+			{#if param.type === 'checkbox'}
+				<CheckboxField id={param.id} label={param.label} bind:checked={values[param.id]} />
+			{:else if param.type === 'number'}
+				<TextField
+					id={param.id}
+					label={param.label}
+					type="number"
+					min={param.min}
+					max={param.max}
+					step={param.step}
+					bind:value={values[param.id]}
+				/>
+			{:else if param.type === 'slider'}
+				<SliderField
+					id={param.id}
+					label={param.label}
+					min={param.min}
+					max={param.max}
+					step={param.step}
+					default={param.default}
+					bind:value={values[param.id]}
+				/>
+			{:else if param.type === 'select'}
+				<SelectField
+					id={param.id}
+					label={param.label}
+					options={param.options}
+					bind:value={values[param.id]}
+				/>
+			{:else if param.type === 'color'}
+				<ColorField
+					id={param.id}
+					label={param.label}
+					bind:value={values[param.id]}
+					pipetteActive={pipetteTargetId === param.id}
+					onPipetteToggle={() => onPipetteToggle?.(param.id)}
+				/>
+			{/if}
+		</div>
+	{/each}
+</div>
+
+<style>
+	.params-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: var(--space-5);
+	}
+
+	@media (min-width: 75rem) {
+		.params-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 50rem) {
+		.params-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

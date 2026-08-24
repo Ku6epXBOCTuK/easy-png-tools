@@ -18,7 +18,6 @@
 </script>
 
 <div class="container">
-	<h2 class="heading-section">Исходник</h2>
 	{#if !source}
 		<DropZone {onFile} {onError} />
 	{:else}
@@ -38,10 +37,6 @@
 		gap: var(--space-2);
 		min-width: 0;
 		height: 100%;
-	}
-
-	h2 {
-		margin-bottom: var(--space-1);
 	}
 
 	.media {

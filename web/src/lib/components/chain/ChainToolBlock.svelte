@@ -40,28 +40,28 @@
 </script>
 
 <div class="block">
-	<header>
-		<h3 class="heading-section">Шаг {index + 1}: {tool.title}</h3>
-		<button
-			type="button"
-			class="remove"
-			aria-label="Убрать шаг"
-			title="Убрать шаг"
-			onclick={onRemove}
-		>
-			✕
-		</button>
-	</header>
+	<div class="panel tool-stage">
+		<span class="edge-legend step-legend">
+			Шаг {index + 1}: {tool.title}
+			<button
+				type="button"
+				class="remove"
+				aria-label="Убрать шаг"
+				title="Убрать шаг"
+				onclick={onRemove}
+			>
+				✕
+			</button>
+		</span>
 
-	<div class="tool-stage panel">
 		<div class="cell">
-			<h4 class="heading-section">Вход</h4>
+			<span class="edge-legend cell-legend" aria-hidden="true">Вход</span>
 			<div class="cell-media">
 				<Preview image={input} />
 			</div>
 		</div>
 		<div class="cell">
-			<h4 class="heading-section">Результат</h4>
+			<span class="edge-legend cell-legend" aria-hidden="true">Результат</span>
 			{#if busy && !result}
 				<div class="cell-media">
 					<EmptyState title="Обработка…" hint="Выполняется шаг цепочки" />
@@ -89,30 +89,38 @@
 		</div>
 	</div>
 
-	<ParamsCard params={tool.params} bind:values />
+	{#if tool.params.length > 0}
+		<div class="params-sep">
+			<span class="edge-legend" aria-hidden="true">Параметры</span>
+		</div>
+		<ParamsCard params={tool.params} bind:values />
+	{/if}
 </div>
 
 <style>
 	.block {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-2);
 	}
 
-	header {
-		display: flex;
+	.tool-stage {
+		position: relative;
+		padding-top: var(--space-3);
+		border-top: 0;
+	}
+
+	.step-legend {
+		left: var(--space-3);
+		display: inline-flex;
 		align-items: center;
-		justify-content: space-between;
 		gap: var(--space-2);
-	}
-
-	h3 {
-		margin: 0;
+		color: var(--text);
+		font-weight: 600;
 	}
 
 	.remove {
-		width: 1.6rem;
-		height: 1.6rem;
+		width: 1.4rem;
+		height: 1.4rem;
 		padding: 0;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-s);
@@ -130,8 +138,14 @@
 		color: var(--danger);
 	}
 
-	h4 {
-		margin-bottom: var(--space-1);
+	.cell {
+		position: relative;
+	}
+
+	.cell-legend {
+		top: -0.9em;
+		left: 50%;
+		transform: translateX(-50%);
 	}
 
 	.recalc {
