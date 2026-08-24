@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CATEGORIES } from './categories';
+import { TOOL_ICONS } from './tools/tool-icons';
 import {
 	defaultParams,
 	getTool,
@@ -149,6 +150,21 @@ describe('реестр инструментов', () => {
 	it('defaultParams собирает значения по умолчанию', () => {
 		const resize = getToolOrThrow('resize-png');
 		expect(defaultParams(resize)).toEqual({ width: 0, height: 0, keepAspect: true });
+	});
+
+	it('словарь иконок покрывает все инструменты', () => {
+		for (const tool of TOOLS) {
+			expect(TOOL_ICONS[tool.id]).toBeDefined();
+		}
+	});
+
+	it('у каждого инструмента популярность в диапазоне 0..100 и ключ иконки', () => {
+		for (const tool of TOOLS) {
+			expect(tool.popularity).toBeGreaterThanOrEqual(0);
+			expect(tool.popularity).toBeLessThanOrEqual(100);
+			expect(typeof tool.icon).toBe('string');
+			expect(tool.icon!.length).toBeGreaterThan(0);
+		}
 	});
 });
 

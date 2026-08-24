@@ -88,6 +88,8 @@ export type ToolEntry = {
 		img: PixelImage,
 		params: Record<string, unknown>
 	) => Promise<PixelImage> | PixelImage;
+	popularity?: number;
+	icon?: string;
 	resultType?: 'image' | 'info' | 'text';
 	output?: OutputFormat;
 };
@@ -802,6 +804,14 @@ export const TOOLS: ToolEntry[] = [
 		}
 	}
 ];
+
+import { TOOL_ICONS } from './tools/tool-icons';
+import { TOOL_POPULARITY } from './tools/tool-popularity';
+
+for (const entry of TOOLS) {
+	entry.icon = entry.id;
+	entry.popularity = TOOL_POPULARITY[entry.id] ?? 50;
+}
 
 export function getTool(id: string): ToolEntry | undefined {
 	return TOOLS.find((tool) => tool.id === id);
