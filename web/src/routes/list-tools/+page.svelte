@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { CATEGORIES } from '$lib/categories';
+	import ToolCard from '$lib/components/search/ToolCard.svelte';
 	import { TOOLS } from '$lib/registry';
 </script>
 
@@ -23,10 +24,14 @@
 			<h2 id="{category.id}-heading" class="heading-section">{category.label}</h2>
 			<div class="grid">
 				{#each categoryTools as tool (tool.id)}
-					<a class="card panel" href="/tools/{tool.id}">
-						<span class="card-title">{tool.title}</span>
-						<span class="card-desc text-caption text-muted">{tool.description}</span>
-					</a>
+					<div class="panel">
+						<ToolCard
+							toolId={tool.id}
+							title={tool.title}
+							description={tool.description}
+							href="/tools/{tool.id}"
+						/>
+					</div>
 				{/each}
 			</div>
 		</section>
@@ -58,39 +63,17 @@
 		gap: var(--space-3);
 	}
 
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2);
-		padding: var(--space-3) var(--space-3) var(--space-4);
-		color: inherit;
+	.grid > .panel {
+		padding: var(--space-2) var(--space-2) var(--space-3);
 		transition:
 			border-color var(--transition-fast),
 			box-shadow var(--transition-fast),
 			transform var(--transition-fast);
 	}
 
-	.card:hover {
-		text-decoration: none;
+	.grid > .panel:hover {
 		border-color: var(--accent);
 		box-shadow: var(--shadow-card);
 		transform: translateY(-1px);
-	}
-
-	.card-title {
-		font-weight: 600;
-		font-size: var(--text-m);
-	}
-
-	.card:hover .card-title {
-		color: var(--accent);
-	}
-
-	.card-desc {
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
 	}
 </style>

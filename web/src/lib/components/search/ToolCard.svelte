@@ -6,27 +6,25 @@
 		title: string;
 		description: string;
 		selected?: boolean;
+		href?: string;
 		onActivate?: () => void;
 		onHover?: () => void;
 	}
 
-	let { toolId, title, description, selected = false, onActivate, onHover }: Props = $props();
+	let {
+		toolId,
+		title,
+		description,
+		selected = false,
+		href,
+		onActivate,
+		onHover
+	}: Props = $props();
 
 	const Icon = $derived(TOOL_ICONS[toolId]);
 </script>
 
-<div
-	class="card"
-	class:selected
-	role="option"
-	aria-selected={selected}
-	tabindex="-1"
-	onclick={onActivate}
-	onmousemove={onHover}
-	onkeydown={(e) => {
-		if (e.key === 'Enter') onActivate?.();
-	}}
->
+{#snippet content()}
 	<span class="icon-box" aria-hidden="true">
 		{#if Icon}<Icon size={24} strokeWidth={1.75} />{/if}
 	</span>
@@ -34,7 +32,33 @@
 		<span class="title">{title}</span>
 		<span class="hint text-caption text-muted">{description}</span>
 	</span>
-</div>
+{/snippet}
+
+{#if href}
+	<a
+		{href}
+		class="card"
+		class:selected
+		onmousemove={onHover}
+	>
+		{@render content()}
+	</a>
+{:else}
+	<div
+		class="card"
+		class:selected
+		role="option"
+		aria-selected={selected}
+		tabindex="-1"
+		onclick={onActivate}
+		onmousemove={onHover}
+		onkeydown={(e) => {
+			if (e.key === 'Enter') onActivate?.();
+		}}
+	>
+		{@render content()}
+	</div>
+{/if}
 
 <style>
 	.card {
@@ -46,6 +70,8 @@
 		border: 1px solid transparent;
 		border-radius: var(--radius-s);
 		cursor: pointer;
+		color: inherit;
+		text-decoration: none;
 	}
 
 	.card:hover,

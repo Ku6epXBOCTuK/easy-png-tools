@@ -6,6 +6,7 @@
 	import EmptyState from '../ui/EmptyState.svelte';
 	import ParamsCard from '../tool/ParamsCard.svelte';
 	import Preview from '../Preview.svelte';
+	import { TOOL_ICONS } from '$lib/tools/tool-icons';
 
 	interface Props {
 		index: number;
@@ -37,11 +38,15 @@
 
 	const format = $derived(outputOf(tool));
 	const safeParams = $derived(sanitizeParams(tool, values));
+	const StepIcon = $derived(TOOL_ICONS[tool.id]);
 </script>
 
 <div class="block">
 	<div class="panel tool-stage">
 		<span class="edge-legend step-legend">
+			{#if StepIcon}
+				<span class="step-icon" aria-hidden="true"><StepIcon size={14} strokeWidth={2} /></span>
+			{/if}
 			Шаг {index + 1}: {tool.title}
 			<button
 				type="button"
@@ -116,6 +121,17 @@
 		gap: var(--space-2);
 		color: var(--text);
 		font-weight: 600;
+	}
+
+	.step-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.4rem;
+		height: 1.4rem;
+		border-radius: var(--radius-s);
+		background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+		color: var(--accent);
 	}
 
 	.remove {
