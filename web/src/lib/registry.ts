@@ -3,6 +3,7 @@ import {
 	colorMask,
 	extractAlphaMask,
 	flattenOntoColor,
+	hardenAlpha,
 	invertAlpha,
 	removeColorToAlpha,
 	roundCorners,
@@ -13,7 +14,18 @@ import {
 	isGrayscale,
 	orientationOf
 } from './core/analyze';
-import { backgroundMaskPreview, removeBackground } from './core/background';
+import {
+	backgroundMaskPreview,
+	removeBackground
+} from './core/background';
+import {
+	closingImage,
+	contourImage,
+	dilateImage,
+	erodeImage,
+	openingImage,
+	strokeImage
+} from './core/morphology';
 import { gaussianBlur, sharpen as sharpenImage } from './core/convolution';
 import { gradientImage, noiseImage, solidImage } from './core/generate';
 import {
@@ -653,6 +665,81 @@ export const TOOLS: ToolEntry[] = [
 				outerOnly: p['outerOnly'] === true,
 				smoothPasses: num(p, 'smooth')
 			})
+	},
+	{
+		id: 'add-stroke-png',
+		title: 'Обвести PNG',
+		description:
+			'Добавляет цветную обводку-кольцо вокруг непрозрачного содержимого заданной толщины.',
+		category: 'alpha',
+		params: [
+			{ id: 'color', label: 'Цвет обводки', type: 'color', default: '#ff0000' },
+			{ id: 'thickness', label: 'Толщина, px', type: 'slider', min: 1, max: 10, step: 1, default: 3 }
+		],
+		run: (img, p) => strokeImage(img, num(p, 'thickness'), str(p, 'color'))
+	},
+	{
+		id: 'find-contour-png',
+		title: 'Найти контур PNG',
+		description:
+			'Оставляет только линию по границе непрозрачных областей выбранного цвета и толщины.',
+		category: 'alpha',
+		params: [
+			{ id: 'color', label: 'Цвет линии', type: 'color', default: '#000000' },
+			{ id: 'thickness', label: 'Толщина линии, px', type: 'slider', min: 1, max: 5, step: 1, default: 1 }
+		],
+		run: (img, p) => contourImage(img, num(p, 'thickness'), str(p, 'color'))
+	},
+	{
+		id: 'make-thicker-png',
+		title: 'Утолщить PNG',
+		description: 'Расширяет непрозрачные области на заданное число пикселей.',
+		category: 'alpha',
+		params: [
+			{ id: 'radius', label: 'На сколько px', type: 'slider', min: 1, max: 10, step: 1, default: 2 }
+		],
+		run: (img, p) => dilateImage(img, num(p, 'radius'))
+	},
+	{
+		id: 'make-thinner-png',
+		title: 'Утончить PNG',
+		description: 'Сужает непрозрачные области — утоньшает штрихи надписей и деталей.',
+		category: 'alpha',
+		params: [
+			{ id: 'radius', label: 'На сколько px', type: 'slider', min: 1, max: 10, step: 1, default: 1 }
+		],
+		run: (img, p) => erodeImage(img, num(p, 'radius'))
+	},
+	{
+		id: 'harden-alpha-png',
+		title: 'Жёсткие края PNG',
+		description:
+			'Бинаризует альфа-канал по порогу: полупрозрачные пиксели становятся либо полностью прозрачными, либо непрозрачными.',
+		category: 'alpha',
+		params: [
+			{ id: 'threshold', label: 'Порог альфы, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+		],
+		run: (img, p) => hardenAlpha(img, num(p, 'threshold'))
+	},
+	{
+		id: 'despeckle-alpha-png',
+		title: 'Убрать мусор PNG',
+		description: 'Открытие: убирает одиночные полупрозрачные пиксели и мелкие крапинки.',
+		category: 'alpha',
+		params: [
+			{ id: 'radius', label: 'Радиус очистки, px', type: 'slider', min: 1, max: 3, step: 1, default: 1 }
+		],
+		run: (img, p) => openingImage(img, num(p, 'radius'))
+	},
+	{
+		id: 'close-holes-png',
+		title: 'Закрыть дыры PNG',
+		description: 'Закрытие: заполняет одиночные прозрачные точки внутри объекта.',
+		category: 'alpha',
+		params: [
+			{ id: 'radius', label: 'Радиус закрытия, px', type: 'slider', min: 1, max: 3, step: 1, default: 1 }
+		],
+		run: (img, p) => closingImage(img, num(p, 'radius'))
 	},
 	{
 		id: 'remove-color-from-png',

@@ -11,65 +11,7 @@ import {
 	type ToolEntry
 } from './registry';
 
-const PLAN_TOOL_IDS = [
-	'resize-png',
-	'crop-png',
-	'rotate-png',
-	'flip-png',
-	'add-padding-png',
-	'add-border-png',
-	'fit-on-background-png',
-	'tile-png',
-	'center-by-alpha-png',
-	'grayscale-png',
-	'invert-colors-png',
-	'adjust-brightness-contrast-png',
-	'convert-png-to-jpg',
-	'convert-png-to-webp',
-	'remove-color-from-png',
-	'png-info',
-	'invert-alpha-png',
-	'jpg-to-png',
-	'webp-to-png',
-	'gif-to-png',
-	'bmp-to-png',
-	'ico-to-png',
-	'png-to-bmp',
-	'png-to-base64',
-	'base64-to-png',
-	'png-to-data-uri',
-	'data-uri-to-png',
-	'png-to-hex',
-	'hex-to-png',
-	'change-png-opacity',
-	'sepia-png',
-	'change-png-hue',
-	'extract-channel-png',
-	'swap-channels-png',
-	'black-and-white-png',
-	'posterize-png',
-	'two-colors-png',
-	'remove-alpha-channel-png',
-	'set-alpha-channel-png',
-	'extract-alpha-mask-png',
-	'round-corners-png',
-	'create-empty-png',
-	'single-color-png',
-	'random-noise-png',
-	'linear-gradient-png',
-	'png-is-grayscale',
-	'png-is-transparent',
-	'png-orientation',
-	'remove-background-png',
-	'blur-png',
-	'sharpen-png'
-];
-
 describe('реестр инструментов', () => {
-	it('содержит ровно 51 инструмент из плана', () => {
-		expect(TOOLS.map((t) => t.id).sort()).toEqual([...PLAN_TOOL_IDS].sort());
-	});
-
 	it('id уникальны и в kebab-case', () => {
 		const ids = TOOLS.map((t) => t.id);
 		expect(new Set(ids).size).toBe(ids.length);

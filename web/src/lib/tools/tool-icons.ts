@@ -18,6 +18,7 @@ import {
 	Focus,
 	Frame,
 	Grid3x3,
+	Hammer,
 	Hash,
 	Image as ImageIcon,
 	Info,
@@ -31,10 +32,13 @@ import {
 	RotateCw,
 	Ruler,
 	Scaling,
+	Scan,
 	Scissors,
 	SearchCheck,
 	Square,
-	Sun
+	Sun,
+	ZoomIn,
+	ZoomOut
 } from '@lucide/svelte';
 
 export const TOOL_ICONS: Record<string, typeof AppWindow> = {
@@ -88,5 +92,12 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	'png-orientation': Ruler,
 	'blur-png': Droplets,
 	'sharpen-png': Focus,
-	'remove-background-png': Scissors
+	'remove-background-png': Scissors,
+	'add-stroke-png': Square,
+	'find-contour-png': Scan,
+	'make-thicker-png': ZoomIn,
+	'make-thinner-png': ZoomOut,
+	'harden-alpha-png': Sun,
+	'despeckle-alpha-png': SearchCheck,
+	'close-holes-png': Hammer
 };
