@@ -10,6 +10,7 @@
 	import ToolSearch from './search/ToolSearch.svelte';
 	import ChainToolBlock from './chain/ChainToolBlock.svelte';
 	import { createAutoRunner } from '$lib/tools/auto-run';
+	import { executeStep } from '$lib/tools/executor';
 	import ParamsCard from './tool/ParamsCard.svelte';
 	import ResultCard from './tool/ResultCard.svelte';
 	import SourceCard from './tool/SourceCard.svelte';
@@ -146,9 +147,8 @@
 			} else if (isSourceless) {
 				next = await tool.generate!(sanitized);
 			} else {
-				next = await tool.run!(source!, sanitized);
+				next = await executeStep(tool, source!, sanitized);
 			}
-
 			let nextPreview: PixelImage | null = null;
 			if (tool.preview && source) {
 				try {
@@ -173,7 +173,7 @@
 					continue;
 				}
 				try {
-					current = await stepTool.run(current, sanitizeParams(stepTool, step.values));
+					current = await executeStep(stepTool, current, sanitizeParams(stepTool, step.values));
 				} catch (e) {
 					const message = e instanceof Error ? e.message : String(e);
 					throw new Error(`Шаг ${i + 1} (${stepTool.title}): ${message}`);
