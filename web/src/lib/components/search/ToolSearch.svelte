@@ -2,11 +2,10 @@
 	import { isChainable, TOOLS } from '$lib/registry';
 
 	interface Props {
-		size?: 'hero' | 'compact';
 		onSelect: (toolId: string) => void;
 	}
 
-	let { size = 'hero', onSelect }: Props = $props();
+	let { onSelect }: Props = $props();
 
 	const candidates = TOOLS.filter(isChainable);
 
@@ -51,7 +50,7 @@
 			}
 		}
 		found.sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
-		return found.slice(0, size === 'hero' ? 12 : 8);
+		return found.slice(0, 12);
 	});
 
 	function choose(id: string) {
@@ -79,7 +78,7 @@
 	}
 </script>
 
-<div class="search {size}">
+<div class="search">
 	<input
 		type="search"
 		bind:value={query}
@@ -120,25 +119,16 @@
 	.search {
 		position: relative;
 		width: 100%;
-		max-width: var(--control-max-width);
-	}
-
-	.hero {
 		max-width: 36rem;
 		margin: 0 auto;
 	}
 
 	input {
 		width: 100%;
-		padding: var(--space-2) var(--space-3);
+		padding: var(--space-3) var(--space-4);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-m);
 		background: var(--surface);
-		font-size: var(--text-l);
-	}
-
-	.hero input {
-		padding: var(--space-3) var(--space-4);
 		font-size: var(--text-xl);
 		text-align: center;
 	}
@@ -163,6 +153,7 @@
 		box-shadow: var(--shadow-card);
 		max-height: 24rem;
 		overflow-y: auto;
+		text-align: left;
 	}
 
 	li button {

@@ -2,7 +2,13 @@
 	import { imageInfo, type ImageInfo } from '$lib/core/analyze';
 	import { decodeFile, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
-	import { defaultParams, sanitizeParams, type ToolEntry } from '$lib/registry';
+	import { defaultParams, getTool, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
+	import { newStepId, type PipelineStep } from '$lib/tools/pipeline';
+	import DownloadButton from './DownloadButton.svelte';
+	import ParamForm from './ParamForm.svelte';
+	import Preview from './Preview.svelte';
+	import ToolSearch from './search/ToolSearch.svelte';
+	import ChainToolBlock from './chain/ChainToolBlock.svelte';
 	import { createAutoRunner } from '$lib/tools/auto-run';
 	import ParamsCard from './tool/ParamsCard.svelte';
 	import ResultCard from './tool/ResultCard.svelte';
@@ -22,11 +28,47 @@
 	let info = $state<ImageInfo | null>(null);
 	let errorText = $state('');
 	let values = $state<Record<string, any>>({});
+	let chain = $state<PipelineStep[]>([]);
+	let chainResults = $state<(PixelImage | null)[]>([]);
+	let lastRunChainJson = '';
 
 	const isInfo = $derived(tool.resultType === 'info');
 	const isSourceless = $derived(tool.sourceMode === 'none');
 	const isTextSource = $derived(tool.sourceMode === 'text');
 	const sanitized = $derived(sanitizeParams(tool, values));
+	const canChainBase = $derived(
+		(tool.resultType ?? 'image') === 'image' && tool.sourceMode !== 'text'
+	);
+	const hasFilledSteps = $derived(chain.some((step) => step.toolId !== ''));
+
+	function addChainStep() {
+		chain.push({ id: newStepId(), toolId: '', values: {} });
+	}
+
+	function removeChainStep(index: number) {
+		chain.splice(index, 1);
+		chainResults = [];
+	}
+
+	function removeChain() {
+		chain.length = 0;
+		chainResults = [];
+	}
+
+	function toggleChain() {
+		if (chain.length > 0) {
+			removeChain();
+		} else {
+			addChainStep();
+		}
+	}
+
+	function applyChainTool(index: number, toolId: string) {
+		const stepTool = getTool(toolId);
+		if (!stepTool || !chain[index]) return;
+		chain[index].toolId = toolId;
+		chain[index].values = defaultParams(stepTool);
+	}
 
 	const runner = createAutoRunner();
 	let hasLastRun = false;
@@ -91,6 +133,7 @@
 		hasLastRun = true;
 		lastRunSource = source;
 		lastRunValuesJson = JSON.stringify(sanitized);
+		lastRunChainJson = JSON.stringify(chain);
 		try {
 			let next: PixelImage | null = null;
 			let nextText: string | null = null;
@@ -116,6 +159,26 @@
 			result = next;
 			previewResult = nextPreview;
 			textResult = nextText;
+
+			const collected: (PixelImage | null)[] = [];
+			let current: PixelImage | null = next ?? source;
+			for (let i = 0; i < chain.length; i++) {
+				const step = chain[i];
+				const stepTool = step.toolId === '' ? undefined : getTool(step.toolId);
+				if (!current || !stepTool?.run) {
+					collected.push(null);
+					continue;
+				}
+				try {
+					current = await stepTool.run(current, sanitizeParams(stepTool, step.values));
+				} catch (e) {
+					const message = e instanceof Error ? e.message : String(e);
+					throw new Error(`Шаг ${i + 1} (${stepTool.title}): ${message}`);
+				}
+				if (!runner.isCurrent(token)) return;
+				collected.push(current);
+			}
+			chainResults = collected;
 			status = 'loaded';
 		} catch (e) {
 			if (!runner.isCurrent(token)) return;
@@ -125,7 +188,15 @@
 
 	$effect(() => {
 		const valuesJson = JSON.stringify(sanitized);
-		if (hasLastRun && source === lastRunSource && valuesJson === lastRunValuesJson) return;
+		const chainJson = JSON.stringify(chain);
+		if (
+			hasLastRun &&
+			source === lastRunSource &&
+			valuesJson === lastRunValuesJson &&
+			chainJson === lastRunChainJson
+		) {
+			return;
+		}
 		if (!source && !isSourceless) return;
 		if (isInfo) return;
 		return runner.schedule(() => void runTool());
@@ -178,7 +249,7 @@
 		<div class="error-banner" role="alert">{errorText}</div>
 	{/if}
 
-	<div class="stage panel" class:single={isSourceless}>
+	<div class="panel tool-stage" class:single={isSourceless}>
 		{#if !isSourceless}
 			<div class="cell">
 				{#if isTextSource && !source}
@@ -206,20 +277,60 @@
 				{info}
 				{isInfo}
 				params={sanitized}
-				{textResult}
+				textResult={textResult}
 				onDownloadError={showError}
+				onChainToggle={canChainBase ? toggleChain : undefined}
+				hasChain={chain.length > 0}
 			/>
 		</div>
 	</div>
 
 	{#if (source || isSourceless) && !isInfo}
-		<ParamsCard
-			params={tool.params}
-			bind:values
-			{pipetteTargetId}
-			onPipetteToggle={handlePipetteToggle}
-		/>
+		<div class="base-params">
+			<ParamsCard
+				params={tool.params}
+				bind:values
+				{pipetteTargetId}
+				onPipetteToggle={handlePipetteToggle}
+			/>
+		</div>
 	{/if}
+
+	<div class="chain-stack">
+		{#each chain as step, index (step.id)}
+			{#if step.toolId === ''}
+				<div class="panel empty-slot">
+					<header>
+						<h3 class="heading-section">Шаг {index + 1}</h3>
+						<button
+							type="button"
+							class="remove-step"
+							aria-label="Убрать шаг"
+							onclick={() => removeChainStep(index)}
+						>
+							✕
+						</button>
+					</header>
+					<ToolSearch onSelect={(id) => applyChainTool(index, id)} />
+				</div>
+			{:else if getTool(step.toolId)}
+				{@const stepTool = getTool(step.toolId)!}
+				<ChainToolBlock
+					index={index}
+					tool={stepTool}
+					bind:values={step.values}
+					input={index === 0 ? result : (chainResults[index - 1] ?? null)}
+					result={chainResults[index] ?? null}
+					busy={status === 'processing'}
+					isLast={index === chain.length - 1}
+					onRemove={() => removeChainStep(index)}
+					onError={showError}
+					onAddStep={addChainStep}
+					onRemoveChain={removeChain}
+				/>
+			{/if}
+		{/each}
+	</div>
 </section>
 
 <style>
@@ -236,37 +347,40 @@
 		margin-bottom: var(--space-3);
 	}
 
-	.stage {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: var(--space-4);
-		padding: var(--space-4);
+	.base-params {
+		margin-top: var(--space-4);
 	}
 
-	.stage.single {
-		grid-template-columns: 1fr;
+	.empty-slot {
+		padding: var(--space-3);
 	}
 
-	.cell {
-		min-width: 0;
+	.empty-slot header {
 		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-2);
+		margin-bottom: var(--space-2);
 	}
 
-	.cell + .cell {
-		border-left: 1px solid var(--border);
-		padding-left: var(--space-4);
+	.empty-slot h3 {
+		margin: 0;
 	}
 
-	@media (max-width: 48rem) {
-		.stage {
-			grid-template-columns: 1fr;
-		}
+	.remove-step {
+		width: 1.6rem;
+		height: 1.6rem;
+		padding: 0;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-s);
+		background: var(--surface);
+		color: var(--text-muted);
+		line-height: 1;
+		cursor: pointer;
+	}
 
-		.cell + .cell {
-			border-left: none;
-			padding-left: 0;
-			border-top: 1px solid var(--border);
-			padding-top: var(--space-4);
-		}
+	.remove-step:hover {
+		border-color: var(--danger);
+		color: var(--danger);
 	}
 </style>

@@ -25,7 +25,6 @@
 
 <style>
 	.root {
-		margin-top: var(--space-4);
 		padding: var(--space-4);
 	}
 

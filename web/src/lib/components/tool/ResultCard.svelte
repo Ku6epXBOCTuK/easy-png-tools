@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CheckboxField from '../ui/CheckboxField.svelte';
+	import Button from '../ui/Button.svelte';
 	import DownloadButton from '../DownloadButton.svelte';
 	import EmptyState from '../ui/EmptyState.svelte';
 	import InfoPanel from '../InfoPanel.svelte';
@@ -22,6 +23,8 @@
 		isInfo: boolean;
 		params: Record<string, unknown>;
 		textResult: string | null;
+		onChainToggle?: () => void;
+		hasChain?: boolean;
 		onDownloadError: (e: unknown) => void;
 	}
 
@@ -36,6 +39,8 @@
 		isInfo,
 		params,
 		textResult,
+		onChainToggle,
+		hasChain = false,
 		onDownloadError
 	}: Props = $props();
 
@@ -81,13 +86,20 @@
 				<span class="recalc" aria-live="polite">Пересчёт…</span>
 			{/if}
 		</div>
-		<DownloadButton
-			image={result}
-			format={outputOf(tool)}
-			baseName={tool.id}
-			{params}
-			onError={onDownloadError}
-		/>
+		<div class="actions-row">
+			<DownloadButton
+				image={result}
+				format={outputOf(tool)}
+				baseName={tool.id}
+				{params}
+				onError={onDownloadError}
+			/>
+			{#if onChainToggle}
+				<Button variant="secondary" fullWidth onclick={onChainToggle}>
+					{hasChain ? '✂ Оборвать цепочку' : '⛓ Следующий инструмент'}
+				</Button>
+			{/if}
+		</div>
 	{/if}
 </div>
 

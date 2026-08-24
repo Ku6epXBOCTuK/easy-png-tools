@@ -18,7 +18,7 @@
 	<section class="hero">
 		<h1>Что делаем с изображением?</h1>
 		<p class="lead text-muted">Найдите инструмент — все операции выполняются локально в браузере.</p>
-		<ToolSearch size="hero" onSelect={(id) => (selectedId = id)} />
+		<ToolSearch onSelect={(id) => (selectedId = id)} />
 	</section>
 {:else}
 	<section class="workbench">

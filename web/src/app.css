@@ -154,3 +154,71 @@ input.control[type='number'] {
 	white-space: nowrap;
 	border: 0;
 }
+
+.tool-stage {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--space-4);
+	padding: var(--space-4);
+	align-items: start;
+	width: 100%;
+}
+
+.tool-stage.single {
+	grid-template-columns: 1fr;
+}
+
+.tool-stage .cell {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+}
+
+.tool-stage .cell + .cell {
+	border-left: 1px solid var(--border);
+	padding-left: var(--space-4);
+}
+
+.cell-media {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 14rem;
+	position: relative;
+	width: 100%;
+}
+
+.chain-stack {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3);
+	margin-top: var(--space-4);
+}
+
+.actions-row {
+	display: flex;
+	gap: var(--space-1);
+	align-items: stretch;
+	width: 100%;
+}
+
+.actions-row > button {
+	flex: 1;
+	min-width: 0;
+}
+
+@media (max-width: 48rem) {
+	.tool-stage {
+		grid-template-columns: 1fr;
+	}
+
+	.tool-stage .cell + .cell {
+		border-left: none;
+		padding-left: 0;
+		border-top: 1px solid var(--border);
+		padding-top: var(--space-4);
+	}
+}
