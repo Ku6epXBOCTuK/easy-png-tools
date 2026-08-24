@@ -58,11 +58,14 @@ const PLAN_TOOL_IDS = [
 	'linear-gradient-png',
 	'png-is-grayscale',
 	'png-is-transparent',
-	'png-orientation'
+	'png-orientation',
+	'remove-background-png',
+	'blur-png',
+	'sharpen-png'
 ];
 
 describe('реестр инструментов', () => {
-	it('содержит ровно 48 инструментов из плана', () => {
+	it('содержит ровно 51 инструмент из плана', () => {
 		expect(TOOLS.map((t) => t.id).sort()).toEqual([...PLAN_TOOL_IDS].sort());
 	});
 

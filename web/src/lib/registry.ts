@@ -13,6 +13,8 @@ import {
 	isGrayscale,
 	orientationOf
 } from './core/analyze';
+import { backgroundMaskPreview, removeBackground } from './core/background';
+import { gaussianBlur, sharpen as sharpenImage } from './core/convolution';
 import { gradientImage, noiseImage, solidImage } from './core/generate';
 import {
 	brightnessContrast,
@@ -407,6 +409,28 @@ export const TOOLS: ToolEntry[] = [
 		run: (img) => centerByAlpha(img)
 	},
 	{
+		id: 'blur-png',
+		title: 'Размытие PNG',
+		description:
+			'Гауссово размытие: три прохода разделяемого бокса — быстро при любом радиусе. Прозрачные края не темнеют.',
+		category: 'filters',
+		params: [
+			{ id: 'radius', label: 'Радиус, px', type: 'slider', min: 1, max: 32, step: 1, default: 4 }
+		],
+		run: (img, p) => gaussianBlur(img, num(p, 'radius'))
+	},
+	{
+		id: 'sharpen-png',
+		title: 'Резкость PNG',
+		description:
+			'Подчёркивает края ядром резкости; сила задаёт смесь с оригиналом. 0% — без изменений.',
+		category: 'filters',
+		params: [
+			{ id: 'strength', label: 'Сила, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+		],
+		run: (img, p) => sharpenImage(img, num(p, 'strength'))
+	},
+	{
 		id: 'grayscale-png',
 		title: 'Чёрно-белый PNG',
 		description: 'Переводит изображение в оттенки серого по яркостной формуле BT.601. Альфа сохраняется.',
@@ -600,6 +624,33 @@ export const TOOLS: ToolEntry[] = [
 		category: 'alpha',
 		params: [],
 		run: (img) => invertAlpha(img)
+	},
+	{
+		id: 'remove-background-png',
+		title: 'Удалить фон PNG (умно)',
+		description:
+			'Убирает однотонный фон: по цвету с допуском, только внешние области от краёв или весь совпадающий цвет. Умеет сглаживать границу.',
+		category: 'alpha',
+		params: [
+			{ id: 'color', label: 'Цвет фона', type: 'color', default: '#ffffff' },
+			{ id: 'tolerance', label: 'Допуск похожести, %', type: 'slider', min: 0, max: 100, step: 1, default: 10 },
+			{ id: 'outerOnly', label: 'Только внешние области', type: 'checkbox', default: true },
+			{ id: 'smooth', label: 'Сглаживание границы, проходы', type: 'slider', min: 0, max: 8, step: 1, default: 1 }
+		],
+		run: (img, p) =>
+			removeBackground(img, {
+				color: str(p, 'color'),
+				tolerancePercent: num(p, 'tolerance'),
+				outerOnly: p['outerOnly'] === true,
+				smoothPasses: num(p, 'smooth')
+			}),
+		preview: (img, p) =>
+			backgroundMaskPreview(img, {
+				color: str(p, 'color'),
+				tolerancePercent: num(p, 'tolerance'),
+				outerOnly: p['outerOnly'] === true,
+				smoothPasses: num(p, 'smooth')
+			})
 	},
 	{
 		id: 'remove-color-from-png',
