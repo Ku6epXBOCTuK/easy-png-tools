@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
+	autoContrast,
 	brightnessContrast,
 	changeHue,
 	extractChannel,
+	gammaCorrection,
 	grayscale,
 	invert,
 	posterize,
@@ -10,6 +12,8 @@ import {
 	sepia,
 	setOpacity,
 	swapChannels,
+	temperature,
+	tint,
 	thresholdBlackWhite,
 	twoColors
 } from './color';
@@ -181,5 +185,50 @@ describe('brightnessContrast', () => {
 	it('альфа не меняется', () => {
 		const out = brightnessContrast(makeImage(1, 1, [[10, 20, 30, 64]]), 50, 50);
 		expect(out.data[3]).toBe(64);
+	});
+});
+
+describe('gammaCorrection', () => {
+	it('гамма 1 — идентичность', () => {
+		const img = makeImage(1, 1, [[64, 128, 192, 255]]);
+		expect([...gammaCorrection(img, 1).data]).toEqual([64, 128, 192, 255]);
+	});
+	it('гамма 2 удваивает яркость (64 → 128)', () => {
+		const out = gammaCorrection(makeImage(1, 1, [[64, 64, 64, 255]]), 2);
+		expect(out.data[0]).toBe(128);
+	});
+});
+
+describe('autoContrast', () => {
+	it('растягивает диапазон [10..200] до [0..255]', () => {
+		const out = autoContrast(makeImage(2, 1, [
+			[10, 10, 10, 255],
+			[200, 200, 200, 255]
+		]));
+		expect(out.data[0]).toBe(0);
+		expect(out.data[4]).toBe(255);
+	});
+});
+
+describe('temperature', () => {
+	it('положительная — теплее (красный ↑, синий ↓)', () => {
+		const out = temperature(makeImage(1, 1, [[128, 128, 128, 255]]), 50);
+		expect(out.data[0]).toBeGreaterThan(128);
+		expect(out.data[2]).toBeLessThan(128);
+	});
+	it('нулевая температура не меняет', () => {
+		const img = makeImage(1, 1, [[128, 128, 128, 255]]);
+		expect([...temperature(img, 0).data]).toEqual([...img.data]);
+	});
+});
+
+describe('tint', () => {
+	it('сила 100 на белом даёт чистый цвет', () => {
+		const out = tint(makeImage(1, 1, [[255, 255, 255, 255]]), '#ff0000', 100);
+		expect([...out.data]).toEqual([255, 0, 0, 255]);
+	});
+	it('сила 0 — идентичность', () => {
+		const img = makeImage(1, 1, [[100, 150, 200, 255]]);
+		expect([...tint(img, '#ff0000', 0).data]).toEqual([...img.data]);
 	});
 });

@@ -181,6 +181,34 @@ function copyPixel(src: PixelImage, sx: number, sy: number, dst: PixelImage, dx:
 	dst.data[di + 3] = src.data[si + 3];
 }
 
+export function sampleBilinear(
+	img: PixelImage,
+	fx: number,
+	fy: number
+): [number, number, number, number] {
+	const maxX = img.width - 1;
+	const maxY = img.height - 1;
+	const cx = Math.min(Math.max(fx, 0), maxX);
+	const cy = Math.min(Math.max(fy, 0), maxY);
+	const x0 = Math.floor(cx);
+	const y0 = Math.floor(cy);
+	const tx = cx - x0;
+	const ty = cy - y0;
+	const x1 = Math.min(x0 + 1, maxX);
+	const y1 = Math.min(y0 + 1, maxY);
+	const i00 = (y0 * img.width + x0) * 4;
+	const i10 = (y0 * img.width + x1) * 4;
+	const i01 = (y1 * img.width + x0) * 4;
+	const i11 = (y1 * img.width + x1) * 4;
+	const result: [number, number, number, number] = [0, 0, 0, 0];
+	for (let ch = 0; ch < 4; ch++) {
+		const top = (1 - tx) * img.data[i00 + ch] + tx * img.data[i10 + ch];
+		const bottom = (1 - tx) * img.data[i01 + ch] + tx * img.data[i11 + ch];
+		result[ch] = (1 - ty) * top + ty * bottom;
+	}
+	return result;
+}
+
 function clampInt(value: number, min: number, max: number): number {
 	return Math.min(max, Math.max(min, Math.trunc(value)));
 }

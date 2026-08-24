@@ -223,3 +223,84 @@ export function rgbToHex(r: number, g: number, b: number): string {
 function clamp(value: number, min: number, max: number): number {
 	return Math.min(max, Math.max(min, value));
 }
+
+export function gammaCorrection(img: PixelImage, value: number): PixelImage {
+	const g = clamp(value, 0.1, 5);
+	const lut = new Uint8ClampedArray(256);
+	for (let v = 0; v < 256; v++) {
+		lut[v] = 255 * Math.pow(v / 255, 1 / g);
+	}
+	const out = createPixelImage(img.width, img.height);
+	for (let i = 0; i < out.data.length; i += 4) {
+		out.data[i] = lut[img.data[i]];
+		out.data[i + 1] = lut[img.data[i + 1]];
+		out.data[i + 2] = lut[img.data[i + 2]];
+		out.data[i + 3] = img.data[i + 3];
+	}
+	return out;
+}
+
+export function autoContrast(img: PixelImage): PixelImage {
+	const lo = [255, 255, 255];
+	const hi = [0, 0, 0];
+	for (let i = 0; i < img.data.length; i += 4) {
+		for (let ch = 0; ch < 3; ch++) {
+			if (img.data[i + ch] < lo[ch]) lo[ch] = img.data[i + ch];
+			if (img.data[i + ch] > hi[ch]) hi[ch] = img.data[i + ch];
+		}
+	}
+	const luts: Uint8ClampedArray[] = [];
+	for (let ch = 0; ch < 3; ch++) {
+		const lut = new Uint8ClampedArray(256);
+		const range = hi[ch] - lo[ch];
+		for (let v = 0; v < 256; v++) {
+			lut[v] = range > 0 ? ((v - lo[ch]) * 255) / range : v;
+		}
+		luts.push(lut);
+	}
+	const out = createPixelImage(img.width, img.height);
+	for (let i = 0; i < out.data.length; i += 4) {
+		out.data[i] = luts[0][img.data[i]];
+		out.data[i + 1] = luts[1][img.data[i + 1]];
+		out.data[i + 2] = luts[2][img.data[i + 2]];
+		out.data[i + 3] = img.data[i + 3];
+	}
+	return out;
+}
+
+export function temperature(img: PixelImage, percent: number): PixelImage {
+	const k = clamp(percent, -100, 100) / 100;
+	const rFactor = 1 + 0.25 * k;
+	const bFactor = 1 - 0.25 * k;
+	const out = createPixelImage(img.width, img.height);
+	for (let i = 0; i < out.data.length; i += 4) {
+		out.data[i] = img.data[i] * rFactor;
+		out.data[i + 1] = img.data[i + 1];
+		out.data[i + 2] = img.data[i + 2] * bFactor;
+		out.data[i + 3] = img.data[i + 3];
+	}
+	return out;
+}
+
+export function tint(
+	img: PixelImage,
+	colorHex: string,
+	strengthPercent: number
+): PixelImage {
+	const s = clamp(strengthPercent, 0, 100) / 100;
+	const match = /^#([0-9a-f]{6})$/i.exec(colorHex.trim());
+	if (!match) throw new Error(`Некорректный HEX-цвет: "${colorHex}"`);
+	const d = match[1];
+	const tr = parseInt(d.slice(0, 2), 16) / 255;
+	const tg = parseInt(d.slice(2, 4), 16) / 255;
+	const tb = parseInt(d.slice(4, 6), 16) / 255;
+	const factors = [1 + (tr - 1) * s, 1 + (tg - 1) * s, 1 + (tb - 1) * s];
+	const out = createPixelImage(img.width, img.height);
+	for (let i = 0; i < out.data.length; i += 4) {
+		for (let ch = 0; ch < 3; ch++) {
+			out.data[i + ch] = img.data[i + ch] * factors[ch];
+		}
+		out.data[i + 3] = img.data[i + 3];
+	}
+	return out;
+}
