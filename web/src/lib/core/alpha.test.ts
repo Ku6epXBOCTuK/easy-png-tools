@@ -3,6 +3,7 @@ import {
 	colorMask,
 	extractAlphaMask,
 	flattenOntoColor,
+	hardenAlpha,
 	invertAlpha,
 	parseHex,
 	removeColorToAlpha,
@@ -10,6 +11,22 @@ import {
 	setAlphaChannel
 } from './alpha';
 import { makeImage } from './test-helpers';
+
+describe('hardenAlpha', () => {
+	it('бинаризует альфу по порогу, RGB не трогает', () => {
+		const out = hardenAlpha(
+			makeImage(2, 1, [
+				[10, 20, 30, 100],
+				[40, 50, 60, 200]
+			]),
+			50
+		);
+		expect([...out.data]).toEqual([
+			10, 20, 30, 0,
+			40, 50, 60, 255
+		]);
+	});
+});
 
 describe('setAlphaChannel', () => {
 	it('задаёт константную альфу', () => {
