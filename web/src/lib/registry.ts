@@ -914,7 +914,8 @@ export const TOOLS: ToolEntry[] = [
 				img,
 				[1, 0, 0, 1, -Math.trunc(num(p, 'offsetX')), -Math.trunc(num(p, 'offsetY'))],
 				img.width,
-				img.height
+				img.height,
+				str(p, 'color')
 			)
 	},
 	{
@@ -959,7 +960,7 @@ export const TOOLS: ToolEntry[] = [
 	{
 		id: 'temperature-png',
 		title: 'Температура PNG',
-		description: 'Отрицательные значения делают изображение теплее (оранжевее), положительные — холоднее (синеватее).',
+		description: 'Положительные значения делают изображение теплее (оранжевее), отрицательные — холоднее (синеватее).',
 		category: 'color',
 		params: [
 			{ id: 'percent', label: 'Температура', type: 'slider', min: -100, max: 100, step: 1, default: 0 }

@@ -67,14 +67,19 @@ describe('rotateFreeImage', () => {
 });
 
 describe('skewImage', () => {
-	it('наклон X=45° сдвигает верхний правый угол', () => {
-		const img = makeImage(2, 2, [
-			[255, 0, 0, 255], [0, 255, 0, 255],
-			[0, 0, 255, 255], [128, 128, 128, 255]
-		]);
+	it('наклон X=45° расширяет холст до w+h−1 и сдвигает строки вправо', () => {
+		const img = makeImage(2, 2, new Array(4).fill([255, 0, 0, 255]));
 		const out = skewImage(img, 45, 0);
-		expect(out.width).toBeGreaterThan(2);
-		expect(out.data[3]).toBe(255);
+		expect(out.width).toBe(3);
+		expect(out.height).toBe(2);
+		let opaque = 0;
+		for (let i = 3; i < out.data.length; i += 4) {
+			if (out.data[i] === 255) {
+				opaque++;
+				expect([out.data[i - 3], out.data[i - 2], out.data[i - 1]]).toEqual([255, 0, 0]);
+			}
+		}
+		expect(opaque).toBe(4);
 	});
 
 	it('углы 0° — тождественное преобразование', () => {
@@ -85,5 +90,27 @@ describe('skewImage', () => {
 		const out = skewImage(img, 0, 0);
 		expect(out.width).toBe(2);
 		expect([...out.data]).toEqual([...img.data]);
+	});
+});
+
+describe('transformImage — заливка фона', () => {
+	it('сдвиг с белым фоном заполняет освободившийся край', () => {
+		const img = makeImage(2, 2, [
+			[255, 0, 0, 255], [0, 255, 0, 255],
+			[0, 0, 255, 255], [128, 128, 128, 255]
+		]);
+		const out = transformImage(img, [1, 0, 0, 1, -1, 0], 2, 2, '#ffffff');
+		expect(out.width).toBe(2);
+		expect(out.height).toBe(2);
+		for (let y = 0; y < 2; y++) {
+			const di = (y * 2) * 4;
+			expect([...out.data.slice(di, di + 4)]).toEqual([255, 255, 255, 255]);
+		}
+	});
+
+	it('без фона освободившийся край остаётся прозрачным', () => {
+		const img = makeImage(2, 2, new Array(4).fill([10, 20, 30, 255]));
+		const out = transformImage(img, [1, 0, 0, 1, -1, 0], 2, 2);
+		expect(out.data[3]).toBe(0);
 	});
 });

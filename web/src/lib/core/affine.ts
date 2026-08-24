@@ -1,3 +1,4 @@
+import { parseHex } from './alpha';
 import { clonePixelImage, createPixelImage, type PixelImage } from './types';
 import { sampleBilinear } from './geometry';
 
@@ -15,61 +16,75 @@ export function invertAffine([a, b, c, d, e, f]: AffineMatrix): AffineMatrix {
 	return [ia, ib, ic, id, -(ia * e + ic * f), -(ib * e + id * f)];
 }
 
-function mulAffine(m1: AffineMatrix, m2: AffineMatrix): AffineMatrix {
-	return [
-		m1[0] * m2[0] + m1[2] * m2[1],
-		m1[1] * m2[0] + m1[3] * m2[1],
-		m1[0] * m2[2] + m1[2] * m2[3],
-		m1[1] * m2[2] + m1[3] * m2[3],
-		m1[0] * m2[4] + m1[2] * m2[5] + m1[4],
-		m1[1] * m2[4] + m1[3] * m2[5] + m1[5]
-	];
-}
+const EPS = 1e-9;
 
 export function transformImage(
 	img: PixelImage,
 	dstToSrc: AffineMatrix,
 	outWidth: number,
-	outHeight: number
+	outHeight: number,
+	bgHex?: string
 ): PixelImage {
-	const [a, b, c, d, e, f] = invertAffine(dstToSrc);
+	const [a, b, c, d, e, f] = dstToSrc;
 	const out = createPixelImage(outWidth, outHeight);
+	const bg = bgHex ? parseHex(bgHex) : null;
 	for (let y = 0; y < outHeight; y++) {
 		for (let x = 0; x < outWidth; x++) {
 			const sx = a * x + c * y + e;
 			const sy = b * x + d * y + f;
 			const di = (y * outWidth + x) * 4;
-			if (sx < -1 || sy < -1 || sx > img.width || sy > img.height) continue;
+			if (sx < -EPS || sy < -EPS || sx > img.width - 1 + EPS || sy > img.height - 1 + EPS) {
+				if (bg) {
+					out.data[di] = bg[0];
+					out.data[di + 1] = bg[1];
+					out.data[di + 2] = bg[2];
+					out.data[di + 3] = 255;
+				}
+				continue;
+			}
 			const [r, g, bl, al] = sampleBilinear(img, sx, sy);
-			out.data[di] = r;
-			out.data[di + 1] = g;
-			out.data[di + 2] = bl;
-			out.data[di + 3] = al;
+			if (bg) {
+				const sa = al / 255;
+				out.data[di] = r * sa + bg[0] * (1 - sa);
+				out.data[di + 1] = g * sa + bg[1] * (1 - sa);
+				out.data[di + 2] = bl * sa + bg[2] * (1 - sa);
+				out.data[di + 3] = 255;
+			} else {
+				out.data[di] = r;
+				out.data[di + 1] = g;
+				out.data[di + 2] = bl;
+				out.data[di + 3] = al;
+			}
 		}
 	}
 	return out;
 }
 
-function transformCorners(
-	img: PixelImage,
-	m: AffineMatrix
-): { minX: number; minY: number; outW: number; outH: number } {
-	const pts = [
-		[0, 0],
-		[img.width, 0],
-		[0, img.height],
-		[img.width, img.height]
-	].map(([x, y]) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]]);
-	const xs = pts.map((p) => p[0]);
-	const ys = pts.map((p) => p[1]);
-	const minX = Math.min(...xs);
-	const minY = Math.min(...ys);
-	return {
-		minX,
-		minY,
-		outW: Math.ceil(Math.max(...xs) - minX),
-		outH: Math.ceil(Math.max(...ys) - minY)
-	};
+function centeredTransform(img: PixelImage, forward: AffineMatrix): PixelImage {
+	const inv = invertAffine(forward);
+
+	let minX = Infinity;
+	let maxX = -Infinity;
+	let minY = Infinity;
+	let maxY = -Infinity;
+	for (const [px, py] of [
+		[0.5, 0.5],
+		[img.width - 0.5, 0.5],
+		[0.5, img.height - 0.5],
+		[img.width - 0.5, img.height - 0.5]
+	]) {
+		const qx = forward[0] * px + forward[2] * py + forward[4];
+		const qy = forward[1] * px + forward[3] * py + forward[5];
+		minX = Math.min(minX, qx);
+		maxX = Math.max(maxX, qx);
+		minY = Math.min(minY, qy);
+		maxY = Math.max(maxY, qy);
+	}
+	const outW = Math.round(maxX - minX) + 1;
+	const outH = Math.round(maxY - minY) + 1;
+	const tx = inv[0] * minX + inv[2] * minY - 0.5;
+	const ty = inv[1] * minX + inv[3] * minY - 0.5;
+	return transformImage(img, [inv[0], inv[1], inv[2], inv[3], tx, ty], outW, outH);
 }
 
 export function skewImage(img: PixelImage, degX: number, degY: number): PixelImage {
@@ -78,25 +93,16 @@ export function skewImage(img: PixelImage, degX: number, degY: number): PixelIma
 	if (!Number.isFinite(kx) || !Number.isFinite(ky)) {
 		throw new Error('Углы наклона не могут быть 90° или -90°');
 	}
-	const forward: AffineMatrix = [1, ky, kx, 1, 0, 0];
-	const bounds = transformCorners(img, forward);
-	const toOrigin: AffineMatrix = [1, 0, 0, 1, -bounds.minX, -bounds.minY];
-	return transformImage(img, mulAffine(invertAffine(forward), invertAffine(toOrigin)), bounds.outW, bounds.outH);
+	return centeredTransform(img, [1, ky, kx, 1, 0, 0]);
 }
 
 export function rotateFreeImage(img: PixelImage, degrees: number): PixelImage {
 	const rad = (degrees * Math.PI) / 180;
-	const cos = Math.cos(rad);
-	const sin = Math.sin(rad);
-	const forward: AffineMatrix = [cos, sin, -sin, cos, 0, 0];
-	const bounds = transformCorners(img, forward);
-	const toOrigin: AffineMatrix = [1, 0, 0, 1, -bounds.minX, -bounds.minY];
-	return transformImage(
-		img,
-		mulAffine(invertAffine(forward), invertAffine(toOrigin)),
-		bounds.outW,
-		bounds.outH
-	);
+	let cos = Math.cos(rad);
+	let sin = Math.sin(rad);
+	if (Math.abs(sin) < 1e-12) sin = 0;
+	if (Math.abs(cos) < 1e-12) cos = 0;
+	return centeredTransform(img, [cos, sin, -sin, cos, 0, 0]);
 }
 
 export function zoomImage(img: PixelImage, scalePercent: number): PixelImage {
