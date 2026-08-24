@@ -123,3 +123,44 @@ export function replaceExtension(filename: string, ext: string): string {
 	const base = filename.replace(/\.[^./\\]+$/, '');
 	return `${base}.${ext}`;
 }
+
+export async function decodeSvgText(text: string, targetWidth?: number): Promise<PixelImage> {
+	const trimmed = text.trim();
+	if (trimmed.length === 0) {
+		throw new Error('Вставьте разметку SVG');
+	}
+	const blob = new Blob([trimmed], { type: 'image/svg+xml' });
+	const url = URL.createObjectURL(blob);
+	try {
+		const img = new Image();
+		await new Promise<void>((resolve, reject) => {
+			img.onload = () => resolve();
+			img.onerror = () => reject(new Error('Не удалось загрузить SVG — проверьте разметку'));
+			img.src = url;
+		});
+		const w = targetWidth ?? img.naturalWidth ?? 300;
+		const ratio = img.naturalHeight > 0 ? img.naturalHeight / img.naturalWidth : 1;
+		const h = Math.max(1, Math.round(w * ratio));
+		const canvas = document.createElement('canvas');
+		canvas.width = w;
+		canvas.height = h;
+		const ctx = canvas.getContext('2d', { willReadFrequently: true });
+		if (!ctx) throw new Error('Canvas 2D context недоступен в этом браузере');
+		ctx.drawImage(img, 0, 0, w, h);
+		const imageData = ctx.getImageData(0, 0, w, h);
+		return { width: imageData.width, height: imageData.height, data: imageData.data };
+	} finally {
+		URL.revokeObjectURL(url);
+	}
+}
+
+export async function jpegRoundtrip(img: PixelImage, qualityPercent: number): Promise<PixelImage> {
+	const quality = Math.min(Math.max(Math.trunc(qualityPercent), 1), 100) / 100;
+	const jpegBlob = await encode(img, 'image/jpeg', quality);
+	const bitmap = await createImageBitmap(jpegBlob);
+	try {
+		return await decodeBitmap(bitmap);
+	} finally {
+		bitmap.close();
+	}
+}
