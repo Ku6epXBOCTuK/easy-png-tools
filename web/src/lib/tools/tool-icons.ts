@@ -99,5 +99,16 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	'make-thinner-png': ZoomOut,
 	'harden-alpha-png': Sun,
 	'despeckle-alpha-png': SearchCheck,
-	'close-holes-png': Hammer
+	'close-holes-png': Hammer,
+	'skew-png': Repeat2,
+	'rotate-free-png': RotateCw,
+	'zoom-png': ZoomIn,
+	'shift-png': Crosshair,
+	'vignette-png': Sun,
+	'jpeg-artifacts-png': Layers,
+	'gamma-png': Contrast,
+	'auto-contrast-png': Contrast,
+	'temperature-png': Sun,
+	'tint-png': Droplet,
+	'svg-to-png': FileImage
 };

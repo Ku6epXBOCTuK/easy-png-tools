@@ -28,23 +28,29 @@ import {
 } from './core/morphology';
 import { gaussianBlur, sharpen as sharpenImage } from './core/convolution';
 import { gradientImage, noiseImage, solidImage } from './core/generate';
+import { rotateFreeImage, skewImage, transformImage, zoomImage } from './core/affine';
+import { vignette } from './core/effects';
 import {
+	autoContrast,
 	brightnessContrast,
 	changeHue,
 	extractChannel,
+	gammaCorrection,
 	grayscale,
 	invert,
 	posterize,
 	sepia,
 	setOpacity,
 	swapChannels,
+	temperature,
+	tint,
 	thresholdBlackWhite,
 	twoColors,
 	type ChannelSwapPair,
 	type RgbChannel
 } from './core/color';
 import { centerByAlpha, crop, expandCanvas, flip, resize, rotate90, tile } from './core/geometry';
-import { decodeTextImage, toBase64, toDataUrl, type OutputMime } from './core/io';
+import { decodeSvgText, decodeTextImage, jpegRoundtrip, toBase64, toDataUrl, type OutputMime } from './core/io';
 import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
 
@@ -859,6 +865,128 @@ export const TOOLS: ToolEntry[] = [
 			isGrayscale(img)
 				? 'Да — все пиксели являются оттенками серого.'
 				: 'Нет — найдены цветные пиксели.'
+	},
+	{
+		id: 'skew-png',
+		title: 'Наклонить PNG',
+		description: 'Сдвигает содержимое по горизонтали и вертикали — эффект перспективы.',
+		category: 'geometry',
+		params: [
+			{ id: 'degX', label: 'Наклон по X, °', type: 'slider', min: -80, max: 80, step: 1, default: 0 },
+			{ id: 'degY', label: 'Наклон по Y, °', type: 'slider', min: -80, max: 80, step: 1, default: 0 }
+		],
+		run: (img, p) => skewImage(img, num(p, 'degX'), num(p, 'degY'))
+	},
+	{
+		id: 'rotate-free-png',
+		title: 'Повернуть на произвольный угол',
+		description:
+			'Поворот на любой угол. Холст расширяется под новые габариты, углы остаются прозрачными.',
+		category: 'geometry',
+		params: [
+			{ id: 'angle', label: 'Угол, °', type: 'slider', min: -180, max: 180, step: 1, default: 15 }
+		],
+		run: (img, p) => rotateFreeImage(img, num(p, 'angle'))
+	},
+	{
+		id: 'zoom-png',
+		title: 'Приблизить PNG',
+		description:
+			'Увеличивает содержимое к центру. Холст прежнего размера — края обрезаются.',
+		category: 'geometry',
+		params: [
+			{ id: 'scale', label: 'Масштаб, %', type: 'slider', min: 100, max: 500, step: 10, default: 200 }
+		],
+		run: (img, p) => zoomImage(img, num(p, 'scale'))
+	},
+	{
+		id: 'shift-png',
+		title: 'Сдвинуть PNG',
+		description: 'Перемещает содержимое на заданное смещение по X и Y.',
+		category: 'geometry',
+		params: [
+			{ id: 'offsetX', label: 'Смещение X, px', type: 'number', min: -5000, max: 5000, step: 1, default: 0 },
+			{ id: 'offsetY', label: 'Смещение Y, px', type: 'number', min: -5000, max: 5000, step: 1, default: 0 },
+			{ id: 'color', label: 'Цвет фона', type: 'color', default: '#ffffff' }
+		],
+		run: (img, p) =>
+			transformImage(
+				img,
+				[1, 0, 0, 1, -Math.trunc(num(p, 'offsetX')), -Math.trunc(num(p, 'offsetY'))],
+				img.width,
+				img.height
+			)
+	},
+	{
+		id: 'vignette-png',
+		title: 'Виньетка PNG',
+		description: 'Плавно затемняет края изображения, центр не затрагивает.',
+		category: 'filters',
+		params: [
+			{ id: 'strength', label: 'Сила затемнения, %', type: 'slider', min: 0, max: 100, step: 5, default: 50 }
+		],
+		run: (img, p) => vignette(img, num(p, 'strength'))
+	},
+	{
+		id: 'jpeg-artifacts-png',
+		title: 'Артефакты JPEG',
+		description:
+			'Имитирует пережатие в JPEG с низким качеством — видимые квадраты и размытие цветов.',
+		category: 'filters',
+		params: [
+			{ id: 'quality', label: 'Качество JPEG', type: 'slider', min: 1, max: 50, step: 1, default: 10 }
+		],
+		run: (img, p) => jpegRoundtrip(img, num(p, 'quality'))
+	},
+	{
+		id: 'gamma-png',
+		title: 'Гамма-коррекция PNG',
+		description: 'Корректирует яркость средних тонов. <1 темнее, >1 светлее, 1 — без изменений.',
+		category: 'color',
+		params: [
+			{ id: 'value', label: 'Гамма', type: 'slider', min: 0.1, max: 3, step: 0.05, default: 1 }
+		],
+		run: (img, p) => gammaCorrection(img, num(p, 'value'))
+	},
+	{
+		id: 'auto-contrast-png',
+		title: 'Автоконтраст PNG',
+		description: 'Растягивает диапазон каждого канала на весь доступный диапазон яркости.',
+		category: 'color',
+		params: [],
+		run: (img) => autoContrast(img)
+	},
+	{
+		id: 'temperature-png',
+		title: 'Температура PNG',
+		description: 'Отрицательные значения делают изображение теплее (оранжевее), положительные — холоднее (синеватее).',
+		category: 'color',
+		params: [
+			{ id: 'percent', label: 'Температура', type: 'slider', min: -100, max: 100, step: 1, default: 0 }
+		],
+		run: (img, p) => temperature(img, num(p, 'percent'))
+	},
+	{
+		id: 'tint-png',
+		title: 'Тонировать PNG',
+		description: 'Умножает цветовые каналы на выбранный оттенок с заданной силой.',
+		category: 'color',
+		params: [
+			{ id: 'color', label: 'Цвет тонирования', type: 'color', default: '#ffb060' },
+			{ id: 'strength', label: 'Сила, %', type: 'slider', min: 0, max: 100, step: 1, default: 30 }
+		],
+		run: (img, p) => tint(img, str(p, 'color'), num(p, 'strength'))
+	},
+	{
+		id: 'svg-to-png',
+		title: 'SVG в PNG',
+		description:
+			'Dекодирует SVG-разметку в растровое изображение. Вставьте SVG-код слева.',
+		category: 'convert',
+		sourceMode: 'text',
+		params: [{ id: 'width', label: 'Ширина результата, px', type: 'number', min: 1, max: 10000, step: 1, default: 512 }],
+		runFromText: (text, p) => decodeSvgText(text, Math.trunc(num(p, 'width'))),
+		run: (img) => clonePixelImage(img)
 	},
 	{
 		id: 'png-is-transparent',
