@@ -39,6 +39,8 @@
 	const canChainBase = $derived(
 		(tool.resultType ?? 'image') === 'image' && tool.sourceMode !== 'text'
 	);
+	const hasMask = $derived(typeof tool.preview === 'function');
+	const shownBase = $derived(showMask && previewResult ? previewResult : result);
 	const hasFilledSteps = $derived(chain.some((step) => step.toolId !== ''));
 
 	function addChainStep() {
@@ -272,15 +274,14 @@
 				sourceLoaded={isSourceless ? true : !!source}
 				{status}
 				{result}
-				{previewResult}
-				bind:showMask
+				displayImage={shownBase}
 				{info}
 				{isInfo}
 				params={sanitized}
 				textResult={textResult}
-				onDownloadError={showError}
 				onChainToggle={canChainBase ? toggleChain : undefined}
 				hasChain={chain.length > 0}
+				onDownloadError={showError}
 			/>
 		</div>
 	</div>
@@ -292,6 +293,8 @@
 				bind:values
 				{pipetteTargetId}
 				onPipetteToggle={handlePipetteToggle}
+				hasMask={hasMask}
+				bind:showMask
 			/>
 		</div>
 	{/if}
