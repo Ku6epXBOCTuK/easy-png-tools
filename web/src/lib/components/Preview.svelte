@@ -94,7 +94,6 @@
 			repeating-conic-gradient(var(--check-a) 0% 25%, var(--check-b) 0% 50%);
 		background-size: 16px 16px;
 		border: 1px solid var(--border);
-		border-radius: var(--radius-m);
 	}
 
 	canvas.pipette {

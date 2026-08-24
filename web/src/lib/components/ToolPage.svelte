@@ -3,7 +3,7 @@
 	import { decodeFile, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
 	import { defaultParams, getTool, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
-	import { newStepId, type PipelineStep } from '$lib/tools/pipeline';
+	import { loadStoredSteps, newStepId, saveSteps, type PipelineStep } from '$lib/tools/pipeline';
 	import DownloadButton from './DownloadButton.svelte';
 	import ParamForm from './ParamForm.svelte';
 	import Preview from './Preview.svelte';
@@ -15,7 +15,7 @@
 	import SourceCard from './tool/SourceCard.svelte';
 	import TextInputCard from './tool/TextInputCard.svelte';
 
-	let { tool }: { tool: ToolEntry } = $props();
+	let { tool, restoreChain = false }: { tool: ToolEntry; restoreChain?: boolean } = $props();
 
 	type Status = 'idle' | 'loaded' | 'processing' | 'error';
 
@@ -28,7 +28,8 @@
 	let info = $state<ImageInfo | null>(null);
 	let errorText = $state('');
 	let values = $state<Record<string, any>>({});
-	let chain = $state<PipelineStep[]>([]);
+	// svelte-ignore state_referenced_locally
+	let chain = $state<PipelineStep[]>(restoreChain ? loadStoredSteps() : []);
 	let chainResults = $state<(PixelImage | null)[]>([]);
 	let lastRunChainJson = '';
 
@@ -202,6 +203,12 @@
 		if (!source && !isSourceless) return;
 		if (isInfo) return;
 		return runner.schedule(() => void runTool());
+	});
+
+	$effect(() => {
+		const filled = chain.filter((step) => step.toolId !== '');
+		if (filled.length === 0 && !hasLastRun) return;
+		saveSteps(filled);
 	});
 
 	function showError(e: unknown) {
