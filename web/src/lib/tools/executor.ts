@@ -1,6 +1,7 @@
 import type { PixelImage } from '../core/types';
 
 type MaybeRunnable = {
+	id: string;
 	run?: (img: PixelImage, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
 };
 
@@ -12,5 +13,105 @@ export async function executeStep(
 	if (!tool.run) {
 		throw new Error('Этот инструмент не обрабатывает изображения');
 	}
+	if (typeof Worker === 'undefined') {
+		return await runDirect(tool, img, params);
+	}
+	const worker = ensureWorker();
+	if (worker === null) {
+		return await runDirect(tool, img, params);
+	}
+	try {
+		return await runInWorker(worker, tool.id, img, params);
+	} catch (workerError) {
+		disableWorker();
+		void workerError;
+		return await runDirect(tool, img, params);
+	}
+}
+
+async function runDirect(
+	tool: MaybeRunnable,
+	img: PixelImage,
+	params: Record<string, unknown>
+): Promise<PixelImage> {
+	if (!tool.run) {
+		throw new Error('Этот инструмент не обрабатывает изображения');
+	}
 	return await tool.run(img, params);
+}
+
+let worker: Worker | null = null;
+let workerTried = false;
+let nextRequestId = 1;
+const pending = new Map<
+	number,
+	{ resolve: (img: PixelImage) => void; reject: (e: Error) => void }
+>();
+
+function ensureWorker(): Worker | null {
+	if (workerTried) return worker;
+	workerTried = true;
+	try {
+		const candidate = new Worker(new URL('./executor.worker.ts', import.meta.url), {
+			type: 'module'
+		});
+		candidate.onmessage = (event: MessageEvent) => {
+			const payload = event.data as {
+				id: number;
+				ok: boolean;
+				width?: number;
+				height?: number;
+				data?: Uint8ClampedArray;
+				error?: string;
+			};
+			const entry = pending.get(payload.id);
+			if (!entry) return;
+			pending.delete(payload.id);
+			if (payload.ok && payload.data && payload.width && payload.height) {
+				entry.resolve({
+					width: payload.width,
+					height: payload.height,
+					data: new Uint8ClampedArray(payload.data)
+				});
+			} else {
+				entry.reject(new Error(payload.error ?? 'Ошибка исполнения в воркере'));
+			}
+		};
+		candidate.onerror = () => {
+			worker = null;
+			for (const entry of pending.values()) {
+				entry.reject(new Error('Воркер недоступен'));
+			}
+			pending.clear();
+		};
+		worker = candidate;
+	} catch {
+		worker = null;
+	}
+	return worker;
+}
+
+function disableWorker(): void {
+	if (worker) {
+		worker.terminate();
+	}
+	worker = null;
+}
+
+function runInWorker(
+	workerInstance: Worker,
+	toolId: string,
+	img: PixelImage,
+	params: Record<string, unknown>
+): Promise<PixelImage> {
+	return new Promise((resolve, reject) => {
+		const id = nextRequestId++;
+		pending.set(id, { resolve, reject });
+		workerInstance.postMessage({
+			id,
+			toolId,
+			image: { width: img.width, height: img.height, data: new Uint8ClampedArray(img.data) },
+			params
+		});
+	});
 }
