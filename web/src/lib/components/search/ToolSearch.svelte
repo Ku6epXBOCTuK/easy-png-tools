@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { isChainable, TOOLS } from '$lib/registry';
+	import ToolCard from './ToolCard.svelte';
 
 	interface Props {
 		onSelect: (toolId: string) => void;
@@ -13,7 +14,13 @@
 	let activeIndex = $state(0);
 	let listOpen = $state(false);
 
-	type Match = { id: string; title: string; description: string; score: number };
+	type Match = {
+		id: string;
+		title: string;
+		description: string;
+		popularity: number;
+		score: number;
+	};
 
 	function score(tool: (typeof TOOLS)[number], q: string): number | null {
 		if (q.length === 0) return 1;
@@ -46,10 +53,21 @@
 		for (const tool of candidates) {
 			const s = score(tool, q);
 			if (s !== null && s > 0) {
-				found.push({ id: tool.id, title: tool.title, description: tool.description, score: s });
+				found.push({
+					id: tool.id,
+					title: tool.title,
+					description: tool.description,
+					popularity: tool.popularity ?? 50,
+					score: s
+				});
 			}
 		}
-		found.sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
+		found.sort(
+			(a, b) =>
+				b.score - a.score ||
+				b.popularity - a.popularity ||
+				a.title.localeCompare(b.title)
+		);
 		return found.slice(0, 12);
 	});
 
@@ -97,21 +115,18 @@
 	{#if listOpen && query.trim().length > 0 && matches.length === 0}
 		<p class="none text-muted">Ничего не найдено — попробуйте другое слово.</p>
 	{:else if listOpen && matches.length > 0}
-		<ul id="tool-search-list" role="listbox">
+		<div id="tool-search-list" class="cards" role="listbox">
 			{#each matches as match, index (match.id)}
-				<li role="option" aria-selected={index === activeIndex}>
-					<button
-						type="button"
-						class:selected={index === activeIndex}
-						onclick={() => choose(match.id)}
-						onmousemove={() => (activeIndex = index)}
-					>
-						<span class="title">{match.title}</span>
-						<span class="hint text-caption text-muted">{match.description}</span>
-					</button>
-				</li>
+				<ToolCard
+					toolId={match.id}
+					title={match.title}
+					description={match.description}
+					selected={index === activeIndex}
+					onActivate={() => choose(match.id)}
+					onHover={() => (activeIndex = index)}
+				/>
 			{/each}
-		</ul>
+		</div>
 	{/if}
 </div>
 
@@ -138,54 +153,30 @@
 		outline: none;
 	}
 
-	ul {
+	.cards {
 		position: absolute;
 		left: 0;
 		right: 0;
 		top: calc(100% + var(--space-1));
 		z-index: 40;
-		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-1);
 		margin: 0;
 		padding: var(--space-1);
 		background: var(--surface);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-m);
 		box-shadow: var(--shadow-card);
-		max-height: 24rem;
+		max-height: 26rem;
 		overflow-y: auto;
 		text-align: left;
 	}
 
-	li button {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		width: 100%;
-		text-align: left;
-		padding: var(--space-2);
-		border: 0;
-		border-radius: var(--radius-s);
-		background: none;
-		color: inherit;
-		cursor: pointer;
-	}
-
-	li button.selected,
-	li button:hover {
-		background: color-mix(in srgb, var(--accent) 10%, var(--surface));
-	}
-
-	.title {
-		font-weight: 600;
-		font-size: var(--text-m);
-	}
-
-	.hint {
-		display: -webkit-box;
-		-webkit-line-clamp: 1;
-		line-clamp: 1;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	@media (max-width: 40rem) {
+		.cards {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	.none {
