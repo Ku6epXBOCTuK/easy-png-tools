@@ -15,7 +15,7 @@
 	import { t } from '$lib/i18n/t';
 	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
 	import type { StageStatus } from './stage/stage-props';
-	import ToolStageClassic from './stage/ToolStageClassic.svelte';
+	import ToolStageInline from './stage/ToolStageInline.svelte';
 
 	let { tool, restoreChain = false }: { tool: ToolEntry; restoreChain?: boolean } = $props();
 
@@ -265,7 +265,7 @@
 		<div class="error-banner" role="alert">{errorText}</div>
 	{/if}
 
-	<ToolStageClassic
+	<ToolStageInline
 		tool={tool}
 		source={source}
 		result={result}
