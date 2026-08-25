@@ -6,7 +6,7 @@ export const en: Dict = {
 		catalog: 'Catalog',
 		sectionsAria: 'Sections',
 		footerNote:
-			'All operations run locally in your browser вЂ” your files are never uploaded anywhere.'
+			'All operations run locally in your browser — your files are never uploaded anywhere.'
 	},
 	categories: {
 		convert: 'Convert',
@@ -18,14 +18,14 @@ export const en: Dict = {
 		generate: 'Generate'
 	},
 	home: {
-		defaultTitle: 'easy-png-tools вЂ” PNG utilities right in your browser',
+		defaultTitle: 'easy-png-tools — PNG utilities right in your browser',
 		heroTitle: 'What do you want to do with the image?',
-		heroLead: 'Find a tool вЂ” everything runs locally in your browser.',
-		restoreLast: 'в†© Restore last: {title}',
-		changeTool: 'в†ђ Change tool'
+		heroLead: 'Find a tool — everything runs locally in your browser.',
+		restoreLast: '↩ Restore last: {title}',
+		changeTool: '← Change tool'
 	},
 	catalog: {
-		pageTitle: 'All tools вЂ” easy-png-tools',
+		pageTitle: 'All tools — easy-png-tools',
 		metaDescription:
 			'Full catalog of PNG utilities: convert, transparency, color, geometry, analysis and image generation.',
 		heading: 'Tool catalog',
@@ -46,7 +46,7 @@ export const en: Dict = {
 		inputLegend: 'Input',
 		resultLegend: 'Result',
 		paramsLegend: 'Parameters',
-		busyTitle: 'ProcessingвЂ¦',
+		busyTitle: 'Processing…',
 		busyHint: 'Running chain step',
 		removeStepAria: 'Remove step'
 	},
@@ -56,14 +56,14 @@ export const en: Dict = {
 	resultCard: {
 		emptyTitle: 'The result will appear here',
 		emptyHint: 'First upload a source image on the left',
-		processingTitle: 'ProcessingвЂ¦',
+		processingTitle: 'Processing…',
 		processingHint: 'The image is being processed, this will take a moment',
-		recalc: 'RecalculatingвЂ¦',
-		nextTool: 'в›“ Next tool',
-		breakChain: 'вњ‚ Break the chain'
+		recalc: 'Recalculating…',
+		nextTool: '⛓ Next tool',
+		breakChain: '✂ Break the chain'
 	},
 	paramsCard: {
-		noParams: 'This tool has no parameters вЂ” the result is ready as is.'
+		noParams: 'This tool has no parameters — the result is ready as is.'
 	},
 	textInput: {
 		heading: 'Text',
@@ -78,13 +78,13 @@ export const en: Dict = {
 		downloadTxt: 'Download .txt'
 	},
 	download: {
-		busy: 'Preparing fileвЂ¦',
+		busy: 'Preparing file…',
 		file: 'Download .{ext}'
 	},
 	infoPanel: {
 		dimensions: 'Dimensions',
 		alpha: 'Alpha channel',
-		alphaYes: 'yes вЂ” there are semi-transparent pixels',
+		alphaYes: 'yes — there are semi-transparent pixels',
 		alphaNo: 'no',
 		colorCount: 'Unique colors (RGBA)'
 	},
@@ -93,9 +93,9 @@ export const en: Dict = {
 		overlayDefault: 'Release the file to replace the image'
 	},
 	search: {
-		placeholder: 'Find a toolвЂ¦',
+		placeholder: 'Find a tool…',
 		aria: 'Search tools',
-		nothingFound: 'Nothing found вЂ” try another word.'
+		nothingFound: 'Nothing found — try another word.'
 	},
 	ui: {
 		showMask: 'Show mask',

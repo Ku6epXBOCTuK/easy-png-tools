@@ -1,5 +1,7 @@
 import type { ParamDef, ToolEntry } from '$lib/registry';
+import type { SearchDoc } from './matching';
 import { getMergedDict } from './locale.svelte';
+import { ru } from './ru';
 
 /**
  * Строки инструмента на активной локали.
