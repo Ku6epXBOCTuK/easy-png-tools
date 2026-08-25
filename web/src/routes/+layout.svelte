@@ -1,8 +1,16 @@
 <script lang="ts">
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import { onMount } from 'svelte';
+	import { getLocale, initLocale, setLocale } from '$lib/i18n/locale.svelte';
+	import { t } from '$lib/i18n/t';
+	import { LOCALES, type Locale } from '$lib/i18n/dict';
 
 	let { children } = $props();
+
+	onMount(() => initLocale());
+
+	const LANG_LABELS: Record<Locale, string> = { ru: 'RU', en: 'EN' };
 </script>
 
 <svelte:head>
@@ -12,9 +20,22 @@
 <div class="app">
 	<header>
 		<a href="/" class="brand">easy-png-tools</a>
-		<nav aria-label="Разделы">
-			<a class="nav-link workspace-link" href="/">Рабочая область</a>
-			<a class="nav-link" href="/list-tools">Каталог</a>
+		<nav aria-label={t('header.sectionsAria')}>
+			<a class="nav-link workspace-link" href="/">{t('header.workspace')}</a>
+			<a class="nav-link" href="/list-tools">{t('header.catalog')}</a>
+			<div class="lang-switch" role="group" aria-label="Language / Язык">
+				{#each LOCALES as l (l)}
+					<button
+						type="button"
+						class="lang-btn"
+						class:active={getLocale() === l}
+						aria-pressed={getLocale() === l}
+						onclick={() => setLocale(l)}
+					>
+						{LANG_LABELS[l]}
+					</button>
+				{/each}
+			</div>
 		</nav>
 	</header>
 
@@ -23,9 +44,7 @@
 	</main>
 
 	<footer>
-		<p class="text-caption text-muted">
-			Все операции выполняются локально в вашем браузере — файлы никуда не отправляются.
-		</p>
+		<p class="text-caption text-muted">{t('header.footerNote')}</p>
 	</footer>
 </div>
 
@@ -75,6 +94,36 @@
 		color: var(--accent);
 		background: var(--bg);
 		text-decoration: none;
+	}
+
+	.lang-switch {
+		display: flex;
+		gap: 2px;
+		margin-left: var(--space-2);
+		padding: 2px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-s);
+		background: var(--bg);
+	}
+
+	.lang-btn {
+		border: none;
+		background: transparent;
+		color: var(--text-muted);
+		font-size: var(--text-s);
+		font-weight: 600;
+		padding: 2px 8px;
+		border-radius: calc(var(--radius-s) - 1px);
+		cursor: pointer;
+	}
+
+	.lang-btn:hover {
+		color: var(--accent);
+	}
+
+	.lang-btn.active {
+		background: var(--accent);
+		color: var(--bg);
 	}
 
 	.workspace-link {
