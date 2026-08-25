@@ -14,14 +14,12 @@
 	import { executeStep } from '$lib/tools/executor';
 	import { t } from '$lib/i18n/t';
 	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
-	import ParamsCard from './tool/ParamsCard.svelte';
-	import ResultCard from './tool/ResultCard.svelte';
-	import SourceCard from './tool/SourceCard.svelte';
-	import TextInputCard from './tool/TextInputCard.svelte';
+	import type { StageStatus } from './stage/stage-props';
+	import ToolStageClassic from './stage/ToolStageClassic.svelte';
 
 	let { tool, restoreChain = false }: { tool: ToolEntry; restoreChain?: boolean } = $props();
 
-	type Status = 'idle' | 'loaded' | 'processing' | 'error';
+	type Status = StageStatus;
 
 	let status = $state<Status>('idle');
 	let source = $state<PixelImage | null>(null);
@@ -267,61 +265,34 @@
 		<div class="error-banner" role="alert">{errorText}</div>
 	{/if}
 
-	<div class="panel tool-block">
-		<div class="tool-stage" class:single={isSourceless}>
-			{#if !isSourceless}
-				<span class="edge-legend source-legend" aria-hidden="true">{t('toolPage.legendSource')}</span>
-				<div class="cell">
-					{#if isTextSource && !source}
-						<TextInputCard onSubmit={handleTextSubmit} />
-					{:else}
-						<SourceCard
-							{source}
-							onFile={handleFile}
-							onError={(e) => (errorText = errorMessage(e))}
-							onReset={reset}
-							pipetteActive={!!pipetteTargetId}
-							onPickColor={handlePickColor}
-						/>
-					{/if}
-				</div>
-			{/if}
-			<span class="edge-legend result-legend" aria-hidden="true">
-				{isInfo ? t('toolPage.legendSummary') : t('toolPage.legendResult')}
-			</span>
-			<div class="cell">
-			<ResultCard
-				{tool}
-				sourceLoaded={isSourceless ? true : !!source}
-				{status}
-				{result}
-				displayImage={shownBase}
-				{info}
-				{isInfo}
-				params={sanitized}
-				textResult={textResult}
-				onChainToggle={canChainBase ? toggleChain : undefined}
-				hasChain={chain.length > 0}
-				onDownloadError={showError}
-			/>
-		</div>
-	</div>
-
-	{#if (source || isSourceless) && !isInfo && (tool.params.length > 0 || hasMask)}
-		<div class="params-sep">
-			<span class="edge-legend" aria-hidden="true">{t('toolPage.legendParams')}</span>
-		</div>
-		<ParamsCard
-			tool={tool}
-			params={tool.params}
-			bind:values
-			{pipetteTargetId}
-			onPipetteToggle={handlePipetteToggle}
-			hasMask={hasMask}
-			bind:showMask
-		/>
-	{/if}
-	</div>
+	<ToolStageClassic
+		tool={tool}
+		source={source}
+		result={result}
+		displayImage={shownBase}
+		info={info}
+		status={status}
+		isInfo={isInfo}
+		isSourceless={isSourceless}
+		isTextSource={isTextSource}
+		textResult={textResult}
+		sanitized={sanitized}
+		canChainBase={canChainBase}
+		hasChain={chain.length > 0}
+		hasMask={hasMask}
+		bind:showMask
+		bind:values
+		pipetteTargetId={pipetteTargetId}
+		handleFile={handleFile}
+		onTextSubmit={handleTextSubmit}
+		onSourceError={(e) => (errorText = errorMessage(e))}
+		reset={reset}
+		toggleChain={toggleChain}
+		handlePipetteToggle={handlePipetteToggle}
+		handlePickColor={handlePickColor}
+		showError={showError}
+		errorMessage={errorMessage}
+	/>
 
 	<div class="chain-stack">
 		{#each chain as step, index (step.id)}
@@ -372,27 +343,6 @@
 
 	.error-banner {
 		margin-bottom: var(--space-3);
-	}
-
-	.tool-stage {
-		position: relative;
-	}
-
-	.source-legend {
-		left: 25%;
-		transform: translateX(-50%);
-	}
-
-	.result-legend {
-		left: 75%;
-		transform: translateX(-50%);
-	}
-
-	@media (max-width: 48rem) {
-		.source-legend,
-		.result-legend {
-			display: none;
-		}
 	}
 
 	.empty-slot {
