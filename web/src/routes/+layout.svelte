@@ -4,12 +4,16 @@
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import { getLocale, initLocale, setLocale } from '$lib/i18n/locale.svelte';
+	import { getTheme, initTheme, setTheme } from '$lib/theme.svelte';
 	import { t } from '$lib/i18n/t';
 	import { LOCALES, type Locale } from '$lib/i18n/dict';
 
 	let { children } = $props();
 
-	onMount(() => initLocale());
+	onMount(() => {
+		initLocale();
+		initTheme();
+	});
 
 	const LANG_LABELS: Record<Locale, string> = { ru: 'RU', en: 'EN' };
 </script>
@@ -36,6 +40,30 @@
 						{LANG_LABELS[l]}
 					</button>
 				{/each}
+			</div>
+			<div class="theme-switch" role="group" aria-label="Theme / Тема">
+				<button
+					type="button"
+					class="lang-btn"
+					class:active={getTheme() === 'light'}
+					aria-pressed={getTheme() === 'light'}
+					title={t('ui.themeLight')}
+					aria-label={t('ui.themeLight')}
+					onclick={() => setTheme('light')}
+				>
+					☀
+				</button>
+				<button
+					type="button"
+					class="lang-btn"
+					class:active={getTheme() === 'dark'}
+					aria-pressed={getTheme() === 'dark'}
+					title={t('ui.themeDark')}
+					aria-label={t('ui.themeDark')}
+					onclick={() => setTheme('dark')}
+				>
+					☾
+				</button>
 			</div>
 		</nav>
 	</header>
@@ -97,7 +125,8 @@
 		text-decoration: none;
 	}
 
-	.lang-switch {
+	.lang-switch,
+	.theme-switch {
 		display: flex;
 		gap: 2px;
 		margin-left: var(--space-2);

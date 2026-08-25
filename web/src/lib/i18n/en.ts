@@ -102,7 +102,9 @@ export const en: Dict = {
 		decrease: 'Decrease',
 		increase: 'Increase',
 		reset: 'Reset',
-		pipette: 'Eyedropper'
+		pipette: 'Eyedropper',
+		themeLight: 'Light theme',
+		themeDark: 'Dark theme'
 	},
 	errors: {
 		noImageRun: 'This tool does not process images',

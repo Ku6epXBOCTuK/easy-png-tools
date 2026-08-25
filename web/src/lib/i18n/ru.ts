@@ -102,7 +102,9 @@ export const ru: Dict = {
 		decrease: 'Уменьшить',
 		increase: 'Увеличить',
 		reset: 'Сбросить',
-		pipette: 'Пипетка'
+		pipette: 'Пипетка',
+		themeLight: 'Светлая тема',
+		themeDark: 'Тёмная тема'
 	},
 	errors: {
 		noImageRun: 'Этот инструмент не обрабатывает изображения',
