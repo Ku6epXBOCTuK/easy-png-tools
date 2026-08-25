@@ -3,7 +3,7 @@ import type { CategoryId } from '../categories';
 export const LOCALES = ['ru', 'en'] as const;
 export type Locale = (typeof LOCALES)[number];
 
-export const BASE_LOCALE: Locale = 'ru';
+export const BASE_LOCALE: Locale = 'en';
 
 export const LOCALE_TAGS: Record<Locale, string> = {
 	ru: 'ru-RU',
@@ -15,12 +15,14 @@ export function isLocale(value: unknown): value is Locale {
 }
 
 export type ToolStrings = {
-	title: string;
-	description: string;
+	title?: string;
+	description?: string;
 	/** Подписи параметров по их id. */
 	params?: Record<string, string>;
 	/** Подписи опций select: paramId -> value -> label. */
 	options?: Record<string, Record<string, string>>;
+	/** Тексты-результаты текстовых инструментов (analyze): ключ -> строка. */
+	results?: Record<string, string>;
 };
 
 export type HeaderStrings = {

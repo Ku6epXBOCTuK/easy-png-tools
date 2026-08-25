@@ -1,4 +1,4 @@
-import type { Dict } from './dict';
+﻿import type { Dict } from './dict';
 
 export const en: Dict = {
 	header: {
@@ -6,7 +6,7 @@ export const en: Dict = {
 		catalog: 'Catalog',
 		sectionsAria: 'Sections',
 		footerNote:
-			'All operations run locally in your browser — your files are never uploaded anywhere.'
+			'All operations run locally in your browser вЂ” your files are never uploaded anywhere.'
 	},
 	categories: {
 		convert: 'Convert',
@@ -18,14 +18,14 @@ export const en: Dict = {
 		generate: 'Generate'
 	},
 	home: {
-		defaultTitle: 'easy-png-tools — PNG utilities right in your browser',
+		defaultTitle: 'easy-png-tools вЂ” PNG utilities right in your browser',
 		heroTitle: 'What do you want to do with the image?',
-		heroLead: 'Find a tool — everything runs locally in your browser.',
-		restoreLast: '↩ Restore last: {title}',
-		changeTool: '← Change tool'
+		heroLead: 'Find a tool вЂ” everything runs locally in your browser.',
+		restoreLast: 'в†© Restore last: {title}',
+		changeTool: 'в†ђ Change tool'
 	},
 	catalog: {
-		pageTitle: 'All tools — easy-png-tools',
+		pageTitle: 'All tools вЂ” easy-png-tools',
 		metaDescription:
 			'Full catalog of PNG utilities: convert, transparency, color, geometry, analysis and image generation.',
 		heading: 'Tool catalog',
@@ -46,7 +46,7 @@ export const en: Dict = {
 		inputLegend: 'Input',
 		resultLegend: 'Result',
 		paramsLegend: 'Parameters',
-		busyTitle: 'Processing…',
+		busyTitle: 'ProcessingвЂ¦',
 		busyHint: 'Running chain step',
 		removeStepAria: 'Remove step'
 	},
@@ -56,14 +56,14 @@ export const en: Dict = {
 	resultCard: {
 		emptyTitle: 'The result will appear here',
 		emptyHint: 'First upload a source image on the left',
-		processingTitle: 'Processing…',
+		processingTitle: 'ProcessingвЂ¦',
 		processingHint: 'The image is being processed, this will take a moment',
-		recalc: 'Recalculating…',
-		nextTool: '⛓ Next tool',
-		breakChain: '✂ Break the chain'
+		recalc: 'RecalculatingвЂ¦',
+		nextTool: 'в›“ Next tool',
+		breakChain: 'вњ‚ Break the chain'
 	},
 	paramsCard: {
-		noParams: 'This tool has no parameters — the result is ready as is.'
+		noParams: 'This tool has no parameters вЂ” the result is ready as is.'
 	},
 	textInput: {
 		heading: 'Text',
@@ -78,13 +78,13 @@ export const en: Dict = {
 		downloadTxt: 'Download .txt'
 	},
 	download: {
-		busy: 'Preparing file…',
+		busy: 'Preparing fileвЂ¦',
 		file: 'Download .{ext}'
 	},
 	infoPanel: {
 		dimensions: 'Dimensions',
 		alpha: 'Alpha channel',
-		alphaYes: 'yes — there are semi-transparent pixels',
+		alphaYes: 'yes вЂ” there are semi-transparent pixels',
 		alphaNo: 'no',
 		colorCount: 'Unique colors (RGBA)'
 	},
@@ -93,9 +93,9 @@ export const en: Dict = {
 		overlayDefault: 'Release the file to replace the image'
 	},
 	search: {
-		placeholder: 'Find a tool…',
+		placeholder: 'Find a toolвЂ¦',
 		aria: 'Search tools',
-		nothingFound: 'Nothing found — try another word.'
+		nothingFound: 'Nothing found вЂ” try another word.'
 	},
 	ui: {
 		showMask: 'Show mask',
@@ -110,5 +110,25 @@ export const en: Dict = {
 		workerUnavailable: 'Worker is unavailable',
 		notFound: 'Tool not found'
 	},
-	tools: {}
+	tools: {
+		'png-is-grayscale': {
+			results: {
+				grayscaleYes: 'Yes — all pixels are shades of gray.',
+				grayscaleNo: 'No — colored pixels were found.'
+			}
+		},
+		'png-is-transparent': {
+			results: {
+				transparentYes: 'Yes — there are transparent or semi-transparent pixels.',
+				transparentNo: 'No — all pixels are fully opaque.'
+			}
+		},
+		'png-orientation': {
+			results: {
+				orientationPortrait: 'Portrait — height is greater than width.',
+				orientationLandscape: 'Landscape — width is greater than height.',
+				orientationSquare: 'Square — the sides are equal.'
+			}
+		}
+	}
 };

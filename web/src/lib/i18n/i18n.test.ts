@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getLocale, initLocale, setLocale } from './locale.svelte';
 import { interpolate, t } from './t';
-import { ru } from './ru';
+import { en } from './en';
 
 type Store = Record<string, string>;
 
@@ -19,7 +19,7 @@ function stubStorage(): { store: Store } {
 
 beforeEach(() => {
 	setLocale('ru');
-	delete (ru.home as Record<string, string>).onlyRuKey;
+	delete (en.home as Record<string, string>).onlyEnKey;
 	vi.unstubAllGlobals();
 });
 
@@ -30,10 +30,10 @@ describe('t', () => {
 		expect(t('header.catalog')).toBe('Catalog');
 	});
 
-	it('фолбэк на базовую локаль, если в активной нет ключа', () => {
-		(ru.home as Record<string, string>).onlyRuKey = 'Только русская строка';
-		setLocale('en');
-		expect(t('home.onlyRuKey')).toBe('Только русская строка');
+	it('фолбэк на английскую базу, если в активной локали нет ключа', () => {
+		(en.home as Record<string, string>).onlyEnKey = 'Only English string';
+		setLocale('ru');
+		expect(t('home.onlyEnKey')).toBe('Only English string');
 	});
 
 	it('неизвестный путь возвращает сам путь', () => {

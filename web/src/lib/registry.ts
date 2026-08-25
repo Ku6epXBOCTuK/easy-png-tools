@@ -162,34 +162,34 @@ function hexToRgba(hex: string, alpha = 255): [number, number, number, number] {
 export const TOOLS: ToolEntry[] = [
 	decodeToPng(
 		'jpg-to-png',
-		'Конвертировать JPG в PNG',
-		'Открывает JPEG и сохраняет его как PNG без потерь. Прозрачность, если была, сохраняется.'
+		'Convert JPG to PNG',
+		'Opens a JPEG and saves it as lossless PNG. Transparency, if present, is preserved.'
 	),
 	decodeToPng(
 		'webp-to-png',
-		'Конвертировать WebP в PNG',
-		'Перекодирует WebP-изображение в универсальный PNG.'
+		'Convert WebP to PNG',
+		'Re-encodes a WebP image into universal PNG.'
 	),
 	decodeToPng(
 		'gif-to-png',
-		'Конвертировать GIF в PNG',
-		'Dостаёт первый кадр GIF-анимации и сохраняет его как PNG.'
+		'Convert GIF to PNG',
+		'Extracts the first frame of a GIF animation and saves it as PNG.'
 	),
 	decodeToPng(
 		'bmp-to-png',
-		'Конвертировать BMP в PNG',
-		'Перекодирует BMP в компактный PNG без потерь.'
+		'Convert BMP to PNG',
+		'Re-encodes BMP into compact lossless PNG.'
 	),
 	decodeToPng(
 		'ico-to-png',
-		'Конвертировать ICO в PNG',
-		'Превращает иконку .ico в обычный PNG нужного размера.'
+		'Convert ICO to PNG',
+		'Turns an .ico icon into a regular PNG of the chosen size.'
 	),
 	{
 		id: 'png-to-bmp',
-		title: 'Конвертировать PNG в BMP',
+		title: 'Convert PNG to BMP',
 		description:
-			'Sохраняет изображение в 24-битный BMP без альфа-канала: прозрачность заменяется чёрным фоном.',
+			'Saves the image as 24-bit BMP without an alpha channel: transparency is replaced with a black background.',
 		category: 'convert',
 		params: [],
 		run: (img) => flattenOntoColor(img, '#000000'),
@@ -197,8 +197,8 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'png-to-base64',
-		title: 'PNG в Base64',
-		description: 'Кодирует изображение в base64-строку для вставки в код или стили.',
+		title: 'PNG to Base64',
+		description: 'Encodes the image into a base64 string for embedding in code or styles.',
 		category: 'convert',
 		params: [],
 		resultType: 'text',
@@ -206,9 +206,9 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'base64-to-png',
-		title: 'Base64 в PNG',
+		title: 'Base64 to PNG',
 		description:
-			'Dекодирует base64-строку или data-uri обратно в картинку. Вставьте строку слева.',
+			'Decodes a base64 string or data-uri back into an image. Paste the string on the left.',
 		category: 'convert',
 		sourceMode: 'text',
 		params: [],
@@ -216,8 +216,8 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'png-to-data-uri',
-		title: 'PNG в Data URI',
-		description: 'Строит полный data-uri (data:image/png;base64,…) для встраивания в HTML/CSS.',
+		title: 'PNG to Data URI',
+		description: 'Builds a full data-uri (data:image/png;base64,…) for embedding in HTML/CSS.',
 		category: 'convert',
 		params: [],
 		resultType: 'text',
@@ -225,8 +225,8 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'data-uri-to-png',
-		title: 'Data URI в PNG',
-		description: 'Dекодирует data:image/…;base64,… обратно в файл картинки.',
+		title: 'Data URI to PNG',
+		description: 'Decodes data:image/…;base64,… back into an image file.',
 		category: 'convert',
 		sourceMode: 'text',
 		params: [],
@@ -234,9 +234,9 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'png-to-hex',
-		title: 'PNG в HEX-пиксели',
+		title: 'PNG to HEX pixels',
 		description:
-			'Показывает все пиксели как hex-значения rrggbbaa — по строкам, через пробел.',
+			'Shows all pixels as rrggbbaa hex values — row by row, space separated.',
 		category: 'convert',
 		params: [],
 		resultType: 'text',
@@ -244,27 +244,27 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'hex-to-png',
-		title: 'HEX-пиксели в PNG',
+		title: 'HEX pixels to PNG',
 		description:
-			'Sобирает картинку из hex-значений rrggbbaa (через пробел). Укажите ширину — высота рассчитается сама.',
+			'Assembles an image from rrggbbaa hex values (space separated). Set the width — the height is computed automatically.',
 		category: 'convert',
 		sourceMode: 'text',
 		params: [
-			{ id: 'width', label: 'Ширина изображения', type: 'number', min: 1, max: 10000, step: 1, default: 1 }
+			{ id: 'width', label: 'Image width', type: 'number', min: 1, max: 10000, step: 1, default: 1 }
 		],
 		runFromText: (text, p) => hexToPixels(text, Math.trunc(Number(p['width']))),
 		run: (img) => clonePixelImage(img)
 	},
 	{
 		id: 'resize-png',
-		title: 'Изменить размер PNG',
+		title: 'Resize PNG',
 		description:
-			'Масштабирование изображения с билинейной интерполяцией. При сохранении пропорций одна сторона задаёт масштаб, а если указаны обе — изображение вписывается в эти размеры.',
+			'Scales the image with bilinear interpolation. With aspect kept, one side defines the scale; if both are set, the image fits inside them.',
 		category: 'geometry',
 		params: [
-			{ id: 'width', label: 'Ширина (0 — авто)', type: 'number', min: 0, max: 20000, step: 1, default: 0 },
-			{ id: 'height', label: 'Высота (0 — авто)', type: 'number', min: 0, max: 20000, step: 1, default: 0 },
-			{ id: 'keepAspect', label: 'Сохранять пропорции', type: 'checkbox', default: true }
+			{ id: 'width', label: 'Width (0 = auto)', type: 'number', min: 0, max: 20000, step: 1, default: 0 },
+			{ id: 'height', label: 'Height (0 = auto)', type: 'number', min: 0, max: 20000, step: 1, default: 0 },
+			{ id: 'keepAspect', label: 'Keep aspect ratio', type: 'checkbox', default: true }
 		],
 		run: (img, p) => {
 			const keepAspect = p['keepAspect'] === true;
@@ -289,15 +289,15 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'crop-png',
-		title: 'Обрезать PNG',
+		title: 'Crop PNG',
 		description:
-			'Вырезает прямоугольную область. Координаты и размеры выходят за границы изображения — область усекается до пересечения с картинкой.',
+			'Cuts out a rectangular area. Coordinates and sizes may go beyond the image — the area is clipped to the intersection.',
 		category: 'geometry',
 		params: [
-			{ id: 'x', label: 'X (слева)', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
-			{ id: 'y', label: 'Y (сверху)', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
-			{ id: 'width', label: 'Ширина области', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
-			{ id: 'height', label: 'Высота области', type: 'number', min: -100000, max: 100000, step: 1, default: 0 }
+			{ id: 'x', label: 'X (from left)', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
+			{ id: 'y', label: 'Y (from top)', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
+			{ id: 'width', label: 'Area width', type: 'number', min: -100000, max: 100000, step: 1, default: 0 },
+			{ id: 'height', label: 'Area height', type: 'number', min: -100000, max: 100000, step: 1, default: 0 }
 		],
 		run: (img, p) => {
 			const w = Math.trunc(num(p, 'width'));
@@ -310,19 +310,19 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'rotate-png',
-		title: 'Повернуть PNG',
-		description: 'Поворот на 90°, 180° или 270° по часовой стрелке без потери качества.',
+		title: 'Rotate PNG',
+		description: 'Rotates by 90°, 180° or 270° clockwise without quality loss.',
 		category: 'geometry',
 		params: [
 			{
 				id: 'angle',
-				label: 'Угол поворота',
+				label: 'Rotation angle',
 				type: 'select',
 				default: '90',
 				options: [
-					{ value: '90', label: '90° по часовой' },
+					{ value: '90', label: '90° clockwise' },
 					{ value: '180', label: '180°' },
-					{ value: '270', label: '270° по часовой' }
+					{ value: '270', label: '270° clockwise' }
 				]
 			}
 		],
@@ -330,18 +330,18 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'flip-png',
-		title: 'Отразить PNG',
-		description: 'Зеркальное отражение по горизонтали или вертикали без потери качества.',
+		title: 'Flip PNG',
+		description: 'Mirrors horizontally or vertically without quality loss.',
 		category: 'geometry',
 		params: [
 			{
 				id: 'axis',
-				label: 'Ось отражения',
+				label: 'Flip axis',
 				type: 'select',
 				default: 'horizontal',
 				options: [
-					{ value: 'horizontal', label: 'По горизонтали (слева направо)' },
-					{ value: 'vertical', label: 'По вертикали (сверху вниз)' }
+					{ value: 'horizontal', label: 'Horizontal (left to right)' },
+					{ value: 'vertical', label: 'Vertical (top to bottom)' }
 				]
 			}
 		],
@@ -349,13 +349,13 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'add-padding-png',
-		title: 'Добавить поля PNG',
-		description: 'Расширяет холст во все стороны на выбранное число пикселей.',
+		title: 'Add padding to PNG',
+		description: 'Expands the canvas on all sides by the chosen number of pixels.',
 		category: 'geometry',
 		params: [
-			{ id: 'padding', label: 'Поля, px', type: 'number', min: 1, max: 2000, step: 1, default: 10 },
-			{ id: 'transparent', label: 'Прозрачные поля', type: 'checkbox', default: true },
-			{ id: 'color', label: 'Цвет полей', type: 'color', default: '#ffffff' }
+			{ id: 'padding', label: 'Padding, px', type: 'number', min: 1, max: 2000, step: 1, default: 10 },
+			{ id: 'transparent', label: 'Transparent padding', type: 'checkbox', default: true },
+			{ id: 'color', label: 'Padding color', type: 'color', default: '#ffffff' }
 		],
 		run: (img, p) =>
 			expandCanvas(
@@ -369,26 +369,26 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'add-border-png',
-		title: 'Добавить рамку PNG',
-		description: 'Рисует цветную рамку вокруг изображения выбранной толщины.',
+		title: 'Add border to PNG',
+		description: 'Draws a colored frame of the chosen thickness around the image.',
 		category: 'geometry',
 		params: [
-			{ id: 'thickness', label: 'Толщина рамки, px', type: 'number', min: 1, max: 500, step: 1, default: 5 },
-			{ id: 'color', label: 'Цвет рамки', type: 'color', default: '#000000' }
+			{ id: 'thickness', label: 'Border thickness, px', type: 'number', min: 1, max: 500, step: 1, default: 5 },
+			{ id: 'color', label: 'Border color', type: 'color', default: '#000000' }
 		],
 		run: (img, p) => expandCanvas(img, num(p, 'thickness'), num(p, 'thickness'), num(p, 'thickness'), num(p, 'thickness'), str(p, 'color'))
 	},
 	{
 		id: 'fit-on-background-png',
-		title: 'Вписать PNG на фон',
+		title: 'Fit PNG onto background',
 		description:
-			'Помещает изображение по центру полотна заданного размера с прозрачным или цветным фоном.',
+			'Places the image centered on a canvas of the given size with a transparent or colored background.',
 		category: 'geometry',
 		params: [
-			{ id: 'width', label: 'Ширина полотна', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
-			{ id: 'height', label: 'Высота полотна', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
-			{ id: 'transparent', label: 'Прозрачный фон', type: 'checkbox', default: false },
-			{ id: 'color', label: 'Цвет фона', type: 'color', default: '#ffffff' }
+			{ id: 'width', label: 'Canvas width', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
+			{ id: 'height', label: 'Canvas height', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
+			{ id: 'transparent', label: 'Transparent background', type: 'checkbox', default: false },
+			{ id: 'color', label: 'Background color', type: 'color', default: '#ffffff' }
 		],
 		run: (img, p) => {
 			const width = Math.trunc(num(p, 'width'));
@@ -410,117 +410,117 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'tile-png',
-		title: 'Замостить PNG',
-		description: 'Повторяет изображение сеткой из выбранного числа столбцов и строк.',
+		title: 'Tile PNG',
+		description: 'Repeats the image in a grid of the chosen columns and rows.',
 		category: 'geometry',
 		params: [
-			{ id: 'columns', label: 'Столбцов', type: 'number', min: 1, max: 50, step: 1, default: 2 },
-			{ id: 'rows', label: 'Строк', type: 'number', min: 1, max: 50, step: 1, default: 2 }
+			{ id: 'columns', label: 'Columns', type: 'number', min: 1, max: 50, step: 1, default: 2 },
+			{ id: 'rows', label: 'Rows', type: 'number', min: 1, max: 50, step: 1, default: 2 }
 		],
 		run: (img, p) => tile(img, num(p, 'columns'), num(p, 'rows'))
 	},
 	{
 		id: 'center-by-alpha-png',
-		title: 'Центрировать PNG по содержимому',
+		title: 'Center PNG by content',
 		description:
-			'Находит непрозрачную часть изображения и размещает её по центру прежнего холста.',
+			'Finds the opaque part of the image and centers it on the original canvas.',
 		category: 'geometry',
 		params: [],
 		run: (img) => centerByAlpha(img)
 	},
 	{
 		id: 'blur-png',
-		title: 'Размытие PNG',
+		title: 'Blur PNG',
 		description:
-			'Гауссово размытие: три прохода разделяемого бокса — быстро при любом радиусе. Прозрачные края не темнеют.',
+			'Gaussian blur: three passes of separable box blur — fast at any radius. Transparent edges do not darken.',
 		category: 'filters',
 		params: [
-			{ id: 'radius', label: 'Радиус, px', type: 'slider', min: 1, max: 32, step: 1, default: 4 }
+			{ id: 'radius', label: 'Radius, px', type: 'slider', min: 1, max: 32, step: 1, default: 4 }
 		],
 		run: (img, p) => gaussianBlur(img, num(p, 'radius'))
 	},
 	{
 		id: 'sharpen-png',
-		title: 'Резкость PNG',
+		title: 'Sharpen PNG',
 		description:
-			'Подчёркивает края ядром резкости; сила задаёт смесь с оригиналом. 0% — без изменений.',
+			'Emphasizes edges with a sharpening kernel; strength sets the blend with the original. 0% means no change.',
 		category: 'filters',
 		params: [
-			{ id: 'strength', label: 'Сила, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+			{ id: 'strength', label: 'Strength, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
 		],
 		run: (img, p) => sharpenImage(img, num(p, 'strength'))
 	},
 	{
 		id: 'grayscale-png',
-		title: 'Чёрно-белый PNG',
-		description: 'Переводит изображение в оттенки серого по яркостной формуле BT.601. Альфа сохраняется.',
+		title: 'Grayscale PNG',
+		description: 'Converts the image to shades of gray using the BT.601 luminance formula. Alpha is preserved.',
 		category: 'color',
 		params: [],
 		run: (img) => grayscale(img)
 	},
 	{
 		id: 'invert-colors-png',
-		title: 'Инвертировать цвета PNG',
-		description: 'Обращает каждый цветовой канал (255 − значение). Альфа не меняется.',
+		title: 'Invert colors PNG',
+		description: 'Inverts each color channel (255 − value). Alpha is unchanged.',
 		category: 'color',
 		params: [],
 		run: (img) => invert(img)
 	},
 	{
 		id: 'adjust-brightness-contrast-png',
-		title: 'Яркость и контраст PNG',
-		description: 'Изменяет яркость и контраст в диапазоне от −100 до +100. Значение 0 — без изменений.',
+		title: 'Brightness & contrast PNG',
+		description: 'Adjusts brightness and contrast in the range from −100 to +100. Zero means no change.',
 		category: 'color',
 		params: [
-			{ id: 'brightness', label: 'Яркость', type: 'slider', min: -100, max: 100, step: 1, default: 0 },
-			{ id: 'contrast', label: 'Контраст', type: 'slider', min: -100, max: 100, step: 1, default: 0 }
+			{ id: 'brightness', label: 'Brightness', type: 'slider', min: -100, max: 100, step: 1, default: 0 },
+			{ id: 'contrast', label: 'Contrast', type: 'slider', min: -100, max: 100, step: 1, default: 0 }
 		],
 		run: (img, p) => brightnessContrast(img, num(p, 'brightness'), num(p, 'contrast'))
 	},
 	{
 		id: 'change-png-opacity',
-		title: 'Изменить прозрачность PNG',
+		title: 'Change PNG opacity',
 		description:
-			'Умножает альфа-канал на процент: 0% — полностью прозрачный, 100% — без изменений.',
+			'Multiplies the alpha channel by a percentage: 0% — fully transparent, 100% — unchanged.',
 		category: 'color',
 		params: [
-			{ id: 'percent', label: 'Прозрачность, %', type: 'slider', min: 0, max: 100, step: 1, default: 100 }
+			{ id: 'percent', label: 'Opacity, %', type: 'slider', min: 0, max: 100, step: 1, default: 100 }
 		],
 		run: (img, p) => setOpacity(img, num(p, 'percent'))
 	},
 	{
 		id: 'sepia-png',
-		title: 'Эффект сепии',
-		description: 'Тонирует изображение в тёплые коричневые тона классической сепии.',
+		title: 'Sepia effect',
+		description: 'Tints the image into the warm brown tones of classic sepia.',
 		category: 'color',
 		params: [],
 		run: (img) => sepia(img)
 	},
 	{
 		id: 'change-png-hue',
-		title: 'Сменить оттенок PNG',
-		description: 'Сдвиг цветового тона по кругу. Насыщенность и яркость сохраняются.',
+		title: 'Change hue PNG',
+		description: 'Shifts the hue around the circle. Saturation and lightness are preserved.',
 		category: 'color',
 		params: [
-			{ id: 'degrees', label: 'Сдвиг тона, °', type: 'slider', min: -180, max: 180, step: 1, default: 0 }
+			{ id: 'degrees', label: 'Hue shift, °', type: 'slider', min: -180, max: 180, step: 1, default: 0 }
 		],
 		run: (img, p) => changeHue(img, num(p, 'degrees'))
 	},
 	{
 		id: 'extract-channel-png',
-		title: 'Извлечь канал PNG',
-		description: 'Оставляет выбранный канал — красный, зелёный или синий — в оттенках серого.',
+		title: 'Extract channel PNG',
+		description: 'Keeps only the chosen channel — red, green or blue — as shades of gray.',
 		category: 'color',
 		params: [
 			{
 				id: 'channel',
-				label: 'Канал',
+				label: 'Channel',
 				type: 'select',
 				default: 'red',
 				options: [
-					{ value: 'red', label: 'Красный' },
-					{ value: 'green', label: 'Зелёный' },
-					{ value: 'blue', label: 'Синий' }
+					{ value: 'red', label: 'Red' },
+					{ value: 'green', label: 'Green' },
+					{ value: 'blue', label: 'Blue' }
 				]
 			}
 		],
@@ -528,19 +528,19 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'swap-channels-png',
-		title: 'Переставить каналы PNG',
-		description: 'Меняет местами два цветовых канала — быстрый способ получить необычный окрас.',
+		title: 'Swap channels PNG',
+		description: 'Swaps two color channels — a quick way to get unusual coloring.',
 		category: 'color',
 		params: [
 			{
 				id: 'pair',
-				label: 'Пара каналов',
+				label: 'Channel pair',
 				type: 'select',
 				default: 'r-g',
 				options: [
-					{ value: 'r-g', label: 'Красный ↔ Зелёный' },
-					{ value: 'r-b', label: 'Красный ↔ Синий' },
-					{ value: 'g-b', label: 'Зелёный ↔ Синий' }
+					{ value: 'r-g', label: 'Red ↔ Green' },
+					{ value: 'r-b', label: 'Red ↔ Blue' },
+					{ value: 'g-b', label: 'Green ↔ Blue' }
 				]
 			}
 		],
@@ -548,114 +548,114 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'black-and-white-png',
-		title: 'Чёрно-белый PNG по порогу',
-		description: 'Жёсткая бинаризация по яркости: каждый пиксель становится чёрным или белым.',
+		title: 'Black & white threshold PNG',
+		description: 'Hard binarization by luminance: every pixel becomes black or white.',
 		category: 'color',
 		params: [
-			{ id: 'threshold', label: 'Порог яркости, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+			{ id: 'threshold', label: 'Brightness threshold, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
 		],
 		run: (img, p) => thresholdBlackWhite(img, num(p, 'threshold'))
 	},
 	{
 		id: 'posterize-png',
-		title: 'Постеризация PNG',
-		description: 'Уменьшает число уровней каждого канала — плакатный эффект.',
+		title: 'Posterize PNG',
+		description: 'Reduces the number of levels per channel — a poster effect.',
 		category: 'color',
 		params: [
-			{ id: 'levels', label: 'Уровней на канал', type: 'slider', min: 2, max: 16, step: 1, default: 4 }
+			{ id: 'levels', label: 'Levels per channel', type: 'slider', min: 2, max: 16, step: 1, default: 4 }
 		],
 		run: (img, p) => posterize(img, num(p, 'levels'))
 	},
 	{
 		id: 'two-colors-png',
-		title: 'Два цвета PNG',
-		description: 'Перекрашивает изображение в два выбранных цвета по порогу яркости.',
+		title: 'Two colors PNG',
+		description: 'Recolors the image into two chosen colors by luminance threshold.',
 		category: 'color',
 		params: [
-			{ id: 'lightColor', label: 'Цвет светлых участков', type: 'color', default: '#ffffff' },
-			{ id: 'darkColor', label: 'Цвет тёмных участков', type: 'color', default: '#000000' },
-			{ id: 'threshold', label: 'Порог яркости, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+			{ id: 'lightColor', label: 'Light areas color', type: 'color', default: '#ffffff' },
+			{ id: 'darkColor', label: 'Dark areas color', type: 'color', default: '#000000' },
+			{ id: 'threshold', label: 'Brightness threshold, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
 		],
 		run: (img, p) => twoColors(img, str(p, 'lightColor'), str(p, 'darkColor'), num(p, 'threshold'))
 	},
 	{
 		id: 'convert-png-to-jpg',
-		title: 'Конвертировать PNG в JPG',
+		title: 'Convert PNG to JPG',
 		description:
-			'Прозрачность накладывается на выбранный цвет подложки (по умолчанию белый), результат сохраняется в JPEG.',
+			'Transparency is composited over the chosen backdrop color (white by default) and saved as JPEG.',
 		category: 'convert',
 		params: [
-			{ id: 'background', label: 'Цвет подложки', type: 'color', default: '#ffffff' },
-			{ id: 'quality', label: 'Качество JPEG', type: 'slider', min: 1, max: 100, step: 1, default: 90 }
+			{ id: 'background', label: 'Backdrop color', type: 'color', default: '#ffffff' },
+			{ id: 'quality', label: 'JPEG quality', type: 'slider', min: 1, max: 100, step: 1, default: 90 }
 		],
 		output: { mime: 'image/jpeg', ext: 'jpg', qualityParamId: 'quality' },
 		run: (img, p) => flattenOntoColor(img, str(p, 'background'))
 	},
 	{
 		id: 'convert-png-to-webp',
-		title: 'Конвертировать PNG в WebP',
-		description: 'Перекодирует изображение в WebP с настраиваемым качеством. Прозрачность сохраняется.',
+		title: 'Convert PNG to WebP',
+		description: 'Re-encodes the image into WebP with adjustable quality. Transparency is preserved.',
 		category: 'convert',
-		params: [{ id: 'quality', label: 'Качество WebP', type: 'slider', min: 1, max: 100, step: 1, default: 90 }],
+		params: [{ id: 'quality', label: 'WebP quality', type: 'slider', min: 1, max: 100, step: 1, default: 90 }],
 		output: { mime: 'image/webp', ext: 'webp', qualityParamId: 'quality' },
 		run: (img) => clonePixelImage(img)
 	},
 	{
 		id: 'remove-alpha-channel-png',
-		title: 'Убрать альфа-канал PNG',
-		description: 'Накладывает изображение на белый фон и сохраняет без прозрачности.',
+		title: 'Remove alpha channel PNG',
+		description: 'Composites the image over a white background and saves without transparency.',
 		category: 'alpha',
 		params: [],
 		run: (img) => flattenOntoColor(img, '#ffffff')
 	},
 	{
 		id: 'set-alpha-channel-png',
-		title: 'Задать альфа-канал PNG',
-		description: 'Присваивает всем пикселям одинаковую прозрачность, цвета не меняются.',
+		title: 'Set alpha channel PNG',
+		description: 'Assigns the same opacity to all pixels; colors stay unchanged.',
 		category: 'alpha',
 		params: [
-			{ id: 'percent', label: 'Прозрачность, %', type: 'slider', min: 0, max: 100, step: 1, default: 100 }
+			{ id: 'percent', label: 'Opacity, %', type: 'slider', min: 0, max: 100, step: 1, default: 100 }
 		],
 		run: (img, p) => setAlphaChannel(img, num(p, 'percent'))
 	},
 	{
 		id: 'extract-alpha-mask-png',
-		title: 'Извлечь маску альфы PNG',
-		description: 'Превращает прозрачность в чёрно-белую непрозрачную маску.',
+		title: 'Extract alpha mask PNG',
+		description: 'Turns transparency into a black-and-white opaque mask.',
 		category: 'alpha',
 		params: [],
 		run: (img) => extractAlphaMask(img)
 	},
 	{
 		id: 'round-corners-png',
-		title: 'Скруглить углы PNG',
+		title: 'Round corners PNG',
 		description:
-			'Обрезает углы по радиусу, заданному в процентах от половины меньшей стороны.',
+			'Clips corners by a radius set as a percentage of half the smaller side.',
 		category: 'alpha',
 		params: [
-			{ id: 'radius', label: 'Радиус скругления, %', type: 'slider', min: 0, max: 50, step: 1, default: 10 }
+			{ id: 'radius', label: 'Corner radius, %', type: 'slider', min: 0, max: 50, step: 1, default: 10 }
 		],
 		run: (img, p) => roundCorners(img, num(p, 'radius'))
 	},
 	{
 		id: 'invert-alpha-png',
-		title: 'Инвертировать альфа-канал PNG',
-		description: 'Непрозрачные области становятся прозрачными и наоборот.',
+		title: 'Invert alpha PNG',
+		description: 'Opaque areas become transparent and vice versa.',
 		category: 'alpha',
 		params: [],
 		run: (img) => invertAlpha(img)
 	},
 	{
 		id: 'remove-background-png',
-		title: 'Удалить фон PNG (умно)',
+		title: 'Remove background PNG (smart)',
 		description:
-			'Убирает однотонный фон: по цвету с допуском, только внешние области от краёв или весь совпадающий цвет. Умеет сглаживать границу.',
+			'Removes a solid background: by color with tolerance, outer regions from the edges only, or every matching pixel. Can smooth the boundary.',
 		category: 'alpha',
 		params: [
-			{ id: 'color', label: 'Цвет фона', type: 'color', default: '#ffffff' },
-			{ id: 'tolerance', label: 'Допуск похожести, %', type: 'slider', min: 0, max: 100, step: 1, default: 10 },
-			{ id: 'outerOnly', label: 'Только внешние области', type: 'checkbox', default: true },
-			{ id: 'smooth', label: 'Сглаживание границы, проходы', type: 'slider', min: 0, max: 8, step: 1, default: 1 }
+			{ id: 'color', label: 'Background color', type: 'color', default: '#ffffff' },
+			{ id: 'tolerance', label: 'Similarity tolerance, %', type: 'slider', min: 0, max: 100, step: 1, default: 10 },
+			{ id: 'outerOnly', label: 'Outer regions only', type: 'checkbox', default: true },
+			{ id: 'smooth', label: 'Edge smoothing, passes', type: 'slider', min: 0, max: 8, step: 1, default: 1 }
 		],
 		run: (img, p) =>
 			removeBackground(img, {
@@ -674,97 +674,97 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'add-stroke-png',
-		title: 'Обвести PNG',
+		title: 'Outline PNG',
 		description:
-			'Добавляет цветную обводку-кольцо вокруг непрозрачного содержимого заданной толщины.',
+			'Adds a colored ring outline around the opaque content with the chosen thickness.',
 		category: 'alpha',
 		params: [
-			{ id: 'color', label: 'Цвет обводки', type: 'color', default: '#ff0000' },
-			{ id: 'thickness', label: 'Толщина, px', type: 'slider', min: 1, max: 10, step: 1, default: 3 }
+			{ id: 'color', label: 'Outline color', type: 'color', default: '#ff0000' },
+			{ id: 'thickness', label: 'Thickness, px', type: 'slider', min: 1, max: 10, step: 1, default: 3 }
 		],
 		run: (img, p) => strokeImage(img, num(p, 'thickness'), str(p, 'color'))
 	},
 	{
 		id: 'find-contour-png',
-		title: 'Найти контур PNG',
+		title: 'Find contour PNG',
 		description:
-			'Оставляет только линию по границе непрозрачных областей выбранного цвета и толщины.',
+			'Leaves only a line along the boundary of opaque regions in the chosen color and thickness.',
 		category: 'alpha',
 		params: [
-			{ id: 'color', label: 'Цвет линии', type: 'color', default: '#000000' },
-			{ id: 'thickness', label: 'Толщина линии, px', type: 'slider', min: 1, max: 5, step: 1, default: 1 }
+			{ id: 'color', label: 'Line color', type: 'color', default: '#000000' },
+			{ id: 'thickness', label: 'Line thickness, px', type: 'slider', min: 1, max: 5, step: 1, default: 1 }
 		],
 		run: (img, p) => contourImage(img, num(p, 'thickness'), str(p, 'color'))
 	},
 	{
 		id: 'make-thicker-png',
-		title: 'Утолщить PNG',
-		description: 'Расширяет непрозрачные области на заданное число пикселей.',
+		title: 'Thicken PNG',
+		description: 'Expands opaque areas by the given number of pixels.',
 		category: 'alpha',
 		params: [
-			{ id: 'radius', label: 'На сколько px', type: 'slider', min: 1, max: 10, step: 1, default: 2 }
+			{ id: 'radius', label: 'Amount, px', type: 'slider', min: 1, max: 10, step: 1, default: 2 }
 		],
 		run: (img, p) => dilateImage(img, num(p, 'radius'))
 	},
 	{
 		id: 'make-thinner-png',
-		title: 'Утончить PNG',
-		description: 'Сужает непрозрачные области — утоньшает штрихи надписей и деталей.',
+		title: 'Thin PNG',
+		description: 'Shrinks opaque areas — thins the strokes of text and details.',
 		category: 'alpha',
 		params: [
-			{ id: 'radius', label: 'На сколько px', type: 'slider', min: 1, max: 10, step: 1, default: 1 }
+			{ id: 'radius', label: 'Amount, px', type: 'slider', min: 1, max: 10, step: 1, default: 1 }
 		],
 		run: (img, p) => erodeImage(img, num(p, 'radius'))
 	},
 	{
 		id: 'harden-alpha-png',
-		title: 'Жёсткие края PNG',
+		title: 'Harden edges PNG',
 		description:
-			'Бинаризует альфа-канал по порогу: полупрозрачные пиксели становятся либо полностью прозрачными, либо непрозрачными.',
+			'Binarizes the alpha channel by threshold: semi-transparent pixels become either fully transparent or fully opaque.',
 		category: 'alpha',
 		params: [
-			{ id: 'threshold', label: 'Порог альфы, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+			{ id: 'threshold', label: 'Alpha threshold, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
 		],
 		run: (img, p) => hardenAlpha(img, num(p, 'threshold'))
 	},
 	{
 		id: 'despeckle-alpha-png',
-		title: 'Убрать мусор PNG',
-		description: 'Открытие: убирает одиночные полупрозрачные пиксели и мелкие крапинки.',
+		title: 'Despeckle PNG',
+		description: 'Opening: removes lone semi-transparent pixels and small specks.',
 		category: 'alpha',
 		params: [
-			{ id: 'radius', label: 'Радиус очистки, px', type: 'slider', min: 1, max: 3, step: 1, default: 1 }
+			{ id: 'radius', label: 'Cleanup radius, px', type: 'slider', min: 1, max: 3, step: 1, default: 1 }
 		],
 		run: (img, p) => openingImage(img, num(p, 'radius'))
 	},
 	{
 		id: 'close-holes-png',
-		title: 'Закрыть дыры PNG',
-		description: 'Закрытие: заполняет одиночные прозрачные точки внутри объекта.',
+		title: 'Close holes PNG',
+		description: 'Closing: fills lone transparent dots inside the object.',
 		category: 'alpha',
 		params: [
-			{ id: 'radius', label: 'Радиус закрытия, px', type: 'slider', min: 1, max: 3, step: 1, default: 1 }
+			{ id: 'radius', label: 'Closing radius, px', type: 'slider', min: 1, max: 3, step: 1, default: 1 }
 		],
 		run: (img, p) => closingImage(img, num(p, 'radius'))
 	},
 	{
 		id: 'remove-color-from-png',
-		title: 'Удалить цвет из PNG (прозрачность)',
+		title: 'Remove color from PNG (make transparent)',
 		description:
-			'Делает прозрачными все пиксели, близкие к выбранному цвету. Порог задаёт допустимое отклонение в процентах от максимального цветового расстояния.',
+			'Makes all pixels close to the chosen color transparent. The tolerance sets the allowed deviation as a percentage of the maximum color distance.',
 		category: 'alpha',
 		params: [
-			{ id: 'targetColor', label: 'Цвет для удаления', type: 'color', default: '#00ff00' },
-			{ id: 'tolerance', label: 'Порог похожести, %', type: 'slider', min: 0, max: 100, step: 1, default: 10 }
+			{ id: 'targetColor', label: 'Color to remove', type: 'color', default: '#00ff00' },
+			{ id: 'tolerance', label: 'Similarity threshold, %', type: 'slider', min: 0, max: 100, step: 1, default: 10 }
 		],
 		run: (img, p) => removeColorToAlpha(img, str(p, 'targetColor'), num(p, 'tolerance')),
 		preview: (img, p) => colorMask(img, str(p, 'targetColor'), num(p, 'tolerance'))
 	},
 	{
 		id: 'png-info',
-		title: 'Информация о PNG',
+		title: 'PNG info',
 		description:
-			'Показывает размеры, наличие альфа-канала и количество уникальных цветов загруженного изображения.',
+			'Shows dimensions, alpha presence and the number of unique colors of the uploaded image.',
 		category: 'analyze',
 		params: [],
 		resultType: 'info',
@@ -772,15 +772,15 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'create-empty-png',
-		title: 'Создать пустой PNG',
-		description: 'Генерирует холст выбранного размера — прозрачный или залитый цветом.',
+		title: 'Create empty PNG',
+		description: 'Generates a canvas of the chosen size — transparent or filled with color.',
 		category: 'generate',
 		sourceMode: 'none',
 		params: [
-			{ id: 'width', label: 'Ширина', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
-			{ id: 'height', label: 'Высота', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
-			{ id: 'transparent', label: 'Прозрачный', type: 'checkbox', default: true },
-			{ id: 'color', label: 'Цвет', type: 'color', default: '#ffffff' }
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
+			{ id: 'transparent', label: 'Transparent', type: 'checkbox', default: true },
+			{ id: 'color', label: 'Color', type: 'color', default: '#ffffff' }
 		],
 		generate: (p) =>
 			solidImage(
@@ -793,14 +793,14 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'single-color-png',
-		title: 'Создать одноцветный PNG',
-		description: 'Генерирует прямоугольник заданного размера и цвета.',
+		title: 'Create solid color PNG',
+		description: 'Generates a rectangle of the given size and color.',
 		category: 'generate',
 		sourceMode: 'none',
 		params: [
-			{ id: 'width', label: 'Ширина', type: 'number', min: 1, max: 20000, step: 1, default: 256 },
-			{ id: 'height', label: 'Высота', type: 'number', min: 1, max: 20000, step: 1, default: 256 },
-			{ id: 'color', label: 'Цвет', type: 'color', default: '#ff0000' }
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 20000, step: 1, default: 256 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 20000, step: 1, default: 256 },
+			{ id: 'color', label: 'Color', type: 'color', default: '#ff0000' }
 		],
 		generate: (p) =>
 			solidImage(
@@ -811,37 +811,37 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'random-noise-png',
-		title: 'Создать случайный шум PNG',
+		title: 'Create random noise PNG',
 		description:
-			'Генерирует картинку со случайными пикселями. Зерно фиксирует результат: одно зерно — одна картинка.',
+			'Generates an image with random pixels. The seed fixes the result: one seed — one image.',
 		category: 'generate',
 		sourceMode: 'none',
 		params: [
-			{ id: 'width', label: 'Ширина', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
-			{ id: 'height', label: 'Высота', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
-			{ id: 'seed', label: 'Зерно', type: 'number', min: 0, max: 999999999, step: 1, default: 1 }
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
+			{ id: 'seed', label: 'Seed', type: 'number', min: 0, max: 999999999, step: 1, default: 1 }
 		],
 		generate: (p) => noiseImage(Math.trunc(num(p, 'width')), Math.trunc(num(p, 'height')), num(p, 'seed'))
 	},
 	{
 		id: 'linear-gradient-png',
-		title: 'Создать градиент PNG',
-		description: 'Генерирует плавный переход между двумя цветами по горизонтали или вертикали.',
+		title: 'Create gradient PNG',
+		description: 'Generates a smooth transition between two colors, horizontally or vertically.',
 		category: 'generate',
 		sourceMode: 'none',
 		params: [
-			{ id: 'width', label: 'Ширина', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
-			{ id: 'height', label: 'Высота', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
-			{ id: 'fromColor', label: 'Цвет начала', type: 'color', default: '#000000' },
-			{ id: 'toColor', label: 'Цвет конца', type: 'color', default: '#ffffff' },
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
+			{ id: 'fromColor', label: 'Start color', type: 'color', default: '#000000' },
+			{ id: 'toColor', label: 'End color', type: 'color', default: '#ffffff' },
 			{
 				id: 'direction',
-				label: 'Направление',
+				label: 'Direction',
 				type: 'select',
 				default: 'horizontal',
 				options: [
-					{ value: 'horizontal', label: 'По горизонтали' },
-					{ value: 'vertical', label: 'По вертикали' }
+					{ value: 'horizontal', label: 'Horizontal' },
+					{ value: 'vertical', label: 'Vertical' }
 				]
 			}
 		],
@@ -856,58 +856,56 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'png-is-grayscale',
-		title: 'Проверить: PNG монохромный?',
-		description: 'Сообщает, состоит ли изображение только из оттенков серого.',
+		title: 'Check: is PNG grayscale?',
+		description: 'Reports whether the image consists only of shades of gray.',
 		category: 'analyze',
 		params: [],
 		resultType: 'text',
 		toText: (img) =>
-			isGrayscale(img)
-				? 'Да — все пиксели являются оттенками серого.'
-				: 'Нет — найдены цветные пиксели.'
+			isGrayscale(img) ? 'grayscaleYes' : 'grayscaleNo'
 	},
 	{
 		id: 'skew-png',
-		title: 'Наклонить PNG',
-		description: 'Сдвигает содержимое по горизонтали и вертикали — эффект перспективы.',
+		title: 'Skew PNG',
+		description: 'Shifts content horizontally and vertically — a perspective effect.',
 		category: 'geometry',
 		params: [
-			{ id: 'degX', label: 'Наклон по X, °', type: 'slider', min: -80, max: 80, step: 1, default: 0 },
-			{ id: 'degY', label: 'Наклон по Y, °', type: 'slider', min: -80, max: 80, step: 1, default: 0 }
+			{ id: 'degX', label: 'Skew X, °', type: 'slider', min: -80, max: 80, step: 1, default: 0 },
+			{ id: 'degY', label: 'Skew Y, °', type: 'slider', min: -80, max: 80, step: 1, default: 0 }
 		],
 		run: (img, p) => skewImage(img, num(p, 'degX'), num(p, 'degY'))
 	},
 	{
 		id: 'rotate-free-png',
-		title: 'Повернуть на произвольный угол',
+		title: 'Rotate by custom angle',
 		description:
-			'Поворот на любой угол. Холст расширяется под новые габариты, углы остаются прозрачными.',
+			'Rotation by any angle. The canvas grows to fit the new bounds; corners stay transparent.',
 		category: 'geometry',
 		params: [
-			{ id: 'angle', label: 'Угол, °', type: 'slider', min: -180, max: 180, step: 1, default: 15 }
+			{ id: 'angle', label: 'Angle, °', type: 'slider', min: -180, max: 180, step: 1, default: 15 }
 		],
 		run: (img, p) => rotateFreeImage(img, num(p, 'angle'))
 	},
 	{
 		id: 'zoom-png',
-		title: 'Приблизить PNG',
+		title: 'Zoom PNG',
 		description:
-			'Увеличивает содержимое к центру. Холст прежнего размера — края обрезаются.',
+			'Magnifies content toward the center. The canvas keeps its size — edges are cropped.',
 		category: 'geometry',
 		params: [
-			{ id: 'scale', label: 'Масштаб, %', type: 'slider', min: 100, max: 500, step: 10, default: 200 }
+			{ id: 'scale', label: 'Scale, %', type: 'slider', min: 100, max: 500, step: 10, default: 200 }
 		],
 		run: (img, p) => zoomImage(img, num(p, 'scale'))
 	},
 	{
 		id: 'shift-png',
-		title: 'Сдвинуть PNG',
-		description: 'Перемещает содержимое на заданное смещение по X и Y.',
+		title: 'Shift PNG',
+		description: 'Moves content by the given X and Y offset.',
 		category: 'geometry',
 		params: [
-			{ id: 'offsetX', label: 'Смещение X, px', type: 'number', min: -5000, max: 5000, step: 1, default: 0 },
-			{ id: 'offsetY', label: 'Смещение Y, px', type: 'number', min: -5000, max: 5000, step: 1, default: 0 },
-			{ id: 'color', label: 'Цвет фона', type: 'color', default: '#ffffff' }
+			{ id: 'offsetX', label: 'Offset X, px', type: 'number', min: -5000, max: 5000, step: 1, default: 0 },
+			{ id: 'offsetY', label: 'Offset Y, px', type: 'number', min: -5000, max: 5000, step: 1, default: 0 },
+			{ id: 'color', label: 'Background color', type: 'color', default: '#ffffff' }
 		],
 		run: (img, p) =>
 			transformImage(
@@ -920,102 +918,100 @@ export const TOOLS: ToolEntry[] = [
 	},
 	{
 		id: 'vignette-png',
-		title: 'Виньетка PNG',
-		description: 'Плавно затемняет края изображения, центр не затрагивает.',
+		title: 'Vignette PNG',
+		description: 'Smoothly darkens the edges of the image, leaving the center untouched.',
 		category: 'filters',
 		params: [
-			{ id: 'strength', label: 'Сила затемнения, %', type: 'slider', min: 0, max: 100, step: 5, default: 50 }
+			{ id: 'strength', label: 'Darkening strength, %', type: 'slider', min: 0, max: 100, step: 5, default: 50 }
 		],
 		run: (img, p) => vignette(img, num(p, 'strength'))
 	},
 	{
 		id: 'jpeg-artifacts-png',
-		title: 'Артефакты JPEG',
+		title: 'JPEG artifacts',
 		description:
-			'Имитирует пережатие в JPEG с низким качеством — видимые квадраты и размытие цветов.',
+			'Simulates low-quality JPEG re-compression — visible blocks and smeared colors.',
 		category: 'filters',
 		params: [
-			{ id: 'quality', label: 'Качество JPEG', type: 'slider', min: 1, max: 50, step: 1, default: 10 }
+			{ id: 'quality', label: 'JPEG quality', type: 'slider', min: 1, max: 50, step: 1, default: 10 }
 		],
 		run: (img, p) => jpegRoundtrip(img, num(p, 'quality'))
 	},
 	{
 		id: 'gamma-png',
-		title: 'Гамма-коррекция PNG',
-		description: 'Корректирует яркость средних тонов. <1 темнее, >1 светлее, 1 — без изменений.',
+		title: 'Gamma correction PNG',
+		description: 'Corrects midtone brightness. <1 darker, >1 lighter, 1 — unchanged.',
 		category: 'color',
 		params: [
-			{ id: 'value', label: 'Гамма', type: 'slider', min: 0.1, max: 3, step: 0.05, default: 1 }
+			{ id: 'value', label: 'Gamma', type: 'slider', min: 0.1, max: 3, step: 0.05, default: 1 }
 		],
 		run: (img, p) => gammaCorrection(img, num(p, 'value'))
 	},
 	{
 		id: 'auto-contrast-png',
-		title: 'Автоконтраст PNG',
-		description: 'Растягивает диапазон каждого канала на весь доступный диапазон яркости.',
+		title: 'Auto contrast PNG',
+		description: 'Stretches each channel\'s range across the full available brightness range.',
 		category: 'color',
 		params: [],
 		run: (img) => autoContrast(img)
 	},
 	{
 		id: 'temperature-png',
-		title: 'Температура PNG',
-		description: 'Положительные значения делают изображение теплее (оранжевее), отрицательные — холоднее (синеватее).',
+		title: 'Temperature PNG',
+		description: 'Positive values make the image warmer (more orange), negative ones cooler (more blue).',
 		category: 'color',
 		params: [
-			{ id: 'percent', label: 'Температура', type: 'slider', min: -100, max: 100, step: 1, default: 0 }
+			{ id: 'percent', label: 'Temperature', type: 'slider', min: -100, max: 100, step: 1, default: 0 }
 		],
 		run: (img, p) => temperature(img, num(p, 'percent'))
 	},
 	{
 		id: 'tint-png',
-		title: 'Тонировать PNG',
-		description: 'Умножает цветовые каналы на выбранный оттенок с заданной силой.',
+		title: 'Tint PNG',
+		description: 'Multiplies color channels by the chosen tint with the given strength.',
 		category: 'color',
 		params: [
-			{ id: 'color', label: 'Цвет тонирования', type: 'color', default: '#ffb060' },
-			{ id: 'strength', label: 'Сила, %', type: 'slider', min: 0, max: 100, step: 1, default: 30 }
+			{ id: 'color', label: 'Tint color', type: 'color', default: '#ffb060' },
+			{ id: 'strength', label: 'Strength, %', type: 'slider', min: 0, max: 100, step: 1, default: 30 }
 		],
 		run: (img, p) => tint(img, str(p, 'color'), num(p, 'strength'))
 	},
 	{
 		id: 'svg-to-png',
-		title: 'SVG в PNG',
+		title: 'SVG to PNG',
 		description:
-			'Dекодирует SVG-разметку в растровое изображение. Вставьте SVG-код слева.',
+			'Decodes SVG markup into a raster image. Paste the SVG code on the left.',
 		category: 'convert',
 		sourceMode: 'text',
-		params: [{ id: 'width', label: 'Ширина результата, px', type: 'number', min: 1, max: 10000, step: 1, default: 512 }],
+		params: [{ id: 'width', label: 'Result width, px', type: 'number', min: 1, max: 10000, step: 1, default: 512 }],
 		runFromText: (text, p) => decodeSvgText(text, Math.trunc(num(p, 'width'))),
 		run: (img) => clonePixelImage(img)
 	},
 	{
 		id: 'png-is-transparent',
-		title: 'Проверить: PNG прозрачный?',
-		description: 'Сообщает, есть ли в изображении прозрачные или полупрозрачные пиксели.',
+		title: 'Check: is PNG transparent?',
+		description: 'Reports whether the image contains transparent or semi-transparent pixels.',
 		category: 'analyze',
 		params: [],
 		resultType: 'text',
 		toText: (img) =>
-			hasTransparency(img)
-				? 'Да — есть прозрачные или полупрозрачные пиксели.'
-				: 'Нет — все пиксели полностью непрозрачны.'
+			hasTransparency(img) ? 'transparentYes' : 'transparentNo'
 	},
 	{
 		id: 'png-orientation',
-		title: 'Ориентация PNG',
-		description: 'Сообщает, портрет это, ландшафт или квадрат.',
+		title: 'PNG orientation',
+		description: 'Reports whether it is portrait, landscape or square.',
 		category: 'analyze',
 		params: [],
 		resultType: 'text',
 		toText: (img) => {
 			switch (orientationOf(img)) {
 				case 'portrait':
-					return 'Портрет — высота больше ширины.';
+					return 'orientationPortrait';
 				case 'landscape':
-					return 'Ландшафт — ширина больше высоты.';
+					return 'orientationLandscape';
 				default:
-					return 'Квадрат — стороны равны.';
+					return 'orientationSquare';
 			}
 		}
 	}
