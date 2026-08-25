@@ -31,3 +31,25 @@ export function optionLabel(tool: ToolEntry, param: ParamDef, value: string): st
 	}
 	return value;
 }
+
+function dedupe(values: string[]): string[] {
+	return [...new Set(values.filter((v) => v.length > 0))];
+}
+
+/**
+ * Поисковый документ инструмента: строки активной локали, русского и английского
+ * (реестр) вместе — запрос находит инструмент по любому из языков независимо
+ * от того, какой сейчас включён.
+ */
+export function toolSearchDoc(tool: ToolEntry): SearchDoc {
+	const active = getMergedDict().tools[tool.id];
+	return {
+		id: tool.id,
+		titles: dedupe([active?.title ?? '', ru.tools[tool.id]?.title ?? '', tool.title]),
+		descriptions: dedupe([
+			active?.description ?? '',
+			ru.tools[tool.id]?.description ?? '',
+			tool.description
+		])
+	};
+}

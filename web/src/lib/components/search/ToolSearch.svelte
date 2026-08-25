@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { isChainable, TOOLS } from '$lib/registry';
+	import { LOCALE_TAGS } from '$lib/i18n/dict';
+	import { getLocale } from '$lib/i18n/locale.svelte';
+	import { normalizeForSearch, scoreDoc } from '$lib/i18n/matching';
 	import { t } from '$lib/i18n/t';
-	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
+	import { toolDescription, toolSearchDoc, toolTitle } from '$lib/i18n/tool-strings';
 	import ToolCard from './ToolCard.svelte';
 
 	interface Props {
@@ -24,36 +27,11 @@
 		score: number;
 	};
 
-	function score(tool: (typeof TOOLS)[number], q: string): number | null {
-		if (q.length === 0) return 1;
-		const title = tool.title.toLowerCase();
-		const id = tool.id.toLowerCase();
-		const description = tool.description.toLowerCase();
-		if (title.startsWith(q)) return 100;
-		const inTitle = title.indexOf(q);
-		if (inTitle >= 0) return 80 - Math.min(inTitle, 40);
-		const inId = id.indexOf(q);
-		if (inId >= 0) return 60 - Math.min(inId, 40);
-		if (description.includes(q)) return 30;
-		let pos = 0;
-		let subScore = 20;
-		for (const ch of q) {
-			pos = title.indexOf(ch, pos);
-			if (pos < 0) {
-				subScore = -1;
-				break;
-			}
-			subScore -= 1;
-			pos += 1;
-		}
-		return subScore >= 0 ? subScore : null;
-	}
-
 	const matches = $derived.by(() => {
-		const q = query.trim().toLowerCase();
+		const q = normalizeForSearch(query.trim());
 		const found: Match[] = [];
 		for (const tool of candidates) {
-			const s = score(tool, q);
+			const s = scoreDoc(toolSearchDoc(tool), q);
 			if (s !== null && s > 0) {
 				found.push({
 					id: tool.id,
@@ -64,11 +42,12 @@
 				});
 			}
 		}
+		const collator = new Intl.Collator(LOCALE_TAGS[getLocale()]);
 		found.sort(
 			(a, b) =>
 				b.score - a.score ||
 				b.popularity - a.popularity ||
-				a.title.localeCompare(b.title)
+				collator.compare(a.title, b.title)
 		);
 		return found.slice(0, 12);
 	});
