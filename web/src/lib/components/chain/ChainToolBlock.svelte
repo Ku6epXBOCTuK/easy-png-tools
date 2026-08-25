@@ -133,7 +133,7 @@
 		height: 1.4rem;
 		border-radius: var(--radius-s);
 		background: color-mix(in srgb, var(--accent) 10%, var(--surface));
-		color: var(--accent);
+		color: var(--link);
 	}
 
 	.remove {
@@ -173,7 +173,7 @@
 		padding: 2px var(--space-2);
 		border-radius: var(--radius-s);
 		background: color-mix(in srgb, var(--accent) 12%, var(--surface));
-		color: var(--accent);
+		color: var(--link);
 		font-size: var(--text-xs);
 	}
 </style>

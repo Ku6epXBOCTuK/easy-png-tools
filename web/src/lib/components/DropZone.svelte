@@ -105,7 +105,7 @@
 	.dropzone:hover,
 	.dropzone:focus-visible,
 	.dragging {
-		border-color: var(--accent);
+		border-color: var(--link);
 		background: color-mix(in srgb, var(--accent) 6%, var(--surface));
 	}
 

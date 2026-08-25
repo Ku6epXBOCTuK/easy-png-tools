@@ -89,7 +89,7 @@
 	}
 
 	.actions .secondary:hover {
-		border-color: var(--accent);
-		color: var(--accent);
+		border-color: var(--link);
+		color: var(--link);
 	}
 </style>

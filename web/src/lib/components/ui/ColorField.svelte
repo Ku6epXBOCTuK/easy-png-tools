@@ -69,13 +69,13 @@
 	}
 
 	.pipette:hover {
-		border-color: var(--accent);
-		color: var(--accent);
+		border-color: var(--link);
+		color: var(--link);
 	}
 
 	.pipette[aria-pressed='true'] {
-		border-color: var(--accent);
-		color: var(--accent);
+		border-color: var(--link);
+		color: var(--link);
 		background: color-mix(in srgb, var(--accent) 10%, var(--surface));
 	}
 </style>

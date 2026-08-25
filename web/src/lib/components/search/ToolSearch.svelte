@@ -130,7 +130,7 @@
 	}
 
 	input:focus {
-		border-color: var(--accent);
+		border-color: var(--link);
 		outline: none;
 	}
 

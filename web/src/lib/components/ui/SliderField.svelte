@@ -71,7 +71,7 @@
 	input[type='range'] {
 		flex: 1;
 		min-width: 3rem;
-		accent-color: var(--accent);
+		accent-color: var(--link);
 		margin: 0;
 	}
 
@@ -96,8 +96,8 @@
 	}
 
 	.step:hover:not(:disabled) {
-		border-color: var(--accent);
-		color: var(--accent);
+		border-color: var(--link);
+		color: var(--link);
 	}
 
 	.step:disabled {

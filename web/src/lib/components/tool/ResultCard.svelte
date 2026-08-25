@@ -117,7 +117,7 @@
 		padding: 2px var(--space-2);
 		border-radius: var(--radius-s);
 		background: color-mix(in srgb, var(--accent) 12%, var(--surface));
-		color: var(--accent);
+		color: var(--link);
 		font-size: var(--text-xs);
 	}
 </style>

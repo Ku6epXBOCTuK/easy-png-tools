@@ -103,7 +103,7 @@
 
 	.brand:hover {
 		text-decoration: none;
-		color: var(--accent);
+		color: var(--link);
 	}
 
 	nav {
@@ -120,7 +120,7 @@
 	}
 
 	.nav-link:hover {
-		color: var(--accent);
+		color: var(--link);
 		background: var(--bg);
 		text-decoration: none;
 	}
@@ -148,7 +148,7 @@
 	}
 
 	.lang-btn:hover {
-		color: var(--accent);
+		color: var(--link);
 	}
 
 	.lang-btn.active {
@@ -158,7 +158,7 @@
 
 	.workspace-link {
 		font-weight: 600;
-		color: var(--accent);
+		color: var(--link);
 	}
 
 	main {

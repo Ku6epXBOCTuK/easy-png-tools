@@ -68,8 +68,8 @@
 	}
 
 	button.secondary:hover:not(:disabled) {
-		border-color: var(--accent);
-		color: var(--accent);
+		border-color: var(--link);
+		color: var(--link);
 	}
 
 	button:disabled {

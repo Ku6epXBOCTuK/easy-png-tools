@@ -89,7 +89,7 @@
 		justify-content: center;
 		border-radius: var(--radius-s);
 		background: color-mix(in srgb, var(--accent) 10%, var(--surface));
-		color: var(--accent);
+		color: var(--link);
 	}
 
 	.text {

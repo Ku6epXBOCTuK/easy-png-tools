@@ -1,6 +1,10 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+// @ts-expect-error node types are not wired into svelte-check; vitest resolves fine
+import { readFileSync } from 'node:fs';
+
+declare const process: { cwd(): string };
+
+const css = readFileSync('src/app.css', 'utf8');
 
 type Tokens = Record<string, string>;
 
@@ -48,7 +52,7 @@ function mix(fgHex: string, alpha: number, bgHex: string): string {
 	return `#${out.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
 }
 
-const css = readFileSync(join(__dirname, '..', 'app.css'), 'utf8');
+const cssText = css;
 const light = parseBlock(css, ':root');
 const darkRaw = parseBlock(css, "[data-theme='dark']");
 const dark: Tokens = { ...light, ...darkRaw };

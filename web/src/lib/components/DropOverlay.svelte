@@ -89,7 +89,7 @@
 		background: color-mix(in srgb, var(--accent) 10%, var(--surface));
 		border: 2px dashed var(--accent);
 		border-radius: var(--radius-m);
-		color: var(--accent);
+		color: var(--link);
 		font-weight: 600;
 		text-align: center;
 		pointer-events: none;

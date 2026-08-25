@@ -102,6 +102,6 @@
 	}
 
 	.back:hover {
-		color: var(--accent);
+		color: var(--link);
 	}
 </style>
