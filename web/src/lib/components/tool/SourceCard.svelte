@@ -9,7 +9,7 @@
 	interface Props {
 		source: PixelImage | null;
 		onFile: (file: File) => void;
-		onError: (message: string) => void;
+		onError: (e: unknown) => void;
 		onReset: () => void;
 		pipetteActive?: boolean;
 		onPickColor?: (hex: string) => void;

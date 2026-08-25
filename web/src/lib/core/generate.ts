@@ -1,4 +1,5 @@
 import type { PixelImage } from './types';
+import { ToolError } from './errors';
 
 export function solidImage(
 	width: number,
@@ -6,7 +7,7 @@ export function solidImage(
 	rgba: [number, number, number, number]
 ): PixelImage {
 	if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
-		throw new Error('Размеры должны быть целыми числами >= 1');
+		throw new ToolError('errors.sizeInt');
 	}
 	const data = new Uint8ClampedArray(width * height * 4);
 	for (let i = 0; i < data.length; i += 4) {
@@ -20,7 +21,7 @@ export function solidImage(
 
 export function noiseImage(width: number, height: number, seed: number): PixelImage {
 	if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
-		throw new Error('Размеры должны быть целыми числами >= 1');
+		throw new ToolError('errors.sizeInt');
 	}
 	const random = mulberry32(seed);
 	const data = new Uint8ClampedArray(width * height * 4);
@@ -41,7 +42,7 @@ export function gradientImage(
 	direction: 'horizontal' | 'vertical'
 ): PixelImage {
 	if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
-		throw new Error('Размеры должны быть целыми числами >= 1');
+		throw new ToolError('errors.sizeInt');
 	}
 	const out: PixelImage = {
 		width,

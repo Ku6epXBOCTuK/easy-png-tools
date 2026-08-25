@@ -1,4 +1,5 @@
 import { getTool, sanitizeParams } from '../registry';
+import { ToolError } from '../core/errors';
 
 export type PipelineStep = {
 	id: string;
@@ -14,7 +15,7 @@ const STORAGE_KEY = 'workspace-pipeline';
 export function createStep(toolId: string): PipelineStep {
 	const tool = getTool(toolId);
 	if (!tool) {
-		throw new Error(`Инструмент "${toolId}" не найден`);
+		throw new ToolError('errors.toolNotFound', { id: toolId });
 	}
 	return { id: newStepId(), toolId, values: {} };
 }
@@ -31,17 +32,17 @@ export function parseDocument(raw: string): PipelineStep[] {
 	try {
 		parsed = JSON.parse(raw);
 	} catch {
-		throw new Error('Файл не является корректным JSON');
+		throw new ToolError('errors.badJson');
 	}
 	if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
-		throw new Error('Структура файла не похожа на цепочку шагов');
+		throw new ToolError('errors.badPipelineShape');
 	}
 	const doc = parsed as { version?: unknown; steps?: unknown };
 	if (doc.version !== PIPELINE_VERSION) {
-		throw new Error(`Неподдерживаемая версия цепочки: ${String(doc.version)}`);
+		throw new ToolError('errors.pipelineVersion', { version: String(doc.version) });
 	}
 	if (!Array.isArray(doc.steps)) {
-		throw new Error('В файле нет списка шагов');
+		throw new ToolError('errors.noSteps');
 	}
 	const steps: PipelineStep[] = [];
 	for (const rawStep of doc.steps) {

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { ACCEPTED_IMAGE_TYPES, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
+	import { ACCEPTED_IMAGE_TYPES, isSupportedImage, unsupportedImageError } from '$lib/core/io';
 	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		onFile: (file: File) => void;
-		onError?: (message: string) => void;
+		onError?: (e: unknown) => void;
 		label?: string;
 	}
 
@@ -33,7 +33,7 @@
 	function accept(file: File | undefined | null) {
 		if (!file) return;
 		if (!isSupportedImage(file)) {
-			onError?.(unsupportedImageMessage(file));
+			onError?.(unsupportedImageError(file));
 			return;
 		}
 		onFile(file);

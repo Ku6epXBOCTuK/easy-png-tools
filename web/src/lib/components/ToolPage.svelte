@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { imageInfo, type ImageInfo } from '$lib/core/analyze';
-	import { decodeFile, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
+	import { ToolError } from '$lib/core/errors';
+	import { decodeFile, isSupportedImage, unsupportedImageError } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
 	import { defaultParams, getTool, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
 	import { loadStoredSteps, newStepId, saveSteps, type PipelineStep } from '$lib/tools/pipeline';
@@ -177,9 +178,8 @@
 				try {
 					current = await executeStep(stepTool, current, sanitizeParams(stepTool, step.values));
 				} catch (e) {
-					const rawMsg = e instanceof Error ? e.message : String(e);
 					throw new Error(
-						t('toolPage.stepError', { n: i + 1, title: toolTitle(stepTool), msg: t(rawMsg) })
+						t('toolPage.stepError', { n: i + 1, title: toolTitle(stepTool), msg: errorMessage(e) })
 					);
 				}
 				if (!runner.isCurrent(token)) return;
@@ -215,10 +215,14 @@
 		saveSteps(filled);
 	});
 
+	function errorMessage(e: unknown): string {
+		if (e instanceof ToolError) return t(e.key, e.vars);
+		return t(e instanceof Error ? e.message : String(e));
+	}
+
 	function showError(e: unknown) {
 		status = source ? 'loaded' : 'idle';
-		const raw = e instanceof Error ? e.message : String(e);
-		errorText = t(raw);
+		errorText = errorMessage(e);
 	}
 
 	function reset() {
@@ -243,7 +247,7 @@
 			if (file) {
 				event.preventDefault();
 				if (!isSupportedImage(file)) {
-					errorText = unsupportedImageMessage(file);
+					errorText = errorMessage(unsupportedImageError(file));
 					return;
 				}
 				handleFile(file);
@@ -274,7 +278,7 @@
 						<SourceCard
 							{source}
 							onFile={handleFile}
-							onError={(message) => (errorText = message)}
+							onError={(e) => (errorText = errorMessage(e))}
 							onReset={reset}
 							pipetteActive={!!pipetteTargetId}
 							onPickColor={handlePickColor}

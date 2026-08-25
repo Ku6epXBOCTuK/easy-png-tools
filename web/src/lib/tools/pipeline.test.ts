@@ -9,7 +9,7 @@ describe('createStep', () => {
 	});
 
 	it('бросает ошибку для неизвестного инструмента', () => {
-		expect(() => createStep('no-such-tool')).toThrow(/не найден/);
+		expect(() => createStep('no-such-tool')).toThrow(/errors\.toolNotFound/);
 	});
 });
 

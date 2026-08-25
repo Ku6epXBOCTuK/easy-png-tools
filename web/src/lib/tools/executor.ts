@@ -1,4 +1,5 @@
 import type { PixelImage } from '../core/types';
+import { ToolError } from '../core/errors';
 
 type MaybeRunnable = {
 	id: string;
@@ -63,6 +64,8 @@ function ensureWorker(): Worker | null {
 				height?: number;
 				data?: Uint8ClampedArray;
 				error?: string;
+				errorKey?: string;
+				errorVars?: Record<string, string | number>;
 			};
 			const entry = pending.get(payload.id);
 			if (!entry) return;
@@ -73,6 +76,8 @@ function ensureWorker(): Worker | null {
 					height: payload.height,
 					data: new Uint8ClampedArray(payload.data)
 				});
+			} else if (payload.errorKey) {
+				entry.reject(new ToolError(payload.errorKey, payload.errorVars));
 			} else {
 				entry.reject(new Error(payload.error ?? 'errors.workerFailed'));
 			}

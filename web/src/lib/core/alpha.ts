@@ -1,4 +1,5 @@
 import { createPixelImage, type PixelImage } from './types';
+import { ToolError } from './errors';
 
 const MAX_COLOR_DISTANCE = Math.sqrt(3 * 255 * 255);
 
@@ -120,7 +121,7 @@ export function flattenOntoColor(img: PixelImage, hex: string): PixelImage {
 export function parseHex(hex: string): [number, number, number] {
 	const match = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
 	if (!match) {
-		throw new Error(`Некорректный HEX-цвет: "${hex}"`);
+		throw new ToolError('errors.badHex', { value: hex });
 	}
 	const digits = match[1];
 	if (digits.length === 3) {

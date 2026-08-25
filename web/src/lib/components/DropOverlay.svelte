@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
+	import { isSupportedImage, unsupportedImageError } from '$lib/core/io';
 	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		onFile: (file: File) => void;
-		onError?: (message: string) => void;
+		onError?: (e: unknown) => void;
 		label?: string;
 		children: Snippet;
 	}
@@ -42,7 +42,7 @@
 		const file = event.dataTransfer?.files[0];
 		if (!file) return;
 		if (!isSupportedImage(file)) {
-			onError?.(unsupportedImageMessage(file));
+			onError?.(unsupportedImageError(file));
 			return;
 		}
 		onFile(file);

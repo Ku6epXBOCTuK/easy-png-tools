@@ -1,4 +1,5 @@
 import { parseHex } from './alpha';
+import { ToolError } from './errors';
 import { clonePixelImage, createPixelImage, type PixelImage } from './types';
 import { sampleBilinear } from './geometry';
 
@@ -7,7 +8,7 @@ export type AffineMatrix = [number, number, number, number, number, number];
 export function invertAffine([a, b, c, d, e, f]: AffineMatrix): AffineMatrix {
 	const det = a * d - b * c;
 	if (Math.abs(det) < 1e-12) {
-		throw new Error('Вырожденная матрица трансформации');
+		throw new ToolError('errors.badTransform');
 	}
 	const ia = d / det;
 	const ib = -b / det;
@@ -91,7 +92,7 @@ export function skewImage(img: PixelImage, degX: number, degY: number): PixelIma
 	const kx = Math.tan((degX * Math.PI) / 180);
 	const ky = Math.tan((degY * Math.PI) / 180);
 	if (!Number.isFinite(kx) || !Number.isFinite(ky)) {
-		throw new Error('Углы наклона не могут быть 90° или -90°');
+		throw new ToolError('errors.skewAngle');
 	}
 	return centeredTransform(img, [1, ky, kx, 1, 0, 0]);
 }

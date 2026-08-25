@@ -1,4 +1,5 @@
 import { parseHex } from './alpha';
+import { ToolError } from './errors';
 import { clonePixelImage, createPixelImage, type PixelImage } from './types';
 
 export function expandCanvas(
@@ -128,7 +129,7 @@ export function crop(
 	const w = ex - sx;
 	const h = ey - sy;
 	if (w <= 0 || h <= 0) {
-		throw new RangeError('Область обрезки пуста: она целиком вне изображения');
+		throw new ToolError('errors.cropBounds');
 	}
 	const out = createPixelImage(w, h);
 	for (let row = 0; row < h; row++) {
@@ -140,7 +141,7 @@ export function crop(
 
 export function resize(img: PixelImage, width: number, height: number): PixelImage {
 	if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
-		throw new RangeError('Размеры должны быть целыми числами >= 1');
+		throw new ToolError('errors.sizeInt');
 	}
 	const out = createPixelImage(width, height);
 	const xr = img.width / width;

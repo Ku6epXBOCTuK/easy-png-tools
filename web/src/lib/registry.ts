@@ -1,4 +1,5 @@
 import type { CategoryId } from './categories';
+import { ToolError } from './core/errors';
 import {
 	colorMask,
 	extractAlphaMask,
@@ -121,7 +122,7 @@ export function isChainable(tool: ToolEntry): boolean {
 function num(params: Record<string, unknown>, id: string): number {
 	const v = params[id];
 	if (typeof v !== 'number' || !Number.isFinite(v)) {
-		throw new Error(`Параметр "${id}" должен быть числом`);
+		throw new ToolError('errors.paramNumber', { id });
 	}
 	return v;
 }
@@ -129,7 +130,7 @@ function num(params: Record<string, unknown>, id: string): number {
 function str(params: Record<string, unknown>, id: string): string {
 	const v = params[id];
 	if (typeof v !== 'string') {
-		throw new Error(`Параметр "${id}" должен быть строкой`);
+		throw new ToolError('errors.paramString', { id });
 	}
 	return v;
 }
@@ -148,7 +149,7 @@ function decodeToPng(id: string, title: string, description: string): ToolEntry 
 function hexToRgba(hex: string, alpha = 255): [number, number, number, number] {
 	const match = /^#([0-9a-f]{6})$/i.exec(hex.trim());
 	if (!match) {
-		throw new Error(`Некорректный HEX-цвет: "${hex}"`);
+		throw new ToolError('errors.badHex', { value: hex });
 	}
 	const d = match[1];
 	return [
@@ -282,7 +283,7 @@ export const TOOLS: ToolEntry[] = [
 				}
 			}
 			if (w <= 0 || h <= 0) {
-				throw new Error('Укажите ширину и/или высоту нового размера');
+				throw new ToolError('errors.resizeSize');
 			}
 			return resize(img, w, h);
 		}
@@ -303,7 +304,7 @@ export const TOOLS: ToolEntry[] = [
 			const w = Math.trunc(num(p, 'width'));
 			const h = Math.trunc(num(p, 'height'));
 			if (w <= 0 || h <= 0) {
-				throw new Error('Укажите ширину и высоту области обрезки');
+				throw new ToolError('errors.cropSize');
 			}
 			return crop(img, Math.trunc(num(p, 'x')), Math.trunc(num(p, 'y')), w, h);
 		}
@@ -394,7 +395,7 @@ export const TOOLS: ToolEntry[] = [
 			const width = Math.trunc(num(p, 'width'));
 			const height = Math.trunc(num(p, 'height'));
 			if (width <= 0 || height <= 0) {
-				throw new Error('Укажите положительные размеры полотна');
+				throw new ToolError('errors.sizePositive');
 			}
 			const left = Math.max(0, Math.floor((width - img.width) / 2));
 			const top = Math.max(0, Math.floor((height - img.height) / 2));

@@ -1,4 +1,5 @@
 import { clonePixelImage, createPixelImage, type PixelImage } from './types';
+import { ToolError } from './errors';
 
 export type RgbChannel = 'red' | 'green' | 'blue';
 
@@ -163,7 +164,7 @@ export function twoColors(
 function parseColor(hex: string): [number, number, number] {
 	const match = /^#([0-9a-f]{6})$/i.exec(hex.trim());
 	if (!match) {
-		throw new Error(`Некорректный HEX-цвет: "${hex}"`);
+		throw new ToolError('errors.badHex', { value: hex });
 	}
 	const digits = match[1];
 	return [
@@ -289,7 +290,7 @@ export function tint(
 ): PixelImage {
 	const s = clamp(strengthPercent, 0, 100) / 100;
 	const match = /^#([0-9a-f]{6})$/i.exec(colorHex.trim());
-	if (!match) throw new Error(`Некорректный HEX-цвет: "${colorHex}"`);
+	if (!match) throw new ToolError('errors.badHex', { value: colorHex });
 	const d = match[1];
 	const tr = parseInt(d.slice(0, 2), 16) / 255;
 	const tg = parseInt(d.slice(2, 4), 16) / 255;

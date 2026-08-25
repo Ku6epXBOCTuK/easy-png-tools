@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 import type { PixelImage } from '../core/types';
+import { ToolError } from '../core/errors';
 import { getTool, sanitizeParams } from '../registry';
 
 type WorkerRequest = {
@@ -34,10 +35,13 @@ async function handle(request: WorkerRequest): Promise<void> {
 		};
 		(self as unknown as Worker).postMessage(payload, [output.data.buffer]);
 	} catch (e) {
+		const toolError = e instanceof ToolError ? e : undefined;
 		(self as unknown as Worker).postMessage({
 			id: request.id,
 			ok: false,
-			error: e instanceof Error ? e.message : String(e)
+			error: e instanceof Error ? e.message : String(e),
+			errorKey: toolError?.key,
+			errorVars: toolError?.vars
 		});
 	}
 }

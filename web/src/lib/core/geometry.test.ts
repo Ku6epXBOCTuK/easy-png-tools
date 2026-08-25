@@ -121,8 +121,8 @@ describe('crop', () => {
 		expect([...out.data]).toEqual([1, 1, 1, 1]);
 	});
 
-	it('бросает RangeError для области вне изображения', () => {
-		expect(() => crop(grid(), 5, 5, 2, 2)).toThrow(RangeError);
+	it('бросает ToolError для области вне изображения', () => {
+		expect(() => crop(grid(), 5, 5, 2, 2)).toThrow(/errors\.cropBounds/);
 	});
 });
 
@@ -207,9 +207,9 @@ describe('resize', () => {
 		expect(red.slice(4, 8)).toEqual([50, 72, 117, 139]);
 	});
 
-	it('бросает RangeError на некорректные размеры', () => {
+	it('бросает ToolError на некорректные размеры', () => {
 		const img = twoByTwo();
-		expect(() => resize(img, 0, 10)).toThrow(RangeError);
-		expect(() => resize(img, 10.5, 10)).toThrow(RangeError);
+		expect(() => resize(img, 0, 10)).toThrow(/errors\.sizeInt/);
+		expect(() => resize(img, 10.5, 10)).toThrow(/errors\.sizeInt/);
 	});
 });

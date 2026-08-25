@@ -1,4 +1,5 @@
 import type { PixelImage } from './types';
+import { ToolError } from './errors';
 
 export function pixelsToHex(img: PixelImage): string {
 	const rows: string[] = [];
@@ -15,20 +16,21 @@ export function pixelsToHex(img: PixelImage): string {
 
 export function hexToPixels(text: string, width: number): PixelImage {
 	if (!Number.isInteger(width) || width < 1) {
-		throw new Error('Укажите ширину изображения (целое число >= 1)');
+		throw new ToolError('errors.widthInt');
 	}
 	const tokens = text.trim().split(/\s+/).filter((t) => t.length > 0);
 	if (tokens.length === 0) {
-		throw new Error('Вставьте hex-данные пикселей');
+		throw new ToolError('errors.noHexPixels');
 	}
 	if (tokens.some((t) => !/^[0-9a-fA-F]{8}$/.test(t))) {
-		throw new Error('Каждый пиксель должен быть 8 hex-символов RRGGBBAA, разделённых пробелами');
+		throw new ToolError('errors.badPixelToken');
 	}
 	const height = tokens.length / width;
 	if (!Number.isInteger(height)) {
-		throw new Error(
-			`Число пикселей (${tokens.length}) не делится на ширину ${width} без остатка`
-		);
+		throw new ToolError('errors.pixelCountMismatch', {
+				count: tokens.length,
+				width
+			});
 	}
 	const data = new Uint8ClampedArray(tokens.length * 4);
 	tokens.forEach((token, index) => {

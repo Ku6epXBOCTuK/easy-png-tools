@@ -1,4 +1,5 @@
 import { encodeBmpBytes } from './bmp';
+import { ToolError } from './errors';
 import { type PixelImage } from './types';
 
 export type OutputMime = 'image/png' | 'image/jpeg' | 'image/webp' | 'image/bmp';
@@ -12,8 +13,8 @@ export function isSupportedImage(file: File): boolean {
 	return SUPPORTED_MIME_TYPES.has(file.type);
 }
 
-export function unsupportedImageMessage(file: File): string {
-	return `Неподдерживаемый формат файла (${file.type || 'неизвестный'}). Поддерживаются PNG, JPEG, WebP, GIF и BMP.`;
+export function unsupportedImageError(file: File): ToolError {
+	return new ToolError('errors.unsupportedFile', { type: file.type || 'unknown' });
 }
 
 async function decodeBitmap(bitmap: ImageBitmap): Promise<PixelImage> {
@@ -22,7 +23,7 @@ async function decodeBitmap(bitmap: ImageBitmap): Promise<PixelImage> {
 	canvas.height = bitmap.height;
 	const ctx = canvas.getContext('2d', { willReadFrequently: true });
 	if (!ctx) {
-		throw new Error('Canvas 2D context недоступен в этом браузере');
+		throw new ToolError('errors.noCanvasCtx');
 	}
 	ctx.drawImage(bitmap, 0, 0);
 	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -54,7 +55,7 @@ export function toDataUrl(img: PixelImage): string {
 	canvas.height = img.height;
 	const ctx = canvas.getContext('2d');
 	if (!ctx) {
-		throw new Error('Canvas 2D context недоступен в этом браузере');
+		throw new ToolError('errors.noCanvasCtx');
 	}
 	ctx.putImageData(new ImageData(img.data, img.width, img.height), 0, 0);
 	return canvas.toDataURL('image/png');
@@ -67,7 +68,7 @@ export function toBase64(img: PixelImage): string {
 export async function decodeTextImage(text: string): Promise<PixelImage> {
 	const cleaned = text.trim().replace(/^data:[^,]*,/, '');
 	if (cleaned.length === 0) {
-		throw new Error('Вставьте base64-строку или data-uri изображения');
+		throw new ToolError('errors.badBase64');
 	}
 	const binary = atob(cleaned);
 	const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
@@ -84,7 +85,7 @@ export async function encode(
 	}
 	if (mime === 'image/jpeg' || mime === 'image/webp') {
 		if (quality !== undefined && (quality < 0 || quality > 1)) {
-			throw new RangeError('quality должен быть в диапазоне 0..1');
+			throw new ToolError('errors.qualityRange');
 		}
 	}
 	const canvas = document.createElement('canvas');
@@ -92,7 +93,7 @@ export async function encode(
 	canvas.height = img.height;
 	const ctx = canvas.getContext('2d');
 	if (!ctx) {
-		throw new Error('Canvas 2D context недоступен в этом браузере');
+		throw new ToolError('errors.noCanvasCtx');
 	}
 	ctx.putImageData(new ImageData(img.data, img.width, img.height), 0, 0);
 	return await canvasToBlob(canvas, mime, quality);
@@ -101,7 +102,10 @@ export async function encode(
 function canvasToBlob(canvas: HTMLCanvasElement, mime: OutputMime, quality?: number): Promise<Blob> {
 	return new Promise((resolve, reject) => {
 		canvas.toBlob(
-			(blob) => (blob ? resolve(blob) : reject(new Error(`Браузер не поддерживает кодирование в ${mime}`))),
+			(blob) =>
+				blob
+					? resolve(blob)
+					: reject(new ToolError('errors.encodeUnsupported', { mime })),
 			mime,
 			quality
 		);
@@ -127,7 +131,7 @@ export function replaceExtension(filename: string, ext: string): string {
 export async function decodeSvgText(text: string, targetWidth?: number): Promise<PixelImage> {
 	const trimmed = text.trim();
 	if (trimmed.length === 0) {
-		throw new Error('Вставьте разметку SVG');
+		throw new ToolError('errors.svgSize');
 	}
 	const blob = new Blob([trimmed], { type: 'image/svg+xml' });
 	const url = URL.createObjectURL(blob);
@@ -135,7 +139,7 @@ export async function decodeSvgText(text: string, targetWidth?: number): Promise
 		const img = new Image();
 		await new Promise<void>((resolve, reject) => {
 			img.onload = () => resolve();
-			img.onerror = () => reject(new Error('Не удалось загрузить SVG — проверьте разметку'));
+			img.onerror = () => reject(new ToolError('errors.svgLoad'));
 			img.src = url;
 		});
 		const w = targetWidth ?? img.naturalWidth ?? 300;
@@ -145,7 +149,7 @@ export async function decodeSvgText(text: string, targetWidth?: number): Promise
 		canvas.width = w;
 		canvas.height = h;
 		const ctx = canvas.getContext('2d', { willReadFrequently: true });
-		if (!ctx) throw new Error('Canvas 2D context недоступен в этом браузере');
+		if (!ctx) throw new ToolError('errors.noCanvasCtx');
 		ctx.drawImage(img, 0, 0, w, h);
 		const imageData = ctx.getImageData(0, 0, w, h);
 		return { width: imageData.width, height: imageData.height, data: imageData.data };

@@ -181,6 +181,6 @@ describe('parseHex', () => {
 	});
 
 	it.each(['zzz', '12345', '##ff', ''])('бросает ошибку на "%s"', (bad) => {
-		expect(() => parseHex(bad)).toThrow(/Некорректный HEX/);
+		expect(() => parseHex(bad)).toThrow(/errors\.badHex/);
 	});
 });

@@ -1,4 +1,5 @@
 import { clonePixelImage, createPixelImage, type PixelImage } from './types';
+import { ToolError } from './errors';
 
 type Plane = Float64Array;
 
@@ -8,10 +9,10 @@ export function convolve(
 	size: number
 ): PixelImage {
 	if (!Number.isInteger(size) || size < 1 || size % 2 === 0) {
-		throw new Error('Размер ядра должен быть нечётным положительным числом');
+		throw new ToolError('errors.radiusInt');
 	}
 	if (kernel.length !== size * size) {
-		throw new Error('Длина ядра не совпадает с его размером');
+		throw new ToolError('errors.kernelSize');
 	}
 	const half = Math.floor(size / 2);
 	const out = createPixelImage(img.width, img.height);

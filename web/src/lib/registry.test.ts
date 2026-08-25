@@ -170,7 +170,7 @@ describe('run инструмента resize-png', () => {
 
 	it('обе стороны 0 — человекочитаемая ошибка', async () => {
 		await expect(runResize({ width: 0, height: 0, keepAspect: true })).rejects.toThrow(
-			'Укажите ширину'
+			'errors.resizeSize'
 		);
 	});
 });

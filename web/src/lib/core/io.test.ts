@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isSupportedImage, unsupportedImageMessage } from './io';
+import { isSupportedImage, unsupportedImageError } from './io';
 
 describe('isSupportedImage', () => {
 	it.each(['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/bmp', 'image/x-icon'])(
@@ -18,14 +18,15 @@ describe('isSupportedImage', () => {
 	});
 });
 
-describe('unsupportedImageMessage', () => {
-	it('упоминает тип файла и поддерживаемые форматы', () => {
-		const message = unsupportedImageMessage(new File([], 'a.txt', { type: 'text/plain' }));
-		expect(message).toContain('text/plain');
-		expect(message).toContain('PNG');
+describe('unsupportedImageError', () => {
+	it('ключ ошибки и тип файла в vars', () => {
+		const err = unsupportedImageError(new File([], 'a.txt', { type: 'text/plain' }));
+		expect(err.key).toBe('errors.unsupportedFile');
+		expect(err.vars?.type).toBe('text/plain');
 	});
 
-	it('сообщает про неизвестный тип, когда он пуст', () => {
-		expect(unsupportedImageMessage(new File([], 'x'))).toContain('неизвестный');
+	it('пустой тип передаётся как unknown', () => {
+		const err = unsupportedImageError(new File([], 'x'));
+		expect(err.vars?.type).toBe('unknown');
 	});
 });
