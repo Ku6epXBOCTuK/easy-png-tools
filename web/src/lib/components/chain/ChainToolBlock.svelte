@@ -2,6 +2,7 @@
 	import { outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
 	import type { PixelImage } from '$lib/core/types';
 	import { t } from '$lib/i18n/t';
+	import { toolTitle } from '$lib/i18n/tool-strings';
 	import DownloadButton from '../DownloadButton.svelte';
 	import Button from '../ui/Button.svelte';
 	import EmptyState from '../ui/EmptyState.svelte';
@@ -48,7 +49,7 @@
 			{#if StepIcon}
 				<span class="step-icon" aria-hidden="true"><StepIcon size={14} strokeWidth={2} /></span>
 			{/if}
-			{t('chain.stepLabel', { n: index + 1, title: tool.title })}
+			{t('chain.stepLabel', { n: index + 1, title: toolTitle(tool) })}
 			<button
 				type="button"
 				class="remove"
@@ -99,7 +100,7 @@
 		<div class="params-sep">
 			<span class="edge-legend" aria-hidden="true">{t('chain.paramsLegend')}</span>
 		</div>
-		<ParamsCard params={tool.params} bind:values />
+		<ParamsCard tool={tool} params={tool.params} bind:values />
 	{/if}
 </div>
 

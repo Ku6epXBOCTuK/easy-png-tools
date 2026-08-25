@@ -4,10 +4,12 @@
 	import SelectField from './ui/SelectField.svelte';
 	import SliderField from './ui/SliderField.svelte';
 	import TextField from './ui/TextField.svelte';
-	import type { ParamDef } from '$lib/registry';
+	import type { ParamDef, ToolEntry } from '$lib/registry';
+	import { optionLabel, paramLabel } from '$lib/i18n/tool-strings';
 	import { t } from '$lib/i18n/t';
 
 	interface Props {
+		tool: ToolEntry;
 		params: ParamDef[];
 		values: Record<string, any>;
 		pipetteTargetId?: string | null;
@@ -17,6 +19,7 @@
 	}
 
 	let {
+		tool,
 		params,
 		values = $bindable(),
 		pipetteTargetId = null,
@@ -33,11 +36,11 @@
 	{#each params as param (param.id)}
 		<div class="field">
 			{#if param.type === 'checkbox'}
-				<CheckboxField id={param.id} label={param.label} bind:checked={values[param.id]} />
+				<CheckboxField id={param.id} label={paramLabel(tool, param)} bind:checked={values[param.id]} />
 			{:else if param.type === 'number'}
 				<TextField
 					id={param.id}
-					label={param.label}
+					label={paramLabel(tool, param)}
 					type="number"
 					min={param.min}
 					max={param.max}
@@ -47,7 +50,7 @@
 			{:else if param.type === 'slider'}
 				<SliderField
 					id={param.id}
-					label={param.label}
+					label={paramLabel(tool, param)}
 					min={param.min}
 					max={param.max}
 					step={param.step}
@@ -57,14 +60,17 @@
 			{:else if param.type === 'select'}
 				<SelectField
 					id={param.id}
-					label={param.label}
-					options={param.options}
+					label={paramLabel(tool, param)}
+					options={param.options.map((o) => ({
+						value: o.value,
+						label: optionLabel(tool, param, o.value)
+					}))}
 					bind:value={values[param.id]}
 				/>
 			{:else if param.type === 'color'}
 				<ColorField
 					id={param.id}
-					label={param.label}
+					label={paramLabel(tool, param)}
 					bind:value={values[param.id]}
 					pipetteActive={pipetteTargetId === param.id}
 					onPipetteToggle={() => onPipetteToggle?.(param.id)}

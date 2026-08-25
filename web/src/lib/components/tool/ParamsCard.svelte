@@ -1,9 +1,10 @@
 <script lang="ts">
 	import ParamForm from '../ParamForm.svelte';
-	import type { ParamDef } from '$lib/registry';
+	import type { ParamDef, ToolEntry } from '$lib/registry';
 	import { t } from '$lib/i18n/t';
 
 	interface Props {
+		tool: ToolEntry;
 		params: ParamDef[];
 		values: Record<string, any>;
 		pipetteTargetId?: string | null;
@@ -13,6 +14,7 @@
 	}
 
 	let {
+		tool,
 		params,
 		values = $bindable(),
 		pipetteTargetId = null,
@@ -25,6 +27,7 @@
 <div class="root">
 	{#if params.length > 0 || hasMask}
 		<ParamForm
+			{tool}
 			{params}
 			bind:values
 			{pipetteTargetId}

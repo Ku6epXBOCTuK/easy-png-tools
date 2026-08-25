@@ -64,7 +64,7 @@
 	{:else if tool.resultType === 'text'}
 		<div class="media">
 			{#if textResult !== null}
-				<TextResult text={textResult} filename={tool.id} />
+				<TextResult text={textResult} filename={tool.id} toolId={tool.id} />
 			{/if}
 		</div>
 	{:else}

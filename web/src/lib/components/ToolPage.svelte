@@ -12,6 +12,7 @@
 	import { createAutoRunner } from '$lib/tools/auto-run';
 	import { executeStep } from '$lib/tools/executor';
 	import { t } from '$lib/i18n/t';
+	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
 	import ParamsCard from './tool/ParamsCard.svelte';
 	import ResultCard from './tool/ResultCard.svelte';
 	import SourceCard from './tool/SourceCard.svelte';
@@ -178,7 +179,7 @@
 				} catch (e) {
 					const rawMsg = e instanceof Error ? e.message : String(e);
 					throw new Error(
-						t('toolPage.stepError', { n: i + 1, title: stepTool.title, msg: t(rawMsg) })
+						t('toolPage.stepError', { n: i + 1, title: toolTitle(stepTool), msg: t(rawMsg) })
 					);
 				}
 				if (!runner.isCurrent(token)) return;
@@ -255,8 +256,8 @@
 <svelte:window onpaste={handlePaste} />
 
 <section>
-	<h1>{tool.title}</h1>
-	<p class="description text-muted">{tool.description}</p>
+	<h1>{toolTitle(tool)}</h1>
+	<p class="description text-muted">{toolDescription(tool)}</p>
 
 	{#if errorText}
 		<div class="error-banner" role="alert">{errorText}</div>
@@ -307,6 +308,7 @@
 			<span class="edge-legend" aria-hidden="true">{t('toolPage.legendParams')}</span>
 		</div>
 		<ParamsCard
+			tool={tool}
 			params={tool.params}
 			bind:values
 			{pipetteTargetId}

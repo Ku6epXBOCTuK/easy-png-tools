@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getTool } from '$lib/registry';
 	import { t } from '$lib/i18n/t';
+	import { toolTitle } from '$lib/i18n/tool-strings';
 	import ToolPage from '$lib/components/ToolPage.svelte';
 	import ToolSearch from '$lib/components/search/ToolSearch.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -56,7 +57,7 @@
 			{@const restoreId = lastToolId}
 			<div class="restore-row">
 				<Button variant="secondary" fullWidth onclick={() => openTool(restoreId, true)}>
-					{t('home.restoreLast', { title: getTool(restoreId)?.title ?? '' })}
+					{t('home.restoreLast', { title: getTool(restoreId) ? toolTitle(getTool(restoreId)!) : '' })}
 				</Button>
 			</div>
 		{/if}

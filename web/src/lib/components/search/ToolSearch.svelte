@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { isChainable, TOOLS } from '$lib/registry';
 	import { t } from '$lib/i18n/t';
+	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
 	import ToolCard from './ToolCard.svelte';
 
 	interface Props {
@@ -56,8 +57,8 @@
 			if (s !== null && s > 0) {
 				found.push({
 					id: tool.id,
-					title: tool.title,
-					description: tool.description,
+					title: toolTitle(tool),
+					description: toolDescription(tool),
 					popularity: tool.popularity ?? 50,
 					score: s
 				});
