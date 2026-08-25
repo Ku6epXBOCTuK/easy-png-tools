@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { CATEGORIES } from '$lib/categories';
+	import { resolve } from '$app/paths';
 	import { t } from '$lib/i18n/t';
 	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
 	import ToolCard from '$lib/components/search/ToolCard.svelte';
@@ -26,7 +27,7 @@
 							toolId={tool.id}
 							title={toolTitle(tool)}
 							description={toolDescription(tool)}
-							href="/tools/{tool.id}"
+							href={resolve(`/tools/${tool.id}`)}
 						/>
 					</div>
 				{/each}

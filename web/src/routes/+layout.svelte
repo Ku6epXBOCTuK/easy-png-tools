@@ -2,6 +2,7 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 	import { getLocale, initLocale, setLocale } from '$lib/i18n/locale.svelte';
 	import { t } from '$lib/i18n/t';
 	import { LOCALES, type Locale } from '$lib/i18n/dict';
@@ -19,10 +20,10 @@
 
 <div class="app">
 	<header>
-		<a href="/" class="brand">easy-png-tools</a>
+		<a href={resolve('/')} class="brand">easy-png-tools</a>
 		<nav aria-label={t('header.sectionsAria')}>
-			<a class="nav-link workspace-link" href="/">{t('header.workspace')}</a>
-			<a class="nav-link" href="/list-tools">{t('header.catalog')}</a>
+			<a class="nav-link workspace-link" href={resolve('/')}>{t('header.workspace')}</a>
+			<a class="nav-link" href={resolve('/list-tools')}>{t('header.catalog')}</a>
 			<div class="lang-switch" role="group" aria-label="Language / Язык">
 				{#each LOCALES as l (l)}
 					<button
