@@ -32,3 +32,17 @@ export interface StageProps {
 	showError: (e: unknown) => void;
 	errorMessage: (e: unknown) => string;
 }
+
+export interface ChainStageProps {
+	tool: ToolEntry;
+	index: number;
+	input: PixelImage | null;
+	result: PixelImage | null;
+	busy: boolean;
+	isLast: boolean;
+	values: Record<string, any>;
+	onRemove: () => void;
+	onError: (e: unknown) => void;
+	onAddStep: () => void;
+	onRemoveChain: () => void;
+}

@@ -49,7 +49,7 @@
 			{#if StepIcon}
 				<span class="step-icon" aria-hidden="true"><StepIcon size={14} strokeWidth={2} /></span>
 			{/if}
-			{t('chain.stepLabel', { n: index + 1, title: toolTitle(tool) })}
+			{t('chain.stepLabel', { n: index + 2, title: toolTitle(tool) })}
 			<button
 				type="button"
 				class="remove"
@@ -84,7 +84,7 @@
 					<DownloadButton
 						image={result}
 						format={format}
-						baseName="{index + 1}-{tool.id}"
+						baseName="{index + 2}-{tool.id}"
 						params={safeParams}
 						{onError}
 					/>

@@ -240,6 +240,20 @@ input.control[type='number'] {
 	padding-bottom: var(--space-3);
 }
 
+/* Панель этапа для инлайн-раскладки: исходник | параметры | результат */
+.pane {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.pane-legend {
+	top: -0.65em;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
 .actions-row {
 	display: flex;
 	gap: var(--space-1);

@@ -5,21 +5,43 @@
 	import type { PixelImage } from '$lib/core/types';
 	import { defaultParams, getTool, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
 	import { loadStoredSteps, newStepId, saveSteps, type PipelineStep } from '$lib/tools/pipeline';
+	import { TOOL_ICONS } from '$lib/tools/tool-icons';
 	import DownloadButton from './DownloadButton.svelte';
 	import ParamForm from './ParamForm.svelte';
 	import Preview from './Preview.svelte';
 	import ToolSearch from './search/ToolSearch.svelte';
-	import ChainToolBlock from './chain/ChainToolBlock.svelte';
 	import { createAutoRunner } from '$lib/tools/auto-run';
 	import { executeStep } from '$lib/tools/executor';
 	import { t } from '$lib/i18n/t';
 	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
 	import type { StageStatus } from './stage/stage-props';
-	import ToolStageInline from './stage/ToolStageInline.svelte';
+	import ChainToolBlock from './chain/ChainToolBlock.svelte';
+	import ToolStage from './stage/ToolStage.svelte';
+	import ToolStageClassic from './stage/ToolStageClassic.svelte';
 
-	let { tool, restoreChain = false }: { tool: ToolEntry; restoreChain?: boolean } = $props();
+	export type PresetStep = { toolId: string; values?: Record<string, unknown> };
+
+	let {
+		tool,
+		restoreChain = false,
+		stageVariant = 'inline',
+		presetBaseValues,
+		presetChain
+	}: {
+		tool: ToolEntry;
+		restoreChain?: boolean;
+		stageVariant?: 'classic' | 'inline';
+		presetBaseValues?: Record<string, unknown>;
+		presetChain?: PresetStep[];
+	} = $props();
+
+	const StageComponent = $derived(stageVariant === 'classic' ? ToolStageClassic : ToolStage);
 
 	type Status = StageStatus;
+
+	const isPreset = $derived(
+		(presetChain?.length ?? 0) > 0 || Object.keys(presetBaseValues ?? {}).length > 0
+	);
 
 	let status = $state<Status>('idle');
 	let source = $state<PixelImage | null>(null);
@@ -29,9 +51,25 @@
 	let showMask = $state(false);
 	let info = $state<ImageInfo | null>(null);
 	let errorText = $state('');
-	let values = $state<Record<string, any>>({});
 	// svelte-ignore state_referenced_locally
-	let chain = $state<PipelineStep[]>(restoreChain ? loadStoredSteps() : []);
+	let values = $state<Record<string, any>>({ ...defaultParams(tool), ...presetBaseValues });
+	// svelte-ignore state_referenced_locally
+	let chain = $state<PipelineStep[]>(
+		restoreChain
+			? loadStoredSteps()
+			: (presetChain ?? []).flatMap((preset) => {
+					const stepTool = getTool(preset.toolId);
+					return stepTool
+						? [
+								{
+									id: newStepId(),
+									toolId: preset.toolId,
+									values: { ...defaultParams(stepTool), ...preset.values }
+								}
+							]
+						: [];
+				})
+	);
 	let chainResults = $state<(PixelImage | null)[]>([]);
 	let lastRunChainJson = '';
 
@@ -177,7 +215,7 @@
 					current = await executeStep(stepTool, current, sanitizeParams(stepTool, step.values));
 				} catch (e) {
 					throw new Error(
-						t('toolPage.stepError', { n: i + 1, title: toolTitle(stepTool), msg: errorMessage(e) })
+						t('toolPage.stepError', { n: i + 2, title: toolTitle(stepTool), msg: errorMessage(e) })
 					);
 				}
 				if (!runner.isCurrent(token)) return;
@@ -208,6 +246,7 @@
 	});
 
 	$effect(() => {
+		if (isPreset) return;
 		const filled = chain.filter((step) => step.toolId !== '');
 		if (filled.length === 0 && !hasLastRun) return;
 		saveSteps(filled);
@@ -265,8 +304,9 @@
 		<div class="error-banner" role="alert">{errorText}</div>
 	{/if}
 
-	<ToolStageInline
-		tool={tool}
+	<StageComponent
+		mode="base"
+		{tool}
 		source={source}
 		result={result}
 		displayImage={shownBase}
@@ -299,7 +339,7 @@
 			{#if step.toolId === ''}
 				<div class="panel empty-slot">
 				<header>
-					<h3 class="heading-section">{t('toolPage.stepHeading', { n: index + 1 })}</h3>
+					<h3 class="heading-section">{t('toolPage.stepHeading', { n: index + 2 })}</h3>
 					<button
 						type="button"
 						class="remove-step"
@@ -313,19 +353,57 @@
 				</div>
 			{:else if getTool(step.toolId)}
 				{@const stepTool = getTool(step.toolId)!}
-				<ChainToolBlock
-					index={index}
-					tool={stepTool}
-					bind:values={step.values}
-					input={index === 0 ? result : (chainResults[index - 1] ?? null)}
-					result={chainResults[index] ?? null}
-					busy={status === 'processing'}
-					isLast={index === chain.length - 1}
-					onRemove={() => removeChainStep(index)}
-					onError={showError}
-					onAddStep={addChainStep}
-					onRemoveChain={removeChain}
-				/>
+				{#if stageVariant === 'inline'}
+					{@const StepIcon = TOOL_ICONS[stepTool.id]}
+					<ToolStage
+						mode="chain"
+						index={index}
+						tool={stepTool}
+						bind:values={step.values}
+						input={index === 0 ? result : (chainResults[index - 1] ?? null)}
+						result={chainResults[index] ?? null}
+						busy={status === 'processing'}
+						isLast={index === chain.length - 1}
+						onRemove={() => removeChainStep(index)}
+						onError={showError}
+						onAddStep={addChainStep}
+						onRemoveChain={removeChain}
+					>
+						{#snippet header()}
+							<span class="edge-legend step-legend">
+								{#if StepIcon}
+									<span class="step-icon" aria-hidden="true">
+										<StepIcon size={14} strokeWidth={2} />
+									</span>
+								{/if}
+								{t('chain.stepLabel', { n: index + 2, title: toolTitle(stepTool) })}
+								<button
+									type="button"
+									class="remove-step"
+									aria-label={t('toolPage.removeStepAria')}
+									title={t('toolPage.removeStepAria')}
+									onclick={() => removeChainStep(index)}
+								>
+									✕
+								</button>
+							</span>
+						{/snippet}
+					</ToolStage>
+				{:else}
+					<ChainToolBlock
+						index={index}
+						tool={stepTool}
+						bind:values={step.values}
+						input={index === 0 ? result : (chainResults[index - 1] ?? null)}
+						result={chainResults[index] ?? null}
+						busy={status === 'processing'}
+						isLast={index === chain.length - 1}
+						onRemove={() => removeChainStep(index)}
+						onError={showError}
+						onAddStep={addChainStep}
+						onRemoveChain={removeChain}
+					/>
+				{/if}
 			{/if}
 		{/each}
 	</div>
@@ -343,6 +421,28 @@
 
 	.error-banner {
 		margin-bottom: var(--space-3);
+	}
+
+	.step-legend {
+		left: var(--space-3);
+		top: -0.75em;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		color: var(--text);
+		font-weight: 600;
+		z-index: 2;
+	}
+
+	.step-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.4rem;
+		height: 1.4rem;
+		border-radius: var(--radius-s);
+		background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+		color: var(--link);
 	}
 
 	.empty-slot {
