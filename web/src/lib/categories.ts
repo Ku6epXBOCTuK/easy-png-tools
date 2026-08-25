@@ -5,7 +5,8 @@ export type CategoryId =
 	| 'geometry'
 	| 'analyze'
 	| 'generate'
-	| 'filters';
+	| 'filters'
+	| 'text';
 
 /**
  * Порядок категорий в каталоге. Человекочитаемые названия живут в словарях
@@ -17,6 +18,7 @@ export const CATEGORIES: readonly CategoryId[] = [
 	'color',
 	'geometry',
 	'filters',
+	'text',
 	'analyze',
 	'generate'
 ];

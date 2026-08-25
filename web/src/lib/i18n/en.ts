@@ -14,6 +14,7 @@ export const en: Dict = {
 		color: 'Color',
 		geometry: 'Geometry',
 		filters: 'Filters',
+		text: 'Text',
 		analyze: 'Analyze',
 		generate: 'Generate'
 	},

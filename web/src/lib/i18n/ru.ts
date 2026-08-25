@@ -14,6 +14,7 @@ export const ru: Dict = {
 		color: 'Цвет',
 		geometry: 'Геометрия',
 		filters: 'Фильтры',
+		text: 'Текст',
 		analyze: 'Анализ',
 		generate: 'Генерация'
 	},
