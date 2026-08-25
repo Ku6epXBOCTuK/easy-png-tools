@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from '../ui/Button.svelte';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		onSubmit: (text: string) => void;
@@ -16,16 +17,16 @@
 </script>
 
 <div class="container">
-	<h2 class="heading-section">Текст</h2>
+	<h2 class="heading-section">{t('textInput.heading')}</h2>
 	<textarea
 		class="input"
 		rows="8"
 		bind:value={text}
-		placeholder="Вставьте данные сюда"
-		aria-label="Текстовые данные"
+		placeholder={t('textInput.placeholder')}
+		aria-label={t('textInput.aria')}
 	></textarea>
 	<Button variant="secondary" onclick={submit} disabled={text.trim().length === 0}>
-		Декодировать
+		{t('textInput.decode')}
 	</Button>
 </div>
 

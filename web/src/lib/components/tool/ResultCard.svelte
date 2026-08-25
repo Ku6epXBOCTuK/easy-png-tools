@@ -8,6 +8,7 @@
 	import type { ImageInfo } from '$lib/core/analyze';
 	import type { PixelImage } from '$lib/core/types';
 	import { outputOf, type ToolEntry } from '$lib/registry';
+	import { t } from '$lib/i18n/t';
 
 	type Status = 'idle' | 'loaded' | 'processing' | 'error';
 
@@ -45,16 +46,13 @@
 <div class="container">
 	{#if !sourceLoaded}
 		<div class="media">
-			<EmptyState
-				title="Результат появится здесь"
-				hint="Сначала загрузите исходное изображение слева"
-			/>
+			<EmptyState title={t('resultCard.emptyTitle')} hint={t('resultCard.emptyHint')} />
 		</div>
 	{:else if !isInfo && status === 'processing' && !result}
 		<div class="media">
 			<EmptyState
-				title="Обработка…"
-				hint="Изображение обрабатывается, это займёт немного времени"
+				title={t('resultCard.processingTitle')}
+				hint={t('resultCard.processingHint')}
 			/>
 		</div>
 	{:else if isInfo}
@@ -73,7 +71,7 @@
 		<div class="media">
 			<Preview image={displayImage} />
 			{#if status === 'processing'}
-				<span class="recalc" aria-live="polite">Пересчёт…</span>
+				<span class="recalc" aria-live="polite">{t('resultCard.recalc')}</span>
 			{/if}
 		</div>
 		<div class="actions-row">
@@ -86,7 +84,7 @@
 			/>
 			{#if onChainToggle}
 				<Button variant="secondary" fullWidth onclick={onChainToggle}>
-					{hasChain ? '✂ Оборвать цепочку' : '⛓ Следующий инструмент'}
+					{hasChain ? t('resultCard.breakChain') : t('resultCard.nextTool')}
 				</Button>
 			{/if}
 		</div>

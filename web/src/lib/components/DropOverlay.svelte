@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		onFile: (file: File) => void;
@@ -12,7 +13,7 @@
 	let {
 		onFile,
 		onError,
-		label = 'Отпустите файл, чтобы заменить изображение',
+		label = t('dropZone.overlayDefault'),
 		children
 	}: Props = $props();
 

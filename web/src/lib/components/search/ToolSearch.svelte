@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { isChainable, TOOLS } from '$lib/registry';
+	import { t } from '$lib/i18n/t';
 	import ToolCard from './ToolCard.svelte';
 
 	interface Props {
@@ -106,14 +107,14 @@
 			activeIndex = 0;
 		}}
 		onkeydown={onKeydown}
-		placeholder="Найдите инструмент…"
-		aria-label="Поиск инструмента"
+		placeholder={t('search.placeholder')}
+		aria-label={t('search.aria')}
 		role="combobox"
 		aria-expanded={listOpen}
 		aria-controls="tool-search-list"
 	/>
 	{#if listOpen && query.trim().length > 0 && matches.length === 0}
-		<p class="none text-muted">Ничего не найдено — попробуйте другое слово.</p>
+		<p class="none text-muted">{t('search.nothingFound')}</p>
 	{:else if listOpen && matches.length > 0}
 		<div id="tool-search-list" class="cards" role="listbox">
 			{#each matches as match, index (match.id)}

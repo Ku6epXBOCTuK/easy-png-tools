@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ParamForm from '../ParamForm.svelte';
 	import type { ParamDef } from '$lib/registry';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		params: ParamDef[];
@@ -32,9 +33,7 @@
 			bind:showMask
 		/>
 	{:else}
-		<p class="hint text-caption text-muted">
-			У этого инструмента нет параметров — результат уже готов.
-		</p>
+		<p class="hint text-caption text-muted">{t('paramsCard.noParams')}</p>
 	{/if}
 </div>
 

@@ -31,7 +31,7 @@ describe('executeStep: прямой путь (среда без Worker)', () => 
 
 	it('инструмент без run даёт понятную ошибку', async () => {
 		await expect(executeStep({ id: 'stub' }, makeImage(1, 1, [[0, 0, 0, 255]]), {})).rejects.toThrow(
-			'не обрабатывает изображения'
+			'errors.noImageRun'
 		);
 	});
 });

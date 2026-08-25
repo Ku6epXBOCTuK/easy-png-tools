@@ -11,7 +11,7 @@ export async function executeStep(
 	params: Record<string, unknown>
 ): Promise<PixelImage> {
 	if (!tool.run) {
-		throw new Error('Этот инструмент не обрабатывает изображения');
+		throw new Error('errors.noImageRun');
 	}
 	if (typeof Worker === 'undefined') {
 		return await runDirect(tool, img, params);
@@ -35,7 +35,7 @@ async function runDirect(
 	params: Record<string, unknown>
 ): Promise<PixelImage> {
 	if (!tool.run) {
-		throw new Error('Этот инструмент не обрабатывает изображения');
+		throw new Error('errors.noImageRun');
 	}
 	return await tool.run(img, params);
 }
@@ -74,13 +74,13 @@ function ensureWorker(): Worker | null {
 					data: new Uint8ClampedArray(payload.data)
 				});
 			} else {
-				entry.reject(new Error(payload.error ?? 'Ошибка исполнения в воркере'));
+				entry.reject(new Error(payload.error ?? 'errors.workerFailed'));
 			}
 		};
 		candidate.onerror = () => {
 			worker = null;
 			for (const entry of pending.values()) {
-				entry.reject(new Error('Воркер недоступен'));
+				entry.reject(new Error('errors.workerUnavailable'));
 			}
 			pending.clear();
 		};

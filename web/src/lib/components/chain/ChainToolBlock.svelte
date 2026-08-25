@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
 	import type { PixelImage } from '$lib/core/types';
+	import { t } from '$lib/i18n/t';
 	import DownloadButton from '../DownloadButton.svelte';
 	import Button from '../ui/Button.svelte';
 	import EmptyState from '../ui/EmptyState.svelte';
@@ -47,12 +48,12 @@
 			{#if StepIcon}
 				<span class="step-icon" aria-hidden="true"><StepIcon size={14} strokeWidth={2} /></span>
 			{/if}
-			Шаг {index + 1}: {tool.title}
+			{t('chain.stepLabel', { n: index + 1, title: tool.title })}
 			<button
 				type="button"
 				class="remove"
-				aria-label="Убрать шаг"
-				title="Убрать шаг"
+				aria-label={t('chain.removeStepAria')}
+				title={t('chain.removeStepAria')}
 				onclick={onRemove}
 			>
 				✕
@@ -60,22 +61,22 @@
 		</span>
 
 		<div class="cell">
-			<span class="edge-legend cell-legend" aria-hidden="true">Вход</span>
+			<span class="edge-legend cell-legend" aria-hidden="true">{t('chain.inputLegend')}</span>
 			<div class="cell-media">
 				<Preview image={input} />
 			</div>
 		</div>
 		<div class="cell">
-			<span class="edge-legend cell-legend" aria-hidden="true">Результат</span>
+			<span class="edge-legend cell-legend" aria-hidden="true">{t('chain.resultLegend')}</span>
 			{#if busy && !result}
 				<div class="cell-media">
-					<EmptyState title="Обработка…" hint="Выполняется шаг цепочки" />
+					<EmptyState title={t('chain.busyTitle')} hint={t('chain.busyHint')} />
 				</div>
 			{:else}
 				<div class="cell-media">
 					<Preview image={result} />
 					{#if busy}
-						<span class="recalc" aria-live="polite">Пересчёт…</span>
+						<span class="recalc" aria-live="polite">{t('resultCard.recalc')}</span>
 					{/if}
 				</div>
 				<div class="actions-row">
@@ -87,7 +88,7 @@
 						{onError}
 					/>
 					<Button variant="secondary" fullWidth onclick={isLast ? onAddStep : onRemoveChain}>
-						{isLast ? '⛓ Следующий инструмент' : '✂ Оборвать цепочку'}
+						{isLast ? t('resultCard.nextTool') : t('resultCard.breakChain')}
 					</Button>
 				</div>
 			{/if}
@@ -96,7 +97,7 @@
 
 	{#if tool.params.length > 0}
 		<div class="params-sep">
-			<span class="edge-legend" aria-hidden="true">Параметры</span>
+			<span class="edge-legend" aria-hidden="true">{t('chain.paramsLegend')}</span>
 		</div>
 		<ParamsCard params={tool.params} bind:values />
 	{/if}

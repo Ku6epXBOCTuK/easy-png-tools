@@ -1,5 +1,8 @@
 <script lang="ts">
 	import type { ImageInfo } from '$lib/core/analyze';
+	import { LOCALE_TAGS } from '$lib/i18n/dict';
+	import { getLocale } from '$lib/i18n/locale.svelte';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		info: ImageInfo | null;
@@ -11,16 +14,16 @@
 {#if info}
 	<dl>
 		<div class="panel">
-			<dt>Размеры</dt>
+			<dt>{t('infoPanel.dimensions')}</dt>
 			<dd>{info.width} × {info.height} px</dd>
 		</div>
 		<div class="panel">
-			<dt>Альфа-канал</dt>
-			<dd>{info.hasAlpha ? 'есть — есть полупрозрачные пиксели' : 'нет'}</dd>
+			<dt>{t('infoPanel.alpha')}</dt>
+			<dd>{info.hasAlpha ? t('infoPanel.alphaYes') : t('infoPanel.alphaNo')}</dd>
 		</div>
 		<div class="panel">
-			<dt>Уникальных цветов (RGBA)</dt>
-			<dd>{info.colorCount.toLocaleString('ru-RU')}</dd>
+			<dt>{t('infoPanel.colorCount')}</dt>
+			<dd>{info.colorCount.toLocaleString(LOCALE_TAGS[getLocale()])}</dd>
 		</div>
 	</dl>
 {/if}

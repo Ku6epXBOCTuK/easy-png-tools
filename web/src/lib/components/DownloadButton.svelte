@@ -3,6 +3,7 @@
 	import { downloadBlob, encode } from '$lib/core/io';
 	import type { PixelImage } from '$lib/core/types';
 	import type { OutputFormat } from '$lib/registry';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		image: PixelImage | null;
@@ -38,8 +39,8 @@
 	fullWidth
 	disabled={!image || !format}
 	{busy}
-	busyText="Готовим файл…"
+	busyText={t('download.busy')}
 	onclick={download}
 >
-	Скачать .{format?.ext ?? 'png'}
+	{t('download.file', { ext: format?.ext ?? 'png' })}
 </Button>

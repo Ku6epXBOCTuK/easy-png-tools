@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getTool } from '$lib/registry';
+	import { t } from '$lib/i18n/t';
 	import ToolPage from '$lib/components/ToolPage.svelte';
 	import ToolSearch from '$lib/components/search/ToolSearch.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -42,20 +43,20 @@
 
 <svelte:head>
 	<title>
-		{selected ? `${selected.title} — easy-png-tools` : 'easy-png-tools — PNG-утилиты прямо в браузере'}
+		{selected ? `${selected.title} — easy-png-tools` : t('home.defaultTitle')}
 	</title>
 </svelte:head>
 
 {#if !selected}
 	<section class="hero">
-		<h1>Что делаем с изображением?</h1>
-		<p class="lead text-muted">Найдите инструмент — все операции выполняются локально в браузере.</p>
+		<h1>{t('home.heroTitle')}</h1>
+		<p class="lead text-muted">{t('home.heroLead')}</p>
 		<ToolSearch onSelect={(id) => openTool(id)} />
 		{#if lastToolId !== null && getTool(lastToolId)}
 			{@const restoreId = lastToolId}
 			<div class="restore-row">
 				<Button variant="secondary" fullWidth onclick={() => openTool(restoreId, true)}>
-					↩ Вернуть последний: {getTool(restoreId)?.title}
+					{t('home.restoreLast', { title: getTool(restoreId)?.title ?? '' })}
 				</Button>
 			</div>
 		{/if}
@@ -63,7 +64,7 @@
 {:else}
 	<section class="workbench">
 		<button type="button" class="back text-caption text-muted" onclick={closeTool}>
-			← Сменить инструмент
+			{t('home.changeTool')}
 		</button>
 		{#key selectedId}
 			<ToolPage tool={selected} restoreChain={restoreOnOpen} />

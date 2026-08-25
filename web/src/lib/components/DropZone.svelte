@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ACCEPTED_IMAGE_TYPES, isSupportedImage, unsupportedImageMessage } from '$lib/core/io';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		onFile: (file: File) => void;
@@ -7,8 +8,7 @@
 		label?: string;
 	}
 
-	let { onFile, onError, label = 'Перетащите изображение сюда или нажмите, чтобы выбрать файл' }: Props =
-		$props();
+	let { onFile, onError, label = t('dropZone.pickDefault') }: Props = $props();
 
 	let input = $state<HTMLInputElement | undefined>();
 	let depth = $state(0);

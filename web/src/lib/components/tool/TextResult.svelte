@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { downloadBlob } from '$lib/core/io';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		text: string;
@@ -22,12 +23,12 @@
 </script>
 
 <div class="panel text-result">
-	<textarea class="output" rows="10" readonly value={text} aria-label="Текстовый результат"></textarea>
+	<textarea class="output" rows="10" readonly value={text} aria-label={t('textResult.outputAria')}></textarea>
 	<div class="actions">
 		<button type="button" class="secondary" onclick={copy}>
-			{copied ? 'Скопировано' : 'Копировать'}
+			{copied ? t('textResult.copied') : t('textResult.copy')}
 		</button>
-		<button type="button" class="primary" onclick={download}>Скачать .txt</button>
+		<button type="button" class="primary" onclick={download}>{t('textResult.downloadTxt')}</button>
 	</div>
 </div>
 

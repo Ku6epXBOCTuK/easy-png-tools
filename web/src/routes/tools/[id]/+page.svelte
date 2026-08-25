@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ToolPage from '$lib/components/ToolPage.svelte';
 	import { getTool } from '$lib/registry';
+	import { t } from '$lib/i18n/t';
 
 	let { data } = $props();
 
@@ -8,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>{tool?.title ?? 'Инструмент'} — easy-png-tools</title>
+	<title>{tool?.title ?? t('toolPage.fallbackTitle')} — easy-png-tools</title>
 	{#if tool}
 		<meta name="description" content={tool.description} />
 	{/if}

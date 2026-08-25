@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PixelImage } from '$lib/core/types';
+	import { t } from '$lib/i18n/t';
 	import DropOverlay from '../DropOverlay.svelte';
 	import DropZone from '../DropZone.svelte';
 	import Preview from '../Preview.svelte';
@@ -25,7 +26,7 @@
 			<div class="media">
 				<Preview image={source} pipetteActive={pipetteActive} onPickColor={onPickColor} />
 			</div>
-			<Button variant="secondary" onclick={onReset}>Заменить изображение</Button>
+			<Button variant="secondary" onclick={onReset}>{t('sourceCard.replaceImage')}</Button>
 		</DropOverlay>
 	{/if}
 </div>

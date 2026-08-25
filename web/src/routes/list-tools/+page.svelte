@@ -1,27 +1,23 @@
 <script lang="ts">
 	import { CATEGORIES } from '$lib/categories';
+	import { t } from '$lib/i18n/t';
 	import ToolCard from '$lib/components/search/ToolCard.svelte';
 	import { TOOLS } from '$lib/registry';
 </script>
 
 <svelte:head>
-	<title>Все инструменты — easy-png-tools</title>
-	<meta
-		name="description"
-		content="Полный каталог PNG-утилит: конвертация, прозрачность, цвет, геометрия, анализ и генерация изображений."
-	/>
+	<title>{t('catalog.pageTitle')}</title>
+	<meta name="description" content={t('catalog.metaDescription')} />
 </svelte:head>
 
-<h1>Каталог инструментов</h1>
-<p class="lead text-muted">
-	{TOOLS.length} утилит для работы с PNG. Все операции выполняются локально в браузере.
-</p>
+<h1>{t('catalog.heading')}</h1>
+<p class="lead text-muted">{t('catalog.lead', { count: TOOLS.length })}</p>
 
 {#each CATEGORIES as category (category.id)}
 	{@const categoryTools = TOOLS.filter((tool) => tool.category === category.id)}
 	{#if categoryTools.length > 0}
 		<section id={category.id} class="category" aria-labelledby="{category.id}-heading">
-			<h2 id="{category.id}-heading" class="heading-section">{category.label}</h2>
+			<h2 id="{category.id}-heading" class="heading-section">{t(`categories.${category.id}`)}</h2>
 			<div class="grid">
 				{#each categoryTools as tool (tool.id)}
 					<div class="panel">

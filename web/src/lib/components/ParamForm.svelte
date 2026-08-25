@@ -5,6 +5,7 @@
 	import SliderField from './ui/SliderField.svelte';
 	import TextField from './ui/TextField.svelte';
 	import type { ParamDef } from '$lib/registry';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		params: ParamDef[];
@@ -27,7 +28,7 @@
 
 <div class="params-grid">
 	{#if hasMask}
-		<CheckboxField id="show-mask" label="Показать маску" bind:checked={showMask} />
+		<CheckboxField id="show-mask" label={t('ui.showMask')} bind:checked={showMask} />
 	{/if}
 	{#each params as param (param.id)}
 		<div class="field">

@@ -11,6 +11,7 @@
 	import ChainToolBlock from './chain/ChainToolBlock.svelte';
 	import { createAutoRunner } from '$lib/tools/auto-run';
 	import { executeStep } from '$lib/tools/executor';
+	import { t } from '$lib/i18n/t';
 	import ParamsCard from './tool/ParamsCard.svelte';
 	import ResultCard from './tool/ResultCard.svelte';
 	import SourceCard from './tool/SourceCard.svelte';
@@ -175,8 +176,10 @@
 				try {
 					current = await executeStep(stepTool, current, sanitizeParams(stepTool, step.values));
 				} catch (e) {
-					const message = e instanceof Error ? e.message : String(e);
-					throw new Error(`Шаг ${i + 1} (${stepTool.title}): ${message}`);
+					const rawMsg = e instanceof Error ? e.message : String(e);
+					throw new Error(
+						t('toolPage.stepError', { n: i + 1, title: stepTool.title, msg: t(rawMsg) })
+					);
 				}
 				if (!runner.isCurrent(token)) return;
 				collected.push(current);
@@ -213,7 +216,8 @@
 
 	function showError(e: unknown) {
 		status = source ? 'loaded' : 'idle';
-		errorText = e instanceof Error ? e.message : String(e);
+		const raw = e instanceof Error ? e.message : String(e);
+		errorText = t(raw);
 	}
 
 	function reset() {
@@ -261,7 +265,7 @@
 	<div class="panel tool-block">
 		<div class="tool-stage" class:single={isSourceless}>
 			{#if !isSourceless}
-				<span class="edge-legend source-legend" aria-hidden="true">Исходник</span>
+				<span class="edge-legend source-legend" aria-hidden="true">{t('toolPage.legendSource')}</span>
 				<div class="cell">
 					{#if isTextSource && !source}
 						<TextInputCard onSubmit={handleTextSubmit} />
@@ -278,7 +282,7 @@
 				</div>
 			{/if}
 			<span class="edge-legend result-legend" aria-hidden="true">
-				{isInfo ? 'Сводка' : 'Результат'}
+				{isInfo ? t('toolPage.legendSummary') : t('toolPage.legendResult')}
 			</span>
 			<div class="cell">
 			<ResultCard
@@ -300,7 +304,7 @@
 
 	{#if (source || isSourceless) && !isInfo && (tool.params.length > 0 || hasMask)}
 		<div class="params-sep">
-			<span class="edge-legend" aria-hidden="true">Параметры</span>
+			<span class="edge-legend" aria-hidden="true">{t('toolPage.legendParams')}</span>
 		</div>
 		<ParamsCard
 			params={tool.params}
@@ -317,17 +321,17 @@
 		{#each chain as step, index (step.id)}
 			{#if step.toolId === ''}
 				<div class="panel empty-slot">
-					<header>
-						<h3 class="heading-section">Шаг {index + 1}</h3>
-						<button
-							type="button"
-							class="remove-step"
-							aria-label="Убрать шаг"
-							onclick={() => removeChainStep(index)}
-						>
-							✕
-						</button>
-					</header>
+				<header>
+					<h3 class="heading-section">{t('toolPage.stepHeading', { n: index + 1 })}</h3>
+					<button
+						type="button"
+						class="remove-step"
+						aria-label={t('toolPage.removeStepAria')}
+						onclick={() => removeChainStep(index)}
+					>
+						✕
+					</button>
+				</header>
 					<ToolSearch onSelect={(id) => applyChainTool(index, id)} />
 				</div>
 			{:else if getTool(step.toolId)}

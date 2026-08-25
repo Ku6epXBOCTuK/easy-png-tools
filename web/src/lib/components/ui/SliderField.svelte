@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Field from './Field.svelte';
+	import { t } from '$lib/i18n/t';
 
 	interface Props {
 		id: string;
@@ -42,13 +43,13 @@
 
 <Field {id} {label} {hint}>
 	<div class="row">
-		<button type="button" class="step" aria-label="Уменьшить" onclick={decrement}>−</button>
+		<button type="button" class="step" aria-label={t('ui.decrease')} onclick={decrement}>−</button>
 		<input id={id} type="range" min={min} max={max} step={step} bind:value />
-		<button type="button" class="step" aria-label="Увеличить" onclick={increment}>+</button>
+		<button type="button" class="step" aria-label={t('ui.increase')} onclick={increment}>+</button>
 		<button
 			type="button"
 			class="step"
-			aria-label="Сбросить"
+			aria-label={t('ui.reset')}
 			disabled={resetDisabled}
 			onclick={reset}
 		>

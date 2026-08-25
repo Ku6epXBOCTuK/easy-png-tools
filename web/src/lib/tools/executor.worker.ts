@@ -17,7 +17,7 @@ async function handle(request: WorkerRequest): Promise<void> {
 	try {
 		const tool = getTool(request.toolId);
 		if (!tool?.run) {
-			throw new Error('Этот инструмент не обрабатывает изображения');
+			throw new Error('errors.noImageRun');
 		}
 		const image: PixelImage = {
 			width: request.image.width,
