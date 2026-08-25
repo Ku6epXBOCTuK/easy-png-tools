@@ -21,7 +21,7 @@ describe('реестр инструментов', () => {
 	});
 
 	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: категория валидна', (_, tool) => {
-		expect(CATEGORIES.map((c) => c.id)).toContain(tool.category);
+		expect(CATEGORIES).toContain(tool.category);
 	});
 
 	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: исполнители определены', (_, tool) => {

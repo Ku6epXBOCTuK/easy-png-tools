@@ -7,14 +7,16 @@ export type CategoryId =
 	| 'generate'
 	| 'filters';
 
-export type Category = { id: CategoryId; label: string };
-
-export const CATEGORIES: Category[] = [
-	{ id: 'convert', label: 'Конвертация' },
-	{ id: 'alpha', label: 'Прозрачность' },
-	{ id: 'color', label: 'Цвет' },
-	{ id: 'geometry', label: 'Геометрия' },
-	{ id: 'filters', label: 'Фильтры' },
-	{ id: 'analyze', label: 'Анализ' },
-	{ id: 'generate', label: 'Генерация' }
+/**
+ * Порядок категорий в каталоге. Человекочитаемые названия живут в словарях
+ * i18n: секция categories, ключ = CategoryId.
+ */
+export const CATEGORIES: readonly CategoryId[] = [
+	'convert',
+	'alpha',
+	'color',
+	'geometry',
+	'filters',
+	'analyze',
+	'generate'
 ];

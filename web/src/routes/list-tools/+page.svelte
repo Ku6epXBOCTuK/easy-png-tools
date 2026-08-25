@@ -15,11 +15,11 @@
 <h1>{t('catalog.heading')}</h1>
 <p class="lead text-muted">{t('catalog.lead', { count: TOOLS.length })}</p>
 
-{#each CATEGORIES as category (category.id)}
-	{@const categoryTools = TOOLS.filter((tool) => tool.category === category.id)}
+{#each CATEGORIES as category (category)}
+	{@const categoryTools = TOOLS.filter((tool) => tool.category === category)}
 	{#if categoryTools.length > 0}
-		<section id={category.id} class="category" aria-labelledby="{category.id}-heading">
-			<h2 id="{category.id}-heading" class="heading-section">{t(`categories.${category.id}`)}</h2>
+		<section id={category} class="category" aria-labelledby="{category}-heading">
+			<h2 id="{category}-heading" class="heading-section">{t(`categories.${category}`)}</h2>
 			<div class="grid">
 				{#each categoryTools as tool (tool.id)}
 					<div class="panel">
