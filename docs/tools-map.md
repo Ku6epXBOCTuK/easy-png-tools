@@ -1,15 +1,13 @@
-# Карта инструментов: реализовано · добавить · идеи
+﻿# Карта инструментов: реализовано · добавить · идеи
 
 > Живой документ для сверки с каталогом. Формат записи: `id / название — параметры через запятую`.
 > Источник сравнения: onlinepngtools.com (311 уникальных; 107 из них — нишевые клоны серий Logo*/Icon*/Stamp*/Signature* поверх обычных операций).
 
-Итого: реализовано **71**, отсутствует **~110** (из них EASY **71**, MEDIUM 35, HARD 4).
-
 ---
 
-## 1. Реализовано (71)
+## 1. Реализовано
 
-### Конвертация (15)
+### Конвертация
 
 - jpg-to-png — без параметров
 - webp-to-png — без параметров
@@ -24,7 +22,7 @@
 - png-to-data-uri / data-uri-to-png — строка
 - png-to-hex — rrggbbaa по строкам / hex-to-png — tokens + width
 
-### Прозрачность (15)
+### Прозрачность
 
 - change-png-opacity — percent
 - set-alpha-channel-png — percent
@@ -40,7 +38,7 @@
 - despeckle-alpha-png / close-holes-png — radius
 - center-by-alpha-png — без параметров
 
-### Цвет (14)
+### Цвет
 
 - grayscale-png / invert-colors-png / sepia-png / auto-contrast-png — без параметров
 - adjust-brightness-contrast-png — brightness, contrast
@@ -54,7 +52,7 @@
 - gamma-png — value
 - tint-png — color, strength
 
-### Геометрия (12)
+### Геометрия
 
 - resize-png — width (0=авто), height (0=авто), keepAspect
 - crop-png — x, y, width, height
@@ -69,35 +67,37 @@
 - fit-on-background-png — width, height, transparent, color
 - tile-png — columns, rows
 
-### Фильтры (4)
+### Фильтры
 
 - blur-png — radius
 - sharpen-png — strength
 - vignette-png — strength
 - jpeg-artifacts-png — quality (имитация пережатия jpg/webp)
 
-### Анализ (4)
+### Анализ
 
 - png-info — размеры, альфа, число цветов
 - png-is-transparent / png-is-grayscale / png-orientation — текстовый вердикт
 
-### Генерация (4)
+### Генерация
 
 - create-empty-png — width, height, transparent, color
 - single-color-png — width, height, color
 - random-noise-png — width, height, seed
 - linear-gradient-png — width, height, fromColor, toColor, direction
 
-### Текст (2)
+### Текст
 
 - add-text-png — text, fontSize, color, font, bold, position (3×3), margin, plate, plateColor, plateOpacity
 - date-stamp-png — format, fontSize, color, font, bold, position, margin, plate, plateColor, plateOpacity
+- watermark-tile-png — text, fontSize, color, opacity, angle, stepX, stepY, font, bold
+- watermark-image-png — вторая картинка-знак (загружается на странице), scale, opacity, position, margin
 
 ---
 
 ## 2. Можно добавить — из onlinepngtools
 
-### Палитры и цветовые утилиты (10)
+### Палитры и цветовые утилиты
 
 - color-wheel-generator — size, кольца/сектора, показ hex при клике (у нас — статичный свотч-полотно)
 - complementary-palette — baseColor
@@ -110,12 +110,12 @@
 - mix-colors — colors[], веса?
 - average-color — colors[]; blend-two — a, b, steps; step-between — a, b, steps (три частных случая одного движка)
 
-### Разложение каналов (7)
+### Разложение каналов
 
 - png-to-hsl / hsv / hsi / cmyk / ycbcr / lab — channel (какой компонент показать), режим отображения (серый/окрашенный)
 - separate-colors — minShare слоя (MEDIUM, мультифайловый вывод → пока идея)
 
-### Маски по свойствам пикселей (7)
+### Маски по свойствам пикселей
 
 - show-transparent-areas — подсветка цветом, полупрозрачность подсветки
 - show-grayscale-pixels / show-color-pixels — маска серых/цветных
@@ -123,14 +123,14 @@
 - unique-color-mask — порог редкости
 - extract-color-from-png — color, tolerance (обратное remove-color: оставить только цвет)
 
-### Фигурные маски (4)
+### Фигурные маски
 
 - circle-mask — diameter/fit, позиция
 - square-mask — side, fit
 - star-mask — rays, innerRadius, rotation
 - wavy-mask — amplitude, frequency, направление края
 
-### Края и силуэт (5)
+### Края и силуэт
 
 - feather-edges — radius (размытие только альфы)
 - clean-edges-defringe — tolerance, радиус подбора цвета края
@@ -138,7 +138,7 @@
 - glow — radius, color, intensity
 - shadow — offsetX, offsetY, blur, color, alpha
 
-### Эффекты (5)
+### Эффекты
 
 - pixelate — blockSize (! обещан в роадмапе)
 - randomize-pixels — blockSize, seed
@@ -146,7 +146,7 @@
 - censor-region / erase-region — область (MEDIUM: нужен UI выделения → см. идеи)
 - whirl — угол, центр, радиус (MEDIUM)
 
-### Сортировка/блоки пикселей (3)
+### Сортировка/блоки пикселей
 
 - sort-pixels — blockSize, ключ (яркость/канал), направление (MEDIUM)
 - color-blocks — blockSize (усреднение блоков) — EASY, родственник pixelate
@@ -160,7 +160,7 @@
 - change-quality — честная семантика для lossless (см. план-гапы §риск)
 - low-quality-png — частично покрыт jpeg-artifacts; остаток = сильный quantize
 
-### Генераторы (7)
+### Генераторы
 
 - text-to-png — text, font, size, textColor, bgColor, padding (движок domText уже есть)
 - emoji-to-png — emoji, size, шрифт эмодзи
@@ -170,7 +170,7 @@
 - colorful-random — блоки случайных цветов, размер блока, seed
 - draw-grid — cols, rows, lineWidth, color, прозрачный фон
 
-### Конвертеры (6)
+### Конвертеры
 
 - png-to-bytes / bytes-to-png — формат строки (dec/hex), порядок каналов
 - png-to-rgb-values / rgb-values-to-png — аналогично
@@ -179,7 +179,7 @@
 - gif-to-frames — MEDIUM (мультифайловый вывод → идея)
 - change-bit-depth — MEDIUM (пересборка PNG)
 
-### Геометрия-добивки (5)
+### Геометрия-добивки
 
 - trim-empty-space — порог альфы (закрывает их Remove Border/Padding/Space одной операцией)
 - change-canvas-size — w, h, якорь 3×3
