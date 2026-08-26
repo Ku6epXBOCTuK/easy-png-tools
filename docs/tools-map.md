@@ -86,6 +86,16 @@
 - png-info — размеры, альфа, число цветов
 - png-is-transparent / png-is-grayscale / png-orientation — текстовый вердикт
 
+### Маски по свойствам пикселей
+
+- show-transparent-png — color, opacity (подсветка прозрачных/полупрозрачных)
+- show-grayscale-pixels-png — tolerance, mode (binary/highlight), highlightColor, highlightOpacity
+- show-color-pixels-png — tolerance, mode, highlightColor, highlightOpacity
+- light-pixel-mask-png — threshold, mode, highlightColor, highlightOpacity
+- dark-pixel-mask-png — threshold, mode, highlightColor, highlightOpacity
+- unique-color-mask-png — rarity (макс. повторов), mode, highlightColor, highlightOpacity
+- extract-color-from-png — color, tolerance (оставить близкие, остальное прозрачным)
+
 ### Генерация
 
 - create-empty-png — width, height, transparent, color
@@ -100,10 +110,6 @@
 - watermark-tile-png — text, fontSize, color, opacity, angle, stepX, stepY, font, bold
 - watermark-image-png — вторая картинка-знак (загружается на странице), scale, opacity, position, margin
 
----
-
-## 2. Можно добавить — из onlinepngtools
-
 ### Палитры и цветовые утилиты
 
 - color-wheel-generator — size, кольца/сектора, показ hex при клике (у нас — статичный свотч-полотно)
@@ -117,17 +123,13 @@
 - mix-colors — colors[], веса?
 - average-color — colors[]; blend-two — a, b, steps; step-between — a, b, steps (три частных случая одного движка)
 
+---
+
+## 2. Можно добавить — из onlinepngtools
+
 ### Разложение каналов — остаток
 
 - separate-colors — minShare слоя (MEDIUM, мультифайловый вывод → пока идея)
-
-### Маски по свойствам пикселей
-
-- show-transparent-areas — подсветка цветом, полупрозрачность подсветки
-- show-grayscale-pixels / show-color-pixels — маска серых/цветных
-- light-pixel-mask / dark-pixel-mask — threshold яркости
-- unique-color-mask — порог редкости
-- extract-color-from-png — color, tolerance (обратное remove-color: оставить только цвет)
 
 ### Фигурные маски
 
