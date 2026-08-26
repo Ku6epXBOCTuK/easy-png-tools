@@ -105,13 +105,17 @@ export const en: Dict = {
 		reset: 'Reset',
 		pipette: 'Eyedropper',
 		themeLight: 'Light theme',
-		themeDark: 'Dark theme'
+		themeDark: 'Dark theme',
+		overlayTitle: 'Watermark',
+		overlayDrop: 'Drop a watermark PNG or click',
+		overlayRemove: 'Remove watermark'
 	},
 	errors: {
 		noImageRun: 'This tool does not process images',
 		workerFailed: 'Worker execution failed',
 		workerUnavailable: 'Worker is unavailable',
 		notFound: 'Tool not found',
+		noWatermark: 'Pick a watermark image first',
 		badTransform: 'Degenerate transformation matrix',
 		skewAngle: 'Skew angles cannot be 90° or -90°',
 		badHex: 'Invalid HEX color: "{value}"',

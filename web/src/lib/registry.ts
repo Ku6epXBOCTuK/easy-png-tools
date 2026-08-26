@@ -52,7 +52,13 @@ import {
 } from './core/color';
 import { centerByAlpha, crop, expandCanvas, flip, resize, rotate90, tile } from './core/geometry';
 import { decodeSvgText, decodeTextImage, jpegRoundtrip, toBase64, toDataUrl, type OutputMime } from './core/io';
-import { drawTextBlock, type TextFont } from './core/domText';
+import {
+	drawImageWatermark,
+	drawTextBlock,
+	drawTextTile,
+	type TextFont
+} from './core/domText';
+import { getOverlay } from './tools/overlay-store.svelte';
 import { formatStamp } from './core/datefmt';
 import type { Position9 } from './core/textdraw';
 import { hexToPixels, pixelsToHex } from './core/text';
@@ -117,6 +123,8 @@ export type ToolEntry = {
 	output?: OutputFormat;
 	/** Инструменту нужен DOM (canvas): исполняется только напрямую, без воркера. */
 	domOnly?: boolean;
+	/** Инструменту нужна вторая картинка-источник (знак), загружаемая на странице. */
+	needsOverlaySource?: boolean;
 };
 
 export const PNG_OUTPUT: OutputFormat = { mime: 'image/png', ext: 'png' };
@@ -1002,6 +1010,89 @@ export const TOOLS: ToolEntry[] = [
 				plateColor: bool(p, 'plate') ? str(p, 'plateColor') : undefined,
 				plateOpacityPercent: num(p, 'plateOpacity')
 			})
+	},
+	{
+		id: 'watermark-tile-png',
+		title: 'Watermark Tile PNG',
+		description:
+			'Covers the image with a repeating diagonal semi-transparent text tile — a protection watermark.',
+		category: 'text',
+		domOnly: true,
+		params: [
+			{ id: 'text', label: 'Text', type: 'text', default: 'DRAFT', placeholder: 'Watermark text' },
+			{ id: 'fontSize', label: 'Font size, px', type: 'slider', min: 12, max: 160, step: 1, default: 56 },
+			{ id: 'color', label: 'Text color', type: 'color', default: '#ffffff' },
+			{ id: 'opacity', label: 'Opacity, %', type: 'slider', min: 5, max: 100, step: 5, default: 30 },
+			{ id: 'angle', label: 'Angle, °', type: 'slider', min: -90, max: 90, step: 1, default: -30 },
+			{ id: 'stepX', label: 'Step X, px', type: 'slider', min: 40, max: 600, step: 10, default: 220 },
+			{ id: 'stepY', label: 'Step Y, px', type: 'slider', min: 40, max: 600, step: 10, default: 180 },
+			{
+				id: 'font',
+				label: 'Font',
+				type: 'select',
+				default: 'sans',
+				options: [
+					{ value: 'sans', label: 'Sans-serif' },
+					{ value: 'serif', label: 'Serif' },
+					{ value: 'mono', label: 'Monospace' }
+				]
+			},
+			{ id: 'bold', label: 'Bold', type: 'checkbox', default: true }
+		],
+		run: (img, p) =>
+			drawTextTile(img, {
+				text: str(p, 'text'),
+				fontSize: num(p, 'fontSize'),
+				font: str(p, 'font') as TextFont,
+				bold: bool(p, 'bold'),
+				color: str(p, 'color'),
+				opacityPercent: num(p, 'opacity'),
+				stepX: num(p, 'stepX'),
+				stepY: num(p, 'stepY'),
+				angleDeg: num(p, 'angle')
+			})
+	},
+	{
+		id: 'watermark-image-png',
+		title: 'Watermark Image PNG',
+		description:
+			'Overlays another PNG (logo/signature) on top: scale from canvas width, opacity, 3×3 position. The mark lives only while the page is open — after restoring a chain, pick it again.',
+		category: 'text',
+		domOnly: true,
+		needsOverlaySource: true,
+		params: [
+			{ id: 'scale', label: 'Mark width, % of canvas', type: 'slider', min: 5, max: 100, step: 1, default: 30 },
+			{ id: 'opacity', label: 'Opacity, %', type: 'slider', min: 5, max: 100, step: 5, default: 60 },
+			{
+				id: 'position',
+				label: 'Position',
+				type: 'select',
+				default: 'bottom-right',
+				options: [
+					{ value: 'top-left', label: 'Top left' },
+					{ value: 'top-center', label: 'Top center' },
+					{ value: 'top-right', label: 'Top right' },
+					{ value: 'middle-left', label: 'Middle left' },
+					{ value: 'center', label: 'Center' },
+					{ value: 'middle-right', label: 'Middle right' },
+					{ value: 'bottom-left', label: 'Bottom left' },
+					{ value: 'bottom-center', label: 'Bottom center' },
+					{ value: 'bottom-right', label: 'Bottom right' }
+				]
+			},
+			{ id: 'margin', label: 'Margin, px', type: 'slider', min: 0, max: 200, step: 1, default: 24 }
+		],
+		run: (img, p) => {
+			const mark = getOverlay();
+			if (!mark) throw new ToolError('errors.noWatermark');
+			return drawImageWatermark(img, {
+				mark,
+				scalePercent: num(p, 'scale'),
+				opacityPercent: num(p, 'opacity'),
+				position: str(p, 'position') as Position9,
+				margin: num(p, 'margin')
+			});
+		}
 	},
 	{
 		id: 'png-is-grayscale',

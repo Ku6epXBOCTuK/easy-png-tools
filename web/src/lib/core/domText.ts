@@ -92,6 +92,38 @@ export interface TileTextOptions extends Omit<TextBlockOptions, 'position' | 'ma
 	angleDeg: number;
 }
 
+export interface ImageWatermarkOptions {
+	mark: PixelImage;
+	scalePercent: number;
+	opacityPercent: number;
+	position: Position9;
+	margin: number;
+}
+
+/** Картинка-знак поверх изображения: масштаб от ширины холста, позиция 3×3. */
+export function drawImageWatermark(img: PixelImage, o: ImageWatermarkOptions): PixelImage {
+	const { canvas, ctx } = ctx2d(img.width, img.height);
+	ctx.putImageData(new ImageData(new Uint8ClampedArray(img.data), img.width, img.height), 0, 0);
+
+	const w = Math.max(1, Math.round((img.width * o.scalePercent) / 100));
+	const h = Math.max(1, Math.round((w * o.mark.height) / o.mark.width));
+	const origin = anchorOrigin(o.position, w, h, img.width, img.height, o.margin);
+
+	const markCanvas = ctx2d(o.mark.width, o.mark.height);
+	markCanvas.ctx.putImageData(
+		new ImageData(new Uint8ClampedArray(o.mark.data), o.mark.width, o.mark.height),
+		0,
+		0
+	);
+
+	ctx.save();
+	ctx.globalAlpha = o.opacityPercent / 100;
+	ctx.drawImage(markCanvas.canvas, origin.x, origin.y, w, h);
+	ctx.restore();
+
+	return toPixelImage(canvas);
+}
+
 /** Повторяющаяся диагональная плитка текста на весь холст. */
 export function drawTextTile(img: PixelImage, o: TileTextOptions): PixelImage {
 	const { canvas, ctx } = ctx2d(img.width, img.height);

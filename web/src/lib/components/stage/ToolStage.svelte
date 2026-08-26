@@ -9,6 +9,7 @@
 	import DownloadButton from '../DownloadButton.svelte';
 	import Button from '../ui/Button.svelte';
 	import EmptyState from '../ui/EmptyState.svelte';
+	import OverlayCard from '../tool/OverlayCard.svelte';
 	import ParamsCard from '../tool/ParamsCard.svelte';
 	import ResultCard from '../tool/ResultCard.svelte';
 	import SourceCard from '../tool/SourceCard.svelte';
@@ -43,6 +44,10 @@
 		handlePipetteToggle?: (id: string) => void;
 		handlePickColor?: (hex: string) => void;
 		showError?: (e: unknown) => void;
+		overlayImage?: PixelImage | null;
+		onOverlayFile?: (file: File) => void;
+		onOverlayError?: (e: unknown) => void;
+		onOverlayClear?: () => void;
 		index?: number;
 		input?: PixelImage | null;
 		result?: PixelImage | null;
@@ -81,6 +86,10 @@
 		handlePipetteToggle,
 		handlePickColor,
 		showError,
+		overlayImage = null,
+		onOverlayFile,
+		onOverlayError,
+		onOverlayClear,
 		index = 0,
 		input = null,
 		result = null,
@@ -138,6 +147,14 @@
 						pipetteActive={!!pipetteTargetId}
 						onPickColor={(hex) => handlePickColor?.(hex)}
 					/>
+					{#if tool.needsOverlaySource && source}
+						<OverlayCard
+							overlay={overlayImage}
+							onFile={(f) => onOverlayFile?.(f)}
+							onError={(e) => onOverlayError?.(e)}
+							onClear={() => onOverlayClear?.()}
+						/>
+					{/if}
 				{/if}
 			</div>
 		</section>

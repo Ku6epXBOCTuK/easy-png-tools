@@ -105,13 +105,17 @@ export const ru: Dict = {
 		reset: 'Сбросить',
 		pipette: 'Пипетка',
 		themeLight: 'Светлая тема',
-		themeDark: 'Тёмная тема'
+		themeDark: 'Тёмная тема',
+		overlayTitle: 'Знак',
+		overlayDrop: 'Перетащите PNG-знак или нажмите',
+		overlayRemove: 'Убрать знак'
 	},
 	errors: {
 		noImageRun: 'Этот инструмент не обрабатывает изображения',
 		workerFailed: 'Ошибка исполнения в воркере',
 		workerUnavailable: 'Воркер недоступен',
 		notFound: 'Инструмент не найден',
+		noWatermark: 'Сначала выберите картинку-знак',
 		badTransform: 'Вырожденная матрица трансформации',
 		skewAngle: 'Углы наклона не могут быть 90° или -90°',
 		badHex: 'Некорректный HEX-цвет: "{value}"',
@@ -438,6 +442,49 @@ export const ru: Dict = {
 			results: {
 				grayscaleYes: 'Да — все пиксели являются оттенками серого.',
 				grayscaleNo: 'Нет — найдены цветные пиксели.'
+			}
+		},
+		'watermark-tile-png': {
+			title: 'Плитка-водяной знак PNG',
+			description:
+				'Покрывает изображение повторяющейся диагональной полупрозрачной плиткой текста — защитный водяной знак.',
+			params: {
+				text: 'Текст',
+				fontSize: 'Размер шрифта, px',
+				color: 'Цвет текста',
+				opacity: 'Непрозрачность, %',
+				angle: 'Угол, °',
+				stepX: 'Шаг X, px',
+				stepY: 'Шаг Y, px',
+				font: 'Шрифт',
+				bold: 'Жирный'
+			},
+			options: {
+				font: { sans: 'Без засечек', serif: 'С засечками', mono: 'Моноширинный' }
+			}
+		},
+		'watermark-image-png': {
+			title: 'Знак картинкой PNG',
+			description:
+				'Накладывает другой PNG (логотип, подпись): масштаб от ширины холста, прозрачность, позиция 3×3. Знак живёт, пока открыта страница, — после восстановления цепочки выберите его заново.',
+			params: {
+				scale: 'Ширина знака, % от холста',
+				opacity: 'Непрозрачность, %',
+				position: 'Позиция',
+				margin: 'Отступ, px'
+			},
+			options: {
+				position: {
+					'top-left': 'Сверху слева',
+					'top-center': 'Сверху по центру',
+					'top-right': 'Сверху справа',
+					'middle-left': 'По центру слева',
+					center: 'По центру',
+					'middle-right': 'По центру справа',
+					'bottom-left': 'Снизу слева',
+					'bottom-center': 'Снизу по центру',
+					'bottom-right': 'Снизу справа'
+				}
 			}
 		},
 		'add-text-png': {

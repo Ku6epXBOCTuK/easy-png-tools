@@ -12,6 +12,7 @@
 	import ToolSearch from './search/ToolSearch.svelte';
 	import { createAutoRunner } from '$lib/tools/auto-run';
 	import { executeStep } from '$lib/tools/executor';
+	import { clearOverlay, setOverlay } from '$lib/tools/overlay-store.svelte';
 	import { t } from '$lib/i18n/t';
 	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
 	import type { StageStatus } from './stage/stage-props';
@@ -51,6 +52,7 @@
 	let showMask = $state(false);
 	let info = $state<ImageInfo | null>(null);
 	let errorText = $state('');
+	let overlayImage = $state<PixelImage | null>(null);
 	// svelte-ignore state_referenced_locally
 	let values = $state<Record<string, any>>({ ...defaultParams(tool), ...presetBaseValues });
 	// svelte-ignore state_referenced_locally
@@ -272,7 +274,16 @@
 		info = null;
 		errorText = '';
 		status = 'idle';
-		values = defaultParams(tool);
+		clearOverlay();
+		values = { ...defaultParams(tool), ...presetBaseValues };
+	}
+
+	async function handleOverlayFile(file: File) {
+		try {
+			setOverlay(await decodeFile(file));
+		} catch (e) {
+			errorText = errorMessage(e);
+		}
 	}
 
 	function handlePaste(event: ClipboardEvent) {
@@ -332,6 +343,10 @@
 		handlePickColor={handlePickColor}
 		showError={showError}
 		errorMessage={errorMessage}
+		overlayImage={overlayImage}
+		onOverlayFile={(f) => void handleOverlayFile(f)}
+		onOverlayError={(e) => (errorText = errorMessage(e))}
+		onOverlayClear={clearOverlay}
 	/>
 
 	<div class="chain-stack">
