@@ -436,6 +436,109 @@ export const ru: Dict = {
 			},
 			options: { direction: { horizontal: 'По горизонтали', vertical: 'По вертикали' } }
 		},
+		'color-wheel-png': {
+			title: 'Цветовой круг PNG',
+			description:
+				'Круг HSL: оттенок по окружности, насыщенность от центра к краю, выбранная светлота.',
+			params: { width: 'Размер', lightness: 'Светлота, %' }
+		},
+		'complementary-png': {
+			title: 'Комплементарная палитра PNG',
+			description: 'Два противоположных цвета круга — базовый и его дополнение.',
+			params: {
+				baseColor: 'Базовый цвет',
+				width: 'Ширина',
+				layout: 'Раскладка'
+			},
+			options: { layout: { grid: 'Сетка', strip: 'Полоса' } }
+		},
+		'triadic-png': {
+			title: 'Триадная палитра PNG',
+			description: 'Три цвета через 120° друг от друга на цветовом круге.',
+			params: { baseColor: 'Базовый цвет', width: 'Ширина', layout: 'Раскладка' },
+			options: { layout: { grid: 'Сетка', strip: 'Полоса' } }
+		},
+		'tetradic-png': {
+			title: 'Тетрадная палитра PNG',
+			description: 'Четыре цвета — две комплементарные пары, шаг 90° по кругу.',
+			params: { baseColor: 'Базовый цвет', width: 'Ширина', layout: 'Раскладка' },
+			options: { layout: { grid: 'Сетка', strip: 'Полоса' } }
+		},
+		'analogous-png': {
+			title: 'Аналоговая палитра PNG',
+			description: 'Соседние оттенки вокруг базового — спокойная родственная гамма.',
+			params: {
+				baseColor: 'Базовый цвет',
+				width: 'Ширина',
+				layout: 'Раскладка',
+				spread: 'Разброс оттенка, °',
+				count: 'Сколько цветов'
+			},
+			options: { layout: { grid: 'Сетка', strip: 'Полоса' } }
+		},
+		'monochromatic-png': {
+			title: 'Монохромная палитра PNG',
+			description:
+				'Тоны одного оттенка: меняется светлота в выбранном диапазоне, тон и насыщенность фиксированы.',
+			params: {
+				baseColor: 'Базовый цвет',
+				width: 'Ширина',
+				layout: 'Раскладка',
+				count: 'Сколько цветов',
+				range: 'Диапазон светлоты, %'
+			},
+			options: { layout: { grid: 'Сетка', strip: 'Полоса' } }
+		},
+		'shades-png': {
+			title: 'Градация оттенка PNG',
+			description: 'Ступени базового цвета от исходного к более тёмному.',
+			params: {
+				baseColor: 'Базовый цвет',
+				width: 'Ширина',
+				layout: 'Раскладка',
+				count: 'Сколько цветов',
+				depth: 'Глубина затемнения, %'
+			},
+			options: { layout: { grid: 'Сетка', strip: 'Полоса' } }
+		},
+		'mix-colors-png': {
+			title: 'Смешать цвета PNG',
+			description:
+				'Усредняет несколько hex-цветов в один свотч. Введите значения через запятую; неверные токены пропускаются.',
+			params: { colors: 'Цвета (hex через запятую)', width: 'Ширина' }
+		},
+		'blend-two-png': {
+			title: 'Перелив двух цветов PNG',
+			description: 'Непрерывный горизонтальный градиент между двумя цветами.',
+			params: { colorA: 'Цвет A', colorB: 'Цвет B', width: 'Ширина' }
+		},
+		'step-colors-png': {
+			title: 'Ступени между цветами PNG',
+			description: 'Дискретный набор равномерно распределённых ступеней между двумя цветами.',
+			params: {
+				colorA: 'Цвет A',
+				colorB: 'Цвет B',
+				steps: 'Сколько ступеней',
+				width: 'Ширина',
+				layout: 'Раскладка'
+			},
+			options: { layout: { grid: 'Сетка', strip: 'Полоса' } }
+		},
+		'sort-colors-png': {
+			title: 'Отсортировать цвета PNG',
+			description:
+				'Рисует ваш hex-список свотчами, отсортированными по тону, яркости или насыщенности. Неверные токены пропускаются.',
+			params: {
+				colors: 'Цвета (hex через запятую)',
+				order: 'Сортировка',
+				width: 'Ширина',
+				layout: 'Раскладка'
+			},
+			options: {
+				order: { hue: 'Оттенок', luma: 'Яркость', sat: 'Насыщенность' },
+				layout: { grid: 'Сетка', strip: 'Полоса' }
+			}
+		},
 		'png-is-grayscale': {
 			title: 'Проверить: PNG монохромный?',
 			description: 'Сообщает, состоит ли изображение только из оттенков серого.',
@@ -488,8 +591,7 @@ export const ru: Dict = {
 			}
 		},
 		'add-text-png': {
-			title: 'Надпись на PNG',
-			description:
+			title: 'Надпись на PNG',			description:
 				'Рисует текст на изображении: шрифт, размер, цвет, жирность, позиция на сетке 3×3 и опциональная подложка.',
 			params: {
 				text: 'Текст',

@@ -61,6 +61,22 @@ import {
 import { getOverlay } from './tools/overlay-store.svelte';
 import { formatStamp } from './core/datefmt';
 import type { Position9 } from './core/textdraw';
+import {
+	analogousSet,
+	complementarySet,
+	monochromaticSet,
+	parseHexList,
+	renderBlend,
+	renderSwatches,
+	renderWheel,
+	shadeSet,
+	sortPalette,
+	stepColors,
+	mixColors,
+	tetradicSet,
+	triadicSet,
+	type SortKey
+} from './core/palette';
 import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
 
@@ -155,6 +171,31 @@ function bool(params: Record<string, unknown>, id: string): boolean {
 		throw new ToolError('errors.paramBool', { id });
 	}
 	return v;
+}
+
+function paletteParams(baseDefault: string) {
+	return [
+		{ id: 'baseColor', label: 'Base color', type: 'color' as const, default: baseDefault },
+		{
+			id: 'width',
+			label: 'Width',
+			type: 'slider' as const,
+			min: 128,
+			max: 1024,
+			step: 16,
+			default: 512
+		},
+		{
+			id: 'layout',
+			label: 'Layout',
+			type: 'select' as const,
+			default: 'grid',
+			options: [
+				{ value: 'grid', label: 'Grid' },
+				{ value: 'strip', label: 'Strip' }
+			]
+		}
+	];
 }
 
 function decodeToPng(id: string, title: string, description: string): ToolEntry {
@@ -875,6 +916,187 @@ export const TOOLS: ToolEntry[] = [
 				hexToRgba(str(p, 'fromColor')),
 				hexToRgba(str(p, 'toColor')),
 				str(p, 'direction') === 'vertical' ? 'vertical' : 'horizontal'
+			)
+	},
+	{
+		id: 'color-wheel-png',
+		title: 'Color Wheel PNG',
+		description:
+			'Generates an HSL color wheel: hue around the circle, saturation from center to edge, chosen lightness.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'width', label: 'Size', type: 'slider', min: 128, max: 1024, step: 16, default: 512 },
+			{ id: 'lightness', label: 'Lightness, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+		],
+		generate: (p) => renderWheel(Math.trunc(num(p, 'width')), num(p, 'lightness'))
+	},
+	{
+		id: 'complementary-png',
+		title: 'Complementary Palette PNG',
+		description: 'Two opposite colors on the color wheel — the base and its complement.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: paletteParams('#2563eb'),
+		generate: (p) =>
+			renderSwatches(complementarySet(str(p, 'baseColor')), num(p, 'width'), str(p, 'layout') as 'strip' | 'grid')
+	},
+	{
+		id: 'triadic-png',
+		title: 'Triadic Palette PNG',
+		description: 'Three colors evenly spaced 120° apart on the color wheel.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: paletteParams('#ff0000'),
+		generate: (p) =>
+			renderSwatches(triadicSet(str(p, 'baseColor')), num(p, 'width'), str(p, 'layout') as 'strip' | 'grid')
+	},
+	{
+		id: 'tetradic-png',
+		title: 'Tetradic Palette PNG',
+		description: 'Four colors in two complementary pairs, 90° apart on the wheel.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: paletteParams('#8000ff'),
+		generate: (p) =>
+			renderSwatches(tetradicSet(str(p, 'baseColor')), num(p, 'width'), str(p, 'layout') as 'strip' | 'grid')
+	},
+	{
+		id: 'analogous-png',
+		title: 'Analogous Palette PNG',
+		description: 'Neighboring hues around the base color — calm, related color scheme.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			...paletteParams('#22c55e'),
+			{ id: 'spread', label: 'Hue spread, °', type: 'slider', min: 10, max: 90, step: 5, default: 30 },
+			{ id: 'count', label: 'Colors', type: 'slider', min: 3, max: 9, step: 1, default: 5 }
+		],
+		generate: (p) =>
+			renderSwatches(
+				analogousSet(str(p, 'baseColor'), num(p, 'spread'), num(p, 'count')),
+				num(p, 'width'),
+				str(p, 'layout') as 'strip' | 'grid'
+			)
+	},
+	{
+		id: 'monochromatic-png',
+		title: 'Monochromatic Palette PNG',
+		description: 'Tones of a single hue: lightness varies within the chosen range, hue and saturation stay fixed.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			...paletteParams('#0ea5e9'),
+			{ id: 'count', label: 'Colors', type: 'slider', min: 2, max: 9, step: 1, default: 5 },
+			{ id: 'range', label: 'Lightness range, %', type: 'slider', min: 10, max: 90, step: 5, default: 40 }
+		],
+		generate: (p) =>
+			renderSwatches(
+				monochromaticSet(str(p, 'baseColor'), num(p, 'count'), num(p, 'range')),
+				num(p, 'width'),
+				str(p, 'layout') as 'strip' | 'grid'
+			)
+	},
+	{
+		id: 'shades-png',
+		title: 'Shade Ramp PNG',
+		description: 'A ramp of the base color getting darker step by step.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			...paletteParams('#f59e0b'),
+			{ id: 'count', label: 'Colors', type: 'slider', min: 2, max: 9, step: 1, default: 5 },
+			{ id: 'depth', label: 'Darkening depth, %', type: 'slider', min: 10, max: 90, step: 5, default: 50 }
+		],
+		generate: (p) =>
+			renderSwatches(
+				shadeSet(str(p, 'baseColor'), num(p, 'count'), num(p, 'depth')),
+				num(p, 'width'),
+				str(p, 'layout') as 'strip' | 'grid'
+			)
+	},
+	{
+		id: 'mix-colors-png',
+		title: 'Mix Colors PNG',
+		description:
+			'Averages several hex colors into one swatch. Enter comma-separated #hex values; invalid tokens are skipped.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{
+				id: 'colors',
+				label: 'Colors (comma-separated hex)',
+				type: 'text',
+				default: '#ff0000,#00ff00,#0000ff'
+			},
+			{ id: 'width', label: 'Width', type: 'slider', min: 128, max: 1024, step: 16, default: 512 }
+		],
+		generate: (p) => renderSwatches([mixColors(parseHexList(str(p, 'colors')))], num(p, 'width'), 'strip')
+	},
+	{
+		id: 'blend-two-png',
+		title: 'Blend Two Colors PNG',
+		description: 'A continuous horizontal gradient between two colors.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'colorA', label: 'Color A', type: 'color', default: '#000000' },
+			{ id: 'colorB', label: 'Color B', type: 'color', default: '#ffffff' },
+			{ id: 'width', label: 'Width', type: 'slider', min: 128, max: 1024, step: 16, default: 512 }
+		],
+		generate: (p) => renderBlend(str(p, 'colorA'), str(p, 'colorB'), num(p, 'width'))
+	},
+	{
+		id: 'step-colors-png',
+		title: 'Color Steps PNG',
+		description: 'A discrete set of evenly spaced steps between two colors.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'colorA', label: 'Color A', type: 'color', default: '#000000' },
+			{ id: 'colorB', label: 'Color B', type: 'color', default: '#ffffff' },
+			{ id: 'steps', label: 'Steps', type: 'slider', min: 2, max: 12, step: 1, default: 6 },
+			...paletteParams('#808080').filter((q) => q.id !== 'baseColor')
+		],
+		generate: (p) =>
+			renderSwatches(
+				stepColors(str(p, 'colorA'), str(p, 'colorB'), num(p, 'steps')),
+				num(p, 'width'),
+				str(p, 'layout') as 'strip' | 'grid'
+			)
+	},
+	{
+		id: 'sort-colors-png',
+		title: 'Sort Colors PNG',
+		description:
+			'Renders your hex list as swatches sorted by hue, brightness or saturation. Invalid tokens are skipped.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{
+				id: 'colors',
+				label: 'Colors (comma-separated hex)',
+				type: 'text',
+				default: '#ff0000,#ff8800,#ffff00,#00cc44,#0066ff,#8800ff'
+			},
+			{
+				id: 'order',
+				label: 'Sort by',
+				type: 'select',
+				default: 'hue',
+				options: [
+					{ value: 'hue', label: 'Hue' },
+					{ value: 'luma', label: 'Brightness' },
+					{ value: 'sat', label: 'Saturation' }
+				]
+			},
+			...paletteParams('#ffffff').filter((q) => q.id !== 'baseColor')
+		],
+		generate: (p) =>
+			renderSwatches(
+				sortPalette(parseHexList(str(p, 'colors')), str(p, 'order') as SortKey),
+				num(p, 'width'),
+				str(p, 'layout') as 'strip' | 'grid'
 			)
 	},
 	{
