@@ -56,9 +56,21 @@ import {
 	drawImageWatermark,
 	drawTextBlock,
 	drawTextTile,
+	renderEmoji,
+	renderTextToImage,
 	type TextFont
 } from './core/domText';
 import { getOverlay } from './tools/overlay-store.svelte';
+import {
+	base64ToBytes,
+	bytesToImage,
+	imageToByteRows,
+	imageToRgbValues,
+	looksLikePng,
+	rgbValuesToImage,
+	stripDataUri
+} from './core/textio';
+import { colorSpectrum, drawGrid, randomColorBlocks } from './core/gen-tools';
 import { formatStamp } from './core/datefmt';
 import type { Position9 } from './core/textdraw';
 import {
@@ -161,6 +173,8 @@ export type ToolEntry = {
 	generate?: (params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
 	toText?: (img: PixelImage, params: Record<string, unknown>) => Promise<string> | string;
 	runFromText?: (text: string, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
+	/** Текстовый источник + текстовый результат без промежуточного изображения. */
+	textToText?: (text: string) => Promise<string> | string;
 	preview?: (
 		img: PixelImage,
 		params: Record<string, unknown>
@@ -599,6 +613,53 @@ export const TOOLS: ToolEntry[] = [
 			{ id: 'width', label: 'Image width', type: 'number', min: 1, max: 10000, step: 1, default: 1 }
 		],
 		runFromText: (text, p) => hexToPixels(text, Math.trunc(Number(p['width']))),
+		run: (img) => clonePixelImage(img)
+	},
+	{
+		id: 'png-to-bytes',
+		title: 'PNG to Bytes',
+		description:
+			'Lists every pixel as four decimal bytes (R G B A), one image row per line.',
+		category: 'convert',
+		params: [],
+		resultType: 'text',
+		toText: (img) => imageToByteRows(img)
+	},
+	{
+		id: 'bytes-to-png',
+		title: 'Bytes to PNG',
+		description:
+			'Assembles an image from decimal RGBA byte numbers (any separators). Set the width — height is computed automatically.',
+		category: 'convert',
+		sourceMode: 'text',
+		params: [
+			{ id: 'width', label: 'Image width', type: 'number', min: 1, max: 10000, step: 1, default: 32 }
+		],
+		runFromText: (text, p) => bytesToImage(text, Math.trunc(num(p as Record<string, unknown>, 'width'))),
+		run: (img) => clonePixelImage(img)
+	},
+	{
+		id: 'png-to-rgb-values',
+		title: 'PNG to RGB Values',
+		description:
+			'Lists every pixel as rgba(r, g, b, a), one image row per line.',
+		category: 'convert',
+		params: [],
+		resultType: 'text',
+		toText: (img) => imageToRgbValues(img)
+	},
+	{
+		id: 'rgb-values-to-png',
+		title: 'RGB Values to PNG',
+		description:
+			'Assembles an image from rgba(r, g, b, a) numbers. Set the width — height is computed automatically.',
+		category: 'convert',
+		sourceMode: 'text',
+		params: [
+			{ id: 'width', label: 'Image width', type: 'number', min: 1, max: 10000, step: 1, default: 32 }
+		],
+		runFromText: (text, p) =>
+			rgbValuesToImage(text, Math.trunc(num(p as Record<string, unknown>, 'width'))),
 		run: (img) => clonePixelImage(img)
 	},
 	{
@@ -1231,6 +1292,17 @@ export const TOOLS: ToolEntry[] = [
 		run: (img, p) => extractByColor(img, str(p, 'color'), num(p, 'tolerance'))
 	},
 	{
+		id: 'verify-is-png',
+		title: 'Verify If Image Is a PNG',
+		description:
+			'Checks the signature of pasted base64 / data-uri content and reports whether it is a real PNG.',
+		category: 'analyze',
+		sourceMode: 'text',
+		params: [],
+		resultType: 'text',
+		textToText: (text) => (looksLikePng(base64ToBytes(stripDataUri(text))) ? 'verifyYes' : 'verifyNo')
+	},
+	{
 		id: 'png-info',
 		title: 'PNG info',
 		description:
@@ -1294,6 +1366,91 @@ export const TOOLS: ToolEntry[] = [
 		generate: (p) => noiseImage(Math.trunc(num(p, 'width')), Math.trunc(num(p, 'height')), num(p, 'seed'))
 	},
 	{
+		id: 'text-to-png',
+		title: 'Text to PNG',
+		description:
+			'Creates a PNG image from text: the canvas is sized to fit the label plus padding.',
+		category: 'generate',
+		sourceMode: 'none',
+		domOnly: true,
+		params: [
+			{ id: 'text', label: 'Text', type: 'text', default: 'Hello!', placeholder: 'Your text' },
+			{ id: 'fontSize', label: 'Font size, px', type: 'slider', min: 8, max: 300, step: 1, default: 96 },
+			{
+				id: 'font',
+				label: 'Font',
+				type: 'select',
+				default: 'sans',
+				options: [
+					{ value: 'sans', label: 'Sans-serif' },
+					{ value: 'serif', label: 'Serif' },
+					{ value: 'mono', label: 'Monospace' }
+				]
+			},
+			{ id: 'bold', label: 'Bold', type: 'checkbox', default: true },
+			{ id: 'color', label: 'Text color', type: 'color', default: '#111318' },
+			{ id: 'transparentBg', label: 'Transparent background', type: 'checkbox', default: false },
+			{ id: 'backgroundColor', label: 'Background color', type: 'color', default: '#ffffff' },
+			{ id: 'padding', label: 'Padding, px', type: 'slider', min: 0, max: 200, step: 2, default: 24 }
+		],
+		generate: (p) =>
+			renderTextToImage({
+				text: str(p, 'text'),
+				fontSize: num(p, 'fontSize'),
+				font: str(p, 'font') as TextFont,
+				bold: bool(p, 'bold'),
+				color: str(p, 'color'),
+				backgroundColor: str(p, 'backgroundColor'),
+				transparentBg: bool(p, 'transparentBg'),
+				padding: num(p, 'padding')
+			})
+	},
+	{
+		id: 'emoji-to-png',
+		title: 'Emoji to PNG',
+		description:
+			'Renders an emoji or any Unicode symbol as a transparent PNG of the chosen size.',
+		category: 'generate',
+		sourceMode: 'none',
+		domOnly: true,
+		params: [
+			{ id: 'emoji', label: 'Emoji / symbol', type: 'text', default: '😀' },
+			{ id: 'size', label: 'Size', type: 'slider', min: 32, max: 1024, step: 16, default: 256 }
+		],
+		generate: (p) => renderEmoji(str(p, 'emoji'), Math.trunc(num(p, 'size')))
+	},
+	{
+		id: 'placeholder-png',
+		title: 'Create Placeholder PNG',
+		description:
+			'Generates a placeholder rectangle with its dimensions printed in the center.',
+		category: 'generate',
+		sourceMode: 'none',
+		domOnly: true,
+		params: [
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 5000, step: 1, default: 800 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 5000, step: 1, default: 400 },
+			{ id: 'backgroundColor', label: 'Background', type: 'color', default: '#dfe2e8' },
+			{ id: 'color', label: 'Text color', type: 'color', default: '#5c6470' },
+			{ id: 'showText', label: 'Print dimensions', type: 'checkbox', default: true }
+		],
+		generate: (p) => {
+			const w = Math.trunc(num(p, 'width'));
+			const h = Math.trunc(num(p, 'height'));
+			const label = renderTextToImage({
+				text: `${w} × ${h}`,
+				fontSize: Math.max(12, Math.round(Math.min(w, h) * 0.14)),
+				font: 'sans',
+				bold: true,
+				color: str(p, 'color'),
+				backgroundColor: str(p, 'backgroundColor'),
+				transparentBg: false,
+				padding: 0
+			});
+			return changeCanvasSize(label, w, h, 'center');
+		}
+	},
+	{
 		id: 'linear-gradient-png',
 		title: 'Create gradient PNG',
 		description: 'Generates a smooth transition between two colors, horizontally or vertically.',
@@ -1322,6 +1479,86 @@ export const TOOLS: ToolEntry[] = [
 				hexToRgba(str(p, 'fromColor')),
 				hexToRgba(str(p, 'toColor')),
 				str(p, 'direction') === 'vertical' ? 'vertical' : 'horizontal'
+			)
+	},
+	{
+		id: 'color-spectrum-png',
+		title: 'Color Spectrum PNG',
+		description:
+			'Full hue rainbow 0–360° along the chosen axis with adjustable saturation and lightness.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 5000, step: 1, default: 1024 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 5000, step: 1, default: 128 },
+			{
+				id: 'direction',
+				label: 'Direction',
+				type: 'select',
+				default: 'horizontal',
+				options: [
+					{ value: 'horizontal', label: 'Horizontal' },
+					{ value: 'vertical', label: 'Vertical' }
+				]
+			},
+			{ id: 'saturation', label: 'Saturation, %', type: 'slider', min: 0, max: 100, step: 1, default: 100 },
+			{ id: 'lightness', label: 'Lightness, %', type: 'slider', min: 0, max: 100, step: 1, default: 50 }
+		],
+		generate: (p) =>
+			colorSpectrum(
+				Math.trunc(num(p, 'width')),
+				Math.trunc(num(p, 'height')),
+				str(p, 'direction') === 'vertical' ? 'vertical' : 'horizontal',
+				num(p, 'saturation'),
+				num(p, 'lightness')
+			)
+	},
+	{
+		id: 'random-colors-png',
+		title: 'Random Color Blocks PNG',
+		description:
+			'Fills the canvas with random vivid color blocks. Deterministic by seed.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
+			{ id: 'blockSize', label: 'Block size, px', type: 'slider', min: 4, max: 256, step: 2, default: 64 },
+			{ id: 'seed', label: 'Seed', type: 'number', min: 0, max: 999999999, step: 1, default: 7 }
+		],
+		generate: (p) =>
+			randomColorBlocks(
+				Math.trunc(num(p, 'width')),
+				Math.trunc(num(p, 'height')),
+				num(p, 'blockSize'),
+				num(p, 'seed')
+			)
+	},
+	{
+		id: 'draw-grid-png',
+		title: 'Draw Grid PNG',
+		description:
+			'Draws a grid with custom columns, rows and line width on a transparent or white background.',
+		category: 'generate',
+		sourceMode: 'none',
+		params: [
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 5000, step: 1, default: 512 },
+			{ id: 'cols', label: 'Columns', type: 'slider', min: 1, max: 64, step: 1, default: 8 },
+			{ id: 'rows', label: 'Rows', type: 'slider', min: 1, max: 64, step: 1, default: 8 },
+			{ id: 'lineWidth', label: 'Line width, px', type: 'slider', min: 1, max: 40, step: 1, default: 2 },
+			{ id: 'color', label: 'Line color', type: 'color', default: '#111318' },
+			{ id: 'transparentBg', label: 'Transparent background', type: 'checkbox', default: true }
+		],
+		generate: (p) =>
+			drawGrid(
+				Math.trunc(num(p, 'width')),
+				Math.trunc(num(p, 'height')),
+				num(p, 'cols'),
+				num(p, 'rows'),
+				num(p, 'lineWidth'),
+				str(p, 'color'),
+				bool(p, 'transparentBg')
 			)
 	},
 	{
@@ -1685,7 +1922,7 @@ export const TOOLS: ToolEntry[] = [
 		title: 'Watermark Image PNG',
 		description:
 			'Overlays another PNG (logo/signature) on top: scale from canvas width, opacity, 3×3 position. The mark lives only while the page is open — after restoring a chain, pick it again.',
-		category: 'text',
+		category: 'alpha',
 		domOnly: true,
 		needsOverlaySource: true,
 		params: [

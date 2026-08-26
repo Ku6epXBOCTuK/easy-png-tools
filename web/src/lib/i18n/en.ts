@@ -148,6 +148,12 @@ export const en: Dict = {
 		sizePositive: 'Dimensions must be positive and finite'
 	},
 	tools: {
+		'verify-is-png': {
+			results: {
+				verifyYes: 'Yes — this is a valid PNG signature.',
+				verifyNo: 'No — the signature does not match a PNG file.'
+			}
+		},
 		'png-is-grayscale': {
 			results: {
 				grayscaleYes: 'Yes — all pixels are shades of gray.',

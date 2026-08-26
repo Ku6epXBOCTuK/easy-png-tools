@@ -21,6 +21,10 @@
 - png-to-base64 / base64-to-png — строка
 - png-to-data-uri / data-uri-to-png — строка
 - png-to-hex — rrggbbaa по строкам / hex-to-png — tokens + width
+- png-to-bytes — десятичные RGBA-байты по строкам / bytes-to-png — tokens + width
+- png-to-rgb-values — rgba(r,g,b,a) по пикселям / rgb-values-to-png — числа + width
+- svg-to-png — width результата
+- verify-is-png — текстовый источник (base64/data-uri), вердикт по сигнатуре
 
 ### Прозрачность
 
@@ -37,6 +41,7 @@
 - harden-alpha-png — threshold
 - feather-edges-png — radius (размытие только альфы)
 - clean-edges-png — radius (defringe: RGB от ближайшего непрозрачного)
+- watermark-image-png — вторая картинка-знак (загружается на странице), scale, opacity, position, margin
 - despeckle-alpha-png / close-holes-png — radius
 - center-by-alpha-png — без параметров
 - round-corners-png — radius
@@ -118,13 +123,18 @@
 - single-color-png — width, height, color
 - random-noise-png — width, height, seed
 - linear-gradient-png — width, height, fromColor, toColor, direction
+- text-to-png — text, fontSize, font, bold, color, transparentBg, backgroundColor, padding
+- emoji-to-png — emoji, size
+- placeholder-png — width, height, backgroundColor, color, showText
+- color-spectrum-png — width, height, direction, saturation, lightness
+- random-colors-png — width, height, blockSize, seed
+- draw-grid-png — width, height, cols, rows, lineWidth, color, transparentBg
 
 ### Текст
 
 - add-text-png — text, fontSize, color, font, bold, position (3×3), margin, plate, plateColor, plateOpacity
 - date-stamp-png — format, fontSize, color, font, bold, position, margin, plate, plateColor, plateOpacity
 - watermark-tile-png — text, fontSize, color, opacity, angle, stepX, stepY, font, bold
-- watermark-image-png — вторая картинка-знак (загружается на странице), scale, opacity, position, margin
 
 ### Палитры и цветовые утилиты
 
@@ -170,21 +180,12 @@
 - change-quality — честная семантика для lossless (см. план-гапы §риск)
 - low-quality-png — частично покрыт jpeg-artifacts; остаток = сильный quantize
 
-### Генераторы
+### Генераторы — остаток
 
-- text-to-png — text, font, size, textColor, bgColor, padding (движок domText уже есть)
-- emoji-to-png — emoji, size, шрифт эмодзи
-- placeholder-png — w, h, text?, bg, fg
-- color-spectrum — w, h, пространство (hsv-радуга)
 - multi-color-gradient — список стопов (нужен новый тип параметра → MEDIUM-UI)
-- colorful-random — блоки случайных цветов, размер блока, seed
-- draw-grid — cols, rows, lineWidth, color, прозрачный фон
 
-### Конвертеры
+### Конвертеры — остаток
 
-- png-to-bytes / bytes-to-png — формат строки (dec/hex), порядок каналов
-- png-to-rgb-values / rgb-values-to-png — аналогично
-- verify-is-png — анализ сигнатуры файла (текстовый вердикт)
 - png-to-gif — MEDIUM (однокадровый GIF-энкодер руками)
 - gif-to-frames — MEDIUM (мультифайловый вывод → идея)
 - change-bit-depth — MEDIUM (пересборка PNG)
@@ -192,7 +193,6 @@
 ### Прочее единичное
 
 - pick-a-color — пипетка уже есть в превью; отдельная страница не планируется (покрыто)
-- watermark-image — в плане волны 4 (этап D)
 - preview/test на цветных фонах — фича превью, не инструмент (решить позже)
 - extract-barcode — HARD, вне планов
 

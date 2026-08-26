@@ -92,6 +92,52 @@ export interface TileTextOptions extends Omit<TextBlockOptions, 'position' | 'ma
 	angleDeg: number;
 }
 
+export interface TextToImageOptions {
+	text: string;
+	fontSize: number;
+	font: TextFont;
+	bold: boolean;
+	color: string;
+	backgroundColor: string;
+	transparentBg: boolean;
+	padding: number;
+	maxTextWidth?: number;
+}
+
+/** Картинка из текста: холст подгоняется под размер надписи с паддингом. */
+export function renderTextToImage(o: TextToImageOptions): PixelImage {
+	const measure = ctx2d(8, 8).ctx;
+	measure.font = fontString(o.fontSize, o.font, o.bold);
+	const maxWidth = o.maxTextWidth ?? 4000;
+	const lines = [o.text];
+	const textW = Math.min(maxWidth, Math.max(measure.measureText(o.text).width, 1));
+	const lineH = o.fontSize * 1.25;
+
+	const w = Math.max(1, Math.ceil(textW + o.padding * 2));
+	const h = Math.max(1, Math.ceil(lineH + o.padding * 2));
+	const { canvas, ctx } = ctx2d(w, h);
+
+	if (!o.transparentBg) {
+		ctx.fillStyle = o.backgroundColor;
+		ctx.fillRect(0, 0, w, h);
+	}
+	ctx.font = fontString(o.fontSize, o.font, o.bold);
+	ctx.fillStyle = o.color;
+	ctx.textBaseline = 'top';
+	lines.forEach((line) => ctx.fillText(line, o.padding, o.padding));
+	return toPixelImage(canvas);
+}
+
+/** Эмодзи/символ как PNG: рисуется платформенным шрифтом по центру. */
+export function renderEmoji(symbol: string, size: number): PixelImage {
+	const { canvas, ctx } = ctx2d(size, size);
+	ctx.font = `${Math.round(size * 0.72)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+	ctx.textAlign = 'center';
+	ctx.textBaseline = 'middle';
+	ctx.fillText(symbol, size / 2, size / 2 + size * 0.04);
+	return toPixelImage(canvas);
+}
+
 export interface ImageWatermarkOptions {
 	mark: PixelImage;
 	scalePercent: number;

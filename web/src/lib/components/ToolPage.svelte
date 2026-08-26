@@ -153,9 +153,22 @@
 	}
 
 	async function handleTextSubmit(text: string) {
-		if (!isTextSource || !tool.runFromText) return;
+		if (!isTextSource) return;
 		errorText = '';
 		status = 'processing';
+		if (tool.textToText) {
+			try {
+				result = null;
+				previewResult = null;
+				info = null;
+				textResult = await tool.textToText(text);
+				status = 'loaded';
+			} catch (e) {
+				showError(e);
+			}
+			return;
+		}
+		if (!tool.runFromText) return;
 		try {
 			source = await tool.runFromText(text, defaultParams(tool));
 			values = defaultParams(tool);

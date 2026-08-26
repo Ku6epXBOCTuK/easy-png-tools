@@ -759,6 +759,100 @@ export const ru: Dict = {
 				'Заливает все видимые пиксели одним цветом, сохраняя их прозрачность — мгновенный силуэт.',
 			params: { color: 'Цвет силуэта', threshold: 'Порог видимости, %' }
 		},
+		'png-to-bytes': {
+			title: 'PNG в байты',
+			description: 'Выводит каждый пиксель четырьмя десятичными байтами (R G B A), по строке изображения на строку текста.'
+		},
+		'bytes-to-png': {
+			title: 'Байты в PNG',
+			description:
+				'Собирает изображение из десятичных RGBA-байтов (разделители любые). Укажите ширину — высота рассчитается сама.',
+			params: { width: 'Ширина изображения' }
+		},
+		'png-to-rgb-values': {
+			title: 'PNG в RGB-значения',
+			description: 'Выводит каждый пиксель как rgba(r, g, b, a), ряды через перевод строки.'
+		},
+		'rgb-values-to-png': {
+			title: 'RGB-значения в PNG',
+			description:
+				'Собирает изображение из чисел rgba(r, g, b, a). Укажите ширину — высота рассчитается сама.',
+			params: { width: 'Ширина изображения' }
+		},
+		'verify-is-png': {
+			title: 'Проверить: это PNG?',
+			description:
+				'Проверяет сигнатуру вставленного base64 / data-uri и сообщает, настоящий ли это PNG.',
+			results: {
+				verifyYes: 'Да — сигнатура настоящего PNG.',
+				verifyNo: 'Нет — сигнатура не совпадает с PNG-файлом.'
+			}
+		},
+		'text-to-png': {
+			title: 'Текст в PNG',
+			description: 'Создаёт PNG из текста: холст подгоняется под размер надписи с полями.',
+			params: {
+				text: 'Текст',
+				fontSize: 'Размер шрифта, px',
+				font: 'Шрифт',
+				bold: 'Жирный',
+				color: 'Цвет текста',
+				transparentBg: 'Прозрачный фон',
+				backgroundColor: 'Цвет фона',
+				padding: 'Отступ, px'
+			},
+			options: {
+				font: { sans: 'Без засечек', serif: 'С засечками', mono: 'Моноширинный' }
+			}
+		},
+		'emoji-to-png': {
+			title: 'Эмодзи в PNG',
+			description: 'Рисует эмодзи или любой Unicode-символ как прозрачный PNG выбранного размера.',
+			params: { emoji: 'Эмодзи / символ', size: 'Размер' }
+		},
+		'placeholder-png': {
+			title: 'Заглушка PNG',
+			description: 'Генерирует прямоугольник-заглушку с напечатанными размерами в центре.',
+			params: {
+				width: 'Ширина',
+				height: 'Высота',
+				backgroundColor: 'Фон',
+				color: 'Цвет текста',
+				showText: 'Печатать размеры'
+			}
+		},
+		'color-spectrum-png': {
+			title: 'Спектр цветов PNG',
+			description:
+				'Полный радужный переход 0–360° вдоль выбранной оси с настройкой насыщенности и светлоты.',
+			params: {
+				width: 'Ширина',
+				height: 'Высота',
+				direction: 'Направление',
+				saturation: 'Насыщенность, %',
+				lightness: 'Светлота, %'
+			},
+			options: { direction: { horizontal: 'По горизонтали', vertical: 'По вертикали' } }
+		},
+		'random-colors-png': {
+			title: 'Случайные цветные блоки PNG',
+			description: 'Заполняет холст случайными яркими блоками. Детерминировано по seed.',
+			params: { width: 'Ширина', height: 'Высота', blockSize: 'Размер блока, px', seed: 'Seed' }
+		},
+		'draw-grid-png': {
+			title: 'Нарисовать сетку PNG',
+			description:
+				'Рисует сетку с заданными столбцами, строками и толщиной линий на прозрачном или белом фоне.',
+			params: {
+				width: 'Ширина',
+				height: 'Высота',
+				cols: 'Столбцы',
+				rows: 'Строки',
+				lineWidth: 'Толщина линий, px',
+				color: 'Цвет линий',
+				transparentBg: 'Прозрачный фон'
+			}
+		},
 		'show-transparent-png': {
 			title: 'Показать прозрачные области PNG',
 			description:

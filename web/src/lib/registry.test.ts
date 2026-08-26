@@ -26,7 +26,9 @@ describe('реестр инструментов', () => {
 
 	it.each(TOOLS.map((t) => [t.id, t] as const))('%s: исполнители определены', (_, tool) => {
 		if (tool.resultType === 'text') {
-			expect(typeof tool.toText).toBe('function');
+			expect(
+				typeof tool.toText === 'function' || typeof tool.textToText === 'function'
+			).toBe(true);
 		} else if (tool.sourceMode === 'none') {
 			expect(typeof tool.generate).toBe('function');
 		} else {

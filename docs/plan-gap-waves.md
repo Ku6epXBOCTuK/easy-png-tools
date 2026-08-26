@@ -42,7 +42,7 @@
 Состав: pixelate, color-blocks, randomize-pixels (seed), add-noise, feather-edges, clean-edges, silhouette.
 Shadow/glow — сюда же, если потянет этап: оба = размытая альфа + смещение + цвет (ядро blur уже есть).
 
-### W7. Конвертеры и генераторы — ~10 инструментов, M
+### W7. Конвертеры и генераторы — ВЫПОЛНЕНА (11 инструментов)
 
 PNG↔bytes, PNG↔rgb-values (текстовые результаты), verify-is-png (анализ сигнатуры),
 text-to-png (domText без входной картинки), emoji-to-png, placeholder-png,

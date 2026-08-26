@@ -15,7 +15,7 @@
 
 	let { onSelect, chainableOnly = false }: Props = $props();
 
-	const candidates = chainableOnly ? TOOLS.filter(isChainable) : TOOLS;
+	const candidates = $derived(chainableOnly ? TOOLS.filter(isChainable) : TOOLS);
 
 	let query = $state('');
 	let activeIndex = $state(0);
