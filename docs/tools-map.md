@@ -179,13 +179,7 @@
 - sort-pixels — blockSize, ключ (яркость/канал), направление (MEDIUM)
 - slow-reveal / fade-in / fade-out / disappear — анимационные (→ идеи)
 
-### Сжатие и качество (5, все MEDIUM)
-
-- compress-png — уровень усилий
-- reduce-file-size — целевой размер KB (итеративный поиск)
-- optimize-png — пресеты
-- change-quality — честная семантика для lossless (см. план-гапы §риск)
-- low-quality-png — частично покрыт jpeg-artifacts + quantize
+### Сжатие и качество — реализовано (см. Конвертация: compress, reduce-to-size; jpeg-artifacts; W8 quantize)
 
 ### Генераторы — остаток
 

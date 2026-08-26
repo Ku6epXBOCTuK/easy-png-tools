@@ -54,7 +54,7 @@ multi-color-gradient — если успеем новый тип парамет�
 Ядро: квантование (median-cut или k-means).
 Состав: quantize (k), decrease-color-count (=quantize с пресетами), custom-palette (маппинг на список цветов — нужен тип параметра «список»), dithering (Floyd–Steinberg/Bayer поверх квантования).
 
-### W9. Сжатие — 4–5 инструментов, L, риск
+### W9. Сжатие — ВЫПОЛНЕНА (3 инструмента; optimize/change-quality осознанно не выделены — покрыты пресетами compress и W8)
 
 Без wasm честное управление размером PNG ограничено: реальный рычаг — квантование (W8) + обрезка метаданных + итеративный подбор под целевой KB.
 Состав: compress (пресеты усилий), reduce-to-size (целевой KB, бинарный поиск по k), optimize (re-encode), change-quality/low-quality — переосмыслить как пресеты W8; jpeg-artifacts уже покрывает «испортить».

@@ -71,6 +71,9 @@ import {
 	stripDataUri
 } from './core/textio';
 import { colorSpectrum, drawGrid, randomColorBlocks } from './core/gen-tools';
+import { COMPRESSION_LEVELS, findMaxColorsWithin, type CompressionLevel } from './core/compress';
+import { encode } from './core/io';
+import { t } from './i18n/t';
 import { formatStamp } from './core/datefmt';
 import type { Position9 } from './core/textdraw';
 import {
@@ -2369,6 +2372,69 @@ export const TOOLS: ToolEntry[] = [
 				num(p, 'colors'),
 				str(p, 'pattern') === 'bayer' ? 'bayer' : 'floyd-steinberg'
 			)
+	},
+	{
+		id: 'compress-png',
+		title: 'Compress PNG',
+		description:
+			'Shrinks the PNG by reducing its palette to a preset level. Honest trade-off: fewer colors = smaller file.',
+		category: 'convert',
+		params: [
+			{
+				id: 'level',
+				label: 'Compression level',
+				type: 'select',
+				default: 'balanced',
+				options: [
+					{ value: 'light', label: 'Light (192 colors)' },
+					{ value: 'balanced', label: 'Balanced (96 colors)' },
+					{ value: 'strong', label: 'Strong (44 colors)' },
+					{ value: 'extreme', label: 'Extreme (16 colors)' }
+				]
+			}
+		],
+		run: (img, p) => {
+			const level = str(p, 'level') as CompressionLevel;
+			const k = COMPRESSION_LEVELS[level] ?? COMPRESSION_LEVELS.balanced;
+			return quantizeImage(img, k).image;
+		}
+	},
+	{
+		id: 'reduce-to-size-png',
+		title: 'Reduce PNG to Size',
+		description:
+			'Binary-searches the palette size until the encoded PNG fits the target KB. Best effort: if even 2 colors exceed the target, returns the 2-color version.',
+		category: 'convert',
+		domOnly: true,
+		params: [
+			{ id: 'targetKB', label: 'Target size, KB', type: 'slider', min: 5, max: 2000, step: 5, default: 100 },
+			{ id: 'maxColors', label: 'Max colors to try', type: 'slider', min: 2, max: 256, step: 1, default: 256 }
+		],
+		run: async (img, p) => {
+			const targetBytes = num(p, 'targetKB') * 1024;
+			const maxK = num(p, 'maxColors');
+			const encodeSize = async (k: number): Promise<number | null> => {
+				const blob = await encode(quantizeImage(img, k).image, 'image/png');
+				return blob.size;
+			};
+			const k = await findMaxColorsWithin(targetBytes, maxK, encodeSize);
+			return quantizeImage(img, k).image;
+		}
+	},
+	{
+		id: 'png-file-size',
+		title: 'PNG File Size',
+		description: 'Encodes the image as PNG and reports the resulting file size.',
+		category: 'analyze',
+		domOnly: true,
+		params: [],
+		resultType: 'text',
+		toText: async (img) => {
+			const blob = await encode(img, 'image/png');
+			const kb = blob.size / 1024;
+			const kbText = kb >= 100 ? Math.round(kb).toString() : kb.toFixed(1);
+			return t('tools.png-file-size.results.line', { kb: kbText });
+		}
 	},
 	{
 		id: 'svg-to-png',
