@@ -52,6 +52,9 @@ import {
 } from './core/color';
 import { centerByAlpha, crop, expandCanvas, flip, resize, rotate90, tile } from './core/geometry';
 import { decodeSvgText, decodeTextImage, jpegRoundtrip, toBase64, toDataUrl, type OutputMime } from './core/io';
+import { drawTextBlock, type TextFont } from './core/domText';
+import { formatStamp } from './core/datefmt';
+import type { Position9 } from './core/textdraw';
 import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
 
@@ -82,7 +85,8 @@ export type ParamDef =
 			default: string;
 	  }
 	| { id: string; label: string; type: 'checkbox'; default: boolean }
-	| { id: string; label: string; type: 'color'; default: string };
+	| { id: string; label: string; type: 'color'; default: string }
+	| { id: string; label: string; type: 'text'; default: string; placeholder?: string };
 
 export type OutputFormat = {
 	mime: OutputMime;
@@ -111,6 +115,8 @@ export type ToolEntry = {
 	icon?: string;
 	resultType?: 'image' | 'info' | 'text';
 	output?: OutputFormat;
+	/** Инструменту нужен DOM (canvas): исполняется только напрямую, без воркера. */
+	domOnly?: boolean;
 };
 
 export const PNG_OUTPUT: OutputFormat = { mime: 'image/png', ext: 'png' };
@@ -131,6 +137,14 @@ function str(params: Record<string, unknown>, id: string): string {
 	const v = params[id];
 	if (typeof v !== 'string') {
 		throw new ToolError('errors.paramString', { id });
+	}
+	return v;
+}
+
+function bool(params: Record<string, unknown>, id: string): boolean {
+	const v = params[id];
+	if (typeof v !== 'boolean') {
+		throw new ToolError('errors.paramBool', { id });
 	}
 	return v;
 }
@@ -856,6 +870,140 @@ export const TOOLS: ToolEntry[] = [
 			)
 	},
 	{
+		id: 'add-text-png',
+		title: 'Add text to PNG',
+		description:
+			'Draws a text label on the image: font, size, color, bold, position on a 3×3 grid and an optional backing plate.',
+		category: 'text',
+		domOnly: true,
+		params: [
+			{ id: 'text', label: 'Text', type: 'text', default: 'Hello!', placeholder: 'Your text' },
+			{ id: 'fontSize', label: 'Font size, px', type: 'slider', min: 8, max: 200, step: 1, default: 48 },
+			{ id: 'color', label: 'Text color', type: 'color', default: '#ffffff' },
+			{
+				id: 'font',
+				label: 'Font',
+				type: 'select',
+				default: 'sans',
+				options: [
+					{ value: 'sans', label: 'Sans-serif' },
+					{ value: 'serif', label: 'Serif' },
+					{ value: 'mono', label: 'Monospace' }
+				]
+			},
+			{ id: 'bold', label: 'Bold', type: 'checkbox', default: true },
+			{
+				id: 'position',
+				label: 'Position',
+				type: 'select',
+				default: 'bottom-right',
+				options: [
+					{ value: 'top-left', label: 'Top left' },
+					{ value: 'top-center', label: 'Top center' },
+					{ value: 'top-right', label: 'Top right' },
+					{ value: 'middle-left', label: 'Middle left' },
+					{ value: 'center', label: 'Center' },
+					{ value: 'middle-right', label: 'Middle right' },
+					{ value: 'bottom-left', label: 'Bottom left' },
+					{ value: 'bottom-center', label: 'Bottom center' },
+					{ value: 'bottom-right', label: 'Bottom right' }
+				]
+			},
+			{ id: 'margin', label: 'Margin, px', type: 'slider', min: 0, max: 200, step: 1, default: 24 },
+			{ id: 'plate', label: 'Backing plate', type: 'checkbox', default: false },
+			{ id: 'plateColor', label: 'Plate color', type: 'color', default: '#000000' },
+			{
+				id: 'plateOpacity',
+				label: 'Plate opacity, %',
+				type: 'slider',
+				min: 0,
+				max: 100,
+				step: 5,
+				default: 60
+			}
+		],
+		run: (img, p) =>
+			drawTextBlock(img, {
+				text: str(p, 'text'),
+				fontSize: num(p, 'fontSize'),
+				font: str(p, 'font') as TextFont,
+				bold: bool(p, 'bold'),
+				color: str(p, 'color'),
+				opacityPercent: 100,
+				position: str(p, 'position') as Position9,
+				margin: num(p, 'margin'),
+				plateColor: bool(p, 'plate') ? str(p, 'plateColor') : undefined,
+				plateOpacityPercent: num(p, 'plateOpacity')
+			})
+	},
+	{
+		id: 'date-stamp-png',
+		title: 'Date stamp PNG',
+		description:
+			'Stamps the current date and time using a format string (YYYY MM DD hh mm ss tokens). Same styling options as Add text.',
+		category: 'text',
+		domOnly: true,
+		params: [
+			{ id: 'format', label: 'Format', type: 'text', default: 'YYYY-MM-DD', placeholder: 'YYYY-MM-DD hh:mm' },
+			{ id: 'fontSize', label: 'Font size, px', type: 'slider', min: 8, max: 200, step: 1, default: 32 },
+			{ id: 'color', label: 'Text color', type: 'color', default: '#ffffff' },
+			{
+				id: 'font',
+				label: 'Font',
+				type: 'select',
+				default: 'mono',
+				options: [
+					{ value: 'sans', label: 'Sans-serif' },
+					{ value: 'serif', label: 'Serif' },
+					{ value: 'mono', label: 'Monospace' }
+				]
+			},
+			{ id: 'bold', label: 'Bold', type: 'checkbox', default: false },
+			{
+				id: 'position',
+				label: 'Position',
+				type: 'select',
+				default: 'bottom-right',
+				options: [
+					{ value: 'top-left', label: 'Top left' },
+					{ value: 'top-center', label: 'Top center' },
+					{ value: 'top-right', label: 'Top right' },
+					{ value: 'middle-left', label: 'Middle left' },
+					{ value: 'center', label: 'Center' },
+					{ value: 'middle-right', label: 'Middle right' },
+					{ value: 'bottom-left', label: 'Bottom left' },
+					{ value: 'bottom-center', label: 'Bottom center' },
+					{ value: 'bottom-right', label: 'Bottom right' }
+				]
+			},
+			{ id: 'margin', label: 'Margin, px', type: 'slider', min: 0, max: 200, step: 1, default: 20 },
+			{ id: 'plate', label: 'Backing plate', type: 'checkbox', default: true },
+			{ id: 'plateColor', label: 'Plate color', type: 'color', default: '#000000' },
+			{
+				id: 'plateOpacity',
+				label: 'Plate opacity, %',
+				type: 'slider',
+				min: 0,
+				max: 100,
+				step: 5,
+				default: 55
+			}
+		],
+		run: (img, p) =>
+			drawTextBlock(img, {
+				text: formatStamp(new Date(), str(p, 'format')),
+				fontSize: num(p, 'fontSize'),
+				font: str(p, 'font') as TextFont,
+				bold: bool(p, 'bold'),
+				color: str(p, 'color'),
+				opacityPercent: 100,
+				position: str(p, 'position') as Position9,
+				margin: num(p, 'margin'),
+				plateColor: bool(p, 'plate') ? str(p, 'plateColor') : undefined,
+				plateOpacityPercent: num(p, 'plateOpacity')
+			})
+	},
+	{
 		id: 'png-is-grayscale',
 		title: 'Check: is PNG grayscale?',
 		description: 'Reports whether the image consists only of shades of gray.',
@@ -1061,6 +1209,9 @@ export function sanitizeParams(
 			case 'color':
 				out[param.id] =
 					typeof raw === 'string' && /^#[0-9a-f]{6}$/i.test(raw) ? raw : param.default;
+				break;
+			case 'text':
+				out[param.id] = typeof raw === 'string' ? raw : param.default;
 				break;
 		}
 	}

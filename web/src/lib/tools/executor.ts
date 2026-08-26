@@ -3,6 +3,7 @@ import { ToolError } from '../core/errors';
 
 type MaybeRunnable = {
 	id: string;
+	domOnly?: boolean;
 	run?: (img: PixelImage, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
 };
 
@@ -13,6 +14,9 @@ export async function executeStep(
 ): Promise<PixelImage> {
 	if (!tool.run) {
 		throw new Error('errors.noImageRun');
+	}
+	if (tool.domOnly) {
+		return await runDirect(tool, img, params);
 	}
 	if (typeof Worker === 'undefined') {
 		return await runDirect(tool, img, params);

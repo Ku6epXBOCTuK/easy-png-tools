@@ -2,6 +2,7 @@ import {
 	AppWindow,
 	Binary,
 	Blend,
+	CalendarDays,
 	ClipboardPaste,
 	Contrast,
 	Crop,
@@ -37,6 +38,7 @@ import {
 	SearchCheck,
 	Square,
 	Sun,
+	Type,
 	ZoomIn,
 	ZoomOut
 } from '@lucide/svelte';
@@ -94,6 +96,8 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	'sharpen-png': Focus,
 	'remove-background-png': Scissors,
 	'add-stroke-png': Square,
+	'add-text-png': Type,
+	'date-stamp-png': CalendarDays,
 	'find-contour-png': Scan,
 	'make-thicker-png': ZoomIn,
 	'make-thinner-png': ZoomOut,

@@ -138,6 +138,7 @@ export const en: Dict = {
 		noSteps: 'The file has no list of steps',
 		paramNumber: 'Parameter "{id}" must be a number',
 		paramString: 'Parameter "{id}" must be a string',
+		paramBool: 'Parameter "{id}" must be a checkbox value',
 		resizeSize: 'Width and/or height must be positive',
 		cropSize: 'Crop width and height must be positive',
 		sizePositive: 'Dimensions must be positive and finite'

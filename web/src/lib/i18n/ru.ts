@@ -138,6 +138,7 @@ export const ru: Dict = {
 		noSteps: 'В файле нет списка шагов',
 		paramNumber: 'Параметр "{id}" должен быть числом',
 		paramString: 'Параметр "{id}" должен быть строкой',
+		paramBool: 'Параметр "{id}" должен быть значением флажка',
 		resizeSize: 'Ширина и/или высота должны быть положительными',
 		cropSize: 'Ширина и высота области обрезки должны быть положительными',
 		sizePositive: 'Размеры должны быть положительными и конечными'
@@ -437,6 +438,68 @@ export const ru: Dict = {
 			results: {
 				grayscaleYes: 'Да — все пиксели являются оттенками серого.',
 				grayscaleNo: 'Нет — найдены цветные пиксели.'
+			}
+		},
+		'add-text-png': {
+			title: 'Надпись на PNG',
+			description:
+				'Рисует текст на изображении: шрифт, размер, цвет, жирность, позиция на сетке 3×3 и опциональная подложка.',
+			params: {
+				text: 'Текст',
+				fontSize: 'Размер шрифта, px',
+				color: 'Цвет текста',
+				font: 'Шрифт',
+				bold: 'Жирный',
+				position: 'Позиция',
+				margin: 'Отступ, px',
+				plate: 'Подложка',
+				plateColor: 'Цвет подложки',
+				plateOpacity: 'Прозрачность плашки, %'
+			},
+			options: {
+				font: { sans: 'Без засечек', serif: 'С засечками', mono: 'Моноширинный' },
+				position: {
+					'top-left': 'Сверху слева',
+					'top-center': 'Сверху по центру',
+					'top-right': 'Сверху справа',
+					'middle-left': 'По центру слева',
+					center: 'По центру',
+					'middle-right': 'По центру справа',
+					'bottom-left': 'Снизу слева',
+					'bottom-center': 'Снизу по центру',
+					'bottom-right': 'Снизу справа'
+				}
+			}
+		},
+		'date-stamp-png': {
+			title: 'Дата-штамп PNG',
+			description:
+				'Ставит текущую дату и время по строке формата (токены YYYY MM DD hh mm ss). Оформление — как у надписи.',
+			params: {
+				format: 'Формат',
+				fontSize: 'Размер шрифта, px',
+				color: 'Цвет текста',
+				font: 'Шрифт',
+				bold: 'Жирный',
+				position: 'Позиция',
+				margin: 'Отступ, px',
+				plate: 'Подложка',
+				plateColor: 'Цвет подложки',
+				plateOpacity: 'Прозрачность плашки, %'
+			},
+			options: {
+				font: { sans: 'Без засечек', serif: 'С засечками', mono: 'Моноширинный' },
+				position: {
+					'top-left': 'Сверху слева',
+					'top-center': 'Сверху по центру',
+					'top-right': 'Сверху справа',
+					'middle-left': 'По центру слева',
+					center: 'По центру',
+					'middle-right': 'По центру справа',
+					'bottom-left': 'Снизу слева',
+					'bottom-center': 'Снизу по центру',
+					'bottom-right': 'Снизу справа'
+				}
 			}
 		},
 		'skew-png': {

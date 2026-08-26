@@ -75,6 +75,14 @@
 					pipetteActive={pipetteTargetId === param.id}
 					onPipetteToggle={() => onPipetteToggle?.(param.id)}
 				/>
+			{:else if param.type === 'text'}
+				<TextField
+					id={param.id}
+					label={paramLabel(tool, param)}
+					type="text"
+					placeholder={param.placeholder}
+					bind:value={values[param.id]}
+				/>
 			{/if}
 		</div>
 	{/each}
