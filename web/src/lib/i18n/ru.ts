@@ -723,6 +723,42 @@ export const ru: Dict = {
 				keepSide: { left: 'Левая', right: 'Правая', top: 'Верхняя', bottom: 'Нижняя' }
 			}
 		},
+		'feather-edges-png': {
+			title: 'Растушевать края PNG',
+			description:
+				'Размывает только альфа-канал: жёсткие края выреза становятся мягкими, цвета не трогаются.',
+			params: { radius: 'Радиус растушёвки, px' }
+		},
+		'clean-edges-png': {
+			title: 'Почистить края PNG (defringe)',
+			description:
+				'Заменяет цветную кайму полупрозрачных пикселей цветом ближайшего полностью непрозрачного соседа. Альфа остаётся как была.',
+			params: { radius: 'Радиус поиска, px' }
+		},
+		'pixelate-png': {
+			title: 'Пикселизация PNG',
+			description: 'Усредняет каждый блок blockSize×blockSize в один цвет — классическая мозаика.',
+			params: { blockSize: 'Размер блока, px' }
+		},
+		'randomize-pixels-png': {
+			title: 'Перемешать пиксели PNG',
+			description:
+				'Переставляет блоки изображения между собой. Одинаковый seed даёт одинаковую раскладку.',
+			params: { blockSize: 'Размер блока, px', seed: 'Seed' }
+		},
+		'add-noise-png': {
+			title: 'Добавить шум PNG',
+			description:
+				'Добавляет зерно в стиле плёнки. Детерминировано по seed; монохромный сохраняет баланс оттенков.',
+			params: { amount: 'Сила, %', mode: 'Тип шума', seed: 'Seed' },
+			options: { mode: { mono: 'Монохромное зерно', color: 'Цветной шум' } }
+		},
+		'silhouette-png': {
+			title: 'Силуэт PNG',
+			description:
+				'Заливает все видимые пиксели одним цветом, сохраняя их прозрачность — мгновенный силуэт.',
+			params: { color: 'Цвет силуэта', threshold: 'Порог видимости, %' }
+		},
 		'show-transparent-png': {
 			title: 'Показать прозрачные области PNG',
 			description:

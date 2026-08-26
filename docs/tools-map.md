@@ -35,6 +35,8 @@
 - find-contour-png — color, thickness
 - make-thicker-png / make-thinner-png — radius
 - harden-alpha-png — threshold
+- feather-edges-png — radius (размытие только альфы)
+- clean-edges-png — radius (defringe: RGB от ближайшего непрозрачного)
 - despeckle-alpha-png / close-holes-png — radius
 - center-by-alpha-png — без параметров
 - round-corners-png — radius
@@ -90,6 +92,10 @@
 - sharpen-png — strength
 - vignette-png — strength
 - jpeg-artifacts-png — quality (имитация пережатия jpg/webp)
+- pixelate-png — blockSize (закрывает и их Color Blocks)
+- randomize-pixels-png — blockSize, seed
+- add-noise-png — amount, mode (mono/color), seed
+- silhouette-png — color, threshold
 
 ### Анализ
 
@@ -141,26 +147,19 @@
 
 - separate-colors — minShare слоя (MEDIUM, мультифайловый вывод → пока идея)
 
-### Края и силуэт
+### Края и силуэт — остаток
 
-- feather-edges — radius (размытие только альфы)
-- clean-edges-defringe — tolerance, радиус подбора цвета края
-- silhouette — color силуэта
 - glow — radius, color, intensity
 - shadow — offsetX, offsetY, blur, color, alpha
 
-### Эффекты
+### Эффекты — остаток
 
-- pixelate — blockSize (! обещан в роадмапе)
-- randomize-pixels — blockSize, seed
-- add-noise — amount, моно/цветной (их Add Noise; наш noise только генератор)
 - censor-region / erase-region — область (MEDIUM: нужен UI выделения → см. идеи)
 - whirl — угол, центр, радиус (MEDIUM)
 
 ### Сортировка/блоки пикселей
 
 - sort-pixels — blockSize, ключ (яркость/канал), направление (MEDIUM)
-- color-blocks — blockSize (усреднение блоков) — EASY, родственник pixelate
 - slow-reveal / fade-in / fade-out / disappear — анимационные (→ идеи)
 
 ### Сжатие и качество (5, все MEDIUM)

@@ -37,7 +37,7 @@
 Ядро: bbox по альфе (trim) переиспользуется тремя инструментами источника.
 Состав: trim-empty-space (закрывает remove border/space), change-canvas-size, change-aspect-ratio, landscape↔portrait, symmetric-copy.
 
-### W6. Эффекты лёгкие — 7 инструментов, M
+### W6. Эффекты лёгкие — ВЫПОЛНЕНА (6 инструментов; color-blocks покрыт pixelate)
 
 Состав: pixelate, color-blocks, randomize-pixels (seed), add-noise, feather-edges, clean-edges, silhouette.
 Shadow/glow — сюда же, если потянет этап: оба = размытая альфа + смещение + цвет (ядро blur уже есть).

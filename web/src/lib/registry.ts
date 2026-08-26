@@ -101,6 +101,14 @@ import {
 	trimToContent,
 	type Anchor9
 } from './core/geometry';
+import {
+	addNoise,
+	defringe,
+	featherAlpha,
+	pixelate,
+	shuffleBlocks,
+	silhouette
+} from './core/pixel-fx';
 import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
 
@@ -1145,6 +1153,28 @@ export const TOOLS: ToolEntry[] = [
 		run: (img, p) => erodeImage(img, num(p, 'radius'))
 	},
 	{
+		id: 'feather-edges-png',
+		title: 'Feather Edges PNG',
+		description:
+			'Blurs only the alpha channel: hard cutout edges become soft and gradual, colors stay untouched.',
+		category: 'alpha',
+		params: [
+			{ id: 'radius', label: 'Feather radius, px', type: 'slider', min: 1, max: 20, step: 1, default: 3 }
+		],
+		run: (img, p) => featherAlpha(img, num(p, 'radius'))
+	},
+	{
+		id: 'clean-edges-png',
+		title: 'Clean Edges PNG (defringe)',
+		description:
+			'Replaces edge-halo colors of semi-transparent pixels with the nearest fully opaque color. Alpha stays as is.',
+		category: 'alpha',
+		params: [
+			{ id: 'radius', label: 'Search radius, px', type: 'slider', min: 1, max: 10, step: 1, default: 3 }
+		],
+		run: (img, p) => defringe(img, num(p, 'radius'))
+	},
+	{
 		id: 'harden-alpha-png',
 		title: 'Harden edges PNG',
 		description:
@@ -1906,6 +1936,68 @@ export const TOOLS: ToolEntry[] = [
 			{ id: 'strength', label: 'Darkening strength, %', type: 'slider', min: 0, max: 100, step: 5, default: 50 }
 		],
 		run: (img, p) => vignette(img, num(p, 'strength'))
+	},
+	{
+		id: 'pixelate-png',
+		title: 'Pixelate PNG',
+		description: 'Averages every blockSize×blockSize area into one color — classic mosaic.',
+		category: 'filters',
+		params: [
+			{ id: 'blockSize', label: 'Block size, px', type: 'slider', min: 2, max: 64, step: 1, default: 8 }
+		],
+		run: (img, p) => pixelate(img, num(p, 'blockSize'))
+	},
+	{
+		id: 'randomize-pixels-png',
+		title: 'Randomize Pixels PNG',
+		description:
+			'Shuffles blocks of the image between positions. Same seed gives the same arrangement.',
+		category: 'filters',
+		params: [
+			{ id: 'blockSize', label: 'Block size, px', type: 'slider', min: 1, max: 64, step: 1, default: 8 },
+			{ id: 'seed', label: 'Seed', type: 'number', min: 0, max: 999999, step: 1, default: 42 }
+		],
+		run: (img, p) => shuffleBlocks(img, num(p, 'blockSize'), num(p, 'seed'))
+	},
+	{
+		id: 'add-noise-png',
+		title: 'Add Noise to PNG',
+		description:
+			'Adds film-grain style noise. Deterministic by seed; monochrome keeps original hue balance.',
+		category: 'filters',
+		params: [
+			{ id: 'amount', label: 'Amount, %', type: 'slider', min: 0, max: 100, step: 1, default: 25 },
+			{
+				id: 'mode',
+				label: 'Noise type',
+				type: 'select',
+				default: 'mono',
+				options: [
+					{ value: 'mono', label: 'Monochrome grain' },
+					{ value: 'color', label: 'Color noise' }
+				]
+			},
+			{ id: 'seed', label: 'Seed', type: 'number', min: 0, max: 999999, step: 1, default: 1234 }
+		],
+		run: (img, p) =>
+			addNoise(
+				img,
+				num(p, 'amount'),
+				str(p, 'mode') === 'color' ? 'color' : 'mono',
+				num(p, 'seed')
+			)
+	},
+	{
+		id: 'silhouette-png',
+		title: 'Silhouette PNG',
+		description:
+			'Turns all visible pixels into a single solid color while keeping their transparency — instant silhouette.',
+		category: 'filters',
+		params: [
+			{ id: 'color', label: 'Silhouette color', type: 'color', default: '#111318' },
+			{ id: 'threshold', label: 'Visibility threshold, %', type: 'slider', min: 0, max: 100, step: 1, default: 10 }
+		],
+		run: (img, p) => silhouette(img, str(p, 'color'), num(p, 'threshold') * 2.55)
 	},
 	{
 		id: 'jpeg-artifacts-png',
