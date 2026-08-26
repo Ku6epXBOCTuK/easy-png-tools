@@ -364,7 +364,7 @@
 						✕
 					</button>
 				</header>
-					<ToolSearch onSelect={(id) => applyChainTool(index, id)} />
+					<ToolSearch onSelect={(id) => applyChainTool(index, id)} chainableOnly />
 				</div>
 			{:else if getTool(step.toolId)}
 				{@const stepTool = getTool(step.toolId)!}

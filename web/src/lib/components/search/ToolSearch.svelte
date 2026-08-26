@@ -9,11 +9,13 @@
 
 	interface Props {
 		onSelect: (toolId: string) => void;
+		/** true — только инструменты, пригодные в шаг цепочки (слот добавления шага). */
+		chainableOnly?: boolean;
 	}
 
-	let { onSelect }: Props = $props();
+	let { onSelect, chainableOnly = false }: Props = $props();
 
-	const candidates = TOOLS.filter(isChainable);
+	const candidates = chainableOnly ? TOOLS.filter(isChainable) : TOOLS;
 
 	let query = $state('');
 	let activeIndex = $state(0);
