@@ -77,6 +77,7 @@ import {
 	triadicSet,
 	type SortKey
 } from './core/palette';
+import { renderSpace, SPACES, type SpaceId } from './core/channels';
 import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
 
@@ -173,6 +174,93 @@ function bool(params: Record<string, unknown>, id: string): boolean {
 	return v;
 }
 
+type SpaceEntry = {
+	id: SpaceId;
+	suffix: string;
+	title: string;
+	description: string;
+};
+
+const CHANNEL_SPACES: SpaceEntry[] = [
+	{
+		id: 'hsl',
+		suffix: 'hsl',
+		title: 'Split PNG into HSL',
+		description: 'Decomposes the image into Hue, Saturation and Lightness components.'
+	},
+	{
+		id: 'hsv',
+		suffix: 'hsv',
+		title: 'Split PNG into HSV',
+		description: 'Decomposes the image into Hue, Saturation and Value (brightness) components.'
+	},
+	{
+		id: 'hsi',
+		suffix: 'hsi',
+		title: 'Split PNG into HSI',
+		description: 'Decomposes the image into Hue, Saturation and Intensity components.'
+	},
+	{
+		id: 'cmyk',
+		suffix: 'cmyk',
+		title: 'Convert PNG to CMYK Colors',
+		description:
+			'Decomposes the image into print-style Cyan, Magenta, Yellow and Key (black) components.'
+	},
+	{
+		id: 'ycbcr',
+		suffix: 'ycbcr',
+		title: 'Convert PNG to YCbCr Colors',
+		description:
+			'Decomposes the image into Luma (Y) and Blue-difference / Red-difference chroma components.'
+	},
+	{
+		id: 'lab',
+		suffix: 'lab',
+		title: 'Convert PNG to LAB Colors',
+		description:
+			'Decomposes the image into perceptual Lightness and green–magenta / blue–yellow opponents.'
+	}
+];
+
+function channelEntries(): ToolEntry[] {
+	return CHANNEL_SPACES.map((space) => {
+		const components = SPACES[space.id].components;
+		return {
+			id: `png-to-${space.suffix}`,
+			title: space.title,
+			description: space.description,
+			category: 'color' as const,
+			params: [
+				{
+					id: 'component',
+					label: 'Component',
+					type: 'select' as const,
+					default: components[0],
+					options: components.map((c) => ({ value: c, label: c.toUpperCase() }))
+				},
+				{
+					id: 'display',
+					label: 'Display mode',
+					type: 'select' as const,
+					default: 'gray',
+					options: [
+						{ value: 'gray', label: 'Grayscale' },
+						{ value: 'color', label: 'Space as RGB' }
+					]
+				}
+			],
+			run: (img, p) =>
+				renderSpace(
+					img,
+					space.id,
+					str(p, 'component'),
+					str(p, 'display') === 'color' ? 'color' : 'gray'
+				)
+		} satisfies ToolEntry;
+	});
+}
+
 function paletteParams(baseDefault: string) {
 	return [
 		{ id: 'baseColor', label: 'Base color', type: 'color' as const, default: baseDefault },
@@ -224,6 +312,7 @@ function hexToRgba(hex: string, alpha = 255): [number, number, number, number] {
 }
 
 export const TOOLS: ToolEntry[] = [
+	...channelEntries(),
 	decodeToPng(
 		'jpg-to-png',
 		'Convert JPG to PNG',

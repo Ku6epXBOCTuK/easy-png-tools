@@ -547,6 +547,72 @@ export const ru: Dict = {
 				grayscaleNo: 'Нет — найдены цветные пиксели.'
 			}
 		},
+		'png-to-hsl': {
+			title: 'Разложить PNG в HSL',
+			description: 'Раскладывает изображение на компоненты Тон, Насыщенность и Светлота.',
+			params: { component: 'Компонент', display: 'Режим показа' },
+			options: {
+				component: { h: 'Тон (H)', s: 'Насыщенность (S)', l: 'Светлота (L)' },
+				display: { gray: 'Градациями серого', color: 'Пространство как RGB' }
+			}
+		},
+		'png-to-hsv': {
+			title: 'Разложить PNG в HSV',
+			description: 'Раскладывает изображение на Тон, Насыщенность и Яркость (Value).',
+			params: { component: 'Компонент', display: 'Режим показа' },
+			options: {
+				component: { h: 'Тон (H)', s: 'Насыщенность (S)', v: 'Яркость (V)' },
+				display: { gray: 'Градациями серого', color: 'Пространство как RGB' }
+			}
+		},
+		'png-to-hsi': {
+			title: 'Разложить PNG в HSI',
+			description: 'Раскладывает изображение на Тон, Насыщенность и Интенсивность.',
+			params: { component: 'Компонент', display: 'Режим показа' },
+			options: {
+				component: { h: 'Тон (H)', s: 'Насыщенность (S)', i: 'Интенсивность (I)' },
+				display: { gray: 'Градациями серого', color: 'Пространство как RGB' }
+			}
+		},
+		'png-to-cmyk': {
+			title: 'PNG в CMYK-цвета',
+			description:
+				'Раскладывает изображение на печатные компоненты: Голубой, Пурпурный, Жёлтый и Чёрный (Key).',
+			params: { component: 'Компонент', display: 'Режим показа' },
+			options: {
+				component: {
+					c: 'Голубой (C)',
+					m: 'Пурпурный (M)',
+					y: 'Жёлтый (Y)',
+					k: 'Чёрный (K)'
+				},
+				display: { gray: 'Градациями серого', color: 'Пространство как RGB' }
+			}
+		},
+		'png-to-ycbcr': {
+			title: 'PNG в YCbCr-цвета',
+			description:
+				'Раскладывает изображение на Яркость (Y) и цветоразностные компоненты Cb / Cr.',
+			params: { component: 'Компонент', display: 'Режим показа' },
+			options: {
+				component: { y: 'Яркость (Y)', cb: 'Синий-разностный (Cb)', cr: 'Красный-разностный (Cr)' },
+				display: { gray: 'Градациями серого', color: 'Пространство как RGB' }
+			}
+		},
+		'png-to-lab': {
+			title: 'PNG в LAB-цвета',
+			description:
+				'Раскладывает изображение на perceptual-компоненты: Светлость, зелёный–пурпурный и синий–жёлтый.',
+			params: { component: 'Компонент', display: 'Режим показа' },
+			options: {
+				component: {
+					l: 'Светлость (L)',
+					a: 'Зелёный–пурпурный (a)',
+					b: 'Синий–жёлтый (b)'
+				},
+				display: { gray: 'Градациями серого', color: 'Пространство как RGB' }
+			}
+		},
 		'watermark-tile-png': {
 			title: 'Плитка-водяной знак PNG',
 			description:

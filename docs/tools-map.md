@@ -52,6 +52,13 @@
 - gamma-png — value
 - tint-png — color, strength
 
+### Разложение каналов
+
+- png-to-hsl / png-to-hsv / png-to-hsi — component (h/s/l и т.п.), display (gray | space-as-rgb)
+- png-to-cmyk — component (c/m/y/k), display
+- png-to-ycbcr — component (y/cb/cr), display
+- png-to-lab — component (l/a/b), display
+
 ### Геометрия
 
 - resize-png — width (0=авто), height (0=авто), keepAspect
@@ -110,9 +117,8 @@
 - mix-colors — colors[], веса?
 - average-color — colors[]; blend-two — a, b, steps; step-between — a, b, steps (три частных случая одного движка)
 
-### Разложение каналов
+### Разложение каналов — остаток
 
-- png-to-hsl / hsv / hsi / cmyk / ycbcr / lab — channel (какой компонент показать), режим отображения (серый/окрашенный)
 - separate-colors — minShare слоя (MEDIUM, мультифайловый вывод → пока идея)
 
 ### Маски по свойствам пикселей
