@@ -27,7 +27,7 @@
 Ядро: предикат над пикселем → бинарная маска (с инверсией и подсветкой цветом).
 Состав: show-transparent, show-grayscale, show-color, light-mask, dark-mask, unique-color-mask, extract-by-color.
 
-### W4. Фигурные маски — 4 инструмента, S
+### W4. Фигурные маски — ВЫПОЛНЕНА (4 инструмента)
 
 Ядро: SDF фигуры (круг/квадрат/звезда/волна) → альфа-маска с fit-режимами.
 Состав: circle-mask, square-mask, star-mask, wavy-mask.

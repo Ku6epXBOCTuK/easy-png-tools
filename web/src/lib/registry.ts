@@ -85,6 +85,13 @@ import {
 	renderPredicateMask
 } from './core/masks';
 import { renderSpace, SPACES, type SpaceId } from './core/channels';
+import {
+	boxTest,
+	circleTest,
+	renderShape,
+	starTest,
+	wavyTest
+} from './core/shapes';
 import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
 
@@ -740,6 +747,96 @@ export const TOOLS: ToolEntry[] = [
 			{ id: 'rows', label: 'Rows', type: 'number', min: 1, max: 50, step: 1, default: 2 }
 		],
 		run: (img, p) => tile(img, num(p, 'columns'), num(p, 'rows'))
+	},
+	{
+		id: 'circle-mask-png',
+		title: 'Circle Mask PNG',
+		description: 'Cuts the image into a circle. Diameter is set as a share of the smaller side.',
+		category: 'alpha',
+		params: [
+			{ id: 'size', label: 'Diameter, % of smaller side', type: 'slider', min: 20, max: 100, step: 1, default: 100 },
+			{ id: 'offsetX', label: 'Offset X, %', type: 'slider', min: -50, max: 50, step: 1, default: 0 },
+			{ id: 'offsetY', label: 'Offset Y, %', type: 'slider', min: -50, max: 50, step: 1, default: 0 }
+		],
+		run: (img, p) =>
+			renderShape(
+				img,
+				circleTest(num(p, 'size') / 200),
+				num(p, 'offsetX') / 100,
+				num(p, 'offsetY') / 100
+			)
+	},
+	{
+		id: 'square-mask-png',
+		title: 'Square Mask PNG',
+		description: 'Cuts the image into a rectangle with sides as a share of the smaller side.',
+		category: 'alpha',
+		params: [
+			{ id: 'widthPct', label: 'Width, % of smaller side', type: 'slider', min: 10, max: 100, step: 1, default: 100 },
+			{ id: 'heightPct', label: 'Height, % of smaller side', type: 'slider', min: 10, max: 100, step: 1, default: 100 },
+			{ id: 'offsetX', label: 'Offset X, %', type: 'slider', min: -50, max: 50, step: 1, default: 0 },
+			{ id: 'offsetY', label: 'Offset Y, %', type: 'slider', min: -50, max: 50, step: 1, default: 0 }
+		],
+		run: (img, p) =>
+			renderShape(
+				img,
+				boxTest(num(p, 'widthPct') / 200, num(p, 'heightPct') / 200),
+				num(p, 'offsetX') / 100,
+				num(p, 'offsetY') / 100
+			)
+	},
+	{
+		id: 'star-mask-png',
+		title: 'Star Mask PNG',
+		description: 'Cuts the image into an n-pointed star with adjustable inner radius and rotation.',
+		category: 'alpha',
+		params: [
+			{ id: 'points', label: 'Points', type: 'slider', min: 3, max: 12, step: 1, default: 5 },
+			{ id: 'innerRadius', label: 'Inner radius, %', type: 'slider', min: 10, max: 90, step: 1, default: 45 },
+			{ id: 'size', label: 'Outer radius, % of smaller side', type: 'slider', min: 20, max: 100, step: 1, default: 100 },
+			{ id: 'rotation', label: 'Rotation, °', type: 'slider', min: -180, max: 180, step: 1, default: 0 },
+			{ id: 'offsetX', label: 'Offset X, %', type: 'slider', min: -50, max: 50, step: 1, default: 0 },
+			{ id: 'offsetY', label: 'Offset Y, %', type: 'slider', min: -50, max: 50, step: 1, default: 0 }
+		],
+		run: (img, p) =>
+			renderShape(
+				img,
+				starTest(
+					num(p, 'points'),
+					num(p, 'innerRadius') / 100,
+					num(p, 'size') / 200,
+					num(p, 'rotation')
+				),
+				num(p, 'offsetX') / 100,
+				num(p, 'offsetY') / 100
+			)
+	},
+	{
+		id: 'wavy-mask-png',
+		title: 'Wavy Mask PNG',
+		description:
+			'Cuts the image into a wavy-edged circle: radius is modulated by a sine with chosen amplitude and frequency.',
+		category: 'alpha',
+		params: [
+			{ id: 'size', label: 'Base radius, % of smaller side', type: 'slider', min: 20, max: 100, step: 1, default: 90 },
+			{ id: 'amplitude', label: 'Wave amplitude, %', type: 'slider', min: 2, max: 30, step: 1, default: 8 },
+			{ id: 'waves', label: 'Waves count', type: 'slider', min: 3, max: 24, step: 1, default: 8 },
+			{ id: 'phase', label: 'Phase, °', type: 'slider', min: 0, max: 360, step: 1, default: 0 },
+			{ id: 'offsetX', label: 'Offset X, %', type: 'slider', min: -50, max: 50, step: 1, default: 0 },
+			{ id: 'offsetY', label: 'Offset Y, %', type: 'slider', min: -50, max: 50, step: 1, default: 0 }
+		],
+		run: (img, p) =>
+			renderShape(
+				img,
+				wavyTest(
+					num(p, 'size') / 200,
+					num(p, 'amplitude') / 200,
+					num(p, 'waves'),
+					num(p, 'phase')
+				),
+				num(p, 'offsetX') / 100,
+				num(p, 'offsetY') / 100
+			)
 	},
 	{
 		id: 'center-by-alpha-png',

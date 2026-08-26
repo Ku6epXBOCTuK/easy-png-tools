@@ -1,9 +1,10 @@
-import {
+﻿import {
 	AppWindow,
 	Binary,
 	Blend,
 	CalendarDays,
 	ClipboardPaste,
+	Circle,
 	Contrast,
 	Crop,
 	Crosshair,
@@ -39,8 +40,10 @@ import {
 	SearchCheck,
 	Square,
 	Stamp,
+	Star,
 	Sun,
 	Type,
+	WavesHorizontal,
 	ZoomIn,
 	ZoomOut
 } from '@lucide/svelte';
@@ -113,6 +116,10 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	'dark-pixel-mask-png': Moon,
 	'unique-color-mask-png': Dices,
 	'extract-color-from-png': Focus,
+	'circle-mask-png': Circle,
+	'square-mask-png': Square,
+	'star-mask-png': Star,
+	'wavy-mask-png': WavesHorizontal,
 	'watermark-tile-png': Stamp,
 	'watermark-image-png': FileImage,
 	'color-wheel-png': Rainbow,
