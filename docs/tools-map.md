@@ -37,6 +37,11 @@
 - harden-alpha-png — threshold
 - despeckle-alpha-png / close-holes-png — radius
 - center-by-alpha-png — без параметров
+- round-corners-png — radius
+- circle-mask-png — size (диаметр, % меньшей стороны), offsetX, offsetY
+- square-mask-png — widthPct, heightPct, offsetX, offsetY
+- star-mask-png — points, innerRadius, size, rotation, offsetX, offsetY
+- wavy-mask-png — size, amplitude, waves, phase, offsetX, offsetY
 
 ### Цвет
 
@@ -73,6 +78,11 @@
 - add-border-png — thickness, color
 - fit-on-background-png — width, height, transparent, color
 - tile-png — columns, rows
+- trim-empty-space-png — threshold (альфа)
+- change-canvas-size-png — width, height, anchor (3×3)
+- change-aspect-ratio-png — ratio (пресеты), mode (crop/pad)
+- swap-orientation-png — target (portrait/landscape)
+- symmetric-copy-png — axis, keepSide
 
 ### Фильтры
 
@@ -131,13 +141,6 @@
 
 - separate-colors — minShare слоя (MEDIUM, мультифайловый вывод → пока идея)
 
-### Фигурные маски
-
-- circle-mask — diameter/fit, позиция
-- square-mask — side, fit
-- star-mask — rays, innerRadius, rotation
-- wavy-mask — amplitude, frequency, направление края
-
 ### Края и силуэт
 
 - feather-edges — radius (размытие только альфы)
@@ -186,14 +189,6 @@
 - png-to-gif — MEDIUM (однокадровый GIF-энкодер руками)
 - gif-to-frames — MEDIUM (мультифайловый вывод → идея)
 - change-bit-depth — MEDIUM (пересборка PNG)
-
-### Геометрия-добивки
-
-- trim-empty-space — порог альфы (закрывает их Remove Border/Padding/Space одной операцией)
-- change-canvas-size — w, h, якорь 3×3
-- change-aspect-ratio — целевое отношение, режим (обрезать/вписать)
-- landscape-to-portrait / portrait-to-landscape — авто-поворот 90° по ориентации
-- symmetric-copy — ось (h/v), сторона
 
 ### Прочее единичное
 

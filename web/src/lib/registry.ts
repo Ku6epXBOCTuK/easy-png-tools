@@ -92,6 +92,15 @@ import {
 	starTest,
 	wavyTest
 } from './core/shapes';
+import {
+	changeCanvasSize,
+	cropToRatio,
+	forceOrientation,
+	padToRatio,
+	symmetricCopy,
+	trimToContent,
+	type Anchor9
+} from './core/geometry';
 import { hexToPixels, pixelsToHex } from './core/text';
 import { clonePixelImage, type PixelImage } from './core/types';
 
@@ -1725,6 +1734,149 @@ export const TOOLS: ToolEntry[] = [
 			{ id: 'scale', label: 'Scale, %', type: 'slider', min: 100, max: 500, step: 10, default: 200 }
 		],
 		run: (img, p) => zoomImage(img, num(p, 'scale'))
+	},
+	{
+		id: 'trim-empty-space-png',
+		title: 'Trim Empty Space PNG',
+		description:
+			'Crops transparent borders around the content. Pixels with alpha above the threshold count as content.',
+		category: 'geometry',
+		params: [
+			{ id: 'threshold', label: 'Alpha threshold', type: 'slider', min: 0, max: 254, step: 1, default: 0 }
+		],
+		run: (img, p) => trimToContent(img, num(p, 'threshold'))
+	},
+	{
+		id: 'change-canvas-size-png',
+		title: 'Change Canvas Size PNG',
+		description:
+			'Sets the exact canvas size: overflow is cropped, missing space is filled with transparency. Anchor picks which part of the image stays.',
+		category: 'geometry',
+		params: [
+			{ id: 'width', label: 'Width', type: 'number', min: 1, max: 20000, step: 1, default: 800 },
+			{ id: 'height', label: 'Height', type: 'number', min: 1, max: 20000, step: 1, default: 600 },
+			{
+				id: 'anchor',
+				label: 'Anchor',
+				type: 'select',
+				default: 'center',
+				options: [
+					{ value: 'top-left', label: 'Top left' },
+					{ value: 'top-center', label: 'Top center' },
+					{ value: 'top-right', label: 'Top right' },
+					{ value: 'middle-left', label: 'Middle left' },
+					{ value: 'center', label: 'Center' },
+					{ value: 'middle-right', label: 'Middle right' },
+					{ value: 'bottom-left', label: 'Bottom left' },
+					{ value: 'bottom-center', label: 'Bottom center' },
+					{ value: 'bottom-right', label: 'Bottom right' }
+				]
+			}
+		],
+		run: (img, p) =>
+			changeCanvasSize(
+				img,
+				Math.trunc(num(p, 'width')),
+				Math.trunc(num(p, 'height')),
+				str(p, 'anchor') as Anchor9
+			)
+	},
+	{
+		id: 'change-aspect-ratio-png',
+		title: 'Change Aspect Ratio PNG',
+		description:
+			'Fits the image into a target aspect ratio: crop the center to fill, or pad with transparency.',
+		category: 'geometry',
+		params: [
+			{
+				id: 'ratio',
+				label: 'Target ratio',
+				type: 'select',
+				default: '1:1',
+				options: [
+					{ value: '1:1', label: '1:1' },
+					{ value: '4:3', label: '4:3' },
+					{ value: '3:4', label: '3:4' },
+					{ value: '3:2', label: '3:2' },
+					{ value: '2:3', label: '2:3' },
+					{ value: '16:9', label: '16:9' },
+					{ value: '9:16', label: '9:16' }
+				]
+			},
+			{
+				id: 'mode',
+				label: 'Mode',
+				type: 'select',
+				default: 'crop',
+				options: [
+					{ value: 'crop', label: 'Crop to fill' },
+					{ value: 'pad', label: 'Pad to fit' }
+				]
+			}
+		],
+		run: (img, p) => {
+			const [rw, rh] = str(p, 'ratio').split(':').map(Number);
+			const ratio = rw / rh;
+			return str(p, 'mode') === 'pad' ? padToRatio(img, ratio) : cropToRatio(img, ratio);
+		}
+	},
+	{
+		id: 'swap-orientation-png',
+		title: 'Swap Orientation PNG',
+		description:
+			'Rotates the image by 90° when its orientation differs from the target — landscape becomes portrait and back. Square images are untouched.',
+		category: 'geometry',
+		params: [
+			{
+				id: 'target',
+				label: 'Target orientation',
+				type: 'select',
+				default: 'portrait',
+				options: [
+					{ value: 'portrait', label: 'Portrait' },
+					{ value: 'landscape', label: 'Landscape' }
+				]
+			}
+		],
+		run: (img, p) =>
+			forceOrientation(img, str(p, 'target') === 'landscape' ? 'landscape' : 'portrait')
+	},
+	{
+		id: 'symmetric-copy-png',
+		title: 'Symmetric Copy PNG',
+		description:
+			'Doubles the canvas by mirroring the kept side onto the empty half — instant symmetric pattern.',
+		category: 'geometry',
+		params: [
+			{
+				id: 'axis',
+				label: 'Mirror line',
+				type: 'select',
+				default: 'vertical',
+				options: [
+					{ value: 'vertical', label: 'Vertical (double width)' },
+					{ value: 'horizontal', label: 'Horizontal (double height)' }
+				]
+			},
+			{
+				id: 'keepSide',
+				label: 'Keep side',
+				type: 'select',
+				default: 'left',
+				options: [
+					{ value: 'left', label: 'Left' },
+					{ value: 'right', label: 'Right' },
+					{ value: 'top', label: 'Top' },
+					{ value: 'bottom', label: 'Bottom' }
+				]
+			}
+		],
+		run: (img, p) =>
+			symmetricCopy(
+				img,
+				str(p, 'axis') === 'horizontal' ? 'horizontal' : 'vertical',
+				str(p, 'keepSide') as 'left' | 'right' | 'top' | 'bottom'
+			)
 	},
 	{
 		id: 'shift-png',

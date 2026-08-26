@@ -1,4 +1,4 @@
-import { parseHex } from './alpha';
+﻿import { parseHex } from './alpha';
 import { ToolError } from './errors';
 import { clonePixelImage, createPixelImage, type PixelImage } from './types';
 
@@ -212,4 +212,158 @@ export function sampleBilinear(
 
 function clampInt(value: number, min: number, max: number): number {
 	return Math.min(max, Math.max(min, Math.trunc(value)));
+}
+
+
+
+export type Anchor9 =
+	| 'top-left'
+	| 'top-center'
+	| 'top-right'
+	| 'middle-left'
+	| 'center'
+	| 'middle-right'
+	| 'bottom-left'
+	| 'bottom-center'
+	| 'bottom-right';
+
+/** Границы контента: пиксели с альфой строго больше порога. Пустое изображение → null. */
+export function contentBounds(
+	img: PixelImage,
+	alphaThreshold = 0
+): { x: number; y: number; w: number; h: number } | null {
+	let minX = img.width;
+	let minY = img.height;
+	let maxX = -1;
+	let maxY = -1;
+	for (let y = 0; y < img.height; y++) {
+		for (let x = 0; x < img.width; x++) {
+			if (img.data[(y * img.width + x) * 4 + 3] > alphaThreshold) {
+				if (x < minX) minX = x;
+				if (y < minY) minY = y;
+				if (x > maxX) maxX = x;
+				if (y > maxY) maxY = y;
+			}
+		}
+	}
+	if (maxX < 0) return null;
+	return { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 };
+}
+
+/** Обрезка прозрачных полей по порогу альфы. Полностью пустое → 1×1 прозрачный пиксель. */
+export function trimToContent(img: PixelImage, alphaThreshold = 0): PixelImage {
+	const b = contentBounds(img, alphaThreshold);
+	if (!b) return crop(img, 0, 0, 1, 1);
+	return crop(img, b.x, b.y, b.w, b.h);
+}
+
+/** Приводит холст к точному размеру: лишнее обрезается, недостающее дополняется прозрачным. */
+export function changeCanvasSize(
+	img: PixelImage,
+	width: number,
+	height: number,
+	anchor: Anchor9
+): PixelImage {
+	const out = createPixelImage(width, height);
+	const pasteX = anchor.endsWith('-left') ? 0 : anchor.endsWith('-right') ? width - img.width : Math.floor((width - img.width) / 2);
+	const pasteY = anchor.startsWith('top-') ? 0 : anchor.startsWith('bottom-') ? height - img.height : Math.floor((height - img.height) / 2);
+	for (let y = 0; y < height; y++) {
+		const sy = y - pasteY;
+		if (sy < 0 || sy >= img.height) continue;
+		for (let x = 0; x < width; x++) {
+			const sx = x - pasteX;
+			if (sx < 0 || sx >= img.width) continue;
+			const di = (y * width + x) * 4;
+			const si = (sy * img.width + sx) * 4;
+			out.data[di] = img.data[si];
+			out.data[di + 1] = img.data[si + 1];
+			out.data[di + 2] = img.data[si + 2];
+			out.data[di + 3] = img.data[si + 3];
+		}
+	}
+	return out;
+}
+
+/** Центральный кроп до соотношения сторон (ratio ≥ 1 = широкое). */
+export function cropToRatio(img: PixelImage, ratio: number): PixelImage {
+	const current = img.width / img.height;
+	if (current > ratio) {
+		const w = Math.max(1, Math.round(img.height * ratio));
+		return crop(img, Math.floor((img.width - w) / 2), 0, w, img.height);
+	}
+	if (current < ratio) {
+		const h = Math.max(1, Math.round(img.width / ratio));
+		return crop(img, 0, Math.floor((img.height - h) / 2), img.width, h);
+	}
+	return clonePixelImage(img);
+}
+
+/** Вписывает в соотношение сторон, добавляя прозрачные поля. */
+export function padToRatio(img: PixelImage, ratio: number): PixelImage {
+	const current = img.width / img.height;
+	let w = img.width;
+	let h = img.height;
+	if (current > ratio) h = Math.round(w / ratio);
+	else if (current < ratio) w = Math.round(h * ratio);
+	w = Math.max(1, w);
+	h = Math.max(1, h);
+	return changeCanvasSize(img, w, h, 'center');
+}
+
+/** Разворачивает изображение на 90°, если его ориентация не совпадает с целевой. Квадрат не трогает. */
+export function forceOrientation(img: PixelImage, target: 'portrait' | 'landscape'): PixelImage {
+	const current = img.width > img.height ? 'landscape' : img.width < img.height ? 'portrait' : 'square';
+	if (current === target || current === 'square') return clonePixelImage(img);
+	return rotate90(img, 1);
+}
+
+/**
+ * Симметричная копия: к выбранной стороне оригинала добавляется его зеркало.
+ * axis vertical — зеркалим по вертикальной линии (ширина ×2), horizontal — по горизонтальной (высота ×2).
+ */
+export function symmetricCopy(
+	img: PixelImage,
+	axis: 'vertical' | 'horizontal',
+	keepSide: 'left' | 'right' | 'top' | 'bottom'
+): PixelImage {
+	if (axis === 'vertical') {
+		const out = createPixelImage(img.width * 2, img.height);
+		for (let y = 0; y < img.height; y++) {
+			for (let x = 0; x < img.width; x++) {
+				const srcX = keepSide === 'left' ? x : img.width - 1 - x;
+				const di = (y * out.width + x) * 4;
+				const si = (y * img.width + srcX) * 4;
+				out.data[di] = img.data[si];
+				out.data[di + 1] = img.data[si + 1];
+				out.data[di + 2] = img.data[si + 2];
+				out.data[di + 3] = img.data[si + 3];
+				const mx = img.width * 2 - 1 - x;
+				const md = (y * out.width + mx) * 4;
+				out.data[md] = img.data[si];
+				out.data[md + 1] = img.data[si + 1];
+				out.data[md + 2] = img.data[si + 2];
+				out.data[md + 3] = img.data[si + 3];
+			}
+		}
+		return out;
+	}
+	const out = createPixelImage(img.width, img.height * 2);
+	for (let y = 0; y < img.height; y++) {
+		const srcY = keepSide === 'top' ? y : img.height - 1 - y;
+		for (let x = 0; x < img.width; x++) {
+			const si = (srcY * img.width + x) * 4;
+			const dTop = (y * out.width + x) * 4;
+			out.data[dTop] = img.data[si];
+			out.data[dTop + 1] = img.data[si + 1];
+			out.data[dTop + 2] = img.data[si + 2];
+			out.data[dTop + 3] = img.data[si + 3];
+			const my = img.height * 2 - 1 - y;
+			const md = (my * out.width + x) * 4;
+			out.data[md] = img.data[si];
+			out.data[md + 1] = img.data[si + 1];
+			out.data[md + 2] = img.data[si + 2];
+			out.data[md + 3] = img.data[si + 3];
+		}
+	}
+	return out;
 }

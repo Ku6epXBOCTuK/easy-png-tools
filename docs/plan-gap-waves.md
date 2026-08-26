@@ -32,7 +32,7 @@
 Ядро: SDF фигуры (круг/квадрат/звезда/волна) → альфа-маска с fit-режимами.
 Состав: circle-mask, square-mask, star-mask, wavy-mask.
 
-### W5. Геометрия-добивки — 5 инструментов, S
+### W5. Геометрия-добивки — ВЫПОЛНЕНА (5 инструментов)
 
 Ядро: bbox по альфе (trim) переиспользуется тремя инструментами источника.
 Состав: trim-empty-space (закрывает remove border/space), change-canvas-size, change-aspect-ratio, landscape↔portrait, symmetric-copy.
