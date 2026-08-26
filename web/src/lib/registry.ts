@@ -98,6 +98,11 @@ import {
 } from './core/masks';
 import { renderSpace, SPACES, type SpaceId } from './core/channels';
 import {
+	ditherImage,
+	mapToNearest,
+	quantizeImage
+} from './core/quantize';
+import {
 	boxTest,
 	circleTest,
 	renderShape,
@@ -2285,6 +2290,85 @@ export const TOOLS: ToolEntry[] = [
 			{ id: 'strength', label: 'Strength, %', type: 'slider', min: 0, max: 100, step: 1, default: 30 }
 		],
 		run: (img, p) => tint(img, str(p, 'color'), num(p, 'strength'))
+	},
+	{
+		id: 'quantize-png',
+		title: 'Quantize PNG',
+		description:
+			'Reduces the image to k colors via median-cut palette. Transparent pixels are preserved.',
+		category: 'color',
+		params: [
+			{ id: 'colors', label: 'Colors (k)', type: 'slider', min: 2, max: 64, step: 1, default: 16 }
+		],
+		run: (img, p) => quantizeImage(img, num(p, 'colors')).image
+	},
+	{
+		id: 'decrease-color-count-png',
+		title: 'Decrease Color Count PNG',
+		description:
+			'Same median-cut engine with fixed power-of-two presets — quick way to drop to 2–256 colors.',
+		category: 'color',
+		params: [
+			{
+				id: 'maxColors',
+				label: 'Max colors',
+				type: 'select',
+				default: '16',
+				options: [
+					{ value: '2', label: '2' },
+					{ value: '4', label: '4' },
+					{ value: '8', label: '8' },
+					{ value: '16', label: '16' },
+					{ value: '32', label: '32' },
+					{ value: '64', label: '64' },
+					{ value: '128', label: '128' },
+					{ value: '256', label: '256' }
+				]
+			}
+		],
+		run: (img, p) => quantizeImage(img, num(p, 'maxColors')).image
+	},
+	{
+		id: 'custom-palette-png',
+		title: 'Custom Palette PNG',
+		description:
+			'Maps every pixel to the nearest color from your comma-separated hex list.',
+		category: 'color',
+		params: [
+			{
+				id: 'colors',
+				label: 'Palette (comma-separated hex)',
+				type: 'text',
+				default: '#000000,#ffffff'
+			}
+		],
+		run: (img, p) => mapToNearest(img, parseHexList(str(p, 'colors')))
+	},
+	{
+		id: 'dithering-png',
+		title: 'Dithering PNG',
+		description:
+			'Applies Floyd–Steinberg error diffusion or ordered Bayer dithering while reducing to k colors.',
+		category: 'color',
+		params: [
+			{ id: 'colors', label: 'Colors (k)', type: 'slider', min: 2, max: 16, step: 1, default: 4 },
+			{
+				id: 'pattern',
+				label: 'Pattern',
+				type: 'select',
+				default: 'floyd-steinberg',
+				options: [
+					{ value: 'floyd-steinberg', label: 'Floyd–Steinberg' },
+					{ value: 'bayer', label: 'Bayer 4×4' }
+				]
+			}
+		],
+		run: (img, p) =>
+			ditherImage(
+				img,
+				num(p, 'colors'),
+				str(p, 'pattern') === 'bayer' ? 'bayer' : 'floyd-steinberg'
+			)
 	},
 	{
 		id: 'svg-to-png',

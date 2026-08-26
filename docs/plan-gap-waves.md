@@ -49,7 +49,7 @@ text-to-png (domText без входной картинки), emoji-to-png, plac
 color-spectrum, colorful-random (seed), draw-grid.
 multi-color-gradient — если успеем новый тип параметра «список цветов», иначе перенос.
 
-### W8. Цветовые MEDIUM — 4 инструмента, L
+### W8. Цветовые MEDIUM — ВЫПОЛНЕНА (4 инструмента; median-cut + Floyd–Steinberg/Bayer, custom-palette через text-параметр)
 
 Ядро: квантование (median-cut или k-means).
 Состав: quantize (k), decrease-color-count (=quantize с пресетами), custom-palette (маппинг на список цветов — нужен тип параметра «список»), dithering (Floyd–Steinberg/Bayer поверх квантования).

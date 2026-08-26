@@ -853,6 +853,35 @@ export const ru: Dict = {
 				transparentBg: 'Прозрачный фон'
 			}
 		},
+		'quantize-png': {
+			title: 'Квантовать PNG',
+			description:
+				'Уменьшает изображение до k цветов через median-cut палитру. Прозрачные пиксели сохраняются.',
+			params: { colors: 'Цветов (k)' }
+		},
+		'decrease-color-count-png': {
+			title: 'Уменьшить число цветов PNG',
+			description:
+				'Тот же движок median-cut с фиксированными пресетами степеней двойки — быстрый спуск до 2–256 цветов.',
+			params: { maxColors: 'Максимум цветов' },
+			options: {
+				maxColors: { '2': '2', '4': '4', '8': '8', '16': '16', '32': '32', '64': '64', '128': '128', '256': '256' }
+			}
+		},
+		'custom-palette-png': {
+			title: 'Своя палитра PNG',
+			description: 'Сопоставляет каждый пиксель с ближайшим цветом из вашего списка hex через запятую.',
+			params: { colors: 'Палитра (hex через запятую)' }
+		},
+		'dithering-png': {
+			title: 'Дизеринг PNG',
+			description:
+				'Применяет распространение ошибки Флойда–Стейнберга или упорядоченный Байер при сведении к k цветам.',
+			params: { colors: 'Цветов (k)', pattern: 'Узор' },
+			options: {
+				pattern: { 'floyd-steinberg': 'Флойд–Стейнберг', bayer: 'Байер 4×4' }
+			}
+		},
 		'show-transparent-png': {
 			title: 'Показать прозрачные области PNG',
 			description:

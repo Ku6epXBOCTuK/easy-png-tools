@@ -64,6 +64,13 @@
 - gamma-png — value
 - tint-png — color, strength
 
+### Квантование и палитры
+
+- quantize-png — colors (k, median-cut)
+- decrease-color-count-png — maxColors (пресеты 2…256)
+- custom-palette-png — colors (hex через запятую, ближайший цвет)
+- dithering-png — colors (k), pattern (Floyd–Steinberg / Bayer 4×4)
+
 ### Разложение каналов
 
 - png-to-hsl / png-to-hsv / png-to-hsi — component (h/s/l и т.п.), display (gray | space-as-rgb)
@@ -178,7 +185,7 @@
 - reduce-file-size — целевой размер KB (итеративный поиск)
 - optimize-png — пресеты
 - change-quality — честная семантика для lossless (см. план-гапы §риск)
-- low-quality-png — частично покрыт jpeg-artifacts; остаток = сильный quantize
+- low-quality-png — частично покрыт jpeg-artifacts + quantize
 
 ### Генераторы — остаток
 
