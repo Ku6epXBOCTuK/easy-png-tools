@@ -329,7 +329,7 @@ src/routes/preview/tools/[id]/+page.svelte
 - [x] **[C10]** `/preview/list-tools` — каталог карточек (группировка по
       `CATEGORIES`, `ToolCard`). Ссылки пока `#` (реальные `/preview/tools/[id]`
       подключим на C12).
-- [ ] **[C11]** `/preview/demo` — зеркало воркспейса (приёмочный стенд).
+- [x] **[C11]** `/preview/demo` — зеркало воркспейса (4 шага + панель превью), статичный приёмочный стенд.
 - [ ] **[C12]** `/preview/tools/[id]` — раскладка gradient (settings-panel + preview-panel).
 - [ ] **[C13]** `/preview/tools/[id]` — раскладка background-remover (comparison-grid).
 - [ ] **[C14]** step-cards для chain в tool-page.
