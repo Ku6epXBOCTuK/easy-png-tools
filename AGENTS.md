@@ -10,6 +10,23 @@
   Не использовать npm.
 - Сборка: `pnpm --dir web build`, проверка типов: `pnpm --dir web exec svelte-check --tsconfig ./tsconfig.json`,
   тесты: `pnpm --dir web test`.
+- Форматирование: `pnpm --dir web format` (Prettier + `prettier-plugin-svelte`,
+  конфиг `web/.prettierrc`, игнор `web/.prettierignore`). Проверка без записи:
+  `pnpm --dir web exec prettier --check .`.
+- Линтинг: `pnpm --dir web lint` (ESLint, flat-конфиг `web/eslint.config.js`).
+  Устроен инкрементально:
+  - На **весь код** — парсинг TS/Svelte + правило
+    `@typescript-eslint/consistent-type-imports` (запрет инлайн-тип-импортов).
+  - Полные `recommended`-наборы (`eslint` + `typescript-eslint` + `eslint-plugin-svelte`)
+    навешены **только на новый код** (`src/lib/components/kit/**`,
+    `src/routes/preview/**`), чтобы старый код не засыпался предсуществующими
+    ошибками. Когда старый дизайн удалён (C19), scoped-блок убирается и
+    `recommended` включается на весь код.
+  - **Scoped-пути двигаются вместе с папками** (см. `plan-redesign.md` §10):
+    на C17 `src/routes/preview/**` → `src/routes/**` (preview переезжает на
+    реальные маршруты), на C19 при переименовании `kit/`→`ui/` — и компонентный
+    glob. Не оставлять устаревшие пути в `eslint.config.js`.
+  - Для `*.svelte` выключен `prefer-const` (пропсы в Svelte 5 пишутся через `let`).
 
 ## Правила кода
 
@@ -20,20 +37,27 @@
 
 ```svelte
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   interface Props {
     label: string;
     accent?: boolean;
-    children?: import('svelte').Snippet;
+    children?: Snippet;
   }
+
   let { label, accent = false, children }: Props = $props();
 </script>
 ```
 
 Не использовать инлайн-дженерик `$props<{ ... }>()` — он тяжело читается и
-разносит тип и деструктуризацию по разным местам.
+разносит тип и деструктуризацию по разным местам. Также **не использовать
+инлайн-импорты в типах** (`children?: import('svelte').Snippet;`) — все
+`import type` поднимаются наверх файла. Это правило **включено в ESLint**
+(`@typescript-eslint/consistent-type-imports`, `prefer: 'type-imports'`).
 
-> Позже планируется линтер/правило (eslint-plugin-svelte / custom rule),
-> запрещающее `$props<...>()` и требующее `interface Props`.
+> Правило «всегда `interface Props` + `let {...}: Props = $props()`» стандартным
+> ESLint-правилом не покрывается — остаётся конвенцией. Кастомное правило
+> (eslint-plugin-svelte / свой visitor) — TODO, позже.
 
 ### Дизайн: новый визуальный язык
 

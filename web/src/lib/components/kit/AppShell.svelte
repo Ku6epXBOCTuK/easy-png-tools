@@ -1,5 +1,5 @@
 <script lang="ts">
-	import BlueprintGrid from './BlueprintGrid.svelte';
+	import BlueprintGrid from "./BlueprintGrid.svelte";
 
 	let { children } = $props();
 </script>

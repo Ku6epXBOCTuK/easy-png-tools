@@ -1,13 +1,15 @@
 <script lang="ts">
+	import type { Snippet } from "svelte";
+
 	interface Props {
 		accent?: boolean;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 	}
 
 	let { accent = false, children }: Props = $props();
 </script>
 
-<span class="mono-label" class:accent={accent}>
+<span class="mono-label" class:accent>
 	{#if children}
 		{@render children()}
 	{/if}
