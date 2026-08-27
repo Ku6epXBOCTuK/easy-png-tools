@@ -304,7 +304,7 @@ src/routes/preview/tools/[id]/+page.svelte
       подключить шрифты в `design2.css` (self-host, offline-first).
 - [x] **[C4]** _(слит в C3: шрифты нельзя подключить до создания `design2.css`)_
       `[data-theme='dark']` (таблица §2). Без утилитарных классов.
-- [ ] **[C5]** Примитивы batch 1: `AppShell`, `BlueprintGrid`, `CheckerCanvas`,
+- [x] **[C5]** Примитивы batch 1: `AppShell`, `BlueprintGrid`, `CheckerCanvas`,
       `MonoLabel`, `StatusDot`/`StatusLine`.
 - [ ] **[C6]** Примитивы batch 2: `Panel`, `PanelHeading`, `SettingGroup`,
       `SettingsFooter`, `MetaRow`/`MetaList`, `Segmented`, `Badge`, `StepCard`,
