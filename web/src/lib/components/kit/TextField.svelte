@@ -4,6 +4,7 @@
 		type?: string;
 		placeholder?: string;
 		readonly?: boolean;
+		label?: string;
 		oninput?: (value: string) => void;
 	}
 	let {
@@ -11,6 +12,7 @@
 		type = "text",
 		placeholder = "",
 		readonly = false,
+		label,
 		oninput,
 	}: Props = $props();
 
@@ -26,6 +28,7 @@
 	{placeholder}
 	{readonly}
 	{value}
+	aria-label={label}
 	oninput={handle}
 />
 

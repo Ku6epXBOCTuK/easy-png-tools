@@ -5,6 +5,18 @@
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
 
+/* Минимальный reset (новый дизайн грузится только на preview-маршрутах). */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
 /* Новый дизайн: токены (§2 плана redesign).
    Файл грузится только layout'ом новой ветки (preview/+layout), поэтому
    глобально не конфликтует со старым app.css. */

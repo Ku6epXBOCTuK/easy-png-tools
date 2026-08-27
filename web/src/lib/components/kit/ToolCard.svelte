@@ -1,20 +1,21 @@
 <script lang="ts">
 	import { ArrowUpRight } from "@lucide/svelte";
-	import type { Snippet } from "svelte";
+	import type { Component } from "svelte";
+	import Icon from "./Icon.svelte";
 
 	interface Props {
 		title: string;
 		href: string;
 		description?: string;
 		index?: number;
-		icon?: Snippet;
+		icon?: Component<{ size?: number; class?: string }>;
 	}
 	let { title, href, description, index, icon }: Props = $props();
 </script>
 
 <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 <a class="tool-card" {href}>
-	{#if icon}<span class="tool-icon">{@render icon()}</span>{/if}
+	{#if icon}<span class="tool-icon"><Icon {icon} size={18} /></span>{/if}
 	<span class="tool-index">
 		{index !== undefined ? index.toString().padStart(2, "0") : ""}
 	</span>
