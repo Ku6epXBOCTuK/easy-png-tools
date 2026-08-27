@@ -322,7 +322,10 @@ src/routes/preview/tools/[id]/+page.svelte
 
 ### Шаг 3. Новые страницы
 
-- [ ] **[C9]** `/preview` — воркспейс (eyebrow, h1, lede, поиск, «открыть последний»).
+- [x] **[C9]** `/preview` — воркспейс (eyebrow, h1, lede, поиск, «открыть последний»).
+      Поиск фильтрует `TOOLS` из `$lib/registry`; карточки результата пока
+      ведут на `#` (реальные `/preview/tools/[id]` подключим на C12, иначе
+      prerender падает на 404).
 - [ ] **[C10]** `/preview/list-tools` — каталог карточек.
 - [ ] **[C11]** `/preview/demo` — зеркало воркспейса (приёмочный стенд).
 - [ ] **[C12]** `/preview/tools/[id]` — раскладка gradient (settings-panel + preview-panel).
