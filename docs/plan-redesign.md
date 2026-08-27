@@ -300,7 +300,7 @@ src/routes/preview/tools/[id]/+page.svelte
 
 ### Шаг 1. Фундамент нового дизайна
 
-- [ ] **[C3]** Создать `src/lib/styles/design2.css` (токены `:root` + `[data-theme='dark']` по §2) и подключить `@fontsource/ibm-plex-sans` + `@fontsource/ibm-plex-mono` (self-host, offline-first).
+- [x] **[C3]** Создать `src/lib/styles/design2.css` (токены `:root` + `[data-theme='dark']` по §2) и подключить `@fontsource/ibm-plex-sans` + `@fontsource/ibm-plex-mono` (self-host, offline-first).
       подключить шрифты в `design2.css` (self-host, offline-first).
 - [x] **[C4]** _(слит в C3: шрифты нельзя подключить до создания `design2.css`)_
       `[data-theme='dark']` (таблица §2). Без утилитарных классов.

@@ -1,0 +1,43 @@
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/700.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+/* Новый дизайн: токены (§2 плана redesign).
+   Файл грузится только layout'ом новой ветки (preview/+layout), поэтому
+   глобально не конфликтует со старым app.css. */
+
+:root {
+	--font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+	--background: #eef1f4;
+	--panel: #f8fafb;
+	--foreground: #17212b;
+	--muted: #6d7883;
+	--line: #cbd3da;
+
+	--blue: #1769d2;
+	--cyan: #00a8c7;
+	--amber: #bd7411;
+	--success: #25a96a;
+	--danger: #e5484d;
+
+	--radius: 4px;
+}
+
+[data-theme='dark'] {
+	--background: #11171d;
+	--panel: #182129;
+	--foreground: #e8eef2;
+	--muted: #91a0ac;
+	--line: #33414c;
+
+	--blue: #54a2ff;
+	--cyan: #00a8c7;
+	--amber: #bd7411;
+	--success: #25a96a;
+	--danger: #ff7479;
+}
