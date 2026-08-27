@@ -1,0 +1,1789 @@
+{
+  "generatedAt": "2026-08-27T18:45:14.461Z",
+  "ours": "http://127.0.0.1:5179/preview/demo",
+  "ref": "C:\\+XBOCTuK\\+life_projects\\easy-png-tools\\refs-html\\demo.html",
+  "tokenDiffs": {
+    "light": [
+      {
+        "key": "--danger",
+        "ours": "#e5484d",
+        "ref": "—"
+      },
+      {
+        "key": "--success",
+        "ours": "#25a96a",
+        "ref": "—"
+      },
+      {
+        "key": "--font-sans",
+        "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+        "ref": "\"IBM Plex Sans\", sans-serif"
+      },
+      {
+        "key": "--font-mono",
+        "ours": "\"IBM Plex Mono\", ui-monospace, \"SFMono-Regular\", monospace",
+        "ref": "\"IBM Plex Mono\", monospace"
+      },
+      {
+        "key": "--text-sm--line-height",
+        "ours": "—",
+        "ref": "calc(1.25 / .875)"
+      },
+      {
+        "key": "--text-xs--line-height",
+        "ours": "—",
+        "ref": "calc(1 / .75)"
+      },
+      {
+        "key": "--font-weight-medium",
+        "ours": "—",
+        "ref": "500"
+      },
+      {
+        "key": "--spacing",
+        "ours": "—",
+        "ref": ".25rem"
+      },
+      {
+        "key": "--text-xs",
+        "ours": "—",
+        "ref": ".75rem"
+      },
+      {
+        "key": "--radius-md",
+        "ours": "—",
+        "ref": ".375rem"
+      },
+      {
+        "key": "--radius-lg",
+        "ours": "—",
+        "ref": ".5rem"
+      },
+      {
+        "key": "--text-sm",
+        "ours": "—",
+        "ref": ".875rem"
+      }
+    ],
+    "dark": [
+      {
+        "key": "--panel",
+        "ours": "#182129",
+        "ref": "#f8fafb"
+      },
+      {
+        "key": "--blue",
+        "ours": "#54a2ff",
+        "ref": "#1769d2"
+      },
+      {
+        "key": "--muted",
+        "ours": "#91a0ac",
+        "ref": "#6d7883"
+      },
+      {
+        "key": "--background",
+        "ours": "#11171d",
+        "ref": "#eef1f4"
+      },
+      {
+        "key": "--danger",
+        "ours": "#ff7479",
+        "ref": "—"
+      },
+      {
+        "key": "--foreground",
+        "ours": "#e8eef2",
+        "ref": "#17212b"
+      },
+      {
+        "key": "--success",
+        "ours": "#25a96a",
+        "ref": "—"
+      },
+      {
+        "key": "--line",
+        "ours": "#33414c",
+        "ref": "#cbd3da"
+      },
+      {
+        "key": "--font-sans",
+        "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+        "ref": "\"IBM Plex Sans\", sans-serif"
+      },
+      {
+        "key": "--font-mono",
+        "ours": "\"IBM Plex Mono\", ui-monospace, \"SFMono-Regular\", monospace",
+        "ref": "\"IBM Plex Mono\", monospace"
+      },
+      {
+        "key": "--text-sm--line-height",
+        "ours": "—",
+        "ref": "calc(1.25 / .875)"
+      },
+      {
+        "key": "--text-xs--line-height",
+        "ours": "—",
+        "ref": "calc(1 / .75)"
+      },
+      {
+        "key": "--font-weight-medium",
+        "ours": "—",
+        "ref": "500"
+      },
+      {
+        "key": "--spacing",
+        "ours": "—",
+        "ref": ".25rem"
+      },
+      {
+        "key": "--text-xs",
+        "ours": "—",
+        "ref": ".75rem"
+      },
+      {
+        "key": "--radius-md",
+        "ours": "—",
+        "ref": ".375rem"
+      },
+      {
+        "key": "--radius-lg",
+        "ours": "—",
+        "ref": ".5rem"
+      },
+      {
+        "key": "--text-sm",
+        "ours": "—",
+        "ref": ".875rem"
+      }
+    ]
+  },
+  "elementDiffs": [
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+      "tag": "span",
+      "text": "EP",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
+      "tag": "span",
+      "text": "easy-png-tools",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(0, 0, 0)",
+          "ref": "rgb(23, 33, 43)"
+        },
+        "rect": {
+          "ours": {
+            "x": 98,
+            "y": 23,
+            "w": 118,
+            "h": 18
+          },
+          "ref": {
+            "x": 98,
+            "y": 23,
+            "w": 108,
+            "h": 17
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(1)",
+      "tag": "button",
+      "text": "RU",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "11px",
+          "ref": "10px"
+        },
+        "color": {
+          "ours": "rgb(255, 255, 255)",
+          "ref": "rgb(238, 241, 244)"
+        },
+        "backgroundColor": {
+          "ours": "rgb(23, 105, 210)",
+          "ref": "rgb(23, 33, 43)"
+        },
+        "padding": {
+          "ours": "4.8px 11.2px",
+          "ref": "6px 9px"
+        },
+        "letterSpacing": {
+          "ours": "0.66px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 1307,
+            "y": 20,
+            "w": 37,
+            "h": 24
+          },
+          "ref": {
+            "x": 1323,
+            "y": 20,
+            "w": 29,
+            "h": 24
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(2)",
+      "tag": "button",
+      "text": "EN",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "11px",
+          "ref": "10px"
+        },
+        "padding": {
+          "ours": "4.8px 11.2px",
+          "ref": "6px 9px"
+        },
+        "letterSpacing": {
+          "ours": "0.66px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 1344,
+            "y": 20,
+            "w": 38,
+            "h": 24
+          },
+          "ref": {
+            "x": 1352,
+            "y": 20,
+            "w": 29,
+            "h": 24
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+      "tag": "span",
+      "text": "/",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(23, 105, 210)",
+          "ref": "rgb(109, 120, 131)"
+        },
+        "rect": {
+          "ours": {
+            "x": 173,
+            "y": 124,
+            "w": 7,
+            "h": 13
+          },
+          "ref": {
+            "x": 165,
+            "y": 124,
+            "w": 13,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(1)>h1:nth-child(1)",
+      "tag": "h1",
+      "text": "Build your image pipeline.",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+          "ref": "\"IBM Plex Sans\", sans-serif"
+        },
+        "lineHeight": {
+          "ours": "normal",
+          "ref": "57.6px"
+        },
+        "rect": {
+          "ours": {
+            "x": 58,
+            "y": 155,
+            "w": 474,
+            "h": 150
+          },
+          "ref": {
+            "x": 58,
+            "y": 154,
+            "w": 482,
+            "h": 115
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(1)>p:nth-child(2)",
+      "tag": "p",
+      "text": "Chain simple tools together. Every chang",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+          "ref": "\"IBM Plex Sans\", sans-serif"
+        },
+        "rect": {
+          "ours": {
+            "x": 58,
+            "y": 321,
+            "w": 474,
+            "h": 51
+          },
+          "ref": {
+            "x": 58,
+            "y": 285,
+            "w": 482,
+            "h": 51
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "tag": "span",
+      "text": "source.png",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 597,
+            "y": 347,
+            "w": 66,
+            "h": 14
+          },
+          "ref": {
+            "x": 606,
+            "y": 311,
+            "w": 60,
+            "h": 13
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(2)>b:nth-child(3)",
+      "tag": "b",
+      "text": "1.8 MB",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 671,
+            "y": 347,
+            "w": 40,
+            "h": 14
+          },
+          "ref": {
+            "x": 674,
+            "y": 311,
+            "w": 36,
+            "h": 13
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
+      "tag": "span",
+      "text": "PROCESSING PIPELINE",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 58,
+            "y": 434,
+            "w": 137,
+            "h": 13
+          },
+          "ref": {
+            "x": 58,
+            "y": 400,
+            "w": 127,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(3)>div:nth-child(1)>strong:nth-child(2)>em:nth-child(1)",
+      "tag": "em",
+      "text": "• LIVE",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 184,
+            "y": 457,
+            "w": 36,
+            "h": 13
+          },
+          "ref": {
+            "x": 173,
+            "y": 425,
+            "w": 33,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
+      "tag": "span",
+      "text": "01",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "padding": {
+          "ours": "0px",
+          "ref": "17px 0px 0px 15px"
+        },
+        "rect": {
+          "ours": {
+            "x": 95,
+            "y": 510,
+            "w": 13,
+            "h": 14
+          },
+          "ref": {
+            "x": 59,
+            "y": 466,
+            "w": 46,
+            "h": 150
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(1)>span:nth-child(3)",
+      "tag": "span",
+      "text": "BACKGROUND",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(23, 105, 210)",
+          "ref": "rgb(109, 120, 131)"
+        },
+        "padding": {
+          "ours": "2.4px 7.2px",
+          "ref": "0px"
+        },
+        "letterSpacing": {
+          "ours": "0.8px",
+          "ref": "1.2px"
+        },
+        "borderRadius": {
+          "ours": "4px",
+          "ref": "0px"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "inline"
+        },
+        "gap": {
+          "ours": "4.8px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 116,
+            "y": 507,
+            "w": 84,
+            "h": 20
+          },
+          "ref": {
+            "x": 143,
+            "y": 489,
+            "w": 67,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(1)>span:nth-child(4)",
+      "tag": "span",
+      "text": "Gradient background",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "14.4px",
+          "ref": "15px"
+        },
+        "margin": {
+          "ours": "0px",
+          "ref": "5px 0px 18px"
+        },
+        "rect": {
+          "ours": {
+            "x": 208,
+            "y": 508,
+            "w": 467,
+            "h": 19
+          },
+          "ref": {
+            "x": 143,
+            "y": 510,
+            "w": 157,
+            "h": 18
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
+      "tag": "span",
+      "text": "COLOR",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontWeight": {
+          "ours": "500",
+          "ref": "400"
+        },
+        "margin": {
+          "ours": "0px",
+          "ref": "0px 0px 8px"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "0.8px"
+        },
+        "lineHeight": {
+          "ours": "12px",
+          "ref": "normal"
+        },
+        "display": {
+          "ours": "block",
+          "ref": "flex"
+        },
+        "rect": {
+          "ours": {
+            "x": 71,
+            "y": 576,
+            "w": 203,
+            "h": 12
+          },
+          "ref": {
+            "x": 143,
+            "y": 546,
+            "w": 189,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)",
+      "tag": "button",
+      "text": "100",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "11px",
+          "ref": "10px"
+        },
+        "padding": {
+          "ours": "4.8px 11.2px",
+          "ref": "0px"
+        },
+        "letterSpacing": {
+          "ours": "0.66px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 491,
+            "y": 597,
+            "w": 44,
+            "h": 24
+          },
+          "ref": {
+            "x": 520,
+            "y": 567,
+            "w": 46,
+            "h": 30
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(2)",
+      "tag": "button",
+      "text": "75",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "11px",
+          "ref": "10px"
+        },
+        "padding": {
+          "ours": "4.8px 11.2px",
+          "ref": "0px"
+        },
+        "letterSpacing": {
+          "ours": "0.66px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 535,
+            "y": 597,
+            "w": 38,
+            "h": 24
+          },
+          "ref": {
+            "x": 566,
+            "y": 567,
+            "w": 46,
+            "h": 30
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(3)",
+      "tag": "button",
+      "text": "50",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "11px",
+          "ref": "10px"
+        },
+        "padding": {
+          "ours": "4.8px 11.2px",
+          "ref": "0px"
+        },
+        "letterSpacing": {
+          "ours": "0.66px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 573,
+            "y": 597,
+            "w": 38,
+            "h": 24
+          },
+          "ref": {
+            "x": 612,
+            "y": 567,
+            "w": 46,
+            "h": 30
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(4)",
+      "tag": "button",
+      "text": "25",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "11px",
+          "ref": "10px"
+        },
+        "padding": {
+          "ours": "4.8px 11.2px",
+          "ref": "0px"
+        },
+        "letterSpacing": {
+          "ours": "0.66px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 611,
+            "y": 597,
+            "w": 38,
+            "h": 24
+          },
+          "ref": {
+            "x": 658,
+            "y": 567,
+            "w": 46,
+            "h": 30
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(2)>div:nth-child(1)>span:nth-child(2)",
+      "tag": "span",
+      "text": "02",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "padding": {
+          "ours": "0px",
+          "ref": "17px 0px 0px 15px"
+        },
+        "rect": {
+          "ours": {
+            "x": 95,
+            "y": 673,
+            "w": 13,
+            "h": 14
+          },
+          "ref": {
+            "x": 59,
+            "y": 628,
+            "w": 46,
+            "h": 136
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(2)>div:nth-child(1)>span:nth-child(3)",
+      "tag": "span",
+      "text": "TRANSFORM",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(23, 105, 210)",
+          "ref": "rgb(109, 120, 131)"
+        },
+        "padding": {
+          "ours": "2.4px 7.2px",
+          "ref": "0px"
+        },
+        "letterSpacing": {
+          "ours": "0.8px",
+          "ref": "1.2px"
+        },
+        "borderRadius": {
+          "ours": "4px",
+          "ref": "0px"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "inline"
+        },
+        "gap": {
+          "ours": "4.8px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 116,
+            "y": 670,
+            "w": 78,
+            "h": 20
+          },
+          "ref": {
+            "x": 143,
+            "y": 651,
+            "w": 60,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(2)>div:nth-child(1)>span:nth-child(4)",
+      "tag": "span",
+      "text": "Remove background",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "14.4px",
+          "ref": "15px"
+        },
+        "margin": {
+          "ours": "0px",
+          "ref": "5px 0px 18px"
+        },
+        "rect": {
+          "ours": {
+            "x": 201,
+            "y": 671,
+            "w": 473,
+            "h": 19
+          },
+          "ref": {
+            "x": 143,
+            "y": 672,
+            "w": 140,
+            "h": 18
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
+      "tag": "span",
+      "text": "03",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "padding": {
+          "ours": "0px",
+          "ref": "17px 0px 0px 15px"
+        },
+        "rect": {
+          "ours": {
+            "x": 95,
+            "y": 788,
+            "w": 13,
+            "h": 14
+          },
+          "ref": {
+            "x": 59,
+            "y": 776,
+            "w": 46,
+            "h": 150
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(3)>div:nth-child(1)>span:nth-child(3)",
+      "tag": "span",
+      "text": "STYLE",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(23, 105, 210)",
+          "ref": "rgb(109, 120, 131)"
+        },
+        "padding": {
+          "ours": "2.4px 7.2px",
+          "ref": "0px"
+        },
+        "letterSpacing": {
+          "ours": "0.8px",
+          "ref": "1.2px"
+        },
+        "borderRadius": {
+          "ours": "4px",
+          "ref": "0px"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "inline"
+        },
+        "gap": {
+          "ours": "4.8px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 116,
+            "y": 785,
+            "w": 50,
+            "h": 20
+          },
+          "ref": {
+            "x": 143,
+            "y": 799,
+            "w": 34,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(3)>div:nth-child(1)>span:nth-child(4)",
+      "tag": "span",
+      "text": "Add outline",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "14.4px",
+          "ref": "15px"
+        },
+        "margin": {
+          "ours": "0px",
+          "ref": "5px 0px 18px"
+        },
+        "rect": {
+          "ours": {
+            "x": 174,
+            "y": 785,
+            "w": 501,
+            "h": 19
+          },
+          "ref": {
+            "x": 143,
+            "y": 820,
+            "w": 91,
+            "h": 18
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(4)>div:nth-child(1)>span:nth-child(2)",
+      "tag": "span",
+      "text": "04",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "padding": {
+          "ours": "0px",
+          "ref": "17px 0px 0px 15px"
+        },
+        "rect": {
+          "ours": {
+            "x": 95,
+            "y": 951,
+            "w": 13,
+            "h": 14
+          },
+          "ref": {
+            "x": 59,
+            "y": 938,
+            "w": 46,
+            "h": 142
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(4)>div:nth-child(1)>span:nth-child(4)",
+      "tag": "span",
+      "text": "Round corners",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "14.4px",
+          "ref": "15px"
+        },
+        "margin": {
+          "ours": "0px",
+          "ref": "5px 0px 18px"
+        },
+        "rect": {
+          "ours": {
+            "x": 174,
+            "y": 948,
+            "w": 501,
+            "h": 19
+          },
+          "ref": {
+            "x": 143,
+            "y": 982,
+            "w": 107,
+            "h": 18
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>label:nth-child(2)>span:nth-child(1)",
+      "tag": "span",
+      "text": "Preserve aspect ratio",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+          "ref": "\"IBM Plex Sans\", sans-serif"
+        },
+        "fontSize": {
+          "ours": "13.6px",
+          "ref": "16px"
+        },
+        "lineHeight": {
+          "ours": "normal",
+          "ref": "24px"
+        },
+        "display": {
+          "ours": "block",
+          "ref": "inline"
+        },
+        "rect": {
+          "ours": {
+            "x": 399,
+            "y": 1036,
+            "w": 129,
+            "h": 18
+          },
+          "ref": {
+            "x": 432,
+            "y": 1021,
+            "w": 156,
+            "h": 17
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+      "tag": "span",
+      "text": "PIPELINE OUTPUTS",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 799,
+            "y": 177,
+            "w": 58,
+            "h": 33
+          },
+          "ref": {
+            "x": 799,
+            "y": 188,
+            "w": 54,
+            "h": 36
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(1)>strong:nth-child(2)",
+      "tag": "strong",
+      "text": "Visual history",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 799,
+            "y": 216,
+            "w": 93,
+            "h": 36
+          },
+          "ref": {
+            "x": 799,
+            "y": 233,
+            "w": 87,
+            "h": 34
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>button:nth-child(2)>span:nth-child(2)>span:nth-child(1)",
+      "tag": "span",
+      "text": "1.2 MB",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "11px"
+        },
+        "color": {
+          "ours": "rgb(255, 255, 255)",
+          "ref": "rgb(23, 33, 43)"
+        },
+        "margin": {
+          "ours": "0px",
+          "ref": "5px 0px 0px"
+        },
+        "display": {
+          "ours": "inline",
+          "ref": "block"
+        },
+        "rect": {
+          "ours": {
+            "x": 1090,
+            "y": 240,
+            "w": 36,
+            "h": 13
+          },
+          "ref": {
+            "x": 1246,
+            "y": 291,
+            "w": 79,
+            "h": 13
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
+      "tag": "span",
+      "text": "DIMENSIONS",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "9px"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 1150,
+            "y": 215,
+            "w": 70,
+            "h": 13
+          },
+          "ref": {
+            "x": 1073,
+            "y": 271,
+            "w": 79,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
+      "tag": "span",
+      "text": "1200 × 800 px",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "margin": {
+          "ours": "0px",
+          "ref": "5px 0px 0px"
+        },
+        "rect": {
+          "ours": {
+            "x": 1236,
+            "y": 214,
+            "w": 86,
+            "h": 14
+          },
+          "ref": {
+            "x": 1073,
+            "y": 291,
+            "w": 79,
+            "h": 13
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(1)",
+      "tag": "span",
+      "text": "FORMAT",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "9px"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 1150,
+            "y": 239,
+            "w": 42,
+            "h": 13
+          },
+          "ref": {
+            "x": 1159,
+            "y": 271,
+            "w": 79,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(2)",
+      "tag": "span",
+      "text": "PNG-24",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "margin": {
+          "ours": "0px",
+          "ref": "5px 0px 0px"
+        },
+        "rect": {
+          "ours": {
+            "x": 1282,
+            "y": 238,
+            "w": 40,
+            "h": 14
+          },
+          "ref": {
+            "x": 1159,
+            "y": 291,
+            "w": 79,
+            "h": 13
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(3)>span:nth-child(1)",
+      "tag": "span",
+      "text": "SIZE",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "9px"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 1150,
+            "y": 264,
+            "w": 28,
+            "h": 13
+          },
+          "ref": {
+            "x": 1246,
+            "y": 271,
+            "w": 79,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
+      "tag": "span",
+      "text": "SOURCE",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "9px"
+        },
+        "fontWeight": {
+          "ours": "500",
+          "ref": "400"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "normal"
+        },
+        "lineHeight": {
+          "ours": "12px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 806,
+            "y": 320,
+            "w": 262,
+            "h": 12
+          },
+          "ref": {
+            "x": 808,
+            "y": 663,
+            "w": 30,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+      "tag": "span",
+      "text": "PNG",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 923,
+            "y": 498,
+            "w": 28,
+            "h": 19
+          },
+          "ref": {
+            "x": 923,
+            "y": 478,
+            "w": 27,
+            "h": 18
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "tag": "span",
+      "text": "original.png · 1200 × 800",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 925,
+            "y": 706,
+            "w": 135,
+            "h": 11
+          },
+          "ref": {
+            "x": 942,
+            "y": 663,
+            "w": 124,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
+      "tag": "span",
+      "text": "STEP 01",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "9px"
+        },
+        "fontWeight": {
+          "ours": "500",
+          "ref": "400"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "normal"
+        },
+        "lineHeight": {
+          "ours": "12px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 1094,
+            "y": 320,
+            "w": 262,
+            "h": 12
+          },
+          "ref": {
+            "x": 1096,
+            "y": 663,
+            "w": 35,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "tag": "span",
+      "text": "gradient applied",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 1262,
+            "y": 706,
+            "w": 86,
+            "h": 11
+          },
+          "ref": {
+            "x": 1275,
+            "y": 663,
+            "w": 79,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(3)>span:nth-child(1)",
+      "tag": "span",
+      "text": "STEP 02",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "9px"
+        },
+        "fontWeight": {
+          "ours": "500",
+          "ref": "400"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "normal"
+        },
+        "lineHeight": {
+          "ours": "12px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 806,
+            "y": 752,
+            "w": 262,
+            "h": 12
+          },
+          "ref": {
+            "x": 808,
+            "y": 1021,
+            "w": 35,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "tag": "span",
+      "text": "background removed",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 962,
+            "y": 1138,
+            "w": 97,
+            "h": 11
+          },
+          "ref": {
+            "x": 977,
+            "y": 1021,
+            "w": 89,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(4)>span:nth-child(1)",
+      "tag": "span",
+      "text": "STEP 03",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "9px"
+        },
+        "fontWeight": {
+          "ours": "500",
+          "ref": "400"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "normal"
+        },
+        "lineHeight": {
+          "ours": "12px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 1094,
+            "y": 752,
+            "w": 262,
+            "h": 12
+          },
+          "ref": {
+            "x": 1096,
+            "y": 1021,
+            "w": 35,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "tag": "span",
+      "text": "outline added",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 1278,
+            "y": 1138,
+            "w": 70,
+            "h": 11
+          },
+          "ref": {
+            "x": 1290,
+            "y": 1021,
+            "w": 64,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(5)>span:nth-child(1)",
+      "tag": "span",
+      "text": "FINAL OUTPUT",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "fontSize": {
+          "ours": "10px",
+          "ref": "9px"
+        },
+        "fontWeight": {
+          "ours": "500",
+          "ref": "400"
+        },
+        "color": {
+          "ours": "rgb(109, 120, 131)",
+          "ref": "rgb(23, 105, 210)"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "normal"
+        },
+        "lineHeight": {
+          "ours": "12px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 806,
+            "y": 1183,
+            "w": 262,
+            "h": 12
+          },
+          "ref": {
+            "x": 808,
+            "y": 1378,
+            "w": 59,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "tag": "span",
+      "text": "ready · PNG-24",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
+          "ref": "\"IBM Plex Mono\", monospace"
+        },
+        "rect": {
+          "ours": {
+            "x": 984,
+            "y": 1569,
+            "w": 76,
+            "h": 11
+          },
+          "ref": {
+            "x": 997,
+            "y": 1378,
+            "w": 69,
+            "h": 10
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>p:nth-child(3)",
+      "tag": "p",
+      "text": "Output is generated in-browser. Your fil",
+      "deltas": {
+        "fontFamily": {
+          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
+          "ref": "\"IBM Plex Sans\", sans-serif"
+        },
+        "rect": {
+          "ours": {
+            "x": 799,
+            "y": 1624,
+            "w": 565,
+            "h": 17
+          },
+          "ref": {
+            "x": 799,
+            "y": 1425,
+            "w": 565,
+            "h": 17
+          }
+        }
+      }
+    }
+  ],
+  "onlyOurs": [
+    "+ Add tool",
+    "AUTO",
+    "Gradient color",
+    "DIRECTION",
+    "135°",
+    "OPACITY",
+    "Automatic subject detection enabled",
+    "WIDTH",
+    "Outline width",
+    "2px",
+    "Outline color",
+    "RADIUS",
+    "Corner radius",
+    "18px"
+  ],
+  "onlyRef": [
+    "/ DEMO",
+    "135\n                        °",
+    "100%",
+    "2\n                        px",
+    "18\n                        px",
+    "v2.4.0",
+    "© 2024"
+  ],
+  "counts": {
+    "tokenLight": 12,
+    "tokenDark": 18,
+    "elements": 48,
+    "onlyOurs": 14,
+    "onlyRef": 7
+  }
+}
