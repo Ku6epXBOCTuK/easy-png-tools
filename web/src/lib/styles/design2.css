@@ -17,6 +17,15 @@ body {
 	padding: 0;
 }
 
+/* Форм-контролы не наследуют шрифт семьи по умолчанию (браузер ставит Arial). */
+button,
+input,
+select,
+textarea,
+optgroup {
+	font-family: inherit;
+}
+
 /* Новый дизайн: токены (§2 плана redesign).
    Файл грузится только layout'ом новой ветки (preview/+layout), поэтому
    глобально не конфликтует со старым app.css. */

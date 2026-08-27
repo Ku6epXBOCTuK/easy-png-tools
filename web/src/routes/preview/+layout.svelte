@@ -2,12 +2,12 @@
 	import "$lib/styles/design2.css";
 	import type { Snippet } from "svelte";
 	import AppShell from "$lib/components/kit/AppShell.svelte";
-	import IconButton from "$lib/components/kit/IconButton.svelte";
-	import { Sun, Moon } from "@lucide/svelte";
+	import TopBar from "$lib/components/kit/TopBar.svelte";
 
 	interface Props {
 		children: Snippet;
 	}
+
 	let { children }: Props = $props();
 
 	let theme = $state<"light" | "dark">("light");
@@ -17,24 +17,6 @@
 </script>
 
 <div class="preview-root" data-theme={theme}>
+	<TopBar {theme} ontoggle={toggle} />
 	<AppShell>{@render children()}</AppShell>
-	<div class="theme-switch">
-		<IconButton
-			icon={theme === "light" ? Moon : Sun}
-			label="Toggle theme"
-			onclick={toggle}
-		/>
-	</div>
 </div>
-
-<style>
-	.preview-root {
-		display: block;
-	}
-	.theme-switch {
-		position: fixed;
-		top: 1rem;
-		right: 1rem;
-		z-index: 20;
-	}
-</style>

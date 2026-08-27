@@ -1,12 +1,5 @@
 <script lang="ts">
-	import {
-		CircleHelp,
-		Moon,
-		Upload,
-		Settings2,
-		RotateCcw,
-		ChevronDown,
-	} from "@lucide/svelte";
+	import { Upload, Settings2, RotateCcw, ChevronDown } from "@lucide/svelte";
 	import StepCard from "$lib/components/kit/StepCard.svelte";
 	import Segmented from "$lib/components/kit/Segmented.svelte";
 	import SliderField from "$lib/components/kit/SliderField.svelte";
@@ -28,7 +21,6 @@
 	let outlineColor = $state("#16202B");
 	let radius = $state(18);
 	let preserveAspect = $state(true);
-	let lang = $state("RU");
 
 	const previewTiles = [
 		{ label: "SOURCE", caption: "original.png · 1200 × 800", bg: "#8d9aa5" },
@@ -63,28 +55,6 @@
 	<title>easy-png-tools / Demo</title>
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
-
-<div class="topbar">
-	<div class="brand">
-		<span class="brand-mark">EP</span>
-		<span>easy-png-tools</span>
-		<span class="version">/ DEMO</span>
-	</div>
-	<div class="top-actions">
-		<span class="status"><StatusDot /> AUTO PIPELINE</span>
-		<IconButton icon={CircleHelp} label="Help" onclick={() => {}} />
-		<IconButton icon={Moon} label="Toggle theme" onclick={() => {}} />
-		<div class="language">
-			<Segmented
-				bind:value={lang}
-				options={[
-					{ value: "RU", label: "RU" },
-					{ value: "EN", label: "EN" },
-				]}
-			/>
-		</div>
-	</div>
-</div>
 
 <div class="page-grid">
 	<section class="workspace">
@@ -275,51 +245,6 @@
 </div>
 
 <style>
-	.topbar {
-		border-bottom: 1px solid var(--line);
-		background: var(--panel);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		height: 64px;
-		padding: 0 clamp(20px, 4vw, 64px);
-	}
-	.brand {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		font: 600 14px var(--font-mono);
-	}
-	.brand-mark {
-		background: var(--blue);
-		color: #fff;
-		width: 30px;
-		height: 30px;
-		font-size: 11px;
-		display: grid;
-		place-items: center;
-	}
-	.version {
-		color: var(--blue);
-		font: 10px var(--font-mono);
-		letter-spacing: 0.12em;
-	}
-	.top-actions {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-	}
-	.status {
-		display: flex;
-		align-items: center;
-		gap: 7px;
-		color: var(--muted);
-		font: 10px var(--font-mono);
-		letter-spacing: 0.08em;
-	}
-	.language :global(.segmented) {
-		height: 32px;
-	}
 	.page-grid {
 		display: grid;
 		grid-template-columns: minmax(0, 1.05fr) minmax(520px, 0.95fr);
