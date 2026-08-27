@@ -309,9 +309,10 @@ src/routes/preview/tools/[id]/+page.svelte
 - [x] **[C6]** Примитивы batch 2: `Panel`, `PanelHeading`, `SettingGroup`,
       `SettingsFooter`, `MetaRow`/`MetaList`, `Segmented`, `Badge`, `StepCard`,
       `ToolCard`, `ImageCard`/`PreviewTile`.
-- [ ] **[C7]** Контролы: `Icon`, `IconButton`, `Button`, `Field`, `SliderField`,
+- [x] **[C7]** Контролы: `Icon`, `IconButton`, `Button`, `Field`, `SliderField`,
       `ColorField`, `TextField`, `SelectField`, `CheckboxField`, `Toggle`,
-      `SegmentedControl`, `EmptyState`, `CodeBlock`, `DownloadButton`.
+      `SegmentedControl` (= `Segmented` из C6), `EmptyState`, `CodeBlock`,
+      `DownloadButton`.
 
 ### Шаг 2. Витрина kit (проверка компонентов)
 
