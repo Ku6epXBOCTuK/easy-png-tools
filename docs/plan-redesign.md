@@ -326,7 +326,9 @@ src/routes/preview/tools/[id]/+page.svelte
       Поиск фильтрует `TOOLS` из `$lib/registry`; карточки результата пока
       ведут на `#` (реальные `/preview/tools/[id]` подключим на C12, иначе
       prerender падает на 404).
-- [ ] **[C10]** `/preview/list-tools` — каталог карточек.
+- [x] **[C10]** `/preview/list-tools` — каталог карточек (группировка по
+      `CATEGORIES`, `ToolCard`). Ссылки пока `#` (реальные `/preview/tools/[id]`
+      подключим на C12).
 - [ ] **[C11]** `/preview/demo` — зеркало воркспейса (приёмочный стенд).
 - [ ] **[C12]** `/preview/tools/[id]` — раскладка gradient (settings-panel + preview-panel).
 - [ ] **[C13]** `/preview/tools/[id]` — раскладка background-remover (comparison-grid).
