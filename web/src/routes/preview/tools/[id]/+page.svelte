@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
 	import { untrack } from "svelte";
-	import { getTool, defaultParams } from "$lib/registry";
+	import {
+		getTool,
+		defaultParams,
+		isChainable,
+		TOOLS,
+		type ParamDef,
+	} from "$lib/registry";
 	import { encode, downloadBlob, toDataUrl, decodeBytes } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import Panel from "$lib/components/kit/Panel.svelte";
@@ -21,9 +27,16 @@
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
 	import Button from "$lib/components/kit/Button.svelte";
 	import Dropzone from "$lib/components/kit/Dropzone.svelte";
+	import StepCard from "$lib/components/kit/StepCard.svelte";
+	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";
 
 	type ParamValue = string | number | boolean;
+
+	interface ChainStep {
+		toolId: string;
+		params: Record<string, ParamValue>;
+	}
 
 	interface Props {
 		data: { id: string };
@@ -31,83 +44,116 @@
 	let { data }: Props = $props();
 
 	const initialTool = untrack(() => getTool(data.id));
-	let params = $state<Record<string, ParamValue>>(
+	let steps = $state<ChainStep[]>(
 		initialTool
-			? (defaultParams(initialTool) as Record<string, ParamValue>)
-			: {},
+			? [
+					{
+						toolId: initialTool.id,
+						params: defaultParams(initialTool) as Record<string, ParamValue>,
+					},
+				]
+			: [],
 	);
-	let previewUrl = $state("");
-	let previewError = $state("");
 
 	let sourceImg = $state<PixelImage | null>(null);
 	let sourceUrl = $state("");
 	let sourceName = $state("");
+
+	let stepOutputs = $state<{ toolId: string; title: string; url: string }[]>(
+		[],
+	);
 	let resultImg = $state<PixelImage | null>(null);
 	let resultUrl = $state("");
-	let showMask = $state(false);
+	let chainError = $state("");
+	let processing = $state(false);
 
-	const tool = $derived(getTool(data.id));
+	const chainOptions = TOOLS.filter(isChainable).map((t) => ({
+		value: t.id,
+		label: t.title,
+	}));
+	let addId = $state(chainOptions[0]?.value ?? "");
+
+	const firstTool = $derived(steps[0] ? getTool(steps[0].toolId) : undefined);
+	const needsSource = $derived(
+		firstTool ? firstTool.sourceMode !== "none" : false,
+	);
 
 	$effect(() => {
-		const next = getTool(data.id);
-		if (next) params = defaultParams(next) as Record<string, ParamValue>;
+		const t = getTool(data.id);
+		if (t) {
+			steps = [
+				{
+					toolId: t.id,
+					params: defaultParams(t) as Record<string, ParamValue>,
+				},
+			];
+			sourceImg = null;
+			sourceUrl = "";
+			sourceName = "";
+		}
 	});
 
 	$effect(() => {
-		if (!tool || !tool.generate) {
-			previewUrl = "";
-			return;
-		}
 		if (!browser) return;
-		const snapshot = { ...params };
-		try {
-			const result = tool.generate(snapshot);
-			if (result instanceof Promise) {
-				result
-					.then((img) => {
-						previewUrl = toDataUrl(img);
-						previewError = "";
-					})
-					.catch((e) => {
-						previewError = String(e);
-					});
-			} else {
-				previewUrl = toDataUrl(result);
-				previewError = "";
-			}
-		} catch (e) {
-			previewError = String(e);
-		}
-	});
-
-	$effect(() => {
+		const chain = steps.map((s) => ({
+			tool: getTool(s.toolId),
+			params: { ...s.params },
+		}));
 		const src = sourceImg;
-		if (!tool || !tool.run || !src) {
+		if (!chain.length || chain.some((c) => !c.tool)) {
 			resultImg = null;
 			resultUrl = "";
+			stepOutputs = [];
 			return;
 		}
-		if (!browser) return;
-		const snapshot = { ...params };
-		const mask = showMask && !!tool.preview;
-		try {
-			const base = mask
-				? tool.preview!(src, snapshot)
-				: tool.run(src, snapshot);
-			const apply = (img: PixelImage) => {
-				resultImg = img;
-				resultUrl = toDataUrl(img);
-				previewError = "";
-			};
-			if (base instanceof Promise) {
-				base.then(apply).catch((e) => (previewError = String(e)));
-			} else {
-				apply(base);
-			}
-		} catch (e) {
-			previewError = String(e);
+		const first = chain[0].tool!;
+		if (first.sourceMode !== "none" && !src) {
+			resultImg = null;
+			resultUrl = "";
+			stepOutputs = [];
+			return;
 		}
+		void runPipeline(chain, src);
 	});
+
+	async function runPipeline(
+		chain: {
+			tool: ReturnType<typeof getTool>;
+			params: Record<string, ParamValue>;
+		}[],
+		src: PixelImage | null,
+	) {
+		processing = true;
+		try {
+			let current: PixelImage | null = src;
+			const outs: { toolId: string; title: string; url: string }[] = [];
+			for (const c of chain) {
+				const tool = c.tool!;
+				const resolve = (x: PixelImage | Promise<PixelImage>) =>
+					x instanceof Promise ? x : Promise.resolve(x);
+				let out: PixelImage;
+				if (!current && tool.sourceMode === "none" && tool.generate) {
+					out = await resolve(tool.generate(c.params));
+				} else if (current && tool.run) {
+					out = await resolve(tool.run(current, c.params));
+				} else if (!current && src && tool.run) {
+					out = await resolve(tool.run(src, c.params));
+				} else {
+					continue;
+				}
+				current = out;
+				outs.push({ toolId: tool.id, title: tool.title, url: toDataUrl(out) });
+			}
+			stepOutputs = outs;
+			resultImg = current;
+			resultUrl = current ? toDataUrl(current) : "";
+			chainError = "";
+		} catch (e) {
+			chainError = String(e);
+		} finally {
+			processing = false;
+		}
+	}
 
 	async function onFile(file: File) {
 		if (!browser) return;
@@ -117,9 +163,9 @@
 			sourceImg = img;
 			sourceName = file.name;
 			sourceUrl = toDataUrl(img);
-			previewError = "";
+			chainError = "";
 		} catch (e) {
-			previewError = String(e);
+			chainError = String(e);
 		}
 	}
 
@@ -127,126 +173,106 @@
 		sourceImg = null;
 		sourceUrl = "";
 		sourceName = "";
-		resultImg = null;
-		resultUrl = "";
 	}
 
-	async function download() {
-		if (!tool?.generate) return;
-		const result = tool.generate({ ...params });
-		const img = result instanceof Promise ? await result : result;
-		const blob = await encode(img, "image/png");
-		downloadBlob(blob, `${tool.id}.png`);
+	function setStepParam(index: number, id: string, value: ParamValue) {
+		steps[index].params[id] = value;
+	}
+
+	function addStep() {
+		const tool = getTool(addId);
+		if (!tool) return;
+		steps = [
+			...steps,
+			{
+				toolId: tool.id,
+				params: defaultParams(tool) as Record<string, ParamValue>,
+			},
+		];
+	}
+
+	function removeStep(index: number) {
+		steps = steps.filter((_, i) => i !== index);
 	}
 
 	async function downloadResult() {
-		if (!resultImg || !tool) return;
+		if (!resultImg || !firstTool) return;
 		const blob = await encode(resultImg, "image/png");
-		const base = sourceName.replace(/\.[^.]+$/, "");
-		downloadBlob(blob, `${base}-${tool.id}.png`);
+		const base = sourceName ? sourceName.replace(/\.[^.]+$/, "") : firstTool.id;
+		downloadBlob(blob, `${base}-pipeline.png`);
 	}
 
-	function setParam(id: string, value: ParamValue) {
-		params[id] = value;
-	}
-
-	const isFileTool = $derived(
-		tool ? tool.sourceMode === "file" || tool.sourceMode === undefined : false,
-	);
-
-	const meta = $derived(
-		tool
+	const resultMeta = $derived(
+		resultImg
 			? [
-					{ caption: "TOOL", value: tool.id },
-					{ caption: "CATEGORY", value: tool.category.toUpperCase() },
-					...(tool.sourceMode === "none" &&
-					"width" in params &&
-					"height" in params
-						? [
-								{
-									caption: "OUTPUT",
-									value: `${params.width} × ${params.height} px`,
-								},
-							]
-						: []),
+					{ caption: "STEPS", value: String(steps.length) },
+					{
+						caption: "DIMENSIONS",
+						value: `${resultImg.width} × ${resultImg.height} px`,
+					},
+					{ caption: "FORMAT", value: "PNG-24" },
 				]
 			: [],
 	);
 </script>
 
 <svelte:head>
-	<title>easy-png-tools / {tool?.title ?? "Tool"}</title>
+	<title>easy-png-tools / {firstTool?.title ?? "Tool"}</title>
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-{#snippet settingsPanel()}
-	<Panel>
-		<PanelHeading title={tool!.title} eyebrow={tool!.category}>
-			{#snippet actions()}
-				<Badge tone="accent">AUTO</Badge>
-			{/snippet}
-		</PanelHeading>
-		<p class="tool-desc">{tool!.description}</p>
-		<div class="settings-body">
-			{#each tool!.params as p (p.id)}
-				<div class="setting-row">
-					{#if p.type === "color"}
-						<ColorField
-							label={p.label}
-							value={params[p.id] as string}
-							oninput={(v) => setParam(p.id, v)}
-						/>
-					{:else if p.type === "slider"}
-						<SliderField
-							label={p.label}
-							value={params[p.id] as number}
-							min={p.min}
-							max={p.max}
-							step={p.step}
-							oninput={(v) => setParam(p.id, v)}
-						/>
-					{:else if p.type === "select"}
-						<SelectField
-							label={p.label}
-							value={params[p.id] as string}
-							options={p.options}
-							onchange={(v) => setParam(p.id, v)}
-						/>
-					{:else if p.type === "checkbox"}
-						<label class="toggle-row"
-							><span>{p.label}</span>
-							<Toggle
-								checked={params[p.id] as boolean}
-								onchange={(v) => setParam(p.id, v)}
-							/></label
-						>
-					{:else if p.type === "text"}
-						<TextField
-							label={p.label}
-							value={params[p.id] as string}
-							placeholder={p.placeholder}
-							oninput={(v) => setParam(p.id, v)}
-						/>
-					{:else if p.type === "number"}
-						<NumberField
-							label={p.label}
-							value={params[p.id] as number}
-							min={p.min}
-							max={p.max}
-							step={p.step}
-							oninput={(v) => setParam(p.id, v)}
-						/>
-					{/if}
-				</div>
-			{/each}
-		</div>
-		<SettingsFooter>
-			<StatusLine label="changes applied automatically" />
-		</SettingsFooter>
-	</Panel>
+{#snippet control(
+	p: ParamDef,
+	value: ParamValue,
+	onInput: (v: ParamValue) => void,
+)}
+	{#if p.type === "color"}
+		<ColorField
+			label={p.label}
+			value={value as string}
+			oninput={(v) => onInput(v)}
+		/>
+	{:else if p.type === "slider"}
+		<SliderField
+			label={p.label}
+			value={value as number}
+			min={p.min}
+			max={p.max}
+			step={p.step}
+			oninput={(v) => onInput(v)}
+		/>
+	{:else if p.type === "select"}
+		<SelectField
+			label={p.label}
+			value={value as string}
+			options={p.options}
+			onchange={(v) => onInput(v)}
+		/>
+	{:else if p.type === "checkbox"}
+		<label class="toggle-row"
+			><span>{p.label}</span>
+			<Toggle checked={value as boolean} onchange={(v) => onInput(v)} /></label
+		>
+	{:else if p.type === "text"}
+		<TextField
+			label={p.label}
+			value={value as string}
+			placeholder={p.placeholder}
+			oninput={(v) => onInput(v)}
+		/>
+	{:else if p.type === "number"}
+		<NumberField
+			label={p.label}
+			value={value as number}
+			min={p.min}
+			max={p.max}
+			step={p.step}
+			oninput={(v) => onInput(v)}
+		/>
+	{/if}
 {/snippet}
 
-{#if !tool}
+{#if !firstTool}
 	<div class="tool-grid">
 		<EmptyState
 			title="Tool not found"
@@ -254,45 +280,59 @@
 			icon={ToolIcon}
 		/>
 	</div>
-{:else if tool.sourceMode === "none"}
+{:else}
 	<div class="tool-grid">
-		<section class="settings-panel">{@render settingsPanel()}</section>
-		<section class="preview-panel">
+		<section class="pipeline-panel">
 			<Panel>
-				<PanelHeading title="Preview" eyebrow="OUTPUT">
+				<PanelHeading title="Pipeline" eyebrow="STEPS">
 					{#snippet actions()}
-						<DownloadButton label="Download PNG" onclick={download} />
+						<Badge tone="accent">AUTO</Badge>
 					{/snippet}
 				</PanelHeading>
-				<div class="preview-body">
-					{#if previewError}
-						<EmptyState title="Preview failed" description={previewError} />
-					{:else if previewUrl}
-						<CheckerCanvas size="large">
-							<img class="result-img" src={previewUrl} alt="result" />
-						</CheckerCanvas>
-					{:else if tool.generate}
-						<div class="preview-loading">
-							<StatusLine label="generating preview" />
-						</div>
-					{:else}
+				<div class="pipeline-body">
+					{#if steps.length === 0}
 						<EmptyState
-							title="No live preview"
-							description="This tool runs on an uploaded image."
-							icon={ToolIcon}
+							title="Pipeline empty"
+							description="Add a tool step below."
 						/>
 					{/if}
-					<MetaList items={meta} />
+					{#each steps as step, i (step.toolId + i)}
+						{@const st = getTool(step.toolId)}
+						<StepCard
+							index={i + 1}
+							title={st?.title ?? step.toolId}
+							type={st?.category}
+							onremove={() => removeStep(i)}
+						>
+							{#if st}
+								<div class="step-controls">
+									{#each st.params as p (p.id)}
+										{@render control(p, step.params[p.id] as ParamValue, (v) =>
+											setStepParam(i, p.id, v),
+										)}
+									{/each}
+								</div>
+							{/if}
+						</StepCard>
+					{/each}
 				</div>
+				<SettingsFooter>
+					<div class="add-step">
+						<SelectField
+							label="Add step"
+							value={addId}
+							options={chainOptions}
+							onchange={(v) => (addId = v)}
+						/>
+						<Button variant="ghost" onclick={addStep}>Add step</Button>
+					</div>
+				</SettingsFooter>
 			</Panel>
 		</section>
-	</div>
-{:else if isFileTool}
-	<div class="tool-grid remover-grid">
-		<section class="settings-panel">{@render settingsPanel()}</section>
+
 		<section class="preview-panel">
 			<Panel>
-				<PanelHeading title="Source / Result" eyebrow="OUTPUT">
+				<PanelHeading title="Pipeline output" eyebrow="RESULT">
 					{#snippet actions()}
 						{#if resultUrl}
 							<DownloadButton
@@ -303,69 +343,34 @@
 					{/snippet}
 				</PanelHeading>
 				<div class="preview-body">
-					{#if previewError}
-						<EmptyState title="Processing failed" description={previewError} />
+					{#if chainError}
+						<EmptyState title="Pipeline failed" description={chainError} />
 					{/if}
-					{#if !sourceImg}
+					{#if needsSource && !sourceImg}
 						<Dropzone onfile={onFile} />
-					{:else}
-						<div class="comparison-grid">
-							<div class="image-card">
-								<div class="image-label">
-									<span>SOURCE</span><b>{sourceName}</b>
-								</div>
-								<div class="remover-canvas">
-									<CheckerCanvas size="large">
-										<img class="cmp-img" src={sourceUrl} alt="source" />
-									</CheckerCanvas>
-									<span class="canvas-size"
-										>{sourceImg.width} × {sourceImg.height}</span
-									>
-								</div>
-							</div>
-							<div class="image-card">
-								<div class="image-label">
-									<span>RESULT</span><b>{sourceName}</b>
-								</div>
-								<div class="remover-canvas">
-									{#if resultUrl}
-										<CheckerCanvas size="large">
-											<img class="cmp-img" src={resultUrl} alt="result" />
-										</CheckerCanvas>
-									{/if}
-									<span class="canvas-size"
-										>{resultImg
-											? `${resultImg.width} × ${resultImg.height}`
-											: "—"}</span
-									>
-								</div>
-							</div>
-						</div>
-						<div class="result-meta">
-							<span>FORMAT <b>PNG-24</b></span>
-							<span>ALPHA <b>ENABLED</b></span>
-							<span>STATUS <b class="ok">PROCESSED</b></span>
-						</div>
-						<Button variant="ghost" onclick={clearSource}
-							>Change image</Button
-						>
+					{:else if needsSource && sourceImg}
+						<Button variant="ghost" onclick={clearSource}>Change image</Button>
 					{/if}
-				</div>
-			</Panel>
-		</section>
-	</div>
-{:else}
-	<div class="tool-grid">
-		<section class="settings-panel">{@render settingsPanel()}</section>
-		<section class="preview-panel">
-			<Panel>
-				<PanelHeading title="Preview" eyebrow="OUTPUT" />
-				<div class="preview-body">
-					<EmptyState
-						title="Text source"
-						description="Paste text on the left — arrives in a later step."
-						icon={ToolIcon}
-					/>
+					<div class="preview-stack">
+						{#if needsSource && sourceImg}
+							<PreviewTile label="SOURCE">
+								<CheckerCanvas size="sm">
+									<img class="tile-img" src={sourceUrl} alt="source" />
+								</CheckerCanvas>
+							</PreviewTile>
+						{/if}
+						{#each stepOutputs as out, i (out.toolId + i)}
+							<PreviewTile label={`STEP ${String(i + 1).padStart(2, "0")}`}>
+								<CheckerCanvas size="sm">
+									<img class="tile-img" src={out.url} alt={out.title} />
+								</CheckerCanvas>
+							</PreviewTile>
+						{/each}
+					</div>
+					{#if processing}
+						<StatusLine label="processing pipeline" />
+					{/if}
+					<MetaList items={resultMeta} />
 				</div>
 			</Panel>
 		</section>
@@ -375,31 +380,23 @@
 <style>
 	.tool-grid {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
 		align-items: start;
 		gap: 40px;
 		max-width: 1680px;
 		margin: 0 auto;
 		padding: 48px clamp(24px, 4vw, 72px) 72px;
 	}
-	.remover-grid {
-		grid-template-columns: minmax(360px, 0.62fr) minmax(0, 1.38fr);
-	}
-	.tool-desc {
-		margin: 0;
-		padding: 0.85rem 1rem;
-		border-bottom: 1px solid var(--line);
-		color: var(--muted);
-		font-size: 0.85rem;
-		line-height: 1.55;
-	}
-	.settings-body {
+	.pipeline-body {
 		display: flex;
 		flex-direction: column;
+		gap: 10px;
+		padding: 0.75rem;
 	}
-	.setting-row {
-		padding: 0.7rem 1rem;
-		border-bottom: 1px solid var(--line);
+	.step-controls {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
 	}
 	.toggle-row {
 		display: flex;
@@ -409,6 +406,16 @@
 		color: var(--foreground);
 		font-size: 0.85rem;
 		cursor: pointer;
+	}
+	.add-step {
+		display: flex;
+		align-items: flex-end;
+		gap: 0.75rem;
+		width: 100%;
+	}
+	.add-step :global(.select-field),
+	.add-step :global(select) {
+		min-width: 0;
 	}
 	.preview-panel {
 		position: sticky;
@@ -420,91 +427,25 @@
 		gap: 1rem;
 		padding: 1rem;
 	}
-	.preview-loading {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 200px;
-		color: var(--muted);
-	}
-	.result-img {
-		max-width: 100%;
-		max-height: 360px;
-		display: block;
-		border-radius: var(--radius);
-	}
-	.comparison-grid {
+	.preview-stack {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 18px;
+		gap: 12px;
 	}
-	.image-card {
-		min-width: 0;
-	}
-	.image-label {
-		display: flex;
-		justify-content: space-between;
-		gap: 8px;
-		margin-bottom: 10px;
-		font: 10px var(--font-mono);
-		color: var(--muted);
-		letter-spacing: 0.08em;
-	}
-	.image-label span {
-		color: var(--blue);
-	}
-	.image-label b {
-		font-weight: 400;
-	}
-	.remover-canvas {
-		position: relative;
-		overflow: hidden;
-	}
-	.cmp-img {
+	.tile-img {
 		max-width: 100%;
-		max-height: 420px;
+		max-height: 220px;
 		display: block;
-	}
-	.canvas-size {
-		position: absolute;
-		bottom: 9px;
-		right: 10px;
-		font: 9px var(--font-mono);
-		color: var(--muted);
-		background: color-mix(in srgb, var(--panel) 70%, transparent);
-		padding: 2px 5px;
 		border-radius: var(--radius);
 	}
-	.result-meta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 18px;
-		padding-top: 14px;
-		border-top: 1px solid var(--line);
-		font: 10px var(--font-mono);
-		color: var(--muted);
-		letter-spacing: 0.08em;
-	}
-	.result-meta b {
-		margin-left: 6px;
-		color: var(--foreground);
-		font-weight: 600;
-	}
-	.result-meta b.ok {
-		color: var(--success);
-	}
 	@media (max-width: 900px) {
-		.tool-grid,
-		.remover-grid {
+		.tool-grid {
 			grid-template-columns: 1fr;
 			gap: 24px;
 			padding: 32px 16px 48px;
 		}
 		.preview-panel {
 			position: static;
-		}
-		.comparison-grid {
-			grid-template-columns: 1fr;
 		}
 	}
 </style>

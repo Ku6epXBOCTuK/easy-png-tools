@@ -332,7 +332,7 @@ src/routes/preview/tools/[id]/+page.svelte
 - [x] **[C11]** `/preview/demo` — зеркало воркспейса (4 шага + панель превью), статичный приёмочный стенд.
 - [x] **[C12]** `/preview/tools/[id]` — data-driven settings-panel + preview-panel (gradient live, остальные — плейсхолдер); `NumberField`, `entries()` для prerender, ToolCard-ссылки подключены.
 - [x] **[C13]** `/preview/tools/[id]` — comparison-grid для file-source инструментов (`Dropzone` + before/after `CheckerCanvas`, `result-meta`); охватывает background-remover и прочие.
-- [ ] **[C14]** step-cards для chain в tool-page.
+- [x] **[C14]** `/preview/tools/[id]` — исполняемая цепочка: `StepCard`-шаги (параметры inline) + «Add step» (chainable), живой прогон пайплайна на исходнике, превью каждого шага + итог + Download.
 
 ### Шаг 4. Переключатель и проверка
 
