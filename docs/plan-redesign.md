@@ -330,7 +330,7 @@ src/routes/preview/tools/[id]/+page.svelte
       `CATEGORIES`, `ToolCard`). Ссылки пока `#` (реальные `/preview/tools/[id]`
       подключим на C12).
 - [x] **[C11]** `/preview/demo` — зеркало воркспейса (4 шага + панель превью), статичный приёмочный стенд.
-- [ ] **[C12]** `/preview/tools/[id]` — раскладка gradient (settings-panel + preview-panel).
+- [x] **[C12]** `/preview/tools/[id]` — data-driven settings-panel + preview-panel (gradient live, остальные — плейсхолдер); `NumberField`, `entries()` для prerender, ToolCard-ссылки подключены.
 - [ ] **[C13]** `/preview/tools/[id]` — раскладка background-remover (comparison-grid).
 - [ ] **[C14]** step-cards для chain в tool-page.
 

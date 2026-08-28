@@ -39,7 +39,7 @@
 				{#each group.tools as tool (tool.id)}
 					<ToolCard
 						title={tool.title}
-						href="#"
+						href="/preview/tools/{tool.id}"
 						description={tool.description}
 					/>
 				{/each}

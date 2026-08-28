@@ -10,6 +10,20 @@ import tseslint from "typescript-eslint";
 // включается на весь код (см. план-redesign §10, шаг 6).
 const newCode = ["**/src/lib/components/kit/**", "**/src/routes/preview/**"];
 
+// Полные recommended-наборы — только на новый код (см. ниже, блок перед prettier).
+const jsRecommended = Array.isArray(js.configs.recommended)
+	? js.configs.recommended
+	: [js.configs.recommended];
+const svelteRecommended = Array.isArray(svelte.configs["flat/recommended"])
+	? svelte.configs["flat/recommended"]
+	: [svelte.configs["flat/recommended"]];
+// Svelte-рекомендации применяем только к .svelte-файлам нового кода, иначе
+// svelte-eslint-parser "съедает" обычные .ts в тех же папках (напр. +page.ts).
+const svelteFiles = [
+	"**/src/lib/components/kit/**/*.svelte",
+	"**/src/routes/preview/**/*.svelte",
+];
+
 export default tseslint.config(
 	{
 		ignores: [
@@ -68,15 +82,10 @@ export default tseslint.config(
 	},
 	// Полные recommended-наборы — только на новый код.
 	...[
-		...(Array.isArray(js.configs.recommended)
-			? js.configs.recommended
-			: [js.configs.recommended]),
-		...tseslint.configs.recommended,
-		...svelte.configs["flat/recommended"],
-	].map((cfg) => ({
-		...cfg,
-		files: newCode,
-	})),
+		...jsRecommended.map((cfg) => ({ ...cfg, files: newCode })),
+		...tseslint.configs.recommended.map((cfg) => ({ ...cfg, files: newCode })),
+		...svelteRecommended.map((cfg) => ({ ...cfg, files: svelteFiles })),
+	],
 
 	// В Svelte 5 пропсы деструктурируются через `let` (конвенция документации и
 	// наш AGENTS.md), поэтому prefer-const на них — ложноположительный.

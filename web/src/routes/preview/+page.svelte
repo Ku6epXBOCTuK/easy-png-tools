@@ -42,7 +42,11 @@
 		</div>
 		<div class="ws-results">
 			{#each results as tool (tool.id)}
-				<ToolCard title={tool.title} href="#" description={tool.description} />
+				<ToolCard
+					title={tool.title}
+					href="/preview/tools/{tool.id}"
+					description={tool.description}
+				/>
 			{/each}
 		</div>
 		<SettingsFooter>
