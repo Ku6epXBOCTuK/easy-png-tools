@@ -2232,5 +2232,19 @@ h1 {
     <template data-dgst="BAILOUT_TO_CLIENT_SIDE_RENDERING">
     </template>
     <!--/$-->
-  </body>
+  
+  <script>
+    (function () {
+      var btn = document.querySelector('button[aria-label="Toggle theme"]');
+      var shell = document.querySelector('.app-shell');
+      if (!btn || window.__themeToggleInjected) return;
+      window.__themeToggleInjected = true;
+      btn.addEventListener('click', function () {
+        document.documentElement.classList.toggle('dark-mode');
+        if (shell) shell.classList.toggle('dark-mode');
+      });
+    })();
+  </script>
+
+</body>
 </html>

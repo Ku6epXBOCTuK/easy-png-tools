@@ -7,6 +7,31 @@ import { join, dirname, basename } from 'node:path';
 const root = process.argv[2];
 const dest = process.argv[3];
 
+// --- inject a minimal theme toggle (extraction strips all <script> tags, so the
+// ref pages would otherwise have no working dark-mode switch) ---
+const THEME_TOGGLE = `
+  <script>
+    (function () {
+      var btn = document.querySelector('button[aria-label="Toggle theme"]');
+      var shell = document.querySelector('.app-shell');
+      if (!btn || window.__themeToggleInjected) return;
+      window.__themeToggleInjected = true;
+      btn.addEventListener('click', function () {
+        document.documentElement.classList.toggle('dark-mode');
+        if (shell) shell.classList.toggle('dark-mode');
+      });
+    })();
+  </script>
+`;
+
+function injectThemeToggle(html) {
+	if (html.includes('__themeToggleInjected')) return html;
+	const tag = '</body>';
+	if (html.includes(tag)) return html.replace(tag, THEME_TOGGLE + '\n' + tag);
+	if (html.includes('</html>')) return html.replace('</html>', THEME_TOGGLE + '\n</html>');
+	return html + '\n' + THEME_TOGGLE;
+}
+
 // --- CSS: find the compiled chunk and pretty-print it ---
 const cssChunks = join(root, '..', '..', 'static', 'chunks');
 const cssFile = readdirSync(cssChunks)
@@ -110,6 +135,7 @@ for (const [src, out] of pages) {
   );
 
   html = fmtHtml(html);
+  html = injectThemeToggle(html);
 
   const file = join(dest, out);
   mkdirSync(dirname(file), { recursive: true });
