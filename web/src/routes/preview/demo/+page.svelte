@@ -205,7 +205,6 @@
 							</div>
 						</CheckerCanvas>
 						<div class="tile-label-wrap">
-							<span class="tile-label">{tile.label}</span>
 							<span class="tile-caption">{tile.caption}</span>
 						</div>
 					</PreviewTile>
@@ -303,7 +302,7 @@
 		padding: 8px;
 		border-top: 1px solid var(--line);
 		font: 9px var(--font-mono);
-		color: var(--blue);
+		color: var(--muted);
 	}
 	.tile-caption {
 		color: var(--muted);
