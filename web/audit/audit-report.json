@@ -1,1436 +1,3418 @@
 {
-  "generatedAt": "2026-08-28T14:54:53.564Z",
-  "ours": "http://127.0.0.1:5179/preview/demo",
-  "ref": "C:\\+XBOCTuK\\+life_projects\\easy-png-tools\\refs-html\\demo.html",
-  "tokenDiffs": {
-    "light": [
-      {
-        "key": "--danger",
-        "ours": "#e5484d",
-        "ref": "—"
+  "generatedAt": "2026-08-28T15:27:27.891Z",
+  "reports": [
+    {
+      "route": "/preview/demo",
+      "ref": "demo.html",
+      "tokenDiffs": {
+        "light": [
+          {
+            "key": "--danger",
+            "ours": "#e5484d",
+            "ref": "—"
+          },
+          {
+            "key": "--success",
+            "ours": "#25a96a",
+            "ref": "—"
+          },
+          {
+            "key": "--text-sm--line-height",
+            "ours": "—",
+            "ref": "calc(1.25 / .875)"
+          },
+          {
+            "key": "--text-xs--line-height",
+            "ours": "—",
+            "ref": "calc(1 / .75)"
+          },
+          {
+            "key": "--font-weight-medium",
+            "ours": "—",
+            "ref": "500"
+          },
+          {
+            "key": "--spacing",
+            "ours": "—",
+            "ref": ".25rem"
+          },
+          {
+            "key": "--text-xs",
+            "ours": "—",
+            "ref": ".75rem"
+          },
+          {
+            "key": "--radius-md",
+            "ours": "—",
+            "ref": ".375rem"
+          },
+          {
+            "key": "--radius-lg",
+            "ours": "—",
+            "ref": ".5rem"
+          },
+          {
+            "key": "--text-sm",
+            "ours": "—",
+            "ref": ".875rem"
+          }
+        ],
+        "dark": [
+          {
+            "key": "--panel",
+            "ours": "#182129",
+            "ref": "#f8fafb"
+          },
+          {
+            "key": "--blue",
+            "ours": "#54a2ff",
+            "ref": "#1769d2"
+          },
+          {
+            "key": "--muted",
+            "ours": "#91a0ac",
+            "ref": "#6d7883"
+          },
+          {
+            "key": "--background",
+            "ours": "#11171d",
+            "ref": "#eef1f4"
+          },
+          {
+            "key": "--danger",
+            "ours": "#ff7479",
+            "ref": "—"
+          },
+          {
+            "key": "--foreground",
+            "ours": "#e8eef2",
+            "ref": "#17212b"
+          },
+          {
+            "key": "--success",
+            "ours": "#25a96a",
+            "ref": "—"
+          },
+          {
+            "key": "--line",
+            "ours": "#33414c",
+            "ref": "#cbd3da"
+          },
+          {
+            "key": "--text-sm--line-height",
+            "ours": "—",
+            "ref": "calc(1.25 / .875)"
+          },
+          {
+            "key": "--text-xs--line-height",
+            "ours": "—",
+            "ref": "calc(1 / .75)"
+          },
+          {
+            "key": "--font-weight-medium",
+            "ours": "—",
+            "ref": "500"
+          },
+          {
+            "key": "--spacing",
+            "ours": "—",
+            "ref": ".25rem"
+          },
+          {
+            "key": "--text-xs",
+            "ours": "—",
+            "ref": ".75rem"
+          },
+          {
+            "key": "--radius-md",
+            "ours": "—",
+            "ref": ".375rem"
+          },
+          {
+            "key": "--radius-lg",
+            "ours": "—",
+            "ref": ".5rem"
+          },
+          {
+            "key": "--text-sm",
+            "ours": "—",
+            "ref": ".875rem"
+          }
+        ]
       },
-      {
-        "key": "--success",
-        "ours": "#25a96a",
-        "ref": "—"
+      "elementDiffs": [
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
+          "tag": "span",
+          "text": "easy-png-tools",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 98,
+                "y": 23,
+                "w": 118,
+                "h": 18
+              },
+              "ref": {
+                "x": 98,
+                "y": 23,
+                "w": 108,
+                "h": 17
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(1)",
+          "tag": "a",
+          "text": "Workspace",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 513,
+                "y": 24,
+                "w": 69,
+                "h": 15
+              },
+              "ref": {
+                "x": 792,
+                "y": 26,
+                "w": 49,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(2)",
+          "tag": "a",
+          "text": "Catalog",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 600,
+                "y": 24,
+                "w": 54,
+                "h": 15
+              },
+              "ref": {
+                "x": 864,
+                "y": 26,
+                "w": 39,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(3)",
+          "tag": "a",
+          "text": "Gradient",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 672,
+                "y": 24,
+                "w": 61,
+                "h": 15
+              },
+              "ref": {
+                "x": 924,
+                "y": 26,
+                "w": 44,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(4)",
+          "tag": "a",
+          "text": "Background remover",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 751,
+                "y": 24,
+                "w": 138,
+                "h": 15
+              },
+              "ref": {
+                "x": 990,
+                "y": 26,
+                "w": 99,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(1)",
+          "tag": "button",
+          "text": "RU",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "normal"
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(2)",
+          "tag": "button",
+          "text": "EN",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 1349,
+                "y": 19,
+                "w": 32,
+                "h": 25
+              },
+              "ref": {
+                "x": 1352,
+                "y": 20,
+                "w": 29,
+                "h": 24
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "/",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Mono\", monospace",
+              "ref": "\"IBM Plex Sans\", sans-serif"
+            },
+            "fontSize": {
+              "ours": "10px",
+              "ref": "16px"
+            },
+            "color": {
+              "ours": "rgb(23, 105, 210)",
+              "ref": "rgb(23, 33, 43)"
+            },
+            "margin": {
+              "ours": "0px 7px",
+              "ref": "0px"
+            },
+            "letterSpacing": {
+              "ours": "1.2px",
+              "ref": "normal"
+            },
+            "lineHeight": {
+              "ours": "normal",
+              "ref": "24px"
+            },
+            "display": {
+              "ours": "inline",
+              "ref": "block"
+            },
+            "rect": {
+              "ours": {
+                "x": 165,
+                "y": 124,
+                "w": 7,
+                "h": 13
+              },
+              "ref": {
+                "x": 1348,
+                "y": 20,
+                "w": 4,
+                "h": 24
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>h1:nth-child(2)",
+          "tag": "h1",
+          "text": "Build your image pipeline.",
+          "deltas": {
+            "lineHeight": {
+              "ours": "51.84px",
+              "ref": "57.6px"
+            },
+            "rect": {
+              "ours": {
+                "x": 58,
+                "y": 155,
+                "w": 474,
+                "h": 104
+              },
+              "ref": {
+                "x": 58,
+                "y": 154,
+                "w": 482,
+                "h": 115
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>p:nth-child(3)",
+          "tag": "p",
+          "text": "Chain simple tools together. Every chang",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 58,
+                "y": 275,
+                "w": 474,
+                "h": 51
+              },
+              "ref": {
+                "x": 58,
+                "y": 285,
+                "w": 482,
+                "h": 51
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>span:nth-child(2)",
+          "tag": "span",
+          "text": "source.png",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 597,
+                "y": 300,
+                "w": 66,
+                "h": 14
+              },
+              "ref": {
+                "x": 606,
+                "y": 311,
+                "w": 60,
+                "h": 13
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>b:nth-child(3)",
+          "tag": "b",
+          "text": "1.8 MB",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 671,
+                "y": 300,
+                "w": 40,
+                "h": 14
+              },
+              "ref": {
+                "x": 674,
+                "y": 311,
+                "w": 36,
+                "h": 13
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "PROCESSING PIPELINE",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "1px",
+              "ref": "1.2px"
+            },
+            "lineHeight": {
+              "ours": "12px",
+              "ref": "normal"
+            },
+            "display": {
+              "ours": "block",
+              "ref": "inline"
+            },
+            "rect": {
+              "ours": {
+                "x": 58,
+                "y": 382,
+                "w": 154,
+                "h": 12
+              },
+              "ref": {
+                "x": 58,
+                "y": 400,
+                "w": 127,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>strong:nth-child(2)>em:nth-child(1)",
+          "tag": "em",
+          "text": "• LIVE",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 175,
+                "y": 405,
+                "w": 36,
+                "h": 13
+              },
+              "ref": {
+                "x": 173,
+                "y": 425,
+                "w": 33,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "01",
+          "deltas": {
+            "fontSize": {
+              "ours": "22px",
+              "ref": "11px"
+            },
+            "fontWeight": {
+              "ours": "600",
+              "ref": "400"
+            },
+            "padding": {
+              "ours": "0px",
+              "ref": "17px 0px 0px 15px"
+            },
+            "lineHeight": {
+              "ours": "22px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 74,
+                "y": 464,
+                "w": 26,
+                "h": 22
+              },
+              "ref": {
+                "x": 59,
+                "y": 466,
+                "w": 46,
+                "h": 150
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "BACKGROUND",
+          "deltas": {
+            "display": {
+              "ours": "block",
+              "ref": "inline"
+            },
+            "rect": {
+              "ours": {
+                "x": 117,
+                "y": 455,
+                "w": 171,
+                "h": 13
+              },
+              "ref": {
+                "x": 143,
+                "y": 489,
+                "w": 67,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
+          "tag": "h2",
+          "text": "Gradient background",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 117,
+                "y": 473,
+                "w": 171,
+                "h": 19
+              },
+              "ref": {
+                "x": 143,
+                "y": 510,
+                "w": 157,
+                "h": 18
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)",
+          "tag": "button",
+          "text": "100%",
+          "deltas": {
+            "color": {
+              "ours": "rgb(255, 255, 255)",
+              "ref": "rgb(23, 33, 43)"
+            },
+            "backgroundColor": {
+              "ours": "rgb(23, 105, 210)",
+              "ref": "rgba(0, 0, 0, 0)"
+            },
+            "padding": {
+              "ours": "0px 11.2px",
+              "ref": "0px"
+            },
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "0.8px"
+            },
+            "display": {
+              "ours": "flex",
+              "ref": "block"
+            },
+            "rect": {
+              "ours": {
+                "x": 518,
+                "y": 552,
+                "w": 49,
+                "h": 30
+              },
+              "ref": {
+                "x": 680,
+                "y": 546,
+                "w": 25,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "02",
+          "deltas": {
+            "fontSize": {
+              "ours": "22px",
+              "ref": "11px"
+            },
+            "fontWeight": {
+              "ours": "600",
+              "ref": "400"
+            },
+            "padding": {
+              "ours": "0px",
+              "ref": "17px 0px 0px 15px"
+            },
+            "lineHeight": {
+              "ours": "22px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 74,
+                "y": 624,
+                "w": 26,
+                "h": 22
+              },
+              "ref": {
+                "x": 59,
+                "y": 628,
+                "w": 46,
+                "h": 136
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "TRANSFORM",
+          "deltas": {
+            "display": {
+              "ours": "block",
+              "ref": "inline"
+            },
+            "rect": {
+              "ours": {
+                "x": 117,
+                "y": 615,
+                "w": 153,
+                "h": 13
+              },
+              "ref": {
+                "x": 143,
+                "y": 651,
+                "w": 60,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
+          "tag": "h2",
+          "text": "Remove background",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 117,
+                "y": 633,
+                "w": 153,
+                "h": 19
+              },
+              "ref": {
+                "x": 143,
+                "y": 672,
+                "w": 140,
+                "h": 18
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "03",
+          "deltas": {
+            "fontSize": {
+              "ours": "22px",
+              "ref": "11px"
+            },
+            "fontWeight": {
+              "ours": "600",
+              "ref": "400"
+            },
+            "padding": {
+              "ours": "0px",
+              "ref": "17px 0px 0px 15px"
+            },
+            "lineHeight": {
+              "ours": "22px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 74,
+                "y": 746,
+                "w": 26,
+                "h": 22
+              },
+              "ref": {
+                "x": 59,
+                "y": 776,
+                "w": 46,
+                "h": 150
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "STYLE",
+          "deltas": {
+            "display": {
+              "ours": "block",
+              "ref": "inline"
+            },
+            "rect": {
+              "ours": {
+                "x": 117,
+                "y": 737,
+                "w": 99,
+                "h": 13
+              },
+              "ref": {
+                "x": 143,
+                "y": 799,
+                "w": 34,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
+          "tag": "h2",
+          "text": "Add outline",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 117,
+                "y": 755,
+                "w": 99,
+                "h": 19
+              },
+              "ref": {
+                "x": 143,
+                "y": 820,
+                "w": 91,
+                "h": 18
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "04",
+          "deltas": {
+            "fontSize": {
+              "ours": "22px",
+              "ref": "11px"
+            },
+            "fontWeight": {
+              "ours": "600",
+              "ref": "400"
+            },
+            "padding": {
+              "ours": "0px",
+              "ref": "17px 0px 0px 15px"
+            },
+            "lineHeight": {
+              "ours": "22px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 74,
+                "y": 896,
+                "w": 26,
+                "h": 22
+              },
+              "ref": {
+                "x": 59,
+                "y": 938,
+                "w": 46,
+                "h": 142
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
+          "tag": "h2",
+          "text": "Round corners",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 117,
+                "y": 905,
+                "w": 117,
+                "h": 19
+              },
+              "ref": {
+                "x": 143,
+                "y": 982,
+                "w": 107,
+                "h": 18
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>label:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Preserve aspect ratio",
+          "deltas": {
+            "fontSize": {
+              "ours": "13.6px",
+              "ref": "16px"
+            },
+            "lineHeight": {
+              "ours": "normal",
+              "ref": "24px"
+            },
+            "display": {
+              "ours": "block",
+              "ref": "inline"
+            },
+            "rect": {
+              "ours": {
+                "x": 422,
+                "y": 973,
+                "w": 129,
+                "h": 18
+              },
+              "ref": {
+                "x": 432,
+                "y": 1021,
+                "w": 156,
+                "h": 17
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "PIPELINE OUTPUTS",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "1px",
+              "ref": "1.2px"
+            },
+            "lineHeight": {
+              "ours": "12px",
+              "ref": "normal"
+            },
+            "display": {
+              "ours": "block",
+              "ref": "inline"
+            },
+            "rect": {
+              "ours": {
+                "x": 799,
+                "y": 178,
+                "w": 94,
+                "h": 24
+              },
+              "ref": {
+                "x": 799,
+                "y": 188,
+                "w": 54,
+                "h": 36
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>strong:nth-child(2)",
+          "tag": "strong",
+          "text": "Visual history",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 799,
+                "y": 209,
+                "w": 94,
+                "h": 36
+              },
+              "ref": {
+                "x": 799,
+                "y": 233,
+                "w": 87,
+                "h": 34
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>button:nth-child(2)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "1.2 MB",
+          "deltas": {
+            "fontSize": {
+              "ours": "10px",
+              "ref": "11px"
+            },
+            "color": {
+              "ours": "rgb(255, 255, 255)",
+              "ref": "rgb(23, 33, 43)"
+            },
+            "margin": {
+              "ours": "0px",
+              "ref": "5px 0px 0px"
+            },
+            "display": {
+              "ours": "inline",
+              "ref": "block"
+            },
+            "rect": {
+              "ours": {
+                "x": 1097,
+                "y": 240,
+                "w": 36,
+                "h": 13
+              },
+              "ref": {
+                "x": 1246,
+                "y": 291,
+                "w": 79,
+                "h": 13
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "DIMENSIONS",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.9px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 1157,
+                "y": 216,
+                "w": 63,
+                "h": 11
+              },
+              "ref": {
+                "x": 1073,
+                "y": 271,
+                "w": 79,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
+          "tag": "span",
+          "text": "1200 × 800 px",
+          "deltas": {
+            "margin": {
+              "ours": "0px",
+              "ref": "5px 0px 0px"
+            },
+            "rect": {
+              "ours": {
+                "x": 1236,
+                "y": 214,
+                "w": 86,
+                "h": 14
+              },
+              "ref": {
+                "x": 1073,
+                "y": 291,
+                "w": 79,
+                "h": 13
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "FORMAT",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.9px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 1157,
+                "y": 240,
+                "w": 38,
+                "h": 11
+              },
+              "ref": {
+                "x": 1159,
+                "y": 271,
+                "w": 79,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(2)",
+          "tag": "span",
+          "text": "PNG-24",
+          "deltas": {
+            "margin": {
+              "ours": "0px",
+              "ref": "5px 0px 0px"
+            },
+            "rect": {
+              "ours": {
+                "x": 1282,
+                "y": 238,
+                "w": 40,
+                "h": 14
+              },
+              "ref": {
+                "x": 1159,
+                "y": 291,
+                "w": 79,
+                "h": 13
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(3)>span:nth-child(1)",
+          "tag": "span",
+          "text": "SIZE",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.9px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 1157,
+                "y": 265,
+                "w": 25,
+                "h": 11
+              },
+              "ref": {
+                "x": 1246,
+                "y": 271,
+                "w": 79,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "SOURCE",
+          "deltas": {
+            "fontSize": {
+              "ours": "10px",
+              "ref": "9px"
+            },
+            "letterSpacing": {
+              "ours": "0.8px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 806,
+                "y": 317,
+                "w": 550,
+                "h": 13
+              },
+              "ref": {
+                "x": 808,
+                "y": 663,
+                "w": 30,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "PNG",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 1067,
+                "y": 496,
+                "w": 28,
+                "h": 19
+              },
+              "ref": {
+                "x": 923,
+                "y": 478,
+                "w": 27,
+                "h": 18
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "original.png · 1200 × 800",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 814,
+                "y": 704,
+                "w": 135,
+                "h": 11
+              },
+              "ref": {
+                "x": 942,
+                "y": 663,
+                "w": 124,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "STEP 01",
+          "deltas": {
+            "fontSize": {
+              "ours": "10px",
+              "ref": "9px"
+            },
+            "letterSpacing": {
+              "ours": "0.8px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 806,
+                "y": 750,
+                "w": 550,
+                "h": 13
+              },
+              "ref": {
+                "x": 1096,
+                "y": 663,
+                "w": 35,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "gradient applied",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 814,
+                "y": 1137,
+                "w": 86,
+                "h": 11
+              },
+              "ref": {
+                "x": 1275,
+                "y": 663,
+                "w": 79,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>span:nth-child(1)",
+          "tag": "span",
+          "text": "STEP 02",
+          "deltas": {
+            "fontSize": {
+              "ours": "10px",
+              "ref": "9px"
+            },
+            "letterSpacing": {
+              "ours": "0.8px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 806,
+                "y": 1182,
+                "w": 550,
+                "h": 13
+              },
+              "ref": {
+                "x": 808,
+                "y": 1021,
+                "w": 35,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "background removed",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 814,
+                "y": 1569,
+                "w": 97,
+                "h": 11
+              },
+              "ref": {
+                "x": 977,
+                "y": 1021,
+                "w": 89,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>span:nth-child(1)",
+          "tag": "span",
+          "text": "STEP 03",
+          "deltas": {
+            "fontSize": {
+              "ours": "10px",
+              "ref": "9px"
+            },
+            "letterSpacing": {
+              "ours": "0.8px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 806,
+                "y": 1615,
+                "w": 550,
+                "h": 13
+              },
+              "ref": {
+                "x": 1096,
+                "y": 1021,
+                "w": 35,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "outline added",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 814,
+                "y": 2002,
+                "w": 70,
+                "h": 11
+              },
+              "ref": {
+                "x": 1290,
+                "y": 1021,
+                "w": 64,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>span:nth-child(1)",
+          "tag": "span",
+          "text": "FINAL OUTPUT",
+          "deltas": {
+            "fontSize": {
+              "ours": "10px",
+              "ref": "9px"
+            },
+            "letterSpacing": {
+              "ours": "0.8px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 806,
+                "y": 2047,
+                "w": 550,
+                "h": 13
+              },
+              "ref": {
+                "x": 808,
+                "y": 1378,
+                "w": 59,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "ready · PNG-24",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 814,
+                "y": 2434,
+                "w": 76,
+                "h": 11
+              },
+              "ref": {
+                "x": 997,
+                "y": 1378,
+                "w": 69,
+                "h": 10
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>p:nth-child(3)",
+          "tag": "p",
+          "text": "Output is generated in-browser. Your fil",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 799,
+                "y": 2489,
+                "w": 565,
+                "h": 17
+              },
+              "ref": {
+                "x": 799,
+                "y": 1425,
+                "w": 565,
+                "h": 17
+              }
+            }
+          }
+        }
+      ],
+      "onlyOurs": [
+        "/ DEMO",
+        "+ Add tool",
+        "AUTO",
+        "Gradient color",
+        "DIRECTION",
+        "135 °",
+        "OPACITY",
+        "75%",
+        "50%",
+        "25%",
+        "Automatic subject detection enabled",
+        "Outline width",
+        "2 px",
+        "Outline color",
+        "Corner radius",
+        "18 px",
+        "v0.1.0",
+        "© 2026"
+      ],
+      "onlyRef": [
+        "/ \n            WORKSPACE",
+        "COLOR",
+        "135\n                        °",
+        "100",
+        "75",
+        "50",
+        "25",
+        "2\n                        px",
+        "18\n                        px",
+        "v2.4.0",
+        "© 2024"
+      ],
+      "counts": {
+        "tokenLight": 10,
+        "tokenDark": 16,
+        "elements": 47,
+        "onlyOurs": 18,
+        "onlyRef": 11
+      }
+    },
+    {
+      "route": "/preview/list-tools",
+      "ref": "list-tools.html",
+      "tokenDiffs": {
+        "light": [
+          {
+            "key": "--danger",
+            "ours": "#e5484d",
+            "ref": "—"
+          },
+          {
+            "key": "--success",
+            "ours": "#25a96a",
+            "ref": "—"
+          },
+          {
+            "key": "--text-sm--line-height",
+            "ours": "—",
+            "ref": "calc(1.25 / .875)"
+          },
+          {
+            "key": "--text-xs--line-height",
+            "ours": "—",
+            "ref": "calc(1 / .75)"
+          },
+          {
+            "key": "--font-weight-medium",
+            "ours": "—",
+            "ref": "500"
+          },
+          {
+            "key": "--spacing",
+            "ours": "—",
+            "ref": ".25rem"
+          },
+          {
+            "key": "--text-xs",
+            "ours": "—",
+            "ref": ".75rem"
+          },
+          {
+            "key": "--radius-md",
+            "ours": "—",
+            "ref": ".375rem"
+          },
+          {
+            "key": "--radius-lg",
+            "ours": "—",
+            "ref": ".5rem"
+          },
+          {
+            "key": "--text-sm",
+            "ours": "—",
+            "ref": ".875rem"
+          }
+        ],
+        "dark": [
+          {
+            "key": "--panel",
+            "ours": "#182129",
+            "ref": "#f8fafb"
+          },
+          {
+            "key": "--blue",
+            "ours": "#54a2ff",
+            "ref": "#1769d2"
+          },
+          {
+            "key": "--muted",
+            "ours": "#91a0ac",
+            "ref": "#6d7883"
+          },
+          {
+            "key": "--background",
+            "ours": "#11171d",
+            "ref": "#eef1f4"
+          },
+          {
+            "key": "--danger",
+            "ours": "#ff7479",
+            "ref": "—"
+          },
+          {
+            "key": "--foreground",
+            "ours": "#e8eef2",
+            "ref": "#17212b"
+          },
+          {
+            "key": "--success",
+            "ours": "#25a96a",
+            "ref": "—"
+          },
+          {
+            "key": "--line",
+            "ours": "#33414c",
+            "ref": "#cbd3da"
+          },
+          {
+            "key": "--text-sm--line-height",
+            "ours": "—",
+            "ref": "calc(1.25 / .875)"
+          },
+          {
+            "key": "--text-xs--line-height",
+            "ours": "—",
+            "ref": "calc(1 / .75)"
+          },
+          {
+            "key": "--font-weight-medium",
+            "ours": "—",
+            "ref": "500"
+          },
+          {
+            "key": "--spacing",
+            "ours": "—",
+            "ref": ".25rem"
+          },
+          {
+            "key": "--text-xs",
+            "ours": "—",
+            "ref": ".75rem"
+          },
+          {
+            "key": "--radius-md",
+            "ours": "—",
+            "ref": ".375rem"
+          },
+          {
+            "key": "--radius-lg",
+            "ours": "—",
+            "ref": ".5rem"
+          },
+          {
+            "key": "--text-sm",
+            "ours": "—",
+            "ref": ".875rem"
+          }
+        ]
       },
-      {
-        "key": "--text-sm--line-height",
-        "ours": "—",
-        "ref": "calc(1.25 / .875)"
+      "elementDiffs": [
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
+          "tag": "span",
+          "text": "easy-png-tools",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 98,
+                "y": 23,
+                "w": 118,
+                "h": 18
+              },
+              "ref": {
+                "x": 98,
+                "y": 23,
+                "w": 108,
+                "h": 17
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(1)",
+          "tag": "a",
+          "text": "Workspace",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 534,
+                "y": 24,
+                "w": 69,
+                "h": 15
+              },
+              "ref": {
+                "x": 761,
+                "y": 26,
+                "w": 49,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(2)",
+          "tag": "a",
+          "text": "Catalog",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "color": {
+              "ours": "rgb(109, 120, 131)",
+              "ref": "rgb(23, 105, 210)"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 621,
+                "y": 24,
+                "w": 54,
+                "h": 15
+              },
+              "ref": {
+                "x": 832,
+                "y": 26,
+                "w": 39,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(3)",
+          "tag": "a",
+          "text": "Gradient",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 693,
+                "y": 24,
+                "w": 61,
+                "h": 15
+              },
+              "ref": {
+                "x": 893,
+                "y": 26,
+                "w": 44,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(4)",
+          "tag": "a",
+          "text": "Background remover",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 773,
+                "y": 24,
+                "w": 138,
+                "h": 15
+              },
+              "ref": {
+                "x": 959,
+                "y": 26,
+                "w": 99,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(1)",
+          "tag": "button",
+          "text": "RU",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "normal"
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(2)",
+          "tag": "button",
+          "text": "EN",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 1349,
+                "y": 19,
+                "w": 32,
+                "h": 25
+              },
+              "ref": {
+                "x": 1352,
+                "y": 20,
+                "w": 29,
+                "h": 24
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(2)>div:nth-child(2)>a:nth-child(1)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Convert JPG to PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 104,
+                "y": 302,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 494,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(2)>div:nth-child(2)>a:nth-child(2)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Convert WebP to PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 364,
+                "y": 311,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 610,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(2)>div:nth-child(2)>a:nth-child(7)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "PNG to Base64",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 364,
+                "y": 429,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 726,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(2)>div:nth-child(2)>a:nth-child(9)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "PNG to Data URI",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 885,
+                "y": 429,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 842,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(2)>div:nth-child(2)>a:nth-child(17)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Convert PNG to JPG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 364,
+                "y": 717,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 958,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(3)>div:nth-child(2)>a:nth-child(8)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Round corners PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 625,
+                "y": 1239,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 726,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(3)>div:nth-child(2)>a:nth-child(11)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Outline PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 104,
+                "y": 1384,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 842,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(4)>div:nth-child(2)>a:nth-child(7)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Grayscale PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 364,
+                "y": 2096,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 1276,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(4)>div:nth-child(2)>a:nth-child(8)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Invert colors PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 625,
+                "y": 2104,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 1392,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(4)>div:nth-child(2)>a:nth-child(10)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Change PNG opacity",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 1146,
+                "y": 2096,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 958,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(4)>div:nth-child(2)>a:nth-child(20)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Temperature PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 1146,
+                "y": 2361,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 1624,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(5)>div:nth-child(2)>a:nth-child(1)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Resize PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 104,
+                "y": 2731,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 1160,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(5)>div:nth-child(2)>a:nth-child(2)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Crop PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 364,
+                "y": 2740,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 1276,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(5)>div:nth-child(2)>a:nth-child(3)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Rotate PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 625,
+                "y": 2748,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 1392,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(5)>div:nth-child(2)>a:nth-child(4)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Flip PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 885,
+                "y": 2757,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 1508,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(5)>div:nth-child(2)>a:nth-child(5)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Add padding to PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 1146,
+                "y": 2748,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 1624,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(6)>div:nth-child(2)>a:nth-child(1)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Blur PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 104,
+                "y": 3396,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 1826,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(6)>div:nth-child(2)>a:nth-child(2)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Sharpen PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 364,
+                "y": 3387,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 1942,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(6)>div:nth-child(2)>a:nth-child(3)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Vignette PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 625,
+                "y": 3404,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 2058,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(6)>div:nth-child(2)>a:nth-child(8)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "JPEG artifacts",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 625,
+                "y": 3540,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 2174,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(8)>div:nth-child(2)>a:nth-child(9)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "PNG info",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 885,
+                "y": 4142,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 1826,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(8)>div:nth-child(2)>a:nth-child(13)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "PNG orientation",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 625,
+                "y": 4287,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 807,
+                "y": 2174,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>section:nth-child(1)>section:nth-child(9)>div:nth-child(2)>a:nth-child(7)>span:nth-child(2)>span:nth-child(1)",
+          "tag": "span",
+          "text": "Create gradient PNG",
+          "deltas": {
+            "fontFamily": {
+              "ours": "\"IBM Plex Sans\", sans-serif",
+              "ref": "\"IBM Plex Mono\", monospace"
+            },
+            "fontSize": {
+              "ours": "14.4px",
+              "ref": "13px"
+            },
+            "rect": {
+              "ours": {
+                "x": 364,
+                "y": 4632,
+                "w": 175,
+                "h": 19
+              },
+              "ref": {
+                "x": 131,
+                "y": 1160,
+                "w": 488,
+                "h": 15
+              }
+            }
+          }
+        }
+      ],
+      "onlyOurs": [
+        "/ LIST-TOOLS",
+        "CATALOG",
+        "All tools",
+        "Каталог всех PNG-инструментов, сгруппиро",
+        "convert",
+        "Convert",
+        "Opens a JPEG and saves it as lossless PN",
+        "Re-encodes a WebP image into universal P",
+        "Convert GIF to PNG",
+        "Extracts the first frame of a GIF animat",
+        "Convert BMP to PNG",
+        "Re-encodes BMP into compact lossless PNG",
+        "Convert ICO to PNG",
+        "Turns an .ico icon into a regular PNG of",
+        "Convert PNG to BMP",
+        "Saves the image as 24-bit BMP without an",
+        "Encodes the image into a base64 string f",
+        "Base64 to PNG",
+        "Decodes a base64 string or data-uri back",
+        "Builds a full data-uri (data:image/png;b",
+        "Data URI to PNG",
+        "Decodes data:image/…;base64,… back into ",
+        "PNG to HEX pixels",
+        "Shows all pixels as rrggbbaa hex values ",
+        "HEX pixels to PNG",
+        "Assembles an image from rrggbbaa hex val",
+        "PNG to Bytes",
+        "Lists every pixel as four decimal bytes ",
+        "Bytes to PNG",
+        "Assembles an image from decimal RGBA byt",
+        "PNG to RGB Values",
+        "Lists every pixel as rgba(r, g, b, a), o",
+        "RGB Values to PNG",
+        "Assembles an image from rgba(r, g, b, a)",
+        "Transparency is composited over the chos",
+        "Convert PNG to WebP",
+        "Re-encodes the image into WebP with adju",
+        "Compress PNG",
+        "Shrinks the PNG by reducing its palette ",
+        "Reduce PNG to Size",
+        "Binary-searches the palette size until t",
+        "SVG to PNG",
+        "Decodes SVG markup into a raster image. ",
+        "alpha",
+        "Alpha & transparency",
+        "Circle Mask PNG",
+        "Cuts the image into a circle. Diameter i",
+        "Square Mask PNG",
+        "Cuts the image into a rectangle with sid",
+        "Star Mask PNG",
+        "Cuts the image into an n-pointed star wi",
+        "Wavy Mask PNG",
+        "Cuts the image into a wavy-edged circle:",
+        "Remove alpha channel PNG",
+        "Composites the image over a white backgr",
+        "Set alpha channel PNG",
+        "Assigns the same opacity to all pixels; ",
+        "Extract alpha mask PNG",
+        "Turns transparency into a black-and-whit",
+        "Clips corners by a radius set as a perce"
+      ],
+      "onlyRef": [
+        "/ \n            CATALOG",
+        "/",
+        "EASY-PNG-TOOLS / CATALOG",
+        "Tool catalog",
+        "Focused utilities for working with PNG. ",
+        "32",
+        "ALL",
+        "CONVERT",
+        "TRANSPARENCY",
+        "COLOR",
+        "GEOMETRY",
+        "FILTERS",
+        "ANALYZE",
+        "05\n                 TOOLS",
+        "Re-encode JPEG files as lossless PNG whi",
+        "01",
+        "Turn WebP images into a universal PNG fo",
+        "02",
+        "Encode an image as a base64 string for e",
+        "03",
+        "Build a complete data URI ready for HTML",
+        "04",
+        "Composite transparency over a selected b",
+        "05",
+        "Remove background PNG",
+        "Remove a solid background by color, tole",
+        "Extract alpha mask",
+        "Turn the alpha channel into a clean blac",
+        "Clip the image corners by a precise radi",
+        "Add a colored ring around opaque content",
+        "Multiply the alpha channel while keeping",
+        "Generate a smooth transition between two",
+        "Convert the image to luminance-based sha",
+        "Invert every color channel while leaving",
+        "Brightness & contrast",
+        "Adjust brightness and contrast across a ",
+        "Make an image warmer or cooler with a si",
+        "Scale an image with bilinear interpolati",
+        "Cut a rectangular area with exact coordi",
+        "Rotate by 90, 180, or 270 degrees withou",
+        "Mirror the image horizontally or vertica",
+        "Expand the canvas on all sides by a chos",
+        "04\n                 TOOLS",
+        "Apply a fast Gaussian-style blur with tr",
+        "Emphasize edges with an adjustable sharp",
+        "Smoothly darken the image edges while pr",
+        "Simulate low-quality JPEG recompression ",
+        "Inspect dimensions, alpha presence, and ",
+        "Check grayscale",
+        "Report whether the image contains only s",
+        "Check transparency",
+        "Detect transparent and semi-transparent ",
+        "Classify the image as portrait, landscap",
+        "•"
+      ],
+      "counts": {
+        "tokenLight": 10,
+        "tokenDark": 16,
+        "elements": 30,
+        "onlyOurs": 257,
+        "onlyRef": 54
+      }
+    },
+    {
+      "route": "/preview/tools/linear-gradient-png",
+      "ref": "gradient.html",
+      "tokenDiffs": {
+        "light": [
+          {
+            "key": "--danger",
+            "ours": "#e5484d",
+            "ref": "—"
+          },
+          {
+            "key": "--success",
+            "ours": "#25a96a",
+            "ref": "—"
+          },
+          {
+            "key": "--text-sm--line-height",
+            "ours": "—",
+            "ref": "calc(1.25 / .875)"
+          },
+          {
+            "key": "--text-xs--line-height",
+            "ours": "—",
+            "ref": "calc(1 / .75)"
+          },
+          {
+            "key": "--font-weight-medium",
+            "ours": "—",
+            "ref": "500"
+          },
+          {
+            "key": "--spacing",
+            "ours": "—",
+            "ref": ".25rem"
+          },
+          {
+            "key": "--text-xs",
+            "ours": "—",
+            "ref": ".75rem"
+          },
+          {
+            "key": "--radius-md",
+            "ours": "—",
+            "ref": ".375rem"
+          },
+          {
+            "key": "--radius-lg",
+            "ours": "—",
+            "ref": ".5rem"
+          },
+          {
+            "key": "--text-sm",
+            "ours": "—",
+            "ref": ".875rem"
+          }
+        ],
+        "dark": [
+          {
+            "key": "--panel",
+            "ours": "#182129",
+            "ref": "#f8fafb"
+          },
+          {
+            "key": "--blue",
+            "ours": "#54a2ff",
+            "ref": "#1769d2"
+          },
+          {
+            "key": "--muted",
+            "ours": "#91a0ac",
+            "ref": "#6d7883"
+          },
+          {
+            "key": "--background",
+            "ours": "#11171d",
+            "ref": "#eef1f4"
+          },
+          {
+            "key": "--danger",
+            "ours": "#ff7479",
+            "ref": "—"
+          },
+          {
+            "key": "--foreground",
+            "ours": "#e8eef2",
+            "ref": "#17212b"
+          },
+          {
+            "key": "--success",
+            "ours": "#25a96a",
+            "ref": "—"
+          },
+          {
+            "key": "--line",
+            "ours": "#33414c",
+            "ref": "#cbd3da"
+          },
+          {
+            "key": "--text-sm--line-height",
+            "ours": "—",
+            "ref": "calc(1.25 / .875)"
+          },
+          {
+            "key": "--text-xs--line-height",
+            "ours": "—",
+            "ref": "calc(1 / .75)"
+          },
+          {
+            "key": "--font-weight-medium",
+            "ours": "—",
+            "ref": "500"
+          },
+          {
+            "key": "--spacing",
+            "ours": "—",
+            "ref": ".25rem"
+          },
+          {
+            "key": "--text-xs",
+            "ours": "—",
+            "ref": ".75rem"
+          },
+          {
+            "key": "--radius-md",
+            "ours": "—",
+            "ref": ".375rem"
+          },
+          {
+            "key": "--radius-lg",
+            "ours": "—",
+            "ref": ".5rem"
+          },
+          {
+            "key": "--text-sm",
+            "ours": "—",
+            "ref": ".875rem"
+          }
+        ]
       },
-      {
-        "key": "--text-xs--line-height",
-        "ours": "—",
-        "ref": "calc(1 / .75)"
+      "elementDiffs": [
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
+          "tag": "span",
+          "text": "easy-png-tools",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 98,
+                "y": 23,
+                "w": 118,
+                "h": 18
+              },
+              "ref": {
+                "x": 98,
+                "y": 23,
+                "w": 108,
+                "h": 17
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(1)",
+          "tag": "a",
+          "text": "Workspace",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 596,
+                "y": 24,
+                "w": 69,
+                "h": 15
+              },
+              "ref": {
+                "x": 798,
+                "y": 26,
+                "w": 49,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(2)",
+          "tag": "a",
+          "text": "Catalog",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 683,
+                "y": 24,
+                "w": 54,
+                "h": 15
+              },
+              "ref": {
+                "x": 870,
+                "y": 26,
+                "w": 39,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(3)",
+          "tag": "a",
+          "text": "Gradient",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "color": {
+              "ours": "rgb(109, 120, 131)",
+              "ref": "rgb(23, 105, 210)"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 754,
+                "y": 24,
+                "w": 61,
+                "h": 15
+              },
+              "ref": {
+                "x": 930,
+                "y": 26,
+                "w": 44,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(4)",
+          "tag": "a",
+          "text": "Background remover",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 834,
+                "y": 24,
+                "w": 138,
+                "h": 15
+              },
+              "ref": {
+                "x": 996,
+                "y": 26,
+                "w": 99,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(1)",
+          "tag": "button",
+          "text": "RU",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "normal"
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(2)",
+          "tag": "button",
+          "text": "EN",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 1349,
+                "y": 19,
+                "w": 32,
+                "h": 25
+              },
+              "ref": {
+                "x": 1352,
+                "y": 20,
+                "w": 29,
+                "h": 24
+              }
+            }
+          }
+        }
+      ],
+      "onlyOurs": [
+        "/ TOOLS / LINEAR-GRADIENT-PNG",
+        "STEPS",
+        "Pipeline",
+        "AUTO",
+        "01",
+        "generate",
+        "Create gradient PNG",
+        "Width",
+        "Height",
+        "Start color",
+        "End color",
+        "Direction",
+        "Horizontal",
+        "Vertical",
+        "Add step",
+        "Split PNG into HSL",
+        "Split PNG into HSV",
+        "Split PNG into HSI",
+        "Convert PNG to CMYK Colors",
+        "Convert PNG to YCbCr Colors",
+        "Convert PNG to LAB Colors",
+        "Show Transparent Areas PNG",
+        "Show Grayscale Pixels PNG",
+        "Show Color Pixels PNG",
+        "Light Pixel Mask PNG",
+        "Dark Pixel Mask PNG",
+        "Unique Color Mask PNG",
+        "Convert JPG to PNG",
+        "Convert WebP to PNG",
+        "Convert GIF to PNG",
+        "Convert BMP to PNG",
+        "Convert ICO to PNG",
+        "Convert PNG to BMP",
+        "Resize PNG",
+        "Crop PNG",
+        "Rotate PNG",
+        "Flip PNG",
+        "Add padding to PNG",
+        "Add border to PNG",
+        "Fit PNG onto background",
+        "Tile PNG",
+        "Circle Mask PNG",
+        "Square Mask PNG",
+        "Star Mask PNG",
+        "Wavy Mask PNG",
+        "Center PNG by content",
+        "Blur PNG",
+        "Sharpen PNG",
+        "Grayscale PNG",
+        "Invert colors PNG",
+        "Brightness & contrast PNG",
+        "Change PNG opacity",
+        "Sepia effect",
+        "Change hue PNG",
+        "Extract channel PNG",
+        "Swap channels PNG",
+        "Black & white threshold PNG",
+        "Posterize PNG",
+        "Two colors PNG",
+        "Convert PNG to JPG"
+      ],
+      "onlyRef": [
+        "/ \n            GRADIENT",
+        "/",
+        "Gradient background.",
+        "Create a clean, export-ready gradient wi",
+        "GRADIENT SETTINGS",
+        "Configure output",
+        "TOOL 01",
+        "GRADIENT TYPE",
+        "Linear",
+        "Radial",
+        "COLOR STOPS",
+        "→",
+        "135\n                  °",
+        "0° →",
+        "45° ↗",
+        "90° ↑",
+        "135° ↖",
+        "180° ←",
+        "225° ↙",
+        "270° ↓",
+        "315° ↘",
+        "100\n                  %",
+        "OUTPUT PREVIEW",
+        "gradient.png",
+        "PNG",
+        "GENERATED CSS",
+        "background: linear-gradient(135deg, #176",
+        "v2.4.0",
+        "gradient tool · local-only",
+        "© 2024"
+      ],
+      "counts": {
+        "tokenLight": 10,
+        "tokenDark": 16,
+        "elements": 7,
+        "onlyOurs": 111,
+        "onlyRef": 30
+      }
+    },
+    {
+      "route": "/preview/tools/remove-background-png",
+      "ref": "background-remover.html",
+      "tokenDiffs": {
+        "light": [
+          {
+            "key": "--danger",
+            "ours": "#e5484d",
+            "ref": "—"
+          },
+          {
+            "key": "--success",
+            "ours": "#25a96a",
+            "ref": "—"
+          },
+          {
+            "key": "--text-sm--line-height",
+            "ours": "—",
+            "ref": "calc(1.25 / .875)"
+          },
+          {
+            "key": "--text-xs--line-height",
+            "ours": "—",
+            "ref": "calc(1 / .75)"
+          },
+          {
+            "key": "--font-weight-medium",
+            "ours": "—",
+            "ref": "500"
+          },
+          {
+            "key": "--spacing",
+            "ours": "—",
+            "ref": ".25rem"
+          },
+          {
+            "key": "--text-xs",
+            "ours": "—",
+            "ref": ".75rem"
+          },
+          {
+            "key": "--radius-md",
+            "ours": "—",
+            "ref": ".375rem"
+          },
+          {
+            "key": "--radius-lg",
+            "ours": "—",
+            "ref": ".5rem"
+          },
+          {
+            "key": "--text-sm",
+            "ours": "—",
+            "ref": ".875rem"
+          }
+        ],
+        "dark": [
+          {
+            "key": "--panel",
+            "ours": "#182129",
+            "ref": "#f8fafb"
+          },
+          {
+            "key": "--blue",
+            "ours": "#54a2ff",
+            "ref": "#1769d2"
+          },
+          {
+            "key": "--muted",
+            "ours": "#91a0ac",
+            "ref": "#6d7883"
+          },
+          {
+            "key": "--background",
+            "ours": "#11171d",
+            "ref": "#eef1f4"
+          },
+          {
+            "key": "--danger",
+            "ours": "#ff7479",
+            "ref": "—"
+          },
+          {
+            "key": "--foreground",
+            "ours": "#e8eef2",
+            "ref": "#17212b"
+          },
+          {
+            "key": "--success",
+            "ours": "#25a96a",
+            "ref": "—"
+          },
+          {
+            "key": "--line",
+            "ours": "#33414c",
+            "ref": "#cbd3da"
+          },
+          {
+            "key": "--text-sm--line-height",
+            "ours": "—",
+            "ref": "calc(1.25 / .875)"
+          },
+          {
+            "key": "--text-xs--line-height",
+            "ours": "—",
+            "ref": "calc(1 / .75)"
+          },
+          {
+            "key": "--font-weight-medium",
+            "ours": "—",
+            "ref": "500"
+          },
+          {
+            "key": "--spacing",
+            "ours": "—",
+            "ref": ".25rem"
+          },
+          {
+            "key": "--text-xs",
+            "ours": "—",
+            "ref": ".75rem"
+          },
+          {
+            "key": "--radius-md",
+            "ours": "—",
+            "ref": ".375rem"
+          },
+          {
+            "key": "--radius-lg",
+            "ours": "—",
+            "ref": ".5rem"
+          },
+          {
+            "key": "--text-sm",
+            "ours": "—",
+            "ref": ".875rem"
+          }
+        ]
       },
-      {
-        "key": "--font-weight-medium",
-        "ours": "—",
-        "ref": "500"
-      },
-      {
-        "key": "--spacing",
-        "ours": "—",
-        "ref": ".25rem"
-      },
-      {
-        "key": "--text-xs",
-        "ours": "—",
-        "ref": ".75rem"
-      },
-      {
-        "key": "--radius-md",
-        "ours": "—",
-        "ref": ".375rem"
-      },
-      {
-        "key": "--radius-lg",
-        "ours": "—",
-        "ref": ".5rem"
-      },
-      {
-        "key": "--text-sm",
-        "ours": "—",
-        "ref": ".875rem"
-      }
-    ],
-    "dark": [
-      {
-        "key": "--panel",
-        "ours": "#182129",
-        "ref": "#f8fafb"
-      },
-      {
-        "key": "--blue",
-        "ours": "#54a2ff",
-        "ref": "#1769d2"
-      },
-      {
-        "key": "--muted",
-        "ours": "#91a0ac",
-        "ref": "#6d7883"
-      },
-      {
-        "key": "--background",
-        "ours": "#11171d",
-        "ref": "#eef1f4"
-      },
-      {
-        "key": "--danger",
-        "ours": "#ff7479",
-        "ref": "—"
-      },
-      {
-        "key": "--foreground",
-        "ours": "#e8eef2",
-        "ref": "#17212b"
-      },
-      {
-        "key": "--success",
-        "ours": "#25a96a",
-        "ref": "—"
-      },
-      {
-        "key": "--line",
-        "ours": "#33414c",
-        "ref": "#cbd3da"
-      },
-      {
-        "key": "--text-sm--line-height",
-        "ours": "—",
-        "ref": "calc(1.25 / .875)"
-      },
-      {
-        "key": "--text-xs--line-height",
-        "ours": "—",
-        "ref": "calc(1 / .75)"
-      },
-      {
-        "key": "--font-weight-medium",
-        "ours": "—",
-        "ref": "500"
-      },
-      {
-        "key": "--spacing",
-        "ours": "—",
-        "ref": ".25rem"
-      },
-      {
-        "key": "--text-xs",
-        "ours": "—",
-        "ref": ".75rem"
-      },
-      {
-        "key": "--radius-md",
-        "ours": "—",
-        "ref": ".375rem"
-      },
-      {
-        "key": "--radius-lg",
-        "ours": "—",
-        "ref": ".5rem"
-      },
-      {
-        "key": "--text-sm",
-        "ours": "—",
-        "ref": ".875rem"
-      }
-    ]
-  },
-  "elementDiffs": [
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
-      "tag": "span",
-      "text": "easy-png-tools",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 98,
-            "y": 23,
-            "w": 118,
-            "h": 18
-          },
-          "ref": {
-            "x": 98,
-            "y": 23,
-            "w": 108,
-            "h": 17
+      "elementDiffs": [
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
+          "tag": "span",
+          "text": "easy-png-tools",
+          "deltas": {
+            "rect": {
+              "ours": {
+                "x": 98,
+                "y": 23,
+                "w": 118,
+                "h": 18
+              },
+              "ref": {
+                "x": 98,
+                "y": 23,
+                "w": 108,
+                "h": 17
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(1)",
+          "tag": "a",
+          "text": "Workspace",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 603,
+                "y": 24,
+                "w": 69,
+                "h": 15
+              },
+              "ref": {
+                "x": 780,
+                "y": 26,
+                "w": 49,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(2)",
+          "tag": "a",
+          "text": "Catalog",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 690,
+                "y": 24,
+                "w": 54,
+                "h": 15
+              },
+              "ref": {
+                "x": 851,
+                "y": 26,
+                "w": 39,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(3)",
+          "tag": "a",
+          "text": "Gradient",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 762,
+                "y": 24,
+                "w": 61,
+                "h": 15
+              },
+              "ref": {
+                "x": 912,
+                "y": 26,
+                "w": 44,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(4)",
+          "tag": "a",
+          "text": "Background remover",
+          "deltas": {
+            "fontSize": {
+              "ours": "12px",
+              "ref": "10px"
+            },
+            "color": {
+              "ours": "rgb(109, 120, 131)",
+              "ref": "rgb(23, 105, 210)"
+            },
+            "letterSpacing": {
+              "ours": "0.48px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 841,
+                "y": 24,
+                "w": 138,
+                "h": 15
+              },
+              "ref": {
+                "x": 978,
+                "y": 26,
+                "w": 99,
+                "h": 12
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(1)",
+          "tag": "button",
+          "text": "RU",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "normal"
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(2)",
+          "tag": "button",
+          "text": "EN",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "0.6px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 1349,
+                "y": 19,
+                "w": 32,
+                "h": 25
+              },
+              "ref": {
+                "x": 1352,
+                "y": 20,
+                "w": 29,
+                "h": 24
+              }
+            }
+          }
+        },
+        {
+          "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>section:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+          "tag": "span",
+          "text": "RESULT",
+          "deltas": {
+            "letterSpacing": {
+              "ours": "1px",
+              "ref": "normal"
+            },
+            "lineHeight": {
+              "ours": "12px",
+              "ref": "normal"
+            },
+            "rect": {
+              "ours": {
+                "x": 726,
+                "y": 125,
+                "w": 108,
+                "h": 12
+              },
+              "ref": {
+                "x": 954,
+                "y": 467,
+                "w": 33,
+                "h": 12
+              }
+            }
           }
         }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(1)",
-      "tag": "a",
-      "text": "Workspace",
-      "deltas": {
-        "fontSize": {
-          "ours": "12px",
-          "ref": "10px"
-        },
-        "letterSpacing": {
-          "ours": "0.48px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 513,
-            "y": 24,
-            "w": 69,
-            "h": 15
-          },
-          "ref": {
-            "x": 792,
-            "y": 26,
-            "w": 49,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(2)",
-      "tag": "a",
-      "text": "Catalog",
-      "deltas": {
-        "fontSize": {
-          "ours": "12px",
-          "ref": "10px"
-        },
-        "letterSpacing": {
-          "ours": "0.48px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 600,
-            "y": 24,
-            "w": 54,
-            "h": 15
-          },
-          "ref": {
-            "x": 864,
-            "y": 26,
-            "w": 39,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(3)",
-      "tag": "a",
-      "text": "Gradient",
-      "deltas": {
-        "fontSize": {
-          "ours": "12px",
-          "ref": "10px"
-        },
-        "letterSpacing": {
-          "ours": "0.48px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 672,
-            "y": 24,
-            "w": 61,
-            "h": 15
-          },
-          "ref": {
-            "x": 924,
-            "y": 26,
-            "w": 44,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(4)",
-      "tag": "a",
-      "text": "Background remover",
-      "deltas": {
-        "fontSize": {
-          "ours": "12px",
-          "ref": "10px"
-        },
-        "letterSpacing": {
-          "ours": "0.48px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 751,
-            "y": 24,
-            "w": 138,
-            "h": 15
-          },
-          "ref": {
-            "x": 990,
-            "y": 26,
-            "w": 99,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(1)",
-      "tag": "button",
-      "text": "RU",
-      "deltas": {
-        "letterSpacing": {
-          "ours": "0.6px",
-          "ref": "normal"
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(2)",
-      "tag": "button",
-      "text": "EN",
-      "deltas": {
-        "letterSpacing": {
-          "ours": "0.6px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 1349,
-            "y": 19,
-            "w": 32,
-            "h": 25
-          },
-          "ref": {
-            "x": 1352,
-            "y": 20,
-            "w": 29,
-            "h": 24
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "/",
-      "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", monospace",
-          "ref": "\"IBM Plex Sans\", sans-serif"
-        },
-        "fontSize": {
-          "ours": "10px",
-          "ref": "16px"
-        },
-        "color": {
-          "ours": "rgb(23, 105, 210)",
-          "ref": "rgb(23, 33, 43)"
-        },
-        "margin": {
-          "ours": "0px 7px",
-          "ref": "0px"
-        },
-        "letterSpacing": {
-          "ours": "1.2px",
-          "ref": "normal"
-        },
-        "lineHeight": {
-          "ours": "normal",
-          "ref": "24px"
-        },
-        "display": {
-          "ours": "inline",
-          "ref": "block"
-        },
-        "rect": {
-          "ours": {
-            "x": 165,
-            "y": 124,
-            "w": 7,
-            "h": 13
-          },
-          "ref": {
-            "x": 1348,
-            "y": 20,
-            "w": 4,
-            "h": 24
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>h1:nth-child(2)",
-      "tag": "h1",
-      "text": "Build your image pipeline.",
-      "deltas": {
-        "lineHeight": {
-          "ours": "51.84px",
-          "ref": "57.6px"
-        },
-        "rect": {
-          "ours": {
-            "x": 58,
-            "y": 155,
-            "w": 474,
-            "h": 104
-          },
-          "ref": {
-            "x": 58,
-            "y": 154,
-            "w": 482,
-            "h": 115
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>p:nth-child(3)",
-      "tag": "p",
-      "text": "Chain simple tools together. Every chang",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 58,
-            "y": 275,
-            "w": 474,
-            "h": 51
-          },
-          "ref": {
-            "x": 58,
-            "y": 285,
-            "w": 482,
-            "h": 51
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>span:nth-child(2)",
-      "tag": "span",
-      "text": "source.png",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 597,
-            "y": 300,
-            "w": 66,
-            "h": 14
-          },
-          "ref": {
-            "x": 606,
-            "y": 311,
-            "w": 60,
-            "h": 13
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>b:nth-child(3)",
-      "tag": "b",
-      "text": "1.8 MB",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 671,
-            "y": 300,
-            "w": 40,
-            "h": 14
-          },
-          "ref": {
-            "x": 674,
-            "y": 311,
-            "w": 36,
-            "h": 13
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "PROCESSING PIPELINE",
-      "deltas": {
-        "letterSpacing": {
-          "ours": "1px",
-          "ref": "1.2px"
-        },
-        "lineHeight": {
-          "ours": "12px",
-          "ref": "normal"
-        },
-        "display": {
-          "ours": "block",
-          "ref": "inline"
-        },
-        "rect": {
-          "ours": {
-            "x": 58,
-            "y": 382,
-            "w": 154,
-            "h": 12
-          },
-          "ref": {
-            "x": 58,
-            "y": 400,
-            "w": 127,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>strong:nth-child(2)>em:nth-child(1)",
-      "tag": "em",
-      "text": "• LIVE",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 175,
-            "y": 405,
-            "w": 36,
-            "h": 13
-          },
-          "ref": {
-            "x": 173,
-            "y": 425,
-            "w": 33,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "01",
-      "deltas": {
-        "fontSize": {
-          "ours": "22px",
-          "ref": "11px"
-        },
-        "fontWeight": {
-          "ours": "600",
-          "ref": "400"
-        },
-        "padding": {
-          "ours": "0px",
-          "ref": "17px 0px 0px 15px"
-        },
-        "lineHeight": {
-          "ours": "22px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 74,
-            "y": 464,
-            "w": 26,
-            "h": 22
-          },
-          "ref": {
-            "x": 59,
-            "y": 466,
-            "w": 46,
-            "h": 150
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "BACKGROUND",
-      "deltas": {
-        "display": {
-          "ours": "block",
-          "ref": "inline"
-        },
-        "rect": {
-          "ours": {
-            "x": 117,
-            "y": 455,
-            "w": 171,
-            "h": 13
-          },
-          "ref": {
-            "x": 143,
-            "y": 489,
-            "w": 67,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
-      "tag": "h2",
-      "text": "Gradient background",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 117,
-            "y": 473,
-            "w": 171,
-            "h": 19
-          },
-          "ref": {
-            "x": 143,
-            "y": 510,
-            "w": 157,
-            "h": 18
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)",
-      "tag": "button",
-      "text": "100%",
-      "deltas": {
-        "color": {
-          "ours": "rgb(255, 255, 255)",
-          "ref": "rgb(23, 33, 43)"
-        },
-        "backgroundColor": {
-          "ours": "rgb(23, 105, 210)",
-          "ref": "rgba(0, 0, 0, 0)"
-        },
-        "padding": {
-          "ours": "0px 11.2px",
-          "ref": "0px"
-        },
-        "letterSpacing": {
-          "ours": "0.6px",
-          "ref": "0.8px"
-        },
-        "display": {
-          "ours": "flex",
-          "ref": "block"
-        },
-        "rect": {
-          "ours": {
-            "x": 518,
-            "y": 552,
-            "w": 49,
-            "h": 30
-          },
-          "ref": {
-            "x": 680,
-            "y": 546,
-            "w": 25,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "02",
-      "deltas": {
-        "fontSize": {
-          "ours": "22px",
-          "ref": "11px"
-        },
-        "fontWeight": {
-          "ours": "600",
-          "ref": "400"
-        },
-        "padding": {
-          "ours": "0px",
-          "ref": "17px 0px 0px 15px"
-        },
-        "lineHeight": {
-          "ours": "22px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 74,
-            "y": 624,
-            "w": 26,
-            "h": 22
-          },
-          "ref": {
-            "x": 59,
-            "y": 628,
-            "w": 46,
-            "h": 136
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "TRANSFORM",
-      "deltas": {
-        "display": {
-          "ours": "block",
-          "ref": "inline"
-        },
-        "rect": {
-          "ours": {
-            "x": 117,
-            "y": 615,
-            "w": 153,
-            "h": 13
-          },
-          "ref": {
-            "x": 143,
-            "y": 651,
-            "w": 60,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
-      "tag": "h2",
-      "text": "Remove background",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 117,
-            "y": 633,
-            "w": 153,
-            "h": 19
-          },
-          "ref": {
-            "x": 143,
-            "y": 672,
-            "w": 140,
-            "h": 18
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "03",
-      "deltas": {
-        "fontSize": {
-          "ours": "22px",
-          "ref": "11px"
-        },
-        "fontWeight": {
-          "ours": "600",
-          "ref": "400"
-        },
-        "padding": {
-          "ours": "0px",
-          "ref": "17px 0px 0px 15px"
-        },
-        "lineHeight": {
-          "ours": "22px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 74,
-            "y": 746,
-            "w": 26,
-            "h": 22
-          },
-          "ref": {
-            "x": 59,
-            "y": 776,
-            "w": 46,
-            "h": 150
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "STYLE",
-      "deltas": {
-        "display": {
-          "ours": "block",
-          "ref": "inline"
-        },
-        "rect": {
-          "ours": {
-            "x": 117,
-            "y": 737,
-            "w": 99,
-            "h": 13
-          },
-          "ref": {
-            "x": 143,
-            "y": 799,
-            "w": 34,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
-      "tag": "h2",
-      "text": "Add outline",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 117,
-            "y": 755,
-            "w": 99,
-            "h": 19
-          },
-          "ref": {
-            "x": 143,
-            "y": 820,
-            "w": 91,
-            "h": 18
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "04",
-      "deltas": {
-        "fontSize": {
-          "ours": "22px",
-          "ref": "11px"
-        },
-        "fontWeight": {
-          "ours": "600",
-          "ref": "400"
-        },
-        "padding": {
-          "ours": "0px",
-          "ref": "17px 0px 0px 15px"
-        },
-        "lineHeight": {
-          "ours": "22px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 74,
-            "y": 896,
-            "w": 26,
-            "h": 22
-          },
-          "ref": {
-            "x": 59,
-            "y": 938,
-            "w": 46,
-            "h": 142
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
-      "tag": "h2",
-      "text": "Round corners",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 117,
-            "y": 905,
-            "w": 117,
-            "h": 19
-          },
-          "ref": {
-            "x": 143,
-            "y": 982,
-            "w": 107,
-            "h": 18
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>label:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "Preserve aspect ratio",
-      "deltas": {
-        "fontSize": {
-          "ours": "13.6px",
-          "ref": "16px"
-        },
-        "lineHeight": {
-          "ours": "normal",
-          "ref": "24px"
-        },
-        "display": {
-          "ours": "block",
-          "ref": "inline"
-        },
-        "rect": {
-          "ours": {
-            "x": 422,
-            "y": 973,
-            "w": 129,
-            "h": 18
-          },
-          "ref": {
-            "x": 432,
-            "y": 1021,
-            "w": 156,
-            "h": 17
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "PIPELINE OUTPUTS",
-      "deltas": {
-        "letterSpacing": {
-          "ours": "1px",
-          "ref": "1.2px"
-        },
-        "lineHeight": {
-          "ours": "12px",
-          "ref": "normal"
-        },
-        "display": {
-          "ours": "block",
-          "ref": "inline"
-        },
-        "rect": {
-          "ours": {
-            "x": 799,
-            "y": 178,
-            "w": 94,
-            "h": 24
-          },
-          "ref": {
-            "x": 799,
-            "y": 188,
-            "w": 54,
-            "h": 36
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>strong:nth-child(2)",
-      "tag": "strong",
-      "text": "Visual history",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 799,
-            "y": 209,
-            "w": 94,
-            "h": 36
-          },
-          "ref": {
-            "x": 799,
-            "y": 233,
-            "w": 87,
-            "h": 34
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>button:nth-child(2)>span:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "1.2 MB",
-      "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "11px"
-        },
-        "color": {
-          "ours": "rgb(255, 255, 255)",
-          "ref": "rgb(23, 33, 43)"
-        },
-        "margin": {
-          "ours": "0px",
-          "ref": "5px 0px 0px"
-        },
-        "display": {
-          "ours": "inline",
-          "ref": "block"
-        },
-        "rect": {
-          "ours": {
-            "x": 1097,
-            "y": 240,
-            "w": 36,
-            "h": 13
-          },
-          "ref": {
-            "x": 1246,
-            "y": 291,
-            "w": 79,
-            "h": 13
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "DIMENSIONS",
-      "deltas": {
-        "letterSpacing": {
-          "ours": "0.9px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 1157,
-            "y": 216,
-            "w": 63,
-            "h": 11
-          },
-          "ref": {
-            "x": 1073,
-            "y": 271,
-            "w": 79,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
-      "tag": "span",
-      "text": "1200 × 800 px",
-      "deltas": {
-        "margin": {
-          "ours": "0px",
-          "ref": "5px 0px 0px"
-        },
-        "rect": {
-          "ours": {
-            "x": 1236,
-            "y": 214,
-            "w": 86,
-            "h": 14
-          },
-          "ref": {
-            "x": 1073,
-            "y": 291,
-            "w": 79,
-            "h": 13
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "FORMAT",
-      "deltas": {
-        "letterSpacing": {
-          "ours": "0.9px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 1157,
-            "y": 240,
-            "w": 38,
-            "h": 11
-          },
-          "ref": {
-            "x": 1159,
-            "y": 271,
-            "w": 79,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(2)",
-      "tag": "span",
-      "text": "PNG-24",
-      "deltas": {
-        "margin": {
-          "ours": "0px",
-          "ref": "5px 0px 0px"
-        },
-        "rect": {
-          "ours": {
-            "x": 1282,
-            "y": 238,
-            "w": 40,
-            "h": 14
-          },
-          "ref": {
-            "x": 1159,
-            "y": 291,
-            "w": 79,
-            "h": 13
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(3)>span:nth-child(1)",
-      "tag": "span",
-      "text": "SIZE",
-      "deltas": {
-        "letterSpacing": {
-          "ours": "0.9px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 1157,
-            "y": 265,
-            "w": 25,
-            "h": 11
-          },
-          "ref": {
-            "x": 1246,
-            "y": 271,
-            "w": 79,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "SOURCE",
-      "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "9px"
-        },
-        "letterSpacing": {
-          "ours": "0.8px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 806,
-            "y": 317,
-            "w": 550,
-            "h": 13
-          },
-          "ref": {
-            "x": 808,
-            "y": 663,
-            "w": 30,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "PNG",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 1067,
-            "y": 496,
-            "w": 28,
-            "h": 19
-          },
-          "ref": {
-            "x": 923,
-            "y": 478,
-            "w": 27,
-            "h": 18
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "original.png · 1200 × 800",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 814,
-            "y": 704,
-            "w": 135,
-            "h": 11
-          },
-          "ref": {
-            "x": 942,
-            "y": 663,
-            "w": 124,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "STEP 01",
-      "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "9px"
-        },
-        "letterSpacing": {
-          "ours": "0.8px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 806,
-            "y": 750,
-            "w": 550,
-            "h": 13
-          },
-          "ref": {
-            "x": 1096,
-            "y": 663,
-            "w": 35,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "gradient applied",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 814,
-            "y": 1137,
-            "w": 86,
-            "h": 11
-          },
-          "ref": {
-            "x": 1275,
-            "y": 663,
-            "w": 79,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>span:nth-child(1)",
-      "tag": "span",
-      "text": "STEP 02",
-      "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "9px"
-        },
-        "letterSpacing": {
-          "ours": "0.8px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 806,
-            "y": 1182,
-            "w": 550,
-            "h": 13
-          },
-          "ref": {
-            "x": 808,
-            "y": 1021,
-            "w": 35,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "background removed",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 814,
-            "y": 1569,
-            "w": 97,
-            "h": 11
-          },
-          "ref": {
-            "x": 977,
-            "y": 1021,
-            "w": 89,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>span:nth-child(1)",
-      "tag": "span",
-      "text": "STEP 03",
-      "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "9px"
-        },
-        "letterSpacing": {
-          "ours": "0.8px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 806,
-            "y": 1615,
-            "w": 550,
-            "h": 13
-          },
-          "ref": {
-            "x": 1096,
-            "y": 1021,
-            "w": 35,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "outline added",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 814,
-            "y": 2002,
-            "w": 70,
-            "h": 11
-          },
-          "ref": {
-            "x": 1290,
-            "y": 1021,
-            "w": 64,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>span:nth-child(1)",
-      "tag": "span",
-      "text": "FINAL OUTPUT",
-      "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "9px"
-        },
-        "letterSpacing": {
-          "ours": "0.8px",
-          "ref": "normal"
-        },
-        "rect": {
-          "ours": {
-            "x": 806,
-            "y": 2047,
-            "w": 550,
-            "h": 13
-          },
-          "ref": {
-            "x": 808,
-            "y": 1378,
-            "w": 59,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
-      "tag": "span",
-      "text": "ready · PNG-24",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 814,
-            "y": 2434,
-            "w": 76,
-            "h": 11
-          },
-          "ref": {
-            "x": 997,
-            "y": 1378,
-            "w": 69,
-            "h": 10
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>p:nth-child(3)",
-      "tag": "p",
-      "text": "Output is generated in-browser. Your fil",
-      "deltas": {
-        "rect": {
-          "ours": {
-            "x": 799,
-            "y": 2489,
-            "w": 565,
-            "h": 17
-          },
-          "ref": {
-            "x": 799,
-            "y": 1425,
-            "w": 565,
-            "h": 17
-          }
-        }
+      ],
+      "onlyOurs": [
+        "/ TOOLS / REMOVE-BACKGROUND-PNG",
+        "STEPS",
+        "Pipeline",
+        "AUTO",
+        "01",
+        "alpha",
+        "Remove background PNG (smart)",
+        "Background color",
+        "Similarity tolerance, %",
+        "10",
+        "Outer regions only",
+        "Edge smoothing, passes",
+        "1",
+        "Add step",
+        "Split PNG into HSL",
+        "Split PNG into HSV",
+        "Split PNG into HSI",
+        "Convert PNG to CMYK Colors",
+        "Convert PNG to YCbCr Colors",
+        "Convert PNG to LAB Colors",
+        "Show Transparent Areas PNG",
+        "Show Grayscale Pixels PNG",
+        "Show Color Pixels PNG",
+        "Light Pixel Mask PNG",
+        "Dark Pixel Mask PNG",
+        "Unique Color Mask PNG",
+        "Convert JPG to PNG",
+        "Convert WebP to PNG",
+        "Convert GIF to PNG",
+        "Convert BMP to PNG",
+        "Convert ICO to PNG",
+        "Convert PNG to BMP",
+        "Resize PNG",
+        "Crop PNG",
+        "Rotate PNG",
+        "Flip PNG",
+        "Add padding to PNG",
+        "Add border to PNG",
+        "Fit PNG onto background",
+        "Tile PNG",
+        "Circle Mask PNG",
+        "Square Mask PNG",
+        "Star Mask PNG",
+        "Wavy Mask PNG",
+        "Center PNG by content",
+        "Blur PNG",
+        "Sharpen PNG",
+        "Grayscale PNG",
+        "Invert colors PNG",
+        "Brightness & contrast PNG",
+        "Change PNG opacity",
+        "Sepia effect",
+        "Change hue PNG",
+        "Extract channel PNG",
+        "Swap channels PNG",
+        "Black & white threshold PNG",
+        "Posterize PNG",
+        "Two colors PNG",
+        "Convert PNG to JPG",
+        "Convert PNG to WebP"
+      ],
+      "onlyRef": [
+        "/ \n            BACKGROUND REMOVER",
+        "/",
+        "Remove background.",
+        "Select a background color and tune the e",
+        "REMOVER SETTINGS",
+        "Configure detection",
+        "TOOL 02",
+        "BACKGROUND COLOR",
+        "72\n                  %",
+        "strict edges",
+        "more removal",
+        "OUTER COLOR ONLY",
+        "Only remove connected background pixels ",
+        "SHOW MASK",
+        "Preview the detected transparency mask.",
+        "SOURCE / RESULT",
+        "comparison.png",
+        "SOURCE",
+        "original.png",
+        "OBJECT",
+        "1200 × 800",
+        "removed-bg.png",
+        "PNG",
+        "PNG-24",
+        "ENABLED",
+        "v2.4.0",
+        "background remover · local-only",
+        "© 2024"
+      ],
+      "counts": {
+        "tokenLight": 10,
+        "tokenDark": 16,
+        "elements": 8,
+        "onlyOurs": 110,
+        "onlyRef": 28
       }
     }
-  ],
-  "onlyOurs": [
-    "/ DEMO",
-    "+ Add tool",
-    "AUTO",
-    "Gradient color",
-    "DIRECTION",
-    "135 °",
-    "OPACITY",
-    "75%",
-    "50%",
-    "25%",
-    "Automatic subject detection enabled",
-    "Outline width",
-    "2 px",
-    "Outline color",
-    "Corner radius",
-    "18 px",
-    "v0.1.0",
-    "© 2026"
-  ],
-  "onlyRef": [
-    "/ \n            WORKSPACE",
-    "COLOR",
-    "135\n                        °",
-    "100",
-    "75",
-    "50",
-    "25",
-    "2\n                        px",
-    "18\n                        px",
-    "v2.4.0",
-    "© 2024"
-  ],
-  "counts": {
-    "tokenLight": 10,
-    "tokenDark": 16,
-    "elements": 47,
-    "onlyOurs": 18,
-    "onlyRef": 11
-  }
+  ]
 }
