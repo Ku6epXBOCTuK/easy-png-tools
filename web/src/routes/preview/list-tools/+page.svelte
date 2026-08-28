@@ -50,9 +50,9 @@
 
 <style>
 	.catalog {
-		max-width: 880px;
+		max-width: none;
 		margin: 0 auto;
-		padding: 2.5rem 1.25rem 4rem;
+		padding: 2.5rem clamp(24px, 4vw, 72px) 4rem;
 		display: flex;
 		flex-direction: column;
 		gap: 1.25rem;

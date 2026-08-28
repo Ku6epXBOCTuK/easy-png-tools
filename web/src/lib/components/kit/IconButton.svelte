@@ -6,10 +6,11 @@
 		icon: Component<{ size?: number; class?: string }>;
 		label: string;
 		onclick?: () => void;
-		variant?: "ghost" | "solid" | "accent";
+		variant?: "ghost" | "solid" | "accent" | "bare";
 		size?: number;
 		disabled?: boolean;
 	}
+
 	let {
 		icon,
 		label,
@@ -56,6 +57,18 @@
 		background: var(--cyan);
 		color: #042;
 		border-color: var(--cyan);
+	}
+	.icon-btn--bare {
+		width: auto;
+		height: auto;
+		padding: 6px;
+		border: 0;
+		border-radius: 0;
+		color: var(--muted);
+	}
+	.icon-btn--bare:hover:not(:disabled) {
+		color: var(--foreground);
+		border-color: transparent;
 	}
 	.icon-btn:disabled {
 		opacity: 0.5;

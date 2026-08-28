@@ -250,8 +250,8 @@
 		grid-template-columns: minmax(0, 1.05fr) minmax(520px, 0.95fr);
 		align-items: start;
 		gap: 56px;
-		max-width: 1680px;
-		margin: 0 auto;
+		max-width: none;
+		margin: auto;
 		padding: 60px clamp(24px, 4vw, 72px) 72px;
 	}
 	.workspace {

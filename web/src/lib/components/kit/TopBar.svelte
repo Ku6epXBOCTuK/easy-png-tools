@@ -1,15 +1,15 @@
 <script lang="ts">
 	import IconButton from "./IconButton.svelte";
-	import Segmented from "./Segmented.svelte";
 	import StatusDot from "./StatusDot.svelte";
 	import { CircleHelp, Moon, Sun } from "@lucide/svelte";
 
 	interface Props {
 		theme: "light" | "dark";
+		crumb?: string;
 		ontoggle: () => void;
 	}
 
-	let { theme, ontoggle }: Props = $props();
+	let { theme, crumb, ontoggle }: Props = $props();
 
 	let lang = $state("RU");
 </script>
@@ -18,22 +18,31 @@
 	<div class="brand">
 		<span class="brand-mark">EP</span>
 		<span>easy-png-tools</span>
+		{#if crumb}<span class="version">{crumb}</span>{/if}
 	</div>
 	<div class="top-actions">
 		<span class="status"><StatusDot /> AUTO PIPELINE</span>
-		<IconButton icon={CircleHelp} label="Help" onclick={() => {}} />
+		<IconButton icon={CircleHelp} label="Help" variant="bare" onclick={() => {}} />
 		<IconButton
 			icon={theme === "light" ? Moon : Sun}
 			label="Toggle theme"
+			variant="bare"
 			onclick={ontoggle}
 		/>
-		<Segmented
-			bind:value={lang}
-			options={[
-				{ value: "RU", label: "RU" },
-				{ value: "EN", label: "EN" },
-			]}
-		/>
+		<div class="lang" role="group" aria-label="Language">
+			<button
+				type="button"
+				class="lang-btn"
+				class:active={lang === "RU"}
+				onclick={() => (lang = "RU")}>RU</button
+			>
+			<button
+				type="button"
+				class="lang-btn"
+				class:active={lang === "EN"}
+				onclick={() => (lang = "EN")}>EN</button
+			>
+		</div>
 	</div>
 </header>
 
@@ -66,6 +75,11 @@
 		display: grid;
 		place-items: center;
 	}
+	.version {
+		font: 10px var(--font-mono);
+		letter-spacing: 0.12em;
+		color: var(--blue);
+	}
 	.top-actions {
 		display: flex;
 		align-items: center;
@@ -78,5 +92,27 @@
 		color: var(--muted);
 		font: 10px var(--font-mono);
 		letter-spacing: 0.08em;
+	}
+	.lang {
+		display: inline-flex;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		overflow: hidden;
+	}
+	.lang-btn {
+		border: 0;
+		background: transparent;
+		color: var(--muted);
+		font: 10px var(--font-mono);
+		letter-spacing: 0.06em;
+		padding: 6px 9px;
+		cursor: pointer;
+	}
+	.lang-btn + .lang-btn {
+		border-left: 1px solid var(--line);
+	}
+	.lang-btn.active {
+		background: var(--foreground);
+		color: var(--background);
 	}
 </style>
