@@ -1,9 +1,9 @@
-import { clonePixelImage, createPixelImage, type PixelImage } from './types';
-import { ToolError } from './errors';
+import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
+import { ToolError } from "./errors";
 
-export type RgbChannel = 'red' | 'green' | 'blue';
+export type RgbChannel = "red" | "green" | "blue";
 
-export type ChannelSwapPair = 'r-g' | 'r-b' | 'g-b';
+export type ChannelSwapPair = "r-g" | "r-b" | "g-b";
 
 export function setOpacity(img: PixelImage, percent: number): PixelImage {
 	const factor = clamp(percent, 0, 100) / 100;
@@ -74,7 +74,10 @@ function hueComponent(p: number, q: number, t: number): number {
 
 const CHANNEL_INDEX: Record<RgbChannel, number> = { red: 0, green: 1, blue: 2 };
 
-export function extractChannel(img: PixelImage, channel: RgbChannel): PixelImage {
+export function extractChannel(
+	img: PixelImage,
+	channel: RgbChannel,
+): PixelImage {
 	const index = CHANNEL_INDEX[channel];
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < out.data.length; i += 4) {
@@ -88,12 +91,15 @@ export function extractChannel(img: PixelImage, channel: RgbChannel): PixelImage
 }
 
 const SWAP_INDEX: Record<ChannelSwapPair, [number, number]> = {
-	'r-g': [0, 1],
-	'r-b': [0, 2],
-	'g-b': [1, 2]
+	"r-g": [0, 1],
+	"r-b": [0, 2],
+	"g-b": [1, 2],
 };
 
-export function swapChannels(img: PixelImage, pair: ChannelSwapPair): PixelImage {
+export function swapChannels(
+	img: PixelImage,
+	pair: ChannelSwapPair,
+): PixelImage {
 	const [a, b] = SWAP_INDEX[pair];
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < out.data.length; i += 4) {
@@ -108,11 +114,15 @@ export function swapChannels(img: PixelImage, pair: ChannelSwapPair): PixelImage
 	return out;
 }
 
-export function thresholdBlackWhite(img: PixelImage, thresholdPercent: number): PixelImage {
+export function thresholdBlackWhite(
+	img: PixelImage,
+	thresholdPercent: number,
+): PixelImage {
 	const threshold = (clamp(thresholdPercent, 0, 100) / 100) * 255;
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < out.data.length; i += 4) {
-		const luma = 0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
+		const luma =
+			0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
 		const v = luma >= threshold ? 255 : 0;
 		out.data[i] = v;
 		out.data[i + 1] = v;
@@ -128,7 +138,9 @@ export function posterize(img: PixelImage, levels: number): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < out.data.length; i += 4) {
 		for (let ch = 0; ch < 3; ch++) {
-			out.data[i + ch] = Math.round(Math.round(img.data[i + ch] / stepSize) * stepSize);
+			out.data[i + ch] = Math.round(
+				Math.round(img.data[i + ch] / stepSize) * stepSize,
+			);
 		}
 		out.data[i + 3] = img.data[i + 3];
 	}
@@ -139,14 +151,15 @@ export function twoColors(
 	img: PixelImage,
 	lightHex: string,
 	darkHex: string,
-	thresholdPercent: number
+	thresholdPercent: number,
 ): PixelImage {
 	const [lr, lg, lb] = parseColor(lightHex);
 	const [dr, dg, db] = parseColor(darkHex);
 	const threshold = (clamp(thresholdPercent, 0, 100) / 100) * 255;
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < out.data.length; i += 4) {
-		const luma = 0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
+		const luma =
+			0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
 		if (luma >= threshold) {
 			out.data[i] = lr;
 			out.data[i + 1] = lg;
@@ -164,20 +177,21 @@ export function twoColors(
 function parseColor(hex: string): [number, number, number] {
 	const match = /^#([0-9a-f]{6})$/i.exec(hex.trim());
 	if (!match) {
-		throw new ToolError('errors.badHex', { value: hex });
+		throw new ToolError("errors.badHex", { value: hex });
 	}
 	const digits = match[1];
 	return [
 		parseInt(digits.slice(0, 2), 16),
 		parseInt(digits.slice(2, 4), 16),
-		parseInt(digits.slice(4, 6), 16)
+		parseInt(digits.slice(4, 6), 16),
 	];
 }
 
 export function grayscale(img: PixelImage): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < img.data.length; i += 4) {
-		const luma = 0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
+		const luma =
+			0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
 		out.data[i] = luma;
 		out.data[i + 1] = luma;
 		out.data[i + 2] = luma;
@@ -200,7 +214,7 @@ export function invert(img: PixelImage): PixelImage {
 export function brightnessContrast(
 	img: PixelImage,
 	brightness: number,
-	contrast: number
+	contrast: number,
 ): PixelImage {
 	const offset = (clamp(brightness, -100, 100) / 100) * 255;
 	const c = (clamp(contrast, -100, 100) / 100) * 255;
@@ -217,7 +231,8 @@ export function brightnessContrast(
 }
 
 export function rgbToHex(r: number, g: number, b: number): string {
-	const byte = (v: number) => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0');
+	const byte = (v: number) =>
+		clamp(Math.round(v), 0, 255).toString(16).padStart(2, "0");
 	return `#${byte(r)}${byte(g)}${byte(b)}`;
 }
 
@@ -286,11 +301,11 @@ export function temperature(img: PixelImage, percent: number): PixelImage {
 export function tint(
 	img: PixelImage,
 	colorHex: string,
-	strengthPercent: number
+	strengthPercent: number,
 ): PixelImage {
 	const s = clamp(strengthPercent, 0, 100) / 100;
 	const match = /^#([0-9a-f]{6})$/i.exec(colorHex.trim());
-	if (!match) throw new ToolError('errors.badHex', { value: colorHex });
+	if (!match) throw new ToolError("errors.badHex", { value: colorHex });
 	const d = match[1];
 	const tr = parseInt(d.slice(0, 2), 16) / 255;
 	const tg = parseInt(d.slice(2, 4), 16) / 255;

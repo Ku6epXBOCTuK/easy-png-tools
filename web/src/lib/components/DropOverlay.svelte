@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import { isSupportedImage, unsupportedImageError } from '$lib/core/io';
-	import { t } from '$lib/i18n/t';
+	import type { Snippet } from "svelte";
+	import { isSupportedImage, unsupportedImageError } from "$lib/core/io";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		onFile: (file: File) => void;
@@ -13,8 +13,8 @@
 	let {
 		onFile,
 		onError,
-		label = t('dropZone.overlayDefault'),
-		children
+		label = t("dropZone.overlayDefault"),
+		children,
 	}: Props = $props();
 
 	let depth = $state(0);

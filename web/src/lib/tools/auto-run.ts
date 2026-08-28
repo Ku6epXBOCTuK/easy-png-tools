@@ -14,7 +14,7 @@ export function createAutoRunner(delayMs = 300) {
 			cancelTimer();
 			timer = setTimeout(run, delayMs);
 			return cancelTimer;
-		}
+		},
 	};
 
 	function cancelTimer() {

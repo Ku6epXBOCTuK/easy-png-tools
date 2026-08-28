@@ -1,5 +1,5 @@
-import type { PixelImage } from './types';
-import { createPixelImage } from './types';
+import type { PixelImage } from "./types";
+import { createPixelImage } from "./types";
 
 export type ShapeTest = (nx: number, ny: number) => boolean;
 
@@ -21,7 +21,7 @@ export function starTest(
 	points: number,
 	innerFrac: number,
 	outerFrac: number,
-	rotationDeg: number
+	rotationDeg: number,
 ): ShapeTest {
 	const n = Math.max(3, Math.round(points));
 	const rot = (rotationDeg * Math.PI) / 180;
@@ -41,7 +41,7 @@ export function wavyTest(
 	baseFrac: number,
 	amplitudeFrac: number,
 	waves: number,
-	phaseDeg: number
+	phaseDeg: number,
 ): ShapeTest {
 	const phase = (phaseDeg * Math.PI) / 180;
 	return (nx, ny) => {
@@ -60,7 +60,7 @@ export function renderShape(
 	img: PixelImage,
 	test: ShapeTest,
 	offsetXFrac = 0,
-	offsetYFrac = 0
+	offsetYFrac = 0,
 ): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	const minDim = Math.min(img.width, img.height);

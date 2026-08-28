@@ -1,5 +1,5 @@
-import { parseHex } from './alpha';
-import { clonePixelImage, createPixelImage, type PixelImage } from './types';
+import { parseHex } from "./alpha";
+import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
 
 type Mask = Uint8Array;
 
@@ -25,7 +25,12 @@ export function buildAlphaMask(img: PixelImage): Mask {
 	return mask;
 }
 
-export function dilateMask(mask: Mask, width: number, height: number, radius: number): Mask {
+export function dilateMask(
+	mask: Mask,
+	width: number,
+	height: number,
+	radius: number,
+): Mask {
 	const r = Math.trunc(radius);
 	if (r < 1) return mask.slice();
 	const out = new Uint8Array(mask.length);
@@ -48,7 +53,12 @@ export function dilateMask(mask: Mask, width: number, height: number, radius: nu
 	return out;
 }
 
-export function erodeMask(mask: Mask, width: number, height: number, radius: number): Mask {
+export function erodeMask(
+	mask: Mask,
+	width: number,
+	height: number,
+	radius: number,
+): Mask {
 	const r = Math.trunc(radius);
 	if (r < 1) return mask.slice();
 	const out = new Uint8Array(mask.length);
@@ -89,18 +99,24 @@ export function applyMaskAlpha(img: PixelImage, mask: Mask): PixelImage {
 
 export function dilateImage(img: PixelImage, radiusPx: number): PixelImage {
 	if (radiusPx < 1) return clonePixelImage(img);
-	return applyMaskAlpha(img, dilateMask(buildAlphaMask(img), img.width, img.height, radiusPx));
+	return applyMaskAlpha(
+		img,
+		dilateMask(buildAlphaMask(img), img.width, img.height, radiusPx),
+	);
 }
 
 export function erodeImage(img: PixelImage, radiusPx: number): PixelImage {
 	if (radiusPx < 1) return clonePixelImage(img);
-	return applyMaskAlpha(img, erodeMask(buildAlphaMask(img), img.width, img.height, radiusPx));
+	return applyMaskAlpha(
+		img,
+		erodeMask(buildAlphaMask(img), img.width, img.height, radiusPx),
+	);
 }
 
 export function strokeImage(
 	img: PixelImage,
 	radiusPx: number,
-	colorHex: string
+	colorHex: string,
 ): PixelImage {
 	const r = Math.trunc(radiusPx);
 	if (r < 1) return clonePixelImage(img);
@@ -125,7 +141,11 @@ export function strokeImage(
 	return out;
 }
 
-export function contourImage(img: PixelImage, radiusPx: number, colorHex: string): PixelImage {
+export function contourImage(
+	img: PixelImage,
+	radiusPx: number,
+	colorHex: string,
+): PixelImage {
 	const r = Math.max(1, Math.trunc(radiusPx));
 	const [cr, cg, cb] = parseHex(colorHex);
 	const mask = buildAlphaMask(img);
@@ -147,11 +167,21 @@ export function contourImage(img: PixelImage, radiusPx: number, colorHex: string
 	return out;
 }
 
-export function openingMask(mask: Mask, w: number, h: number, radius: number): Mask {
+export function openingMask(
+	mask: Mask,
+	w: number,
+	h: number,
+	radius: number,
+): Mask {
 	return dilateMask(erodeMask(mask, w, h, radius), w, h, radius);
 }
 
-export function closingMask(mask: Mask, w: number, h: number, radius: number): Mask {
+export function closingMask(
+	mask: Mask,
+	w: number,
+	h: number,
+	radius: number,
+): Mask {
 	return erodeMask(dilateMask(mask, w, h, radius), w, h, radius);
 }
 

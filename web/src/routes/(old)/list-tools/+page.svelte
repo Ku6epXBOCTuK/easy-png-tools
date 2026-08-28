@@ -1,25 +1,31 @@
 <script lang="ts">
-	import { CATEGORIES } from '$lib/categories';
-	import { resolve } from '$app/paths';
-	import { t } from '$lib/i18n/t';
-	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
-	import ToolCard from '$lib/components/search/ToolCard.svelte';
-	import { TOOLS } from '$lib/registry';
+	import { CATEGORIES } from "$lib/categories";
+	import { resolve } from "$app/paths";
+	import { t } from "$lib/i18n/t";
+	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
+	import ToolCard from "$lib/components/search/ToolCard.svelte";
+	import { TOOLS } from "$lib/registry";
 </script>
 
 <svelte:head>
-	<title>{t('catalog.pageTitle')}</title>
-	<meta name="description" content={t('catalog.metaDescription')} />
+	<title>{t("catalog.pageTitle")}</title>
+	<meta name="description" content={t("catalog.metaDescription")} />
 </svelte:head>
 
-<h1>{t('catalog.heading')}</h1>
-<p class="lead text-muted">{t('catalog.lead', { count: TOOLS.length })}</p>
+<h1>{t("catalog.heading")}</h1>
+<p class="lead text-muted">{t("catalog.lead", { count: TOOLS.length })}</p>
 
 {#each CATEGORIES as category (category)}
 	{@const categoryTools = TOOLS.filter((tool) => tool.category === category)}
 	{#if categoryTools.length > 0}
-		<section id={category} class="category" aria-labelledby="{category}-heading">
-			<h2 id="{category}-heading" class="heading-section">{t(`categories.${category}`)}</h2>
+		<section
+			id={category}
+			class="category"
+			aria-labelledby="{category}-heading"
+		>
+			<h2 id="{category}-heading" class="heading-section">
+				{t(`categories.${category}`)}
+			</h2>
 			<div class="grid">
 				{#each categoryTools as tool (tool.id)}
 					<div class="panel">

@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
-import { TOOLS } from '../registry';
-import { normalizeForSearch, scoreDoc } from './matching';
-import { toolSearchDoc } from './tool-strings';
-import { isChainable } from '../registry';
+import { describe, expect, it } from "vitest";
+import { TOOLS } from "../registry";
+import { normalizeForSearch, scoreDoc } from "./matching";
+import { toolSearchDoc } from "./tool-strings";
+import { isChainable } from "../registry";
 
 function hits(q: string): string[] {
 	const nq = normalizeForSearch(q);
@@ -12,13 +12,15 @@ function hits(q: string): string[] {
 	}).map((t) => t.id);
 }
 
-describe('полнота поиска', () => {
-	it('генератор (не chainable) находится поиском — раньше отфильтровывался', () => {
-		expect(isChainable(TOOLS.find((t) => t.id === 'color-wheel-png')!)).toBe(false);
-		expect(hits('color wheel')).toContain('color-wheel-png');
+describe("полнота поиска", () => {
+	it("генератор (не chainable) находится поиском — раньше отфильтровывался", () => {
+		expect(isChainable(TOOLS.find((t) => t.id === "color-wheel-png")!)).toBe(
+			false,
+		);
+		expect(hits("color wheel")).toContain("color-wheel-png");
 	});
 
-	it('анализатор-маска тоже ищется', () => {
-		expect(hits('уникальных цветов')).toContain('unique-color-mask-png');
+	it("анализатор-маска тоже ищется", () => {
+		expect(hits("уникальных цветов")).toContain("unique-color-mask-png");
 	});
 });

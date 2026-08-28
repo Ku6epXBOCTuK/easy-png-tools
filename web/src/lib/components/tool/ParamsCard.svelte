@@ -1,7 +1,7 @@
 <script lang="ts">
-	import ParamForm from '../ParamForm.svelte';
-	import type { ParamDef, ToolEntry } from '$lib/registry';
-	import { t } from '$lib/i18n/t';
+	import ParamForm from "../ParamForm.svelte";
+	import type { ParamDef, ToolEntry } from "$lib/registry";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		tool: ToolEntry;
@@ -20,7 +20,7 @@
 		pipetteTargetId = null,
 		onPipetteToggle,
 		hasMask = false,
-		showMask = $bindable(false)
+		showMask = $bindable(false),
 	}: Props = $props();
 </script>
 
@@ -36,7 +36,7 @@
 			bind:showMask
 		/>
 	{:else}
-		<p class="hint text-caption text-muted">{t('paramsCard.noParams')}</p>
+		<p class="hint text-caption text-muted">{t("paramsCard.noParams")}</p>
 	{/if}
 </div>
 

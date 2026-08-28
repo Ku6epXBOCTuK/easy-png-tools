@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Field from './Field.svelte';
-	import { t } from '$lib/i18n/t';
+	import Field from "./Field.svelte";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		id: string;
@@ -11,20 +11,26 @@
 		onPipetteToggle?: () => void;
 	}
 
-	let { id, label, value = $bindable('#000000'), hint, pipetteActive = false, onPipetteToggle }:
-		Props = $props();
+	let {
+		id,
+		label,
+		value = $bindable("#000000"),
+		hint,
+		pipetteActive = false,
+		onPipetteToggle,
+	}: Props = $props();
 </script>
 
 <Field {id} {label} {hint}>
 	<div class="row">
-		<input id={id} class="control swatch" type="color" bind:value />
+		<input {id} class="control swatch" type="color" bind:value />
 		{#if onPipetteToggle}
 			<button
 				type="button"
 				class="pipette"
-				aria-label={t('ui.pipette')}
+				aria-label={t("ui.pipette")}
 				aria-pressed={pipetteActive}
-				title={t('ui.pipette')}
+				title={t("ui.pipette")}
 				onclick={onPipetteToggle}
 			>
 				◎
@@ -73,7 +79,7 @@
 		color: var(--link);
 	}
 
-	.pipette[aria-pressed='true'] {
+	.pipette[aria-pressed="true"] {
 		border-color: var(--link);
 		color: var(--link);
 		background: color-mix(in srgb, var(--accent) 10%, var(--surface));

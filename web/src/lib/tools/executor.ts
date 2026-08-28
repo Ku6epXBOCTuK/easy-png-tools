@@ -1,24 +1,27 @@
-import type { PixelImage } from '../core/types';
-import { ToolError } from '../core/errors';
+import type { PixelImage } from "../core/types";
+import { ToolError } from "../core/errors";
 
 type MaybeRunnable = {
 	id: string;
 	domOnly?: boolean;
-	run?: (img: PixelImage, params: Record<string, unknown>) => Promise<PixelImage> | PixelImage;
+	run?: (
+		img: PixelImage,
+		params: Record<string, unknown>,
+	) => Promise<PixelImage> | PixelImage;
 };
 
 export async function executeStep(
 	tool: MaybeRunnable,
 	img: PixelImage,
-	params: Record<string, unknown>
+	params: Record<string, unknown>,
 ): Promise<PixelImage> {
 	if (!tool.run) {
-		throw new Error('errors.noImageRun');
+		throw new Error("errors.noImageRun");
 	}
 	if (tool.domOnly) {
 		return await runDirect(tool, img, params);
 	}
-	if (typeof Worker === 'undefined') {
+	if (typeof Worker === "undefined") {
 		return await runDirect(tool, img, params);
 	}
 	const worker = ensureWorker();
@@ -37,10 +40,10 @@ export async function executeStep(
 async function runDirect(
 	tool: MaybeRunnable,
 	img: PixelImage,
-	params: Record<string, unknown>
+	params: Record<string, unknown>,
 ): Promise<PixelImage> {
 	if (!tool.run) {
-		throw new Error('errors.noImageRun');
+		throw new Error("errors.noImageRun");
 	}
 	return await tool.run(img, params);
 }
@@ -57,9 +60,12 @@ function ensureWorker(): Worker | null {
 	if (workerTried) return worker;
 	workerTried = true;
 	try {
-		const candidate = new Worker(new URL('./executor.worker.ts', import.meta.url), {
-			type: 'module'
-		});
+		const candidate = new Worker(
+			new URL("./executor.worker.ts", import.meta.url),
+			{
+				type: "module",
+			},
+		);
 		candidate.onmessage = (event: MessageEvent) => {
 			const payload = event.data as {
 				id: number;
@@ -78,18 +84,18 @@ function ensureWorker(): Worker | null {
 				entry.resolve({
 					width: payload.width,
 					height: payload.height,
-					data: new Uint8ClampedArray(payload.data)
+					data: new Uint8ClampedArray(payload.data),
 				});
 			} else if (payload.errorKey) {
 				entry.reject(new ToolError(payload.errorKey, payload.errorVars));
 			} else {
-				entry.reject(new Error(payload.error ?? 'errors.workerFailed'));
+				entry.reject(new Error(payload.error ?? "errors.workerFailed"));
 			}
 		};
 		candidate.onerror = () => {
 			worker = null;
 			for (const entry of pending.values()) {
-				entry.reject(new Error('errors.workerUnavailable'));
+				entry.reject(new Error("errors.workerUnavailable"));
 			}
 			pending.clear();
 		};
@@ -111,7 +117,7 @@ function runInWorker(
 	workerInstance: Worker,
 	toolId: string,
 	img: PixelImage,
-	params: Record<string, unknown>
+	params: Record<string, unknown>,
 ): Promise<PixelImage> {
 	return new Promise((resolve, reject) => {
 		const id = nextRequestId++;
@@ -119,8 +125,12 @@ function runInWorker(
 		workerInstance.postMessage({
 			id,
 			toolId,
-			image: { width: img.width, height: img.height, data: new Uint8ClampedArray(img.data) },
-			params
+			image: {
+				width: img.width,
+				height: img.height,
+				data: new Uint8ClampedArray(img.data),
+			},
+			params,
 		});
 	});
 }

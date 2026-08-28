@@ -1,16 +1,16 @@
 <script lang="ts">
-	import Button from '../ui/Button.svelte';
-	import DownloadButton from '../DownloadButton.svelte';
-	import EmptyState from '../ui/EmptyState.svelte';
-	import InfoPanel from '../InfoPanel.svelte';
-	import Preview from '../Preview.svelte';
-	import TextResult from './TextResult.svelte';
-	import type { ImageInfo } from '$lib/core/analyze';
-	import type { PixelImage } from '$lib/core/types';
-	import { outputOf, type ToolEntry } from '$lib/registry';
-	import { t } from '$lib/i18n/t';
+	import Button from "../ui/Button.svelte";
+	import DownloadButton from "../DownloadButton.svelte";
+	import EmptyState from "../ui/EmptyState.svelte";
+	import InfoPanel from "../InfoPanel.svelte";
+	import Preview from "../Preview.svelte";
+	import TextResult from "./TextResult.svelte";
+	import type { ImageInfo } from "$lib/core/analyze";
+	import type { PixelImage } from "$lib/core/types";
+	import { outputOf, type ToolEntry } from "$lib/registry";
+	import { t } from "$lib/i18n/t";
 
-	type Status = 'idle' | 'loaded' | 'processing' | 'error';
+	type Status = "idle" | "loaded" | "processing" | "error";
 
 	interface Props {
 		tool: ToolEntry;
@@ -39,20 +39,23 @@
 		textResult,
 		onChainToggle,
 		hasChain = false,
-		onDownloadError
+		onDownloadError,
 	}: Props = $props();
 </script>
 
 <div class="container">
 	{#if !sourceLoaded}
 		<div class="media">
-			<EmptyState title={t('resultCard.emptyTitle')} hint={t('resultCard.emptyHint')} />
+			<EmptyState
+				title={t("resultCard.emptyTitle")}
+				hint={t("resultCard.emptyHint")}
+			/>
 		</div>
-	{:else if !isInfo && status === 'processing' && !result}
+	{:else if !isInfo && status === "processing" && !result}
 		<div class="media">
 			<EmptyState
-				title={t('resultCard.processingTitle')}
-				hint={t('resultCard.processingHint')}
+				title={t("resultCard.processingTitle")}
+				hint={t("resultCard.processingHint")}
 			/>
 		</div>
 	{:else if isInfo}
@@ -61,7 +64,7 @@
 				<InfoPanel {info} />
 			{/if}
 		</div>
-	{:else if tool.resultType === 'text'}
+	{:else if tool.resultType === "text"}
 		<div class="media">
 			{#if textResult !== null}
 				<TextResult text={textResult} filename={tool.id} toolId={tool.id} />
@@ -70,8 +73,8 @@
 	{:else}
 		<div class="media">
 			<Preview image={displayImage} />
-			{#if status === 'processing'}
-				<span class="recalc" aria-live="polite">{t('resultCard.recalc')}</span>
+			{#if status === "processing"}
+				<span class="recalc" aria-live="polite">{t("resultCard.recalc")}</span>
 			{/if}
 		</div>
 		<div class="actions-row">
@@ -84,7 +87,7 @@
 			/>
 			{#if onChainToggle}
 				<Button variant="secondary" fullWidth onclick={onChainToggle}>
-					{hasChain ? t('resultCard.breakChain') : t('resultCard.nextTool')}
+					{hasChain ? t("resultCard.breakChain") : t("resultCard.nextTool")}
 				</Button>
 			{/if}
 		</div>

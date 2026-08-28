@@ -3,7 +3,7 @@ export const COMPRESSION_LEVELS = {
 	light: 192,
 	balanced: 96,
 	strong: 44,
-	extreme: 16
+	extreme: 16,
 } as const;
 
 export type CompressionLevel = keyof typeof COMPRESSION_LEVELS;
@@ -16,7 +16,7 @@ export type CompressionLevel = keyof typeof COMPRESSION_LEVELS;
 export async function findMaxColorsWithin(
 	targetBytes: number,
 	maxK: number,
-	encodeSize: (k: number) => Promise<number | null>
+	encodeSize: (k: number) => Promise<number | null>,
 ): Promise<number> {
 	const hi = Math.max(2, Math.round(maxK));
 	let ok = 2;

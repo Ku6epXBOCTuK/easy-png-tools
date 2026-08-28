@@ -1,13 +1,13 @@
 export type Position9 =
-	| 'top-left'
-	| 'top-center'
-	| 'top-right'
-	| 'middle-left'
-	| 'center'
-	| 'middle-right'
-	| 'bottom-left'
-	| 'bottom-center'
-	| 'bottom-right';
+	| "top-left"
+	| "top-center"
+	| "top-right"
+	| "middle-left"
+	| "center"
+	| "middle-right"
+	| "bottom-left"
+	| "bottom-center"
+	| "bottom-right";
 
 /**
  * Левый верхний угол контента размером contentW×contentH при размещении
@@ -19,16 +19,30 @@ export function anchorOrigin(
 	contentH: number,
 	cw: number,
 	ch: number,
-	margin: number
+	margin: number,
 ): { x: number; y: number } {
-	const h = position.endsWith('-left') ? 'left' : position.endsWith('-right') ? 'right' : 'center';
-	const v = position.startsWith('top-')
-		? 'top'
-		: position.startsWith('bottom-')
-			? 'bottom'
-			: 'middle';
-	const x = h === 'left' ? margin : h === 'right' ? cw - margin - contentW : (cw - contentW) / 2;
-	const y = v === 'top' ? margin : v === 'bottom' ? ch - margin - contentH : (ch - contentH) / 2;
+	const h = position.endsWith("-left")
+		? "left"
+		: position.endsWith("-right")
+			? "right"
+			: "center";
+	const v = position.startsWith("top-")
+		? "top"
+		: position.startsWith("bottom-")
+			? "bottom"
+			: "middle";
+	const x =
+		h === "left"
+			? margin
+			: h === "right"
+				? cw - margin - contentW
+				: (cw - contentW) / 2;
+	const y =
+		v === "top"
+			? margin
+			: v === "bottom"
+				? ch - margin - contentH
+				: (ch - contentH) / 2;
 	return { x, y };
 }
 
@@ -39,12 +53,15 @@ export function anchorOrigin(
 export function wrapText(
 	text: string,
 	maxWidth: number,
-	measure: (line: string) => number
+	measure: (line: string) => number,
 ): string[] {
-	const words = text.trim().split(/\s+/).filter((w) => w.length > 0);
+	const words = text
+		.trim()
+		.split(/\s+/)
+		.filter((w) => w.length > 0);
 	if (words.length === 0) return [];
 	const lines: string[] = [];
-	let current = '';
+	let current = "";
 	for (const word of words) {
 		const candidate = current.length === 0 ? word : `${current} ${word}`;
 		if (measure(candidate) <= maxWidth || current.length === 0) {
@@ -75,7 +92,7 @@ export function tileGrid(
 	stepX: number,
 	stepY: number,
 	blockW: number,
-	blockH: number
+	blockH: number,
 ): TilePoint[] {
 	const diag = Math.sqrt(cw * cw + ch * ch);
 	const spanX = diag + blockW;
@@ -101,7 +118,7 @@ export function tileGrid(
 		for (let c = 0; c < cols; c++) {
 			points.push({
 				x: startX + c * sx - cw / 2,
-				y: startY + r * sy - ch / 2
+				y: startY + r * sy - ch / 2,
 			});
 		}
 	}

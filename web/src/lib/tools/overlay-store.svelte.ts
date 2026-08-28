@@ -1,4 +1,4 @@
-import type { PixelImage } from '$lib/core/types';
+import type { PixelImage } from "$lib/core/types";
 
 /**
  * Картинка-знак для watermark-image-png. Живёт только в состоянии страницы:

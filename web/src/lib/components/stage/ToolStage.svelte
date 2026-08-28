@@ -1,24 +1,24 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import { outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
-	import type { ImageInfo } from '$lib/core/analyze';
-	import type { PixelImage } from '$lib/core/types';
-	import { t } from '$lib/i18n/t';
-	import { toolTitle } from '$lib/i18n/tool-strings';
-	import { TOOL_ICONS } from '$lib/tools/tool-icons';
-	import DownloadButton from '../DownloadButton.svelte';
-	import Button from '../ui/Button.svelte';
-	import EmptyState from '../ui/EmptyState.svelte';
-	import OverlayCard from '../tool/OverlayCard.svelte';
-	import ParamsCard from '../tool/ParamsCard.svelte';
-	import ResultCard from '../tool/ResultCard.svelte';
-	import SourceCard from '../tool/SourceCard.svelte';
-	import TextInputCard from '../tool/TextInputCard.svelte';
-	import Preview from '../Preview.svelte';
-	import type { StageStatus } from './stage-props';
+	import type { Snippet } from "svelte";
+	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/registry";
+	import type { ImageInfo } from "$lib/core/analyze";
+	import type { PixelImage } from "$lib/core/types";
+	import { t } from "$lib/i18n/t";
+	import { toolTitle } from "$lib/i18n/tool-strings";
+	import { TOOL_ICONS } from "$lib/tools/tool-icons";
+	import DownloadButton from "../DownloadButton.svelte";
+	import Button from "../ui/Button.svelte";
+	import EmptyState from "../ui/EmptyState.svelte";
+	import OverlayCard from "../tool/OverlayCard.svelte";
+	import ParamsCard from "../tool/ParamsCard.svelte";
+	import ResultCard from "../tool/ResultCard.svelte";
+	import SourceCard from "../tool/SourceCard.svelte";
+	import TextInputCard from "../tool/TextInputCard.svelte";
+	import Preview from "../Preview.svelte";
+	import type { StageStatus } from "./stage-props";
 
 	interface Props {
-		mode: 'base' | 'chain';
+		mode: "base" | "chain";
 		header?: Snippet;
 		tool: ToolEntry;
 		source?: PixelImage | null;
@@ -66,7 +66,7 @@
 		source = null,
 		displayImage = null,
 		info = null,
-		status = 'idle',
+		status = "idle",
 		isInfo = false,
 		isSourceless = false,
 		isTextSource = false,
@@ -98,43 +98,59 @@
 		onRemove,
 		onError,
 		onAddStep,
-		onRemoveChain
+		onRemoveChain,
 	}: Props = $props();
 
-	const isChain = $derived(mode === 'chain');
+	const isChain = $derived(mode === "chain");
 	const format = $derived(outputOf(tool));
 	const safeParams = $derived(sanitizeParams(tool, values ?? {}));
 	const StepIcon = $derived(TOOL_ICONS[tool.id]);
 	const showParams = $derived(
-		mode === 'chain'
+		mode === "chain"
 			? tool.params.length > 0
 			: (source !== null || isSourceless) &&
-				!isInfo &&
-				(tool.params.length > 0 || hasMask)
+					!isInfo &&
+					(tool.params.length > 0 || hasMask),
 	);
 
-	const leftLegend = $derived(isChain ? t('chain.inputLegend') : t('toolPage.legendSource'));
-	const midLegend = $derived(isChain ? t('chain.paramsLegend') : t('toolPage.legendParams'));
+	const leftLegend = $derived(
+		isChain ? t("chain.inputLegend") : t("toolPage.legendSource"),
+	);
+	const midLegend = $derived(
+		isChain ? t("chain.paramsLegend") : t("toolPage.legendParams"),
+	);
 	const rightLegend = $derived(
-		isChain ? t('chain.resultLegend') : isInfo ? t('toolPage.legendSummary') : t('toolPage.legendResult')
+		isChain
+			? t("chain.resultLegend")
+			: isInfo
+				? t("toolPage.legendSummary")
+				: t("toolPage.legendResult"),
 	);
 </script>
 
-<div class="panel stage-grid" class:no-params={!showParams} class:single={!isChain && !!isSourceless}>
+<div
+	class="panel stage-grid"
+	class:no-params={!showParams}
+	class:single={!isChain && !!isSourceless}
+>
 	{#if header}
 		{@render header()}
 	{/if}
 
 	{#if isChain}
 		<section class="pane">
-			<span class="edge-legend pane-legend" aria-hidden="true">{leftLegend}</span>
+			<span class="edge-legend pane-legend" aria-hidden="true"
+				>{leftLegend}</span
+			>
 			<div class="pane-body">
 				<Preview image={input} />
 			</div>
 		</section>
 	{:else if !isSourceless}
 		<section class="pane">
-			<span class="edge-legend pane-legend" aria-hidden="true">{leftLegend}</span>
+			<span class="edge-legend pane-legend" aria-hidden="true"
+				>{leftLegend}</span
+			>
 			<div class="pane-body">
 				{#if isTextSource && !source}
 					<TextInputCard onSubmit={(text) => onTextSubmit?.(text)} />
@@ -162,34 +178,50 @@
 
 	{#if showParams}
 		<section class="pane pane-params">
-			<span class="edge-legend pane-legend" aria-hidden="true">{midLegend}</span>
+			<span class="edge-legend pane-legend" aria-hidden="true">{midLegend}</span
+			>
 			<div class="pane-body">
-				<ParamsCard {tool} params={tool.params} bind:values {pipetteTargetId} onPipetteToggle={(id) => handlePipetteToggle?.(id)} {hasMask} bind:showMask />
+				<ParamsCard
+					{tool}
+					params={tool.params}
+					bind:values
+					{pipetteTargetId}
+					onPipetteToggle={(id) => handlePipetteToggle?.(id)}
+					{hasMask}
+					bind:showMask
+				/>
 			</div>
 		</section>
 	{/if}
 
 	<section class="pane">
-		<span class="edge-legend pane-legend" aria-hidden="true">{rightLegend}</span>
+		<span class="edge-legend pane-legend" aria-hidden="true">{rightLegend}</span
+		>
 		<div class="pane-body">
 			{#if isChain}
 				{#if busy && !result}
-					<EmptyState title={t('chain.busyTitle')} hint={t('chain.busyHint')} />
+					<EmptyState title={t("chain.busyTitle")} hint={t("chain.busyHint")} />
 				{:else}
 					<Preview image={result} />
 					{#if busy}
-						<span class="recalc" aria-live="polite">{t('resultCard.recalc')}</span>
+						<span class="recalc" aria-live="polite"
+							>{t("resultCard.recalc")}</span
+						>
 					{/if}
 					<div class="actions-row">
 						<DownloadButton
 							image={result}
-							format={format}
+							{format}
 							baseName="{index + 2}-{tool.id}"
 							params={safeParams}
 							onError={(e) => showError?.(e)}
 						/>
-						<Button variant="secondary" fullWidth onclick={isLast ? onAddStep : onRemoveChain}>
-							{isLast ? t('resultCard.nextTool') : t('resultCard.breakChain')}
+						<Button
+							variant="secondary"
+							fullWidth
+							onclick={isLast ? onAddStep : onRemoveChain}
+						>
+							{isLast ? t("resultCard.nextTool") : t("resultCard.breakChain")}
 						</Button>
 					</div>
 				{/if}
@@ -199,11 +231,11 @@
 					sourceLoaded={isSourceless ? true : !!source}
 					{status}
 					{result}
-					displayImage={displayImage}
+					{displayImage}
 					{info}
 					{isInfo}
 					params={sanitized}
-					textResult={textResult}
+					{textResult}
 					onChainToggle={canChainBase ? toggleChain : undefined}
 					{hasChain}
 					onDownloadError={(e) => showError?.(e)}
@@ -276,7 +308,7 @@
 		text-align: left;
 	}
 
-	.pane-params :global(input[type='range']) {
+	.pane-params :global(input[type="range"]) {
 		order: -1;
 		flex: 1 1 100%;
 		min-width: 0;
@@ -306,7 +338,10 @@
 
 	@media (min-width: 75rem) {
 		.stage-grid:not(.no-params):not(.single) {
-			grid-template-columns: minmax(0, 1fr) clamp(13rem, 17vw, 18rem) minmax(0, 1fr);
+			grid-template-columns: minmax(0, 1fr) clamp(13rem, 17vw, 18rem) minmax(
+					0,
+					1fr
+				);
 		}
 
 		.stage-grid.no-params:not(.single),

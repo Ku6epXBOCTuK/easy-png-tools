@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { PixelImage } from '$lib/core/types';
-	import { t } from '$lib/i18n/t';
-	import DropOverlay from '../DropOverlay.svelte';
-	import DropZone from '../DropZone.svelte';
-	import Preview from '../Preview.svelte';
-	import Button from '../ui/Button.svelte';
+	import type { PixelImage } from "$lib/core/types";
+	import { t } from "$lib/i18n/t";
+	import DropOverlay from "../DropOverlay.svelte";
+	import DropZone from "../DropZone.svelte";
+	import Preview from "../Preview.svelte";
+	import Button from "../ui/Button.svelte";
 
 	interface Props {
 		source: PixelImage | null;
@@ -15,7 +15,14 @@
 		onPickColor?: (hex: string) => void;
 	}
 
-	let { source, onFile, onError, onReset, pipetteActive = false, onPickColor }: Props = $props();
+	let {
+		source,
+		onFile,
+		onError,
+		onReset,
+		pipetteActive = false,
+		onPickColor,
+	}: Props = $props();
 </script>
 
 <div class="container">
@@ -24,9 +31,11 @@
 	{:else}
 		<DropOverlay {onFile} {onError}>
 			<div class="media">
-				<Preview image={source} pipetteActive={pipetteActive} onPickColor={onPickColor} />
+				<Preview image={source} {pipetteActive} {onPickColor} />
 			</div>
-			<Button variant="secondary" onclick={onReset}>{t('sourceCard.replaceImage')}</Button>
+			<Button variant="secondary" onclick={onReset}
+				>{t("sourceCard.replaceImage")}</Button
+			>
 		</DropOverlay>
 	{/if}
 </div>

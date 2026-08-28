@@ -4,9 +4,9 @@
 export function normalizeForSearch(value: string): string {
 	return value
 		.toLowerCase()
-		.replaceAll('ё', 'е')
-		.normalize('NFD')
-		.replace(/\p{M}/gu, '');
+		.replaceAll("ё", "е")
+		.normalize("NFD")
+		.replace(/\p{M}/gu, "");
 }
 
 export type SearchDoc = {
@@ -48,7 +48,10 @@ function bestTitleScore(titles: string[], q: string): number | null {
  * Скоринг документа против нормализованного запроса.
  * Пустой запрос — нейтральный балл; отсутствие совпадения — null.
  */
-export function scoreDoc(doc: SearchDoc, normalizedQuery: string): number | null {
+export function scoreDoc(
+	doc: SearchDoc,
+	normalizedQuery: string,
+): number | null {
 	if (normalizedQuery.length === 0) return 1;
 	if (normalizeForSearch(doc.id).includes(normalizedQuery)) {
 		const at = normalizeForSearch(doc.id).indexOf(normalizedQuery);

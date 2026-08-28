@@ -39,11 +39,12 @@
 	--control-max-width: 16rem;
 
 	--font-sans:
-		system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-	--font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+		system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+		sans-serif;
+	--font-mono: ui-monospace, "Cascadia Code", Consolas, monospace;
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
 	color-scheme: dark;
 
 	--bg: #12151a;
@@ -150,7 +151,7 @@ select {
 	max-width: var(--control-max-width);
 }
 
-input.control[type='number'] {
+input.control[type="number"] {
 	font-family: var(--font-mono);
 	width: 100%;
 }

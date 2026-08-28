@@ -11,7 +11,7 @@
 
 <div class="checkbox-row">
 	<label class="checkbox" for={id}>
-		<input id={id} type="checkbox" bind:checked />
+		<input {id} type="checkbox" bind:checked />
 		{label}
 	</label>
 	{#if hint}
@@ -38,7 +38,7 @@
 		color: var(--text-muted);
 	}
 
-	input[type='checkbox'] {
+	input[type="checkbox"] {
 		width: 1rem;
 		height: 1rem;
 		cursor: pointer;

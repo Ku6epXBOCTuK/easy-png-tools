@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { ImageInfo } from '$lib/core/analyze';
-	import { LOCALE_TAGS } from '$lib/i18n/dict';
-	import { getLocale } from '$lib/i18n/locale.svelte';
-	import { t } from '$lib/i18n/t';
+	import type { ImageInfo } from "$lib/core/analyze";
+	import { LOCALE_TAGS } from "$lib/i18n/dict";
+	import { getLocale } from "$lib/i18n/locale.svelte";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		info: ImageInfo | null;
@@ -14,15 +14,17 @@
 {#if info}
 	<dl>
 		<div class="panel">
-			<dt>{t('infoPanel.dimensions')}</dt>
+			<dt>{t("infoPanel.dimensions")}</dt>
 			<dd>{info.width} × {info.height} px</dd>
 		</div>
 		<div class="panel">
-			<dt>{t('infoPanel.alpha')}</dt>
-			<dd>{info.hasAlpha ? t('infoPanel.alphaYes') : t('infoPanel.alphaNo')}</dd>
+			<dt>{t("infoPanel.alpha")}</dt>
+			<dd>
+				{info.hasAlpha ? t("infoPanel.alphaYes") : t("infoPanel.alphaNo")}
+			</dd>
 		</div>
 		<div class="panel">
-			<dt>{t('infoPanel.colorCount')}</dt>
+			<dt>{t("infoPanel.colorCount")}</dt>
 			<dd>{info.colorCount.toLocaleString(LOCALE_TAGS[getLocale()])}</dd>
 		</div>
 	</dl>

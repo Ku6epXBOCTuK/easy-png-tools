@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { getTool } from '$lib/registry';
-	import { t } from '$lib/i18n/t';
-	import { toolTitle } from '$lib/i18n/tool-strings';
-	import ToolPage from '$lib/components/ToolPage.svelte';
-	import ToolSearch from '$lib/components/search/ToolSearch.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
+	import { getTool } from "$lib/registry";
+	import { t } from "$lib/i18n/t";
+	import { toolTitle } from "$lib/i18n/tool-strings";
+	import ToolPage from "$lib/components/ToolPage.svelte";
+	import ToolSearch from "$lib/components/search/ToolSearch.svelte";
+	import Button from "$lib/components/ui/Button.svelte";
 
-	const LAST_TOOL_KEY = 'last-tool-id';
+	const LAST_TOOL_KEY = "last-tool-id";
 
 	function loadLastToolId(): string | null {
-		if (typeof localStorage === 'undefined') return null;
+		if (typeof localStorage === "undefined") return null;
 		try {
 			const id = localStorage.getItem(LAST_TOOL_KEY);
 			return id !== null && getTool(id) ? id : null;
@@ -27,7 +27,7 @@
 		selectedId = id;
 		restoreOnOpen = restore;
 		lastToolId = id;
-		if (typeof localStorage === 'undefined') return;
+		if (typeof localStorage === "undefined") return;
 		try {
 			localStorage.setItem(LAST_TOOL_KEY, id);
 		} catch {
@@ -39,33 +39,45 @@
 		selectedId = null;
 	}
 
-	let selected = $derived(selectedId !== null ? (getTool(selectedId) ?? null) : null);
+	let selected = $derived(
+		selectedId !== null ? (getTool(selectedId) ?? null) : null,
+	);
 </script>
 
 <svelte:head>
 	<title>
-		{selected ? `${selected.title} — easy-png-tools` : t('home.defaultTitle')}
+		{selected ? `${selected.title} — easy-png-tools` : t("home.defaultTitle")}
 	</title>
 </svelte:head>
 
 {#if !selected}
 	<section class="hero">
-		<h1>{t('home.heroTitle')}</h1>
-		<p class="lead text-muted">{t('home.heroLead')}</p>
+		<h1>{t("home.heroTitle")}</h1>
+		<p class="lead text-muted">{t("home.heroLead")}</p>
 		<ToolSearch onSelect={(id) => openTool(id)} />
 		{#if lastToolId !== null && getTool(lastToolId)}
 			{@const restoreId = lastToolId}
 			<div class="restore-row">
-				<Button variant="secondary" fullWidth onclick={() => openTool(restoreId, true)}>
-					{t('home.restoreLast', { title: getTool(restoreId) ? toolTitle(getTool(restoreId)!) : '' })}
+				<Button
+					variant="secondary"
+					fullWidth
+					onclick={() => openTool(restoreId, true)}
+				>
+					{t("home.restoreLast", {
+						title: getTool(restoreId) ? toolTitle(getTool(restoreId)!) : "",
+					})}
 				</Button>
 			</div>
 		{/if}
 	</section>
 {:else}
 	<section class="workbench">
-		<button type="button" class="back text-caption text-muted" onclick={closeTool}>
-			{t('home.changeTool')}
+		<button
+			type="button"
+			class="back text-caption text-muted"
+			onclick={closeTool}
+		>
+			{t("home.changeTool")}
 		</button>
 		{#key selectedId}
 			<ToolPage tool={selected} restoreChain={restoreOnOpen} />

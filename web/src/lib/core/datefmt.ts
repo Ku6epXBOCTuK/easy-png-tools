@@ -1,4 +1,4 @@
-const PAD2 = (n: number) => String(n).padStart(2, '0');
+const PAD2 = (n: number) => String(n).padStart(2, "0");
 
 /**
  * Мини-форматтер штампа даты: токены YYYY MM DD hh mm ss заменяются
@@ -7,17 +7,17 @@ const PAD2 = (n: number) => String(n).padStart(2, '0');
 export function formatStamp(date: Date, pattern: string): string {
 	return pattern.replace(/YYYY|MM|DD|hh|mm|ss/g, (token) => {
 		switch (token) {
-			case 'YYYY':
+			case "YYYY":
 				return String(date.getFullYear());
-			case 'MM':
+			case "MM":
 				return PAD2(date.getMonth() + 1);
-			case 'DD':
+			case "DD":
 				return PAD2(date.getDate());
-			case 'hh':
+			case "hh":
 				return PAD2(date.getHours());
-			case 'mm':
+			case "mm":
 				return PAD2(date.getMinutes());
-			case 'ss':
+			case "ss":
 				return PAD2(date.getSeconds());
 			default:
 				return token;

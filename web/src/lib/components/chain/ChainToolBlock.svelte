@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
-	import type { PixelImage } from '$lib/core/types';
-	import { t } from '$lib/i18n/t';
-	import { toolTitle } from '$lib/i18n/tool-strings';
-	import DownloadButton from '../DownloadButton.svelte';
-	import Button from '../ui/Button.svelte';
-	import EmptyState from '../ui/EmptyState.svelte';
-	import ParamsCard from '../tool/ParamsCard.svelte';
-	import Preview from '../Preview.svelte';
-	import { TOOL_ICONS } from '$lib/tools/tool-icons';
+	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/registry";
+	import type { PixelImage } from "$lib/core/types";
+	import { t } from "$lib/i18n/t";
+	import { toolTitle } from "$lib/i18n/tool-strings";
+	import DownloadButton from "../DownloadButton.svelte";
+	import Button from "../ui/Button.svelte";
+	import EmptyState from "../ui/EmptyState.svelte";
+	import ParamsCard from "../tool/ParamsCard.svelte";
+	import Preview from "../Preview.svelte";
+	import { TOOL_ICONS } from "$lib/tools/tool-icons";
 
 	interface Props {
 		index: number;
@@ -35,7 +35,7 @@
 		onRemove,
 		onError,
 		onAddStep,
-		onRemoveChain
+		onRemoveChain,
 	}: Props = $props();
 
 	const format = $derived(outputOf(tool));
@@ -47,14 +47,16 @@
 	<div class="panel tool-stage">
 		<span class="edge-legend step-legend">
 			{#if StepIcon}
-				<span class="step-icon" aria-hidden="true"><StepIcon size={14} strokeWidth={2} /></span>
+				<span class="step-icon" aria-hidden="true"
+					><StepIcon size={14} strokeWidth={2} /></span
+				>
 			{/if}
-			{t('chain.stepLabel', { n: index + 2, title: toolTitle(tool) })}
+			{t("chain.stepLabel", { n: index + 2, title: toolTitle(tool) })}
 			<button
 				type="button"
 				class="remove"
-				aria-label={t('chain.removeStepAria')}
-				title={t('chain.removeStepAria')}
+				aria-label={t("chain.removeStepAria")}
+				title={t("chain.removeStepAria")}
 				onclick={onRemove}
 			>
 				✕
@@ -62,34 +64,44 @@
 		</span>
 
 		<div class="cell">
-			<span class="edge-legend cell-legend" aria-hidden="true">{t('chain.inputLegend')}</span>
+			<span class="edge-legend cell-legend" aria-hidden="true"
+				>{t("chain.inputLegend")}</span
+			>
 			<div class="cell-media">
 				<Preview image={input} />
 			</div>
 		</div>
 		<div class="cell">
-			<span class="edge-legend cell-legend" aria-hidden="true">{t('chain.resultLegend')}</span>
+			<span class="edge-legend cell-legend" aria-hidden="true"
+				>{t("chain.resultLegend")}</span
+			>
 			{#if busy && !result}
 				<div class="cell-media">
-					<EmptyState title={t('chain.busyTitle')} hint={t('chain.busyHint')} />
+					<EmptyState title={t("chain.busyTitle")} hint={t("chain.busyHint")} />
 				</div>
 			{:else}
 				<div class="cell-media">
 					<Preview image={result} />
 					{#if busy}
-						<span class="recalc" aria-live="polite">{t('resultCard.recalc')}</span>
+						<span class="recalc" aria-live="polite"
+							>{t("resultCard.recalc")}</span
+						>
 					{/if}
 				</div>
 				<div class="actions-row">
 					<DownloadButton
 						image={result}
-						format={format}
+						{format}
 						baseName="{index + 2}-{tool.id}"
 						params={safeParams}
 						{onError}
 					/>
-					<Button variant="secondary" fullWidth onclick={isLast ? onAddStep : onRemoveChain}>
-						{isLast ? t('resultCard.nextTool') : t('resultCard.breakChain')}
+					<Button
+						variant="secondary"
+						fullWidth
+						onclick={isLast ? onAddStep : onRemoveChain}
+					>
+						{isLast ? t("resultCard.nextTool") : t("resultCard.breakChain")}
 					</Button>
 				</div>
 			{/if}
@@ -98,9 +110,11 @@
 
 	{#if tool.params.length > 0}
 		<div class="params-sep">
-			<span class="edge-legend" aria-hidden="true">{t('chain.paramsLegend')}</span>
+			<span class="edge-legend" aria-hidden="true"
+				>{t("chain.paramsLegend")}</span
+			>
 		</div>
-		<ParamsCard tool={tool} params={tool.params} bind:values />
+		<ParamsCard {tool} params={tool.params} bind:values />
 	{/if}
 </div>
 

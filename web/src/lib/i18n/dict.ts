@@ -1,17 +1,19 @@
-import type { CategoryId } from '../categories';
+import type { CategoryId } from "../categories";
 
-export const LOCALES = ['ru', 'en'] as const;
+export const LOCALES = ["ru", "en"] as const;
 export type Locale = (typeof LOCALES)[number];
 
-export const BASE_LOCALE: Locale = 'en';
+export const BASE_LOCALE: Locale = "en";
 
 export const LOCALE_TAGS: Record<Locale, string> = {
-	ru: 'ru-RU',
-	en: 'en-US'
+	ru: "ru-RU",
+	en: "en-US",
 };
 
 export function isLocale(value: unknown): value is Locale {
-	return typeof value === 'string' && (LOCALES as readonly string[]).includes(value);
+	return (
+		typeof value === "string" && (LOCALES as readonly string[]).includes(value)
+	);
 }
 
 export type ToolStrings = {

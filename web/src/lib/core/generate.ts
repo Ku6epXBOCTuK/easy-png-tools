@@ -1,13 +1,18 @@
-import type { PixelImage } from './types';
-import { ToolError } from './errors';
+import type { PixelImage } from "./types";
+import { ToolError } from "./errors";
 
 export function solidImage(
 	width: number,
 	height: number,
-	rgba: [number, number, number, number]
+	rgba: [number, number, number, number],
 ): PixelImage {
-	if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
-		throw new ToolError('errors.sizeInt');
+	if (
+		!Number.isInteger(width) ||
+		!Number.isInteger(height) ||
+		width < 1 ||
+		height < 1
+	) {
+		throw new ToolError("errors.sizeInt");
 	}
 	const data = new Uint8ClampedArray(width * height * 4);
 	for (let i = 0; i < data.length; i += 4) {
@@ -19,9 +24,18 @@ export function solidImage(
 	return { width, height, data };
 }
 
-export function noiseImage(width: number, height: number, seed: number): PixelImage {
-	if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
-		throw new ToolError('errors.sizeInt');
+export function noiseImage(
+	width: number,
+	height: number,
+	seed: number,
+): PixelImage {
+	if (
+		!Number.isInteger(width) ||
+		!Number.isInteger(height) ||
+		width < 1 ||
+		height < 1
+	) {
+		throw new ToolError("errors.sizeInt");
 	}
 	const random = mulberry32(seed);
 	const data = new Uint8ClampedArray(width * height * 4);
@@ -39,20 +53,25 @@ export function gradientImage(
 	height: number,
 	fromRgba: [number, number, number, number],
 	toRgba: [number, number, number, number],
-	direction: 'horizontal' | 'vertical'
+	direction: "horizontal" | "vertical",
 ): PixelImage {
-	if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
-		throw new ToolError('errors.sizeInt');
+	if (
+		!Number.isInteger(width) ||
+		!Number.isInteger(height) ||
+		width < 1 ||
+		height < 1
+	) {
+		throw new ToolError("errors.sizeInt");
 	}
 	const out: PixelImage = {
 		width,
 		height,
-		data: new Uint8ClampedArray(width * height * 4)
+		data: new Uint8ClampedArray(width * height * 4),
 	};
-	const steps = (direction === 'horizontal' ? width : height) - 1;
+	const steps = (direction === "horizontal" ? width : height) - 1;
 	for (let y = 0; y < height; y++) {
 		for (let x = 0; x < width; x++) {
-			const t = steps === 0 ? 0 : (direction === 'horizontal' ? x : y) / steps;
+			const t = steps === 0 ? 0 : (direction === "horizontal" ? x : y) / steps;
 			const i = (y * width + x) * 4;
 			out.data[i] = fromRgba[0] + (toRgba[0] - fromRgba[0]) * t;
 			out.data[i + 1] = fromRgba[1] + (toRgba[1] - fromRgba[1]) * t;

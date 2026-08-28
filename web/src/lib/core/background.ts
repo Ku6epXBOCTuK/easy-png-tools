@@ -1,5 +1,5 @@
-import { parseHex } from './alpha';
-import { createPixelImage, type PixelImage } from './types';
+import { parseHex } from "./alpha";
+import { createPixelImage, type PixelImage } from "./types";
 
 export type BackgroundOptions = {
 	color: string;
@@ -13,9 +13,10 @@ function buildRawMask(
 	targetR: number,
 	targetG: number,
 	targetB: number,
-	tolerancePercent: number
+	tolerancePercent: number,
 ): Uint8Array {
-	const tolerance = (clamp(tolerancePercent, 0, 100) / 100) * Math.sqrt(3 * 255 * 255);
+	const tolerance =
+		(clamp(tolerancePercent, 0, 100) / 100) * Math.sqrt(3 * 255 * 255);
 	const thresholdSq = tolerance * tolerance;
 	const mask = new Uint8Array(img.width * img.height);
 	for (let i = 0; i < mask.length; i++) {
@@ -61,7 +62,7 @@ export function smoothMask(
 	mask: Uint8Array,
 	w: number,
 	h: number,
-	passes: number
+	passes: number,
 ): Uint8Array {
 	let current = mask;
 	const count = clamp(Math.trunc(passes), 0, 8);
@@ -89,7 +90,7 @@ export function smoothMask(
 
 export function backgroundRemovalMask(
 	img: PixelImage,
-	options: BackgroundOptions
+	options: BackgroundOptions,
 ): Uint8Array {
 	const [tr, tg, tb] = parseHex(options.color);
 	const mask = buildRawMask(img, tr, tg, tb, options.tolerancePercent);
@@ -99,7 +100,10 @@ export function backgroundRemovalMask(
 	return smoothMask(mask, img.width, img.height, options.smoothPasses);
 }
 
-export function removeBackground(img: PixelImage, options: BackgroundOptions): PixelImage {
+export function removeBackground(
+	img: PixelImage,
+	options: BackgroundOptions,
+): PixelImage {
 	const mask = backgroundRemovalMask(img, options);
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < mask.length; i++) {
@@ -112,7 +116,10 @@ export function removeBackground(img: PixelImage, options: BackgroundOptions): P
 	return out;
 }
 
-export function backgroundMaskPreview(img: PixelImage, options: BackgroundOptions): PixelImage {
+export function backgroundMaskPreview(
+	img: PixelImage,
+	options: BackgroundOptions,
+): PixelImage {
 	const mask = backgroundRemovalMask(img, options);
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < mask.length; i++) {

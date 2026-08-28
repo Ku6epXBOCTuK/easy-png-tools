@@ -1,37 +1,42 @@
-import { describe, expect, it } from 'vitest';
-import { ditherImage, mapToNearest, medianCutPalette, quantizeImage } from './quantize';
-import { makeImage } from './test-helpers';
+import { describe, expect, it } from "vitest";
+import {
+	ditherImage,
+	mapToNearest,
+	medianCutPalette,
+	quantizeImage,
+} from "./quantize";
+import { makeImage } from "./test-helpers";
 
-describe('medianCutPalette', () => {
-	it('два явных кластера при k=2 дают сами цвета', () => {
+describe("medianCutPalette", () => {
+	it("два явных кластера при k=2 дают сами цвета", () => {
 		const img = makeImage(4, 1, [
 			[0, 0, 0, 255],
 			[0, 0, 0, 255],
 			[255, 255, 255, 255],
-			[255, 255, 255, 255]
+			[255, 255, 255, 255],
 		]);
 		const palette = medianCutPalette(img, 2);
 		expect(palette).toHaveLength(2);
 		const hexes = palette.map((c) => `${c.r},${c.g},${c.b}`).sort();
-		expect(hexes).toEqual(['0,0,0', '255,255,255']);
+		expect(hexes).toEqual(["0,0,0", "255,255,255"]);
 	});
 
-	it('пустое изображение даёт чёрную заглушку', () => {
+	it("пустое изображение даёт чёрную заглушку", () => {
 		const empty = makeImage(2, 2, new Array(4).fill([0, 0, 0, 0]));
 		expect(medianCutPalette(empty, 4)).toHaveLength(1);
 	});
 });
 
-describe('quantizeImage / ditherImage', () => {
-	it('квантование укладывает пиксели в палитру, прозрачность сохраняется', () => {
+describe("quantizeImage / ditherImage", () => {
+	it("квантование укладывает пиксели в палитру, прозрачность сохраняется", () => {
 		const img = makeImage(3, 1, [
 			[10, 10, 10, 255],
 			[250, 250, 250, 255],
-			[0, 0, 0, 0]
+			[0, 0, 0, 0],
 		]);
 		const { image, palette } = quantizeImage(img, 2);
 		expect(palette.length).toBeLessThanOrEqual(2);
-		expect(image.data[(2) * 4 + 3]).toBe(0); // прозрачный остался
+		expect(image.data[2 * 4 + 3]).toBe(0); // прозрачный остался
 		for (let x = 0; x < 2; x++) {
 			const i = x * 4;
 			const matched = palette.some((hex) => {
@@ -42,9 +47,9 @@ describe('quantizeImage / ditherImage', () => {
 		}
 	});
 
-	it('floyd-steinberg расщепляет серый 50% на чёрное и белое', () => {
+	it("floyd-steinberg расщепляет серый 50% на чёрное и белое", () => {
 		const gray = makeImage(16, 16, new Array(256).fill([128, 128, 128, 255]));
-		const out = ditherImage(gray, 2, 'floyd-steinberg', ['#000000', '#ffffff']);
+		const out = ditherImage(gray, 2, "floyd-steinberg", ["#000000", "#ffffff"]);
 		let hasDark = false;
 		let hasLight = false;
 		for (let i = 0; i < out.data.length; i += 4) {
@@ -55,27 +60,27 @@ describe('quantizeImage / ditherImage', () => {
 		expect(hasLight).toBe(true);
 	});
 
-	it('bayer детерминирован', () => {
+	it("bayer детерминирован", () => {
 		const gray = makeImage(8, 8, new Array(64).fill([128, 128, 128, 255]));
-		const a = ditherImage(gray, 2, 'bayer');
-		const b = ditherImage(gray, 2, 'bayer');
+		const a = ditherImage(gray, 2, "bayer");
+		const b = ditherImage(gray, 2, "bayer");
 		expect([...a.data]).toEqual([...b.data]);
 	});
 
-	it('полностью прозрачное изображение не падает', () => {
+	it("полностью прозрачное изображение не падает", () => {
 		const empty = makeImage(2, 2, new Array(4).fill([0, 0, 0, 0]));
-		const out = ditherImage(empty, 4, 'bayer');
+		const out = ditherImage(empty, 4, "bayer");
 		expect(out.data[3]).toBe(0);
 	});
 });
 
-describe('mapToNearest', () => {
-	it('маппинг на ближайший из списка', () => {
+describe("mapToNearest", () => {
+	it("маппинг на ближайший из списка", () => {
 		const img = makeImage(2, 1, [
 			[10, 10, 10, 255],
-			[240, 240, 240, 255]
+			[240, 240, 240, 255],
 		]);
-		const out = mapToNearest(img, ['#000000', '#ffffff']);
+		const out = mapToNearest(img, ["#000000", "#ffffff"]);
 		expect(out.data[0]).toBe(0);
 		expect(out.data[4]).toBe(255);
 	});

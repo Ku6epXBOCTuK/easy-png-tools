@@ -1,18 +1,18 @@
-import { clonePixelImage, createPixelImage, type PixelImage } from './types';
-import { ToolError } from './errors';
+import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
+import { ToolError } from "./errors";
 
 type Plane = Float64Array;
 
 export function convolve(
 	img: PixelImage,
 	kernel: readonly number[],
-	size: number
+	size: number,
 ): PixelImage {
 	if (!Number.isInteger(size) || size < 1 || size % 2 === 0) {
-		throw new ToolError('errors.radiusInt');
+		throw new ToolError("errors.radiusInt");
 	}
 	if (kernel.length !== size * size) {
-		throw new ToolError('errors.kernelSize');
+		throw new ToolError("errors.kernelSize");
 	}
 	const half = Math.floor(size / 2);
 	const out = createPixelImage(img.width, img.height);
@@ -24,12 +24,14 @@ export function convolve(
 					const sy = clampInt(y + ky - half, 0, img.height - 1);
 					for (let kx = 0; kx < size; kx++) {
 						const sx = clampInt(x + kx - half, 0, img.width - 1);
-						acc += img.data[(sy * img.width + sx) * 4 + ch] * kernel[ky * size + kx];
+						acc +=
+							img.data[(sy * img.width + sx) * 4 + ch] * kernel[ky * size + kx];
 					}
 				}
 				out.data[(y * out.width + x) * 4 + ch] = acc;
 			}
-			out.data[(y * out.width + x) * 4 + 3] = img.data[(y * img.width + x) * 4 + 3];
+			out.data[(y * out.width + x) * 4 + 3] =
+				img.data[(y * img.width + x) * 4 + 3];
 		}
 	}
 	return out;
@@ -103,7 +105,13 @@ export function gaussianBlur(img: PixelImage, radiusPx: number): PixelImage {
 	return out;
 }
 
-function blurPlanePass(plane: Plane, tmp: Plane, w: number, h: number, r: number): void {
+function blurPlanePass(
+	plane: Plane,
+	tmp: Plane,
+	w: number,
+	h: number,
+	r: number,
+): void {
 	blurPlaneHorizontal(plane, tmp, w, h, r);
 	blurPlaneVertical(tmp, plane, w, h, r);
 }
@@ -113,7 +121,7 @@ function blurPlaneHorizontal(
 	dst: Plane,
 	w: number,
 	h: number,
-	r: number
+	r: number,
 ): void {
 	const div = 2 * r + 1;
 	const inv = 1 / div;
@@ -137,7 +145,7 @@ function blurPlaneVertical(
 	dst: Plane,
 	w: number,
 	h: number,
-	r: number
+	r: number,
 ): void {
 	const div = 2 * r + 1;
 	const inv = 1 / div;
@@ -160,7 +168,8 @@ function boxesForGauss(sigma: number, boxes: number): number[] {
 	let wl = Math.floor(wIdeal);
 	if (wl % 2 === 0) wl--;
 	const wu = wl + 2;
-	const mIdeal = (12 * sigma * sigma - boxes * wl * wl - boxes * wl - boxes) / (4 * wl + 4);
+	const mIdeal =
+		(12 * sigma * sigma - boxes * wl * wl - boxes * wl - boxes) / (4 * wl + 4);
 	const m = Math.round(mIdeal);
 	const sizes: number[] = [];
 	for (let i = 0; i < boxes; i++) {

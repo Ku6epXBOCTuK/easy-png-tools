@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { downloadBlob } from '$lib/core/io';
-	import { t } from '$lib/i18n/t';
-	import { getMergedDict } from '$lib/i18n/locale.svelte';
+	import { downloadBlob } from "$lib/core/io";
+	import { t } from "$lib/i18n/t";
+	import { getMergedDict } from "$lib/i18n/locale.svelte";
 
 	interface Props {
 		text: string;
@@ -12,7 +12,7 @@
 	let { text, filename, toolId }: Props = $props();
 
 	const shown = $derived(
-		toolId ? (getMergedDict().tools[toolId]?.results?.[text] ?? text) : text
+		toolId ? (getMergedDict().tools[toolId]?.results?.[text] ?? text) : text,
 	);
 
 	let copied = $state(false);
@@ -24,17 +24,24 @@
 	}
 
 	function download() {
-		downloadBlob(new Blob([shown], { type: 'text/plain' }), `${filename}.txt`);
+		downloadBlob(new Blob([shown], { type: "text/plain" }), `${filename}.txt`);
 	}
 </script>
 
 <div class="panel text-result">
-	<textarea class="output" rows="10" readonly value={shown} aria-label={t('textResult.outputAria')}></textarea>
+	<textarea
+		class="output"
+		rows="10"
+		readonly
+		value={shown}
+		aria-label={t("textResult.outputAria")}></textarea>
 	<div class="actions">
 		<button type="button" class="secondary" onclick={copy}>
-			{copied ? t('textResult.copied') : t('textResult.copy')}
+			{copied ? t("textResult.copied") : t("textResult.copy")}
 		</button>
-		<button type="button" class="primary" onclick={download}>{t('textResult.downloadTxt')}</button>
+		<button type="button" class="primary" onclick={download}
+			>{t("textResult.downloadTxt")}</button
+		>
 	</div>
 </div>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PixelImage } from '$lib/core/types';
+	import type { PixelImage } from "$lib/core/types";
 
 	interface Props {
 		image: PixelImage;
@@ -25,10 +25,16 @@
 
 	function ensureSource(): HTMLCanvasElement | null {
 		if (!srcCanvas || srcKey !== image) {
-			srcCanvas = document.createElement('canvas');
+			srcCanvas = document.createElement("canvas");
 			srcCanvas.width = image.width;
 			srcCanvas.height = image.height;
-			srcCanvas.getContext('2d')?.putImageData(new ImageData(image.data, image.width, image.height), 0, 0);
+			srcCanvas
+				.getContext("2d")
+				?.putImageData(
+					new ImageData(image.data, image.width, image.height),
+					0,
+					0,
+				);
 			srcKey = image;
 		}
 		return srcCanvas;
@@ -38,8 +44,12 @@
 		return Math.min(max, Math.max(min, v));
 	}
 
-	const blockX = $derived(clamp(px - HALF, 0, Math.max(0, image.width - BLOCK)));
-	const blockY = $derived(clamp(py - HALF, 0, Math.max(0, image.height - BLOCK)));
+	const blockX = $derived(
+		clamp(px - HALF, 0, Math.max(0, image.width - BLOCK)),
+	);
+	const blockY = $derived(
+		clamp(py - HALF, 0, Math.max(0, image.height - BLOCK)),
+	);
 	const flipBelow = $derived(clientY < SIZE + 24);
 
 	$effect(() => {
@@ -47,12 +57,12 @@
 		const dpr = window.devicePixelRatio || 1;
 		loupeCanvas.width = SIZE * dpr;
 		loupeCanvas.height = SIZE * dpr;
-		const ctx = loupeCanvas.getContext('2d');
+		const ctx = loupeCanvas.getContext("2d");
 		const src = ensureSource();
 		if (!ctx || !src) return;
 		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 		ctx.imageSmoothingEnabled = false;
-		ctx.fillStyle = '#111318';
+		ctx.fillStyle = "#111318";
 		ctx.fillRect(0, 0, SIZE, SIZE);
 		ctx.drawImage(
 			src,
@@ -63,11 +73,16 @@
 			CENTER + (blockX - px) * ZOOM,
 			CENTER + (blockY - py) * ZOOM,
 			BLOCK * ZOOM,
-			BLOCK * ZOOM
+			BLOCK * ZOOM,
 		);
-		ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+		ctx.strokeStyle = "rgba(255,255,255,0.9)";
 		ctx.lineWidth = 1;
-		ctx.strokeRect(CENTER - ZOOM / 2 + 0.5, CENTER - ZOOM / 2 + 0.5, ZOOM, ZOOM);
+		ctx.strokeRect(
+			CENTER - ZOOM / 2 + 0.5,
+			CENTER - ZOOM / 2 + 0.5,
+			ZOOM,
+			ZOOM,
+		);
 	});
 </script>
 
@@ -77,7 +92,8 @@
 	style="left:{clientX}px;top:{clientY}px"
 	aria-hidden="true"
 >
-	<canvas bind:this={loupeCanvas} style="width:{SIZE}px;height:{SIZE}px"></canvas>
+	<canvas bind:this={loupeCanvas} style="width:{SIZE}px;height:{SIZE}px"
+	></canvas>
 	<p class="hex">{hex}</p>
 </div>
 

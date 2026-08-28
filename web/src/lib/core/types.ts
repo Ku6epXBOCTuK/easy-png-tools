@@ -8,7 +8,7 @@ export function createPixelImage(width: number, height: number): PixelImage {
 	return {
 		width,
 		height,
-		data: new Uint8ClampedArray(width * height * 4)
+		data: new Uint8ClampedArray(width * height * 4),
 	};
 }
 

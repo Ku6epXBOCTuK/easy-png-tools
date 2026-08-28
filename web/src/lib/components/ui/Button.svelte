@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import type { Snippet } from "svelte";
 
 	interface Props {
-		variant?: 'primary' | 'secondary';
-		type?: 'button' | 'submit';
+		variant?: "primary" | "secondary";
+		type?: "button" | "submit";
 		disabled?: boolean;
 		busy?: boolean;
 		busyText?: string;
@@ -13,14 +13,14 @@
 	}
 
 	let {
-		variant = 'primary',
-		type = 'button',
+		variant = "primary",
+		type = "button",
 		disabled = false,
 		busy = false,
-		busyText = '',
+		busyText = "",
 		fullWidth = false,
 		onclick,
-		children
+		children,
 	}: Props = $props();
 </script>
 
@@ -29,7 +29,7 @@
 	class={fullWidth ? `${variant} fullwidth` : variant}
 	aria-busy={busy}
 	disabled={disabled || busy}
-	onclick={onclick}
+	{onclick}
 >
 	{#if busy && busyText}
 		{busyText}

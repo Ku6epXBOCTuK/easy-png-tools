@@ -1,12 +1,12 @@
 <script lang="ts">
-	import CheckboxField from './ui/CheckboxField.svelte';
-	import ColorField from './ui/ColorField.svelte';
-	import SelectField from './ui/SelectField.svelte';
-	import SliderField from './ui/SliderField.svelte';
-	import TextField from './ui/TextField.svelte';
-	import type { ParamDef, ToolEntry } from '$lib/registry';
-	import { optionLabel, paramLabel } from '$lib/i18n/tool-strings';
-	import { t } from '$lib/i18n/t';
+	import CheckboxField from "./ui/CheckboxField.svelte";
+	import ColorField from "./ui/ColorField.svelte";
+	import SelectField from "./ui/SelectField.svelte";
+	import SliderField from "./ui/SliderField.svelte";
+	import TextField from "./ui/TextField.svelte";
+	import type { ParamDef, ToolEntry } from "$lib/registry";
+	import { optionLabel, paramLabel } from "$lib/i18n/tool-strings";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		tool: ToolEntry;
@@ -25,19 +25,27 @@
 		pipetteTargetId = null,
 		onPipetteToggle,
 		hasMask = false,
-		showMask = $bindable(false)
+		showMask = $bindable(false),
 	}: Props = $props();
 </script>
 
 <div class="params-grid">
 	{#if hasMask}
-		<CheckboxField id="show-mask" label={t('ui.showMask')} bind:checked={showMask} />
+		<CheckboxField
+			id="show-mask"
+			label={t("ui.showMask")}
+			bind:checked={showMask}
+		/>
 	{/if}
 	{#each params as param (param.id)}
 		<div class="field">
-			{#if param.type === 'checkbox'}
-				<CheckboxField id={param.id} label={paramLabel(tool, param)} bind:checked={values[param.id]} />
-			{:else if param.type === 'number'}
+			{#if param.type === "checkbox"}
+				<CheckboxField
+					id={param.id}
+					label={paramLabel(tool, param)}
+					bind:checked={values[param.id]}
+				/>
+			{:else if param.type === "number"}
 				<TextField
 					id={param.id}
 					label={paramLabel(tool, param)}
@@ -47,7 +55,7 @@
 					step={param.step}
 					bind:value={values[param.id]}
 				/>
-			{:else if param.type === 'slider'}
+			{:else if param.type === "slider"}
 				<SliderField
 					id={param.id}
 					label={paramLabel(tool, param)}
@@ -57,17 +65,17 @@
 					default={param.default}
 					bind:value={values[param.id]}
 				/>
-			{:else if param.type === 'select'}
+			{:else if param.type === "select"}
 				<SelectField
 					id={param.id}
 					label={paramLabel(tool, param)}
 					options={param.options.map((o) => ({
 						value: o.value,
-						label: optionLabel(tool, param, o.value)
+						label: optionLabel(tool, param, o.value),
 					}))}
 					bind:value={values[param.id]}
 				/>
-			{:else if param.type === 'color'}
+			{:else if param.type === "color"}
 				<ColorField
 					id={param.id}
 					label={paramLabel(tool, param)}
@@ -75,7 +83,7 @@
 					pipetteActive={pipetteTargetId === param.id}
 					onPipetteToggle={() => onPipetteToggle?.(param.id)}
 				/>
-			{:else if param.type === 'text'}
+			{:else if param.type === "text"}
 				<TextField
 					id={param.id}
 					label={paramLabel(tool, param)}

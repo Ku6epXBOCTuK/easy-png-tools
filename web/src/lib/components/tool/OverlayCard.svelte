@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { t } from '$lib/i18n/t';
-	import type { PixelImage } from '$lib/core/types';
-	import DropZone from '../DropZone.svelte';
-	import Preview from '../Preview.svelte';
-	import Button from '../ui/Button.svelte';
+	import { t } from "$lib/i18n/t";
+	import type { PixelImage } from "$lib/core/types";
+	import DropZone from "../DropZone.svelte";
+	import Preview from "../Preview.svelte";
+	import Button from "../ui/Button.svelte";
 
 	interface Props {
 		overlay: PixelImage | null;
@@ -16,13 +16,17 @@
 </script>
 
 <div class="overlay-card">
-	<span class="edge-legend overlay-legend" aria-hidden="true">{t('ui.overlayTitle')}</span>
+	<span class="edge-legend overlay-legend" aria-hidden="true"
+		>{t("ui.overlayTitle")}</span
+	>
 	{#if !overlay}
-		<DropZone {onFile} {onError} label={t('ui.overlayDrop')} />
+		<DropZone {onFile} {onError} label={t("ui.overlayDrop")} />
 	{:else}
 		<div class="preview-wrap">
 			<Preview image={overlay} />
-			<Button variant="secondary" onclick={onClear}>{t('ui.overlayRemove')}</Button>
+			<Button variant="secondary" onclick={onClear}
+				>{t("ui.overlayRemove")}</Button
+			>
 		</div>
 	{/if}
 </div>

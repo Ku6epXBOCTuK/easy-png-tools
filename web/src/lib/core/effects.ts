@@ -1,4 +1,4 @@
-import { clonePixelImage, createPixelImage, type PixelImage } from './types';
+import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
 
 export function vignette(img: PixelImage, strengthPercent: number): PixelImage {
 	const strength = Math.min(Math.max(strengthPercent, 0), 100) / 100;

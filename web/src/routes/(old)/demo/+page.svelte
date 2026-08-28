@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ToolPage from '$lib/components/ToolPage.svelte';
-	import { getTool } from '$lib/registry';
+	import ToolPage from "$lib/components/ToolPage.svelte";
+	import { getTool } from "$lib/registry";
 
-	const base = getTool('linear-gradient-png')!;
+	const base = getTool("linear-gradient-png")!;
 </script>
 
 <svelte:head>
@@ -17,17 +17,17 @@
 		presetBaseValues={{
 			width: 520,
 			height: 340,
-			fromColor: '#e5484d',
-			toColor: '#fbbf24',
-			direction: 'horizontal'
+			fromColor: "#e5484d",
+			toColor: "#fbbf24",
+			direction: "horizontal",
 		}}
 		presetChain={[
 			{
-				toolId: 'remove-background-png',
-				values: { color: '#fbbf24', tolerance: 10, outerOnly: true, smooth: 2 }
+				toolId: "remove-background-png",
+				values: { color: "#fbbf24", tolerance: 10, outerOnly: true, smooth: 2 },
 			},
-			{ toolId: 'add-stroke-png', values: { color: '#2563eb', thickness: 8 } },
-			{ toolId: 'round-corners-png', values: { radius: 28 } }
+			{ toolId: "add-stroke-png", values: { color: "#2563eb", thickness: 8 } },
+			{ toolId: "round-corners-png", values: { radius: 28 } },
 		]}
 	/>
 </section>

@@ -1,7 +1,7 @@
-import { hexToRgb } from './palette';
-import type { PixelImage } from './types';
-import { createPixelImage } from './types';
-import { gaussianBlur } from './convolution';
+import { hexToRgb } from "./palette";
+import type { PixelImage } from "./types";
+import { createPixelImage } from "./types";
+import { gaussianBlur } from "./convolution";
 
 /** Детерминированный ГПСЧ (mulberry32): одинаковый seed — одинаковый результат. */
 export function mulberry32(seed: number): () => number {
@@ -59,7 +59,11 @@ export function pixelate(img: PixelImage, blockSize: number): PixelImage {
 }
 
 /** Перемешивает блоки blockSize×Blocksize между собой детерминированно по seed. */
-export function shuffleBlocks(img: PixelImage, blockSize: number, seed: number): PixelImage {
+export function shuffleBlocks(
+	img: PixelImage,
+	blockSize: number,
+	seed: number,
+): PixelImage {
 	const bs = Math.max(1, Math.round(blockSize));
 	const cols = Math.ceil(img.width / bs);
 	const rows = Math.ceil(img.height / bs);
@@ -92,28 +96,32 @@ export function shuffleBlocks(img: PixelImage, blockSize: number, seed: number):
 	return out;
 }
 
-export type NoiseMode = 'mono' | 'color';
+export type NoiseMode = "mono" | "color";
 
 /** Зерно: amountPercent — сила отклонения от оригинала. Детерминировано по seed. */
 export function addNoise(
 	img: PixelImage,
 	amountPercent: number,
 	mode: NoiseMode,
-	seed: number
+	seed: number,
 ): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	const amount = Math.min(Math.max(amountPercent, 0), 100) / 100;
 	const rng = mulberry32(seed);
 	for (let i = 0; i < img.data.length; i += 4) {
 		const shift = (rng() * 2 - 1) * amount * 255;
-		if (mode === 'mono') {
+		if (mode === "mono") {
 			out.data[i] = clampByte(img.data[i] + shift);
 			out.data[i + 1] = clampByte(img.data[i + 1] + shift);
 			out.data[i + 2] = clampByte(img.data[i + 2] + shift);
 		} else {
 			out.data[i] = clampByte(img.data[i] + (rng() * 2 - 1) * amount * 255);
-			out.data[i + 1] = clampByte(img.data[i + 1] + (rng() * 2 - 1) * amount * 255);
-			out.data[i + 2] = clampByte(img.data[i + 2] + (rng() * 2 - 1) * amount * 255);
+			out.data[i + 1] = clampByte(
+				img.data[i + 1] + (rng() * 2 - 1) * amount * 255,
+			);
+			out.data[i + 2] = clampByte(
+				img.data[i + 2] + (rng() * 2 - 1) * amount * 255,
+			);
 		}
 		out.data[i + 3] = img.data[i + 3];
 	}
@@ -160,7 +168,8 @@ export function defringe(img: PixelImage, radius: number): PixelImage {
 						if (Math.max(Math.abs(dx), Math.abs(dy)) !== ry) continue;
 						const nx = x + dx;
 						const ny = y + dy;
-						if (nx < 0 || ny < 0 || nx >= img.width || ny >= img.height) continue;
+						if (nx < 0 || ny < 0 || nx >= img.width || ny >= img.height)
+							continue;
 						const si = (ny * img.width + nx) * 4;
 						if (img.data[si + 3] !== 255) continue;
 						out.data[di] = img.data[si];
@@ -176,7 +185,11 @@ export function defringe(img: PixelImage, radius: number): PixelImage {
 }
 
 /** Силуэт: все видимые пиксели заливаются одним цветом, альфа сохраняется. */
-export function silhouette(img: PixelImage, colorHex: string, alphaThreshold: number): PixelImage {
+export function silhouette(
+	img: PixelImage,
+	colorHex: string,
+	alphaThreshold: number,
+): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	const { r, g, b } = hexToRgb(colorHex);
 	for (let i = 0; i < img.data.length; i += 4) {

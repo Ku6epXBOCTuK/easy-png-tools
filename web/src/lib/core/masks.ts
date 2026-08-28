@@ -1,8 +1,8 @@
-﻿import { hexToRgb } from './palette';
-import type { PixelImage } from './types';
-import { createPixelImage } from './types';
+﻿import { hexToRgb } from "./palette";
+import type { PixelImage } from "./types";
+import { createPixelImage } from "./types";
 
-export type MaskMode = 'binary' | 'highlight';
+export type MaskMode = "binary" | "highlight";
 
 export interface MaskOptions {
 	/** binary: белое/чёрное без альфы; highlight: подкрасить совпавшие пиксели цветом. */
@@ -18,10 +18,10 @@ export interface MaskOptions {
 export function renderPredicateMask(
 	img: PixelImage,
 	predicate: (r: number, g: number, b: number, a: number) => boolean,
-	o: MaskOptions = {}
+	o: MaskOptions = {},
 ): PixelImage {
 	const out = createPixelImage(img.width, img.height);
-	const highlight = o.mode !== 'binary';
+	const highlight = o.mode !== "binary";
 	const tint = o.color ? hexToRgb(o.color) : { r: 255, g: 0, b: 170 };
 	const opacity = Math.min(Math.max(o.opacityPercent ?? 70, 0), 100) / 100;
 	if (!highlight) {
@@ -34,7 +34,7 @@ export function renderPredicateMask(
 		const b = img.data[i + 2];
 		const a = img.data[i + 3];
 		if (!predicate(r, g, b, a)) {
-			if (highlight && o.mode === 'highlight') {
+			if (highlight && o.mode === "highlight") {
 				out.data[i] = r;
 				out.data[i + 1] = g;
 				out.data[i + 2] = b;
@@ -57,13 +57,27 @@ export function renderPredicateMask(
 	return out;
 }
 
-function maxChannelDelta(r1: number, g1: number, b1: number, r2: number, g2: number, b2: number): number {
+function maxChannelDelta(
+	r1: number,
+	g1: number,
+	b1: number,
+	r2: number,
+	g2: number,
+	b2: number,
+): number {
 	return Math.max(Math.abs(r1 - r2), Math.abs(g1 - g2), Math.abs(b1 - b2));
 }
 
-export function isGrayscaleish(r: number, g: number, b: number, tolerance: number): boolean {
+export function isGrayscaleish(
+	r: number,
+	g: number,
+	b: number,
+	tolerance: number,
+): boolean {
 	return (
-		Math.abs(r - g) <= tolerance && Math.abs(g - b) <= tolerance && Math.abs(r - b) <= tolerance
+		Math.abs(r - g) <= tolerance &&
+		Math.abs(g - b) <= tolerance &&
+		Math.abs(r - b) <= tolerance
 	);
 }
 
@@ -78,13 +92,22 @@ export function luma01(r: number, g: number, b: number): number {
 export function extractByColor(
 	img: PixelImage,
 	targetHex: string,
-	tolerancePercent: number
+	tolerancePercent: number,
 ): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	const t = hexToRgb(targetHex);
 	const tol = (Math.min(Math.max(tolerancePercent, 0), 100) / 100) * 255;
 	for (let i = 0; i < img.data.length; i += 4) {
-		if (maxChannelDelta(img.data[i], img.data[i + 1], img.data[i + 2], t.r, t.g, t.b) <= tol) {
+		if (
+			maxChannelDelta(
+				img.data[i],
+				img.data[i + 1],
+				img.data[i + 2],
+				t.r,
+				t.g,
+				t.b,
+			) <= tol
+		) {
 			out.data[i] = img.data[i];
 			out.data[i + 1] = img.data[i + 1];
 			out.data[i + 2] = img.data[i + 2];
@@ -99,7 +122,7 @@ export function extractByColor(
  */
 export function rarityPredicate(
 	img: PixelImage,
-	limit: number
+	limit: number,
 ): (r: number, g: number, b: number, a: number) => boolean {
 	const counts = new Map<number, number>();
 	for (let i = 0; i < img.data.length; i += 4) {
@@ -111,4 +134,3 @@ export function rarityPredicate(
 		return (counts.get(key) ?? 0) <= limit;
 	};
 }
-

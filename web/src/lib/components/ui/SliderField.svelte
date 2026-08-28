@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Field from './Field.svelte';
-	import { t } from '$lib/i18n/t';
+	import Field from "./Field.svelte";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		id: string;
@@ -21,7 +21,7 @@
 		max,
 		step,
 		default: defaultValue,
-		hint
+		hint,
 	}: Props = $props();
 
 	function decrement() {
@@ -38,18 +38,30 @@
 		if (defaultValue !== undefined) value = defaultValue;
 	}
 
-	const resetDisabled = $derived(defaultValue === undefined || value === defaultValue);
+	const resetDisabled = $derived(
+		defaultValue === undefined || value === defaultValue,
+	);
 </script>
 
 <Field {id} {label} {hint}>
 	<div class="row">
-		<button type="button" class="step" aria-label={t('ui.decrease')} onclick={decrement}>−</button>
-		<input id={id} type="range" min={min} max={max} step={step} bind:value />
-		<button type="button" class="step" aria-label={t('ui.increase')} onclick={increment}>+</button>
 		<button
 			type="button"
 			class="step"
-			aria-label={t('ui.reset')}
+			aria-label={t("ui.decrease")}
+			onclick={decrement}>−</button
+		>
+		<input {id} type="range" {min} {max} {step} bind:value />
+		<button
+			type="button"
+			class="step"
+			aria-label={t("ui.increase")}
+			onclick={increment}>+</button
+		>
+		<button
+			type="button"
+			class="step"
+			aria-label={t("ui.reset")}
 			disabled={resetDisabled}
 			onclick={reset}
 		>
@@ -68,7 +80,7 @@
 		max-width: 22rem;
 	}
 
-	input[type='range'] {
+	input[type="range"] {
 		flex: 1;
 		min-width: 3rem;
 		accent-color: var(--link);

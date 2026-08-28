@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TOOL_ICONS } from '$lib/tools/tool-icons';
+	import { TOOL_ICONS } from "$lib/tools/tool-icons";
 
 	interface Props {
 		toolId: string;
@@ -18,7 +18,7 @@
 		selected = false,
 		href,
 		onActivate,
-		onHover
+		onHover,
 	}: Props = $props();
 
 	const Icon = $derived(TOOL_ICONS[toolId]);
@@ -35,12 +35,7 @@
 {/snippet}
 
 {#if href}
-	<a
-		{href}
-		class="card"
-		class:selected
-		onmousemove={onHover}
-	>
+	<a {href} class="card" class:selected onmousemove={onHover}>
 		{@render content()}
 	</a>
 {:else}
@@ -53,7 +48,7 @@
 		onclick={onActivate}
 		onmousemove={onHover}
 		onkeydown={(e) => {
-			if (e.key === 'Enter') onActivate?.();
+			if (e.key === "Enter") onActivate?.();
 		}}
 	>
 		{@render content()}

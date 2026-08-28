@@ -1,8 +1,8 @@
-import type { ImageInfo } from '$lib/core/analyze';
-import type { PixelImage } from '$lib/core/types';
-import type { ToolEntry } from '$lib/registry';
+import type { ImageInfo } from "$lib/core/analyze";
+import type { PixelImage } from "$lib/core/types";
+import type { ToolEntry } from "$lib/registry";
 
-export type StageStatus = 'idle' | 'loaded' | 'processing' | 'error';
+export type StageStatus = "idle" | "loaded" | "processing" | "error";
 
 export interface StageProps {
 	tool: ToolEntry;

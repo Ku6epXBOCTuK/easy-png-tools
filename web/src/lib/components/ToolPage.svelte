@@ -1,60 +1,81 @@
 <script lang="ts">
-	import { imageInfo, type ImageInfo } from '$lib/core/analyze';
-	import { ToolError } from '$lib/core/errors';
-	import { decodeFile, isSupportedImage, unsupportedImageError } from '$lib/core/io';
-	import type { PixelImage } from '$lib/core/types';
-	import { defaultParams, getTool, outputOf, sanitizeParams, type ToolEntry } from '$lib/registry';
-	import { loadStoredSteps, newStepId, saveSteps, type PipelineStep } from '$lib/tools/pipeline';
-	import { TOOL_ICONS } from '$lib/tools/tool-icons';
-	import DownloadButton from './DownloadButton.svelte';
-	import ParamForm from './ParamForm.svelte';
-	import Preview from './Preview.svelte';
-	import ToolSearch from './search/ToolSearch.svelte';
-	import { createAutoRunner } from '$lib/tools/auto-run';
-	import { executeStep } from '$lib/tools/executor';
-	import { clearOverlay, setOverlay } from '$lib/tools/overlay-store.svelte';
-	import { t } from '$lib/i18n/t';
-	import { toolDescription, toolTitle } from '$lib/i18n/tool-strings';
-	import type { StageStatus } from './stage/stage-props';
-	import ChainToolBlock from './chain/ChainToolBlock.svelte';
-	import ToolStage from './stage/ToolStage.svelte';
-	import ToolStageClassic from './stage/ToolStageClassic.svelte';
+	import { imageInfo, type ImageInfo } from "$lib/core/analyze";
+	import { ToolError } from "$lib/core/errors";
+	import {
+		decodeFile,
+		isSupportedImage,
+		unsupportedImageError,
+	} from "$lib/core/io";
+	import type { PixelImage } from "$lib/core/types";
+	import {
+		defaultParams,
+		getTool,
+		outputOf,
+		sanitizeParams,
+		type ToolEntry,
+	} from "$lib/registry";
+	import {
+		loadStoredSteps,
+		newStepId,
+		saveSteps,
+		type PipelineStep,
+	} from "$lib/tools/pipeline";
+	import { TOOL_ICONS } from "$lib/tools/tool-icons";
+	import DownloadButton from "./DownloadButton.svelte";
+	import ParamForm from "./ParamForm.svelte";
+	import Preview from "./Preview.svelte";
+	import ToolSearch from "./search/ToolSearch.svelte";
+	import { createAutoRunner } from "$lib/tools/auto-run";
+	import { executeStep } from "$lib/tools/executor";
+	import { clearOverlay, setOverlay } from "$lib/tools/overlay-store.svelte";
+	import { t } from "$lib/i18n/t";
+	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
+	import type { StageStatus } from "./stage/stage-props";
+	import ChainToolBlock from "./chain/ChainToolBlock.svelte";
+	import ToolStage from "./stage/ToolStage.svelte";
+	import ToolStageClassic from "./stage/ToolStageClassic.svelte";
 
 	export type PresetStep = { toolId: string; values?: Record<string, unknown> };
 
 	let {
 		tool,
 		restoreChain = false,
-		stageVariant = 'inline',
+		stageVariant = "inline",
 		presetBaseValues,
-		presetChain
+		presetChain,
 	}: {
 		tool: ToolEntry;
 		restoreChain?: boolean;
-		stageVariant?: 'classic' | 'inline';
+		stageVariant?: "classic" | "inline";
 		presetBaseValues?: Record<string, unknown>;
 		presetChain?: PresetStep[];
 	} = $props();
 
-	const StageComponent = $derived(stageVariant === 'classic' ? ToolStageClassic : ToolStage);
+	const StageComponent = $derived(
+		stageVariant === "classic" ? ToolStageClassic : ToolStage,
+	);
 
 	type Status = StageStatus;
 
 	const isPreset = $derived(
-		(presetChain?.length ?? 0) > 0 || Object.keys(presetBaseValues ?? {}).length > 0
+		(presetChain?.length ?? 0) > 0 ||
+			Object.keys(presetBaseValues ?? {}).length > 0,
 	);
 
-	let status = $state<Status>('idle');
+	let status = $state<Status>("idle");
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
 	let previewResult = $state<PixelImage | null>(null);
 	let textResult = $state<string | null>(null);
 	let showMask = $state(false);
 	let info = $state<ImageInfo | null>(null);
-	let errorText = $state('');
+	let errorText = $state("");
 	let overlayImage = $state<PixelImage | null>(null);
 	// svelte-ignore state_referenced_locally
-	let values = $state<Record<string, any>>({ ...defaultParams(tool), ...presetBaseValues });
+	let values = $state<Record<string, any>>({
+		...defaultParams(tool),
+		...presetBaseValues,
+	});
 	// svelte-ignore state_referenced_locally
 	let chain = $state<PipelineStep[]>(
 		restoreChain
@@ -66,28 +87,30 @@
 								{
 									id: newStepId(),
 									toolId: preset.toolId,
-									values: { ...defaultParams(stepTool), ...preset.values }
-								}
+									values: { ...defaultParams(stepTool), ...preset.values },
+								},
 							]
 						: [];
-				})
+				}),
 	);
 	let chainResults = $state<(PixelImage | null)[]>([]);
-	let lastRunChainJson = '';
+	let lastRunChainJson = "";
 
-	const isInfo = $derived(tool.resultType === 'info');
-	const isSourceless = $derived(tool.sourceMode === 'none');
-	const isTextSource = $derived(tool.sourceMode === 'text');
+	const isInfo = $derived(tool.resultType === "info");
+	const isSourceless = $derived(tool.sourceMode === "none");
+	const isTextSource = $derived(tool.sourceMode === "text");
 	const sanitized = $derived(sanitizeParams(tool, values));
 	const canChainBase = $derived(
-		(tool.resultType ?? 'image') === 'image' && tool.sourceMode !== 'text'
+		(tool.resultType ?? "image") === "image" && tool.sourceMode !== "text",
 	);
-	const hasMask = $derived(typeof tool.preview === 'function');
-	const shownBase = $derived(showMask && previewResult ? previewResult : result);
-	const hasFilledSteps = $derived(chain.some((step) => step.toolId !== ''));
+	const hasMask = $derived(typeof tool.preview === "function");
+	const shownBase = $derived(
+		showMask && previewResult ? previewResult : result,
+	);
+	const hasFilledSteps = $derived(chain.some((step) => step.toolId !== ""));
 
 	function addChainStep() {
-		chain.push({ id: newStepId(), toolId: '', values: {} });
+		chain.push({ id: newStepId(), toolId: "", values: {} });
 	}
 
 	function removeChainStep(index: number) {
@@ -118,7 +141,7 @@
 	const runner = createAutoRunner();
 	let hasLastRun = false;
 	let lastRunSource: PixelImage | null = null;
-	let lastRunValuesJson = '';
+	let lastRunValuesJson = "";
 	let pipetteTargetId = $state<string | null>(null);
 
 	function handlePipetteToggle(id: string) {
@@ -132,8 +155,8 @@
 	}
 
 	async function handleFile(file: File) {
-		errorText = '';
-		status = 'processing';
+		errorText = "";
+		status = "processing";
 		try {
 			source = await decodeFile(file);
 			values = defaultParams(tool);
@@ -143,7 +166,7 @@
 			pipetteTargetId = null;
 			info = isInfo ? imageInfo(source) : null;
 			if (isInfo) {
-				status = 'loaded';
+				status = "loaded";
 			} else {
 				await runTool();
 			}
@@ -154,15 +177,15 @@
 
 	async function handleTextSubmit(text: string) {
 		if (!isTextSource) return;
-		errorText = '';
-		status = 'processing';
+		errorText = "";
+		status = "processing";
 		if (tool.textToText) {
 			try {
 				result = null;
 				previewResult = null;
 				info = null;
 				textResult = await tool.textToText(text);
-				status = 'loaded';
+				status = "loaded";
 			} catch (e) {
 				showError(e);
 			}
@@ -196,7 +219,7 @@
 			let next: PixelImage | null = null;
 			let nextText: string | null = null;
 
-			if (tool.resultType === 'text') {
+			if (tool.resultType === "text") {
 				nextText = await tool.toText!(source!, sanitized);
 			} else if (isSourceless) {
 				next = await tool.generate!(sanitized);
@@ -221,23 +244,31 @@
 			let current: PixelImage | null = next ?? source;
 			for (let i = 0; i < chain.length; i++) {
 				const step = chain[i];
-				const stepTool = step.toolId === '' ? undefined : getTool(step.toolId);
+				const stepTool = step.toolId === "" ? undefined : getTool(step.toolId);
 				if (!current || !stepTool?.run) {
 					collected.push(null);
 					continue;
 				}
 				try {
-					current = await executeStep(stepTool, current, sanitizeParams(stepTool, step.values));
+					current = await executeStep(
+						stepTool,
+						current,
+						sanitizeParams(stepTool, step.values),
+					);
 				} catch (e) {
 					throw new Error(
-						t('toolPage.stepError', { n: i + 2, title: toolTitle(stepTool), msg: errorMessage(e) })
+						t("toolPage.stepError", {
+							n: i + 2,
+							title: toolTitle(stepTool),
+							msg: errorMessage(e),
+						}),
 					);
 				}
 				if (!runner.isCurrent(token)) return;
 				collected.push(current);
 			}
 			chainResults = collected;
-			status = 'loaded';
+			status = "loaded";
 		} catch (e) {
 			if (!runner.isCurrent(token)) return;
 			showError(e);
@@ -262,7 +293,7 @@
 
 	$effect(() => {
 		if (isPreset) return;
-		const filled = chain.filter((step) => step.toolId !== '');
+		const filled = chain.filter((step) => step.toolId !== "");
 		if (filled.length === 0 && !hasLastRun) return;
 		saveSteps(filled);
 	});
@@ -273,7 +304,7 @@
 	}
 
 	function showError(e: unknown) {
-		status = source ? 'loaded' : 'idle';
+		status = source ? "loaded" : "idle";
 		errorText = errorMessage(e);
 	}
 
@@ -285,8 +316,8 @@
 		showMask = false;
 		pipetteTargetId = null;
 		info = null;
-		errorText = '';
-		status = 'idle';
+		errorText = "";
+		status = "idle";
 		clearOverlay();
 		values = { ...defaultParams(tool), ...presetBaseValues };
 	}
@@ -303,7 +334,7 @@
 		const items = event.clipboardData?.items;
 		if (!items) return;
 		for (const item of items) {
-			if (!item.type.startsWith('image/')) continue;
+			if (!item.type.startsWith("image/")) continue;
 			const file = item.getAsFile();
 			if (file) {
 				event.preventDefault();
@@ -331,32 +362,32 @@
 	<StageComponent
 		mode="base"
 		{tool}
-		source={source}
-		result={result}
+		{source}
+		{result}
 		displayImage={shownBase}
-		info={info}
-		status={status}
-		isInfo={isInfo}
-		isSourceless={isSourceless}
-		isTextSource={isTextSource}
-		textResult={textResult}
-		sanitized={sanitized}
-		canChainBase={canChainBase}
+		{info}
+		{status}
+		{isInfo}
+		{isSourceless}
+		{isTextSource}
+		{textResult}
+		{sanitized}
+		{canChainBase}
 		hasChain={chain.length > 0}
-		hasMask={hasMask}
+		{hasMask}
 		bind:showMask
 		bind:values
-		pipetteTargetId={pipetteTargetId}
-		handleFile={handleFile}
+		{pipetteTargetId}
+		{handleFile}
 		onTextSubmit={handleTextSubmit}
 		onSourceError={(e) => (errorText = errorMessage(e))}
-		reset={reset}
-		toggleChain={toggleChain}
-		handlePipetteToggle={handlePipetteToggle}
-		handlePickColor={handlePickColor}
-		showError={showError}
-		errorMessage={errorMessage}
-		overlayImage={overlayImage}
+		{reset}
+		{toggleChain}
+		{handlePipetteToggle}
+		{handlePickColor}
+		{showError}
+		{errorMessage}
+		{overlayImage}
 		onOverlayFile={(f) => void handleOverlayFile(f)}
 		onOverlayError={(e) => (errorText = errorMessage(e))}
 		onOverlayClear={clearOverlay}
@@ -364,33 +395,38 @@
 
 	<div class="chain-stack">
 		{#each chain as step, index (step.id)}
-			{#if step.toolId === ''}
+			{#if step.toolId === ""}
 				<div class="panel empty-slot">
-				<header>
-					<h3 class="heading-section">{t('toolPage.stepHeading', { n: index + 2 })}</h3>
-					<button
-						type="button"
-						class="remove-step"
-						aria-label={t('toolPage.removeStepAria')}
-						onclick={() => removeChainStep(index)}
-					>
-						✕
-					</button>
-				</header>
-					<ToolSearch onSelect={(id) => applyChainTool(index, id)} chainableOnly />
+					<header>
+						<h3 class="heading-section">
+							{t("toolPage.stepHeading", { n: index + 2 })}
+						</h3>
+						<button
+							type="button"
+							class="remove-step"
+							aria-label={t("toolPage.removeStepAria")}
+							onclick={() => removeChainStep(index)}
+						>
+							✕
+						</button>
+					</header>
+					<ToolSearch
+						onSelect={(id) => applyChainTool(index, id)}
+						chainableOnly
+					/>
 				</div>
 			{:else if getTool(step.toolId)}
 				{@const stepTool = getTool(step.toolId)!}
-				{#if stageVariant === 'inline'}
+				{#if stageVariant === "inline"}
 					{@const StepIcon = TOOL_ICONS[stepTool.id]}
 					<ToolStage
 						mode="chain"
-						index={index}
+						{index}
 						tool={stepTool}
 						bind:values={step.values}
 						input={index === 0 ? result : (chainResults[index - 1] ?? null)}
 						result={chainResults[index] ?? null}
-						busy={status === 'processing'}
+						busy={status === "processing"}
 						isLast={index === chain.length - 1}
 						onRemove={() => removeChainStep(index)}
 						onError={showError}
@@ -404,12 +440,15 @@
 										<StepIcon size={14} strokeWidth={2} />
 									</span>
 								{/if}
-								{t('chain.stepLabel', { n: index + 2, title: toolTitle(stepTool) })}
+								{t("chain.stepLabel", {
+									n: index + 2,
+									title: toolTitle(stepTool),
+								})}
 								<button
 									type="button"
 									class="remove-step"
-									aria-label={t('toolPage.removeStepAria')}
-									title={t('toolPage.removeStepAria')}
+									aria-label={t("toolPage.removeStepAria")}
+									title={t("toolPage.removeStepAria")}
 									onclick={() => removeChainStep(index)}
 								>
 									✕
@@ -419,12 +458,12 @@
 					</ToolStage>
 				{:else}
 					<ChainToolBlock
-						index={index}
+						{index}
 						tool={stepTool}
 						bind:values={step.values}
 						input={index === 0 ? result : (chainResults[index - 1] ?? null)}
 						result={chainResults[index] ?? null}
-						busy={status === 'processing'}
+						busy={status === "processing"}
 						isLast={index === chain.length - 1}
 						onRemove={() => removeChainStep(index)}
 						onError={showError}

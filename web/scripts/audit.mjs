@@ -38,7 +38,7 @@ const FIELDS = [
 	"lineHeight",
 	"borderRadius",
 	"display",
-	"gap"
+	"gap",
 ];
 
 const waitFor = async (url, ms = 60000) => {
@@ -58,7 +58,8 @@ const snapshot = (page, url) =>
 		const readTokens = () => {
 			const s = getComputedStyle(document.documentElement);
 			const out = {};
-			for (const k of s) if (k.startsWith("--")) out[k] = s.getPropertyValue(k).trim();
+			for (const k of s)
+				if (k.startsWith("--")) out[k] = s.getPropertyValue(k).trim();
 			return out;
 		};
 		const tokensLight = readTokens();
@@ -85,14 +86,19 @@ const snapshot = (page, url) =>
 				"lineHeight",
 				"borderRadius",
 				"display",
-				"gap"
+				"gap",
 			])
 				o[f] = s[f];
 			return o;
 		};
 		const rect = (el) => {
 			const r = el.getBoundingClientRect();
-			return { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) };
+			return {
+				x: Math.round(r.x),
+				y: Math.round(r.y),
+				w: Math.round(r.width),
+				h: Math.round(r.height),
+			};
 		};
 		const walk = (el, path) => {
 			if (["SCRIPT", "STYLE", "NOSCRIPT"].includes(el.tagName)) return [];
@@ -101,12 +107,18 @@ const snapshot = (page, url) =>
 			out.push({
 				path,
 				tag: el.tagName.toLowerCase(),
-				text: el.children.length === 0 ? el.textContent.trim().slice(0, 40) : "",
+				text:
+					el.children.length === 0 ? el.textContent.trim().slice(0, 40) : "",
 				rect: rect(el),
-				style: sig(el)
+				style: sig(el),
 			});
 			for (let i = 0; i < kids.length; i++)
-				out.push(...walk(kids[i], `${path}>${kids[i].tagName.toLowerCase()}:nth-child(${i + 1})`));
+				out.push(
+					...walk(
+						kids[i],
+						`${path}>${kids[i].tagName.toLowerCase()}:nth-child(${i + 1})`,
+					),
+				);
 			return out;
 		};
 		return { tokensLight, tokensDark, tree: walk(document.body, "body") };
@@ -120,13 +132,16 @@ async function main() {
 			cwd: WEB,
 			stdio: "ignore",
 			shell: true,
-			detached: process.platform !== "win32"
+			detached: process.platform !== "win32",
 		});
 		await waitFor(OURS);
 	}
 
 	const browser = await chromium.launch();
-	const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+	const page = await browser.newPage({
+		viewport: { width: 1440, height: 900 },
+		deviceScaleFactor: 1,
+	});
 	try {
 		await page.goto(OURS, { waitUntil: "load" });
 		await page.evaluate(() => document.fonts.ready);
@@ -154,7 +169,7 @@ async function main() {
 		};
 		const tokenDiffs = {
 			light: tokDiff(ours.tokensLight, ref.tokensLight),
-			dark: tokDiff(ours.tokensDark, ref.tokensDark)
+			dark: tokDiff(ours.tokensDark, ref.tokensDark),
 		};
 
 		// element diff: совпадающие по тексту элементы (структуры разные,
@@ -183,9 +198,15 @@ async function main() {
 			}
 			const dr = o.rect;
 			const rr = r.rect;
-			if (Math.abs(dr.x - rr.x) > 2 || Math.abs(dr.y - rr.y) > 2 || Math.abs(dr.w - rr.w) > 2 || Math.abs(dr.h - rr.h) > 2)
+			if (
+				Math.abs(dr.x - rr.x) > 2 ||
+				Math.abs(dr.y - rr.y) > 2 ||
+				Math.abs(dr.w - rr.w) > 2 ||
+				Math.abs(dr.h - rr.h) > 2
+			)
 				deltas.rect = { ours: dr, ref: rr };
-			if (Object.keys(deltas).length) elementDiffs.push({ path: o.path, tag: o.tag, text: k, deltas });
+			if (Object.keys(deltas).length)
+				elementDiffs.push({ path: o.path, tag: o.tag, text: k, deltas });
 		}
 		for (const [k] of txtR) if (!txtO.has(k)) onlyRef.push(k);
 
@@ -202,16 +223,22 @@ async function main() {
 				tokenDark: tokenDiffs.dark.length,
 				elements: elementDiffs.length,
 				onlyOurs: onlyOurs.length,
-				onlyRef: onlyRef.length
-			}
+				onlyRef: onlyRef.length,
+			},
 		};
 
 		mkdirSync(resolve(WEB, "audit"), { recursive: true });
-		writeFileSync(resolve(WEB, "audit/audit-report.json"), JSON.stringify(report, null, 2));
-		writeFileSync(resolve(WEB, "audit/audit-report.md"), toMarkdown(report, ours, ref));
+		writeFileSync(
+			resolve(WEB, "audit/audit-report.json"),
+			JSON.stringify(report, null, 2),
+		);
+		writeFileSync(
+			resolve(WEB, "audit/audit-report.md"),
+			toMarkdown(report, ours, ref),
+		);
 		console.log(
 			`audit done: tokens light/dark=${tokenDiffs.light.length}/${tokenDiffs.dark.length}, ` +
-				`elements=${elementDiffs.length}, onlyOurs=${onlyOurs.length}, onlyRef=${onlyRef.length}`
+				`elements=${elementDiffs.length}, onlyOurs=${onlyOurs.length}, onlyRef=${onlyRef.length}`,
 		);
 		console.log(`report: web/audit/audit-report.md`);
 	} finally {
@@ -219,7 +246,9 @@ async function main() {
 		if (server) {
 			try {
 				if (process.platform === "win32")
-					spawn("taskkill", ["/pid", String(server.pid), "/f", "/t"], { stdio: "ignore" });
+					spawn("taskkill", ["/pid", String(server.pid), "/f", "/t"], {
+						stdio: "ignore",
+					});
 				else server.kill("SIGTERM");
 			} catch {}
 		}
@@ -233,24 +262,25 @@ function toMarkdown(report, ours, ref) {
 				rows.map((r) => `| \`${r.key}\` | ${r.ours} | ${r.ref} |`).join("\n")
 			: "_все совпадают_";
 	const sorted = [...report.elementDiffs].sort(
-		(x, y) => Object.keys(y.deltas).length - Object.keys(x.deltas).length
+		(x, y) => Object.keys(y.deltas).length - Object.keys(x.deltas).length,
 	);
 	const elRows = sorted
 		.slice(0, 100)
 		.map((e) => {
-		const d = Object.entries(e.deltas)
-			.map(([k, v]) => {
-				if (k === "rect") {
-					const f = (r) => `${r.x},${r.y} ${r.w}x${r.h}`;
-					return `    - **rect**: \`${f(v.ours)}\` → \`${f(v.ref)}\``;
-				}
-				return `    - **${k}**: \`${v.ours}\` → \`${v.ref}\``;
-			})
-			.join("\n");
+			const d = Object.entries(e.deltas)
+				.map(([k, v]) => {
+					if (k === "rect") {
+						const f = (r) => `${r.x},${r.y} ${r.w}x${r.h}`;
+						return `    - **rect**: \`${f(v.ours)}\` → \`${f(v.ref)}\``;
+					}
+					return `    - **${k}**: \`${v.ours}\` → \`${v.ref}\``;
+				})
+				.join("\n");
 			return `### \`${e.path}\`${e.text ? ` — "${e.text}"` : ""}\n${d}`;
 		})
 		.join("\n\n");
-	return `# Style audit: ${report.ours}\n\nvs ${report.ref}\n\n_${report.generatedAt}_\n\n` +
+	return (
+		`# Style audit: ${report.ours}\n\nvs ${report.ref}\n\n_${report.generatedAt}_\n\n` +
 		`## Сводка\n\n- Токены light: **${report.counts.tokenLight}** расх.\n` +
 		`- Токены dark: **${report.counts.tokenDark}** расх.\n` +
 		`- Элементы (стиль/геометрия): **${report.counts.elements}** расх.\n` +
@@ -259,10 +289,15 @@ function toMarkdown(report, ours, ref) {
 		`## Токены — Dark\n\n${tokTable(report.tokenDiffs.dark)}\n\n` +
 		`## Расхождения элементов (топ ${Math.min(100, sorted.length)})\n\n${elRows}\n\n` +
 		`## Только у нас (структурно)\n\n` +
-		(report.onlyOurs.length ? report.onlyOurs.map((p) => `- \`${p}\``).join("\n") : "_—_") +
+		(report.onlyOurs.length
+			? report.onlyOurs.map((p) => `- \`${p}\``).join("\n")
+			: "_—_") +
 		`\n\n## Только в рефе (структурно)\n\n` +
-		(report.onlyRef.length ? report.onlyRef.map((p) => `- \`${p}\``).join("\n") : "_—_") +
-		`\n`;
+		(report.onlyRef.length
+			? report.onlyRef.map((p) => `- \`${p}\``).join("\n")
+			: "_—_") +
+		`\n`
+	);
 }
 
 main().catch((e) => {

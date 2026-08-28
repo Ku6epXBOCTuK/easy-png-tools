@@ -1,14 +1,14 @@
-import { parseHex } from './alpha';
-import { ToolError } from './errors';
-import { clonePixelImage, createPixelImage, type PixelImage } from './types';
-import { sampleBilinear } from './geometry';
+import { parseHex } from "./alpha";
+import { ToolError } from "./errors";
+import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
+import { sampleBilinear } from "./geometry";
 
 export type AffineMatrix = [number, number, number, number, number, number];
 
 export function invertAffine([a, b, c, d, e, f]: AffineMatrix): AffineMatrix {
 	const det = a * d - b * c;
 	if (Math.abs(det) < 1e-12) {
-		throw new ToolError('errors.badTransform');
+		throw new ToolError("errors.badTransform");
 	}
 	const ia = d / det;
 	const ib = -b / det;
@@ -24,7 +24,7 @@ export function transformImage(
 	dstToSrc: AffineMatrix,
 	outWidth: number,
 	outHeight: number,
-	bgHex?: string
+	bgHex?: string,
 ): PixelImage {
 	const [a, b, c, d, e, f] = dstToSrc;
 	const out = createPixelImage(outWidth, outHeight);
@@ -34,7 +34,12 @@ export function transformImage(
 			const sx = a * x + c * y + e;
 			const sy = b * x + d * y + f;
 			const di = (y * outWidth + x) * 4;
-			if (sx < -EPS || sy < -EPS || sx > img.width - 1 + EPS || sy > img.height - 1 + EPS) {
+			if (
+				sx < -EPS ||
+				sy < -EPS ||
+				sx > img.width - 1 + EPS ||
+				sy > img.height - 1 + EPS
+			) {
 				if (bg) {
 					out.data[di] = bg[0];
 					out.data[di + 1] = bg[1];
@@ -72,7 +77,7 @@ function centeredTransform(img: PixelImage, forward: AffineMatrix): PixelImage {
 		[0.5, 0.5],
 		[img.width - 0.5, 0.5],
 		[0.5, img.height - 0.5],
-		[img.width - 0.5, img.height - 0.5]
+		[img.width - 0.5, img.height - 0.5],
 	]) {
 		const qx = forward[0] * px + forward[2] * py + forward[4];
 		const qy = forward[1] * px + forward[3] * py + forward[5];
@@ -85,14 +90,23 @@ function centeredTransform(img: PixelImage, forward: AffineMatrix): PixelImage {
 	const outH = Math.round(maxY - minY) + 1;
 	const tx = inv[0] * minX + inv[2] * minY - 0.5;
 	const ty = inv[1] * minX + inv[3] * minY - 0.5;
-	return transformImage(img, [inv[0], inv[1], inv[2], inv[3], tx, ty], outW, outH);
+	return transformImage(
+		img,
+		[inv[0], inv[1], inv[2], inv[3], tx, ty],
+		outW,
+		outH,
+	);
 }
 
-export function skewImage(img: PixelImage, degX: number, degY: number): PixelImage {
+export function skewImage(
+	img: PixelImage,
+	degX: number,
+	degY: number,
+): PixelImage {
 	const kx = Math.tan((degX * Math.PI) / 180);
 	const ky = Math.tan((degY * Math.PI) / 180);
 	if (!Number.isFinite(kx) || !Number.isFinite(ky)) {
-		throw new ToolError('errors.skewAngle');
+		throw new ToolError("errors.skewAngle");
 	}
 	return centeredTransform(img, [1, ky, kx, 1, 0, 0]);
 }

@@ -1,6 +1,6 @@
-﻿import { parseHex } from './alpha';
-import { ToolError } from './errors';
-import { clonePixelImage, createPixelImage, type PixelImage } from './types';
+﻿import { parseHex } from "./alpha";
+import { ToolError } from "./errors";
+import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
 
 export function expandCanvas(
 	img: PixelImage,
@@ -8,7 +8,7 @@ export function expandCanvas(
 	top: number,
 	right: number,
 	bottom: number,
-	backgroundHex?: string
+	backgroundHex?: string,
 ): PixelImage {
 	const l = Math.max(0, Math.trunc(left));
 	const t = Math.max(0, Math.trunc(top));
@@ -28,13 +28,17 @@ export function expandCanvas(
 		const srcStart = y * img.width * 4;
 		out.data.set(
 			img.data.subarray(srcStart, srcStart + img.width * 4),
-			((y + t) * out.width + l) * 4
+			((y + t) * out.width + l) * 4,
 		);
 	}
 	return out;
 }
 
-export function tile(img: PixelImage, columns: number, rows: number): PixelImage {
+export function tile(
+	img: PixelImage,
+	columns: number,
+	rows: number,
+): PixelImage {
 	const cols = Math.max(1, Math.trunc(columns));
 	const rowsCount = Math.max(1, Math.trunc(rows));
 	const out = createPixelImage(img.width * cols, img.height * rowsCount);
@@ -44,7 +48,7 @@ export function tile(img: PixelImage, columns: number, rows: number): PixelImage
 				const srcStart = y * img.width * 4;
 				out.data.set(
 					img.data.subarray(srcStart, srcStart + img.width * 4),
-					((ty * img.height + y) * out.width + tx * img.width) * 4
+					((ty * img.height + y) * out.width + tx * img.width) * 4,
 				);
 			}
 		}
@@ -75,20 +79,20 @@ export function centerByAlpha(img: PixelImage): PixelImage {
 	for (let y = 0; y < content.height; y++) {
 		out.data.set(
 			content.data.subarray(y * content.width * 4, (y + 1) * content.width * 4),
-			((y + dy) * out.width + dx) * 4
+			((y + dy) * out.width + dx) * 4,
 		);
 	}
 	return out;
 }
 
-export type FlipAxis = 'horizontal' | 'vertical';
+export type FlipAxis = "horizontal" | "vertical";
 
 export function flip(img: PixelImage, axis: FlipAxis): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	for (let y = 0; y < img.height; y++) {
 		for (let x = 0; x < img.width; x++) {
-			const sx = axis === 'horizontal' ? img.width - 1 - x : x;
-			const sy = axis === 'vertical' ? img.height - 1 - y : y;
+			const sx = axis === "horizontal" ? img.width - 1 - x : x;
+			const sy = axis === "vertical" ? img.height - 1 - y : y;
 			copyPixel(img, sx, sy, out, x, y);
 		}
 	}
@@ -120,7 +124,7 @@ export function crop(
 	x: number,
 	y: number,
 	width: number,
-	height: number
+	height: number,
 ): PixelImage {
 	const sx = clampInt(x, 0, img.width);
 	const sy = clampInt(y, 0, img.height);
@@ -129,7 +133,7 @@ export function crop(
 	const w = ex - sx;
 	const h = ey - sy;
 	if (w <= 0 || h <= 0) {
-		throw new ToolError('errors.cropBounds');
+		throw new ToolError("errors.cropBounds");
 	}
 	const out = createPixelImage(w, h);
 	for (let row = 0; row < h; row++) {
@@ -139,9 +143,18 @@ export function crop(
 	return out;
 }
 
-export function resize(img: PixelImage, width: number, height: number): PixelImage {
-	if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) {
-		throw new ToolError('errors.sizeInt');
+export function resize(
+	img: PixelImage,
+	width: number,
+	height: number,
+): PixelImage {
+	if (
+		!Number.isInteger(width) ||
+		!Number.isInteger(height) ||
+		width < 1 ||
+		height < 1
+	) {
+		throw new ToolError("errors.sizeInt");
 	}
 	const out = createPixelImage(width, height);
 	const xr = img.width / width;
@@ -173,7 +186,14 @@ export function resize(img: PixelImage, width: number, height: number): PixelIma
 	return out;
 }
 
-function copyPixel(src: PixelImage, sx: number, sy: number, dst: PixelImage, dx: number, dy: number): void {
+function copyPixel(
+	src: PixelImage,
+	sx: number,
+	sy: number,
+	dst: PixelImage,
+	dx: number,
+	dy: number,
+): void {
 	const si = (sy * src.width + sx) * 4;
 	const di = (dy * dst.width + dx) * 4;
 	dst.data[di] = src.data[si];
@@ -185,7 +205,7 @@ function copyPixel(src: PixelImage, sx: number, sy: number, dst: PixelImage, dx:
 export function sampleBilinear(
 	img: PixelImage,
 	fx: number,
-	fy: number
+	fy: number,
 ): [number, number, number, number] {
 	const maxX = img.width - 1;
 	const maxY = img.height - 1;
@@ -214,23 +234,21 @@ function clampInt(value: number, min: number, max: number): number {
 	return Math.min(max, Math.max(min, Math.trunc(value)));
 }
 
-
-
 export type Anchor9 =
-	| 'top-left'
-	| 'top-center'
-	| 'top-right'
-	| 'middle-left'
-	| 'center'
-	| 'middle-right'
-	| 'bottom-left'
-	| 'bottom-center'
-	| 'bottom-right';
+	| "top-left"
+	| "top-center"
+	| "top-right"
+	| "middle-left"
+	| "center"
+	| "middle-right"
+	| "bottom-left"
+	| "bottom-center"
+	| "bottom-right";
 
 /** Границы контента: пиксели с альфой строго больше порога. Пустое изображение → null. */
 export function contentBounds(
 	img: PixelImage,
-	alphaThreshold = 0
+	alphaThreshold = 0,
 ): { x: number; y: number; w: number; h: number } | null {
 	let minX = img.width;
 	let minY = img.height;
@@ -262,11 +280,19 @@ export function changeCanvasSize(
 	img: PixelImage,
 	width: number,
 	height: number,
-	anchor: Anchor9
+	anchor: Anchor9,
 ): PixelImage {
 	const out = createPixelImage(width, height);
-	const pasteX = anchor.endsWith('-left') ? 0 : anchor.endsWith('-right') ? width - img.width : Math.floor((width - img.width) / 2);
-	const pasteY = anchor.startsWith('top-') ? 0 : anchor.startsWith('bottom-') ? height - img.height : Math.floor((height - img.height) / 2);
+	const pasteX = anchor.endsWith("-left")
+		? 0
+		: anchor.endsWith("-right")
+			? width - img.width
+			: Math.floor((width - img.width) / 2);
+	const pasteY = anchor.startsWith("top-")
+		? 0
+		: anchor.startsWith("bottom-")
+			? height - img.height
+			: Math.floor((height - img.height) / 2);
 	for (let y = 0; y < height; y++) {
 		const sy = y - pasteY;
 		if (sy < 0 || sy >= img.height) continue;
@@ -307,13 +333,21 @@ export function padToRatio(img: PixelImage, ratio: number): PixelImage {
 	else if (current < ratio) w = Math.round(h * ratio);
 	w = Math.max(1, w);
 	h = Math.max(1, h);
-	return changeCanvasSize(img, w, h, 'center');
+	return changeCanvasSize(img, w, h, "center");
 }
 
 /** Разворачивает изображение на 90°, если его ориентация не совпадает с целевой. Квадрат не трогает. */
-export function forceOrientation(img: PixelImage, target: 'portrait' | 'landscape'): PixelImage {
-	const current = img.width > img.height ? 'landscape' : img.width < img.height ? 'portrait' : 'square';
-	if (current === target || current === 'square') return clonePixelImage(img);
+export function forceOrientation(
+	img: PixelImage,
+	target: "portrait" | "landscape",
+): PixelImage {
+	const current =
+		img.width > img.height
+			? "landscape"
+			: img.width < img.height
+				? "portrait"
+				: "square";
+	if (current === target || current === "square") return clonePixelImage(img);
 	return rotate90(img, 1);
 }
 
@@ -323,14 +357,14 @@ export function forceOrientation(img: PixelImage, target: 'portrait' | 'landscap
  */
 export function symmetricCopy(
 	img: PixelImage,
-	axis: 'vertical' | 'horizontal',
-	keepSide: 'left' | 'right' | 'top' | 'bottom'
+	axis: "vertical" | "horizontal",
+	keepSide: "left" | "right" | "top" | "bottom",
 ): PixelImage {
-	if (axis === 'vertical') {
+	if (axis === "vertical") {
 		const out = createPixelImage(img.width * 2, img.height);
 		for (let y = 0; y < img.height; y++) {
 			for (let x = 0; x < img.width; x++) {
-				const srcX = keepSide === 'left' ? x : img.width - 1 - x;
+				const srcX = keepSide === "left" ? x : img.width - 1 - x;
 				const di = (y * out.width + x) * 4;
 				const si = (y * img.width + srcX) * 4;
 				out.data[di] = img.data[si];
@@ -349,7 +383,7 @@ export function symmetricCopy(
 	}
 	const out = createPixelImage(img.width, img.height * 2);
 	for (let y = 0; y < img.height; y++) {
-		const srcY = keepSide === 'top' ? y : img.height - 1 - y;
+		const srcY = keepSide === "top" ? y : img.height - 1 - y;
 		for (let x = 0; x < img.width; x++) {
 			const si = (srcY * img.width + x) * 4;
 			const dTop = (y * out.width + x) * 4;

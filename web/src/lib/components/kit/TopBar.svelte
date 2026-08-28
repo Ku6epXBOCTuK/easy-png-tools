@@ -22,7 +22,12 @@
 	</div>
 	<div class="top-actions">
 		<span class="status"><StatusDot /> AUTO PIPELINE</span>
-		<IconButton icon={CircleHelp} label="Help" variant="bare" onclick={() => {}} />
+		<IconButton
+			icon={CircleHelp}
+			label="Help"
+			variant="bare"
+			onclick={() => {}}
+		/>
 		<IconButton
 			icon={theme === "light" ? Moon : Sun}
 			label="Toggle theme"

@@ -1,12 +1,12 @@
-import type { PixelImage } from './types';
-import { createPixelImage } from './types';
-import { rgbToHsl } from './palette';
-import type { Rgb } from './palette';
+import type { PixelImage } from "./types";
+import { createPixelImage } from "./types";
+import { rgbToHsl } from "./palette";
+import type { Rgb } from "./palette";
 
 /** Все компоненты нормализованы в 0..1 в порядке объявления. */
 export type SpaceComponents = number[];
 
-export type SpaceId = 'hsl' | 'hsv' | 'hsi' | 'cmyk' | 'ycbcr' | 'lab';
+export type SpaceId = "hsl" | "hsv" | "hsi" | "cmyk" | "ycbcr" | "lab";
 
 function hueOf({ r, g, b }: Rgb): number {
 	const max = Math.max(r, g, b);
@@ -47,7 +47,12 @@ function rgbToCmyk({ r, g, b }: Rgb): [number, number, number, number] {
 	const bn = b / 255;
 	const k = 1 - Math.max(rn, gn, bn);
 	if (k === 1) return [0, 0, 0, 1];
-	return [(1 - rn - k) / (1 - k), (1 - gn - k) / (1 - k), (1 - bn - k) / (1 - k), k];
+	return [
+		(1 - rn - k) / (1 - k),
+		(1 - gn - k) / (1 - k),
+		(1 - bn - k) / (1 - k),
+		k,
+	];
 }
 
 function rgbToYcbcr({ r, g, b }: Rgb): [number, number, number] {
@@ -71,27 +76,34 @@ function rgbToLab({ r, g, b }: Rgb): [number, number, number] {
 	const fy = f(y);
 	const fz = f(z);
 	// L нормирован 0..1; a/b центрированы на 0.5 с размахом ±0.5
-	return [(116 * fy - 16) / 100, (500 * (fx - fy)) / 250 + 0.5, (200 * (fy - fz)) / 250 + 0.5];
+	return [
+		(116 * fy - 16) / 100,
+		(500 * (fx - fy)) / 250 + 0.5,
+		(200 * (fy - fz)) / 250 + 0.5,
+	];
 }
 
-type SpaceDef = { components: string[]; convert: (rgb: Rgb) => SpaceComponents };
+type SpaceDef = {
+	components: string[];
+	convert: (rgb: Rgb) => SpaceComponents;
+};
 
 export const SPACES: Record<SpaceId, SpaceDef> = {
 	hsl: {
-		components: ['h', 's', 'l'],
+		components: ["h", "s", "l"],
 		convert: ({ r, g, b }) => {
 			const { h, s, l } = rgbToHsl({ r, g, b });
 			return [h / 360, s, l];
-		}
+		},
 	},
-	hsv: { components: ['h', 's', 'v'], convert: rgbToHsv },
-	hsi: { components: ['h', 's', 'i'], convert: rgbToHsi },
-	cmyk: { components: ['c', 'm', 'y', 'k'], convert: rgbToCmyk },
-	ycbcr: { components: ['y', 'cb', 'cr'], convert: rgbToYcbcr },
-	lab: { components: ['l', 'a', 'b'], convert: rgbToLab }
+	hsv: { components: ["h", "s", "v"], convert: rgbToHsv },
+	hsi: { components: ["h", "s", "i"], convert: rgbToHsi },
+	cmyk: { components: ["c", "m", "y", "k"], convert: rgbToCmyk },
+	ycbcr: { components: ["y", "cb", "cr"], convert: rgbToYcbcr },
+	lab: { components: ["l", "a", "b"], convert: rgbToLab },
 };
 
-export type ChannelDisplay = 'gray' | 'color';
+export type ChannelDisplay = "gray" | "color";
 
 /**
  * Визуализация выбранного пространства: каждый компонент пространства
@@ -102,7 +114,7 @@ export function renderSpace(
 	img: PixelImage,
 	space: SpaceId,
 	component: string,
-	display: ChannelDisplay
+	display: ChannelDisplay,
 ): PixelImage {
 	const def = SPACES[space];
 	if (!def) return createPixelImage(img.width, img.height);
@@ -110,10 +122,14 @@ export function renderSpace(
 	if (idx < 0) return createPixelImage(img.width, img.height);
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < img.data.length; i += 4) {
-		const comps = def.convert({ r: img.data[i], g: img.data[i + 1], b: img.data[i + 2] });
+		const comps = def.convert({
+			r: img.data[i],
+			g: img.data[i + 1],
+			b: img.data[i + 2],
+		});
 		const di = i;
 		out.data[di + 3] = img.data[i + 3];
-		if (display === 'gray') {
+		if (display === "gray") {
 			const v = comps[idx] * 255;
 			out.data[di] = v;
 			out.data[di + 1] = v;

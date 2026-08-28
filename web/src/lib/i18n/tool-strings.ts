@@ -1,7 +1,7 @@
-import type { ParamDef, ToolEntry } from '$lib/registry';
-import type { SearchDoc } from './matching';
-import { getMergedDict } from './locale.svelte';
-import { ru } from './ru';
+import type { ParamDef, ToolEntry } from "$lib/registry";
+import type { SearchDoc } from "./matching";
+import { getMergedDict } from "./locale.svelte";
+import { ru } from "./ru";
 
 /**
  * Строки инструмента на активной локали.
@@ -23,10 +23,14 @@ export function paramLabel(tool: ToolEntry, param: ParamDef): string {
 	return viaDef.label ?? param.id;
 }
 
-export function optionLabel(tool: ToolEntry, param: ParamDef, value: string): string {
+export function optionLabel(
+	tool: ToolEntry,
+	param: ParamDef,
+	value: string,
+): string {
 	const viaDict = getMergedDict().tools[tool.id]?.options?.[param.id]?.[value];
 	if (viaDict) return viaDict;
-	if (param.type === 'select') {
+	if (param.type === "select") {
 		return param.options.find((o) => o.value === value)?.label ?? value;
 	}
 	return value;
@@ -45,11 +49,15 @@ export function toolSearchDoc(tool: ToolEntry): SearchDoc {
 	const active = getMergedDict().tools[tool.id];
 	return {
 		id: tool.id,
-		titles: dedupe([active?.title ?? '', ru.tools[tool.id]?.title ?? '', tool.title]),
+		titles: dedupe([
+			active?.title ?? "",
+			ru.tools[tool.id]?.title ?? "",
+			tool.title,
+		]),
 		descriptions: dedupe([
-			active?.description ?? '',
-			ru.tools[tool.id]?.description ?? '',
-			tool.description
-		])
+			active?.description ?? "",
+			ru.tools[tool.id]?.description ?? "",
+			tool.description,
+		]),
 	};
 }

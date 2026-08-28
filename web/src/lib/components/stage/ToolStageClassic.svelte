@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { t } from '$lib/i18n/t';
-	import ParamsCard from '../tool/ParamsCard.svelte';
-	import ResultCard from '../tool/ResultCard.svelte';
-	import SourceCard from '../tool/SourceCard.svelte';
-	import TextInputCard from '../tool/TextInputCard.svelte';
-	import type { StageProps } from './stage-props';
+	import { t } from "$lib/i18n/t";
+	import ParamsCard from "../tool/ParamsCard.svelte";
+	import ResultCard from "../tool/ResultCard.svelte";
+	import SourceCard from "../tool/SourceCard.svelte";
+	import TextInputCard from "../tool/TextInputCard.svelte";
+	import type { StageProps } from "./stage-props";
 
 	let {
 		tool,
@@ -32,14 +32,16 @@
 		handlePipetteToggle,
 		handlePickColor,
 		showError,
-		errorMessage
+		errorMessage,
 	}: StageProps = $props();
 </script>
 
 <div class="panel tool-block">
 	<div class="tool-stage" class:single={isSourceless}>
 		{#if !isSourceless}
-			<span class="edge-legend source-legend" aria-hidden="true">{t('toolPage.legendSource')}</span>
+			<span class="edge-legend source-legend" aria-hidden="true"
+				>{t("toolPage.legendSource")}</span
+			>
 			<div class="cell">
 				{#if isTextSource && !source}
 					<TextInputCard onSubmit={onTextSubmit} />
@@ -56,7 +58,7 @@
 			</div>
 		{/if}
 		<span class="edge-legend result-legend" aria-hidden="true">
-			{isInfo ? t('toolPage.legendSummary') : t('toolPage.legendResult')}
+			{isInfo ? t("toolPage.legendSummary") : t("toolPage.legendResult")}
 		</span>
 		<div class="cell">
 			<ResultCard
@@ -64,11 +66,11 @@
 				sourceLoaded={isSourceless ? true : !!source}
 				{status}
 				{result}
-				displayImage={displayImage}
+				{displayImage}
 				{info}
 				{isInfo}
 				params={sanitized}
-				textResult={textResult}
+				{textResult}
 				onChainToggle={canChainBase ? toggleChain : undefined}
 				{hasChain}
 				onDownloadError={showError}
@@ -78,7 +80,9 @@
 
 	{#if (source || isSourceless) && !isInfo && (tool.params.length > 0 || hasMask)}
 		<div class="params-sep">
-			<span class="edge-legend" aria-hidden="true">{t('toolPage.legendParams')}</span>
+			<span class="edge-legend" aria-hidden="true"
+				>{t("toolPage.legendParams")}</span
+			>
 		</div>
 		<ParamsCard
 			{tool}

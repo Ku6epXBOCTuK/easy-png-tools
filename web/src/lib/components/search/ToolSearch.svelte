@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { isChainable, TOOLS } from '$lib/registry';
-	import { LOCALE_TAGS } from '$lib/i18n/dict';
-	import { getLocale } from '$lib/i18n/locale.svelte';
-	import { normalizeForSearch, scoreDoc } from '$lib/i18n/matching';
-	import { t } from '$lib/i18n/t';
-	import { toolDescription, toolSearchDoc, toolTitle } from '$lib/i18n/tool-strings';
-	import ToolCard from './ToolCard.svelte';
+	import { isChainable, TOOLS } from "$lib/registry";
+	import { LOCALE_TAGS } from "$lib/i18n/dict";
+	import { getLocale } from "$lib/i18n/locale.svelte";
+	import { normalizeForSearch, scoreDoc } from "$lib/i18n/matching";
+	import { t } from "$lib/i18n/t";
+	import {
+		toolDescription,
+		toolSearchDoc,
+		toolTitle,
+	} from "$lib/i18n/tool-strings";
+	import ToolCard from "./ToolCard.svelte";
 
 	interface Props {
 		onSelect: (toolId: string) => void;
@@ -15,9 +19,11 @@
 
 	let { onSelect, chainableOnly = false }: Props = $props();
 
-	const candidates = $derived(chainableOnly ? TOOLS.filter(isChainable) : TOOLS);
+	const candidates = $derived(
+		chainableOnly ? TOOLS.filter(isChainable) : TOOLS,
+	);
 
-	let query = $state('');
+	let query = $state("");
 	let activeIndex = $state(0);
 	let listOpen = $state(false);
 
@@ -40,7 +46,7 @@
 					title: toolTitle(tool),
 					description: toolDescription(tool),
 					popularity: tool.popularity ?? 50,
-					score: s
+					score: s,
 				});
 			}
 		}
@@ -49,31 +55,31 @@
 			(a, b) =>
 				b.score - a.score ||
 				b.popularity - a.popularity ||
-				collator.compare(a.title, b.title)
+				collator.compare(a.title, b.title),
 		);
 		return found.slice(0, 12);
 	});
 
 	function choose(id: string) {
 		listOpen = false;
-		query = '';
+		query = "";
 		activeIndex = 0;
 		onSelect(id);
 	}
 
 	function onKeydown(event: KeyboardEvent) {
 		if (!listOpen || matches.length === 0) return;
-		if (event.key === 'ArrowDown') {
+		if (event.key === "ArrowDown") {
 			event.preventDefault();
 			activeIndex = (activeIndex + 1) % matches.length;
-		} else if (event.key === 'ArrowUp') {
+		} else if (event.key === "ArrowUp") {
 			event.preventDefault();
 			activeIndex = (activeIndex - 1 + matches.length) % matches.length;
-		} else if (event.key === 'Enter') {
+		} else if (event.key === "Enter") {
 			event.preventDefault();
 			const match = matches[Math.min(activeIndex, matches.length - 1)];
 			if (match) choose(match.id);
-		} else if (event.key === 'Escape') {
+		} else if (event.key === "Escape") {
 			listOpen = false;
 		}
 	}
@@ -89,14 +95,14 @@
 			activeIndex = 0;
 		}}
 		onkeydown={onKeydown}
-		placeholder={t('search.placeholder')}
-		aria-label={t('search.aria')}
+		placeholder={t("search.placeholder")}
+		aria-label={t("search.aria")}
 		role="combobox"
 		aria-expanded={listOpen}
 		aria-controls="tool-search-list"
 	/>
 	{#if listOpen && query.trim().length > 0 && matches.length === 0}
-		<p class="none text-muted">{t('search.nothingFound')}</p>
+		<p class="none text-muted">{t("search.nothingFound")}</p>
 	{:else if listOpen && matches.length > 0}
 		<div id="tool-search-list" class="cards" role="listbox">
 			{#each matches as match, index (match.id)}

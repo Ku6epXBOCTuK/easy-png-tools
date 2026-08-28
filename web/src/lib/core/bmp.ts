@@ -1,4 +1,4 @@
-import type { PixelImage } from './types';
+import type { PixelImage } from "./types";
 
 export function encodeBmpBytes(img: PixelImage): Uint8Array<ArrayBuffer> {
 	const rowSize = Math.ceil((img.width * 3) / 4) * 4;

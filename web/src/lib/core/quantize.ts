@@ -1,7 +1,7 @@
-import type { PixelImage } from './types';
-import { createPixelImage } from './types';
-import { rgbToHex } from './palette';
-import { hexToRgb } from './palette';
+import type { PixelImage } from "./types";
+import { createPixelImage } from "./types";
+import { rgbToHex } from "./palette";
+import { hexToRgb } from "./palette";
 
 type Rgb = { r: number; g: number; b: number };
 
@@ -73,9 +73,9 @@ export function medianCutPalette(img: PixelImage, k: number): Rgb[] {
 
 		const bucket = buckets[targetIdx];
 		const ranges = [
-			{ ch: 'r' as const, range: bucket.max.r - bucket.min.r },
-			{ ch: 'g' as const, range: bucket.max.g - bucket.min.g },
-			{ ch: 'b' as const, range: bucket.max.b - bucket.min.b }
+			{ ch: "r" as const, range: bucket.max.r - bucket.min.r },
+			{ ch: "g" as const, range: bucket.max.g - bucket.min.g },
+			{ ch: "b" as const, range: bucket.max.b - bucket.min.b },
 		].sort((a, b) => b.range - a.range);
 		const widest = ranges[0].ch;
 		bucket.px.sort((a, b) => a[widest] - b[widest]);
@@ -84,7 +84,7 @@ export function medianCutPalette(img: PixelImage, k: number): Rgb[] {
 			...buckets.slice(0, targetIdx),
 			makeBucket(bucket.px.slice(0, mid)),
 			makeBucket(bucket.px.slice(mid)),
-			...buckets.slice(targetIdx + 1)
+			...buckets.slice(targetIdx + 1),
 		];
 	}
 
@@ -93,7 +93,7 @@ export function medianCutPalette(img: PixelImage, k: number): Rgb[] {
 		.map((b) => ({
 			r: Math.round(b.px.reduce((s, c) => s + c.r, 0) / b.px.length),
 			g: Math.round(b.px.reduce((s, c) => s + c.g, 0) / b.px.length),
-			b: Math.round(b.px.reduce((s, c) => s + c.b, 0) / b.px.length)
+			b: Math.round(b.px.reduce((s, c) => s + c.b, 0) / b.px.length),
 		}));
 }
 
@@ -109,7 +109,12 @@ export function quantizeImage(img: PixelImage, k: number): QuantizeResult {
 	for (let i = 0; i < img.data.length; i += 4) {
 		out.data[i + 3] = img.data[i + 3];
 		if (img.data[i + 3] === 0) continue;
-		const chosen = nearestIndex(palette, img.data[i], img.data[i + 1], img.data[i + 2]);
+		const chosen = nearestIndex(
+			palette,
+			img.data[i],
+			img.data[i + 1],
+			img.data[i + 2],
+		);
 		out.data[i] = palette[chosen].r;
 		out.data[i + 1] = palette[chosen].g;
 		out.data[i + 2] = palette[chosen].b;
@@ -118,13 +123,21 @@ export function quantizeImage(img: PixelImage, k: number): QuantizeResult {
 }
 
 /** Маппинг каждого пикселя на ближайший цвет пользовательского списка. */
-export function mapToNearest(img: PixelImage, paletteHexes: string[]): PixelImage {
+export function mapToNearest(
+	img: PixelImage,
+	paletteHexes: string[],
+): PixelImage {
 	const palette = paletteHexes.map(hexToRgb);
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < img.data.length; i += 4) {
 		out.data[i + 3] = img.data[i + 3];
 		if (img.data[i + 3] === 0) continue;
-		const chosen = nearestIndex(palette, img.data[i], img.data[i + 1], img.data[i + 2]);
+		const chosen = nearestIndex(
+			palette,
+			img.data[i],
+			img.data[i + 1],
+			img.data[i + 2],
+		);
 		out.data[i] = palette[chosen].r;
 		out.data[i + 1] = palette[chosen].g;
 		out.data[i + 2] = palette[chosen].b;
@@ -136,10 +149,10 @@ const BAYER_4 = [
 	[0, 8, 2, 10],
 	[12, 4, 14, 6],
 	[3, 11, 1, 9],
-	[15, 7, 13, 5]
+	[15, 7, 13, 5],
 ];
 
-export type DitherPattern = 'floyd-steinberg' | 'bayer';
+export type DitherPattern = "floyd-steinberg" | "bayer";
 
 /**
  * Дизеринг к палитре из k цветов (median-cut) или к явно заданному списку hex.
@@ -149,7 +162,7 @@ export function ditherImage(
 	img: PixelImage,
 	k: number,
 	pattern: DitherPattern,
-	forcedPaletteHexes?: string[]
+	forcedPaletteHexes?: string[],
 ): PixelImage {
 	const palette = forcedPaletteHexes
 		? forcedPaletteHexes.map(hexToRgb)
@@ -177,7 +190,7 @@ export function ditherImage(
 			let g = buf[p * 3 + 1];
 			let b = buf[p * 3 + 2];
 
-			if (pattern === 'bayer') {
+			if (pattern === "bayer") {
 				const offset = ((BAYER_4[y % 4][x % 4] + 0.5) / 16 - 0.5) * spread;
 				r += offset;
 				g += offset;
@@ -189,7 +202,7 @@ export function ditherImage(
 			out.data[di + 1] = palette[chosen].g;
 			out.data[di + 2] = palette[chosen].b;
 
-			if (pattern !== 'floyd-steinberg') continue;
+			if (pattern !== "floyd-steinberg") continue;
 			const er = r - palette[chosen].r;
 			const eg = g - palette[chosen].g;
 			const eb = b - palette[chosen].b;

@@ -7,16 +7,16 @@
 		<script>
 			(() => {
 				try {
-					const saved = localStorage.getItem('theme');
+					const saved = localStorage.getItem("theme");
 					const theme =
-						saved === 'dark' || saved === 'light'
+						saved === "dark" || saved === "light"
 							? saved
-							: matchMedia('(prefers-color-scheme: dark)').matches
-								? 'dark'
-								: 'light';
+							: matchMedia("(prefers-color-scheme: dark)").matches
+								? "dark"
+								: "light";
 					document.documentElement.dataset.theme = theme;
 				} catch {
-					document.documentElement.dataset.theme = 'light';
+					document.documentElement.dataset.theme = "light";
 				}
 			})();
 		</script>

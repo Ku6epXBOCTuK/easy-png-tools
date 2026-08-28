@@ -1,25 +1,25 @@
-import { ToolError } from './errors';
-import type { PixelImage } from './types';
-import { createPixelImage } from './types';
+import { ToolError } from "./errors";
+import type { PixelImage } from "./types";
+import { createPixelImage } from "./types";
 
 export type Rgb = { r: number; g: number; b: number };
 export type Hsl = { h: number; s: number; l: number };
 
 export function hexToRgb(hex: string): Rgb {
 	const m = /^#([0-9a-f]{6})$/i.exec(hex.trim());
-	if (!m) throw new ToolError('errors.badHex', { value: hex });
+	if (!m) throw new ToolError("errors.badHex", { value: hex });
 	const d = m[1];
 	return {
 		r: parseInt(d.slice(0, 2), 16),
 		g: parseInt(d.slice(2, 4), 16),
-		b: parseInt(d.slice(4, 6), 16)
+		b: parseInt(d.slice(4, 6), 16),
 	};
 }
 
 const byte = (v: number) =>
 	Math.round(Math.min(255, Math.max(0, v)))
 		.toString(16)
-		.padStart(2, '0');
+		.padStart(2, "0");
 
 export function rgbToHex({ r, g, b }: Rgb): string {
 	return `#${byte(r)}${byte(g)}${byte(b)}`;
@@ -60,7 +60,7 @@ export function hslToRgb({ h, s, l }: Hsl): Rgb {
 	return {
 		r: Math.round((r + m) * 255),
 		g: Math.round((g + m) * 255),
-		b: Math.round((b + m) * 255)
+		b: Math.round((b + m) * 255),
 	};
 }
 
@@ -82,16 +82,31 @@ export function triadicSet(base: string): string[] {
 }
 
 export function tetradicSet(base: string): string[] {
-	return [normalizeHex(base), shiftHue(base, 90), shiftHue(base, 180), shiftHue(base, 270)];
+	return [
+		normalizeHex(base),
+		shiftHue(base, 90),
+		shiftHue(base, 180),
+		shiftHue(base, 270),
+	];
 }
 
-export function analogousSet(base: string, spreadDeg: number, count: number): string[] {
+export function analogousSet(
+	base: string,
+	spreadDeg: number,
+	count: number,
+): string[] {
 	const n = Math.max(3, Math.min(9, Math.round(count)));
 	const half = Math.floor(n / 2);
-	return Array.from({ length: n }, (_, i) => shiftHue(base, (i - half) * spreadDeg));
+	return Array.from({ length: n }, (_, i) =>
+		shiftHue(base, (i - half) * spreadDeg),
+	);
 }
 
-export function monochromaticSet(base: string, count: number, rangePercent: number): string[] {
+export function monochromaticSet(
+	base: string,
+	count: number,
+	rangePercent: number,
+): string[] {
 	const n = Math.max(2, Math.min(9, Math.round(count)));
 	const baseL = rgbToHsl(hexToRgb(normalizeHex(base))).l;
 	const halfSpan = Math.min(0.495, rangePercent / 200);
@@ -102,7 +117,11 @@ export function monochromaticSet(base: string, count: number, rangePercent: numb
 	});
 }
 
-export function shadeSet(base: string, count: number, depthPercent: number): string[] {
+export function shadeSet(
+	base: string,
+	count: number,
+	depthPercent: number,
+): string[] {
 	const n = Math.max(2, Math.min(9, Math.round(count)));
 	const baseL = rgbToHsl(hexToRgb(normalizeHex(base))).l;
 	const floorL = Math.max(0.03, baseL - depthPercent / 100);
@@ -118,24 +137,28 @@ export function parseHexList(text: string): string[] {
 		.map((t) => t.trim())
 		.filter((t) => /^#[0-9a-f]{6}$/i.test(t))
 		.map((t) => normalizeHex(t));
-	if (list.length === 0) throw new ToolError('errors.badHex', { value: text });
+	if (list.length === 0) throw new ToolError("errors.badHex", { value: text });
 	return list;
 }
 
 export function normalizeHex(hex: string): string {
 	const m = /^#([0-9a-f]{6})$/i.exec(hex.trim());
-	if (!m) throw new ToolError('errors.badHex', { value: hex });
+	if (!m) throw new ToolError("errors.badHex", { value: hex });
 	return `#${m[1].toLowerCase()}`;
 }
 
 export function mixColors(hexes: string[]): string {
 	const sum = hexes
 		.map(hexToRgb)
-		.reduce((acc, c) => ({ r: acc.r + c.r, g: acc.g + c.g, b: acc.b + c.b }), { r: 0, g: 0, b: 0 });
+		.reduce((acc, c) => ({ r: acc.r + c.r, g: acc.g + c.g, b: acc.b + c.b }), {
+			r: 0,
+			g: 0,
+			b: 0,
+		});
 	return rgbToHex({
 		r: sum.r / hexes.length,
 		g: sum.g / hexes.length,
-		b: sum.b / hexes.length
+		b: sum.b / hexes.length,
 	});
 }
 
@@ -144,15 +167,17 @@ export function luma(hex: string): number {
 	return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-export type SortKey = 'hue' | 'luma' | 'sat';
+export type SortKey = "hue" | "luma" | "sat";
 
 export function sortPalette(hexes: string[], key: SortKey): string[] {
 	const scored = hexes.map((h) => {
-		if (key === 'luma') return { h, k: luma(h) };
+		if (key === "luma") return { h, k: luma(h) };
 		const hsl = rgbToHsl(hexToRgb(h));
-		return { h, k: key === 'hue' ? hsl.h : hsl.s };
+		return { h, k: key === "hue" ? hsl.h : hsl.s };
 	});
-	return scored.sort((a, b) => a.k - b.k || a.h.localeCompare(b.h)).map((s) => s.h);
+	return scored
+		.sort((a, b) => a.k - b.k || a.h.localeCompare(b.h))
+		.map((s) => s.h);
 }
 
 function clamp01(v: number): number {
@@ -160,15 +185,28 @@ function clamp01(v: number): number {
 }
 
 /** Горизонтальные равные колонки-свотчи (strip) или сетка ~квадратных ячеек (grid). */
-export function renderSwatches(colors: string[], width: number, layout: 'strip' | 'grid'): PixelImage {
+export function renderSwatches(
+	colors: string[],
+	width: number,
+	layout: "strip" | "grid",
+): PixelImage {
 	const n = colors.length;
-	if (layout === 'strip') {
+	if (layout === "strip") {
 		const cellW = width / n;
 		const height = Math.max(24, Math.round(cellW));
 		const out = createPixelImage(width, height);
 		colors.forEach((hex, i) => {
 			const { r, g, b } = hexToRgb(hex);
-			fillRect(out, Math.floor(i * cellW), 0, Math.ceil(cellW), height, r, g, b);
+			fillRect(
+				out,
+				Math.floor(i * cellW),
+				0,
+				Math.ceil(cellW),
+				height,
+				r,
+				g,
+				b,
+			);
 		});
 		return out;
 	}
@@ -179,7 +217,16 @@ export function renderSwatches(colors: string[], width: number, layout: 'strip' 
 	const out = createPixelImage(width, height);
 	colors.forEach((hex, i) => {
 		const { r, g, b } = hexToRgb(hex);
-		fillRect(out, (i % cols) * cell, Math.floor(i / cols) * cell, cell, cell, r, g, b);
+		fillRect(
+			out,
+			(i % cols) * cell,
+			Math.floor(i / cols) * cell,
+			cell,
+			cell,
+			r,
+			g,
+			b,
+		);
 	});
 	return out;
 }
@@ -222,13 +269,17 @@ export function renderBlend(a: string, b: string, width: number): PixelImage {
 			height,
 			Math.round(ca.r + (cb.r - ca.r) * t),
 			Math.round(ca.g + (cb.g - ca.g) * t),
-			Math.round(ca.b + (cb.b - ca.b) * t)
+			Math.round(ca.b + (cb.b - ca.b) * t),
 		);
 	}
 	return out;
 }
 
-export function stepColors(aHex: string, bHex: string, steps: number): string[] {
+export function stepColors(
+	aHex: string,
+	bHex: string,
+	steps: number,
+): string[] {
 	const n = Math.max(2, Math.min(12, Math.round(steps)));
 	const ca = hexToRgb(aHex);
 	const cb = hexToRgb(bHex);
@@ -237,7 +288,7 @@ export function stepColors(aHex: string, bHex: string, steps: number): string[] 
 		return rgbToHex({
 			r: ca.r + (cb.r - ca.r) * t,
 			g: ca.g + (cb.g - ca.g) * t,
-			b: ca.b + (cb.b - ca.b) * t
+			b: ca.b + (cb.b - ca.b) * t,
 		});
 	});
 }
@@ -250,7 +301,7 @@ function fillRect(
 	h: number,
 	r: number,
 	g: number,
-	b: number
+	b: number,
 ): void {
 	for (let y = y0; y < Math.min(y0 + h, img.height); y++) {
 		for (let x = x0; x < Math.min(x0 + w, img.width); x++) {

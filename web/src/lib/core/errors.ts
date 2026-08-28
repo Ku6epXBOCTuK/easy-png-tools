@@ -11,7 +11,7 @@ export class ToolError extends Error {
 
 	constructor(key: string, vars?: ErrorVars) {
 		super(key);
-		this.name = 'ToolError';
+		this.name = "ToolError";
 		this.key = key;
 		this.vars = vars;
 	}

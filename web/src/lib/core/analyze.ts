@@ -1,4 +1,4 @@
-import type { PixelImage } from './types';
+import type { PixelImage } from "./types";
 
 export type ImageInfo = {
 	width: number;
@@ -22,12 +22,20 @@ export function imageInfo(img: PixelImage): ImageInfo {
 			0;
 		seen.add(key);
 	}
-	return { width: img.width, height: img.height, hasAlpha, colorCount: seen.size };
+	return {
+		width: img.width,
+		height: img.height,
+		hasAlpha,
+		colorCount: seen.size,
+	};
 }
 
 export function isGrayscale(img: PixelImage): boolean {
 	for (let i = 0; i < img.data.length; i += 4) {
-		if (img.data[i] !== img.data[i + 1] || img.data[i + 1] !== img.data[i + 2]) {
+		if (
+			img.data[i] !== img.data[i + 1] ||
+			img.data[i + 1] !== img.data[i + 2]
+		) {
 			return false;
 		}
 	}
@@ -41,10 +49,10 @@ export function hasTransparency(img: PixelImage): boolean {
 	return false;
 }
 
-export type Orientation = 'portrait' | 'landscape' | 'square';
+export type Orientation = "portrait" | "landscape" | "square";
 
 export function orientationOf(img: PixelImage): Orientation {
-	if (img.height > img.width) return 'portrait';
-	if (img.width > img.height) return 'landscape';
-	return 'square';
+	if (img.height > img.width) return "portrait";
+	if (img.width > img.height) return "landscape";
+	return "square";
 }
