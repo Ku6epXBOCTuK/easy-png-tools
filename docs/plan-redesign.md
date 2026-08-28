@@ -331,7 +331,7 @@ src/routes/preview/tools/[id]/+page.svelte
       подключим на C12).
 - [x] **[C11]** `/preview/demo` — зеркало воркспейса (4 шага + панель превью), статичный приёмочный стенд.
 - [x] **[C12]** `/preview/tools/[id]` — data-driven settings-panel + preview-panel (gradient live, остальные — плейсхолдер); `NumberField`, `entries()` для prerender, ToolCard-ссылки подключены.
-- [ ] **[C13]** `/preview/tools/[id]` — раскладка background-remover (comparison-grid).
+- [x] **[C13]** `/preview/tools/[id]` — comparison-grid для file-source инструментов (`Dropzone` + before/after `CheckerCanvas`, `result-meta`); охватывает background-remover и прочие.
 - [ ] **[C14]** step-cards для chain в tool-page.
 
 ### Шаг 4. Переключатель и проверка

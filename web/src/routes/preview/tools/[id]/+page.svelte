@@ -2,7 +2,8 @@
 	import { browser } from "$app/environment";
 	import { untrack } from "svelte";
 	import { getTool, defaultParams } from "$lib/registry";
-	import { encode, downloadBlob, toDataUrl } from "$lib/core/io";
+	import { encode, downloadBlob, toDataUrl, decodeBytes } from "$lib/core/io";
+	import type { PixelImage } from "$lib/core/types";
 	import Panel from "$lib/components/kit/Panel.svelte";
 	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
@@ -12,13 +13,14 @@
 	import Toggle from "$lib/components/kit/Toggle.svelte";
 	import TextField from "$lib/components/kit/TextField.svelte";
 	import NumberField from "$lib/components/kit/NumberField.svelte";
-	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
 	import Badge from "$lib/components/kit/Badge.svelte";
 	import StatusLine from "$lib/components/kit/StatusLine.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
+	import Button from "$lib/components/kit/Button.svelte";
+	import Dropzone from "$lib/components/kit/Dropzone.svelte";
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";
 
 	type ParamValue = string | number | boolean;
@@ -36,6 +38,13 @@
 	);
 	let previewUrl = $state("");
 	let previewError = $state("");
+
+	let sourceImg = $state<PixelImage | null>(null);
+	let sourceUrl = $state("");
+	let sourceName = $state("");
+	let resultImg = $state<PixelImage | null>(null);
+	let resultUrl = $state("");
+	let showMask = $state(false);
 
 	const tool = $derived(getTool(data.id));
 
@@ -71,6 +80,57 @@
 		}
 	});
 
+	$effect(() => {
+		const src = sourceImg;
+		if (!tool || !tool.run || !src) {
+			resultImg = null;
+			resultUrl = "";
+			return;
+		}
+		if (!browser) return;
+		const snapshot = { ...params };
+		const mask = showMask && !!tool.preview;
+		try {
+			const base = mask
+				? tool.preview!(src, snapshot)
+				: tool.run(src, snapshot);
+			const apply = (img: PixelImage) => {
+				resultImg = img;
+				resultUrl = toDataUrl(img);
+				previewError = "";
+			};
+			if (base instanceof Promise) {
+				base.then(apply).catch((e) => (previewError = String(e)));
+			} else {
+				apply(base);
+			}
+		} catch (e) {
+			previewError = String(e);
+		}
+	});
+
+	async function onFile(file: File) {
+		if (!browser) return;
+		try {
+			const bytes = new Uint8Array(await file.arrayBuffer());
+			const img = await decodeBytes(bytes);
+			sourceImg = img;
+			sourceName = file.name;
+			sourceUrl = toDataUrl(img);
+			previewError = "";
+		} catch (e) {
+			previewError = String(e);
+		}
+	}
+
+	function clearSource() {
+		sourceImg = null;
+		sourceUrl = "";
+		sourceName = "";
+		resultImg = null;
+		resultUrl = "";
+	}
+
 	async function download() {
 		if (!tool?.generate) return;
 		const result = tool.generate({ ...params });
@@ -79,9 +139,20 @@
 		downloadBlob(blob, `${tool.id}.png`);
 	}
 
+	async function downloadResult() {
+		if (!resultImg || !tool) return;
+		const blob = await encode(resultImg, "image/png");
+		const base = sourceName.replace(/\.[^.]+$/, "");
+		downloadBlob(blob, `${base}-${tool.id}.png`);
+	}
+
 	function setParam(id: string, value: ParamValue) {
 		params[id] = value;
 	}
+
+	const isFileTool = $derived(
+		tool ? tool.sourceMode === "file" || tool.sourceMode === undefined : false,
+	);
 
 	const meta = $derived(
 		tool
@@ -108,6 +179,73 @@
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
+{#snippet settingsPanel()}
+	<Panel>
+		<PanelHeading title={tool!.title} eyebrow={tool!.category}>
+			{#snippet actions()}
+				<Badge tone="accent">AUTO</Badge>
+			{/snippet}
+		</PanelHeading>
+		<p class="tool-desc">{tool!.description}</p>
+		<div class="settings-body">
+			{#each tool!.params as p (p.id)}
+				<div class="setting-row">
+					{#if p.type === "color"}
+						<ColorField
+							label={p.label}
+							value={params[p.id] as string}
+							oninput={(v) => setParam(p.id, v)}
+						/>
+					{:else if p.type === "slider"}
+						<SliderField
+							label={p.label}
+							value={params[p.id] as number}
+							min={p.min}
+							max={p.max}
+							step={p.step}
+							oninput={(v) => setParam(p.id, v)}
+						/>
+					{:else if p.type === "select"}
+						<SelectField
+							label={p.label}
+							value={params[p.id] as string}
+							options={p.options}
+							onchange={(v) => setParam(p.id, v)}
+						/>
+					{:else if p.type === "checkbox"}
+						<label class="toggle-row"
+							><span>{p.label}</span>
+							<Toggle
+								checked={params[p.id] as boolean}
+								onchange={(v) => setParam(p.id, v)}
+							/></label
+						>
+					{:else if p.type === "text"}
+						<TextField
+							label={p.label}
+							value={params[p.id] as string}
+							placeholder={p.placeholder}
+							oninput={(v) => setParam(p.id, v)}
+						/>
+					{:else if p.type === "number"}
+						<NumberField
+							label={p.label}
+							value={params[p.id] as number}
+							min={p.min}
+							max={p.max}
+							step={p.step}
+							oninput={(v) => setParam(p.id, v)}
+						/>
+					{/if}
+				</div>
+			{/each}
+		</div>
+		<SettingsFooter>
+			<StatusLine label="changes applied automatically" />
+		</SettingsFooter>
+	</Panel>
+{/snippet}
+
 {#if !tool}
 	<div class="tool-grid">
 		<EmptyState
@@ -116,75 +254,9 @@
 			icon={ToolIcon}
 		/>
 	</div>
-{:else}
+{:else if tool.sourceMode === "none"}
 	<div class="tool-grid">
-		<section class="settings-panel">
-			<Panel>
-				<PanelHeading title={tool.title} eyebrow={tool.category}>
-					{#snippet actions()}
-						<Badge tone="accent">AUTO</Badge>
-					{/snippet}
-				</PanelHeading>
-				<p class="tool-desc">{tool.description}</p>
-				<div class="settings-body">
-					{#each tool.params as p (p.id)}
-						<div class="setting-row">
-							{#if p.type === "color"}
-								<ColorField
-									label={p.label}
-									value={params[p.id] as string}
-									oninput={(v) => setParam(p.id, v)}
-								/>
-							{:else if p.type === "slider"}
-								<SliderField
-									label={p.label}
-									value={params[p.id] as number}
-									min={p.min}
-									max={p.max}
-									step={p.step}
-									oninput={(v) => setParam(p.id, v)}
-								/>
-							{:else if p.type === "select"}
-								<SelectField
-									label={p.label}
-									value={params[p.id] as string}
-									options={p.options}
-									onchange={(v) => setParam(p.id, v)}
-								/>
-							{:else if p.type === "checkbox"}
-								<label class="toggle-row"
-									><span>{p.label}</span>
-									<Toggle
-										checked={params[p.id] as boolean}
-										onchange={(v) => setParam(p.id, v)}
-									/></label
-								>
-							{:else if p.type === "text"}
-								<TextField
-									label={p.label}
-									value={params[p.id] as string}
-									placeholder={p.placeholder}
-									oninput={(v) => setParam(p.id, v)}
-								/>
-							{:else if p.type === "number"}
-								<NumberField
-									label={p.label}
-									value={params[p.id] as number}
-									min={p.min}
-									max={p.max}
-									step={p.step}
-									oninput={(v) => setParam(p.id, v)}
-								/>
-							{/if}
-						</div>
-					{/each}
-				</div>
-				<SettingsFooter>
-					<StatusLine label="changes applied automatically" />
-				</SettingsFooter>
-			</Panel>
-		</section>
-
+		<section class="settings-panel">{@render settingsPanel()}</section>
 		<section class="preview-panel">
 			<Panel>
 				<PanelHeading title="Preview" eyebrow="OUTPUT">
@@ -196,11 +268,9 @@
 					{#if previewError}
 						<EmptyState title="Preview failed" description={previewError} />
 					{:else if previewUrl}
-						<PreviewTile label="RESULT">
-							<CheckerCanvas size="large">
-								<img class="result-img" src={previewUrl} alt="result" />
-							</CheckerCanvas>
-						</PreviewTile>
+						<CheckerCanvas size="large">
+							<img class="result-img" src={previewUrl} alt="result" />
+						</CheckerCanvas>
 					{:else if tool.generate}
 						<div class="preview-loading">
 							<StatusLine label="generating preview" />
@@ -208,11 +278,94 @@
 					{:else}
 						<EmptyState
 							title="No live preview"
-							description="This tool runs on an uploaded image. Source upload arrives in a later step."
+							description="This tool runs on an uploaded image."
 							icon={ToolIcon}
 						/>
 					{/if}
 					<MetaList items={meta} />
+				</div>
+			</Panel>
+		</section>
+	</div>
+{:else if isFileTool}
+	<div class="tool-grid remover-grid">
+		<section class="settings-panel">{@render settingsPanel()}</section>
+		<section class="preview-panel">
+			<Panel>
+				<PanelHeading title="Source / Result" eyebrow="OUTPUT">
+					{#snippet actions()}
+						{#if resultUrl}
+							<DownloadButton
+								label="Download result"
+								onclick={downloadResult}
+							/>
+						{/if}
+					{/snippet}
+				</PanelHeading>
+				<div class="preview-body">
+					{#if previewError}
+						<EmptyState title="Processing failed" description={previewError} />
+					{/if}
+					{#if !sourceImg}
+						<Dropzone onfile={onFile} />
+					{:else}
+						<div class="comparison-grid">
+							<div class="image-card">
+								<div class="image-label">
+									<span>SOURCE</span><b>{sourceName}</b>
+								</div>
+								<div class="remover-canvas">
+									<CheckerCanvas size="large">
+										<img class="cmp-img" src={sourceUrl} alt="source" />
+									</CheckerCanvas>
+									<span class="canvas-size"
+										>{sourceImg.width} × {sourceImg.height}</span
+									>
+								</div>
+							</div>
+							<div class="image-card">
+								<div class="image-label">
+									<span>RESULT</span><b>{sourceName}</b>
+								</div>
+								<div class="remover-canvas">
+									{#if resultUrl}
+										<CheckerCanvas size="large">
+											<img class="cmp-img" src={resultUrl} alt="result" />
+										</CheckerCanvas>
+									{/if}
+									<span class="canvas-size"
+										>{resultImg
+											? `${resultImg.width} × ${resultImg.height}`
+											: "—"}</span
+									>
+								</div>
+							</div>
+						</div>
+						<div class="result-meta">
+							<span>FORMAT <b>PNG-24</b></span>
+							<span>ALPHA <b>ENABLED</b></span>
+							<span>STATUS <b class="ok">PROCESSED</b></span>
+						</div>
+						<Button variant="ghost" onclick={clearSource}
+							>Change image</Button
+						>
+					{/if}
+				</div>
+			</Panel>
+		</section>
+	</div>
+{:else}
+	<div class="tool-grid">
+		<section class="settings-panel">{@render settingsPanel()}</section>
+		<section class="preview-panel">
+			<Panel>
+				<PanelHeading title="Preview" eyebrow="OUTPUT" />
+				<div class="preview-body">
+					<EmptyState
+						title="Text source"
+						description="Paste text on the left — arrives in a later step."
+						icon={ToolIcon}
+					/>
 				</div>
 			</Panel>
 		</section>
@@ -228,6 +381,9 @@
 		max-width: 1680px;
 		margin: 0 auto;
 		padding: 48px clamp(24px, 4vw, 72px) 72px;
+	}
+	.remover-grid {
+		grid-template-columns: minmax(360px, 0.62fr) minmax(0, 1.38fr);
 	}
 	.tool-desc {
 		margin: 0;
@@ -277,14 +433,78 @@
 		display: block;
 		border-radius: var(--radius);
 	}
+	.comparison-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 18px;
+	}
+	.image-card {
+		min-width: 0;
+	}
+	.image-label {
+		display: flex;
+		justify-content: space-between;
+		gap: 8px;
+		margin-bottom: 10px;
+		font: 10px var(--font-mono);
+		color: var(--muted);
+		letter-spacing: 0.08em;
+	}
+	.image-label span {
+		color: var(--blue);
+	}
+	.image-label b {
+		font-weight: 400;
+	}
+	.remover-canvas {
+		position: relative;
+		overflow: hidden;
+	}
+	.cmp-img {
+		max-width: 100%;
+		max-height: 420px;
+		display: block;
+	}
+	.canvas-size {
+		position: absolute;
+		bottom: 9px;
+		right: 10px;
+		font: 9px var(--font-mono);
+		color: var(--muted);
+		background: color-mix(in srgb, var(--panel) 70%, transparent);
+		padding: 2px 5px;
+		border-radius: var(--radius);
+	}
+	.result-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 18px;
+		padding-top: 14px;
+		border-top: 1px solid var(--line);
+		font: 10px var(--font-mono);
+		color: var(--muted);
+		letter-spacing: 0.08em;
+	}
+	.result-meta b {
+		margin-left: 6px;
+		color: var(--foreground);
+		font-weight: 600;
+	}
+	.result-meta b.ok {
+		color: var(--success);
+	}
 	@media (max-width: 900px) {
-		.tool-grid {
+		.tool-grid,
+		.remover-grid {
 			grid-template-columns: 1fr;
 			gap: 24px;
 			padding: 32px 16px 48px;
 		}
 		.preview-panel {
 			position: static;
+		}
+		.comparison-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>
