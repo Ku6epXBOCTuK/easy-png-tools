@@ -1,12 +1,12 @@
 <script lang="ts">
-	import '../../app.css';
-	import favicon from '$lib/assets/favicon.svg';
-	import { onMount } from 'svelte';
-	import { resolve } from '$app/paths';
-	import { getLocale, initLocale, setLocale } from '$lib/i18n/locale.svelte';
-	import { getTheme, initTheme, setTheme } from '$lib/theme.svelte';
-	import { t } from '$lib/i18n/t';
-	import { LOCALES, type Locale } from '$lib/i18n/dict';
+	import "../../app.css";
+	import favicon from "$lib/assets/favicon.svg";
+	import { onMount } from "svelte";
+	import { resolve } from "$app/paths";
+	import { getLocale, initLocale, setLocale } from "$lib/i18n/locale.svelte";
+	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
+	import { t } from "$lib/i18n/t";
+	import { LOCALES, type Locale } from "$lib/i18n/dict";
 
 	let { children } = $props();
 
@@ -15,7 +15,7 @@
 		initTheme();
 	});
 
-	const LANG_LABELS: Record<Locale, string> = { ru: 'RU', en: 'EN' };
+	const LANG_LABELS: Record<Locale, string> = { ru: "RU", en: "EN" };
 </script>
 
 <svelte:head>
@@ -24,10 +24,20 @@
 
 <div class="app">
 	<header>
-		<a href={resolve('/')} class="brand">easy-png-tools</a>
-		<nav aria-label={t('header.sectionsAria')}>
-			<a class="nav-link workspace-link" href={resolve('/')}>{t('header.workspace')}</a>
-			<a class="nav-link" href={resolve('/list-tools')}>{t('header.catalog')}</a>
+		<a href={resolve("/")} class="brand">easy-png-tools</a>
+		<nav aria-label={t("header.sectionsAria")}>
+			<a class="nav-link workspace-link" href={resolve("/")}
+				>{t("header.workspace")}</a
+			>
+			<a class="nav-link" href={resolve("/list-tools")}>{t("header.catalog")}</a
+			>
+			<a
+				class="nav-link preview-v2"
+				href={resolve("/preview")}
+				onclick={() => localStorage.setItem("easy-png-tools:preview-v2", "1")}
+			>
+				Preview v2
+			</a>
 			<div class="lang-switch" role="group" aria-label="Language / Язык">
 				{#each LOCALES as l (l)}
 					<button
@@ -45,22 +55,22 @@
 				<button
 					type="button"
 					class="lang-btn"
-					class:active={getTheme() === 'light'}
-					aria-pressed={getTheme() === 'light'}
-					title={t('ui.themeLight')}
-					aria-label={t('ui.themeLight')}
-					onclick={() => setTheme('light')}
+					class:active={getTheme() === "light"}
+					aria-pressed={getTheme() === "light"}
+					title={t("ui.themeLight")}
+					aria-label={t("ui.themeLight")}
+					onclick={() => setTheme("light")}
 				>
 					☀
 				</button>
 				<button
 					type="button"
 					class="lang-btn"
-					class:active={getTheme() === 'dark'}
-					aria-pressed={getTheme() === 'dark'}
-					title={t('ui.themeDark')}
-					aria-label={t('ui.themeDark')}
-					onclick={() => setTheme('dark')}
+					class:active={getTheme() === "dark"}
+					aria-pressed={getTheme() === "dark"}
+					title={t("ui.themeDark")}
+					aria-label={t("ui.themeDark")}
+					onclick={() => setTheme("dark")}
 				>
 					☾
 				</button>
@@ -73,7 +83,7 @@
 	</main>
 
 	<footer>
-		<p class="text-caption text-muted">{t('header.footerNote')}</p>
+		<p class="text-caption text-muted">{t("header.footerNote")}</p>
 	</footer>
 </div>
 
@@ -159,6 +169,17 @@
 	.workspace-link {
 		font-weight: 600;
 		color: var(--link);
+	}
+
+	.preview-v2 {
+		color: var(--accent);
+		border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+	}
+
+	.preview-v2:hover {
+		background: var(--accent);
+		color: var(--bg);
+		text-decoration: none;
 	}
 
 	main {
