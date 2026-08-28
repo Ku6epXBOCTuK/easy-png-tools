@@ -20,7 +20,7 @@
 		font-family: var(--font-mono);
 		font-size: 10px;
 		line-height: 1.2;
-		font-weight: 500;
+		font-weight: 400;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		color: var(--muted);

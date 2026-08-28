@@ -91,7 +91,9 @@
 				title="Gradient background"
 				onremove={() => {}}
 			>
-				<div class="step-tools"><Badge tone="success">AUTO</Badge></div>
+				{#snippet tools()}
+					<Badge tone="success">AUTO</Badge>
+				{/snippet}
 				<FieldGrid>
 					<ColorField label="Gradient color" bind:value={gradColor} />
 					<SliderField
@@ -106,10 +108,10 @@
 						<Segmented
 							bind:value={opacity}
 							options={[
-								{ value: "100", label: "100" },
-								{ value: "75", label: "75" },
-								{ value: "50", label: "50" },
-								{ value: "25", label: "25" },
+								{ value: "100", label: "100%" },
+								{ value: "75", label: "75%" },
+								{ value: "50", label: "50%" },
+								{ value: "25", label: "25%" },
 							]}
 						/>
 					</div>
@@ -122,12 +124,16 @@
 				title="Remove background"
 				onremove={() => {}}
 			>
-				<div class="step-tools"><Badge tone="success">AUTO</Badge></div>
+				{#snippet tools()}
+					<Badge tone="success">AUTO</Badge>
+				{/snippet}
 				<div class="transform-note">Automatic subject detection enabled</div>
 			</StepCard>
 
 			<StepCard index={3} type="STYLE" title="Add outline" onremove={() => {}}>
-				<div class="step-tools"><Badge tone="success">AUTO</Badge></div>
+				{#snippet tools()}
+					<Badge tone="success">AUTO</Badge>
+				{/snippet}
 				<FieldGrid compact>
 					<SliderField
 						label="Outline width"
@@ -146,7 +152,9 @@
 				title="Round corners"
 				onremove={() => {}}
 			>
-				<div class="step-tools"><Badge tone="success">AUTO</Badge></div>
+				{#snippet tools()}
+					<Badge tone="success">AUTO</Badge>
+				{/snippet}
 				<FieldGrid compact>
 					<SliderField
 						label="Corner radius"
@@ -233,11 +241,6 @@
 		display: grid;
 		gap: 10px;
 		padding-top: 14px;
-	}
-	.step-tools {
-		display: flex;
-		gap: 8px;
-		align-items: center;
 	}
 	.control-block {
 		display: flex;

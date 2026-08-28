@@ -1,6 +1,7 @@
 <script lang="ts">
 	import IconButton from "./IconButton.svelte";
 	import StatusDot from "./StatusDot.svelte";
+	import { resolve } from "$app/paths";
 	import { CircleHelp, Moon, Sun } from "@lucide/svelte";
 
 	interface Props {
@@ -14,13 +15,19 @@
 	let lang = $state("RU");
 </script>
 
-<header class="topbar">
-	<div class="brand">
-		<span class="brand-mark">EP</span>
-		<span>easy-png-tools</span>
-		{#if crumb}<span class="version">{crumb}</span>{/if}
-	</div>
-	<div class="top-actions">
+	<header class="topbar">
+		<div class="brand">
+			<span class="brand-mark">EP</span>
+			<span>easy-png-tools</span>
+			{#if crumb}<span class="version">{crumb}</span>{/if}
+		</div>
+		<nav class="nav">
+			<a href={resolve("/preview/demo")}>Workspace</a>
+			<a href={resolve("/preview/list-tools")}>Catalog</a>
+			<a href={resolve("/preview/tools/linear-gradient-png")}>Gradient</a>
+			<a href={resolve("/preview/tools/remove-background-png")}>Background remover</a>
+		</nav>
+		<div class="top-actions">
 		<span class="status"><StatusDot /> AUTO PIPELINE</span>
 		<IconButton
 			icon={CircleHelp}
@@ -84,6 +91,21 @@
 		font: 10px var(--font-mono);
 		letter-spacing: 0.12em;
 		color: var(--blue);
+	}
+	.nav {
+		display: flex;
+		align-items: center;
+		gap: 18px;
+		margin-left: 24px;
+	}
+	.nav a {
+		color: var(--muted);
+		font: 12px var(--font-mono);
+		letter-spacing: 0.04em;
+		text-decoration: none;
+	}
+	.nav a:hover {
+		color: var(--foreground);
 	}
 	.top-actions {
 		display: flex;

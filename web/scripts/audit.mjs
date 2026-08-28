@@ -47,7 +47,16 @@ const waitFor = async (url, ms = 60000) => {
 		try {
 			const r = await fetch(url);
 			if (r.ok) return;
-		} catch {}
+			// Сервер уже отвечает, но страница упала (4xx/5xx) — ждать 200
+			// бессмысленно: сообщаем явно вместо таймаута "dev server not up".
+			if (r.status >= 400) {
+				throw new Error(
+					`route ${url} returned HTTP ${r.status} (server is up, page failed to render)`,
+				);
+			}
+		} catch (e) {
+			if (e instanceof Error && e.message.includes("returned HTTP")) throw e;
+		}
 		await new Promise((r) => setTimeout(r, 500));
 	}
 	throw new Error("dev server not up: " + url);

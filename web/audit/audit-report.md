@@ -2,14 +2,14 @@
 
 vs C:\+XBOCTuK\+life_projects\easy-png-tools\refs-html\demo.html
 
-_2026-08-28T11:58:18.224Z_
+_2026-08-28T14:54:53.564Z_
 
 ## Сводка
 
 - Токены light: **10** расх.
 - Токены dark: **16** расх.
-- Элементы (стиль/геометрия): **46** расх.
-- Только у нас: 13, только в рефе: 12
+- Элементы (стиль/геометрия): **47** расх.
+- Только у нас: 18, только в рефе: 11
 
 ## Токены — Light
 
@@ -47,7 +47,7 @@ _2026-08-28T11:58:18.224Z_
 | `--radius-lg` | — | .5rem |
 | `--text-sm` | — | .875rem |
 
-## Расхождения элементов (топ 46)
+## Расхождения элементов (топ 47)
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "/"
     - **fontFamily**: `"IBM Plex Mono", monospace` → `"IBM Plex Sans", sans-serif`
@@ -59,71 +59,86 @@ _2026-08-28T11:58:18.224Z_
     - **display**: `inline` → `block`
     - **rect**: `165,124 7x13` → `1348,20 4x24`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)` — "PROCESSING PIPELINE"
-    - **fontWeight**: `500` → `400`
-    - **letterSpacing**: `1px` → `1.2px`
-    - **lineHeight**: `12px` → `normal`
-    - **display**: `block` → `inline`
-    - **rect**: `58,428 154x12` → `58,400 127x12`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)` — "100%"
+    - **color**: `rgb(255, 255, 255)` → `rgb(23, 33, 43)`
+    - **backgroundColor**: `rgb(23, 105, 210)` → `rgba(0, 0, 0, 0)`
+    - **padding**: `0px 11.2px` → `0px`
+    - **letterSpacing**: `0.6px` → `0.8px`
+    - **display**: `flex` → `block`
+    - **rect**: `518,552 49x30` → `680,546 25x12`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "PIPELINE OUTPUTS"
-    - **fontWeight**: `500` → `400`
-    - **letterSpacing**: `1px` → `1.2px`
-    - **lineHeight**: `12px` → `normal`
-    - **display**: `block` → `inline`
-    - **rect**: `799,178 93x24` → `799,188 54x36`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "01"
+    - **fontSize**: `22px` → `11px`
+    - **fontWeight**: `600` → `400`
+    - **padding**: `0px` → `17px 0px 0px 15px`
+    - **lineHeight**: `22px` → `normal`
+    - **rect**: `74,464 26x22` → `59,466 46x150`
+
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(1)>span:nth-child(1)` — "02"
+    - **fontSize**: `22px` → `11px`
+    - **fontWeight**: `600` → `400`
+    - **padding**: `0px` → `17px 0px 0px 15px`
+    - **lineHeight**: `22px` → `normal`
+    - **rect**: `74,624 26x22` → `59,628 46x136`
+
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(1)>span:nth-child(1)` — "03"
+    - **fontSize**: `22px` → `11px`
+    - **fontWeight**: `600` → `400`
+    - **padding**: `0px` → `17px 0px 0px 15px`
+    - **lineHeight**: `22px` → `normal`
+    - **rect**: `74,746 26x22` → `59,776 46x150`
+
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(1)>span:nth-child(1)` — "04"
+    - **fontSize**: `22px` → `11px`
+    - **fontWeight**: `600` → `400`
+    - **padding**: `0px` → `17px 0px 0px 15px`
+    - **lineHeight**: `22px` → `normal`
+    - **rect**: `74,896 26x22` → `59,938 46x142`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>button:nth-child(2)>span:nth-child(2)>span:nth-child(1)` — "1.2 MB"
     - **fontSize**: `10px` → `11px`
     - **color**: `rgb(255, 255, 255)` → `rgb(23, 33, 43)`
     - **margin**: `0px` → `5px 0px 0px`
     - **display**: `inline` → `block`
-    - **rect**: `1090,240 36x13` → `1246,291 79x13`
+    - **rect**: `1097,240 36x13` → `1246,291 79x13`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)` — "100"
-    - **padding**: `0px 11.2px` → `0px`
-    - **letterSpacing**: `0.6px` → `normal`
-    - **display**: `flex` → `block`
-    - **rect**: `491,590 42x30` → `520,567 46x30`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)` — "PROCESSING PIPELINE"
+    - **letterSpacing**: `1px` → `1.2px`
+    - **lineHeight**: `12px` → `normal`
+    - **display**: `block` → `inline`
+    - **rect**: `58,382 154x12` → `58,400 127x12`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(2)` — "75"
-    - **padding**: `0px 11.2px` → `0px`
-    - **letterSpacing**: `0.6px` → `normal`
-    - **display**: `flex` → `block`
-    - **rect**: `533,590 37x30` → `566,567 46x30`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(3)` — "50"
-    - **padding**: `0px 11.2px` → `0px`
-    - **letterSpacing**: `0.6px` → `normal`
-    - **display**: `flex` → `block`
-    - **rect**: `569,590 37x30` → `612,567 46x30`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(4)` — "25"
-    - **padding**: `0px 11.2px` → `0px`
-    - **letterSpacing**: `0.6px` → `normal`
-    - **display**: `flex` → `block`
-    - **rect**: `606,590 37x30` → `658,567 46x30`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>label:nth-child(2)>span:nth-child(1)` — "Preserve aspect ratio"
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>label:nth-child(2)>span:nth-child(1)` — "Preserve aspect ratio"
     - **fontSize**: `13.6px` → `16px`
     - **lineHeight**: `normal` → `24px`
     - **display**: `block` → `inline`
-    - **rect**: `399,986 129x18` → `432,1021 156x17`
+    - **rect**: `422,973 129x18` → `432,1021 156x17`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)` — "DIMENSIONS"
-    - **fontSize**: `10px` → `9px`
-    - **letterSpacing**: `1px` → `normal`
-    - **rect**: `1150,215 70x13` → `1073,271 79x10`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "PIPELINE OUTPUTS"
+    - **letterSpacing**: `1px` → `1.2px`
+    - **lineHeight**: `12px` → `normal`
+    - **display**: `block` → `inline`
+    - **rect**: `799,178 94x24` → `799,188 54x36`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(1)` — "FORMAT"
-    - **fontSize**: `10px` → `9px`
-    - **letterSpacing**: `1px` → `normal`
-    - **rect**: `1150,239 42x13` → `1159,271 79x10`
+### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(1)` — "Workspace"
+    - **fontSize**: `12px` → `10px`
+    - **letterSpacing**: `0.48px` → `normal`
+    - **rect**: `513,24 69x15` → `792,26 49x12`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(3)>span:nth-child(1)` — "SIZE"
-    - **fontSize**: `10px` → `9px`
-    - **letterSpacing**: `1px` → `normal`
-    - **rect**: `1150,264 28x13` → `1246,271 79x10`
+### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(2)` — "Catalog"
+    - **fontSize**: `12px` → `10px`
+    - **letterSpacing**: `0.48px` → `normal`
+    - **rect**: `600,24 54x15` → `864,26 39x12`
+
+### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(3)` — "Gradient"
+    - **fontSize**: `12px` → `10px`
+    - **letterSpacing**: `0.48px` → `normal`
+    - **rect**: `672,24 61x15` → `924,26 44x12`
+
+### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(4)` — "Background remover"
+    - **fontSize**: `12px` → `10px`
+    - **letterSpacing**: `0.48px` → `normal`
+    - **rect**: `751,24 138x15` → `990,26 99x12`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)` — "SOURCE"
     - **fontSize**: `10px` → `9px`
@@ -150,104 +165,96 @@ _2026-08-28T11:58:18.224Z_
     - **letterSpacing**: `0.8px` → `normal`
     - **rect**: `806,2047 550x13` → `808,1378 59x10`
 
-### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(2)` — "EN"
+### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(2)` — "EN"
     - **letterSpacing**: `0.6px` → `normal`
     - **rect**: `1349,19 32x25` → `1352,20 29x24`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>h1:nth-child(2)` — "Build your image pipeline."
-    - **lineHeight**: `normal` → `57.6px`
-    - **rect**: `58,155 474x150` → `58,154 482x115`
+    - **lineHeight**: `51.84px` → `57.6px`
+    - **rect**: `58,155 474x104` → `58,154 482x115`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(2)` — "01"
-    - **padding**: `0px` → `17px 0px 0px 15px`
-    - **rect**: `95,504 13x14` → `59,466 46x150`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(3)` — "BACKGROUND"
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "BACKGROUND"
     - **display**: `block` → `inline`
-    - **rect**: `116,504 72x13` → `143,489 67x12`
+    - **rect**: `117,455 171x13` → `143,489 67x12`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(4)` — "Gradient background"
-    - **margin**: `0px` → `5px 0px 18px`
-    - **rect**: `196,501 171x19` → `143,510 157x18`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(2)` — "02"
-    - **padding**: `0px` → `17px 0px 0px 15px`
-    - **rect**: `95,655 13x14` → `59,628 46x136`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(3)` — "TRANSFORM"
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "TRANSFORM"
     - **display**: `block` → `inline`
-    - **rect**: `116,656 65x13` → `143,651 60x12`
+    - **rect**: `117,615 153x13` → `143,651 60x12`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(4)` — "Remove background"
-    - **margin**: `0px` → `5px 0px 18px`
-    - **rect**: `189,653 153x19` → `143,672 140x18`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)` — "03"
-    - **padding**: `0px` → `17px 0px 0px 15px`
-    - **rect**: `95,769 13x14` → `59,776 46x150`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(3)` — "STYLE"
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "STYLE"
     - **display**: `block` → `inline`
-    - **rect**: `116,770 36x13` → `143,799 34x12`
+    - **rect**: `117,737 99x13` → `143,799 34x12`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(4)` — "Add outline"
-    - **margin**: `0px` → `5px 0px 18px`
-    - **rect**: `160,767 99x19` → `143,820 91x18`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(1)>span:nth-child(2)` — "04"
-    - **padding**: `0px` → `17px 0px 0px 15px`
-    - **rect**: `95,911 13x14` → `59,938 46x142`
-
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(1)>span:nth-child(4)` — "Round corners"
-    - **margin**: `0px` → `5px 0px 18px`
-    - **rect**: `160,909 117x19` → `143,982 107x18`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)` — "DIMENSIONS"
+    - **letterSpacing**: `0.9px` → `normal`
+    - **rect**: `1157,216 63x11` → `1073,271 79x10`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)` — "1200 × 800 px"
     - **margin**: `0px` → `5px 0px 0px`
     - **rect**: `1236,214 86x14` → `1073,291 79x13`
 
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(1)` — "FORMAT"
+    - **letterSpacing**: `0.9px` → `normal`
+    - **rect**: `1157,240 38x11` → `1159,271 79x10`
+
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(2)` — "PNG-24"
     - **margin**: `0px` → `5px 0px 0px`
     - **rect**: `1282,238 40x14` → `1159,291 79x13`
 
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(3)>span:nth-child(1)` — "SIZE"
+    - **letterSpacing**: `0.9px` → `normal`
+    - **rect**: `1157,265 25x11` → `1246,271 79x10`
+
 ### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)` — "easy-png-tools"
     - **rect**: `98,23 118x18` → `98,23 108x17`
 
-### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(1)` — "RU"
+### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(1)` — "RU"
     - **letterSpacing**: `0.6px` → `normal`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>p:nth-child(3)` — "Chain simple tools together. Every chang"
-    - **rect**: `58,321 474x51` → `58,285 482x51`
+    - **rect**: `58,275 474x51` → `58,285 482x51`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>span:nth-child(2)` — "source.png"
-    - **rect**: `597,347 66x14` → `606,311 60x13`
+    - **rect**: `597,300 66x14` → `606,311 60x13`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>b:nth-child(3)` — "1.8 MB"
-    - **rect**: `671,347 40x14` → `674,311 36x13`
+    - **rect**: `671,300 40x14` → `674,311 36x13`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>strong:nth-child(2)>em:nth-child(1)` — "• LIVE"
-    - **rect**: `175,451 36x13` → `173,425 33x12`
+    - **rect**: `175,405 36x13` → `173,425 33x12`
+
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)` — "Gradient background"
+    - **rect**: `117,473 171x19` → `143,510 157x18`
+
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)` — "Remove background"
+    - **rect**: `117,633 153x19` → `143,672 140x18`
+
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)` — "Add outline"
+    - **rect**: `117,755 99x19` → `143,820 91x18`
+
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)` — "Round corners"
+    - **rect**: `117,905 117x19` → `143,982 107x18`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>strong:nth-child(2)` — "Visual history"
-    - **rect**: `799,209 93x36` → `799,233 87x34`
+    - **rect**: `799,209 94x36` → `799,233 87x34`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "PNG"
     - **rect**: `1067,496 28x19` → `923,478 27x18`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)` — "original.png · 1200 × 800"
-    - **rect**: `1213,704 135x11` → `942,663 124x10`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)` — "original.png · 1200 × 800"
+    - **rect**: `814,704 135x11` → `942,663 124x10`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)` — "gradient applied"
-    - **rect**: `1262,1137 86x11` → `1275,663 79x10`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)` — "gradient applied"
+    - **rect**: `814,1137 86x11` → `1275,663 79x10`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)` — "background removed"
-    - **rect**: `1251,1569 97x11` → `977,1021 89x10`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)` — "background removed"
+    - **rect**: `814,1569 97x11` → `977,1021 89x10`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)` — "outline added"
-    - **rect**: `1278,2002 70x11` → `1290,1021 64x10`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)` — "outline added"
+    - **rect**: `814,2002 70x11` → `1290,1021 64x10`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)` — "ready · PNG-24"
-    - **rect**: `1272,2434 76x11` → `997,1378 69x10`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)` — "ready · PNG-24"
+    - **rect**: `814,2434 76x11` → `997,1378 69x10`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>p:nth-child(3)` — "Output is generated in-browser. Your fil"
     - **rect**: `799,2489 565x17` → `799,1425 565x17`
@@ -259,27 +266,31 @@ _2026-08-28T11:58:18.224Z_
 - `AUTO`
 - `Gradient color`
 - `DIRECTION`
-- `135°`
+- `135 °`
 - `OPACITY`
+- `75%`
+- `50%`
+- `25%`
 - `Automatic subject detection enabled`
 - `Outline width`
-- `2px`
+- `2 px`
 - `Outline color`
 - `Corner radius`
-- `18px`
+- `18 px`
+- `v0.1.0`
+- `© 2026`
 
 ## Только в рефе (структурно)
 
 - `/ 
             WORKSPACE`
-- `Workspace`
-- `Catalog`
-- `Gradient`
-- `Background remover`
 - `COLOR`
 - `135
                         °`
-- `100%`
+- `100`
+- `75`
+- `50`
+- `25`
 - `2
                         px`
 - `18

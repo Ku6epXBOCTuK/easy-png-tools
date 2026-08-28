@@ -29,7 +29,12 @@
 <Field {label}>
 	<div class="slider-field">
 		<input type="range" {min} {max} {step} {value} oninput={handle} />
-		<span class="slider-value">{value}{suffix}</span>
+		<span class="slider-value">
+			{value}
+			{#if suffix}
+				{suffix}
+			{/if}
+		</span>
 	</div>
 </Field>
 

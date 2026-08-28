@@ -21,7 +21,7 @@
 	}
 	.meta-caption {
 		font-family: var(--font-mono);
-		font-size: 10px;
+		font-size: 9px;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		color: var(--muted);

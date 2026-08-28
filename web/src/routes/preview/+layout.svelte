@@ -1,9 +1,9 @@
 <script lang="ts">
-	import "$lib/styles/design2.css";
-	import type { Snippet } from "svelte";
 	import { page } from "$app/stores";
 	import AppShell from "$lib/components/kit/AppShell.svelte";
 	import TopBar from "$lib/components/kit/TopBar.svelte";
+	import "$lib/styles/design2.css";
+	import type { Snippet } from "svelte";
 
 	interface Props {
 		children: Snippet;
@@ -47,4 +47,25 @@
 <div class="preview-root" data-theme={theme}>
 	<TopBar {theme} {crumb} ontoggle={toggle} />
 	<AppShell>{@render children()}</AppShell>
+	<footer class="preview-footer">
+		<span class="version">v0.1.0</span>
+		<span class="copy">© 2026</span>
+	</footer>
 </div>
+
+<style>
+	.preview-footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 16px clamp(20px, 4vw, 64px);
+		border-top: 1px solid var(--line);
+		font: 10px var(--font-mono);
+		letter-spacing: 0.08em;
+		color: var(--muted);
+	}
+	.preview-footer .version {
+		color: var(--blue);
+	}
+</style>

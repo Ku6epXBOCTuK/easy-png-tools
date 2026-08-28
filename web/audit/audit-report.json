@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T11:58:18.224Z",
+  "generatedAt": "2026-08-28T14:54:53.564Z",
   "ours": "http://127.0.0.1:5179/preview/demo",
   "ref": "C:\\+XBOCTuK\\+life_projects\\easy-png-tools\\refs-html\\demo.html",
   "tokenDiffs": {
@@ -161,7 +161,123 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(1)",
+      "tag": "a",
+      "text": "Workspace",
+      "deltas": {
+        "fontSize": {
+          "ours": "12px",
+          "ref": "10px"
+        },
+        "letterSpacing": {
+          "ours": "0.48px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 513,
+            "y": 24,
+            "w": 69,
+            "h": 15
+          },
+          "ref": {
+            "x": 792,
+            "y": 26,
+            "w": 49,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(2)",
+      "tag": "a",
+      "text": "Catalog",
+      "deltas": {
+        "fontSize": {
+          "ours": "12px",
+          "ref": "10px"
+        },
+        "letterSpacing": {
+          "ours": "0.48px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 600,
+            "y": 24,
+            "w": 54,
+            "h": 15
+          },
+          "ref": {
+            "x": 864,
+            "y": 26,
+            "w": 39,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(3)",
+      "tag": "a",
+      "text": "Gradient",
+      "deltas": {
+        "fontSize": {
+          "ours": "12px",
+          "ref": "10px"
+        },
+        "letterSpacing": {
+          "ours": "0.48px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 672,
+            "y": 24,
+            "w": 61,
+            "h": 15
+          },
+          "ref": {
+            "x": 924,
+            "y": 26,
+            "w": 44,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>nav:nth-child(2)>a:nth-child(4)",
+      "tag": "a",
+      "text": "Background remover",
+      "deltas": {
+        "fontSize": {
+          "ours": "12px",
+          "ref": "10px"
+        },
+        "letterSpacing": {
+          "ours": "0.48px",
+          "ref": "normal"
+        },
+        "rect": {
+          "ours": {
+            "x": 751,
+            "y": 24,
+            "w": 138,
+            "h": 15
+          },
+          "ref": {
+            "x": 990,
+            "y": 26,
+            "w": 99,
+            "h": 12
+          }
+        }
+      }
+    },
+    {
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(1)",
       "tag": "button",
       "text": "RU",
       "deltas": {
@@ -172,7 +288,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(3)>div:nth-child(4)>button:nth-child(2)",
       "tag": "button",
       "text": "EN",
       "deltas": {
@@ -251,7 +367,7 @@
       "text": "Build your image pipeline.",
       "deltas": {
         "lineHeight": {
-          "ours": "normal",
+          "ours": "51.84px",
           "ref": "57.6px"
         },
         "rect": {
@@ -259,7 +375,7 @@
             "x": 58,
             "y": 155,
             "w": 474,
-            "h": 150
+            "h": 104
           },
           "ref": {
             "x": 58,
@@ -278,7 +394,7 @@
         "rect": {
           "ours": {
             "x": 58,
-            "y": 321,
+            "y": 275,
             "w": 474,
             "h": 51
           },
@@ -299,7 +415,7 @@
         "rect": {
           "ours": {
             "x": 597,
-            "y": 347,
+            "y": 300,
             "w": 66,
             "h": 14
           },
@@ -320,7 +436,7 @@
         "rect": {
           "ours": {
             "x": 671,
-            "y": 347,
+            "y": 300,
             "w": 40,
             "h": 14
           },
@@ -338,10 +454,6 @@
       "tag": "span",
       "text": "PROCESSING PIPELINE",
       "deltas": {
-        "fontWeight": {
-          "ours": "500",
-          "ref": "400"
-        },
         "letterSpacing": {
           "ours": "1px",
           "ref": "1.2px"
@@ -357,7 +469,7 @@
         "rect": {
           "ours": {
             "x": 58,
-            "y": 428,
+            "y": 382,
             "w": 154,
             "h": 12
           },
@@ -378,7 +490,7 @@
         "rect": {
           "ours": {
             "x": 175,
-            "y": 451,
+            "y": 405,
             "w": 36,
             "h": 13
           },
@@ -392,20 +504,32 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "01",
       "deltas": {
+        "fontSize": {
+          "ours": "22px",
+          "ref": "11px"
+        },
+        "fontWeight": {
+          "ours": "600",
+          "ref": "400"
+        },
         "padding": {
           "ours": "0px",
           "ref": "17px 0px 0px 15px"
         },
+        "lineHeight": {
+          "ours": "22px",
+          "ref": "normal"
+        },
         "rect": {
           "ours": {
-            "x": 95,
-            "y": 504,
-            "w": 13,
-            "h": 14
+            "x": 74,
+            "y": 464,
+            "w": 26,
+            "h": 22
           },
           "ref": {
             "x": 59,
@@ -417,7 +541,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "BACKGROUND",
       "deltas": {
@@ -427,9 +551,9 @@
         },
         "rect": {
           "ours": {
-            "x": 116,
-            "y": 504,
-            "w": 72,
+            "x": 117,
+            "y": 455,
+            "w": 171,
             "h": 13
           },
           "ref": {
@@ -442,18 +566,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(4)",
-      "tag": "span",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
+      "tag": "h2",
       "text": "Gradient background",
       "deltas": {
-        "margin": {
-          "ours": "0px",
-          "ref": "5px 0px 18px"
-        },
         "rect": {
           "ours": {
-            "x": 196,
-            "y": 501,
+            "x": 117,
+            "y": 473,
             "w": 171,
             "h": 19
           },
@@ -467,17 +587,25 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)",
       "tag": "button",
-      "text": "100",
+      "text": "100%",
       "deltas": {
+        "color": {
+          "ours": "rgb(255, 255, 255)",
+          "ref": "rgb(23, 33, 43)"
+        },
+        "backgroundColor": {
+          "ours": "rgb(23, 105, 210)",
+          "ref": "rgba(0, 0, 0, 0)"
+        },
         "padding": {
           "ours": "0px 11.2px",
           "ref": "0px"
         },
         "letterSpacing": {
           "ours": "0.6px",
-          "ref": "normal"
+          "ref": "0.8px"
         },
         "display": {
           "ours": "flex",
@@ -485,134 +613,47 @@
         },
         "rect": {
           "ours": {
-            "x": 491,
-            "y": 590,
-            "w": 42,
+            "x": 518,
+            "y": 552,
+            "w": 49,
             "h": 30
           },
           "ref": {
-            "x": 520,
-            "y": 567,
-            "w": 46,
-            "h": 30
+            "x": 680,
+            "y": 546,
+            "w": 25,
+            "h": 12
           }
         }
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(2)",
-      "tag": "button",
-      "text": "75",
-      "deltas": {
-        "padding": {
-          "ours": "0px 11.2px",
-          "ref": "0px"
-        },
-        "letterSpacing": {
-          "ours": "0.6px",
-          "ref": "normal"
-        },
-        "display": {
-          "ours": "flex",
-          "ref": "block"
-        },
-        "rect": {
-          "ours": {
-            "x": 533,
-            "y": 590,
-            "w": 37,
-            "h": 30
-          },
-          "ref": {
-            "x": 566,
-            "y": 567,
-            "w": 46,
-            "h": 30
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(3)",
-      "tag": "button",
-      "text": "50",
-      "deltas": {
-        "padding": {
-          "ours": "0px 11.2px",
-          "ref": "0px"
-        },
-        "letterSpacing": {
-          "ours": "0.6px",
-          "ref": "normal"
-        },
-        "display": {
-          "ours": "flex",
-          "ref": "block"
-        },
-        "rect": {
-          "ours": {
-            "x": 569,
-            "y": 590,
-            "w": 37,
-            "h": 30
-          },
-          "ref": {
-            "x": 612,
-            "y": 567,
-            "w": 46,
-            "h": 30
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(4)",
-      "tag": "button",
-      "text": "25",
-      "deltas": {
-        "padding": {
-          "ours": "0px 11.2px",
-          "ref": "0px"
-        },
-        "letterSpacing": {
-          "ours": "0.6px",
-          "ref": "normal"
-        },
-        "display": {
-          "ours": "flex",
-          "ref": "block"
-        },
-        "rect": {
-          "ours": {
-            "x": 606,
-            "y": 590,
-            "w": 37,
-            "h": 30
-          },
-          "ref": {
-            "x": 658,
-            "y": 567,
-            "w": 46,
-            "h": 30
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "02",
       "deltas": {
+        "fontSize": {
+          "ours": "22px",
+          "ref": "11px"
+        },
+        "fontWeight": {
+          "ours": "600",
+          "ref": "400"
+        },
         "padding": {
           "ours": "0px",
           "ref": "17px 0px 0px 15px"
         },
+        "lineHeight": {
+          "ours": "22px",
+          "ref": "normal"
+        },
         "rect": {
           "ours": {
-            "x": 95,
-            "y": 655,
-            "w": 13,
-            "h": 14
+            "x": 74,
+            "y": 624,
+            "w": 26,
+            "h": 22
           },
           "ref": {
             "x": 59,
@@ -624,7 +665,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "TRANSFORM",
       "deltas": {
@@ -634,9 +675,9 @@
         },
         "rect": {
           "ours": {
-            "x": 116,
-            "y": 656,
-            "w": 65,
+            "x": 117,
+            "y": 615,
+            "w": 153,
             "h": 13
           },
           "ref": {
@@ -649,18 +690,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(4)",
-      "tag": "span",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
+      "tag": "h2",
       "text": "Remove background",
       "deltas": {
-        "margin": {
-          "ours": "0px",
-          "ref": "5px 0px 18px"
-        },
         "rect": {
           "ours": {
-            "x": 189,
-            "y": 653,
+            "x": 117,
+            "y": 633,
             "w": 153,
             "h": 19
           },
@@ -674,20 +711,32 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "03",
       "deltas": {
+        "fontSize": {
+          "ours": "22px",
+          "ref": "11px"
+        },
+        "fontWeight": {
+          "ours": "600",
+          "ref": "400"
+        },
         "padding": {
           "ours": "0px",
           "ref": "17px 0px 0px 15px"
         },
+        "lineHeight": {
+          "ours": "22px",
+          "ref": "normal"
+        },
         "rect": {
           "ours": {
-            "x": 95,
-            "y": 769,
-            "w": 13,
-            "h": 14
+            "x": 74,
+            "y": 746,
+            "w": 26,
+            "h": 22
           },
           "ref": {
             "x": 59,
@@ -699,7 +748,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "STYLE",
       "deltas": {
@@ -709,9 +758,9 @@
         },
         "rect": {
           "ours": {
-            "x": 116,
-            "y": 770,
-            "w": 36,
+            "x": 117,
+            "y": 737,
+            "w": 99,
             "h": 13
           },
           "ref": {
@@ -724,18 +773,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(4)",
-      "tag": "span",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
+      "tag": "h2",
       "text": "Add outline",
       "deltas": {
-        "margin": {
-          "ours": "0px",
-          "ref": "5px 0px 18px"
-        },
         "rect": {
           "ours": {
-            "x": 160,
-            "y": 767,
+            "x": 117,
+            "y": 755,
             "w": 99,
             "h": 19
           },
@@ -749,20 +794,32 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "04",
       "deltas": {
+        "fontSize": {
+          "ours": "22px",
+          "ref": "11px"
+        },
+        "fontWeight": {
+          "ours": "600",
+          "ref": "400"
+        },
         "padding": {
           "ours": "0px",
           "ref": "17px 0px 0px 15px"
         },
+        "lineHeight": {
+          "ours": "22px",
+          "ref": "normal"
+        },
         "rect": {
           "ours": {
-            "x": 95,
-            "y": 911,
-            "w": 13,
-            "h": 14
+            "x": 74,
+            "y": 896,
+            "w": 26,
+            "h": 22
           },
           "ref": {
             "x": 59,
@@ -774,18 +831,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(1)>span:nth-child(4)",
-      "tag": "span",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>h2:nth-child(2)",
+      "tag": "h2",
       "text": "Round corners",
       "deltas": {
-        "margin": {
-          "ours": "0px",
-          "ref": "5px 0px 18px"
-        },
         "rect": {
           "ours": {
-            "x": 160,
-            "y": 909,
+            "x": 117,
+            "y": 905,
             "w": 117,
             "h": 19
           },
@@ -799,7 +852,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>label:nth-child(2)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>article:nth-child(4)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>label:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "Preserve aspect ratio",
       "deltas": {
@@ -817,8 +870,8 @@
         },
         "rect": {
           "ours": {
-            "x": 399,
-            "y": 986,
+            "x": 422,
+            "y": 973,
             "w": 129,
             "h": 18
           },
@@ -836,10 +889,6 @@
       "tag": "span",
       "text": "PIPELINE OUTPUTS",
       "deltas": {
-        "fontWeight": {
-          "ours": "500",
-          "ref": "400"
-        },
         "letterSpacing": {
           "ours": "1px",
           "ref": "1.2px"
@@ -856,7 +905,7 @@
           "ours": {
             "x": 799,
             "y": 178,
-            "w": 93,
+            "w": 94,
             "h": 24
           },
           "ref": {
@@ -877,7 +926,7 @@
           "ours": {
             "x": 799,
             "y": 209,
-            "w": 93,
+            "w": 94,
             "h": 36
           },
           "ref": {
@@ -912,7 +961,7 @@
         },
         "rect": {
           "ours": {
-            "x": 1090,
+            "x": 1097,
             "y": 240,
             "w": 36,
             "h": 13
@@ -931,20 +980,16 @@
       "tag": "span",
       "text": "DIMENSIONS",
       "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "9px"
-        },
         "letterSpacing": {
-          "ours": "1px",
+          "ours": "0.9px",
           "ref": "normal"
         },
         "rect": {
           "ours": {
-            "x": 1150,
-            "y": 215,
-            "w": 70,
-            "h": 13
+            "x": 1157,
+            "y": 216,
+            "w": 63,
+            "h": 11
           },
           "ref": {
             "x": 1073,
@@ -985,20 +1030,16 @@
       "tag": "span",
       "text": "FORMAT",
       "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "9px"
-        },
         "letterSpacing": {
-          "ours": "1px",
+          "ours": "0.9px",
           "ref": "normal"
         },
         "rect": {
           "ours": {
-            "x": 1150,
-            "y": 239,
-            "w": 42,
-            "h": 13
+            "x": 1157,
+            "y": 240,
+            "w": 38,
+            "h": 11
           },
           "ref": {
             "x": 1159,
@@ -1039,20 +1080,16 @@
       "tag": "span",
       "text": "SIZE",
       "deltas": {
-        "fontSize": {
-          "ours": "10px",
-          "ref": "9px"
-        },
         "letterSpacing": {
-          "ours": "1px",
+          "ours": "0.9px",
           "ref": "normal"
         },
         "rect": {
           "ours": {
-            "x": 1150,
-            "y": 264,
-            "w": 28,
-            "h": 13
+            "x": 1157,
+            "y": 265,
+            "w": 25,
+            "h": 11
           },
           "ref": {
             "x": 1246,
@@ -1114,13 +1151,13 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "original.png · 1200 × 800",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 1213,
+            "x": 814,
             "y": 704,
             "w": 135,
             "h": 11
@@ -1164,13 +1201,13 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "gradient applied",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 1262,
+            "x": 814,
             "y": 1137,
             "w": 86,
             "h": 11
@@ -1214,13 +1251,13 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "background removed",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 1251,
+            "x": 814,
             "y": 1569,
             "w": 97,
             "h": 11
@@ -1264,13 +1301,13 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "outline added",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 1278,
+            "x": 814,
             "y": 2002,
             "w": 70,
             "h": 11
@@ -1314,13 +1351,13 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "ready · PNG-24",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 1272,
+            "x": 814,
             "y": 2434,
             "w": 76,
             "h": 11
@@ -1362,24 +1399,28 @@
     "AUTO",
     "Gradient color",
     "DIRECTION",
-    "135°",
+    "135 °",
     "OPACITY",
+    "75%",
+    "50%",
+    "25%",
     "Automatic subject detection enabled",
     "Outline width",
-    "2px",
+    "2 px",
     "Outline color",
     "Corner radius",
-    "18px"
+    "18 px",
+    "v0.1.0",
+    "© 2026"
   ],
   "onlyRef": [
     "/ \n            WORKSPACE",
-    "Workspace",
-    "Catalog",
-    "Gradient",
-    "Background remover",
     "COLOR",
     "135\n                        °",
-    "100%",
+    "100",
+    "75",
+    "50",
+    "25",
     "2\n                        px",
     "18\n                        px",
     "v2.4.0",
@@ -1388,8 +1429,8 @@
   "counts": {
     "tokenLight": 10,
     "tokenDark": 16,
-    "elements": 46,
-    "onlyOurs": 13,
-    "onlyRef": 12
+    "elements": 47,
+    "onlyOurs": 18,
+    "onlyRef": 11
   }
 }
