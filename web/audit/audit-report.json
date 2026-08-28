@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-27T18:45:14.461Z",
+  "generatedAt": "2026-08-28T07:02:47.972Z",
   "ours": "http://127.0.0.1:5179/preview/demo",
   "ref": "C:\\+XBOCTuK\\+life_projects\\easy-png-tools\\refs-html\\demo.html",
   "tokenDiffs": {
@@ -13,16 +13,6 @@
         "key": "--success",
         "ours": "#25a96a",
         "ref": "—"
-      },
-      {
-        "key": "--font-sans",
-        "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-        "ref": "\"IBM Plex Sans\", sans-serif"
-      },
-      {
-        "key": "--font-mono",
-        "ours": "\"IBM Plex Mono\", ui-monospace, \"SFMono-Regular\", monospace",
-        "ref": "\"IBM Plex Mono\", monospace"
       },
       {
         "key": "--text-sm--line-height",
@@ -107,16 +97,6 @@
         "ref": "#cbd3da"
       },
       {
-        "key": "--font-sans",
-        "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-        "ref": "\"IBM Plex Sans\", sans-serif"
-      },
-      {
-        "key": "--font-mono",
-        "ours": "\"IBM Plex Mono\", ui-monospace, \"SFMono-Regular\", monospace",
-        "ref": "\"IBM Plex Mono\", monospace"
-      },
-      {
         "key": "--text-sm--line-height",
         "ours": "—",
         "ref": "calc(1.25 / .875)"
@@ -160,29 +140,10 @@
   },
   "elementDiffs": [
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "EP",
-      "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        }
-      }
-    },
-    {
       "path": "body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
       "tag": "span",
       "text": "easy-png-tools",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "color": {
-          "ours": "rgb(0, 0, 0)",
-          "ref": "rgb(23, 33, 43)"
-        },
         "rect": {
           "ours": {
             "x": 98,
@@ -204,14 +165,6 @@
       "tag": "button",
       "text": "RU",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "11px",
-          "ref": "10px"
-        },
         "color": {
           "ours": "rgb(255, 255, 255)",
           "ref": "rgb(238, 241, 244)"
@@ -221,19 +174,23 @@
           "ref": "rgb(23, 33, 43)"
         },
         "padding": {
-          "ours": "4.8px 11.2px",
+          "ours": "0px 11.2px",
           "ref": "6px 9px"
         },
         "letterSpacing": {
-          "ours": "0.66px",
+          "ours": "0.6px",
           "ref": "normal"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "block"
         },
         "rect": {
           "ours": {
-            "x": 1307,
-            "y": 20,
-            "w": 37,
-            "h": 24
+            "x": 1309,
+            "y": 17,
+            "w": 36,
+            "h": 30
           },
           "ref": {
             "x": 1323,
@@ -249,28 +206,24 @@
       "tag": "button",
       "text": "EN",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "11px",
-          "ref": "10px"
-        },
         "padding": {
-          "ours": "4.8px 11.2px",
+          "ours": "0px 11.2px",
           "ref": "6px 9px"
         },
         "letterSpacing": {
-          "ours": "0.66px",
+          "ours": "0.6px",
           "ref": "normal"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "block"
         },
         "rect": {
           "ours": {
-            "x": 1344,
-            "y": 20,
-            "w": 38,
-            "h": 24
+            "x": 1345,
+            "y": 17,
+            "w": 37,
+            "h": 30
           },
           "ref": {
             "x": 1352,
@@ -286,10 +239,6 @@
       "tag": "span",
       "text": "/",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "color": {
           "ours": "rgb(23, 105, 210)",
           "ref": "rgb(109, 120, 131)"
@@ -315,10 +264,6 @@
       "tag": "h1",
       "text": "Build your image pipeline.",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-          "ref": "\"IBM Plex Sans\", sans-serif"
-        },
         "lineHeight": {
           "ours": "normal",
           "ref": "57.6px"
@@ -344,10 +289,6 @@
       "tag": "p",
       "text": "Chain simple tools together. Every chang",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-          "ref": "\"IBM Plex Sans\", sans-serif"
-        },
         "rect": {
           "ours": {
             "x": 58,
@@ -369,10 +310,6 @@
       "tag": "span",
       "text": "source.png",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 597,
@@ -394,10 +331,6 @@
       "tag": "b",
       "text": "1.8 MB",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 671,
@@ -419,10 +352,6 @@
       "tag": "span",
       "text": "PROCESSING PIPELINE",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 58,
@@ -444,10 +373,6 @@
       "tag": "em",
       "text": "• LIVE",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 184,
@@ -469,14 +394,6 @@
       "tag": "span",
       "text": "01",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "padding": {
           "ours": "0px",
           "ref": "17px 0px 0px 15px"
@@ -502,40 +419,16 @@
       "tag": "span",
       "text": "BACKGROUND",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "color": {
-          "ours": "rgb(23, 105, 210)",
-          "ref": "rgb(109, 120, 131)"
-        },
-        "padding": {
-          "ours": "2.4px 7.2px",
-          "ref": "0px"
-        },
-        "letterSpacing": {
-          "ours": "0.8px",
-          "ref": "1.2px"
-        },
-        "borderRadius": {
-          "ours": "4px",
-          "ref": "0px"
-        },
         "display": {
-          "ours": "flex",
+          "ours": "block",
           "ref": "inline"
-        },
-        "gap": {
-          "ours": "4.8px",
-          "ref": "normal"
         },
         "rect": {
           "ours": {
             "x": 116,
-            "y": 507,
-            "w": 84,
-            "h": 20
+            "y": 510,
+            "w": 72,
+            "h": 13
           },
           "ref": {
             "x": 143,
@@ -551,23 +444,15 @@
       "tag": "span",
       "text": "Gradient background",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "14.4px",
-          "ref": "15px"
-        },
         "margin": {
           "ours": "0px",
           "ref": "5px 0px 18px"
         },
         "rect": {
           "ours": {
-            "x": 208,
-            "y": 508,
-            "w": 467,
+            "x": 196,
+            "y": 507,
+            "w": 171,
             "h": 19
           },
           "ref": {
@@ -584,10 +469,6 @@
       "tag": "span",
       "text": "COLOR",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontWeight": {
           "ours": "500",
           "ref": "400"
@@ -611,7 +492,7 @@
         "rect": {
           "ours": {
             "x": 71,
-            "y": 576,
+            "y": 575,
             "w": 203,
             "h": 12
           },
@@ -629,28 +510,24 @@
       "tag": "button",
       "text": "100",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "11px",
-          "ref": "10px"
-        },
         "padding": {
-          "ours": "4.8px 11.2px",
+          "ours": "0px 11.2px",
           "ref": "0px"
         },
         "letterSpacing": {
-          "ours": "0.66px",
+          "ours": "0.6px",
           "ref": "normal"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "block"
         },
         "rect": {
           "ours": {
             "x": 491,
-            "y": 597,
-            "w": 44,
-            "h": 24
+            "y": 596,
+            "w": 42,
+            "h": 30
           },
           "ref": {
             "x": 520,
@@ -666,28 +543,24 @@
       "tag": "button",
       "text": "75",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "11px",
-          "ref": "10px"
-        },
         "padding": {
-          "ours": "4.8px 11.2px",
+          "ours": "0px 11.2px",
           "ref": "0px"
         },
         "letterSpacing": {
-          "ours": "0.66px",
+          "ours": "0.6px",
           "ref": "normal"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "block"
         },
         "rect": {
           "ours": {
-            "x": 535,
-            "y": 597,
-            "w": 38,
-            "h": 24
+            "x": 533,
+            "y": 596,
+            "w": 37,
+            "h": 30
           },
           "ref": {
             "x": 566,
@@ -703,28 +576,24 @@
       "tag": "button",
       "text": "50",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "11px",
-          "ref": "10px"
-        },
         "padding": {
-          "ours": "4.8px 11.2px",
+          "ours": "0px 11.2px",
           "ref": "0px"
         },
         "letterSpacing": {
-          "ours": "0.66px",
+          "ours": "0.6px",
           "ref": "normal"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "block"
         },
         "rect": {
           "ours": {
-            "x": 573,
-            "y": 597,
-            "w": 38,
-            "h": 24
+            "x": 569,
+            "y": 596,
+            "w": 37,
+            "h": 30
           },
           "ref": {
             "x": 612,
@@ -740,28 +609,24 @@
       "tag": "button",
       "text": "25",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "11px",
-          "ref": "10px"
-        },
         "padding": {
-          "ours": "4.8px 11.2px",
+          "ours": "0px 11.2px",
           "ref": "0px"
         },
         "letterSpacing": {
-          "ours": "0.66px",
+          "ours": "0.6px",
           "ref": "normal"
+        },
+        "display": {
+          "ours": "flex",
+          "ref": "block"
         },
         "rect": {
           "ours": {
-            "x": 611,
-            "y": 597,
-            "w": 38,
-            "h": 24
+            "x": 606,
+            "y": 596,
+            "w": 37,
+            "h": 30
           },
           "ref": {
             "x": 658,
@@ -777,14 +642,6 @@
       "tag": "span",
       "text": "02",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "padding": {
           "ours": "0px",
           "ref": "17px 0px 0px 15px"
@@ -792,7 +649,7 @@
         "rect": {
           "ours": {
             "x": 95,
-            "y": 673,
+            "y": 672,
             "w": 13,
             "h": 14
           },
@@ -810,40 +667,16 @@
       "tag": "span",
       "text": "TRANSFORM",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "color": {
-          "ours": "rgb(23, 105, 210)",
-          "ref": "rgb(109, 120, 131)"
-        },
-        "padding": {
-          "ours": "2.4px 7.2px",
-          "ref": "0px"
-        },
-        "letterSpacing": {
-          "ours": "0.8px",
-          "ref": "1.2px"
-        },
-        "borderRadius": {
-          "ours": "4px",
-          "ref": "0px"
-        },
         "display": {
-          "ours": "flex",
+          "ours": "block",
           "ref": "inline"
-        },
-        "gap": {
-          "ours": "4.8px",
-          "ref": "normal"
         },
         "rect": {
           "ours": {
             "x": 116,
-            "y": 670,
-            "w": 78,
-            "h": 20
+            "y": 672,
+            "w": 65,
+            "h": 13
           },
           "ref": {
             "x": 143,
@@ -859,23 +692,15 @@
       "tag": "span",
       "text": "Remove background",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "14.4px",
-          "ref": "15px"
-        },
         "margin": {
           "ours": "0px",
           "ref": "5px 0px 18px"
         },
         "rect": {
           "ours": {
-            "x": 201,
-            "y": 671,
-            "w": 473,
+            "x": 189,
+            "y": 669,
+            "w": 153,
             "h": 19
           },
           "ref": {
@@ -892,14 +717,6 @@
       "tag": "span",
       "text": "03",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "padding": {
           "ours": "0px",
           "ref": "17px 0px 0px 15px"
@@ -907,7 +724,7 @@
         "rect": {
           "ours": {
             "x": 95,
-            "y": 788,
+            "y": 786,
             "w": 13,
             "h": 14
           },
@@ -925,40 +742,16 @@
       "tag": "span",
       "text": "STYLE",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "color": {
-          "ours": "rgb(23, 105, 210)",
-          "ref": "rgb(109, 120, 131)"
-        },
-        "padding": {
-          "ours": "2.4px 7.2px",
-          "ref": "0px"
-        },
-        "letterSpacing": {
-          "ours": "0.8px",
-          "ref": "1.2px"
-        },
-        "borderRadius": {
-          "ours": "4px",
-          "ref": "0px"
-        },
         "display": {
-          "ours": "flex",
+          "ours": "block",
           "ref": "inline"
-        },
-        "gap": {
-          "ours": "4.8px",
-          "ref": "normal"
         },
         "rect": {
           "ours": {
             "x": 116,
-            "y": 785,
-            "w": 50,
-            "h": 20
+            "y": 786,
+            "w": 36,
+            "h": 13
           },
           "ref": {
             "x": 143,
@@ -974,23 +767,15 @@
       "tag": "span",
       "text": "Add outline",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "14.4px",
-          "ref": "15px"
-        },
         "margin": {
           "ours": "0px",
           "ref": "5px 0px 18px"
         },
         "rect": {
           "ours": {
-            "x": 174,
-            "y": 785,
-            "w": 501,
+            "x": 160,
+            "y": 783,
+            "w": 99,
             "h": 19
           },
           "ref": {
@@ -1007,14 +792,6 @@
       "tag": "span",
       "text": "04",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "padding": {
           "ours": "0px",
           "ref": "17px 0px 0px 15px"
@@ -1022,7 +799,7 @@
         "rect": {
           "ours": {
             "x": 95,
-            "y": 951,
+            "y": 948,
             "w": 13,
             "h": 14
           },
@@ -1040,23 +817,15 @@
       "tag": "span",
       "text": "Round corners",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
-        "fontSize": {
-          "ours": "14.4px",
-          "ref": "15px"
-        },
         "margin": {
           "ours": "0px",
           "ref": "5px 0px 18px"
         },
         "rect": {
           "ours": {
-            "x": 174,
-            "y": 948,
-            "w": 501,
+            "x": 160,
+            "y": 945,
+            "w": 117,
             "h": 19
           },
           "ref": {
@@ -1073,10 +842,6 @@
       "tag": "span",
       "text": "Preserve aspect ratio",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-          "ref": "\"IBM Plex Sans\", sans-serif"
-        },
         "fontSize": {
           "ours": "13.6px",
           "ref": "16px"
@@ -1092,7 +857,7 @@
         "rect": {
           "ours": {
             "x": 399,
-            "y": 1036,
+            "y": 1032,
             "w": 129,
             "h": 18
           },
@@ -1110,10 +875,6 @@
       "tag": "span",
       "text": "PIPELINE OUTPUTS",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 799,
@@ -1135,10 +896,6 @@
       "tag": "strong",
       "text": "Visual history",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 799,
@@ -1160,10 +917,6 @@
       "tag": "span",
       "text": "1.2 MB",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "11px"
@@ -1201,10 +954,6 @@
       "tag": "span",
       "text": "DIMENSIONS",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "9px"
@@ -1234,10 +983,6 @@
       "tag": "span",
       "text": "1200 × 800 px",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "margin": {
           "ours": "0px",
           "ref": "5px 0px 0px"
@@ -1263,10 +1008,6 @@
       "tag": "span",
       "text": "FORMAT",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "9px"
@@ -1296,10 +1037,6 @@
       "tag": "span",
       "text": "PNG-24",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "margin": {
           "ours": "0px",
           "ref": "5px 0px 0px"
@@ -1325,10 +1062,6 @@
       "tag": "span",
       "text": "SIZE",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "9px"
@@ -1358,28 +1091,12 @@
       "tag": "span",
       "text": "SOURCE",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "9px"
         },
-        "fontWeight": {
-          "ours": "500",
-          "ref": "400"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "letterSpacing": {
-          "ours": "1px",
-          "ref": "normal"
-        },
-        "lineHeight": {
-          "ours": "12px",
+          "ours": "0.8px",
           "ref": "normal"
         },
         "rect": {
@@ -1387,7 +1104,7 @@
             "x": 806,
             "y": 320,
             "w": 262,
-            "h": 12
+            "h": 13
           },
           "ref": {
             "x": 808,
@@ -1403,14 +1120,10 @@
       "tag": "span",
       "text": "PNG",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 923,
-            "y": 498,
+            "y": 499,
             "w": 28,
             "h": 19
           },
@@ -1428,14 +1141,10 @@
       "tag": "span",
       "text": "original.png · 1200 × 800",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 925,
-            "y": 706,
+            "y": 707,
             "w": 135,
             "h": 11
           },
@@ -1453,28 +1162,12 @@
       "tag": "span",
       "text": "STEP 01",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "9px"
         },
-        "fontWeight": {
-          "ours": "500",
-          "ref": "400"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "letterSpacing": {
-          "ours": "1px",
-          "ref": "normal"
-        },
-        "lineHeight": {
-          "ours": "12px",
+          "ours": "0.8px",
           "ref": "normal"
         },
         "rect": {
@@ -1482,7 +1175,7 @@
             "x": 1094,
             "y": 320,
             "w": 262,
-            "h": 12
+            "h": 13
           },
           "ref": {
             "x": 1096,
@@ -1498,14 +1191,10 @@
       "tag": "span",
       "text": "gradient applied",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 1262,
-            "y": 706,
+            "y": 707,
             "w": 86,
             "h": 11
           },
@@ -1523,36 +1212,20 @@
       "tag": "span",
       "text": "STEP 02",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "9px"
         },
-        "fontWeight": {
-          "ours": "500",
-          "ref": "400"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "letterSpacing": {
-          "ours": "1px",
-          "ref": "normal"
-        },
-        "lineHeight": {
-          "ours": "12px",
+          "ours": "0.8px",
           "ref": "normal"
         },
         "rect": {
           "ours": {
             "x": 806,
-            "y": 752,
+            "y": 753,
             "w": 262,
-            "h": 12
+            "h": 13
           },
           "ref": {
             "x": 808,
@@ -1568,14 +1241,10 @@
       "tag": "span",
       "text": "background removed",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 962,
-            "y": 1138,
+            "y": 1140,
             "w": 97,
             "h": 11
           },
@@ -1593,36 +1262,20 @@
       "tag": "span",
       "text": "STEP 03",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "9px"
         },
-        "fontWeight": {
-          "ours": "500",
-          "ref": "400"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "letterSpacing": {
-          "ours": "1px",
-          "ref": "normal"
-        },
-        "lineHeight": {
-          "ours": "12px",
+          "ours": "0.8px",
           "ref": "normal"
         },
         "rect": {
           "ours": {
             "x": 1094,
-            "y": 752,
+            "y": 753,
             "w": 262,
-            "h": 12
+            "h": 13
           },
           "ref": {
             "x": 1096,
@@ -1638,14 +1291,10 @@
       "tag": "span",
       "text": "outline added",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 1278,
-            "y": 1138,
+            "y": 1140,
             "w": 70,
             "h": 11
           },
@@ -1663,36 +1312,20 @@
       "tag": "span",
       "text": "FINAL OUTPUT",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "fontSize": {
           "ours": "10px",
           "ref": "9px"
         },
-        "fontWeight": {
-          "ours": "500",
-          "ref": "400"
-        },
-        "color": {
-          "ours": "rgb(109, 120, 131)",
-          "ref": "rgb(23, 105, 210)"
-        },
         "letterSpacing": {
-          "ours": "1px",
-          "ref": "normal"
-        },
-        "lineHeight": {
-          "ours": "12px",
+          "ours": "0.8px",
           "ref": "normal"
         },
         "rect": {
           "ours": {
             "x": 806,
-            "y": 1183,
+            "y": 1185,
             "w": 262,
-            "h": 12
+            "h": 13
           },
           "ref": {
             "x": 808,
@@ -1708,14 +1341,10 @@
       "tag": "span",
       "text": "ready · PNG-24",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, monospace",
-          "ref": "\"IBM Plex Mono\", monospace"
-        },
         "rect": {
           "ours": {
             "x": 984,
-            "y": 1569,
+            "y": 1572,
             "w": 76,
             "h": 11
           },
@@ -1733,14 +1362,10 @@
       "tag": "p",
       "text": "Output is generated in-browser. Your fil",
       "deltas": {
-        "fontFamily": {
-          "ours": "\"IBM Plex Sans\", system-ui, -apple-system, sans-serif",
-          "ref": "\"IBM Plex Sans\", sans-serif"
-        },
         "rect": {
           "ours": {
             "x": 799,
-            "y": 1624,
+            "y": 1627,
             "w": 565,
             "h": 17
           },
@@ -1780,9 +1405,9 @@
     "© 2024"
   ],
   "counts": {
-    "tokenLight": 12,
-    "tokenDark": 18,
-    "elements": 48,
+    "tokenLight": 10,
+    "tokenDark": 16,
+    "elements": 47,
     "onlyOurs": 14,
     "onlyRef": 7
   }

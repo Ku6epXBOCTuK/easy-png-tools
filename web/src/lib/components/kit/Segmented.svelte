@@ -34,6 +34,7 @@
 <style>
 	.segmented {
 		display: inline-flex;
+		height: 32px;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		overflow: hidden;
@@ -44,11 +45,13 @@
 		background: transparent;
 		color: var(--muted);
 		font-family: var(--font-mono);
-		font-size: 11px;
+		font-size: 10px;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		padding: 0.3rem 0.7rem;
+		padding: 0 0.7rem;
 		cursor: pointer;
+		display: inline-flex;
+		align-items: center;
 	}
 	.segment + .segment {
 		border-left: 1px solid var(--line);

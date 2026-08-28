@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
 	import { GripVertical, X } from "@lucide/svelte";
-	import Badge from "./Badge.svelte";
 
 	interface Props {
 		index: number;
@@ -17,7 +16,7 @@
 	<div class="step-heading">
 		<span class="drag" aria-hidden="true"><GripVertical size={16} /></span>
 		<span class="step-index">{index.toString().padStart(2, "0")}</span>
-		{#if type}<Badge tone="accent">{type}</Badge>{/if}
+		{#if type}<span class="step-type">{type}</span>{/if}
 		{#if title}<span class="step-title">{title}</span>{/if}
 		<button
 			type="button"
@@ -54,13 +53,18 @@
 	.step-index {
 		font-family: var(--font-mono);
 		font-size: 11px;
-		color: var(--muted);
+		color: var(--blue);
 	}
 	.step-title {
-		font-weight: 600;
-		font-size: 0.9rem;
+		font: 600 15px var(--font-mono);
 		color: var(--foreground);
-		flex: 1;
+		margin: 0;
+	}
+	.step-type {
+		color: var(--muted);
+		font: 10px var(--font-mono);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
 	}
 	.step-remove {
 		margin-left: auto;

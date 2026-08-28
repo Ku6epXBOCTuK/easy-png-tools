@@ -55,6 +55,7 @@
 		align-items: center;
 		gap: 10px;
 		font: 600 14px var(--font-mono);
+		color: var(--foreground);
 	}
 	.brand-mark {
 		background: var(--blue);

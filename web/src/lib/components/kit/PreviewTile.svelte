@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
-	import MonoLabel from "./MonoLabel.svelte";
 
 	interface Props {
 		label: string;
@@ -10,7 +9,7 @@
 </script>
 
 <div class="preview-tile">
-	<MonoLabel>{label}</MonoLabel>
+	<span class="tile-label">{label}</span>
 	<div class="tile-canvas">{@render children()}</div>
 </div>
 
@@ -23,6 +22,12 @@
 		border-radius: var(--radius);
 		padding: 0.4rem;
 		background: var(--panel);
+	}
+	.tile-label {
+		font: 10px var(--font-mono);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--blue);
 	}
 	.tile-canvas {
 		border-radius: var(--radius);

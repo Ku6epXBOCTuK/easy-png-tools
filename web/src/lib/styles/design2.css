@@ -31,8 +31,8 @@ optgroup {
    глобально не конфликтует со старым app.css. */
 
 :root {
-	--font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
-	--font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+	--font-sans: "IBM Plex Sans", sans-serif;
+	--font-mono: "IBM Plex Mono", monospace;
 
 	--background: #eef1f4;
 	--panel: #f8fafb;
