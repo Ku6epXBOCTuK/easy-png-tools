@@ -7,11 +7,6 @@
 @layer properties {
   @supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))) {
   *,:before,:after,::backdrop {
-  --tw-rotate-x:initial;
-  --tw-rotate-y:initial;
-  --tw-rotate-z:initial;
-  --tw-skew-x:initial;
-  --tw-skew-y:initial;
   --tw-border-style:solid;
   --tw-font-weight:initial;
   --tw-shadow:0 0 #0000;
@@ -290,13 +285,7 @@ button,input:where([type=button],[type=reset],[type=submit]) {
 }
 @layer components;
   @layer utilities {
-  .static {
-  position:static
-}
-.inline {
-  display:inline
-}
-.inline-flex {
+  .inline-flex {
   display:inline-flex
 }
 .size-6 {
@@ -329,9 +318,6 @@ button,input:where([type=button],[type=reset],[type=submit]) {
 }
 .shrink-0 {
   flex-shrink:0
-}
-.transform {
-  transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)
 }
 .items-center {
   align-items:center
@@ -630,7 +616,7 @@ button {
   --line:#33414c;
   --muted:#91a0ac;
   --blue:#54a2ff;
-  background-image:linear-gradient(#1b252d 1px,#0000 1px),linear-gradient(90deg,#1b252d 1px,#0000 1px)
+  background-image:linear-gradient(#1e2a3447 1px,#0000 1px),linear-gradient(90deg,#1e2a3447 1px,#0000 1px)
 }
 .topbar,.brand,.top-actions,.language,.status,.title-row,.pipeline-head,.step-heading,.step-tools,.pipeline-footer,.preview-top,.footer {
   align-items:center;
@@ -642,6 +628,26 @@ button {
   justify-content:space-between;
   height:64px;
   padding:0 clamp(20px,4vw,64px)
+}
+.topbar>.brand {
+  color:var(--foreground);
+  text-decoration:none
+}
+.top-nav {
+  align-items:center;
+  gap:22px;
+  margin-left:auto;
+  margin-right:28px;
+  display:flex
+}
+.top-nav a {
+  color:var(--muted);
+  font:10px var(--font-mono);
+  white-space:nowrap;
+  text-decoration:none
+}
+.top-nav a:hover,.top-nav a.active {
+  color:var(--blue)
 }
 .brand {
   font:600 14px var(--font-mono);
@@ -1104,6 +1110,9 @@ h1 {
 }
 
 }
+.dark-mode .app-shell {
+  background-image:linear-gradient(#1e2a3447 1px,#0000 1px),linear-gradient(90deg,#1e2a3447 1px,#0000 1px)
+}
 .dark-mode .tile-canvas {
   background-color:#202a31;
   background-image:linear-gradient(45deg,#29343c 25%,#0000 25%),linear-gradient(-45deg,#29343c 25%,#0000 25%),linear-gradient(45deg,#0000 75%,#29343c 75%),linear-gradient(-45deg,#0000 75%,#29343c 75%)
@@ -1113,7 +1122,22 @@ h1 {
 }
 @media (max-width:800px) {
   .topbar {
-  padding:0 16px
+  flex-wrap:wrap;
+  gap:12px;
+  height:auto;
+  min-height:64px;
+  padding:12px 16px
+}
+.top-nav {
+  order:3;
+  gap:12px;
+  width:100%;
+  margin:0;
+  padding-bottom:2px;
+  overflow:auto
+}
+.top-nav a {
+  font-size:9px
 }
 .status {
   display:none
@@ -1532,9 +1556,9 @@ h1 {
 }
 .catalog-page {
   width:100%;
-  max-width:1680px;
-  margin:0 auto;
-  padding:64px clamp(24px,4vw,72px) 72px
+  max-width:none;
+  margin:0;
+  padding:60px clamp(24px,4vw,72px) 72px
 }
 .catalog-head {
   border-bottom:1px solid var(--line);
@@ -1804,26 +1828,6 @@ h1 {
 }
 
 }
-@property --tw-rotate-x {
-  syntax:"*";
-  inherits:false
-}
-@property --tw-rotate-y {
-  syntax:"*";
-  inherits:false
-}
-@property --tw-rotate-z {
-  syntax:"*";
-  inherits:false
-}
-@property --tw-skew-x {
-  syntax:"*";
-  inherits:false
-}
-@property --tw-skew-y {
-  syntax:"*";
-  inherits:false
-}
 @property --tw-border-style {
   syntax:"*";
   inherits:false;
@@ -1984,923 +1988,965 @@ h1 {
       <!--$-->
       <!--/$-->
     </div>
-    <main class="catalog-page">
-      <header class="catalog-nav">
-        <a class="catalog-brand" href="/">easy-png-tools
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/">
+          <span class="brand-mark">EP
+          </span>
+          <span>easy-png-tools
+          </span>
+          <span class="version">/ 
+            <!-- -->CATALOG
+          </span>
         </a>
-        <nav>
-          <a href="/">Workspace
+        <nav class="top-nav" aria-label="Primary navigation">
+          <a class="" href="/">Workspace
           </a>
-          <a class="current" href="/easy-png-tools/list-tools">Catalog
+          <a class="active" href="/easy-png-tools/list-tools">Catalog
+          </a>
+          <a class="" href="/easy-png-tools/gradient">Gradient
+          </a>
+          <a class="" href="/easy-png-tools/background-remover">Background remover
           </a>
         </nav>
-        <span class="catalog-nav-status">LOCAL MODE / READY
-        </span>
-      </header>
-      <div class="catalog-head">
-        <div>
-          <div class="eyebrow">EASY-PNG-TOOLS / CATALOG
-          </div>
-          <h1>Tool catalog
-          </h1>
-          <p>Focused utilities for working with PNG. Inspect, transform, and export — locally in your browser.
-          </p>
-        </div>
-        <div class="catalog-total">
-          <b>32
-          </b>
-          <span>TOOLS
-            <br/>AVAILABLE
+        <div class="top-actions">
+          <span class="status">
+            <i>
+            </i>
+            <!-- -->LOCAL MODE / READY
           </span>
+          <button class="icon-btn" aria-label="Help">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-question-mark" aria-hidden="true">
+              <circle cx="12" cy="12" r="10">
+              </circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3">
+              </path>
+              <path d="M12 17h.01">
+              </path>
+            </svg>
+          </button>
+          <button class="icon-btn" aria-label="Toggle theme">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon" aria-hidden="true">
+              <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401">
+              </path>
+            </svg>
+          </button>
+          <div class="language">
+            <button class="active">RU
+            </button>
+            <span>/
+            </span>
+            <button>EN
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="catalog-toolbar">
-        <label class="catalog-search">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true">
-            <path d="m21 21-4.34-4.34">
-            </path>
-            <circle cx="11" cy="11" r="8">
-            </circle>
-          </svg>
-          <input aria-label="Search tools" placeholder="Search tools..." value=""/>
-        </label>
-        <div class="catalog-filters">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-funnel" aria-hidden="true">
-            <path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z">
-            </path>
-          </svg>
-          <button class="active">ALL
-          </button>
-          <button class="">CONVERT
-          </button>
-          <button class="">TRANSPARENCY
-          </button>
-          <button class="">COLOR
-          </button>
-          <button class="">GEOMETRY
-          </button>
-          <button class="">FILTERS
-          </button>
-          <button class="">ANALYZE
-          </button>
+      </header>
+      <div class="catalog-page">
+        <div class="catalog-head">
+          <div>
+            <div class="eyebrow">EASY-PNG-TOOLS / CATALOG
+            </div>
+            <h1>Tool catalog
+            </h1>
+            <p>Focused utilities for working with PNG. Inspect, transform, and export — locally in your browser.
+            </p>
+          </div>
+          <div class="catalog-total">
+            <b>32
+            </b>
+            <span>TOOLS
+              <br/>AVAILABLE
+            </span>
+          </div>
         </div>
+        <div class="catalog-toolbar">
+          <label class="catalog-search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search" aria-hidden="true">
+              <path d="m21 21-4.34-4.34">
+              </path>
+              <circle cx="11" cy="11" r="8">
+              </circle>
+            </svg>
+            <input aria-label="Search tools" placeholder="Search tools..." value=""/>
+          </label>
+          <div class="catalog-filters">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-funnel" aria-hidden="true">
+              <path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z">
+              </path>
+            </svg>
+            <button class="active">ALL
+            </button>
+            <button class="">CONVERT
+            </button>
+            <button class="">TRANSPARENCY
+            </button>
+            <button class="">COLOR
+            </button>
+            <button class="">GEOMETRY
+            </button>
+            <button class="">FILTERS
+            </button>
+            <button class="">ANALYZE
+            </button>
+          </div>
+        </div>
+        <div class="catalog-groups">
+          <section class="catalog-group">
+            <div class="group-title">
+              <span>CONVERT
+              </span>
+              <i>05
+                <!-- --> TOOLS
+              </i>
+            </div>
+            <div class="tool-cards">
+              <a class="tool-card" href="/easy-png-tools/gradient">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Convert JPG to PNG
+                  </strong>
+                  <span>Re-encode JPEG files as lossless PNG while preserving transparency.
+                  </span>
+                </span>
+                <span class="tool-index">01
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Convert WebP to PNG
+                  </strong>
+                  <span>Turn WebP images into a universal PNG format for any workflow.
+                  </span>
+                </span>
+                <span class="tool-index">02
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>PNG to Base64
+                  </strong>
+                  <span>Encode an image as a base64 string for embedding in code or styles.
+                  </span>
+                </span>
+                <span class="tool-index">03
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>PNG to Data URI
+                  </strong>
+                  <span>Build a complete data URI ready for HTML and CSS.
+                  </span>
+                </span>
+                <span class="tool-index">04
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Convert PNG to JPG
+                  </strong>
+                  <span>Composite transparency over a selected backdrop and export JPEG.
+                  </span>
+                </span>
+                <span class="tool-index">05
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+            </div>
+          </section>
+          <section class="catalog-group">
+            <div class="group-title">
+              <span>TRANSPARENCY
+              </span>
+              <i>05
+                <!-- --> TOOLS
+              </i>
+            </div>
+            <div class="tool-cards">
+              <a class="tool-card" href="/easy-png-tools/background-remover">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Remove background PNG
+                  </strong>
+                  <span>Remove a solid background by color, tolerance, or edge-connected regions.
+                  </span>
+                </span>
+                <span class="tool-index">01
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Extract alpha mask
+                  </strong>
+                  <span>Turn the alpha channel into a clean black-and-white mask.
+                  </span>
+                </span>
+                <span class="tool-index">02
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Round corners PNG
+                  </strong>
+                  <span>Clip the image corners by a precise radius percentage.
+                  </span>
+                </span>
+                <span class="tool-index">03
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Outline PNG
+                  </strong>
+                  <span>Add a colored ring around opaque content with adjustable thickness.
+                  </span>
+                </span>
+                <span class="tool-index">04
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Change PNG opacity
+                  </strong>
+                  <span>Multiply the alpha channel while keeping the original colors unchanged.
+                  </span>
+                </span>
+                <span class="tool-index">05
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+            </div>
+          </section>
+          <section class="catalog-group">
+            <div class="group-title">
+              <span>COLOR
+              </span>
+              <i>05
+                <!-- --> TOOLS
+              </i>
+            </div>
+            <div class="tool-cards">
+              <a class="tool-card" href="/easy-png-tools/gradient">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Create gradient PNG
+                  </strong>
+                  <span>Generate a smooth transition between two colors with direction controls.
+                  </span>
+                </span>
+                <span class="tool-index">01
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Grayscale PNG
+                  </strong>
+                  <span>Convert the image to luminance-based shades of gray.
+                  </span>
+                </span>
+                <span class="tool-index">02
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Invert colors PNG
+                  </strong>
+                  <span>Invert every color channel while leaving alpha untouched.
+                  </span>
+                </span>
+                <span class="tool-index">03
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Brightness &amp; contrast
+                  </strong>
+                  <span>Adjust brightness and contrast across a controlled range.
+                  </span>
+                </span>
+                <span class="tool-index">04
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Temperature PNG
+                  </strong>
+                  <span>Make an image warmer or cooler with a single precise control.
+                  </span>
+                </span>
+                <span class="tool-index">05
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+            </div>
+          </section>
+          <section class="catalog-group">
+            <div class="group-title">
+              <span>GEOMETRY
+              </span>
+              <i>05
+                <!-- --> TOOLS
+              </i>
+            </div>
+            <div class="tool-cards">
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Resize PNG
+                  </strong>
+                  <span>Scale an image with bilinear interpolation and optional aspect lock.
+                  </span>
+                </span>
+                <span class="tool-index">01
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Crop PNG
+                  </strong>
+                  <span>Cut a rectangular area with exact coordinates and dimensions.
+                  </span>
+                </span>
+                <span class="tool-index">02
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Rotate PNG
+                  </strong>
+                  <span>Rotate by 90, 180, or 270 degrees without quality loss.
+                  </span>
+                </span>
+                <span class="tool-index">03
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Flip PNG
+                  </strong>
+                  <span>Mirror the image horizontally or vertically.
+                  </span>
+                </span>
+                <span class="tool-index">04
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Add padding to PNG
+                  </strong>
+                  <span>Expand the canvas on all sides by a chosen number of pixels.
+                  </span>
+                </span>
+                <span class="tool-index">05
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+            </div>
+          </section>
+          <section class="catalog-group">
+            <div class="group-title">
+              <span>FILTERS
+              </span>
+              <i>04
+                <!-- --> TOOLS
+              </i>
+            </div>
+            <div class="tool-cards">
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Blur PNG
+                  </strong>
+                  <span>Apply a fast Gaussian-style blur with transparent edge handling.
+                  </span>
+                </span>
+                <span class="tool-index">01
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Sharpen PNG
+                  </strong>
+                  <span>Emphasize edges with an adjustable sharpening kernel.
+                  </span>
+                </span>
+                <span class="tool-index">02
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Vignette PNG
+                  </strong>
+                  <span>Smoothly darken the image edges while preserving the center.
+                  </span>
+                </span>
+                <span class="tool-index">03
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>JPEG artifacts
+                  </strong>
+                  <span>Simulate low-quality JPEG recompression for testing.
+                  </span>
+                </span>
+                <span class="tool-index">04
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+            </div>
+          </section>
+          <section class="catalog-group">
+            <div class="group-title">
+              <span>ANALYZE
+              </span>
+              <i>04
+                <!-- --> TOOLS
+              </i>
+            </div>
+            <div class="tool-cards">
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>PNG info
+                  </strong>
+                  <span>Inspect dimensions, alpha presence, and unique color count.
+                  </span>
+                </span>
+                <span class="tool-index">01
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Check grayscale
+                  </strong>
+                  <span>Report whether the image contains only shades of gray.
+                  </span>
+                </span>
+                <span class="tool-index">02
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>Check transparency
+                  </strong>
+                  <span>Detect transparent and semi-transparent pixels.
+                  </span>
+                </span>
+                <span class="tool-index">03
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+              <a class="tool-card" href="#">
+                <span class="tool-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
+                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                    </path>
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5">
+                    </path>
+                    <circle cx="10" cy="12" r="2">
+                    </circle>
+                    <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
+                    </path>
+                  </svg>
+                </span>
+                <span class="tool-copy">
+                  <strong>PNG orientation
+                  </strong>
+                  <span>Classify the image as portrait, landscape, or square.
+                  </span>
+                </span>
+                <span class="tool-index">04
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
+                  <path d="M7 7h10v10">
+                  </path>
+                  <path d="M7 17 17 7">
+                  </path>
+                </svg>
+              </a>
+            </div>
+          </section>
+        </div>
+        <footer class="catalog-footer">ALL OPERATIONS RUN LOCALLY 
+          <span>•
+          </span> YOUR FILES NEVER LEAVE THIS DEVICE
+        </footer>
       </div>
-      <div class="catalog-groups">
-        <section class="catalog-group">
-          <div class="group-title">
-            <span>CONVERT
-            </span>
-            <i>05
-              <!-- --> TOOLS
-            </i>
-          </div>
-          <div class="tool-cards">
-            <a class="tool-card" href="/easy-png-tools/gradient">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Convert JPG to PNG
-                </strong>
-                <span>Re-encode JPEG files as lossless PNG while preserving transparency.
-                </span>
-              </span>
-              <span class="tool-index">01
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Convert WebP to PNG
-                </strong>
-                <span>Turn WebP images into a universal PNG format for any workflow.
-                </span>
-              </span>
-              <span class="tool-index">02
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>PNG to Base64
-                </strong>
-                <span>Encode an image as a base64 string for embedding in code or styles.
-                </span>
-              </span>
-              <span class="tool-index">03
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>PNG to Data URI
-                </strong>
-                <span>Build a complete data URI ready for HTML and CSS.
-                </span>
-              </span>
-              <span class="tool-index">04
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Convert PNG to JPG
-                </strong>
-                <span>Composite transparency over a selected backdrop and export JPEG.
-                </span>
-              </span>
-              <span class="tool-index">05
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-          </div>
-        </section>
-        <section class="catalog-group">
-          <div class="group-title">
-            <span>TRANSPARENCY
-            </span>
-            <i>05
-              <!-- --> TOOLS
-            </i>
-          </div>
-          <div class="tool-cards">
-            <a class="tool-card" href="/easy-png-tools/background-remover">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Remove background PNG
-                </strong>
-                <span>Remove a solid background by color, tolerance, or edge-connected regions.
-                </span>
-              </span>
-              <span class="tool-index">01
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Extract alpha mask
-                </strong>
-                <span>Turn the alpha channel into a clean black-and-white mask.
-                </span>
-              </span>
-              <span class="tool-index">02
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Round corners PNG
-                </strong>
-                <span>Clip the image corners by a precise radius percentage.
-                </span>
-              </span>
-              <span class="tool-index">03
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Outline PNG
-                </strong>
-                <span>Add a colored ring around opaque content with adjustable thickness.
-                </span>
-              </span>
-              <span class="tool-index">04
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Change PNG opacity
-                </strong>
-                <span>Multiply the alpha channel while keeping the original colors unchanged.
-                </span>
-              </span>
-              <span class="tool-index">05
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-          </div>
-        </section>
-        <section class="catalog-group">
-          <div class="group-title">
-            <span>COLOR
-            </span>
-            <i>05
-              <!-- --> TOOLS
-            </i>
-          </div>
-          <div class="tool-cards">
-            <a class="tool-card" href="/easy-png-tools/gradient">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Create gradient PNG
-                </strong>
-                <span>Generate a smooth transition between two colors with direction controls.
-                </span>
-              </span>
-              <span class="tool-index">01
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Grayscale PNG
-                </strong>
-                <span>Convert the image to luminance-based shades of gray.
-                </span>
-              </span>
-              <span class="tool-index">02
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Invert colors PNG
-                </strong>
-                <span>Invert every color channel while leaving alpha untouched.
-                </span>
-              </span>
-              <span class="tool-index">03
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Brightness &amp; contrast
-                </strong>
-                <span>Adjust brightness and contrast across a controlled range.
-                </span>
-              </span>
-              <span class="tool-index">04
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Temperature PNG
-                </strong>
-                <span>Make an image warmer or cooler with a single precise control.
-                </span>
-              </span>
-              <span class="tool-index">05
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-          </div>
-        </section>
-        <section class="catalog-group">
-          <div class="group-title">
-            <span>GEOMETRY
-            </span>
-            <i>05
-              <!-- --> TOOLS
-            </i>
-          </div>
-          <div class="tool-cards">
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Resize PNG
-                </strong>
-                <span>Scale an image with bilinear interpolation and optional aspect lock.
-                </span>
-              </span>
-              <span class="tool-index">01
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Crop PNG
-                </strong>
-                <span>Cut a rectangular area with exact coordinates and dimensions.
-                </span>
-              </span>
-              <span class="tool-index">02
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Rotate PNG
-                </strong>
-                <span>Rotate by 90, 180, or 270 degrees without quality loss.
-                </span>
-              </span>
-              <span class="tool-index">03
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Flip PNG
-                </strong>
-                <span>Mirror the image horizontally or vertically.
-                </span>
-              </span>
-              <span class="tool-index">04
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Add padding to PNG
-                </strong>
-                <span>Expand the canvas on all sides by a chosen number of pixels.
-                </span>
-              </span>
-              <span class="tool-index">05
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-          </div>
-        </section>
-        <section class="catalog-group">
-          <div class="group-title">
-            <span>FILTERS
-            </span>
-            <i>04
-              <!-- --> TOOLS
-            </i>
-          </div>
-          <div class="tool-cards">
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Blur PNG
-                </strong>
-                <span>Apply a fast Gaussian-style blur with transparent edge handling.
-                </span>
-              </span>
-              <span class="tool-index">01
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Sharpen PNG
-                </strong>
-                <span>Emphasize edges with an adjustable sharpening kernel.
-                </span>
-              </span>
-              <span class="tool-index">02
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Vignette PNG
-                </strong>
-                <span>Smoothly darken the image edges while preserving the center.
-                </span>
-              </span>
-              <span class="tool-index">03
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>JPEG artifacts
-                </strong>
-                <span>Simulate low-quality JPEG recompression for testing.
-                </span>
-              </span>
-              <span class="tool-index">04
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-          </div>
-        </section>
-        <section class="catalog-group">
-          <div class="group-title">
-            <span>ANALYZE
-            </span>
-            <i>04
-              <!-- --> TOOLS
-            </i>
-          </div>
-          <div class="tool-cards">
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>PNG info
-                </strong>
-                <span>Inspect dimensions, alpha presence, and unique color count.
-                </span>
-              </span>
-              <span class="tool-index">01
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Check grayscale
-                </strong>
-                <span>Report whether the image contains only shades of gray.
-                </span>
-              </span>
-              <span class="tool-index">02
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>Check transparency
-                </strong>
-                <span>Detect transparent and semi-transparent pixels.
-                </span>
-              </span>
-              <span class="tool-index">03
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-            <a class="tool-card" href="#">
-              <span class="tool-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image" aria-hidden="true">
-                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
-                  </path>
-                  <path d="M14 2v5a1 1 0 0 0 1 1h5">
-                  </path>
-                  <circle cx="10" cy="12" r="2">
-                  </circle>
-                  <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22">
-                  </path>
-                </svg>
-              </span>
-              <span class="tool-copy">
-                <strong>PNG orientation
-                </strong>
-                <span>Classify the image as portrait, landscape, or square.
-                </span>
-              </span>
-              <span class="tool-index">04
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right tool-arrow" aria-hidden="true">
-                <path d="M7 7h10v10">
-                </path>
-                <path d="M7 17 17 7">
-                </path>
-              </svg>
-            </a>
-          </div>
-        </section>
-      </div>
-      <footer class="catalog-footer">ALL OPERATIONS RUN LOCALLY 
-        <span>•
-        </span> YOUR FILES NEVER LEAVE THIS DEVICE
-      </footer>
     </main>
     <!--$-->
     <!--/$-->

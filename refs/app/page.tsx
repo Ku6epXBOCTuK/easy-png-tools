@@ -1,7 +1,8 @@
 'use client'
 
+import TopBar from '@/components/top-bar'
 import { useMemo, useState } from 'react'
-import { ArrowDownToLine, Check, ChevronDown, CircleHelp, Download, GripVertical, Link2, Moon, MoreHorizontal, Plus, RotateCcw, Settings2, SlidersHorizontal, Sun, Upload, X } from 'lucide-react'
+import { ArrowDownToLine, Check, ChevronDown, Download, GripVertical, Link2, MoreHorizontal, Plus, RotateCcw, Settings2, SlidersHorizontal, Upload, X } from 'lucide-react'
 
 const initialSteps = [
   { id: 1, title: 'Gradient background', type: 'BACKGROUND' },
@@ -20,14 +21,13 @@ export default function Page() {
   const [radius, setRadius] = useState(18)
   const [outline, setOutline] = useState(2)
   const [language, setLanguage] = useState('RU')
-  const [dark, setDark] = useState(false)
   const [showIntermediate, setShowIntermediate] = useState(true)
   const [gradient, setGradient] = useState('#DCEBFF')
   const gradientStyle = useMemo(() => ({ background: `linear-gradient(${angle}deg, ${gradient}, #8BC8F5)` }), [angle, gradient])
   const finalStyle = { ...gradientStyle, borderRadius: radius, boxShadow: `0 0 0 ${outline}px #16202B` }
 
-  return <main className={dark ? 'app-shell dark-mode' : 'app-shell'}>
-    <header className="topbar"><div className="brand"><span className="brand-mark">EP</span><span>easy-png-tools</span><span className="version">/ DEMO</span></div><div className="top-actions"><span className="status"><i /> AUTO PIPELINE</span><button className="icon-btn" aria-label="Help"><CircleHelp size={17} /></button><button className="icon-btn" aria-label="Toggle theme" onClick={() => setDark(!dark)}>{dark ? <Sun size={17} /> : <Moon size={17} />}</button><div className="language"><button className={language === 'RU' ? 'active' : ''} onClick={() => setLanguage('RU')}>RU</button><button className={language === 'EN' ? 'active' : ''} onClick={() => setLanguage('EN')}>EN</button></div></div></header>
+  return <main className="app-shell">
+    <TopBar section="WORKSPACE" status="AUTO PIPELINE" />
     <div className="page-grid">
       <section className="workspace"><div className="eyebrow">PNG PROCESSING <span>/</span> WORKSPACE</div><div className="title-row"><div><h1>Build your image pipeline.</h1><p className="lede">Chain simple tools together. Every change is processed automatically and previewed at each stage.</p></div><div className="file-chip"><Upload size={15} /><span>source.png</span><b>1.8 MB</b></div></div>
         <div className="pipeline-head"><div><span className="label">PROCESSING PIPELINE</span><strong>{steps.length} active steps <em>• LIVE</em></strong></div><button className="add-btn" onClick={() => setSteps([...steps, { id: Date.now(), title: 'New adjustment', type: 'STYLE' }])}><Plus size={15} /> Add tool</button></div>

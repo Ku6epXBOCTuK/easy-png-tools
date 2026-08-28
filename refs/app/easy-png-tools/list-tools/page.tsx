@@ -1,5 +1,6 @@
 "use client"
 
+import TopBar from '@/components/top-bar'
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { ArrowUpRight, FileImage, Filter, Search, Sparkles } from "lucide-react"
@@ -17,11 +18,11 @@ export default function ListToolsPage() {
   const [query, setQuery] = useState("")
   const [active, setActive] = useState("ALL")
   const filtered = useMemo(() => groups.map(group => ({ ...group, tools: group.tools.filter(([name, description]) => (active === "ALL" || active === group.name) && `${name} ${description}`.toLowerCase().includes(query.toLowerCase())) })).filter(group => group.tools.length), [query, active])
-  return <main className="catalog-page"><header className="catalog-nav"><Link href="/" className="catalog-brand">easy-png-tools</Link><nav><Link href="/">Workspace</Link><Link className="current" href="/easy-png-tools/list-tools">Catalog</Link></nav><span className="catalog-nav-status">LOCAL MODE / READY</span></header>
+  return <main className="app-shell"><TopBar section="CATALOG" status="LOCAL MODE / READY" /><div className="catalog-page">
     <div className="catalog-head"><div><div className="eyebrow">EASY-PNG-TOOLS / CATALOG</div><h1>Tool catalog</h1><p>Focused utilities for working with PNG. Inspect, transform, and export — locally in your browser.</p></div><div className="catalog-total"><b>32</b><span>TOOLS<br />AVAILABLE</span></div></div>
     <div className="catalog-toolbar"><label className="catalog-search"><Search size={16} /><input aria-label="Search tools" placeholder="Search tools..." value={query} onChange={e => setQuery(e.target.value)} /></label><div className="catalog-filters"><Filter size={15} />{["ALL", ...groups.map(g => g.name)].map(name => <button key={name} className={active === name ? "active" : ""} onClick={() => setActive(name)}>{name}</button>)}</div></div>
     <div className="catalog-groups">{filtered.map(group => <section className="catalog-group" key={group.name}><div className="group-title"><span>{group.name}</span><i>{String(group.tools.length).padStart(2, "0")} TOOLS</i></div><div className="tool-cards">{group.tools.map(([name, description, href], index) => <Link className="tool-card" href={href || "#"} key={name} onClick={e => { if (!href) e.preventDefault() }}><span className="tool-icon"><FileImage size={19} /></span><span className="tool-copy"><strong>{name}</strong><span>{description}</span></span><span className="tool-index">{String(index + 1).padStart(2, "0")}</span><ArrowUpRight size={16} className="tool-arrow" /></Link>)}</div></section>)}</div>
     {!filtered.length && <div className="catalog-empty"><Sparkles size={18} /> No tools match your search.</div>}
     <footer className="catalog-footer">ALL OPERATIONS RUN LOCALLY <span>•</span> YOUR FILES NEVER LEAVE THIS DEVICE</footer>
-  </main>
+  </div></main>
 }

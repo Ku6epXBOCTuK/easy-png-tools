@@ -1,1 +1,10 @@
 node_modules
+
+# Reference source (legacy Next.js design in refs/): branding icons are not needed
+refs/public/icon.svg
+refs/public/icon-dark-32x32.png
+refs/public/icon-light-32x32.png
+refs/public/apple-icon.png
+refs/public/placeholder-logo.svg
+refs/public/placeholder-logo.png
+refs/public/placeholder.svg

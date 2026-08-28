@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "html": "node extract-static.mjs .next\\server\\app ..\\refs-html",
     "start": "next start"
   },
   "dependencies": {

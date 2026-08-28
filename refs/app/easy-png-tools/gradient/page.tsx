@@ -1,7 +1,8 @@
 'use client'
 
+import TopBar from '@/components/top-bar'
 import { useMemo, useState } from 'react'
-import { Check, ChevronDown, Copy, Download, Moon, RotateCcw, Sun } from 'lucide-react'
+import { Check, ChevronDown, Copy, Download, RotateCcw } from 'lucide-react'
 
 const directions = ['0° →', '45° ↗', '90° ↑', '135° ↖', '180° ←', '225° ↙', '270° ↓', '315° ↘']
 
@@ -11,14 +12,13 @@ export default function GradientPage() {
   const [direction, setDirection] = useState(135)
   const [opacity, setOpacity] = useState(100)
   const [type, setType] = useState<'linear' | 'radial'>('linear')
-  const [dark, setDark] = useState(true)
   const [copied, setCopied] = useState(false)
   const gradient = useMemo(() => type === 'linear' ? `linear-gradient(${direction}deg, ${start} 0%, ${end} 100%)` : `radial-gradient(circle, ${start} 0%, ${end} 100%)`, [direction, end, start, type])
   const css = `background: ${gradient};\nopacity: ${opacity / 100};`
   const reset = () => { setStart('#1769D2'); setEnd('#00A8C7'); setDirection(135); setOpacity(100); setType('linear') }
   const copyCss = async () => { await navigator.clipboard?.writeText(css); setCopied(true); setTimeout(() => setCopied(false), 1400) }
-  return <main className={`app-shell ${dark ? 'dark-mode' : ''}`}>
-    <header className="topbar"><div className="brand"><span className="brand-mark">EP</span><span>easy-png-tools</span><span className="version">/ GRADIENT</span></div><div className="top-actions"><button className="icon-btn" aria-label="Toggle theme" onClick={() => setDark(!dark)}>{dark ? <Sun size={17} /> : <Moon size={17} />}</button></div></header>
+  return <main className="app-shell">
+    <TopBar section="GRADIENT" status="LIVE PREVIEW" />
     <div className="tool-page"><div className="eyebrow">PNG PROCESSING <span>/</span> SINGLE TOOL</div><div className="tool-title"><div><h1>Gradient background.</h1><p className="lede">Create a clean, export-ready gradient with precise control over color, direction and transparency.</p></div><span className="tool-status"><i /> LIVE PREVIEW</span></div>
       <div className="gradient-layout"><section className="settings-panel"><div className="panel-heading"><div><span className="label">GRADIENT SETTINGS</span><strong>Configure output</strong></div><span className="step-type">TOOL 01</span></div>
         <div className="setting-group"><label>GRADIENT TYPE</label><div className="segmented wide"><button className={type === 'linear' ? 'selected' : ''} onClick={() => setType('linear')}>Linear</button><button className={type === 'radial' ? 'selected' : ''} onClick={() => setType('radial')}>Radial</button></div></div>

@@ -7,11 +7,6 @@
 @layer properties {
   @supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))) {
   *,:before,:after,::backdrop {
-  --tw-rotate-x:initial;
-  --tw-rotate-y:initial;
-  --tw-rotate-z:initial;
-  --tw-skew-x:initial;
-  --tw-skew-y:initial;
   --tw-border-style:solid;
   --tw-font-weight:initial;
   --tw-shadow:0 0 #0000;
@@ -290,13 +285,7 @@ button,input:where([type=button],[type=reset],[type=submit]) {
 }
 @layer components;
   @layer utilities {
-  .static {
-  position:static
-}
-.inline {
-  display:inline
-}
-.inline-flex {
+  .inline-flex {
   display:inline-flex
 }
 .size-6 {
@@ -329,9 +318,6 @@ button,input:where([type=button],[type=reset],[type=submit]) {
 }
 .shrink-0 {
   flex-shrink:0
-}
-.transform {
-  transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)
 }
 .items-center {
   align-items:center
@@ -630,7 +616,7 @@ button {
   --line:#33414c;
   --muted:#91a0ac;
   --blue:#54a2ff;
-  background-image:linear-gradient(#1b252d 1px,#0000 1px),linear-gradient(90deg,#1b252d 1px,#0000 1px)
+  background-image:linear-gradient(#1e2a3447 1px,#0000 1px),linear-gradient(90deg,#1e2a3447 1px,#0000 1px)
 }
 .topbar,.brand,.top-actions,.language,.status,.title-row,.pipeline-head,.step-heading,.step-tools,.pipeline-footer,.preview-top,.footer {
   align-items:center;
@@ -642,6 +628,26 @@ button {
   justify-content:space-between;
   height:64px;
   padding:0 clamp(20px,4vw,64px)
+}
+.topbar>.brand {
+  color:var(--foreground);
+  text-decoration:none
+}
+.top-nav {
+  align-items:center;
+  gap:22px;
+  margin-left:auto;
+  margin-right:28px;
+  display:flex
+}
+.top-nav a {
+  color:var(--muted);
+  font:10px var(--font-mono);
+  white-space:nowrap;
+  text-decoration:none
+}
+.top-nav a:hover,.top-nav a.active {
+  color:var(--blue)
 }
 .brand {
   font:600 14px var(--font-mono);
@@ -1104,6 +1110,9 @@ h1 {
 }
 
 }
+.dark-mode .app-shell {
+  background-image:linear-gradient(#1e2a3447 1px,#0000 1px),linear-gradient(90deg,#1e2a3447 1px,#0000 1px)
+}
 .dark-mode .tile-canvas {
   background-color:#202a31;
   background-image:linear-gradient(45deg,#29343c 25%,#0000 25%),linear-gradient(-45deg,#29343c 25%,#0000 25%),linear-gradient(45deg,#0000 75%,#29343c 75%),linear-gradient(-45deg,#0000 75%,#29343c 75%)
@@ -1113,7 +1122,22 @@ h1 {
 }
 @media (max-width:800px) {
   .topbar {
-  padding:0 16px
+  flex-wrap:wrap;
+  gap:12px;
+  height:auto;
+  min-height:64px;
+  padding:12px 16px
+}
+.top-nav {
+  order:3;
+  gap:12px;
+  width:100%;
+  margin:0;
+  padding-bottom:2px;
+  overflow:auto
+}
+.top-nav a {
+  font-size:9px
 }
 .status {
   display:none
@@ -1532,9 +1556,9 @@ h1 {
 }
 .catalog-page {
   width:100%;
-  max-width:1680px;
-  margin:0 auto;
-  padding:64px clamp(24px,4vw,72px) 72px
+  max-width:none;
+  margin:0;
+  padding:60px clamp(24px,4vw,72px) 72px
 }
 .catalog-head {
   border-bottom:1px solid var(--line);
@@ -1804,26 +1828,6 @@ h1 {
 }
 
 }
-@property --tw-rotate-x {
-  syntax:"*";
-  inherits:false
-}
-@property --tw-rotate-y {
-  syntax:"*";
-  inherits:false
-}
-@property --tw-rotate-z {
-  syntax:"*";
-  inherits:false
-}
-@property --tw-skew-x {
-  syntax:"*";
-  inherits:false
-}
-@property --tw-skew-y {
-  syntax:"*";
-  inherits:false
-}
 @property --tw-border-style {
   syntax:"*";
   inherits:false;
@@ -1984,43 +1988,57 @@ h1 {
       <!--$-->
       <!--/$-->
     </div>
-    <main class="app-shell dark-mode">
+    <main class="app-shell">
       <header class="topbar">
-        <div class="brand">
+        <a class="brand" href="/">
           <span class="brand-mark">EP
           </span>
           <span>easy-png-tools
           </span>
-          <span class="version">/ BACKGROUND REMOVER
+          <span class="version">/ 
+            <!-- -->BACKGROUND REMOVER
           </span>
-        </div>
+        </a>
+        <nav class="top-nav" aria-label="Primary navigation">
+          <a class="" href="/">Workspace
+          </a>
+          <a class="" href="/easy-png-tools/list-tools">Catalog
+          </a>
+          <a class="" href="/easy-png-tools/gradient">Gradient
+          </a>
+          <a class="active" href="/easy-png-tools/background-remover">Background remover
+          </a>
+        </nav>
         <div class="top-actions">
           <span class="status">
             <i>
-            </i> AUTO PROCESSING
+            </i>
+            <!-- -->AUTO PROCESSING
           </span>
-          <button class="icon-btn" aria-label="Toggle theme">
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun" aria-hidden="true">
-              <circle cx="12" cy="12" r="4">
+          <button class="icon-btn" aria-label="Help">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-question-mark" aria-hidden="true">
+              <circle cx="12" cy="12" r="10">
               </circle>
-              <path d="M12 2v2">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3">
               </path>
-              <path d="M12 20v2">
-              </path>
-              <path d="m4.93 4.93 1.41 1.41">
-              </path>
-              <path d="m17.66 17.66 1.41 1.41">
-              </path>
-              <path d="M2 12h2">
-              </path>
-              <path d="M20 12h2">
-              </path>
-              <path d="m6.34 17.66-1.41 1.41">
-              </path>
-              <path d="m19.07 4.93-1.41 1.41">
+              <path d="M12 17h.01">
               </path>
             </svg>
           </button>
+          <button class="icon-btn" aria-label="Toggle theme">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon" aria-hidden="true">
+              <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401">
+              </path>
+            </svg>
+          </button>
+          <div class="language">
+            <button class="active">RU
+            </button>
+            <span>/
+            </span>
+            <button>EN
+            </button>
+          </div>
         </div>
       </header>
       <div class="tool-page">
