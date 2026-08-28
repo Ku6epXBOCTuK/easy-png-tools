@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T11:41:19.954Z",
+  "generatedAt": "2026-08-28T11:58:18.224Z",
   "ours": "http://127.0.0.1:5179/preview/demo",
   "ref": "C:\\+XBOCTuK\\+life_projects\\easy-png-tools\\refs-html\\demo.html",
   "tokenDiffs": {
@@ -197,7 +197,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "/",
       "deltas": {
@@ -231,7 +231,7 @@
         },
         "rect": {
           "ours": {
-            "x": 173,
+            "x": 165,
             "y": 124,
             "w": 7,
             "h": 13
@@ -246,7 +246,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(1)>h1:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>h1:nth-child(2)",
       "tag": "h1",
       "text": "Build your image pipeline.",
       "deltas": {
@@ -271,7 +271,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(1)>p:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>p:nth-child(3)",
       "tag": "p",
       "text": "Chain simple tools together. Every chang",
       "deltas": {
@@ -292,7 +292,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>span:nth-child(2)",
       "tag": "span",
       "text": "source.png",
       "deltas": {
@@ -313,7 +313,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(2)>b:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>b:nth-child(3)",
       "tag": "b",
       "text": "1.8 MB",
       "deltas": {
@@ -334,16 +334,32 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "PROCESSING PIPELINE",
       "deltas": {
+        "fontWeight": {
+          "ours": "500",
+          "ref": "400"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "1.2px"
+        },
+        "lineHeight": {
+          "ours": "12px",
+          "ref": "normal"
+        },
+        "display": {
+          "ours": "block",
+          "ref": "inline"
+        },
         "rect": {
           "ours": {
             "x": 58,
-            "y": 434,
-            "w": 137,
-            "h": 13
+            "y": 428,
+            "w": 154,
+            "h": 12
           },
           "ref": {
             "x": 58,
@@ -355,14 +371,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(3)>div:nth-child(1)>strong:nth-child(2)>em:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>strong:nth-child(2)>em:nth-child(1)",
       "tag": "em",
       "text": "• LIVE",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 184,
-            "y": 457,
+            "x": 175,
+            "y": 451,
             "w": 36,
             "h": 13
           },
@@ -376,7 +392,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(2)",
       "tag": "span",
       "text": "01",
       "deltas": {
@@ -387,7 +403,7 @@
         "rect": {
           "ours": {
             "x": 95,
-            "y": 510,
+            "y": 504,
             "w": 13,
             "h": 14
           },
@@ -401,7 +417,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(1)>span:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(3)",
       "tag": "span",
       "text": "BACKGROUND",
       "deltas": {
@@ -412,7 +428,7 @@
         "rect": {
           "ours": {
             "x": 116,
-            "y": 510,
+            "y": 504,
             "w": 72,
             "h": 13
           },
@@ -426,7 +442,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(1)>span:nth-child(4)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(1)>span:nth-child(4)",
       "tag": "span",
       "text": "Gradient background",
       "deltas": {
@@ -437,7 +453,7 @@
         "rect": {
           "ours": {
             "x": 196,
-            "y": 507,
+            "y": 501,
             "w": 171,
             "h": 19
           },
@@ -451,48 +467,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
-      "tag": "span",
-      "text": "COLOR",
-      "deltas": {
-        "fontWeight": {
-          "ours": "500",
-          "ref": "400"
-        },
-        "margin": {
-          "ours": "0px",
-          "ref": "0px 0px 8px"
-        },
-        "letterSpacing": {
-          "ours": "1px",
-          "ref": "0.8px"
-        },
-        "lineHeight": {
-          "ours": "12px",
-          "ref": "normal"
-        },
-        "display": {
-          "ours": "block",
-          "ref": "flex"
-        },
-        "rect": {
-          "ours": {
-            "x": 71,
-            "y": 575,
-            "w": 203,
-            "h": 12
-          },
-          "ref": {
-            "x": 143,
-            "y": 546,
-            "w": 189,
-            "h": 12
-          }
-        }
-      }
-    },
-    {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)",
       "tag": "button",
       "text": "100",
       "deltas": {
@@ -511,7 +486,7 @@
         "rect": {
           "ours": {
             "x": 491,
-            "y": 596,
+            "y": 590,
             "w": 42,
             "h": 30
           },
@@ -525,7 +500,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(2)",
       "tag": "button",
       "text": "75",
       "deltas": {
@@ -544,7 +519,7 @@
         "rect": {
           "ours": {
             "x": 533,
-            "y": 596,
+            "y": 590,
             "w": 37,
             "h": 30
           },
@@ -558,7 +533,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(3)",
       "tag": "button",
       "text": "50",
       "deltas": {
@@ -577,7 +552,7 @@
         "rect": {
           "ours": {
             "x": 569,
-            "y": 596,
+            "y": 590,
             "w": 37,
             "h": 30
           },
@@ -591,7 +566,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(4)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(4)",
       "tag": "button",
       "text": "25",
       "deltas": {
@@ -610,7 +585,7 @@
         "rect": {
           "ours": {
             "x": 606,
-            "y": 596,
+            "y": 590,
             "w": 37,
             "h": 30
           },
@@ -624,7 +599,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(2)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(2)",
       "tag": "span",
       "text": "02",
       "deltas": {
@@ -635,7 +610,7 @@
         "rect": {
           "ours": {
             "x": 95,
-            "y": 672,
+            "y": 655,
             "w": 13,
             "h": 14
           },
@@ -649,7 +624,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(2)>div:nth-child(1)>span:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(3)",
       "tag": "span",
       "text": "TRANSFORM",
       "deltas": {
@@ -660,7 +635,7 @@
         "rect": {
           "ours": {
             "x": 116,
-            "y": 672,
+            "y": 656,
             "w": 65,
             "h": 13
           },
@@ -674,7 +649,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(2)>div:nth-child(1)>span:nth-child(4)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>span:nth-child(4)",
       "tag": "span",
       "text": "Remove background",
       "deltas": {
@@ -685,7 +660,7 @@
         "rect": {
           "ours": {
             "x": 189,
-            "y": 669,
+            "y": 653,
             "w": 153,
             "h": 19
           },
@@ -699,7 +674,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
       "tag": "span",
       "text": "03",
       "deltas": {
@@ -710,7 +685,7 @@
         "rect": {
           "ours": {
             "x": 95,
-            "y": 786,
+            "y": 769,
             "w": 13,
             "h": 14
           },
@@ -724,7 +699,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(3)>div:nth-child(1)>span:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(3)",
       "tag": "span",
       "text": "STYLE",
       "deltas": {
@@ -735,7 +710,7 @@
         "rect": {
           "ours": {
             "x": 116,
-            "y": 786,
+            "y": 770,
             "w": 36,
             "h": 13
           },
@@ -749,7 +724,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(3)>div:nth-child(1)>span:nth-child(4)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(3)>div:nth-child(1)>span:nth-child(4)",
       "tag": "span",
       "text": "Add outline",
       "deltas": {
@@ -760,7 +735,7 @@
         "rect": {
           "ours": {
             "x": 160,
-            "y": 783,
+            "y": 767,
             "w": 99,
             "h": 19
           },
@@ -774,7 +749,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(4)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(1)>span:nth-child(2)",
       "tag": "span",
       "text": "04",
       "deltas": {
@@ -785,7 +760,7 @@
         "rect": {
           "ours": {
             "x": 95,
-            "y": 948,
+            "y": 911,
             "w": 13,
             "h": 14
           },
@@ -799,7 +774,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(4)>div:nth-child(1)>span:nth-child(4)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(1)>span:nth-child(4)",
       "tag": "span",
       "text": "Round corners",
       "deltas": {
@@ -810,7 +785,7 @@
         "rect": {
           "ours": {
             "x": 160,
-            "y": 945,
+            "y": 909,
             "w": 117,
             "h": 19
           },
@@ -824,7 +799,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>label:nth-child(2)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(3)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>label:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "Preserve aspect ratio",
       "deltas": {
@@ -843,7 +818,7 @@
         "rect": {
           "ours": {
             "x": 399,
-            "y": 1032,
+            "y": 986,
             "w": 129,
             "h": 18
           },
@@ -857,16 +832,32 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "PIPELINE OUTPUTS",
       "deltas": {
+        "fontWeight": {
+          "ours": "500",
+          "ref": "400"
+        },
+        "letterSpacing": {
+          "ours": "1px",
+          "ref": "1.2px"
+        },
+        "lineHeight": {
+          "ours": "12px",
+          "ref": "normal"
+        },
+        "display": {
+          "ours": "block",
+          "ref": "inline"
+        },
         "rect": {
           "ours": {
             "x": 799,
-            "y": 177,
-            "w": 58,
-            "h": 33
+            "y": 178,
+            "w": 93,
+            "h": 24
           },
           "ref": {
             "x": 799,
@@ -878,14 +869,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(1)>strong:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(1)>strong:nth-child(2)",
       "tag": "strong",
       "text": "Visual history",
       "deltas": {
         "rect": {
           "ours": {
             "x": 799,
-            "y": 216,
+            "y": 209,
             "w": 93,
             "h": 36
           },
@@ -899,7 +890,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>button:nth-child(2)>span:nth-child(2)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>button:nth-child(2)>span:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "1.2 MB",
       "deltas": {
@@ -936,7 +927,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "DIMENSIONS",
       "deltas": {
@@ -965,7 +956,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(1)>span:nth-child(2)",
       "tag": "span",
       "text": "1200 × 800 px",
       "deltas": {
@@ -990,7 +981,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "FORMAT",
       "deltas": {
@@ -1019,7 +1010,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>span:nth-child(2)",
       "tag": "span",
       "text": "PNG-24",
       "deltas": {
@@ -1044,7 +1035,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(3)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(3)>span:nth-child(1)",
       "tag": "span",
       "text": "SIZE",
       "deltas": {
@@ -1073,7 +1064,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "SOURCE",
       "deltas": {
@@ -1088,8 +1079,8 @@
         "rect": {
           "ours": {
             "x": 806,
-            "y": 320,
-            "w": 262,
+            "y": 317,
+            "w": 550,
             "h": 13
           },
           "ref": {
@@ -1102,14 +1093,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(1)>span:nth-child(1)",
       "tag": "span",
       "text": "PNG",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 923,
-            "y": 499,
+            "x": 1067,
+            "y": 496,
             "w": 28,
             "h": 19
           },
@@ -1123,14 +1114,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
       "tag": "span",
       "text": "original.png · 1200 × 800",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 925,
-            "y": 707,
+            "x": 1213,
+            "y": 704,
             "w": 135,
             "h": 11
           },
@@ -1144,7 +1135,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>span:nth-child(1)",
       "tag": "span",
       "text": "STEP 01",
       "deltas": {
@@ -1158,9 +1149,9 @@
         },
         "rect": {
           "ours": {
-            "x": 1094,
-            "y": 320,
-            "w": 262,
+            "x": 806,
+            "y": 750,
+            "w": 550,
             "h": 13
           },
           "ref": {
@@ -1173,14 +1164,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
       "tag": "span",
       "text": "gradient applied",
       "deltas": {
         "rect": {
           "ours": {
             "x": 1262,
-            "y": 707,
+            "y": 1137,
             "w": 86,
             "h": 11
           },
@@ -1194,7 +1185,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(3)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>span:nth-child(1)",
       "tag": "span",
       "text": "STEP 02",
       "deltas": {
@@ -1209,8 +1200,8 @@
         "rect": {
           "ours": {
             "x": 806,
-            "y": 753,
-            "w": 262,
+            "y": 1182,
+            "w": 550,
             "h": 13
           },
           "ref": {
@@ -1223,14 +1214,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
       "tag": "span",
       "text": "background removed",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 962,
-            "y": 1140,
+            "x": 1251,
+            "y": 1569,
             "w": 97,
             "h": 11
           },
@@ -1244,7 +1235,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(4)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>span:nth-child(1)",
       "tag": "span",
       "text": "STEP 03",
       "deltas": {
@@ -1258,9 +1249,9 @@
         },
         "rect": {
           "ours": {
-            "x": 1094,
-            "y": 753,
-            "w": 262,
+            "x": 806,
+            "y": 1615,
+            "w": 550,
             "h": 13
           },
           "ref": {
@@ -1273,14 +1264,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
       "tag": "span",
       "text": "outline added",
       "deltas": {
         "rect": {
           "ours": {
             "x": 1278,
-            "y": 1140,
+            "y": 2002,
             "w": 70,
             "h": 11
           },
@@ -1294,7 +1285,7 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(5)>span:nth-child(1)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>span:nth-child(1)",
       "tag": "span",
       "text": "FINAL OUTPUT",
       "deltas": {
@@ -1309,8 +1300,8 @@
         "rect": {
           "ours": {
             "x": 806,
-            "y": 1185,
-            "w": 262,
+            "y": 2047,
+            "w": 550,
             "h": 13
           },
           "ref": {
@@ -1323,14 +1314,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(5)>div:nth-child(2)>div:nth-child(2)>span:nth-child(2)",
       "tag": "span",
       "text": "ready · PNG-24",
       "deltas": {
         "rect": {
           "ours": {
-            "x": 984,
-            "y": 1572,
+            "x": 1272,
+            "y": 2434,
             "w": 76,
             "h": 11
           },
@@ -1344,14 +1335,14 @@
       }
     },
     {
-      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(2)>p:nth-child(3)",
+      "path": "body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>p:nth-child(3)",
       "tag": "p",
       "text": "Output is generated in-browser. Your fil",
       "deltas": {
         "rect": {
           "ours": {
             "x": 799,
-            "y": 1627,
+            "y": 2489,
             "w": 565,
             "h": 17
           },
@@ -1374,11 +1365,9 @@
     "135°",
     "OPACITY",
     "Automatic subject detection enabled",
-    "WIDTH",
     "Outline width",
     "2px",
     "Outline color",
-    "RADIUS",
     "Corner radius",
     "18px"
   ],
@@ -1388,6 +1377,7 @@
     "Catalog",
     "Gradient",
     "Background remover",
+    "COLOR",
     "135\n                        °",
     "100%",
     "2\n                        px",
@@ -1398,8 +1388,8 @@
   "counts": {
     "tokenLight": 10,
     "tokenDark": 16,
-    "elements": 47,
-    "onlyOurs": 15,
-    "onlyRef": 11
+    "elements": 46,
+    "onlyOurs": 13,
+    "onlyRef": 12
   }
 }

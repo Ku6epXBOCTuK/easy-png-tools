@@ -1,18 +1,23 @@
 <script lang="ts">
-	import { Upload, Settings2, RotateCcw, ChevronDown } from "@lucide/svelte";
+	import { Settings2, ChevronDown } from "@lucide/svelte";
+	import WorkspaceLayout from "$lib/components/kit/WorkspaceLayout.svelte";
+	import WorkspaceHeader from "./WorkspaceHeader.svelte";
+	import SectionLabel from "$lib/components/kit/SectionLabel.svelte";
 	import StepCard from "$lib/components/kit/StepCard.svelte";
-	import Segmented from "$lib/components/kit/Segmented.svelte";
-	import SliderField from "$lib/components/kit/SliderField.svelte";
-	import ColorField from "$lib/components/kit/ColorField.svelte";
-	import Toggle from "$lib/components/kit/Toggle.svelte";
-	import IconButton from "$lib/components/kit/IconButton.svelte";
-	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
 	import Badge from "$lib/components/kit/Badge.svelte";
-	import StatusDot from "$lib/components/kit/StatusDot.svelte";
+	import FieldGrid from "$lib/components/kit/FieldGrid.svelte";
 	import MonoLabel from "$lib/components/kit/MonoLabel.svelte";
-	import MetaList from "$lib/components/kit/MetaList.svelte";
+	import ColorField from "$lib/components/kit/ColorField.svelte";
+	import SliderField from "$lib/components/kit/SliderField.svelte";
+	import Segmented from "$lib/components/kit/Segmented.svelte";
+	import ToggleRow from "$lib/components/kit/ToggleRow.svelte";
+	import PreviewStack from "$lib/components/kit/PreviewStack.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
+	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
+	import MetaList from "$lib/components/kit/MetaList.svelte";
+	import IconButton from "$lib/components/kit/IconButton.svelte";
+	import PipelineFooter from "$lib/components/kit/PipelineFooter.svelte";
 
 	let gradColor = $state("#DCEBFF");
 	let direction = $state(135);
@@ -56,31 +61,28 @@
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-<div class="page-grid">
-	<section class="workspace">
-		<div class="eyebrow">PNG PROCESSING <span>/</span> WORKSPACE</div>
-		<div class="title-row">
-			<div>
-				<h1>Build your image pipeline.</h1>
-				<p class="lede">
-					Chain simple tools together. Every change is processed automatically
-					and previewed at each stage.
-				</p>
-			</div>
-			<div class="file-chip">
-				<Upload size={15} />
-				<span>source.png</span>
-				<b>1.8 MB</b>
-			</div>
-		</div>
+<WorkspaceLayout
+	columns="minmax(0, 1.05fr) minmax(520px, 0.95fr)"
+	gap="56px"
+	padding="60px clamp(24px, 4vw, 72px) 72px"
+	maxWidth="none"
+	stickyTop="24px"
+	padMobile="36px 16px 48px"
+>
+	{#snippet settings()}
+		<WorkspaceHeader
+			eyebrowA="PNG PROCESSING"
+			eyebrowB="WORKSPACE"
+			title="Build your image pipeline."
+			lede="Chain simple tools together. Every change is processed automatically and previewed at each stage."
+			file={{ name: "source.png", size: "1.8 MB" }}
+		/>
 
-		<div class="pipeline-head">
-			<div>
-				<span class="label">PROCESSING PIPELINE</span>
-				<strong>4 active steps <em>• LIVE</em></strong>
-			</div>
-			<button class="add-btn" onclick={() => {}}>+ Add tool</button>
-		</div>
+		<SectionLabel label="PROCESSING PIPELINE" title="4 active steps" meta="• LIVE">
+			{#snippet actions()}
+				<button class="add-btn" onclick={() => {}}>+ Add tool</button>
+			{/snippet}
+		</SectionLabel>
 
 		<div class="steps-list">
 			<StepCard
@@ -90,11 +92,8 @@
 				onremove={() => {}}
 			>
 				<div class="step-tools"><Badge tone="success">AUTO</Badge></div>
-				<div class="controls">
-					<div class="control-block">
-						<MonoLabel>COLOR</MonoLabel>
-						<ColorField label="Gradient color" bind:value={gradColor} />
-					</div>
+				<FieldGrid>
+					<ColorField label="Gradient color" bind:value={gradColor} />
 					<SliderField
 						label="DIRECTION"
 						bind:value={direction}
@@ -114,7 +113,7 @@
 							]}
 						/>
 					</div>
-				</div>
+				</FieldGrid>
 			</StepCard>
 
 			<StepCard
@@ -129,22 +128,16 @@
 
 			<StepCard index={3} type="STYLE" title="Add outline" onremove={() => {}}>
 				<div class="step-tools"><Badge tone="success">AUTO</Badge></div>
-				<div class="controls compact">
-					<div class="control-block">
-						<MonoLabel>WIDTH</MonoLabel>
-						<SliderField
-							label="Outline width"
-							bind:value={outlineWidth}
-							min={0}
-							max={8}
-							suffix="px"
-						/>
-					</div>
-					<div class="control-block">
-						<MonoLabel>COLOR</MonoLabel>
-						<ColorField label="Outline color" bind:value={outlineColor} />
-					</div>
-				</div>
+				<FieldGrid compact>
+					<SliderField
+						label="Outline width"
+						bind:value={outlineWidth}
+						min={0}
+						max={8}
+						suffix="px"
+					/>
+					<ColorField label="Outline color" bind:value={outlineColor} />
+				</FieldGrid>
 			</StepCard>
 
 			<StepCard
@@ -154,177 +147,79 @@
 				onremove={() => {}}
 			>
 				<div class="step-tools"><Badge tone="success">AUTO</Badge></div>
-				<div class="controls compact">
-					<div class="control-block">
-						<MonoLabel>RADIUS</MonoLabel>
-						<SliderField
-							label="Corner radius"
-							bind:value={radius}
-							min={0}
-							max={48}
-							suffix="px"
-						/>
-					</div>
-					<label class="toggle-row">
-						<span>Preserve aspect ratio</span>
-						<Toggle
-							bind:checked={preserveAspect}
-							label="Preserve aspect ratio"
-						/>
-					</label>
-				</div>
+				<FieldGrid compact>
+					<SliderField
+						label="Corner radius"
+						bind:value={radius}
+						min={0}
+						max={48}
+						suffix="px"
+					/>
+					<ToggleRow label="Preserve aspect ratio" bind:checked={preserveAspect} />
+				</FieldGrid>
 			</StepCard>
 		</div>
 
-		<div class="pipeline-footer">
-			<button class="reset-btn" onclick={() => {}}>
-				<RotateCcw size={14} /> Reset pipeline
-			</button>
-			<span class="auto-note"
-				><StatusDot /> changes are applied automatically</span
-			>
-		</div>
-	</section>
+		<PipelineFooter onreset={() => {}} />
+	{/snippet}
 
-	<section class="preview-panel">
-		<div class="preview-top">
-			<div>
-				<span class="label">PIPELINE OUTPUTS</span>
-				<strong>Visual history</strong>
-			</div>
-			<div class="preview-actions">
-				<button class="history-toggle" onclick={() => {}}>
-					Hide intermediate <ChevronDown size={15} />
-				</button>
-				<DownloadButton
-					label="Download result"
-					size="1.2 MB"
-					onclick={() => {}}
-				/>
-				<MetaList
-					items={[
-						{ caption: "DIMENSIONS", value: "1200 × 800 px" },
-						{ caption: "FORMAT", value: "PNG-24" },
-						{ caption: "SIZE", value: "1.2 MB" },
-					]}
-				/>
-				<IconButton
-					icon={Settings2}
-					label="Preview settings"
-					onclick={() => {}}
-				/>
-			</div>
-		</div>
+	{#snippet preview()}
+		<div class="preview-panel">
+			<SectionLabel label="PIPELINE OUTPUTS" title="Visual history">
+				{#snippet actions()}
+					<button class="history-toggle" onclick={() => {}}>
+						Hide intermediate <ChevronDown size={15} />
+					</button>
+					<DownloadButton
+						label="Download result"
+						size="1.2 MB"
+						onclick={() => {}}
+					/>
+					<MetaList
+						items={[
+							{ caption: "DIMENSIONS", value: "1200 × 800 px" },
+							{ caption: "FORMAT", value: "PNG-24" },
+							{ caption: "SIZE", value: "1.2 MB" },
+						]}
+					/>
+					<IconButton
+						icon={Settings2}
+						label="Preview settings"
+						onclick={() => {}}
+					/>
+				{/snippet}
+			</SectionLabel>
 
-		<div class="preview-stack">
-			{#each previewTiles as tile (tile.label)}
-				<PreviewTile label={tile.label}>
-					<CheckerCanvas size="large">
-						<div
-							class="ph"
-							class:active={tile.active}
-							style="background:{tile.bg}; border-radius:{tile.radius ??
-								'0'}; box-shadow:{tile.ring ?? 'none'};"
-						>
-							<span class="sample-icon">PNG</span>
-							<span>easy-png-tools</span>
+			<PreviewStack pad="16px 0">
+				{#each previewTiles as tile (tile.label)}
+					<PreviewTile label={tile.label}>
+						<CheckerCanvas size="large">
+							<div
+								class="ph"
+								class:active={tile.active}
+								style="background:{tile.bg}; border-radius:{tile.radius ??
+									'0'}; box-shadow:{tile.ring ?? 'none'};"
+							>
+								<span class="sample-icon">PNG</span>
+								<span>easy-png-tools</span>
+							</div>
+						</CheckerCanvas>
+						<div class="tile-label-wrap">
+							<span class="tile-label">{tile.label}</span>
+							<span class="tile-caption">{tile.caption}</span>
 						</div>
-					</CheckerCanvas>
-					<div class="tile-label-wrap">
-						<span class="tile-label">{tile.label}</span>
-						<span class="tile-caption">{tile.caption}</span>
-					</div>
-				</PreviewTile>
-			{/each}
-		</div>
+					</PreviewTile>
+				{/each}
+			</PreviewStack>
 
-		<p class="preview-note">
-			Output is generated in-browser. Your files never leave this device.
-		</p>
-	</section>
-</div>
+			<p class="preview-note">
+				Output is generated in-browser. Your files never leave this device.
+			</p>
+		</div>
+	{/snippet}
+</WorkspaceLayout>
 
 <style>
-	.page-grid {
-		display: grid;
-		grid-template-columns: minmax(0, 1.05fr) minmax(520px, 0.95fr);
-		align-items: start;
-		gap: 56px;
-		max-width: none;
-		margin: auto;
-		padding: 60px clamp(24px, 4vw, 72px) 72px;
-	}
-	.workspace {
-		min-width: 0;
-	}
-	.eyebrow {
-		font: 10px var(--font-mono);
-		letter-spacing: 0.12em;
-		color: var(--muted);
-		margin-bottom: 18px;
-	}
-	.eyebrow span {
-		margin: 0 7px;
-		color: var(--blue);
-	}
-	.title-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-end;
-		gap: 30px;
-		margin-bottom: 56px;
-	}
-	h1 {
-		margin: 0 0 16px;
-		font-size: clamp(36px, 4vw, 64px);
-		font-weight: 650;
-		letter-spacing: -0.06em;
-		color: var(--foreground);
-	}
-	.lede {
-		margin: 0;
-		max-width: 550px;
-		color: var(--muted);
-		line-height: 1.6;
-	}
-	.file-chip {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		white-space: nowrap;
-		border: 1px solid var(--line);
-		background: var(--panel);
-		font: 11px var(--font-mono);
-		color: var(--muted);
-		padding: 10px 12px;
-	}
-	.file-chip b {
-		color: var(--blue);
-		font-weight: 500;
-	}
-	.pipeline-head {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		border-bottom: 1px solid var(--line);
-		padding-bottom: 12px;
-	}
-	.label {
-		font: 10px var(--font-mono);
-		letter-spacing: 0.12em;
-		color: var(--muted);
-	}
-	.pipeline-head strong {
-		display: block;
-		margin-top: 5px;
-		font: 600 14px var(--font-mono);
-		color: var(--foreground);
-	}
-	.pipeline-head em {
-		color: #25a96a;
-		font-style: normal;
-		font-size: 10px;
-	}
 	.add-btn {
 		display: flex;
 		align-items: center;
@@ -345,14 +240,6 @@
 		gap: 8px;
 		align-items: center;
 	}
-	.controls {
-		display: grid;
-		grid-template-columns: 1.1fr 1fr 1.2fr;
-		gap: 16px;
-	}
-	.controls.compact {
-		grid-template-columns: 1fr 1fr;
-	}
 	.control-block {
 		display: flex;
 		flex-direction: column;
@@ -365,65 +252,11 @@
 		color: var(--muted);
 		font: 11px var(--font-mono);
 	}
-	.toggle-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 15px;
-		color: var(--foreground);
-		font-size: 0.85rem;
-		cursor: pointer;
-	}
-	.pipeline-footer {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding-top: 18px;
-	}
-	.reset-btn {
-		display: flex;
-		align-items: center;
-		gap: 7px;
-		color: var(--blue);
-		background: none;
-		border: 0;
-		cursor: pointer;
-		font-size: 12px;
-	}
-	.auto-note {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		color: var(--muted);
-		font: 11px var(--font-mono);
-	}
 	.preview-panel {
-		position: sticky;
-		top: 24px;
 		border: 1px solid var(--line);
 		background: var(--panel);
 		padding: 18px;
 		min-width: 0;
-	}
-	.preview-top {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		border-bottom: 1px solid var(--line);
-		padding-bottom: 15px;
-		gap: 16px;
-	}
-	.preview-top strong {
-		display: block;
-		margin-top: 5px;
-		font: 600 14px var(--font-mono);
-	}
-	.preview-actions {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: flex-end;
-		gap: 10px;
 	}
 	.history-toggle {
 		display: flex;
@@ -443,12 +276,6 @@
 	.history-toggle:hover {
 		color: var(--foreground);
 		background: var(--background);
-	}
-	.preview-stack {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 12px;
-		padding: 16px 0;
 	}
 	.ph {
 		width: 80%;
@@ -488,26 +315,5 @@
 		color: var(--muted);
 		font-size: 11px;
 		line-height: 1.5;
-	}
-	@media (max-width: 800px) {
-		.page-grid {
-			grid-template-columns: 1fr;
-			gap: 24px;
-			padding: 36px 16px 48px;
-		}
-		.title-row {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-		.preview-panel {
-			position: static;
-		}
-		.controls,
-		.controls.compact {
-			grid-template-columns: 1fr;
-		}
-		.preview-stack {
-			grid-template-columns: 1fr;
-		}
 	}
 </style>
