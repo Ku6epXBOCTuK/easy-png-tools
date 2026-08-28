@@ -2,14 +2,14 @@
 
 vs C:\+XBOCTuK\+life_projects\easy-png-tools\refs-html\demo.html
 
-_2026-08-28T07:02:47.972Z_
+_2026-08-28T11:41:19.954Z_
 
 ## Сводка
 
 - Токены light: **10** расх.
 - Токены dark: **16** расх.
 - Элементы (стиль/геометрия): **47** расх.
-- Только у нас: 14, только в рефе: 7
+- Только у нас: 15, только в рефе: 11
 
 ## Токены — Light
 
@@ -49,13 +49,15 @@ _2026-08-28T07:02:47.972Z_
 
 ## Расхождения элементов (топ 47)
 
-### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(1)` — "RU"
-    - **color**: `rgb(255, 255, 255)` → `rgb(238, 241, 244)`
-    - **backgroundColor**: `rgb(23, 105, 210)` → `rgb(23, 33, 43)`
-    - **padding**: `0px 11.2px` → `6px 9px`
-    - **letterSpacing**: `0.6px` → `normal`
-    - **display**: `flex` → `block`
-    - **rect**: `1309,17 36x30` → `1323,20 29x24`
+### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "/"
+    - **fontFamily**: `"IBM Plex Mono", monospace` → `"IBM Plex Sans", sans-serif`
+    - **fontSize**: `10px` → `16px`
+    - **color**: `rgb(23, 105, 210)` → `rgb(23, 33, 43)`
+    - **margin**: `0px 7px` → `0px`
+    - **letterSpacing**: `1.2px` → `normal`
+    - **lineHeight**: `normal` → `24px`
+    - **display**: `inline` → `block`
+    - **rect**: `173,124 7x13` → `1348,20 4x24`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>span:nth-child(1)` — "COLOR"
     - **fontWeight**: `500` → `400`
@@ -71,12 +73,6 @@ _2026-08-28T07:02:47.972Z_
     - **margin**: `0px` → `5px 0px 0px`
     - **display**: `inline` → `block`
     - **rect**: `1090,240 36x13` → `1246,291 79x13`
-
-### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(2)` — "EN"
-    - **padding**: `0px 11.2px` → `6px 9px`
-    - **letterSpacing**: `0.6px` → `normal`
-    - **display**: `flex` → `block`
-    - **rect**: `1345,17 37x30` → `1352,20 29x24`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(4)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>button:nth-child(1)` — "100"
     - **padding**: `0px 11.2px` → `0px`
@@ -148,9 +144,9 @@ _2026-08-28T07:02:47.972Z_
     - **letterSpacing**: `0.8px` → `normal`
     - **rect**: `806,1185 262x13` → `808,1378 59x10`
 
-### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(1)>span:nth-child(1)` — "/"
-    - **color**: `rgb(23, 105, 210)` → `rgb(109, 120, 131)`
-    - **rect**: `173,124 7x13` → `165,124 13x12`
+### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(2)` — "EN"
+    - **letterSpacing**: `0.6px` → `normal`
+    - **rect**: `1349,19 32x25` → `1352,20 29x24`
 
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(1)>h1:nth-child(1)` — "Build your image pipeline."
     - **lineHeight**: `normal` → `57.6px`
@@ -211,6 +207,9 @@ _2026-08-28T07:02:47.972Z_
 ### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(1)>span:nth-child(2)` — "easy-png-tools"
     - **rect**: `98,23 118x18` → `98,23 108x17`
 
+### `body>div:nth-child(1)>div:nth-child(1)>header:nth-child(1)>div:nth-child(2)>div:nth-child(4)>button:nth-child(1)` — "RU"
+    - **letterSpacing**: `0.6px` → `normal`
+
 ### `body>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>section:nth-child(1)>div:nth-child(2)>div:nth-child(1)>p:nth-child(2)` — "Chain simple tools together. Every chang"
     - **rect**: `58,321 474x51` → `58,285 482x51`
 
@@ -255,6 +254,7 @@ _2026-08-28T07:02:47.972Z_
 
 ## Только у нас (структурно)
 
+- `/ DEMO`
 - `+ Add tool`
 - `AUTO`
 - `Gradient color`
@@ -272,7 +272,12 @@ _2026-08-28T07:02:47.972Z_
 
 ## Только в рефе (структурно)
 
-- `/ DEMO`
+- `/ 
+            WORKSPACE`
+- `Workspace`
+- `Catalog`
+- `Gradient`
+- `Background remover`
 - `135
                         °`
 - `100%`
