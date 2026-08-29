@@ -6,7 +6,6 @@
 import { chromium } from "playwright";
 import { spawn } from "node:child_process";
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
-import { pathToFileURL } from "node:url";
 import { resolve, join } from "node:path";
 
 const args = (() => {
@@ -145,6 +144,9 @@ const snapshot = (page) =>
 		const walk = (el) => {
 			const tag = el.tagName.toLowerCase();
 			if (["script", "style", "noscript", "template"].includes(tag)) return null;
+			// SvelteKit ін'єктить #svelte-announcer (aria-live) прямо в <body>;
+			// у рефа (Next.js) його немає — це фреймворк-шум, не збіг дизайну.
+			if (el.id === "svelte-announcer") return null;
 			// Пропускаем не отображаемые узлы (Next-боилерплейт: <div hidden>,
 			// оверлеи), чтобы они не конкурировали за матчинг с реальным контентом.
 			if (el.hasAttribute("hidden")) return null;
@@ -261,19 +263,29 @@ function tally(deltas) {
 	return c;
 }
 
-async function auditOne(page, target) {
+async function auditOne(browser, target) {
 	const oursUrl = args.ours || `http://127.0.0.1:${PORT}${target.route}`;
-	const refUrl = pathToFileURL(resolve(REFS_DIR, target.ref)).href;
 
+	const page = await browser.newPage({
+		viewport: { width: 1440, height: 900 },
+		deviceScaleFactor: 1,
+	});
 	await page.goto(oursUrl, { waitUntil: "load" });
-	await page.evaluate(() => document.fonts && document.fonts.ready);
-	await page.waitForTimeout(300);
+	await page.waitForTimeout(600);
 	const ours = await snapshot(page);
+	await page.close();
 
-	await page.goto(refUrl, { waitUntil: "load" });
-	await page.evaluate(() => document.fonts && document.fonts.ready);
-	await page.waitForTimeout(300);
-	const ref = await snapshot(page);
+	// Реф грузим через goto(file://) в ИЗОЛИРОВАННОМ контексте: так http-страница
+	// и статический реф не делят один execution context (переход http → file в
+	// одной странице уничтожал контекст и ронял прогон). setContent не годится —
+	// он не воспроизводит DOM рефа (губит 1 узел), поэтому используем goto.
+	const refUrl = "file:///" + resolve(REFS_DIR, target.ref).replace(/\\/g, "/");
+	const ctx = await browser.newContext();
+	const refPage = await ctx.newPage();
+	await refPage.goto(refUrl, { waitUntil: "load" });
+	await refPage.waitForTimeout(400);
+	const ref = await snapshot(refPage);
+	await ctx.close();
 
 	const deltas = [];
 	diff(ours, ref, "body", deltas);
@@ -348,18 +360,18 @@ async function main() {
 	}
 
 	const browser = await chromium.launch();
-	const page = await browser.newPage({
-		viewport: { width: 1440, height: 900 },
-		deviceScaleFactor: 1,
-	});
 	const reports = [];
 	try {
 		for (const target of targets) {
-			const rep = await auditOne(page, target);
-			reports.push(rep);
-			console.log(
-				`[dom-audit] ${rep.route}: added=${rep.counts.added} removed=${rep.counts.removed} tag=${rep.counts.tagMismatch} text=${rep.counts.textMismatch}`,
-			);
+			try {
+				const rep = await auditOne(browser, target);
+				reports.push(rep);
+				console.log(
+					`[dom-audit] ${rep.route}: added=${rep.counts.added} removed=${rep.counts.removed} tag=${rep.counts.tagMismatch} text=${rep.counts.textMismatch}`,
+				);
+			} catch (e) {
+				console.error(`[dom-audit] ${target.route} failed: ${e.message}`);
+			}
 		}
 		mkdirSync(resolve(WEB, "audit"), { recursive: true });
 		writeFileSync(

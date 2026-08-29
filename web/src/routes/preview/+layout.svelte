@@ -34,6 +34,12 @@
 	let crumb = $derived(toCrumb($page.url.pathname));
 	let status = $derived(toStatus($page.url.pathname));
 
+	const FOOTER_NOTE: Record<string, string> = {
+		"/preview/tools/linear-gradient-png": "gradient tool · local-only",
+		"/preview/tools/remove-background-png": "background remover · local-only",
+	};
+	let footerNote = $derived(FOOTER_NOTE[$page.url.pathname] ?? "pipeline is local-only");
+
 	const CRUMB: Record<string, string> = {
 		"/preview/demo": "WORKSPACE",
 		"/preview/list-tools": "CATALOG",
@@ -63,7 +69,9 @@
 	{#if $page.url.pathname !== "/preview/list-tools"}
 		<footer class="preview-footer">
 			<span>easy-png-tools <b>v2.4.0</b></span>
-			<span><Link2 size={13} /> pipeline is local-only</span>
+			<span
+				>{#if footerNote === "pipeline is local-only"}<Link2 size={13} /> {/if}{footerNote}</span
+			>
 			<span>© 2024</span>
 		</footer>
 	{/if}

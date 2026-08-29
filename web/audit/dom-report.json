@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-29T02:50:59.952Z",
+  "generatedAt": "2026-08-29T04:04:14.643Z",
   "reports": [
     {
       "route": "/preview/demo",
@@ -30,233 +30,27 @@
     {
       "route": "/preview/tools/linear-gradient-png",
       "ref": "gradient.html",
-      "deltas": [
-        {
-          "path": "body > main:1 > div:2 > section:1",
-          "type": "tagMismatch",
-          "ours": "section",
-          "ref": "div"
-        },
-        {
-          "path": "body > main:1 > div:2 > section:1",
-          "type": "textMismatch",
-          "ours": "",
-          "ref": "PNG PROCESSING SINGLE TOOL"
-        },
-        {
-          "path": "body > main:1 > div:2 > section:1 > section:1",
-          "type": "added",
-          "tag": "section",
-          "text": "",
-          "nodes": 145
-        },
-        {
-          "path": "body > main:1 > div:2 > section:1 > span:1",
-          "type": "removed",
-          "tag": "span",
-          "text": "/",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2",
-          "type": "tagMismatch",
-          "ours": "section",
-          "ref": "div"
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > header:1",
-          "type": "added",
-          "tag": "header",
-          "text": "",
-          "nodes": 5
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > div:1",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > div:2",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > h1:1",
-          "type": "removed",
-          "tag": "h1",
-          "text": "Gradient background.",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > p:2",
-          "type": "removed",
-          "tag": "p",
-          "text": "Create a clean, export-ready gradient with precise control over color, direction and transparency.",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > span:2",
-          "type": "removed",
-          "tag": "span",
-          "text": "LIVE PREVIEW",
-          "nodes": 2
-        },
-        {
-          "path": "body > main:1 > div:2 > div:3",
-          "type": "removed",
-          "tag": "div",
-          "text": "",
-          "nodes": 66
-        },
-        {
-          "path": "body > main:1 > footer:3 > span:2",
-          "type": "added",
-          "tag": "span",
-          "text": "pipeline is local-only",
-          "nodes": 2
-        },
-        {
-          "path": "body > main:1 > footer:3 > span:2",
-          "type": "removed",
-          "tag": "span",
-          "text": "gradient tool · local-only",
-          "nodes": 1
-        }
-      ],
+      "deltas": [],
       "counts": {
-        "added": 5,
-        "removed": 6,
-        "tagMismatch": 2,
-        "textMismatch": 1,
-        "nodesAdded": 154,
-        "nodesRemoved": 72
+        "added": 0,
+        "removed": 0,
+        "tagMismatch": 0,
+        "textMismatch": 0,
+        "nodesAdded": 0,
+        "nodesRemoved": 0
       }
     },
     {
       "route": "/preview/tools/remove-background-png",
       "ref": "background-remover.html",
-      "deltas": [
-        {
-          "path": "body > main:1 > div:2 > section:1",
-          "type": "tagMismatch",
-          "ours": "section",
-          "ref": "div"
-        },
-        {
-          "path": "body > main:1 > div:2 > section:1",
-          "type": "textMismatch",
-          "ours": "",
-          "ref": "PNG PROCESSING SINGLE TOOL"
-        },
-        {
-          "path": "body > main:1 > div:2 > section:1 > section:1",
-          "type": "added",
-          "tag": "section",
-          "text": "",
-          "nodes": 138
-        },
-        {
-          "path": "body > main:1 > div:2 > section:1 > span:1",
-          "type": "removed",
-          "tag": "span",
-          "text": "/",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2",
-          "type": "tagMismatch",
-          "ours": "section",
-          "ref": "div"
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > header:1",
-          "type": "added",
-          "tag": "header",
-          "text": "",
-          "nodes": 5
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > div:1",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 4
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > div:2",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > div:3",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > h1:1",
-          "type": "removed",
-          "tag": "h1",
-          "text": "Remove background.",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > div:2 > p:2",
-          "type": "removed",
-          "tag": "p",
-          "text": "Select a background color and tune the edge detection. Changes are processed automatically in your browser.",
-          "nodes": 1
-        },
-        {
-          "path": "body > main:1 > div:2 > section:2 > span:2",
-          "type": "removed",
-          "tag": "span",
-          "text": "LIVE PREVIEW",
-          "nodes": 2
-        },
-        {
-          "path": "body > main:1 > div:2 > div:3",
-          "type": "removed",
-          "tag": "div",
-          "text": "",
-          "nodes": 71
-        },
-        {
-          "path": "body > main:1 > footer:3 > span:2",
-          "type": "added",
-          "tag": "span",
-          "text": "pipeline is local-only",
-          "nodes": 2
-        },
-        {
-          "path": "body > main:1 > footer:3 > span:2",
-          "type": "removed",
-          "tag": "span",
-          "text": "background remover · local-only",
-          "nodes": 1
-        },
-        {
-          "path": "body > div:2",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 1
-        }
-      ],
+      "deltas": [],
       "counts": {
-        "added": 7,
-        "removed": 6,
-        "tagMismatch": 2,
-        "textMismatch": 1,
-        "nodesAdded": 152,
-        "nodesRemoved": 77
+        "added": 0,
+        "removed": 0,
+        "tagMismatch": 0,
+        "textMismatch": 0,
+        "nodesAdded": 0,
+        "nodesRemoved": 0
       }
     }
   ]

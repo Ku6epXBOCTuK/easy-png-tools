@@ -8,7 +8,8 @@
     "dev": "pnpm --dir web dev",
     "build": "pnpm --dir web build",
     "format": "pnpm --dir web format",
-    "html": "pnpm --dir refs build && node scripts/extract-static.mjs refs/.next/server/app refs-html"
+    "html": "pnpm --dir refs build && node scripts/extract-static.mjs refs/.next/server/app refs-html",
+    "dom-audit": "pnpm --dir web refs-dom-audit"
   },
   "keywords": [],
   "author": "Ku6epXBOCTuK",
