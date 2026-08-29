@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
+	import Footer from "$lib/components/kit/Footer.svelte";
 	import TopBar from "$lib/components/kit/TopBar.svelte";
-	import { Link2 } from "@lucide/svelte";
 	import "$lib/styles/design2.css";
 	import type { Snippet } from "svelte";
 
@@ -31,14 +31,8 @@
 		}
 	});
 
-	let crumb = $derived(toCrumb($page.url.pathname));
-	let status = $derived(toStatus($page.url.pathname));
-
-	const FOOTER_NOTE: Record<string, string> = {
-		"/preview/tools/linear-gradient-png": "gradient tool · local-only",
-		"/preview/tools/remove-background-png": "background remover · local-only",
-	};
-	let footerNote = $derived(FOOTER_NOTE[$page.url.pathname] ?? "pipeline is local-only");
+	let crumb = $derived(toCrumb(page.url.pathname));
+	let status = $derived(toStatus(page.url.pathname));
 
 	const CRUMB: Record<string, string> = {
 		"/preview/demo": "WORKSPACE",
@@ -55,7 +49,12 @@
 	};
 
 	function toCrumb(path: string): string {
-		return "/ " + (CRUMB[path] ?? path.split("/").filter(Boolean).pop()?.toUpperCase() ?? "PREVIEW");
+		return (
+			"/ " +
+			(CRUMB[path] ??
+				path.split("/").filter(Boolean).pop()?.toUpperCase() ??
+				"PREVIEW")
+		);
 	}
 
 	function toStatus(path: string): string {
@@ -66,30 +65,16 @@
 <main class="preview-root" data-theme={theme}>
 	<TopBar {theme} {crumb} {status} ontoggle={toggle} />
 	{@render children()}
-	{#if $page.url.pathname !== "/preview/list-tools"}
-		<footer class="preview-footer">
-			<span>easy-png-tools <b>v2.4.0</b></span>
-			<span
-				>{#if footerNote === "pipeline is local-only"}<Link2 size={13} /> {/if}{footerNote}</span
-			>
-			<span>© 2024</span>
-		</footer>
-	{/if}
+	<Footer />
 </main>
 
 <style>
-	.preview-footer {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		padding: 16px clamp(20px, 4vw, 64px);
-		border-top: 1px solid var(--line);
-		font: 10px var(--font-mono);
-		letter-spacing: 0.08em;
-		color: var(--muted);
-	}
-	.preview-footer .version {
-		color: var(--blue);
+	main {
+		background-color: var(--background);
+		background-image:
+			linear-gradient(#dce2e7 1px, #0000 1px),
+			linear-gradient(90deg, #dce2e7 1px, #0000 1px);
+		background-size: 32px 32px;
+		min-height: 100vh;
 	}
 </style>
