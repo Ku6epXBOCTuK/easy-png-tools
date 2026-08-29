@@ -33,7 +33,7 @@
 	.control-block {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 0;
 	}
 	label {
 		display: flex;
@@ -41,9 +41,10 @@
 		justify-content: space-between;
 		gap: 0.5rem;
 		font: 10px var(--font-mono);
-		letter-spacing: 0.1em;
+		letter-spacing: 0.05em;
 		text-transform: uppercase;
 		color: var(--muted);
+		margin-bottom: 8px;
 	}
 	output {
 		font: 11px var(--font-mono);

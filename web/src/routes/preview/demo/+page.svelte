@@ -63,7 +63,7 @@
 	columns="minmax(0, 1.05fr) minmax(520px, 0.95fr)"
 	gap="56px"
 	padding="60px clamp(24px, 4vw, 72px) 72px"
-	maxWidth="none"
+	maxWidth="1200px"
 	stickyTop="24px"
 	padMobile="36px 16px 48px"
 >

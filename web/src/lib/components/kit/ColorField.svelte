@@ -32,10 +32,15 @@
 		gap: 8px;
 	}
 	label {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 8px;
 		font: 10px var(--font-mono);
-		letter-spacing: 0.1em;
+		letter-spacing: 0.05em;
 		text-transform: uppercase;
 		color: var(--muted);
+		margin-bottom: 8px;
 	}
 	.color-field {
 		display: flex;

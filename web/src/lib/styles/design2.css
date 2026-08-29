@@ -17,6 +17,25 @@ body {
 	padding: 0;
 }
 
+/* Базовая типографика и палитра: без этого весь текст наследует UA-дефолт
+   (Times New Roman / чёрный), что даёт сотни расхождений с рефом. */
+html {
+	color-scheme: light dark;
+	font-family: var(--font-sans);
+	font-size: 16px;
+	line-height: 1.5;
+	-webkit-text-size-adjust: 100%;
+}
+body {
+	font-family: var(--font-sans);
+	font-size: 16px;
+	line-height: 1.5;
+	color: var(--foreground);
+	background: var(--background);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
 /* Форм-контролы не наследуют шрифт семьи по умолчанию (браузер ставит Arial). */
 button,
 input,
