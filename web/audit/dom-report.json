@@ -1,0 +1,416 @@
+{
+  "generatedAt": "2026-08-29T01:35:12.843Z",
+  "reports": [
+    {
+      "route": "/preview/demo",
+      "ref": "demo.html",
+      "deltas": [
+        {
+          "path": "body > div:1",
+          "type": "tagMismatch",
+          "ours": "div",
+          "ref": "main"
+        },
+        {
+          "path": "body > div:1 > div:1 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 20
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2",
+          "type": "tagMismatch",
+          "ours": "div",
+          "ref": "section"
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:1",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2",
+          "type": "textMismatch",
+          "ours": "",
+          "ref": "PNG PROCESSING WORKSPACE"
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2 > div:1",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 203
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2 > span:1",
+          "type": "removed",
+          "tag": "span",
+          "text": "/",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 8
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:3",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:4",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 97
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:5",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 5
+        },
+        {
+          "path": "body > div:1 > div:1 > footer:3",
+          "type": "added",
+          "tag": "footer",
+          "text": "",
+          "nodes": 3
+        },
+        {
+          "path": "body > div:1 > div:1 > section:2",
+          "type": "removed",
+          "tag": "section",
+          "text": "",
+          "nodes": 65
+        },
+        {
+          "path": "body > div:1 > header:1",
+          "type": "removed",
+          "tag": "header",
+          "text": "",
+          "nodes": 21
+        },
+        {
+          "path": "body > div:1 > footer:3",
+          "type": "removed",
+          "tag": "footer",
+          "text": "",
+          "nodes": 6
+        }
+      ],
+      "counts": {
+        "added": 4,
+        "removed": 8,
+        "tagMismatch": 2,
+        "textMismatch": 1,
+        "nodesAdded": 227,
+        "nodesRemoved": 210
+      }
+    },
+    {
+      "route": "/preview/list-tools",
+      "ref": "list-tools.html",
+      "deltas": [
+        {
+          "path": "body > div:1",
+          "type": "tagMismatch",
+          "ours": "div",
+          "ref": "main"
+        },
+        {
+          "path": "body > div:1 > div:1 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 20
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:1",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2 > section:1",
+          "type": "added",
+          "tag": "section",
+          "text": "",
+          "nodes": 963
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2 > div:1",
+          "type": "removed",
+          "tag": "div",
+          "text": "EASY-PNG-TOOLS / CATALOG",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2 > h1:2",
+          "type": "removed",
+          "tag": "h1",
+          "text": "Tool catalog",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2 > p:3",
+          "type": "removed",
+          "tag": "p",
+          "text": "Focused utilities for working with PNG. Inspect, transform, and export — locally in your browser.",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 4
+        },
+        {
+          "path": "body > div:1 > div:1 > footer:3",
+          "type": "textMismatch",
+          "ours": "",
+          "ref": "ALL OPERATIONS RUN LOCALLY YOUR FILES NEVER LEAVE THIS DEVICE"
+        },
+        {
+          "path": "body > div:1 > div:1 > footer:3 > span:1",
+          "type": "added",
+          "tag": "span",
+          "text": "v0.1.0",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > footer:3 > span:2",
+          "type": "added",
+          "tag": "span",
+          "text": "© 2026",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > footer:3 > span:1",
+          "type": "removed",
+          "tag": "span",
+          "text": "•",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 13
+        },
+        {
+          "path": "body > div:1 > div:1 > div:3",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 255
+        },
+        {
+          "path": "body > div:1 > header:1",
+          "type": "removed",
+          "tag": "header",
+          "text": "",
+          "nodes": 21
+        }
+      ],
+      "counts": {
+        "added": 5,
+        "removed": 8,
+        "tagMismatch": 1,
+        "textMismatch": 1,
+        "nodesAdded": 986,
+        "nodesRemoved": 297
+      }
+    },
+    {
+      "route": "/preview/tools/linear-gradient-png",
+      "ref": "gradient.html",
+      "deltas": [
+        {
+          "path": "body > div:1",
+          "type": "tagMismatch",
+          "ours": "div",
+          "ref": "main"
+        },
+        {
+          "path": "body > div:1 > div:1 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 20
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2",
+          "type": "textMismatch",
+          "ours": "",
+          "ref": "PNG PROCESSING SINGLE TOOL"
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:1",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 162
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > span:1",
+          "type": "removed",
+          "tag": "span",
+          "text": "/",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > footer:3",
+          "type": "added",
+          "tag": "footer",
+          "text": "",
+          "nodes": 3
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 6
+        },
+        {
+          "path": "body > div:1 > div:1 > div:3",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 66
+        },
+        {
+          "path": "body > div:1 > header:1",
+          "type": "removed",
+          "tag": "header",
+          "text": "",
+          "nodes": 21
+        },
+        {
+          "path": "body > div:1 > footer:3",
+          "type": "removed",
+          "tag": "footer",
+          "text": "",
+          "nodes": 5
+        }
+      ],
+      "counts": {
+        "added": 4,
+        "removed": 5,
+        "tagMismatch": 1,
+        "textMismatch": 1,
+        "nodesAdded": 186,
+        "nodesRemoved": 99
+      }
+    },
+    {
+      "route": "/preview/tools/remove-background-png",
+      "ref": "background-remover.html",
+      "deltas": [
+        {
+          "path": "body > div:1",
+          "type": "tagMismatch",
+          "ours": "div",
+          "ref": "main"
+        },
+        {
+          "path": "body > div:1 > div:1 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 20
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2",
+          "type": "textMismatch",
+          "ours": "",
+          "ref": "PNG PROCESSING SINGLE TOOL"
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:1",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > div:2",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 162
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2 > span:1",
+          "type": "removed",
+          "tag": "span",
+          "text": "/",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:1 > div:1 > footer:3",
+          "type": "added",
+          "tag": "footer",
+          "text": "",
+          "nodes": 3
+        },
+        {
+          "path": "body > div:1 > div:1 > div:2",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 6
+        },
+        {
+          "path": "body > div:1 > div:1 > div:3",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 71
+        },
+        {
+          "path": "body > div:1 > header:1",
+          "type": "removed",
+          "tag": "header",
+          "text": "",
+          "nodes": 21
+        },
+        {
+          "path": "body > div:1 > footer:3",
+          "type": "removed",
+          "tag": "footer",
+          "text": "",
+          "nodes": 5
+        }
+      ],
+      "counts": {
+        "added": 4,
+        "removed": 5,
+        "tagMismatch": 1,
+        "textMismatch": 1,
+        "nodesAdded": 186,
+        "nodesRemoved": 104
+      }
+    }
+  ]
+}
