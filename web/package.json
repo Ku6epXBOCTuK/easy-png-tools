@@ -13,7 +13,7 @@
 		"test": "vitest run",
 		"format": "prettier --write .",
 		"lint": "eslint .",
-		"refs-audit": "node scripts/audit.mjs",
+		"refs-css-audit": "node scripts/audit-css.mjs",
 		"refs-dom-audit": "node scripts/audit-dom.mjs"
 	},
 	"devDependencies": {
