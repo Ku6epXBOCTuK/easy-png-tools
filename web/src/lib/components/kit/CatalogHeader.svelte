@@ -16,7 +16,7 @@
 	</div>
 	<div class="catalog-total">
 		<b>{total}</b>
-		<span>TOOLS<br />AVAILABLE</span>
+		<span>TOOLS<br /> AVAILABLE</span>
 	</div>
 </div>
 

@@ -12,7 +12,7 @@
 <section class="catalog-group">
 	<div class="group-title">
 		<span>{label}</span>
-		<i>{count} <!-- --> TOOLS</i>
+		<i>{count.toString().padStart(2, "0")} <!-- --> TOOLS</i>
 	</div>
 	<div class="tool-cards">
 		{@render children()}

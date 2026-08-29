@@ -23,7 +23,7 @@
 	<span class="tool-index">
 		{index !== undefined ? index.toString().padStart(2, "0") : ""}
 	</span>
-	<span class="tool-arrow"><ArrowUpRight size={16} /></span>
+	<ArrowUpRight class="tool-arrow" size={16} />
 </a>
 
 <style>

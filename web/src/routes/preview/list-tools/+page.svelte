@@ -1,34 +1,21 @@
 <script lang="ts">
-	import { TOOLS } from "$lib/registry";
-	import { CATEGORIES, type CategoryId } from "$lib/categories";
+	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/preview/catalog";
 	import { TOOL_ICONS } from "$lib/tools/tool-icons";
 	import CatalogHeader from "$lib/components/kit/CatalogHeader.svelte";
 	import CatalogToolbar from "$lib/components/kit/CatalogToolbar.svelte";
 	import CatalogGroup from "$lib/components/kit/CatalogGroup.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
 
-	const LABELS: Record<CategoryId, string> = {
-		convert: "CONVERT",
-		alpha: "TRANSPARENCY",
-		color: "COLOR",
-		geometry: "GEOMETRY",
-		filters: "FILTERS",
-		text: "TEXT",
-		analyze: "ANALYZE",
-		generate: "GENERATE",
-	};
-
 	let query = $state("");
 	let category = $state<string>("all");
 
 	const groups = $derived(
-		CATEGORIES.map((cat) => ({
-			id: cat,
-			label: LABELS[cat],
-			tools: TOOLS.filter(
+		PREVIEW_GROUPS.map((g) => ({
+			id: g.id,
+			label: g.label,
+			tools: g.tools.filter(
 				(t) =>
-					t.category === cat &&
-					(category === "all" || category === cat) &&
+					(category === "all" || category === g.id) &&
 					(query.trim() === "" ||
 						t.title.toLowerCase().includes(query.trim().toLowerCase()) ||
 						t.description.toLowerCase().includes(query.trim().toLowerCase())),
@@ -38,7 +25,7 @@
 </script>
 
 <div class="catalog-page">
-	<CatalogHeader total={TOOLS.length} />
+	<CatalogHeader total={PREVIEW_TOTAL} />
 	<CatalogToolbar bind:query bind:category />
 	<div class="catalog-groups">
 		{#each groups as group (group.id)}
