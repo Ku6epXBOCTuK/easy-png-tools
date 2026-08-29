@@ -1,19 +1,17 @@
 <script lang="ts">
-	import { Settings2, ChevronDown } from "@lucide/svelte";
+	import { Settings2, ChevronDown, Plus, SlidersHorizontal } from "@lucide/svelte";
 	import WorkspaceLayout from "$lib/components/kit/WorkspaceLayout.svelte";
 	import WorkspaceHeader from "./WorkspaceHeader.svelte";
 	import SectionLabel from "$lib/components/kit/SectionLabel.svelte";
 	import StepCard from "$lib/components/kit/StepCard.svelte";
 	import Badge from "$lib/components/kit/Badge.svelte";
 	import FieldGrid from "$lib/components/kit/FieldGrid.svelte";
-	import MonoLabel from "$lib/components/kit/MonoLabel.svelte";
 	import ColorField from "$lib/components/kit/ColorField.svelte";
 	import SliderField from "$lib/components/kit/SliderField.svelte";
 	import Segmented from "$lib/components/kit/Segmented.svelte";
 	import ToggleRow from "$lib/components/kit/ToggleRow.svelte";
 	import PreviewStack from "$lib/components/kit/PreviewStack.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
-	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
 	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import IconButton from "$lib/components/kit/IconButton.svelte";
@@ -78,9 +76,9 @@
 			file={{ name: "source.png", size: "1.8 MB" }}
 		/>
 
-		<SectionLabel label="PROCESSING PIPELINE" title="4 active steps" meta="• LIVE">
+		<SectionLabel label="PROCESSING PIPELINE" title="4 active steps" meta="• LIVE" unwrapActions>
 			{#snippet actions()}
-				<button class="add-btn" onclick={() => {}}>+ Add tool</button>
+				<button class="add-btn" onclick={() => {}}><Plus size={15} /> Add tool</button>
 			{/snippet}
 		</SectionLabel>
 
@@ -92,26 +90,26 @@
 				onremove={() => {}}
 			>
 				{#snippet tools()}
-					<Badge tone="success">AUTO</Badge>
+					<Badge tone="success" check>AUTO</Badge>
 				{/snippet}
 				<FieldGrid>
-					<ColorField label="Gradient color" bind:value={gradColor} />
+					<ColorField label="COLOR" chevron bind:value={gradColor} />
 					<SliderField
 						label="DIRECTION"
 						bind:value={direction}
 						min={0}
 						max={360}
-						suffix="°"
+						suffix=" °"
 					/>
 					<div class="control-block">
-						<MonoLabel>OPACITY</MonoLabel>
+						<label>OPACITY <output>{opacity}%</output></label>
 						<Segmented
 							bind:value={opacity}
 							options={[
-								{ value: "100", label: "100%" },
-								{ value: "75", label: "75%" },
-								{ value: "50", label: "50%" },
-								{ value: "25", label: "25%" },
+								{ value: "100", label: "100" },
+								{ value: "75", label: "75" },
+								{ value: "50", label: "50" },
+								{ value: "25", label: "25" },
 							]}
 						/>
 					</div>
@@ -125,24 +123,26 @@
 				onremove={() => {}}
 			>
 				{#snippet tools()}
-					<Badge tone="success">AUTO</Badge>
+					<Badge tone="success" check>AUTO</Badge>
 				{/snippet}
-				<div class="transform-note">Automatic subject detection enabled</div>
+				<div class="transform-note">
+					<SlidersHorizontal size={15} /> Automatic subject detection enabled
+				</div>
 			</StepCard>
 
 			<StepCard index={3} type="STYLE" title="Add outline" onremove={() => {}}>
 				{#snippet tools()}
-					<Badge tone="success">AUTO</Badge>
+					<Badge tone="success" check>AUTO</Badge>
 				{/snippet}
 				<FieldGrid compact>
 					<SliderField
-						label="Outline width"
+						label="WIDTH"
 						bind:value={outlineWidth}
 						min={0}
 						max={8}
-						suffix="px"
+						suffix=" px"
 					/>
-					<ColorField label="Outline color" bind:value={outlineColor} />
+					<ColorField label="COLOR" dark bind:value={outlineColor} />
 				</FieldGrid>
 			</StepCard>
 
@@ -153,15 +153,15 @@
 				onremove={() => {}}
 			>
 				{#snippet tools()}
-					<Badge tone="success">AUTO</Badge>
+					<Badge tone="success" check>AUTO</Badge>
 				{/snippet}
 				<FieldGrid compact>
 					<SliderField
-						label="Corner radius"
+						label="RADIUS"
 						bind:value={radius}
 						min={0}
 						max={48}
-						suffix="px"
+						suffix=" px"
 					/>
 					<ToggleRow label="Preserve aspect ratio" bind:checked={preserveAspect} />
 				</FieldGrid>
@@ -172,7 +172,7 @@
 	{/snippet}
 
 	{#snippet preview()}
-		<div class="preview-panel">
+		<section class="preview-panel">
 			<SectionLabel label="PIPELINE OUTPUTS" title="Visual history">
 				{#snippet actions()}
 					<button class="history-toggle" onclick={() => {}}>
@@ -180,7 +180,6 @@
 					</button>
 					<DownloadButton
 						label="Download result"
-						size="1.2 MB"
 						onclick={() => {}}
 					/>
 					<MetaList
@@ -200,29 +199,24 @@
 
 			<PreviewStack pad="16px 0">
 				{#each previewTiles as tile (tile.label)}
-					<PreviewTile label={tile.label}>
-						<CheckerCanvas size="large">
-							<div
-								class="ph"
-								class:active={tile.active}
-								style="background:{tile.bg}; border-radius:{tile.radius ??
-									'0'}; box-shadow:{tile.ring ?? 'none'};"
-							>
-								<span class="sample-icon">PNG</span>
-								<span>easy-png-tools</span>
-							</div>
-						</CheckerCanvas>
-						<div class="tile-label-wrap">
-							<span class="tile-caption">{tile.caption}</span>
-						</div>
-					</PreviewTile>
+				<PreviewTile label={tile.label} caption={tile.caption}>
+					<div
+						class="ph"
+						class:active={tile.active}
+						style="background:{tile.bg}; border-radius:{tile.radius ??
+							'0'}; box-shadow:{tile.ring ?? 'none'};"
+					>
+						<span class="sample-icon">PNG</span>
+						<span>easy-png-tools</span>
+					</div>
+				</PreviewTile>
 				{/each}
 			</PreviewStack>
 
 			<p class="preview-note">
 				Output is generated in-browser. Your files never leave this device.
 			</p>
-		</div>
+		</section>
 	{/snippet}
 </WorkspaceLayout>
 
@@ -259,6 +253,8 @@
 		background: var(--panel);
 		padding: 18px;
 		min-width: 0;
+		position: sticky;
+		top: 24px;
 	}
 	.history-toggle {
 		display: flex;
@@ -298,20 +294,6 @@
 		padding: 3px 5px;
 		font-size: 9px;
 	}
-	.tile-label-wrap {
-		display: flex;
-		justify-content: space-between;
-		gap: 8px;
-		padding: 8px;
-		border-top: 1px solid var(--line);
-		font: 9px var(--font-mono);
-		color: var(--muted);
-	}
-	.tile-caption {
-		color: var(--muted);
-		font-weight: 400;
-		text-align: right;
-	}
 	.preview-note {
 		margin: 12px 0 0;
 		color: var(--muted);
@@ -319,3 +301,4 @@
 		line-height: 1.5;
 	}
 </style>
+

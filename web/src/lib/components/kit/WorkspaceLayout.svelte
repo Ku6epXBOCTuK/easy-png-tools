@@ -30,8 +30,8 @@
 	class="ws"
 	style="--ws-cols:{columns};--ws-gap:{gap};--ws-pad:{padding};--ws-max:{maxWidth};--ws-sticky:{stickyTop};--ws-pad-mobile:{padMobile};--ws-gap-mobile:{gapMobile};"
 >
-	<div class="ws-settings">{@render settings()}</div>
-	<div class="ws-preview">{@render preview()}</div>
+	<section class="ws-settings">{@render settings()}</section>
+	{@render preview()}
 </div>
 
 <style>
@@ -47,19 +47,11 @@
 	.ws-settings {
 		min-width: 0;
 	}
-	.ws-preview {
-		position: sticky;
-		top: var(--ws-sticky);
-		min-width: 0;
-	}
 	@media (max-width: 800px) {
 		.ws {
 			grid-template-columns: 1fr;
 			gap: var(--ws-gap-mobile);
 			padding: var(--ws-pad-mobile);
-		}
-		.ws-preview {
-			position: static;
 		}
 	}
 </style>

@@ -17,19 +17,17 @@
 	let { eyebrowA, eyebrowB, title, lede, file }: Props = $props();
 </script>
 
-<div class="ws-header">
-	<div class="title-row">
-		<div>
-			<div class="eyebrow">
-				{eyebrowA}{#if eyebrowB}<span>/</span>{eyebrowB}{/if}
-			</div>
-			<h1>{title}</h1>
-			{#if lede}<p class="lede">{lede}</p>{/if}
-		</div>
-		{#if file}
-			<FileChip name={file.name} size={file.size} />
-		{/if}
+<div class="eyebrow">
+	{eyebrowA} <span>/</span> {eyebrowB}
+</div>
+<div class="title-row">
+	<div>
+		<h1>{title}</h1>
+		{#if lede}<p class="lede">{lede}</p>{/if}
 	</div>
+	{#if file}
+		<FileChip name={file.name} size={file.size} />
+	{/if}
 </div>
 
 <style>

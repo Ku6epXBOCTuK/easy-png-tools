@@ -10,10 +10,10 @@
 	let { label, checked = $bindable(), onchange }: Props = $props();
 </script>
 
-<label class="toggle-row">
+<div class="toggle-row">
 	<span>{label}</span>
 	<Toggle bind:checked {onchange} {label} />
-</label>
+</div>
 
 <style>
 	.toggle-row {

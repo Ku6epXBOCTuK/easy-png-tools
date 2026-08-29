@@ -1,120 +1,17 @@
 {
-  "generatedAt": "2026-08-29T01:35:12.843Z",
+  "generatedAt": "2026-08-29T02:19:33.865Z",
   "reports": [
     {
       "route": "/preview/demo",
       "ref": "demo.html",
-      "deltas": [
-        {
-          "path": "body > div:1",
-          "type": "tagMismatch",
-          "ours": "div",
-          "ref": "main"
-        },
-        {
-          "path": "body > div:1 > div:1 > header:1",
-          "type": "added",
-          "tag": "header",
-          "text": "",
-          "nodes": 20
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2",
-          "type": "tagMismatch",
-          "ours": "div",
-          "ref": "section"
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:1",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 1
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:2",
-          "type": "textMismatch",
-          "ours": "",
-          "ref": "PNG PROCESSING WORKSPACE"
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:2 > div:1",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 203
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:2 > span:1",
-          "type": "removed",
-          "tag": "span",
-          "text": "/",
-          "nodes": 1
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:2",
-          "type": "removed",
-          "tag": "div",
-          "text": "",
-          "nodes": 8
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:3",
-          "type": "removed",
-          "tag": "div",
-          "text": "",
-          "nodes": 7
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:4",
-          "type": "removed",
-          "tag": "div",
-          "text": "",
-          "nodes": 97
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:5",
-          "type": "removed",
-          "tag": "div",
-          "text": "",
-          "nodes": 5
-        },
-        {
-          "path": "body > div:1 > div:1 > footer:3",
-          "type": "added",
-          "tag": "footer",
-          "text": "",
-          "nodes": 3
-        },
-        {
-          "path": "body > div:1 > div:1 > section:2",
-          "type": "removed",
-          "tag": "section",
-          "text": "",
-          "nodes": 65
-        },
-        {
-          "path": "body > div:1 > header:1",
-          "type": "removed",
-          "tag": "header",
-          "text": "",
-          "nodes": 21
-        },
-        {
-          "path": "body > div:1 > footer:3",
-          "type": "removed",
-          "tag": "footer",
-          "text": "",
-          "nodes": 6
-        }
-      ],
+      "deltas": [],
       "counts": {
-        "added": 4,
-        "removed": 8,
-        "tagMismatch": 2,
-        "textMismatch": 1,
-        "nodesAdded": 227,
-        "nodesRemoved": 210
+        "added": 0,
+        "removed": 0,
+        "tagMismatch": 0,
+        "textMismatch": 0,
+        "nodesAdded": 0,
+        "nodesRemoved": 0
       }
     },
     {
@@ -122,116 +19,749 @@
       "ref": "list-tools.html",
       "deltas": [
         {
-          "path": "body > div:1",
-          "type": "tagMismatch",
-          "ours": "div",
-          "ref": "main"
-        },
-        {
-          "path": "body > div:1 > div:1 > header:1",
+          "path": "body > main:1 > header:1 > a:1 > span:3",
           "type": "added",
-          "tag": "header",
-          "text": "",
-          "nodes": 20
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > div:1",
-          "type": "added",
-          "tag": "div",
-          "text": "",
+          "tag": "span",
+          "text": "/ LIST-TOOLS",
           "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:2 > section:1",
-          "type": "added",
-          "tag": "section",
-          "text": "",
-          "nodes": 963
+          "path": "body > main:1 > header:1 > a:1 > span:3",
+          "type": "removed",
+          "tag": "span",
+          "text": "/ CATALOG",
+          "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:2 > div:1",
+          "path": "body > main:1 > header:1 > div:3 > span:1",
+          "type": "textMismatch",
+          "ours": "AUTO PIPELINE",
+          "ref": "LOCAL MODE / READY"
+        },
+        {
+          "path": "body > main:1 > section:2",
+          "type": "tagMismatch",
+          "ours": "section",
+          "ref": "div"
+        },
+        {
+          "path": "body > main:1 > section:2 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 4
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2",
+          "type": "tagMismatch",
+          "ours": "section",
+          "ref": "div"
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 4
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:1",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:2",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:3",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:4",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:5",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:6",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:7",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:8",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:9",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:10",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:11",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:12",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:13",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:14",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:15",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:16",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:17",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:18",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:19",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:20",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > a:21",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:2 > div:2 > div:1",
           "type": "removed",
           "tag": "div",
           "text": "EASY-PNG-TOOLS / CATALOG",
           "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:2 > h1:2",
+          "path": "body > main:1 > section:2 > section:2 > div:2 > h1:2",
           "type": "removed",
           "tag": "h1",
           "text": "Tool catalog",
           "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:2 > p:3",
+          "path": "body > main:1 > section:2 > section:2 > div:2 > p:3",
           "type": "removed",
           "tag": "p",
           "text": "Focused utilities for working with PNG. Inspect, transform, and export — locally in your browser.",
           "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:2",
+          "path": "body > main:1 > section:2 > section:2 > div:2",
           "type": "removed",
           "tag": "div",
           "text": "",
           "nodes": 4
         },
         {
-          "path": "body > div:1 > div:1 > footer:3",
-          "type": "textMismatch",
-          "ours": "",
-          "ref": "ALL OPERATIONS RUN LOCALLY YOUR FILES NEVER LEAVE THIS DEVICE"
+          "path": "body > main:1 > section:2 > section:3",
+          "type": "tagMismatch",
+          "ours": "section",
+          "ref": "div"
         },
         {
-          "path": "body > div:1 > div:1 > footer:3 > span:1",
+          "path": "body > main:1 > section:2 > section:3 > header:1",
           "type": "added",
-          "tag": "span",
-          "text": "v0.1.0",
-          "nodes": 1
-        },
-        {
-          "path": "body > div:1 > div:1 > footer:3 > span:2",
-          "type": "added",
-          "tag": "span",
-          "text": "© 2026",
-          "nodes": 1
-        },
-        {
-          "path": "body > div:1 > div:1 > footer:3 > span:1",
-          "type": "removed",
-          "tag": "span",
-          "text": "•",
-          "nodes": 1
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2",
-          "type": "removed",
-          "tag": "div",
-          "text": "",
-          "nodes": 13
-        },
-        {
-          "path": "body > div:1 > div:1 > div:3",
-          "type": "removed",
-          "tag": "div",
-          "text": "",
-          "nodes": 255
-        },
-        {
-          "path": "body > div:1 > header:1",
-          "type": "removed",
           "tag": "header",
           "text": "",
-          "nodes": 21
+          "nodes": 4
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:1",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:2",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:3",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:4",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:5",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:6",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:7",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:8",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:9",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:10",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:11",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:12",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:13",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:14",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:15",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:16",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:17",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:18",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:19",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:20",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > a:21",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > svg:1",
+          "type": "removed",
+          "tag": "svg",
+          "text": "",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > button:2",
+          "type": "removed",
+          "tag": "button",
+          "text": "ALL",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > button:3",
+          "type": "removed",
+          "tag": "button",
+          "text": "CONVERT",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > button:4",
+          "type": "removed",
+          "tag": "button",
+          "text": "TRANSPARENCY",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > button:5",
+          "type": "removed",
+          "tag": "button",
+          "text": "COLOR",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > button:6",
+          "type": "removed",
+          "tag": "button",
+          "text": "GEOMETRY",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > button:7",
+          "type": "removed",
+          "tag": "button",
+          "text": "FILTERS",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > div:2 > button:8",
+          "type": "removed",
+          "tag": "button",
+          "text": "ANALYZE",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > section:2 > section:3 > label:1",
+          "type": "removed",
+          "tag": "label",
+          "text": "",
+          "nodes": 3
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4",
+          "type": "tagMismatch",
+          "ours": "section",
+          "ref": "div"
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 4
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2",
+          "type": "tagMismatch",
+          "ours": "div",
+          "ref": "section"
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:1",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:2",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:3",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:4",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:5",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:6",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:7",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:8",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:9",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:10",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:11",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:12",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:13",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:14",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:15",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:16",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:17",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:18",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:19",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:20",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:21",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:22",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:23",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:24",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > a:25",
+          "type": "added",
+          "tag": "a",
+          "text": "",
+          "nodes": 7
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > div:1",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 3
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > div:2 > div:2",
+          "type": "removed",
+          "tag": "div",
+          "text": "",
+          "nodes": 41
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > section:2",
+          "type": "removed",
+          "tag": "section",
+          "text": "",
+          "nodes": 45
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > section:3",
+          "type": "removed",
+          "tag": "section",
+          "text": "",
+          "nodes": 45
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > section:4",
+          "type": "removed",
+          "tag": "section",
+          "text": "",
+          "nodes": 45
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > section:5",
+          "type": "removed",
+          "tag": "section",
+          "text": "",
+          "nodes": 37
+        },
+        {
+          "path": "body > main:1 > section:2 > section:4 > section:6",
+          "type": "removed",
+          "tag": "section",
+          "text": "",
+          "nodes": 37
+        },
+        {
+          "path": "body > main:1 > section:2 > section:5",
+          "type": "added",
+          "tag": "section",
+          "text": "",
+          "nodes": 132
+        },
+        {
+          "path": "body > main:1 > section:2 > section:6",
+          "type": "added",
+          "tag": "section",
+          "text": "",
+          "nodes": 62
+        },
+        {
+          "path": "body > main:1 > section:2 > section:7",
+          "type": "added",
+          "tag": "section",
+          "text": "",
+          "nodes": 27
+        },
+        {
+          "path": "body > main:1 > section:2 > section:8",
+          "type": "added",
+          "tag": "section",
+          "text": "",
+          "nodes": 97
+        },
+        {
+          "path": "body > main:1 > section:2 > section:9",
+          "type": "added",
+          "tag": "section",
+          "text": "",
+          "nodes": 153
+        },
+        {
+          "path": "body > main:1 > section:2 > footer:4",
+          "type": "removed",
+          "tag": "footer",
+          "text": "ALL OPERATIONS RUN LOCALLY YOUR FILES NEVER LEAVE THIS DEVICE",
+          "nodes": 2
+        },
+        {
+          "path": "body > main:1 > footer:3",
+          "type": "added",
+          "tag": "footer",
+          "text": "",
+          "nodes": 6
         }
       ],
       "counts": {
-        "added": 5,
-        "removed": 8,
-        "tagMismatch": 1,
+        "added": 78,
+        "removed": 22,
+        "tagMismatch": 5,
         "textMismatch": 1,
-        "nodesAdded": 986,
-        "nodesRemoved": 297
+        "nodesAdded": 963,
+        "nodesRemoved": 274
       }
     },
     {
@@ -239,88 +769,128 @@
       "ref": "gradient.html",
       "deltas": [
         {
-          "path": "body > div:1",
-          "type": "tagMismatch",
-          "ours": "div",
-          "ref": "main"
-        },
-        {
-          "path": "body > div:1 > div:1 > header:1",
+          "path": "body > main:1 > header:1 > a:1 > span:3",
           "type": "added",
-          "tag": "header",
-          "text": "",
-          "nodes": 20
+          "tag": "span",
+          "text": "/ TOOLS / LINEAR-GRADIENT-PNG",
+          "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > div:2",
+          "path": "body > main:1 > header:1 > a:1 > span:3",
+          "type": "removed",
+          "tag": "span",
+          "text": "/ GRADIENT",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > header:1 > div:3 > span:1",
+          "type": "textMismatch",
+          "ours": "AUTO PIPELINE",
+          "ref": "LIVE PREVIEW"
+        },
+        {
+          "path": "body > main:1 > div:2 > section:1",
+          "type": "tagMismatch",
+          "ours": "section",
+          "ref": "div"
+        },
+        {
+          "path": "body > main:1 > div:2 > section:1",
           "type": "textMismatch",
           "ours": "",
           "ref": "PNG PROCESSING SINGLE TOOL"
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:1",
+          "path": "body > main:1 > div:2 > section:1 > section:1",
           "type": "added",
-          "tag": "div",
+          "tag": "section",
           "text": "",
-          "nodes": 1
+          "nodes": 145
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:2",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 162
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > span:1",
+          "path": "body > main:1 > div:2 > section:1 > span:1",
           "type": "removed",
           "tag": "span",
           "text": "/",
           "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > footer:3",
-          "type": "added",
-          "tag": "footer",
-          "text": "",
-          "nodes": 3
+          "path": "body > main:1 > div:2 > section:2",
+          "type": "tagMismatch",
+          "ours": "section",
+          "ref": "div"
         },
         {
-          "path": "body > div:1 > div:1 > div:2",
-          "type": "removed",
+          "path": "body > main:1 > div:2 > section:2 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 5
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > div:2 > div:1",
+          "type": "added",
           "tag": "div",
           "text": "",
-          "nodes": 6
+          "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > div:3",
+          "path": "body > main:1 > div:2 > section:2 > div:2 > div:2",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > div:2 > h1:1",
+          "type": "removed",
+          "tag": "h1",
+          "text": "Gradient background.",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > div:2 > p:2",
+          "type": "removed",
+          "tag": "p",
+          "text": "Create a clean, export-ready gradient with precise control over color, direction and transparency.",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > span:2",
+          "type": "removed",
+          "tag": "span",
+          "text": "LIVE PREVIEW",
+          "nodes": 2
+        },
+        {
+          "path": "body > main:1 > div:2 > div:3",
           "type": "removed",
           "tag": "div",
           "text": "",
           "nodes": 66
         },
         {
-          "path": "body > div:1 > header:1",
-          "type": "removed",
-          "tag": "header",
-          "text": "",
-          "nodes": 21
+          "path": "body > main:1 > footer:3 > span:2",
+          "type": "added",
+          "tag": "span",
+          "text": "pipeline is local-only",
+          "nodes": 2
         },
         {
-          "path": "body > div:1 > footer:3",
+          "path": "body > main:1 > footer:3 > span:2",
           "type": "removed",
-          "tag": "footer",
-          "text": "",
-          "nodes": 5
+          "tag": "span",
+          "text": "gradient tool · local-only",
+          "nodes": 1
         }
       ],
       "counts": {
-        "added": 4,
-        "removed": 5,
-        "tagMismatch": 1,
-        "textMismatch": 1,
-        "nodesAdded": 186,
-        "nodesRemoved": 99
+        "added": 6,
+        "removed": 7,
+        "tagMismatch": 2,
+        "textMismatch": 2,
+        "nodesAdded": 155,
+        "nodesRemoved": 73
       }
     },
     {
@@ -328,88 +898,142 @@
       "ref": "background-remover.html",
       "deltas": [
         {
-          "path": "body > div:1",
-          "type": "tagMismatch",
-          "ours": "div",
-          "ref": "main"
-        },
-        {
-          "path": "body > div:1 > div:1 > header:1",
+          "path": "body > main:1 > header:1 > a:1 > span:3",
           "type": "added",
-          "tag": "header",
-          "text": "",
-          "nodes": 20
+          "tag": "span",
+          "text": "/ TOOLS / REMOVE-BACKGROUND-PNG",
+          "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > div:2",
+          "path": "body > main:1 > header:1 > a:1 > span:3",
+          "type": "removed",
+          "tag": "span",
+          "text": "/ BACKGROUND REMOVER",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > header:1 > div:3 > span:1",
+          "type": "textMismatch",
+          "ours": "AUTO PIPELINE",
+          "ref": "AUTO PROCESSING"
+        },
+        {
+          "path": "body > main:1 > div:2 > section:1",
+          "type": "tagMismatch",
+          "ours": "section",
+          "ref": "div"
+        },
+        {
+          "path": "body > main:1 > div:2 > section:1",
           "type": "textMismatch",
           "ours": "",
           "ref": "PNG PROCESSING SINGLE TOOL"
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:1",
+          "path": "body > main:1 > div:2 > section:1 > section:1",
           "type": "added",
-          "tag": "div",
+          "tag": "section",
           "text": "",
-          "nodes": 1
+          "nodes": 138
         },
         {
-          "path": "body > div:1 > div:1 > div:2 > div:2",
-          "type": "added",
-          "tag": "div",
-          "text": "",
-          "nodes": 162
-        },
-        {
-          "path": "body > div:1 > div:1 > div:2 > span:1",
+          "path": "body > main:1 > div:2 > section:1 > span:1",
           "type": "removed",
           "tag": "span",
           "text": "/",
           "nodes": 1
         },
         {
-          "path": "body > div:1 > div:1 > footer:3",
-          "type": "added",
-          "tag": "footer",
-          "text": "",
-          "nodes": 3
+          "path": "body > main:1 > div:2 > section:2",
+          "type": "tagMismatch",
+          "ours": "section",
+          "ref": "div"
         },
         {
-          "path": "body > div:1 > div:1 > div:2",
-          "type": "removed",
+          "path": "body > main:1 > div:2 > section:2 > header:1",
+          "type": "added",
+          "tag": "header",
+          "text": "",
+          "nodes": 5
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > div:2 > div:1",
+          "type": "added",
           "tag": "div",
           "text": "",
-          "nodes": 6
+          "nodes": 4
         },
         {
-          "path": "body > div:1 > div:1 > div:3",
+          "path": "body > main:1 > div:2 > section:2 > div:2 > div:2",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > div:2 > div:3",
+          "type": "added",
+          "tag": "div",
+          "text": "",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > div:2 > h1:1",
+          "type": "removed",
+          "tag": "h1",
+          "text": "Remove background.",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > div:2 > p:2",
+          "type": "removed",
+          "tag": "p",
+          "text": "Select a background color and tune the edge detection. Changes are processed automatically in your browser.",
+          "nodes": 1
+        },
+        {
+          "path": "body > main:1 > div:2 > section:2 > span:2",
+          "type": "removed",
+          "tag": "span",
+          "text": "LIVE PREVIEW",
+          "nodes": 2
+        },
+        {
+          "path": "body > main:1 > div:2 > div:3",
           "type": "removed",
           "tag": "div",
           "text": "",
           "nodes": 71
         },
         {
-          "path": "body > div:1 > header:1",
-          "type": "removed",
-          "tag": "header",
-          "text": "",
-          "nodes": 21
+          "path": "body > main:1 > footer:3 > span:2",
+          "type": "added",
+          "tag": "span",
+          "text": "pipeline is local-only",
+          "nodes": 2
         },
         {
-          "path": "body > div:1 > footer:3",
+          "path": "body > main:1 > footer:3 > span:2",
           "type": "removed",
-          "tag": "footer",
+          "tag": "span",
+          "text": "background remover · local-only",
+          "nodes": 1
+        },
+        {
+          "path": "body > div:2",
+          "type": "added",
+          "tag": "div",
           "text": "",
-          "nodes": 5
+          "nodes": 1
         }
       ],
       "counts": {
-        "added": 4,
-        "removed": 5,
-        "tagMismatch": 1,
-        "textMismatch": 1,
-        "nodesAdded": 186,
-        "nodesRemoved": 104
+        "added": 8,
+        "removed": 7,
+        "tagMismatch": 2,
+        "textMismatch": 2,
+        "nodesAdded": 153,
+        "nodesRemoved": 78
       }
     }
   ]

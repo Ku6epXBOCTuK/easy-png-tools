@@ -9,22 +9,23 @@
 	let { compact = false, children }: Props = $props();
 </script>
 
-<div class="field-grid" class:compact>
+<div class="controls" class:compact>
 	{@render children()}
 </div>
 
 <style>
-	.field-grid {
-		display: grid;
-		grid-template-columns: 1.1fr 1fr 1.2fr;
-		gap: 16px;
+	.controls {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
 	}
-	.field-grid.compact {
+	.controls.compact {
+		display: grid;
 		grid-template-columns: 1fr 1fr;
+		gap: 14px;
 	}
 	@media (max-width: 800px) {
-		.field-grid,
-		.field-grid.compact {
+		.controls.compact {
 			grid-template-columns: 1fr;
 		}
 	}

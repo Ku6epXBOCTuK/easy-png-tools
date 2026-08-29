@@ -21,7 +21,7 @@
 	aria-label={label}
 	onclick={handle}
 >
-	<span class="toggle-knob"></span>
+		<i class="toggle-knob"></i>
 </button>
 
 <style>

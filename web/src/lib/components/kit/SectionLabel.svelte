@@ -7,9 +7,10 @@
 		title: string;
 		meta?: string;
 		actions?: Snippet;
+		unwrapActions?: boolean;
 	}
 
-	let { label, title, meta, actions }: Props = $props();
+	let { label, title, meta, actions, unwrapActions = false }: Props = $props();
 </script>
 
 <div class="section-label">
@@ -18,9 +19,13 @@
 		<strong>{title}{#if meta}<em>{meta}</em>{/if}</strong>
 	</div>
 	{#if actions}
-		<div class="section-actions">
+		{#if unwrapActions}
 			{@render actions()}
-		</div>
+		{:else}
+			<div class="section-actions">
+				{@render actions()}
+			</div>
+		{/if}
 	{/if}
 </div>
 

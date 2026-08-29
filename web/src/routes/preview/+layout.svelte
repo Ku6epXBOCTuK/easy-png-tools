@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import AppShell from "$lib/components/kit/AppShell.svelte";
 	import TopBar from "$lib/components/kit/TopBar.svelte";
+	import { Link2 } from "@lucide/svelte";
 	import "$lib/styles/design2.css";
 	import type { Snippet } from "svelte";
 
@@ -39,19 +39,23 @@
 			.replace(/^\//, "")
 			.split("/")
 			.filter(Boolean);
-		const label = seg.length ? seg.join(" / ").toUpperCase() : "PREVIEW";
+		const map: Record<string, string> = { demo: "WORKSPACE" };
+		const label = seg.length
+			? seg.map((s) => map[s] ?? s.toUpperCase()).join(" / ")
+			: "PREVIEW";
 		return "/ " + label;
 	}
 </script>
 
-<div class="preview-root" data-theme={theme}>
+<main class="preview-root" data-theme={theme}>
 	<TopBar {theme} {crumb} ontoggle={toggle} />
-	<AppShell>{@render children()}</AppShell>
+	{@render children()}
 	<footer class="preview-footer">
-		<span class="version">v0.1.0</span>
-		<span class="copy">© 2026</span>
+		<span>easy-png-tools <b>v2.4.0</b></span>
+		<span><Link2 size={13} /> pipeline is local-only</span>
+		<span>© 2024</span>
 	</footer>
-</div>
+</main>
 
 <style>
 	.preview-footer {

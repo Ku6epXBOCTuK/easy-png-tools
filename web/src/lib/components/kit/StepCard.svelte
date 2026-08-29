@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
-	import { GripVertical, X } from "@lucide/svelte";
+	import { GripVertical, X, Ellipsis } from "@lucide/svelte";
 
 	interface Props {
 		index: number;
@@ -15,10 +15,8 @@
 </script>
 
 <article class="step-card">
-	<div class="step-rail">
-		<span class="step-index">{index.toString().padStart(2, "0")}</span>
-		<span class="drag" aria-hidden="true"><GripVertical size={16} /></span>
-	</div>
+	<div class="step-index">{index.toString().padStart(2, "0")}</div>
+	<GripVertical size={16} class="drag" aria-hidden="true" />
 	<div class="step-body">
 		<div class="step-heading">
 			<div class="step-heading-text">
@@ -35,43 +33,46 @@
 				>
 					<X size={16} />
 				</button>
+				<Ellipsis size={17} />
 			</div>
 		</div>
 		{#if children}
-			<div class="step-content">{@render children()}</div>
+			{@render children()}
 		{/if}
 	</div>
 </article>
 
 <style>
 	.step-card {
-		display: flex;
+		display: grid;
+		grid-template-columns: 46px 1fr;
+		grid-template-rows: auto 1fr;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		background: var(--panel);
 		overflow: hidden;
 	}
-	.step-rail {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 10px;
-		min-width: 46px;
-		padding: 17px 0 17px 15px;
-		border-right: 1px solid var(--line);
-	}
 	.step-index {
+		grid-column: 1;
+		grid-row: 1;
 		font: 600 22px var(--font-mono);
 		line-height: 1;
 		color: var(--blue);
+		padding: 17px 0 6px 15px;
+		border-right: 1px solid var(--line);
 	}
 	.drag {
+		grid-column: 1;
+		grid-row: 2;
 		color: var(--muted);
 		cursor: grab;
 		display: inline-flex;
+		padding: 0 0 17px 15px;
+		border-right: 1px solid var(--line);
 	}
 	.step-body {
-		flex: 1;
+		grid-column: 2;
+		grid-row: 1 / span 2;
 		min-width: 0;
 		display: flex;
 		flex-direction: column;
@@ -115,10 +116,7 @@
 	.step-remove:hover {
 		color: var(--danger);
 	}
-	.step-content {
+	.step-body > :not(.step-heading) {
 		padding: 0.75rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
 	}
 </style>

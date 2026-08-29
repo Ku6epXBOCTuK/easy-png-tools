@@ -3,14 +3,19 @@
 
 	interface Props {
 		label: string;
+		caption: string;
 		children: Snippet;
 	}
-	let { label, children }: Props = $props();
+
+	let { label, caption, children }: Props = $props();
 </script>
 
 <div class="preview-tile">
-	<span class="tile-label">{label}</span>
 	<div class="tile-canvas">{@render children()}</div>
+	<div class="tile-label">
+		<span>{label}</span>
+		<b>{caption}</b>
+	</div>
 </div>
 
 <style>
@@ -23,15 +28,25 @@
 		padding: 0.4rem;
 		background: var(--panel);
 	}
+	.tile-canvas {
+		border-radius: var(--radius);
+		overflow: hidden;
+		min-height: 120px;
+	}
 	.tile-label {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+	.tile-label span {
 		font: 10px var(--font-mono);
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--blue);
 	}
-	.tile-canvas {
-		border-radius: var(--radius);
-		overflow: hidden;
-		min-height: 120px;
+	.tile-label b {
+		font: 400 10px var(--font-mono);
+		color: var(--muted);
 	}
 </style>

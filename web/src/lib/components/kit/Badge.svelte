@@ -1,16 +1,19 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
+	import { Check } from "@lucide/svelte";
 
 	type Tone = "default" | "accent" | "success" | "amber";
 
 	interface Props {
 		tone?: Tone;
+		check?: boolean;
 		children: Snippet;
 	}
-	let { tone = "default", children }: Props = $props();
+	let { tone = "default", check = false, children }: Props = $props();
 </script>
 
 <span class="badge badge--{tone}">
+	{#if check}<Check size={12} />{/if}
 	{#if children}{@render children()}{/if}
 </span>
 

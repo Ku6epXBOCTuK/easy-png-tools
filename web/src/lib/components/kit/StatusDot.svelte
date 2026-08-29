@@ -1,4 +1,4 @@
-<span class="status-dot" aria-hidden="true"></span>
+<i class="status-dot" aria-hidden="true"></i>
 
 <style>
 	.status-dot {

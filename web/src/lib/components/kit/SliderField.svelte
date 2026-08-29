@@ -1,6 +1,4 @@
 <script lang="ts">
-	import Field from "./Field.svelte";
-
 	interface Props {
 		label: string;
 		value: number;
@@ -26,34 +24,33 @@
 	}
 </script>
 
-<Field {label}>
-	<div class="slider-field">
-		<input type="range" {min} {max} {step} {value} oninput={handle} />
-		<span class="slider-value">
-			{value}
-			{#if suffix}
-				{suffix}
-			{/if}
-		</span>
-	</div>
-</Field>
+<div class="control-block">
+	<label>{label} <output>{value}{suffix}</output></label>
+	<input type="range" {min} {max} {step} {value} oninput={handle} />
+</div>
 
 <style>
-	.slider-field {
+	.control-block {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	label {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
-		width: 100%;
+		justify-content: space-between;
+		gap: 0.5rem;
+		font: 10px var(--font-mono);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+	output {
+		font: 11px var(--font-mono);
+		color: var(--foreground);
 	}
 	input[type="range"] {
-		flex: 1;
+		width: 100%;
 		accent-color: var(--blue);
-	}
-	.slider-value {
-		font-family: var(--font-mono);
-		font-size: 11px;
-		color: var(--foreground);
-		min-width: 4ch;
-		text-align: right;
 	}
 </style>

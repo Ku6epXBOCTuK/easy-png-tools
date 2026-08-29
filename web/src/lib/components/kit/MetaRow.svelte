@@ -8,7 +8,7 @@
 
 <div class="meta-row">
 	<span class="meta-caption">{caption}</span>
-	<span class="meta-value">{value}</span>
+	<b class="meta-value">{value}</b>
 </div>
 
 <style>

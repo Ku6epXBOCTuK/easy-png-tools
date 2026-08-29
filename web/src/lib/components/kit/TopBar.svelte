@@ -16,11 +16,11 @@
 </script>
 
 	<header class="topbar">
-		<div class="brand">
+		<a class="brand" href={resolve("/")}>
 			<span class="brand-mark">EP</span>
 			<span>easy-png-tools</span>
 			{#if crumb}<span class="version">{crumb}</span>{/if}
-		</div>
+		</a>
 		<nav class="nav">
 			<a href={resolve("/preview/demo")}>Workspace</a>
 			<a href={resolve("/preview/list-tools")}>Catalog</a>
@@ -47,7 +47,7 @@
 				class="lang-btn"
 				class:active={lang === "RU"}
 				onclick={() => (lang = "RU")}>RU</button
-			>
+			><span class="lang-div">/</span>
 			<button
 				type="button"
 				class="lang-btn"
@@ -137,6 +137,11 @@
 	}
 	.lang-btn + .lang-btn {
 		border-left: 1px solid var(--line);
+	}
+	.lang-div {
+		color: var(--muted);
+		font: 10px var(--font-mono);
+		align-self: center;
 	}
 	.lang-btn.active {
 		background: var(--foreground);

@@ -22,7 +22,7 @@
 		<button
 			type="button"
 			class="segment"
-			class:active={value === opt.value}
+			class:selected={value === opt.value}
 			aria-pressed={value === opt.value}
 			onclick={() => select(opt.value)}
 		>
