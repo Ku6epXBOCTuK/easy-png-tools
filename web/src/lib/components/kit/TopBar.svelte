@@ -7,10 +7,11 @@
 	interface Props {
 		theme: "light" | "dark";
 		crumb?: string;
+		status?: string;
 		ontoggle: () => void;
 	}
 
-	let { theme, crumb, ontoggle }: Props = $props();
+	let { theme, crumb, status = "AUTO PIPELINE", ontoggle }: Props = $props();
 
 	let lang = $state("RU");
 </script>
@@ -28,7 +29,7 @@
 			<a href={resolve("/preview/tools/remove-background-png")}>Background remover</a>
 		</nav>
 		<div class="top-actions">
-		<span class="status"><StatusDot /> AUTO PIPELINE</span>
+		<span class="status"><StatusDot /> {status}</span>
 		<IconButton
 			icon={CircleHelp}
 			label="Help"

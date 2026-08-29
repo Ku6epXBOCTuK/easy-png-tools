@@ -1,89 +1,88 @@
 <script lang="ts">
 	import { TOOLS } from "$lib/registry";
 	import { CATEGORIES, type CategoryId } from "$lib/categories";
-	import Panel from "$lib/components/kit/Panel.svelte";
-	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
+	import { TOOL_ICONS } from "$lib/tools/tool-icons";
+	import CatalogHeader from "$lib/components/kit/CatalogHeader.svelte";
+	import CatalogToolbar from "$lib/components/kit/CatalogToolbar.svelte";
+	import CatalogGroup from "$lib/components/kit/CatalogGroup.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
 
-	const TITLES: Record<CategoryId, string> = {
-		convert: "Convert",
-		alpha: "Alpha & transparency",
-		color: "Color",
-		geometry: "Geometry",
-		filters: "Filters",
-		text: "Text",
-		analyze: "Analyze",
-		generate: "Generate",
+	const LABELS: Record<CategoryId, string> = {
+		convert: "CONVERT",
+		alpha: "TRANSPARENCY",
+		color: "COLOR",
+		geometry: "GEOMETRY",
+		filters: "FILTERS",
+		text: "TEXT",
+		analyze: "ANALYZE",
+		generate: "GENERATE",
 	};
 
-	const groups = CATEGORIES.map((cat) => ({
-		id: cat,
-		title: TITLES[cat],
-		tools: TOOLS.filter((t) => t.category === cat),
-	}));
+	let query = $state("");
+	let category = $state<string>("all");
+
+	const groups = $derived(
+		CATEGORIES.map((cat) => ({
+			id: cat,
+			label: LABELS[cat],
+			tools: TOOLS.filter(
+				(t) =>
+					t.category === cat &&
+					(category === "all" || category === cat) &&
+					(query.trim() === "" ||
+						t.title.toLowerCase().includes(query.trim().toLowerCase()) ||
+						t.description.toLowerCase().includes(query.trim().toLowerCase())),
+			),
+		})).filter((g) => g.tools.length > 0),
+	);
 </script>
 
-<section class="catalog">
-	<header class="cat-head">
-		<span class="cat-eyebrow">CATALOG</span>
-		<h1 class="cat-title">All tools</h1>
-		<p class="cat-lede">
-			Каталог всех PNG-инструментов, сгруппированный по назначению.
-		</p>
-	</header>
-
-	{#each groups as group (group.id)}
-		<Panel>
-			<PanelHeading title={group.title} eyebrow={group.id} />
-			<div class="cat-grid">
-				{#each group.tools as tool (tool.id)}
+<div class="catalog-page">
+	<CatalogHeader total={TOOLS.length} />
+	<CatalogToolbar bind:query bind:category />
+	<div class="catalog-groups">
+		{#each groups as group (group.id)}
+			<CatalogGroup label={group.label} count={group.tools.length}>
+				{#each group.tools as tool, i (tool.id)}
 					<ToolCard
 						title={tool.title}
-						href="/preview/tools/{tool.id}"
+						href={`/preview/tools/${tool.id}`}
 						description={tool.description}
+						index={i + 1}
+						icon={TOOL_ICONS[tool.id]}
 					/>
 				{/each}
-			</div>
-		</Panel>
-	{/each}
-</section>
+			</CatalogGroup>
+		{/each}
+	</div>
+	<footer class="catalog-footer">
+		ALL OPERATIONS RUN LOCALLY <span>•</span> YOUR FILES NEVER LEAVE THIS DEVICE
+	</footer>
+</div>
 
 <style>
-	.catalog {
-		max-width: none;
-		margin: 0 auto;
-		padding: 2.5rem clamp(24px, 4vw, 72px) 4rem;
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
+	.catalog-page {
+		padding: 60px clamp(24px, 4vw, 72px) 72px;
 	}
-	.cat-head {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-	.cat-eyebrow {
-		font-family: var(--font-mono);
-		font-size: 12px;
-		letter-spacing: 0.18em;
-		color: var(--muted);
-	}
-	.cat-title {
-		margin: 0;
-		font-size: 2rem;
-		font-weight: 700;
-		color: var(--foreground);
-	}
-	.cat-lede {
-		margin: 0;
-		max-width: 56ch;
-		color: var(--muted);
-		font-size: 0.95rem;
-	}
-	.cat-grid {
+	.catalog-groups {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-		gap: 0.75rem;
-		padding: 0.75rem 1rem 1rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 56px 28px;
+	}
+	.catalog-footer {
+		display: flex;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+		margin-top: 56px;
+		padding-top: 24px;
+		border-top: 1px solid var(--line);
+		font: 10px var(--font-mono);
+		letter-spacing: 0.08em;
+		color: var(--muted);
+	}
+	@media (max-width: 800px) {
+		.catalog-groups {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

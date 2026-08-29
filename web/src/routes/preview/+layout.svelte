@@ -32,29 +32,41 @@
 	});
 
 	let crumb = $derived(toCrumb($page.url.pathname));
+	let status = $derived(toStatus($page.url.pathname));
+
+	const CRUMB: Record<string, string> = {
+		"/preview/demo": "WORKSPACE",
+		"/preview/list-tools": "CATALOG",
+		"/preview/tools/linear-gradient-png": "GRADIENT",
+		"/preview/tools/remove-background-png": "BACKGROUND REMOVER",
+	};
+
+	const STATUS: Record<string, string> = {
+		"/preview/demo": "AUTO PIPELINE",
+		"/preview/list-tools": "LOCAL MODE / READY",
+		"/preview/tools/linear-gradient-png": "LIVE PREVIEW",
+		"/preview/tools/remove-background-png": "AUTO PROCESSING",
+	};
 
 	function toCrumb(path: string): string {
-		const seg = path
-			.replace(/^\/preview/, "")
-			.replace(/^\//, "")
-			.split("/")
-			.filter(Boolean);
-		const map: Record<string, string> = { demo: "WORKSPACE" };
-		const label = seg.length
-			? seg.map((s) => map[s] ?? s.toUpperCase()).join(" / ")
-			: "PREVIEW";
-		return "/ " + label;
+		return "/ " + (CRUMB[path] ?? path.split("/").filter(Boolean).pop()?.toUpperCase() ?? "PREVIEW");
+	}
+
+	function toStatus(path: string): string {
+		return STATUS[path] ?? "AUTO PIPELINE";
 	}
 </script>
 
 <main class="preview-root" data-theme={theme}>
-	<TopBar {theme} {crumb} ontoggle={toggle} />
+	<TopBar {theme} {crumb} {status} ontoggle={toggle} />
 	{@render children()}
-	<footer class="preview-footer">
-		<span>easy-png-tools <b>v2.4.0</b></span>
-		<span><Link2 size={13} /> pipeline is local-only</span>
-		<span>© 2024</span>
-	</footer>
+	{#if $page.url.pathname !== "/preview/list-tools"}
+		<footer class="preview-footer">
+			<span>easy-png-tools <b>v2.4.0</b></span>
+			<span><Link2 size={13} /> pipeline is local-only</span>
+			<span>© 2024</span>
+		</footer>
+	{/if}
 </main>
 
 <style>

@@ -2,6 +2,7 @@
 	import { ArrowUpRight } from "@lucide/svelte";
 	import type { Component } from "svelte";
 	import Icon from "./Icon.svelte";
+	import { resolve } from "$app/paths";
 
 	interface Props {
 		title: string;
@@ -13,25 +14,26 @@
 	let { title, href, description, index, icon }: Props = $props();
 </script>
 
-<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-<a class="tool-card" {href}>
-	{#if icon}<span class="tool-icon"><Icon {icon} size={18} /></span>{/if}
+<a class="tool-card" href={resolve(href)}>
+	{#if icon}<span class="tool-icon"><Icon {icon} size={19} /></span>{/if}
+	<span class="tool-copy">
+		<strong>{title}</strong>
+		{#if description}<span>{description}</span>{/if}
+	</span>
 	<span class="tool-index">
 		{index !== undefined ? index.toString().padStart(2, "0") : ""}
-	</span>
-	<span class="tool-copy">
-		<span class="tool-title">{title}</span>
-		{#if description}<span class="tool-desc">{description}</span>{/if}
 	</span>
 	<span class="tool-arrow"><ArrowUpRight size={16} /></span>
 </a>
 
 <style>
 	.tool-card {
-		display: flex;
+		display: grid;
+		grid-template-columns: 42px minmax(0, 1fr) 24px 18px;
 		align-items: center;
-		gap: 0.75rem;
-		padding: 0.75rem 1rem;
+		gap: 14px;
+		min-height: 106px;
+		padding: 16px;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		background: var(--panel);
@@ -42,32 +44,42 @@
 		border-color: var(--blue);
 	}
 	.tool-icon {
+		width: 42px;
+		height: 42px;
+		display: grid;
+		place-items: center;
+		background: color-mix(in srgb, var(--blue) 12%, transparent);
 		color: var(--blue);
-		display: inline-flex;
-	}
-	.tool-index {
-		font-family: var(--font-mono);
-		font-size: 11px;
-		color: var(--muted);
+		border-radius: var(--radius);
 	}
 	.tool-copy {
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
-		flex: 1;
+		min-width: 0;
 	}
-	.tool-title {
-		font-weight: 600;
-		font-size: 0.9rem;
+	.tool-copy strong {
+		font: 600 13px var(--font-mono);
+		color: var(--foreground);
 	}
-	.tool-desc {
-		font-size: 0.8rem;
+	.tool-copy span {
+		font: 12px/1.5 var(--font-mono);
 		color: var(--muted);
+	}
+	.tool-index {
+		font: 10px var(--font-mono);
+		color: var(--muted);
+		align-self: start;
 	}
 	.tool-arrow {
-		color: var(--muted);
+		color: var(--blue);
+		opacity: 0;
+		transition:
+			opacity 0.12s ease,
+			transform 0.12s ease;
 	}
 	.tool-card:hover .tool-arrow {
-		color: var(--blue);
+		opacity: 1;
+		transform: translate(2px, -2px);
 	}
 </style>
