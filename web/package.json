@@ -13,6 +13,7 @@
 		"test": "vitest run",
 		"format": "prettier --write .",
 		"lint": "eslint .",
+		"refs-cdp-audit": "node scripts/audit-cdp.mjs http://localhost:3000/demo.html http://localhost:5173/preview/demo",
 		"refs-css-audit": "node scripts/audit-css.mjs",
 		"refs-dom-audit": "node scripts/audit-dom.mjs"
 	},
@@ -21,6 +22,7 @@
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
+		"diff": "^9.0.0",
 		"eslint": "^10.9.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.23.0",
