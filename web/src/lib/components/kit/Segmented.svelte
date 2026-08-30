@@ -33,7 +33,7 @@
 
 <style>
 	.segmented {
-		display: inline-flex;
+		display: flex;
 		height: 32px;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
@@ -41,22 +41,17 @@
 		background: var(--background);
 	}
 	.segment {
-		border: none;
-		background: transparent;
+		border: 0;
+		border-right: 1px solid var(--line);
 		color: var(--muted);
-		font-family: var(--font-mono);
-		font-size: 10px;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		padding: 0 0.7rem;
-		cursor: pointer;
-		display: inline-flex;
-		align-items: center;
+		font: 10px var(--font-mono);
+		background: 0 0;
+		flex: 1;
 	}
 	.segment + .segment {
 		border-left: 1px solid var(--line);
 	}
-	.segment.active {
+	.segment.selected {
 		background: var(--blue);
 		color: #fff;
 	}

@@ -18,7 +18,8 @@
 </script>
 
 <div class="eyebrow">
-	{eyebrowA} <span>/</span> {eyebrowB}
+	{eyebrowA} <span>/</span>
+	{eyebrowB}
 </div>
 <div class="title-row">
 	<div>
@@ -34,12 +35,12 @@
 	.eyebrow {
 		font: 10px var(--font-mono);
 		letter-spacing: 0.12em;
-		color: var(--muted);
+		color: var(--blue);
 		margin-bottom: 18px;
 	}
 	.eyebrow span {
 		margin: 0 7px;
-		color: var(--blue);
+		color: var(--muted);
 	}
 	.title-row {
 		display: flex;
@@ -52,9 +53,10 @@
 		margin: 0 0 16px;
 		font-size: clamp(36px, 4vw, 64px);
 		font-weight: 650;
-		line-height: 0.9;
+		line-height: 1;
 		letter-spacing: -0.06em;
 		color: var(--foreground);
+		max-width: 700px;
 	}
 	.lede {
 		margin: 0;

@@ -8,7 +8,13 @@
 		chevron?: boolean;
 		oninput?: (value: string) => void;
 	}
-	let { label, value = $bindable(), dark = false, chevron = false, oninput }: Props = $props();
+	let {
+		label,
+		value = $bindable(),
+		dark = false,
+		chevron = false,
+		oninput,
+	}: Props = $props();
 
 	function handle(e: Event) {
 		value = (e.target as HTMLInputElement).value;
@@ -20,51 +26,52 @@
 	<label>{label}</label>
 	<div class="color-field">
 		<span class="swatch" class:dark style="background:{value}"></span>
-		<input type="text" aria-label={label} {value} oninput={handle} spellcheck="false" />
-		{#if chevron}<ChevronDown size={14} />{/if}
+		<input
+			type="text"
+			aria-label={label}
+			{value}
+			oninput={handle}
+			spellcheck="false"
+		/>
+		{#if chevron}<ChevronDown class="icon" size={14} />{/if}
 	</div>
 </div>
 
 <style>
-	.control-block {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
+	.control-block :global(.icon) {
+		color: var(--foreground);
 	}
 	label {
 		display: flex;
 		justify-content: space-between;
-		align-items: baseline;
-		gap: 8px;
 		font: 10px var(--font-mono);
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
+		letter-spacing: 0.08em;
 		color: var(--muted);
 		margin-bottom: 8px;
 	}
 	.color-field {
 		display: flex;
 		align-items: center;
-		gap: 0.4rem;
+		gap: 8px;
+		padding-left: 8px;
+		padding-right: 8px;
+		height: 32px;
 	}
 	.swatch {
-		width: 1.6rem;
-		height: 1.6rem;
+		width: 14px;
+		height: 14px;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		flex: none;
 	}
 	.color-field input {
-		flex: 1;
 		min-width: 0;
-		font-family: var(--font-mono);
-		font-size: 11px;
 		color: var(--foreground);
-		background: var(--background);
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		padding: 0.35rem 0.5rem;
-		text-transform: uppercase;
+		font: 11px var(--font-mono);
+		background: 0 0;
+		border: 0;
+		outline: 0;
+		flex: 1;
 	}
 	.color-field :global(svg) {
 		color: var(--muted);

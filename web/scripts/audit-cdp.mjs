@@ -639,6 +639,15 @@ const sig = (n) =>
 const sameNode = (x, y) => {
 	if (x.tag !== y.tag) return false;
 	if (x.tag === "svg") return true; // icons: design vs library classes differ
+	// Leaf controls (buttons/links/labels) are identified by their text label:
+	// the ref and the app may name the same control with different classes
+	// (e.g. "selected" vs "segment selected"), so a class-list match alone
+	// mis-pairs them (and a classless ref button would otherwise match any
+	// sibling). Matching by label keeps the pairings stable.
+	if (
+		(x.tag === "button" || x.tag === "a" || x.tag === "label") && x.text && y.text
+	)
+		return x.text === y.text;
 	const cx = [...x.classes].sort().join(" ");
 	const cy = [...y.classes].sort().join(" ");
 	return cx === cy || !x.classes.length || !y.classes.length;

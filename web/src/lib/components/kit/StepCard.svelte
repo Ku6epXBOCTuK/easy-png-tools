@@ -45,8 +45,8 @@
 <style>
 	.step-card {
 		display: grid;
-		grid-template-columns: 46px 1fr;
-		grid-template-rows: auto 1fr;
+		grid-template-columns: 46px 20px 1fr;
+		min-height: 138px;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		background: var(--panel);
@@ -56,17 +56,14 @@
 		grid-column: 1;
 		grid-row: 1;
 		font: 600 22px var(--font-mono);
-		line-height: 1;
 		color: var(--blue);
-		padding: 17px 0 6px 15px;
+		padding: 17px 0 0px 15px;
 		border-right: 1px solid var(--line);
 	}
 	.step-body {
 		grid-column: 2;
 		grid-row: 1 / span 2;
-		min-width: 0;
-		display: flex;
-		flex-direction: column;
+		padding: 15px 18px 18px;
 	}
 	.step-heading {
 		display: flex;
@@ -95,6 +92,10 @@
 		background: transparent;
 		color: var(--muted);
 		cursor: pointer;
+	}
+	.step-card :global(.drag) {
+		margin-top: 17px;
+		color: var(--line);
 	}
 	.step-remove:hover {
 		color: var(--danger);

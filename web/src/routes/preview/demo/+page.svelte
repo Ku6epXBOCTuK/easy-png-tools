@@ -241,11 +241,6 @@
 		gap: 10px;
 		padding-top: 14px;
 	}
-	.control-block {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
 	.transform-note {
 		display: flex;
 		align-items: center;
@@ -311,5 +306,16 @@
 		color: var(--muted);
 		font-size: 11px;
 		line-height: 1.5;
+	}
+	label {
+		color: var(--muted);
+		font: 10px var(--font-mono);
+		letter-spacing: 0.08em;
+		justify-content: space-between;
+		margin-bottom: 8px;
+		display: flex;
+		& output {
+			color: var(--foreground);
+		}
 	}
 </style>

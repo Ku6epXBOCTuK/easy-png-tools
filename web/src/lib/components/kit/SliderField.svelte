@@ -30,19 +30,11 @@
 </div>
 
 <style>
-	.control-block {
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-	}
 	label {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
-		gap: 0.5rem;
 		font: 10px var(--font-mono);
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
+		letter-spacing: 0.08em;
 		color: var(--muted);
 		margin-bottom: 8px;
 	}
