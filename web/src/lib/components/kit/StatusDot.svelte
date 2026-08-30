@@ -2,10 +2,9 @@
 
 <style>
 	.status-dot {
-		display: inline-block;
 		width: 6px;
 		height: 6px;
 		border-radius: 50%;
-		background: var(--success);
+		background-color: var(--success2);
 	}
 </style>

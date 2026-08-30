@@ -264,19 +264,21 @@
 		top: 24px;
 	}
 	.history-toggle {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-		width: 100%;
-		margin-top: 18px;
 		border: 1px solid var(--line);
 		color: var(--muted);
 		font: 10px var(--font-mono);
 		letter-spacing: 0.04em;
-		background: none;
-		padding: 11px 14px;
-		cursor: pointer;
+		background: 0 0;
+		justify-content: center;
+		align-items: center;
+		gap: 8px;
+		display: flex;
+		width: auto;
+		margin: 0;
+		padding: 8px 10px;
+		& :global(svg) {
+			transform: rotate(180deg);
+		}
 	}
 	.history-toggle:hover {
 		color: var(--foreground);

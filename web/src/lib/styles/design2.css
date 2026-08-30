@@ -22,14 +22,10 @@ body {
 html {
 	color-scheme: light dark;
 	font-family: var(--font-sans);
-	font-size: 16px;
-	line-height: 1.5;
 	-webkit-text-size-adjust: 100%;
 }
 body {
 	font-family: var(--font-sans);
-	font-size: 16px;
-	line-height: 1.5;
 	color: var(--foreground);
 	background: var(--background);
 	-webkit-font-smoothing: antialiased;
@@ -42,7 +38,7 @@ input,
 select,
 textarea,
 optgroup {
-	font-family: inherit;
+	font: inherit;
 }
 
 /* Новый дизайн: токены (§2 плана redesign).
@@ -62,7 +58,8 @@ optgroup {
 	--blue: #1769d2;
 	--cyan: #00a8c7;
 	--amber: #bd7411;
-	--success: #25a96a;
+	--success: rgb(35, 131, 84);
+	--success2: rgb(37, 169, 106);
 	--danger: #e5484d;
 
 	--radius: 4px;

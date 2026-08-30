@@ -42,6 +42,12 @@
 		cursor: pointer;
 		font-size: inherit;
 		line-height: inherit;
+		border: 0;
+		background: 0 0;
+		border: 0;
+		place-items: center;
+		padding: 6px;
+		display: grid;
 	}
 	.icon-btn:hover:not(:disabled) {
 		color: var(--foreground);
@@ -70,5 +76,12 @@
 	.icon-btn:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
+	}
+
+	.icon-btn--ghost {
+		padding: 6px;
+		border: 0;
+		border-radius: 0;
+		color: var(--muted);
 	}
 </style>

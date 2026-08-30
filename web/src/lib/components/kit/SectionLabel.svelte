@@ -16,7 +16,9 @@
 <div class="section-label">
 	<div class="section-text">
 		<MonoLabel>{label}</MonoLabel>
-		<strong>{title}{#if meta}<em>{meta}</em>{/if}</strong>
+		<strong
+			>{title}{#if meta}<em>{meta}</em>{/if}</strong
+		>
 	</div>
 	{#if actions}
 		{#if unwrapActions}
@@ -34,15 +36,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		gap: 16px;
 		border-bottom: 1px solid var(--line);
-		padding-bottom: 12px;
-	}
-	.section-text {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		min-width: 0;
+		padding-bottom: 15px;
 	}
 	.section-text strong {
 		display: block;

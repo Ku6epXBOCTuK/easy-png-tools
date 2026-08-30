@@ -15,8 +15,10 @@
 
 <style>
 	.meta-list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.15rem;
+		border-top: 1px solid var(--line);
+		grid-template-columns: repeat(3, 1fr);
+		gap: 8px;
+		padding-top: 14px;
+		display: grid;
 	}
 </style>

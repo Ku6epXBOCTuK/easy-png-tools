@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Download, ArrowDownToLine } from "@lucide/svelte";
+	import { ArrowDownToLine, Download } from "@lucide/svelte";
 
 	interface Props {
 		label: string;
@@ -16,17 +16,17 @@
 
 <style>
 	.download-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		border: 1px solid var(--blue);
 		background: var(--blue);
 		color: #fff;
-		font: 12px var(--font-mono);
-		letter-spacing: 0.04em;
-		padding: 9px 14px;
-		border-radius: var(--radius);
-		cursor: pointer;
+		width: 100%;
+		height: 42px;
+		font: 11px var(--font-mono);
+		border: 0;
+		justify-content: center;
+		align-items: center;
+		gap: 9px;
+		margin-top: 18px;
+		display: flex;
 	}
 	.download-btn:hover {
 		background: color-mix(in srgb, var(--blue) 88%, #000);

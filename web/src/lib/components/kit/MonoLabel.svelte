@@ -19,11 +19,10 @@
 	.mono-label {
 		font-family: var(--font-mono);
 		font-size: 10px;
-		line-height: 1.2;
 		font-weight: 400;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		letter-spacing: 0.12em;
 		color: var(--muted);
+		line-height: normal;
 	}
 
 	.accent {

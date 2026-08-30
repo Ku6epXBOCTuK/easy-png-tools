@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
 	import { Check } from "@lucide/svelte";
+	import type { Snippet } from "svelte";
 
 	type Tone = "default" | "accent" | "success" | "amber";
 
@@ -19,14 +19,12 @@
 
 <style>
 	.badge {
-		display: inline-flex;
+		display: flex;
 		align-items: center;
-		gap: 0.3rem;
+		gap: 4px;
+		line-height: normal;
 		font-family: var(--font-mono);
 		font-size: 10px;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		padding: 0.15rem 0.45rem;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		color: var(--muted);

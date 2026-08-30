@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { Ellipsis, GripVertical, X } from "@lucide/svelte";
 	import type { Snippet } from "svelte";
-	import { GripVertical, X, Ellipsis } from "@lucide/svelte";
 
 	interface Props {
 		index: number;
@@ -61,15 +61,6 @@
 		padding: 17px 0 6px 15px;
 		border-right: 1px solid var(--line);
 	}
-	.drag {
-		grid-column: 1;
-		grid-row: 2;
-		color: var(--muted);
-		cursor: grab;
-		display: inline-flex;
-		padding: 0 0 17px 15px;
-		border-right: 1px solid var(--line);
-	}
 	.step-body {
 		grid-column: 2;
 		grid-row: 1 / span 2;
@@ -79,22 +70,15 @@
 	}
 	.step-heading {
 		display: flex;
-		align-items: flex-start;
+		align-items: center;
 		justify-content: space-between;
-		gap: 0.5rem;
-		padding: 0.5rem 0.75rem;
+		gap: 15px;
 		border-bottom: 1px solid var(--line);
-	}
-	.step-heading-text {
-		display: flex;
-		flex-direction: column;
-		min-width: 0;
 	}
 	.step-type {
 		color: var(--muted);
 		font: 10px var(--font-mono);
 		letter-spacing: 0.12em;
-		text-transform: uppercase;
 	}
 	.step-title {
 		margin: 5px 0 18px;
@@ -104,14 +88,13 @@
 	.step-tools {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 13px;
 	}
 	.step-remove {
-		border: none;
+		border: 0;
 		background: transparent;
 		color: var(--muted);
 		cursor: pointer;
-		display: inline-flex;
 	}
 	.step-remove:hover {
 		color: var(--danger);
