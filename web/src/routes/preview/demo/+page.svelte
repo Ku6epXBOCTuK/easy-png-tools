@@ -206,7 +206,7 @@
 				{#each previewTiles as tile (tile.label)}
 					<PreviewTile label={tile.label} caption={tile.caption}>
 						<div
-							class="ph"
+							class="image-preview"
 							class:active={tile.active}
 							style="background:{tile.bg}; border-radius:{tile.radius ??
 								'0'}; box-shadow:{tile.ring ?? 'none'};"
@@ -254,10 +254,12 @@
 		font: 11px var(--font-mono);
 	}
 	.preview-panel {
+		min-width: 0;
+		margin-top: 0;
 		border: 1px solid var(--line);
 		background: var(--panel);
+		align-self: start;
 		padding: 18px;
-		min-width: 0;
 		position: sticky;
 		top: 24px;
 	}
@@ -280,18 +282,21 @@
 		color: var(--foreground);
 		background: var(--background);
 	}
-	.ph {
+	.image-preview {
+		min-width: 0;
+		max-width: 100%;
+		overflow: hidden;
+		aspect-ratio: 1.5;
+		color: #16202b;
 		width: 80%;
-		aspect-ratio: 1.35;
-		display: flex;
+		font: 600 10px var(--font-mono);
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		gap: 5px;
-		color: #16202b;
-		font: 600 10px var(--font-mono);
+		display: flex;
 	}
-	.ph.active {
+	.image-preview.active {
 		border-color: var(--blue);
 	}
 	.sample-icon {

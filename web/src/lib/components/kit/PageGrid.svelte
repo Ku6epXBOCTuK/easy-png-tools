@@ -9,17 +9,18 @@
 	let { settings, preview }: Props = $props();
 </script>
 
-<div class="ws">
+<div class="page-grid">
 	<section class="ws-settings">{@render settings()}</section>
 	{@render preview()}
 </div>
 
 <style>
-	.ws {
+	.page-grid {
 		display: grid;
 		grid-template-columns: minmax(0, 1.05fr) minmax(520px, 0.95fr);
 		align-items: start;
 		gap: 56px;
+		width: 100%;
 		max-width: none;
 		margin: auto;
 		padding: 60px clamp(24px, 4vw, 72px) 72px;
@@ -28,7 +29,7 @@
 		min-width: 0;
 	}
 	@media (max-width: 800px) {
-		.ws {
+		.page-grid {
 			grid-template-columns: 1fr;
 			gap: var(--ws-gap-mobile);
 			padding: 36px 16px 48px;
