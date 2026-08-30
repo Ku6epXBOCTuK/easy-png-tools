@@ -145,6 +145,11 @@ async function capture(browser, target, viewport) {
 	await page.evaluate(() => {
 		document.documentElement.dataset.theme = "light";
 	});
+	// Get deterministic base state: no element under the cursor and no focused
+	// element, so pointer/keyboard state pseudo-classes (:hover/:focus/:active)
+	// never match. Hover rules are simply not part of a static snapshot.
+	await page.mouse.move(-10, -10);
+	await page.evaluate(() => document.activeElement?.blur?.());
 	await page.waitForTimeout(400);
 
 	const tree = await page.evaluate((props) => {
@@ -214,8 +219,7 @@ async function capture(browser, target, viewport) {
 			} catch {}
 		}
 
-		// Strip state pseudo-classes that depend on the current pointer/focus state.
-		const STATE = /:(hover|active|focus|focus-visible|focus-within|visited)\b/g;
+		
 
 		// Selector specificity parser (approximation of the CSS algorithm):
 		// ids, classes, attributes, elements, plus :is/:not/:has (max of args)
@@ -321,7 +325,7 @@ if (comp[i] === "(") {
 				// Specificity is per complex selector: a comma list like
 				// ".a, .b .c" does NOT sum. Match each complex selector on its
 				// own and use its specificity; ties are broken by source order.
-				for (const cs of splitTop(sel.replace(STATE, ""), ",")) {
+				for (const cs of splitTop(sel, ",")) {
 					let ok = false;
 					try {
 						ok = el.matches(cs);

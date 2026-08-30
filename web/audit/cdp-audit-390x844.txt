@@ -1,5 +1,5 @@
 CDP visual audit
-2026-08-30T16:20:46.248Z
+2026-08-30T16:45:08.002Z
 viewport 390x844, tolerance 1px, theme light
 
 === [390x844] /preview/demo  (vs demo.html)  —  172 differences ===
@@ -16,32 +16,22 @@ body > main > header > div > span > i  [status-dot]
     h:  0  →  6  (+6px)
 
 body > main > header > div > button:nth-of-type(1)  [icon-btn icon-btn--bare]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     width:  —  →  auto
     height:  —  →  auto
-    border-top-color:  currentcolor  →  transparent
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(1) > svg  [lucide lucide-circle-question-mark lucide-icon]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(2)  [icon-btn icon-btn--bare]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     width:  —  →  auto
     height:  —  →  auto
-    border-top-color:  currentcolor  →  transparent
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(2) > svg  [lucide lucide-icon lucide-moon]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -67,19 +57,15 @@ body > main > header > nav  [nav]
     margin-left:  auto  →  24px
 
 body > main > header > nav > a:nth-of-type(1)  "Workspace"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(2)  "Catalog"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(3)  "Gradient"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(4)  "Background remover"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > div  [ws]
@@ -467,21 +453,15 @@ body > main > div > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-typ
     line-height:  —  →  1.5
 
 body > main > div > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button:nth-of-type(3)  [icon-btn icon-btn--ghost]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     padding-top:  6px  →  —
     padding-bottom:  6px  →  —
-    width:  —  →  2rem
-    height:  —  →  2rem
     border-top-width:  0px  →  —
     border-top-style:  none  →  —
     border-top-color:  currentcolor  →  —
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > div > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button:nth-of-type(3) > svg  [lucide lucide-icon lucide-settings-2]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -541,12 +521,10 @@ body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button  [step-remove]
     display:  —  →  inline-flex
     border-top-width:  0px  →  medium
-    color:  #6d7883 [var(--muted)]  →  #e5484d [var(--danger)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button > svg  [lucide lucide-icon lucide-x]
-    color:  #6d7883 [var(--muted)]  →  #e5484d [var(--danger)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -749,12 +727,10 @@ body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button  [step-remove]
     display:  —  →  inline-flex
     border-top-width:  0px  →  medium
-    color:  #6d7883 [var(--muted)]  →  #e5484d [var(--danger)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button > svg  [lucide lucide-icon lucide-x]
-    color:  #6d7883 [var(--muted)]  →  #e5484d [var(--danger)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -823,12 +799,10 @@ body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button  [step-remove]
     display:  —  →  inline-flex
     border-top-width:  0px  →  medium
-    color:  #6d7883 [var(--muted)]  →  #e5484d [var(--danger)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button > svg  [lucide lucide-icon lucide-x]
-    color:  #6d7883 [var(--muted)]  →  #e5484d [var(--danger)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -962,12 +936,10 @@ body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(4) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button  [step-remove]
     display:  —  →  inline-flex
     border-top-width:  0px  →  medium
-    color:  #6d7883 [var(--muted)]  →  #e5484d [var(--danger)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(4) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button > svg  [lucide lucide-icon lucide-x]
-    color:  #6d7883 [var(--muted)]  →  #e5484d [var(--danger)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -1127,32 +1099,22 @@ body > main > header > div > span > i  [status-dot]
     h:  0  →  6  (+6px)
 
 body > main > header > div > button:nth-of-type(1)  [icon-btn icon-btn--bare]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     width:  —  →  auto
     height:  —  →  auto
-    border-top-color:  currentcolor  →  transparent
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(1) > svg  [lucide lucide-circle-question-mark lucide-icon]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(2)  [icon-btn icon-btn--bare]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     width:  —  →  auto
     height:  —  →  auto
-    border-top-color:  currentcolor  →  transparent
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(2) > svg  [lucide lucide-icon lucide-moon]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -1178,19 +1140,16 @@ body > main > header > nav  [nav]
     margin-left:  auto  →  24px
 
 body > main > header > nav > a:nth-of-type(1)  "Workspace"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(2)  "Catalog"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(3)  "Gradient"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(4)  "Background remover"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > div  [catalog-page]
@@ -1291,7 +1250,7 @@ body > main > div > div:nth-of-type(2) > div > button:nth-of-type(2)  "CONVERT"
     padding-right:  10px  →  0.6rem
     padding-bottom:  8px  →  0.4rem
     padding-left:  10px  →  0.6rem
-    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
+    border-top-color:  rgba(0, 0, 0, 0)  →  —
     letter-spacing:  —  →  0.06em
 
 body > main > div > div:nth-of-type(2) > div > button:nth-of-type(3)  "TRANSPARENCY"
@@ -1299,7 +1258,7 @@ body > main > div > div:nth-of-type(2) > div > button:nth-of-type(3)  "TRANSPARE
     padding-right:  10px  →  0.6rem
     padding-bottom:  8px  →  0.4rem
     padding-left:  10px  →  0.6rem
-    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
+    border-top-color:  rgba(0, 0, 0, 0)  →  —
     letter-spacing:  —  →  0.06em
 
 body > main > div > div:nth-of-type(2) > div > button:nth-of-type(4)  "COLOR"
@@ -1307,7 +1266,7 @@ body > main > div > div:nth-of-type(2) > div > button:nth-of-type(4)  "COLOR"
     padding-right:  10px  →  0.6rem
     padding-bottom:  8px  →  0.4rem
     padding-left:  10px  →  0.6rem
-    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
+    border-top-color:  rgba(0, 0, 0, 0)  →  —
     letter-spacing:  —  →  0.06em
 
 body > main > div > div:nth-of-type(2) > div > button:nth-of-type(5)  "GEOMETRY"
@@ -1315,7 +1274,7 @@ body > main > div > div:nth-of-type(2) > div > button:nth-of-type(5)  "GEOMETRY"
     padding-right:  10px  →  0.6rem
     padding-bottom:  8px  →  0.4rem
     padding-left:  10px  →  0.6rem
-    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
+    border-top-color:  rgba(0, 0, 0, 0)  →  —
     letter-spacing:  —  →  0.06em
 
 body > main > div > div:nth-of-type(2) > div > button:nth-of-type(6)  "FILTERS"
@@ -1323,7 +1282,7 @@ body > main > div > div:nth-of-type(2) > div > button:nth-of-type(6)  "FILTERS"
     padding-right:  10px  →  0.6rem
     padding-bottom:  8px  →  0.4rem
     padding-left:  10px  →  0.6rem
-    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
+    border-top-color:  rgba(0, 0, 0, 0)  →  —
     letter-spacing:  —  →  0.06em
 
 body > main > div > div:nth-of-type(2) > div > button:nth-of-type(7)  "ANALYZE"
@@ -1331,7 +1290,7 @@ body > main > div > div:nth-of-type(2) > div > button:nth-of-type(7)  "ANALYZE"
     padding-right:  10px  →  0.6rem
     padding-bottom:  8px  →  0.4rem
     padding-left:  10px  →  0.6rem
-    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
+    border-top-color:  rgba(0, 0, 0, 0)  →  —
     letter-spacing:  —  →  0.06em
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1)  [catalog-group]
@@ -1892,32 +1851,22 @@ body > main > header > div > span > i  [status-dot]
     h:  0  →  6  (+6px)
 
 body > main > header > div > button:nth-of-type(1)  [icon-btn icon-btn--bare]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     width:  —  →  auto
     height:  —  →  auto
-    border-top-color:  currentcolor  →  transparent
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(1) > svg  [lucide lucide-circle-question-mark lucide-icon]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(2)  [icon-btn icon-btn--bare]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     width:  —  →  auto
     height:  —  →  auto
-    border-top-color:  currentcolor  →  transparent
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(2) > svg  [lucide lucide-icon lucide-moon]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -1943,19 +1892,16 @@ body > main > header > nav  [nav]
     margin-left:  auto  →  24px
 
 body > main > header > nav > a:nth-of-type(1)  "Workspace"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(2)  "Catalog"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(3)  "Gradient"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(4)  "Background remover"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > div  [tool-page]
@@ -2387,12 +2333,13 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-typ
     column-gap:  8px  →  —
     padding-top:  8px  →  —
     padding-bottom:  8px  →  —
-    color:  #eef1f4 [var(--background)]  →  #17212b [var(--foreground)]
+    background-color:  initial  →  —
+    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-family:  —  →  inherit
     font-size:  —  →  16px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > button:nth-of-type(1) > svg  [lucide lucide-copy lucide-icon]
-    color:  #eef1f4 [var(--background)]  →  #17212b [var(--foreground)]
+    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-family:  —  →  inherit
     font-size:  —  →  16px
 
@@ -2555,32 +2502,22 @@ body > main > header > div > span > i  [status-dot]
     h:  0  →  6  (+6px)
 
 body > main > header > div > button:nth-of-type(1)  [icon-btn icon-btn--bare]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     width:  —  →  auto
     height:  —  →  auto
-    border-top-color:  currentcolor  →  transparent
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(1) > svg  [lucide lucide-circle-question-mark lucide-icon]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(2)  [icon-btn icon-btn--bare]
-    display:  grid  →  inline-flex
-    justify-content:  —  →  center
     width:  —  →  auto
     height:  —  →  auto
-    border-top-color:  currentcolor  →  transparent
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
 body > main > header > div > button:nth-of-type(2) > svg  [lucide lucide-icon lucide-moon]
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
@@ -2606,19 +2543,16 @@ body > main > header > nav  [nav]
     margin-left:  auto  →  24px
 
 body > main > header > nav > a:nth-of-type(1)  "Workspace"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(2)  "Catalog"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(3)  "Gradient"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     letter-spacing:  —  →  0.04em
 
 body > main > header > nav > a:nth-of-type(4)  "Background remover"
-    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
     letter-spacing:  —  →  0.04em
 
 body > main > div  [tool-page]
