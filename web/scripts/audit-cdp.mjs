@@ -1,9 +1,12 @@
 // audit-cdp.mjs
-// CDP/DOMSnapshot-based visual audit over multiple routes.
+// Visual audit over multiple routes comparing SPECIFIED styles (what the CSS
+// actually declares, after cascade + var() resolution + inheritance) instead
+// of computed layout values — so sizes driven by differing page content don't
+// produce false positives. Geometry (box) is only reported where a dimension
+// is explicitly locked by CSS, not where it just follows the content flow.
 // Replicates the route→ref mapping from audit-css.mjs (the 4 targets that have
 // a corresponding ref HTML file), starts a dev server (unless --no-serve),
-// captures each pair, diffs computed styles + geometry, and writes a report to
-// web/audit/cdp-audit.txt.
+// captures each pair, diffs, and writes a report to web/audit/cdp-audit.txt.
 //
 // Usage:
 //   node scripts/audit-cdp.mjs            # serve + audit all 4 targets
@@ -113,7 +116,7 @@ async function capture(browser, target) {
 	});
 	await page.waitForTimeout(400);
 
-	const tree = await page.evaluate((PROPS) => {
+	const tree = await page.evaluate((props) => {
 		const NOISE_TAGS = new Set([
 			"script",
 			"template",
@@ -121,7 +124,260 @@ async function capture(browser, target) {
 			"link",
 			"noscript",
 		]);
-		const snap = (el) => {
+		// Properties that inherit by default — their specified value flows to children.
+		const INHERITED = new Set([
+			"color",
+			"cursor",
+			"direction",
+			"font-family",
+			"font-size",
+			"font-style",
+			"font-variant",
+			"font-weight",
+			"letter-spacing",
+			"line-height",
+			"text-align",
+			"text-indent",
+			"text-shadow",
+			"text-transform",
+			"visibility",
+			"white-space",
+			"word-spacing",
+		]);
+
+		// ---- collect author rules (stylesheets) preserving cascade order ----
+		const rules = [];
+		let ruleOrder = 0;
+		const collect = (list) => {
+			for (const r of list || []) {
+				if (r == null) continue;
+				if (r.type === 1) rules.push({ rule: r, order: ruleOrder++ });
+				else if (r.type === 3 && r.styleSheet) {
+					try {
+						collect(r.styleSheet.cssRules);
+					} catch {}
+				} else if (r.type === 4) {
+					if (r.media?.matches) {
+						try {
+							collect(r.cssRules);
+						} catch {}
+					}
+				} else if (r.type === 12) {
+					try {
+						if (CSS.supports(r.conditionText)) collect(r.cssRules);
+					} catch {
+						try {
+							collect(r.cssRules);
+						} catch {}
+					}
+				} else if (r.type === 15) {
+					try {
+						collect(r.cssRules);
+					} catch {}
+				}
+			}
+		};
+		for (const sheet of document.styleSheets) {
+			try {
+				collect(sheet.cssRules);
+			} catch {}
+		}
+
+		// Strip state pseudo-classes that depend on the current pointer/focus state.
+		const STATE = /:(hover|active|focus|focus-visible|focus-within|visited)\b/g;
+
+		// Selector specificity parser (approximation of the CSS algorithm):
+		// ids, classes, attributes, elements, plus :is/:not/:has (max of args)
+		// and :where (zero).
+		const splitTop = (s, sep) => {
+			const parts = [];
+			let depth = 0,
+				cur = "";
+			const isSep = (ch) =>
+				sep === "," ? ch === "," : ch === ">" || ch === "+" || ch === "~" || /\s/.test(ch);
+			for (const ch of s) {
+				if (ch === "(" || ch === "[") depth++;
+				else if (ch === ")" || ch === "]") depth--;
+				if (depth === 0 && isSep(ch)) {
+					if (cur.trim()) parts.push(cur.trim());
+					cur = "";
+				} else cur += ch;
+			}
+			if (cur.trim()) parts.push(cur.trim());
+			return parts;
+		};
+		const specCompound = (full) => {
+			let [A, B, C] = [0, 0, 0];
+			for (const comp of splitTop(full, " ")) {
+				const n = comp.length;
+				let i = 0;
+				const ident = (ch) => /[\w\u00A0-\uFFFF-]/.test(ch);
+				const readName = () => {
+					let o = "";
+					while (i < n && ident(comp[i])) o += comp[i++];
+					return o;
+				};
+				const endParen = () => {
+					let d = 1;
+					i++;
+					while (i < n) {
+						if (comp[i] === "(" || comp[i] === "[") d++;
+						else if (comp[i] === ")") {
+							d--;
+							if (!d) return i;
+						}
+						i++;
+					}
+					return n;
+				};
+				while (i < n) {
+					const ch = comp[i];
+					if (ch === "#") {
+						A++;
+						i++;
+						readName();
+					} else if (ch === ".") {
+						B++;
+						i++;
+						readName();
+					} else if (ch === "*") i++;
+					else if (ch === "[") {
+						B++;
+						while (i < n && comp[i] !== "]") i++;
+						i++;
+					} else if (ch === ":") {
+						if (comp[i + 1] === ":") {
+							C++;
+							i += 2;
+							readName();
+						} else {
+							i++;
+							const name = readName();
+							if (comp[i] === "(") {
+								const inner = comp.slice(i + 1, endParen());
+								if (name !== "where") {
+									for (const arg of splitTop(inner, ",")) {
+										const [a, b, c] = specCompound(arg);
+										A += a;
+										B += b;
+										C += c;
+									}
+								}
+							} else B++;
+						}
+					} else if (/[a-zA-Z]/.test(ch)) {
+						C++;
+						readName();
+					} else i++;
+				}
+			}
+			return [A, B, C];
+		};
+
+		// All declarations that apply to `el`, in cascade terms.
+		const matched = (el) => {
+			const out = [];
+			for (const { rule, order } of rules) {
+				const sel = rule.selectorText;
+				if (!sel) continue;
+				let ok = false;
+				try {
+					ok = el.matches(sel.replace(STATE, ""));
+				} catch {
+					try {
+						ok = el.matches(sel);
+					} catch {}
+				}
+				if (!ok) continue;
+				const [a, b, c] = specCompound(sel);
+				const st = rule.style;
+				for (let k = 0; k < st.length; k++) {
+					const name = st.item(k);
+					out.push({
+						name,
+						value: st.getPropertyValue(name).trim(),
+						important: st.getPropertyPriority(name) === "important",
+						a,
+						b,
+						c,
+						order,
+					});
+				}
+			}
+			const inline = el.getAttribute("style");
+			if (inline) {
+				const st = el.style;
+				for (let k = 0; k < st.length; k++) {
+					const name = st.item(k);
+					out.push({
+						name,
+						value: st.getPropertyValue(name).trim(),
+						important: st.getPropertyPriority(name) === "important",
+						a: 1e6,
+						b: 0,
+						c: 0,
+						order: 1e6,
+					});
+				}
+			}
+			return out;
+		};
+		const keyOf = (d) => [d.important ? 1 : 0, d.a, d.b, d.c, d.order];
+		const betterThan = (x, y) => {
+			const kx = keyOf(x),
+				ky = keyOf(y);
+			for (let i = 0; i < kx.length; i++)
+				if (kx[i] !== ky[i]) return kx[i] > ky[i] ? 1 : -1;
+			return 0;
+		};
+		// Pick the winning declaration per property (inline > !important > cascade).
+		const resolve = (decls) => {
+			const map = new Map();
+			for (const d of decls) {
+				const cur = map.get(d.name);
+				if (!cur || betterThan(d, cur) > 0) map.set(d.name, d);
+			}
+			return map;
+		};
+		// Inherited entries must always lose against a real declaration.
+		// Custom properties inherit too, so they propagate like inherited props.
+		const inheritedEntries = (m) => {
+			const out = [];
+			for (const [k, v] of m)
+				if (
+					(INHERITED.has(k) || k.startsWith("--")) &&
+					typeof v === "object" &&
+					v !== null
+				)
+					out.push([
+						k,
+						{
+							name: k,
+							value: v.value ?? "",
+							important: false,
+							a: -1,
+							b: -1,
+							c: -1,
+							order: -1,
+						},
+					]);
+			return out;
+		};
+		// Substitute var(--name[, fallback]) with the resolved custom property value
+		// from getComputedStyle (custom props inherit, so per-element lookup works).
+		const resolveVars = (value, cs, depth = 0) => {
+			if (depth > 8 || !value.includes("var(")) return value;
+			return value.replace(
+				/var\((--[\w-]+)(?:,([^)]*))?\)/g,
+				(_, name, fb) => {
+					const v = cs.getPropertyValue(name).trim();
+					if (v) return resolveVars(v, cs, depth + 1);
+					return fb ? resolveVars(fb, cs, depth + 1).trim() : "";
+				},
+			);
+		};
+
+		const snap = (el, inherited) => {
 			const tag = el.tagName.toLowerCase();
 			if (
 				NOISE_TAGS.has(tag) ||
@@ -129,7 +385,24 @@ async function capture(browser, target) {
 				el.id === "svelte-announcer"
 			)
 				return null;
+			const specMap = new Map(inheritedEntries(inherited));
+			for (const [name, d] of resolve(matched(el))) {
+				const cur = specMap.get(name);
+				if (!cur || betterThan(d, cur) > 0) specMap.set(name, d);
+			}
 			const cs = getComputedStyle(el);
+			const styles = {};
+			const raw = {};
+			const computed = {};
+			for (const p of props) {
+				const c = cs.getPropertyValue(p);
+				computed[p] = c;
+				const rv = specMap.get(p)?.value ?? "";
+				raw[p] = rv;
+				let v = rv;
+				if (v.includes("var(")) v = resolveVars(v, cs);
+				styles[p] = v;
+			}
 			const r = el.getBoundingClientRect();
 			return {
 				tag,
@@ -147,16 +420,21 @@ async function capture(browser, target) {
 					w: +r.width.toFixed(1),
 					h: +r.height.toFixed(1),
 				},
-				styles: Object.fromEntries(
-					PROPS.map((p) => [p, cs.getPropertyValue(p)]),
-				),
+				styles,
+				raw,
+				computed,
 				children:
 					tag === "svg"
 						? []
-						: [...el.children].map(snap).filter(Boolean),
+						: [...el.children].map((ch) => snap(ch, specMap)).filter(Boolean),
 			};
 		};
-		return snap(document.body);
+		const htmlNode = snap(document.documentElement, new Map());
+		const findBody = (n) =>
+			n?.tag === "body" ? n : (n?.children ?? []).map(findBody).find(Boolean);
+		const body = findBody(htmlNode);
+		if (!body) throw new Error("capture: body not found");
+		return body;
 	}, PROPS);
 
 	await page.close();
@@ -343,6 +621,43 @@ function diffStyles(a, b) {
 			`⚠ node without styles (a.tag=${a?.tag}, b.tag=${b?.tag}) — matching bug, inspect manually`,
 		];
 
+	// Layout-sensitive props must never fall back to computed: keeping them
+	// specified (e.g. "auto") is what makes this audit content-size independent.
+	const LAYOUT = new Set([
+		"width",
+		"height",
+		"min-width",
+		"min-height",
+		"max-width",
+		"max-height",
+		"top",
+		"right",
+		"bottom",
+		"left",
+		"margin-top",
+		"margin-right",
+		"margin-bottom",
+		"margin-left",
+		"row-gap",
+		"column-gap",
+	]);
+	const DEFAULTISH = (v) =>
+		v === "" ||
+		v === "inherit" ||
+		v === "initial" ||
+		v === "unset" ||
+		v === "revert";
+	// Geometry drift along an axis only matters when that dimension is actually
+	// locked by CSS; otherwise it is just content flow (text lengths, images).
+	const flowDriven = (node, k) => {
+		if (!node?.styles) return true;
+		if (k === "w") return DEFAULTISH(node.styles.width);
+		if (k === "h") return DEFAULTISH(node.styles.height);
+		if (k === "x") return DEFAULTISH(node.styles.left) && DEFAULTISH(node.styles.right);
+		if (k === "y") return DEFAULTISH(node.styles.top) && DEFAULTISH(node.styles.bottom);
+		return true;
+	};
+
 	if (!!a.box !== !!b.box)
 		out.push(
 			`render: node is rendered only on one side ` +
@@ -351,18 +666,38 @@ function diffStyles(a, b) {
 	if (a.box && b.box)
 		for (const k of ["x", "y", "w", "h"]) {
 			const d = +(b.box[k] - a.box[k]).toFixed(1);
-			if (Math.abs(d) > PX_TOL)
+			if (Math.abs(d) > PX_TOL && !(flowDriven(a, k) && flowDriven(b, k)))
 				out.push(
 					`${k}:  ${a.box[k]}  →  ${b.box[k]}  (${d > 0 ? "+" : ""}${d}px)`,
 				);
 		}
+	// If a side is declared via CSS variables, append the raw declaration so
+	// the defining rule is easy to find (e.g. "color: var(--accent)").
+	const fmtSide = (n, k) => {
+		const res = n?.styles?.[k] ?? "";
+		const r = n?.raw?.[k] ?? "";
+		if (r && r.includes("var(") && r !== res)
+			return `${res || "—"} [${r}]`;
+		return res;
+	};
 	for (const k of new Set([
 		...Object.keys(a.styles),
 		...Object.keys(b.styles),
 	])) {
 		const va = a.styles[k] ?? "",
 			vb = b.styles[k] ?? "";
-		if (va !== vb) out.push(`${k}:  ${va || "—"}  →  ${vb || "—"}`);
+		if (va !== vb) {
+			// One side relied on a default (UA/inherit) while the other spelled it
+			// out, but they render identically — not a real difference. Skip for
+			// content-independent props by comparing the computed values.
+			if (
+				!LAYOUT.has(k) &&
+				(DEFAULTISH(va) || DEFAULTISH(vb)) &&
+				a.computed?.[k] === b.computed?.[k]
+			)
+				continue;
+			out.push(`${k}:  ${fmtSide(a, k) || "—"}  →  ${fmtSide(b, k) || "—"}`);
+		}
 	}
 	return out;
 }
