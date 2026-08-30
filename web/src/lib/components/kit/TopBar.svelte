@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { resolve } from "$app/paths";
+	import { CircleQuestionMark, Moon, Sun } from "@lucide/svelte";
 	import IconButton from "./IconButton.svelte";
 	import StatusDot from "./StatusDot.svelte";
-	import { resolve } from "$app/paths";
-	import { CircleHelp, Moon, Sun } from "@lucide/svelte";
 
 	interface Props {
 		theme: "light" | "dark";
@@ -16,22 +16,24 @@
 	let lang = $state("RU");
 </script>
 
-	<header class="topbar">
-		<a class="brand" href={resolve("/")}>
-			<span class="brand-mark">EP</span>
-			<span>easy-png-tools</span>
-			{#if crumb}<span class="version">{crumb}</span>{/if}
-		</a>
-		<nav class="nav">
-			<a href={resolve("/preview/demo")}>Workspace</a>
-			<a href={resolve("/preview/list-tools")}>Catalog</a>
-			<a href={resolve("/preview/tools/linear-gradient-png")}>Gradient</a>
-			<a href={resolve("/preview/tools/remove-background-png")}>Background remover</a>
-		</nav>
-		<div class="top-actions">
+<header class="topbar">
+	<a class="brand" href={resolve("/")}>
+		<span class="brand-mark">EP</span>
+		<span>easy-png-tools</span>
+		{#if crumb}<span class="version">{crumb}</span>{/if}
+	</a>
+	<nav class="nav">
+		<a href={resolve("/preview/demo")}>Workspace</a>
+		<a href={resolve("/preview/list-tools")}>Catalog</a>
+		<a href={resolve("/preview/tools/linear-gradient-png")}>Gradient</a>
+		<a href={resolve("/preview/tools/remove-background-png")}
+			>Background remover</a
+		>
+	</nav>
+	<div class="top-actions">
 		<span class="status"><StatusDot /> {status}</span>
 		<IconButton
-			icon={CircleHelp}
+			icon={CircleQuestionMark}
 			label="Help"
 			variant="bare"
 			onclick={() => {}}
@@ -61,9 +63,6 @@
 
 <style>
 	.topbar {
-		position: sticky;
-		top: 0;
-		z-index: 20;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -96,13 +95,13 @@
 	.nav {
 		display: flex;
 		align-items: center;
-		gap: 18px;
-		margin-left: 24px;
+		gap: 22px;
+		margin-right: 28px;
+		margin-left: auto;
 	}
 	.nav a {
 		color: var(--muted);
 		font: 12px var(--font-mono);
-		letter-spacing: 0.04em;
 		text-decoration: none;
 	}
 	.nav a:hover {
@@ -122,7 +121,8 @@
 		letter-spacing: 0.08em;
 	}
 	.lang {
-		display: inline-flex;
+		display: flex;
+		align-items: center;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		overflow: hidden;
@@ -132,17 +132,12 @@
 		background: transparent;
 		color: var(--muted);
 		font: 10px var(--font-mono);
-		letter-spacing: 0.06em;
 		padding: 6px 9px;
 		cursor: pointer;
 	}
-	.lang-btn + .lang-btn {
-		border-left: 1px solid var(--line);
-	}
 	.lang-div {
-		color: var(--muted);
-		font: 10px var(--font-mono);
-		align-self: center;
+		color: var(--foreground);
+		font-family: var(--font-sans);
 	}
 	.lang-btn.active {
 		background: var(--foreground);

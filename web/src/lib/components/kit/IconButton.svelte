@@ -33,16 +33,15 @@
 
 <style>
 	.icon-btn {
-		display: inline-flex;
+		display: grid;
 		align-items: center;
-		justify-content: center;
-		width: 2rem;
-		height: 2rem;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		background: transparent;
 		color: var(--muted);
 		cursor: pointer;
+		font-size: inherit;
+		line-height: inherit;
 	}
 	.icon-btn:hover:not(:disabled) {
 		color: var(--foreground);
@@ -59,8 +58,6 @@
 		border-color: var(--cyan);
 	}
 	.icon-btn--bare {
-		width: auto;
-		height: auto;
 		padding: 6px;
 		border: 0;
 		border-radius: 0;
