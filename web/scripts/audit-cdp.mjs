@@ -284,17 +284,24 @@ async function capture(browser, target, viewport) {
 						} else {
 							i++;
 							const name = readName();
-							if (comp[i] === "(") {
-								const inner = comp.slice(i + 1, endParen());
-								if (name !== "where") {
-									for (const arg of splitTop(inner, ",")) {
-										const [a, b, c] = specCompound(arg);
-										A += a;
-										B += b;
-										C += c;
-									}
+if (comp[i] === "(") {
+							const inner = comp.slice(i + 1, endParen());
+							// :is/:not/:has take the most specific argument.
+							if (name !== "where") {
+								let a = 0,
+									b = 0,
+									c = 0;
+								for (const arg of splitTop(inner, ",")) {
+									const [aa, bb, cc] = specCompound(arg);
+									a = Math.max(a, aa);
+									b = Math.max(b, bb);
+									c = Math.max(c, cc);
 								}
-							} else B++;
+								A += a;
+								B += b;
+								C += c;
+							}
+						} else B++;
 						}
 					} else if (/[a-zA-Z]/.test(ch)) {
 						C++;
@@ -311,28 +318,33 @@ async function capture(browser, target, viewport) {
 			for (const { rule, order } of rules) {
 				const sel = rule.selectorText;
 				if (!sel) continue;
-				let ok = false;
-				try {
-					ok = el.matches(sel.replace(STATE, ""));
-				} catch {
+				// Specificity is per complex selector: a comma list like
+				// ".a, .b .c" does NOT sum. Match each complex selector on its
+				// own and use its specificity; ties are broken by source order.
+				for (const cs of splitTop(sel.replace(STATE, ""), ",")) {
+					let ok = false;
 					try {
-						ok = el.matches(sel);
-					} catch {}
-				}
-				if (!ok) continue;
-				const [a, b, c] = specCompound(sel);
-				const st = rule.style;
-				for (let k = 0; k < st.length; k++) {
-					const name = st.item(k);
-					out.push({
-						name,
-						value: st.getPropertyValue(name).trim(),
-						important: st.getPropertyPriority(name) === "important",
-						a,
-						b,
-						c,
-						order,
-					});
+						ok = el.matches(cs);
+					} catch {
+						try {
+							ok = el.matches(sel);
+						} catch {}
+					}
+					if (!ok) continue;
+					const [a, b, c] = specCompound(cs);
+					const st = rule.style;
+					for (let k = 0; k < st.length; k++) {
+						const name = st.item(k);
+						out.push({
+							name,
+							value: st.getPropertyValue(name).trim(),
+							important: st.getPropertyPriority(name) === "important",
+							a,
+							b,
+							c,
+							order,
+						});
+					}
 				}
 			}
 			const inline = el.getAttribute("style");

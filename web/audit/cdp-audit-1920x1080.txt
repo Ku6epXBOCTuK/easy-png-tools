@@ -1,21 +1,8 @@
 CDP visual audit
-2026-08-30T14:39:15.772Z
+2026-08-30T16:20:46.240Z
 viewport 1920x1080, tolerance 1px, theme light
 
-=== [1920x1080] /preview/demo  (vs demo.html)  —  173 differences ===
-
-body > main > header  [topbar]
-    position:  —  →  sticky
-    top:  —  →  0px
-    z-index:  —  →  20
-
-body > main > header > a > span:nth-of-type(3)  [version]  "/ WORKSPACE"
-    color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
-
-body > main > header > div > span > i  [status-dot]
-    width:  6px  →  8px
-    height:  6px  →  8px
-    box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
+=== [1920x1080] /preview/demo  (vs demo.html)  —  169 differences ===
 
 body > main > header > div > button:nth-of-type(1)  [icon-btn icon-btn--bare]
     display:  grid  →  inline-flex
@@ -486,11 +473,11 @@ body > main > div > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-typ
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
 
+body > main > div > section:nth-of-type(1) > div:nth-of-type(1)  [eyebrow]  "PNG PROCESSING WORKSPACE"
+    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
+
 body > main > div > section:nth-of-type(1) > div:nth-of-type(1) > span  "/"
     color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
-
-body > main > div > section:nth-of-type(1) > div:nth-of-type(2)  [title-row]
-    align-items:  center  →  flex-end
 
 body > main > div > section:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > h1  "Build your image pipeline."
     max-width:  700px  →  —
@@ -1057,11 +1044,6 @@ body > main > div > section:nth-of-type(1) > div:nth-of-type(5) > button  [reset
 body > main > div > section:nth-of-type(1) > div:nth-of-type(5) > button > svg  [lucide lucide-icon lucide-rotate-ccw]
     line-height:  inherit  →  1.5
 
-body > main > div > section:nth-of-type(1) > div:nth-of-type(5) > span > i  [status-dot]
-    width:  6px  →  8px
-    height:  6px  →  8px
-    box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
-
 body > main > div > section:nth-of-type(1) > div:nth-of-type(3)  [section-label]
     row-gap:  —  →  16px
     column-gap:  —  →  16px
@@ -1119,20 +1101,7 @@ body >div
     ✗ present in reference, absent in project
 
 
-=== [1920x1080] /preview/list-tools  (vs list-tools.html)  —  126 differences ===
-
-body > main > header  [topbar]
-    position:  —  →  sticky
-    top:  —  →  0px
-    z-index:  —  →  20
-
-body > main > header > a > span:nth-of-type(3)  [version]  "/ CATALOG"
-    color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
-
-body > main > header > div > span > i  [status-dot]
-    width:  6px  →  8px
-    height:  6px  →  8px
-    box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
+=== [1920x1080] /preview/list-tools  (vs list-tools.html)  —  123 differences ===
 
 body > main > header > div > button:nth-of-type(1)  [icon-btn icon-btn--bare]
     display:  grid  →  inline-flex
@@ -1217,6 +1186,7 @@ body > main > div > div:nth-of-type(1)  [catalog-head]
 
 body > main > div > div:nth-of-type(1) > div:nth-of-type(1) > div  [eyebrow]  "EASY-PNG-TOOLS / CATALOG"
     margin-bottom:  18px  →  0.5rem
+    color:  #1769d2 [var(--blue)]  →  #6d7883 [var(--muted)]
     letter-spacing:  0.12em  →  0.18em
 
 body > main > div > div:nth-of-type(1) > div:nth-of-type(1) > h1  "Tool catalog"
@@ -1801,20 +1771,7 @@ body >div
     ✗ present in reference, absent in project
 
 
-=== [1920x1080] /preview/tools/linear-gradient-png  (vs gradient.html)  —  92 differences ===
-
-body > main > header  [topbar]
-    position:  —  →  sticky
-    top:  —  →  0px
-    z-index:  —  →  20
-
-body > main > header > a > span:nth-of-type(3)  [version]  "/ GRADIENT"
-    color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
-
-body > main > header > div > span > i  [status-dot]
-    width:  6px  →  8px
-    height:  6px  →  8px
-    box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
+=== [1920x1080] /preview/tools/linear-gradient-png  (vs gradient.html)  —  89 differences ===
 
 body > main > header > div > button:nth-of-type(1)  [icon-btn icon-btn--bare]
     display:  grid  →  inline-flex
@@ -1892,7 +1849,7 @@ body > main > div  [tool-page]
 
 body > main > div > div:nth-of-type(1)  [eyebrow]  "PNG PROCESSING SINGLE TOOL"
     margin-bottom:  18px  →  —
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
+    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     font-family:  —  →  "IBM Plex Sans", sans-serif [var(--font-sans)]
     font-size:  —  →  16px
     line-height:  —  →  1.5
@@ -2467,20 +2424,7 @@ body >div
     ✗ present in reference, absent in project
 
 
-=== [1920x1080] /preview/tools/remove-background-png  (vs background-remover.html)  —  100 differences ===
-
-body > main > header  [topbar]
-    position:  —  →  sticky
-    top:  —  →  0px
-    z-index:  —  →  20
-
-body > main > header > a > span:nth-of-type(3)  [version]  "/ BACKGROUND REMOVER"
-    color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
-
-body > main > header > div > span > i  [status-dot]
-    width:  6px  →  8px
-    height:  6px  →  8px
-    box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
+=== [1920x1080] /preview/tools/remove-background-png  (vs background-remover.html)  —  97 differences ===
 
 body > main > header > div > button:nth-of-type(1)  [icon-btn icon-btn--bare]
     display:  grid  →  inline-flex
@@ -2558,7 +2502,7 @@ body > main > div  [tool-page]
 
 body > main > div > div:nth-of-type(1)  [eyebrow]  "PNG PROCESSING SINGLE TOOL"
     margin-bottom:  18px  →  —
-    color:  #6d7883 [var(--muted)]  →  #17212b [var(--foreground)]
+    color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
     font-family:  —  →  "IBM Plex Sans", sans-serif [var(--font-sans)]
     font-size:  —  →  16px
     line-height:  —  →  1.5
@@ -2713,7 +2657,7 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-typ
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2)  [color-reference]  "sampled from image background"
     display:  flex  →  —
-    justify-content:  space-between  →  —
+    justify-content:  flex-start  →  —
     row-gap:  8px  →  —
     column-gap:  8px  →  —
     margin-top:  10px  →  —
