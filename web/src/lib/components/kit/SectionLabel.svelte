@@ -37,7 +37,7 @@
 		justify-content: space-between;
 		align-items: center;
 		border-bottom: 1px solid var(--line);
-		padding-bottom: 15px;
+		padding-bottom: 12px;
 	}
 	.section-text strong {
 		display: block;

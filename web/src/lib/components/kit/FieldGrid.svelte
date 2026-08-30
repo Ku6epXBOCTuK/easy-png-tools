@@ -21,9 +21,8 @@
 	}
 	.controls.compact {
 		display: grid;
-		grid-auto-flow: column;
-		grid-auto-columns: minmax(0, 1fr);
-		gap: 0 16px;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
 	}
 
 	@media (max-width: 800px) {

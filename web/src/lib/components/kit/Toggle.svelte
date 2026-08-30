@@ -21,14 +21,14 @@
 	aria-label={label}
 	onclick={handle}
 >
-		<i class="toggle-knob"></i>
+	<i class="toggle-knob"></i>
 </button>
 
 <style>
 	.toggle {
 		position: relative;
-		width: 2.4rem;
-		height: 1.3rem;
+		width: 32px;
+		height: 18px;
 		border: 1px solid var(--line);
 		border-radius: 999px;
 		background: var(--background);
@@ -40,17 +40,10 @@
 		border-color: var(--blue);
 	}
 	.toggle-knob {
-		position: absolute;
-		top: 1px;
-		left: 1px;
-		width: calc(1.3rem - 4px);
-		height: calc(1.3rem - 4px);
 		border-radius: 50%;
 		background: var(--foreground);
 		transition: transform 0.12s ease;
 	}
 	.toggle.on .toggle-knob {
-		transform: translateX(1.1rem);
-		background: #fff;
 	}
 </style>

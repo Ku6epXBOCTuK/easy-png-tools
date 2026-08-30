@@ -17,12 +17,7 @@
 
 <style>
 	.toggle-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
 		color: var(--foreground);
-		font-size: 0.85rem;
 		cursor: pointer;
 	}
 </style>
