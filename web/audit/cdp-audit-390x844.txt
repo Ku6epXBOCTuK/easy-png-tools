@@ -1,18 +1,23 @@
 CDP visual audit
-2026-08-30T09:31:56.937Z
-viewport 1440x900, tolerance 1px, theme light
+2026-08-30T14:39:15.778Z
+viewport 390x844, tolerance 1px, theme light
 
-=== [1440x900] /preview/demo  (vs demo.html)  —  173 differences ===
+=== [390x844] /preview/demo  (vs demo.html)  —  174 differences ===
 
 body > main > header  [topbar]
     position:  —  →  sticky
     top:  —  →  0px
     z-index:  —  →  20
+    h:  120  →  64  (-56px)
+
+body > main > header > a > span:nth-of-type(1)  [brand-mark]  "EP"
+    w:  30  →  14.6  (-15.4px)
 
 body > main > header > a > span:nth-of-type(3)  [version]  "/ WORKSPACE"
     color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
 
 body > main > header > div > span > i  [status-dot]
+    display:  —  →  inline-block
     width:  6px  →  8px
     height:  6px  →  8px
     box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
@@ -90,6 +95,7 @@ body > main > div  [ws]
 body > main > div > section:nth-of-type(2)  [preview-panel]
     align-self:  start  →  —
     margin-top:  0px  →  —
+    y:  1489.8  →  1270.7  (-219.1px)
 
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2)  [preview-stack]
     grid-template-columns:  1fr 1fr  →  1fr
@@ -125,7 +131,7 @@ body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-typ
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div  [ph]
     min-width:  0px  →  —
     max-width:  100%  →  —
-    w:  193.9  →  439.9  (+246px)
+    w:  228.8  →  244.2  (+15.4px)
 
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2)  [tile-label]
     align-items:  —  →  baseline
@@ -176,7 +182,7 @@ body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-typ
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div  [ph]
     min-width:  0px  →  —
     max-width:  100%  →  —
-    w:  193.9  →  439.9  (+246px)
+    w:  228.8  →  244.2  (+15.4px)
 
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2)  [tile-label]
     align-items:  —  →  baseline
@@ -227,7 +233,7 @@ body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-typ
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(1) > div  [ph]
     min-width:  0px  →  —
     max-width:  100%  →  —
-    w:  193.9  →  439.9  (+246px)
+    w:  228.8  →  244.2  (+15.4px)
 
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3) > div:nth-of-type(2)  [tile-label]
     align-items:  —  →  baseline
@@ -278,7 +284,7 @@ body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-typ
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(4) > div:nth-of-type(1) > div  [ph]
     min-width:  0px  →  —
     max-width:  100%  →  —
-    w:  193.9  →  439.9  (+246px)
+    w:  228.8  →  244.2  (+15.4px)
 
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(4) > div:nth-of-type(2)  [tile-label]
     align-items:  —  →  baseline
@@ -329,7 +335,7 @@ body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-typ
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(5) > div:nth-of-type(1) > div  [active ph]
     min-width:  0px  →  —
     max-width:  100%  →  —
-    w:  193.9  →  439.9  (+246px)
+    w:  228.8  →  244.2  (+15.4px)
 
 body > main > div > section:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(5) > div:nth-of-type(2)  [tile-label]
     align-items:  —  →  baseline
@@ -637,7 +643,7 @@ body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2) > input
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
-    w:  155  →  190  (+35px)
+    w:  254  →  310  (+56px)
 
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(3)  [control-block]
     display:  —  →  flex
@@ -878,7 +884,7 @@ body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > input
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
-    w:  273.1  →  301.1  (+28px)
+    w:  254  →  310  (+56px)
 
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2)  [control-block]
     display:  —  →  flex
@@ -1017,7 +1023,7 @@ body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(4) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > input
     font-size:  inherit  →  16px
     line-height:  inherit  →  1.5
-    w:  273.1  →  301.1  (+28px)
+    w:  254  →  310  (+56px)
 
 body > main > div > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(4) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(2)  [toggle-row]
     display:  —  →  flex
@@ -1119,17 +1125,22 @@ body >div
     ✗ present in reference, absent in project
 
 
-=== [1440x900] /preview/list-tools  (vs list-tools.html)  —  126 differences ===
+=== [390x844] /preview/list-tools  (vs list-tools.html)  —  155 differences ===
 
 body > main > header  [topbar]
     position:  —  →  sticky
     top:  —  →  0px
     z-index:  —  →  20
+    h:  120  →  64  (-56px)
+
+body > main > header > a > span:nth-of-type(1)  [brand-mark]  "EP"
+    w:  30  →  14.6  (-15.4px)
 
 body > main > header > a > span:nth-of-type(3)  [version]  "/ CATALOG"
     color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
 
 body > main > header > div > span > i  [status-dot]
+    display:  —  →  inline-block
     width:  6px  →  8px
     height:  6px  →  8px
     box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
@@ -1367,6 +1378,10 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-typ
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2)  [tool-cards]
     padding-top:  14px  →  —
 
+body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
+
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
     flex-direction:  —  →  column
@@ -1374,8 +1389,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(1) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1384,8 +1402,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(2) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1394,8 +1415,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(3) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1404,8 +1428,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(4) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(5) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(5) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1414,7 +1441,6 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(1) > div:nth-of-type(2) > a:nth-of-type(5) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2)  [catalog-group]
@@ -1443,6 +1469,10 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-typ
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2)  [tool-cards]
     padding-top:  14px  →  —
 
+body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
+
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
     flex-direction:  —  →  column
@@ -1450,8 +1480,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(1) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1460,8 +1493,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(2) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1470,8 +1506,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(3) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1480,8 +1519,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(4) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(5) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(5) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1490,7 +1532,6 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(2) > div:nth-of-type(2) > a:nth-of-type(5) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3)  [catalog-group]
@@ -1519,6 +1560,10 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-typ
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2)  [tool-cards]
     padding-top:  14px  →  —
 
+body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
+
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
     flex-direction:  —  →  column
@@ -1526,8 +1571,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(1) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1536,8 +1584,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(2) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1546,8 +1597,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(3) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1556,8 +1610,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(4) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(5) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(5) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1566,7 +1623,6 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(3) > div:nth-of-type(2) > a:nth-of-type(5) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4)  [catalog-group]
@@ -1595,6 +1651,10 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-typ
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2)  [tool-cards]
     padding-top:  14px  →  —
 
+body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
+
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
     flex-direction:  —  →  column
@@ -1602,8 +1662,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(1) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1612,8 +1675,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(2) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1622,8 +1688,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(3) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1632,8 +1701,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(4) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(5) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(5) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1642,7 +1714,6 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(4) > div:nth-of-type(2) > a:nth-of-type(5) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5)  [catalog-group]
@@ -1671,6 +1742,10 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-typ
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2)  [tool-cards]
     padding-top:  14px  →  —
 
+body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
+
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
     flex-direction:  —  →  column
@@ -1678,8 +1753,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(1) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1688,8 +1766,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(2) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1698,8 +1779,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(3) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1708,7 +1792,6 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(5) > div:nth-of-type(2) > a:nth-of-type(4) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6)  [catalog-group]
@@ -1737,6 +1820,10 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-typ
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2)  [tool-cards]
     padding-top:  14px  →  —
 
+body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
+
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(1) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
     flex-direction:  —  →  column
@@ -1744,8 +1831,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(1) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(2) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1754,8 +1844,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(2) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(3) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1764,8 +1857,11 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(3) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
+
+body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(1)  [tool-icon]
+    w:  38  →  42  (+4px)
+    h:  38  →  42  (+4px)
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(4) > span:nth-of-type(2)  [tool-copy]
     display:  grid  →  flex
@@ -1774,7 +1870,6 @@ body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-typ
     column-gap:  8px  →  2px
 
 body > main > div > div:nth-of-type(3) > section:nth-of-type(6) > div:nth-of-type(2) > a:nth-of-type(4) > svg  [lucide lucide-arrow-up-right lucide-icon tool-arrow]
-    opacity:  1  →  —
     color:  #1769d2 [var(--blue)]  →  #17212b [var(--foreground)]
 
 body > main > div > footer  [catalog-footer]  "ALL OPERATIONS RUN LOCALLY YOUR FILES NE"
@@ -1801,17 +1896,22 @@ body >div
     ✗ present in reference, absent in project
 
 
-=== [1440x900] /preview/tools/linear-gradient-png  (vs gradient.html)  —  92 differences ===
+=== [390x844] /preview/tools/linear-gradient-png  (vs gradient.html)  —  93 differences ===
 
 body > main > header  [topbar]
     position:  —  →  sticky
     top:  —  →  0px
     z-index:  —  →  20
+    h:  120  →  64  (-56px)
+
+body > main > header > a > span:nth-of-type(1)  [brand-mark]  "EP"
+    w:  30  →  14.6  (-15.4px)
 
 body > main > header > a > span:nth-of-type(3)  [version]  "/ GRADIENT"
     color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
 
 body > main > header > div > span > i  [status-dot]
+    display:  —  →  inline-block
     width:  6px  →  8px
     height:  6px  →  8px
     box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
@@ -1910,7 +2010,6 @@ body > main > div > div:nth-of-type(1) > span  "/"
     letter-spacing:  0.12em  →  —
 
 body > main > div > div:nth-of-type(2)  [tool-title]
-    display:  flex  →  —
     justify-content:  space-between  →  —
     align-items:  end  →  —
     row-gap:  32px  →  —
@@ -2467,17 +2566,22 @@ body >div
     ✗ present in reference, absent in project
 
 
-=== [1440x900] /preview/tools/remove-background-png  (vs background-remover.html)  —  100 differences ===
+=== [390x844] /preview/tools/remove-background-png  (vs background-remover.html)  —  101 differences ===
 
 body > main > header  [topbar]
     position:  —  →  sticky
     top:  —  →  0px
     z-index:  —  →  20
+    h:  120  →  64  (-56px)
+
+body > main > header > a > span:nth-of-type(1)  [brand-mark]  "EP"
+    w:  30  →  14.6  (-15.4px)
 
 body > main > header > a > span:nth-of-type(3)  [version]  "/ BACKGROUND REMOVER"
     color:  #6d7883 [var(--muted)]  →  #1769d2 [var(--blue)]
 
 body > main > header > div > span > i  [status-dot]
+    display:  —  →  inline-block
     width:  6px  →  8px
     height:  6px  →  8px
     box-shadow:  —  →  0 0 0 2px color-mix(in srgb, #25a96a 25%, transparent) [0 0 0 2px color-mix(in srgb, var(--success) 25%, transparent)]
@@ -2576,7 +2680,6 @@ body > main > div > div:nth-of-type(1) > span  "/"
     letter-spacing:  0.12em  →  —
 
 body > main > div > div:nth-of-type(2)  [tool-title]
-    display:  flex  →  —
     justify-content:  space-between  →  —
     align-items:  end  →  —
     row-gap:  32px  →  —

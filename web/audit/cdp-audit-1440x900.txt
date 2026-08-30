@@ -1,5 +1,5 @@
 CDP visual audit
-2026-08-30T09:31:56.937Z
+2026-08-30T14:39:15.774Z
 viewport 1440x900, tolerance 1px, theme light
 
 === [1440x900] /preview/demo  (vs demo.html)  —  173 differences ===

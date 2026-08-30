@@ -20,7 +20,7 @@ import { writeFileSync, mkdirSync, readdirSync } from "node:fs";
 import { resolve, join } from "node:path";
 
 const argv = (() => {
-	const a = {};
+	const a = { viewports: [] };
 	for (let i = 0; i < process.argv.length; i++) {
 		const v = process.argv[i];
 		if (v === "--no-serve") a.noServe = true;
@@ -28,6 +28,10 @@ const argv = (() => {
 		else if (v === "--ref") a.ref = process.argv[++i];
 		else if (v === "--route") a.route = process.argv[++i];
 		else if (v === "--port") a.port = Number(process.argv[++i]);
+		else if (v === "--viewport")
+			a.viewports.push(
+				...(process.argv[++i] ?? "").split(",").filter(Boolean),
+			);
 	}
 	return a;
 })();
@@ -36,6 +40,35 @@ const WEB = process.cwd();
 const PORT = argv.port || 5179;
 const REFS_DIR = resolve(WEB, "../refs-html");
 const PX_TOL = 1;
+
+// Requested viewports; repeatable/comma-separated "--viewport WxH".
+// Deduplicated, preserves order. Defaults to 1440x900 when the flag is absent.
+const viewports = (() => {
+	const raw = argv.viewports.length ? argv.viewports : ["1440x900"];
+	const out = [];
+	for (const s of raw) {
+		const m = /^(\d+)x(\d+)$/.exec(s.trim());
+		if (!m) {
+			console.error(`[cdp-audit] invalid viewport: ${s} (expected "WxH")`);
+			process.exit(1);
+		}
+		const vp = { width: +m[1], height: +m[2] };
+		if (!out.some((o) => o.width === vp.width && o.height === vp.height))
+			out.push(vp);
+	}
+	return out;
+})();
+const vpLabel = (vp) => `${vp.width}x${vp.height}`; 
+
+// Explicit --viewport means per-resolution files; default run keeps the
+// backward-compatible single cdp-audit.txt name.
+const perResFile = argv.viewports.length > 0;
+const reportPath = (vp) =>
+	resolve(
+		WEB,
+		"audit",
+		perResFile ? `cdp-audit-${vpLabel(vp)}.txt` : "cdp-audit.txt",
+	);
 
 const PROPS = [
 	"display",
@@ -98,13 +131,11 @@ const PROPS = [
 
 // --- capture: open a page and snapshot its tree via getComputedStyle ---
 
-async function capture(browser, target) {
+async function capture(browser, target, viewport) {
 	const url = target.startsWith("http")
 		? target
 		: "file:///" + target.replace(/\\/g, "/");
-	const page = await browser.newPage({
-		viewport: { width: 1440, height: 900 },
-	});
+	const page = await browser.newPage({ viewport });
 	await page.goto(url, { waitUntil: "networkidle" });
 	await page.evaluate(async () => {
 		await document.fonts.ready;
@@ -663,14 +694,7 @@ function diffStyles(a, b) {
 			`render: node is rendered only on one side ` +
 				`(no layout box — usually display:none on one side)`,
 		);
-	if (a.box && b.box)
-		for (const k of ["x", "y", "w", "h"]) {
-			const d = +(b.box[k] - a.box[k]).toFixed(1);
-			if (Math.abs(d) > PX_TOL && !(flowDriven(a, k) && flowDriven(b, k)))
-				out.push(
-					`${k}:  ${a.box[k]}  →  ${b.box[k]}  (${d > 0 ? "+" : ""}${d}px)`,
-				);
-		}
+
 	// If a side is declared via CSS variables, append the raw declaration so
 	// the defining rule is easy to find (e.g. "color: var(--accent)").
 	const fmtSide = (n, k) => {
@@ -680,6 +704,9 @@ function diffStyles(a, b) {
 			return `${res || "—"} [${r}]`;
 		return res;
 	};
+	// Which style props were already reported as diffs — box axes governed by
+	// them are redundant then.
+	const styleDiffKeys = new Set();
 	for (const k of new Set([
 		...Object.keys(a.styles),
 		...Object.keys(b.styles),
@@ -697,8 +724,31 @@ function diffStyles(a, b) {
 			)
 				continue;
 			out.push(`${k}:  ${fmtSide(a, k) || "—"}  →  ${fmtSide(b, k) || "—"}`);
+			styleDiffKeys.add(k);
 		}
 	}
+
+	// Box axes map to style props: w→width, h→height, x→left/right, y→top/bottom.
+	// If the corresponding style diff is already above, the geometry line is a
+	// duplicate — drop it. Keep geometry only for changes the styles don't
+	// explain (e.g. different border/padding with the same declared width).
+	if (a.box && b.box)
+		for (const k of ["x", "y", "w", "h"]) {
+			const gov =
+				k === "w"
+					? ["width"]
+					: k === "h"
+						? ["height"]
+						: k === "x"
+							? ["left", "right"]
+							: ["top", "bottom"];
+			if (gov.some((p) => styleDiffKeys.has(p))) continue;
+			const d = +(b.box[k] - a.box[k]).toFixed(1);
+			if (Math.abs(d) > PX_TOL && !(flowDriven(a, k) && flowDriven(b, k)))
+				out.push(
+					`${k}:  ${a.box[k]}  →  ${b.box[k]}  (${d > 0 ? "+" : ""}${d}px)`,
+				);
+		}
 	return out;
 }
 
@@ -861,16 +911,16 @@ const waitFor = async (url, ms = 60000) => {
 	throw new Error("dev server not up: " + url);
 };
 
-async function auditOne(browser, target) {
+async function auditOne(browser, target, viewport) {
 	const oursUrl = argv.ours || `http://127.0.0.1:${PORT}${target.route}`;
 	const refUrl = resolve(REFS_DIR, target.ref);
 
-	const ours = await capture(browser, oursUrl);
-	const ref = await capture(browser, refUrl);
+	const ours = await capture(browser, oursUrl, viewport);
+	const ref = await capture(browser, refUrl, viewport);
 
 	const report = [];
 	compare(ref, ours, ["body"], report);
-	return { route: target.route, ref: target.ref, lines: report };
+	return { route: target.route, ref: target.ref, viewport, lines: report };
 }
 
 async function main() {
@@ -896,15 +946,19 @@ async function main() {
 	const browser = await chromium.launch();
 	const reports = [];
 	try {
-		for (const target of targets) {
-			try {
-				const rep = await auditOne(browser, target);
-				reports.push(rep);
-				console.log(
-					`[cdp-audit] ${rep.route} (vs ${rep.ref}): ${rep.lines.length} differences`,
-				);
-			} catch (e) {
-				console.error(`[cdp-audit] ${target.route} failed: ${e.message}`);
+		for (const vp of viewports) {
+			for (const target of targets) {
+				try {
+					const rep = await auditOne(browser, target, vp);
+					reports.push(rep);
+					console.log(
+						`[cdp-audit] [${vpLabel(vp)}] ${rep.route} (vs ${rep.ref}): ${rep.lines.length} differences`,
+					);
+				} catch (e) {
+					console.error(
+						`[cdp-audit] [${vpLabel(vp)}] ${target.route} failed: ${e.message}`,
+					);
+				}
 			}
 		}
 	} finally {
@@ -920,22 +974,26 @@ async function main() {
 		}
 	}
 
-	const header =
-		`CDP visual audit\n${new Date().toISOString()}\n` +
-		`viewport 1440x900, tolerance ${PX_TOL}px, theme light\n\n`;
-	const body = reports
-		.map((r) => {
-			const title = `=== ${r.route}  (vs ${r.ref})  —  ${r.lines.length} differences ===`;
-			if (!r.lines.length) return title + "\n  ✅ no differences found";
-			return title + "\n\n" + r.lines.join("\n\n");
-		})
-		.join("\n\n\n");
-
 	const outDir = resolve(WEB, "audit");
 	mkdirSync(outDir, { recursive: true });
-	const outPath = resolve(outDir, "cdp-audit.txt");
-	writeFileSync(outPath, header + body + "\n", "utf8");
-	console.log(`report: web/audit/cdp-audit.txt`);
+	for (const vp of viewports) {
+		const vReps = reports.filter(
+			(r) => r.viewport.width === vp.width && r.viewport.height === vp.height,
+		);
+		const header =
+			`CDP visual audit\n${new Date().toISOString()}\n` +
+			`viewport ${vpLabel(vp)}, tolerance ${PX_TOL}px, theme light\n\n`;
+		const body = vReps
+			.map((r) => {
+				const title = `=== [${vpLabel(vp)}] ${r.route}  (vs ${r.ref})  —  ${r.lines.length} differences ===`;
+				if (!r.lines.length) return title + "\n  ✅ no differences found";
+				return title + "\n\n" + r.lines.join("\n\n");
+			})
+			.join("\n\n\n");
+		const outPath = reportPath(vp);
+		writeFileSync(outPath, header + body + "\n", "utf8");
+		console.log(`report: ${outPath}`);
+	}
 }
 
 main().catch((e) => {
