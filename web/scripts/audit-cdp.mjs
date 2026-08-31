@@ -126,6 +126,15 @@ const PROPS = [
 	"border-top-width",
 	"border-top-style",
 	"border-top-color",
+	"border-right-width",
+	"border-right-style",
+	"border-right-color",
+	"border-bottom-width",
+	"border-bottom-style",
+	"border-bottom-color",
+	"border-left-width",
+	"border-left-style",
+	"border-left-color",
 	"border-radius",
 	"background-color",
 	"background-image",
@@ -207,6 +216,7 @@ async function capture(browser, target, viewport) {
 		PROPS,
 		NOISE_TAGS: [...NOISE_TAGS],
 		INHERITED: [...INHERITED],
+		BOX_GROUPS,
 	});
 	await page.close();
 	return tree;
@@ -217,7 +227,7 @@ async function capture(browser, target, viewport) {
 // declares after cascade + inheritance + var() resolution — alongside the
 // computed value from getComputedStyle. Runs inside the page via
 // page.evaluate, so it must stay self-contained (browser globals + the arg).
-function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
+function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED, BOX_GROUPS }) {
 	// page.evaluate hand-serialized the Sets to plain arrays — restore them.
 	NOISE_TAGS = new Set(NOISE_TAGS);
 	INHERITED = new Set(INHERITED);
@@ -546,11 +556,12 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 		return [...map.values()];
 	}
 
-	function matchedDeclarations(el, rules) {
+	// `comp` is the element's computed style, used to resolve var()s inside a
+	// rule's shorthand values (custom props inherit, so per-element lookup is
+	// correct); the caller computes it once so the tree builder and matcher
+	// share a single getComputedStyle call.
+	function matchedDeclarations(el, rules, comp) {
 		const out = [];
-		// Computed style for resolving var()s inside a rule's shorthand values
-		// (custom props inherit, so per-element lookup is correct).
-		const comp = getComputedStyle(el);
 		for (const { rule, order, effective } of rules) {
 			const sel = effective ?? rule.selectorText;
 			if (!sel) continue;
@@ -575,12 +586,33 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 		const inline = el.getAttribute("style");
 		if (inline) {
 			const st = el.style;
+			const names = new Set();
 			for (let k = 0; k < st.length; k++) {
 				const name = st.item(k);
+				names.add(name);
 				out.push({
 					name,
 					value: st.getPropertyValue(name).trim(),
 					important: st.getPropertyPriority(name) === "important",
+					layerRank: Number.MAX_SAFE_INTEGER,
+					a: 1e6,
+					b: 0,
+					c: 0,
+					order: 1e6,
+				});
+			}
+			// Enumeration only yields longhands (inline "margin: 0" shows up as
+			// margin-top..left, never as "margin"). Parse the RAW attribute text
+			// (el.style.cssText is canonicalized by the browser, e.g. a 4-value
+			// margin collapses to the shortest form) so box shorthands get a
+			// winning entry carrying the ORIGINAL declared spelling.
+			for (const part of parseDecls(inline)) {
+				const md = /^([^:]+):\s*([\s\S]*?)\s*(!important)?\s*$/.exec(part);
+				if (!md || names.has(md[1].trim())) continue;
+				out.push({
+					name: md[1].trim(),
+					value: md[2].trim(),
+					important: !!md[3],
 					layerRank: Number.MAX_SAFE_INTEGER,
 					a: 1e6,
 					b: 0,
@@ -661,15 +693,32 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 			el.id === "svelte-announcer"
 		)
 			return null;
-		const specMap = new Map(inheritedEntries(inherited));
-		for (const [name, d] of resolve(matchedDeclarations(el, rules))) {
-			const cur = specMap.get(name);
-			if (!cur || betterThan(d, cur) > 0) specMap.set(name, d);
-		}
-		const cs = getComputedStyle(el);
-		const styles = {};
-		const raw = {};
-		const computed = {};
+	// Computed style drives var() resolution and the recorded computed values;
+	// computed once here and reused by the cascade matcher below.
+	const cs = getComputedStyle(el);
+	const specMap = new Map(inheritedEntries(inherited));
+	for (const [name, d] of resolve(matchedDeclarations(el, rules, cs))) {
+		const cur = specMap.get(name);
+		if (!cur || betterThan(d, cur) > 0) specMap.set(name, d);
+	}
+	// Box shorthands (margin/padding/gap): record the ORIGINAL declared value
+	// when one rule cleanly set every side (`consistent` cascade), so the report
+	// can show "20px 20px 20px 20px" vs a single "20px" the way the CSS spells
+	// it, not just the collapsed rendering.
+	const groups = {};
+	for (const g of BOX_GROUPS) {
+		const declared = specMap.get(g.name)?.value;
+		if (!declared) continue;
+		const expanded = expandShorthand(g.name, declared, cs);
+		const consistent = g.keys.every(
+			(k) => (expanded[k] ?? "") === (specMap.get(k)?.value ?? ""),
+		);
+		groups[g.name] = { declared, consistent };
+	}
+
+	const styles = {};
+	const raw = {};
+	const computed = {};
 		for (const p of PROPS) {
 			const c = cs.getPropertyValue(p);
 			computed[p] = c;
@@ -699,6 +748,7 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 			styles,
 			raw,
 			computed,
+			groups,
 			children:
 				tag === "svg"
 					? []
@@ -943,6 +993,14 @@ const DEFAULTISH = (v) =>
 	v === "unset" ||
 	v === "revert";
 
+// Border longhands are reported as one grouped "border" line per side-group
+// rather than 12 separate lines, so a full-border change is visible at a glance.
+const BORDER_SIDES = ["top", "right", "bottom", "left"];
+const BORDER_SUBS = ["width", "style", "color"];
+const BORDER_KEYS = new Set(
+	BORDER_SIDES.flatMap((s) => BORDER_SUBS.map((t) => `border-${s}-${t}`)),
+);
+
 // Geometry drift along an axis only matters when that dimension is actually
 // locked by CSS; otherwise it is just content flow (text lengths, images).
 function flowDriven(node, k) {
@@ -973,6 +1031,117 @@ function normVal(k, v) {
 	return v;
 }
 
+// Is property k genuinely different between two interpreted nodes? Skips
+// spelling-vs-default noise (one side spells out a UA/inherit default the
+// other relies on) when they render identically (computed matches), unless the
+// prop is layout-sensitive where the specified value is what matters.
+function isRealDiff(a, b, k) {
+	const va = normVal(k, a.styles[k] ?? ""),
+		vb = normVal(k, b.styles[k] ?? "");
+	if (va === vb) return false;
+	return !(
+		!LAYOUT.has(k) &&
+		(DEFAULTISH(va) || DEFAULTISH(vb)) &&
+		a.computed?.[k] === b.computed?.[k]
+	);
+}
+
+// One "prop: ref → ours" line for a non-border property, or null if identical.
+function styleLine(a, b, k) {
+	if (!isRealDiff(a, b, k)) return null;
+	return `${k}:  ${fmtSide(a, k) || "—"}  →  ${fmtSide(b, k) || "—"}`;
+}
+
+// Compact, one-line rendering of one node's border. When every side shares the
+// same width/style/color it reads "1px solid red"; otherwise the sides that
+// actually differ are listed explicitly (e.g. "top(color:#00f)").
+function borderOf(a, b, n) {
+	const sideVals = (sub) => {
+		const vals = BORDER_SIDES.map((s) => fmtSide(n, `border-${s}-${sub}`));
+		return new Set(vals.map((v) => v || "—")).size === 1 ? vals[0] : null;
+	};
+	const w = sideVals("width"),
+		st = sideVals("style"),
+		c = sideVals("color");
+	if (w !== null && st !== null && c !== null)
+		return `${w} ${st} ${c}`.replace(/\s+/g, " ").trim();
+	const parts = BORDER_SIDES.map((s) => {
+		const subs = BORDER_SUBS.filter((t) =>
+			isRealDiff(a, b, `border-${s}-${t}`),
+		);
+		if (!subs.length) return null;
+		return `${s}(${subs
+			.map((t) => `${t}:${fmtSide(n, `border-${s}-${t}`) || "—"}`)
+			.join(" ")})`;
+	}).filter(Boolean);
+	return parts.join(" ") || "—";
+}
+
+// The grouped "border" line covering all four sides, or null if there is no
+// real border difference. Returns the differing longhand keys too so the caller
+// can mark them as already-reported (suppressing geometry duplicates).
+function borderLine(a, b) {
+	const keys = [...BORDER_KEYS].filter((k) => isRealDiff(a, b, k));
+	if (!keys.length) return null;
+	return { line: `border:  ${borderOf(a, b, a)}  →  ${borderOf(a, b, b)}`, keys };
+}
+
+// CSS box shorthands reported as one line instead of one line per longhand
+// (4 for margin/padding, 2 for gap). The same table is passed into the browser
+// so the snapshot can also record the ORIGINAL declared shorthand (see snap()).
+const BOX_GROUPS = [
+	{
+		name: "margin",
+		keys: ["margin-top", "margin-right", "margin-bottom", "margin-left"],
+	},
+	{
+		name: "padding",
+		keys: ["padding-top", "padding-right", "padding-bottom", "padding-left"],
+	},
+	{ name: "gap", keys: ["row-gap", "column-gap"] },
+];
+const GROUP_KEYS = new Set(BOX_GROUPS.flatMap((g) => g.keys));
+
+// Collapse per-side specified values into the shortest CSS shorthand that
+// expresses them (1/2/3/4 values for a box, 1/2 for gap) — exactly how the
+// browser serializes e.g. padding. Distinct sides can't collapse, so a
+// "padding: 15px 20px 25px 30px" vs "padding: 20px" difference stays visible.
+function boxShorthand(vals) {
+	if (vals.length === 2) {
+		const [row, col] = vals;
+		return row === col ? row : `${row} ${col}`;
+	}
+	const [t, r, b, l] = vals;
+	if (t === r && t === b && t === l) return t;
+	if (t === b && r === l) return `${t} ${r}`;
+	if (r === l) return `${t} ${r} ${b}`;
+	return `${t} ${r} ${b} ${l}`;
+}
+
+// The browser records how a box shorthand was actually DECLARED in CSS (e.g.
+// "20px 20px 20px 20px") when one rule cleanly set every side of the group.
+// Surface it when it differs from the collapsed rendering, so source-level
+// syntax differences (explicit longhand lists vs a single value) are visible.
+function declaredHint(node, group, collapsed) {
+	const h = node?.groups?.[group.name];
+	if (!h?.consistent || !h.declared) return "";
+	if (h.declared === collapsed) return "";
+	return ` [declared: ${h.declared}]`;
+}
+
+// One grouped "margin/padding/gap: ref → ours" line, or null when none of the
+// group's longhands actually differ. Returns the differing keys too.
+function boxGroupLine(a, b, group) {
+	const keys = group.keys;
+	const diff = keys.filter((k) => isRealDiff(a, b, k));
+	if (!diff.length) return null;
+	const packed = (n) => boxShorthand(keys.map((k) => fmtSide(n, k) || "—"));
+	const line =
+		`${group.name}:  ${packed(a)}${declaredHint(a, group, packed(a))}` +
+		`  →  ${packed(b)}${declaredHint(b, group, packed(b))}`;
+	return { line, keys: diff };
+}
+
 function diffStyles(a, b) {
 	const out = [];
 	if (!a?.styles || !b?.styles)
@@ -993,21 +1162,25 @@ function diffStyles(a, b) {
 		...Object.keys(a.styles),
 		...Object.keys(b.styles),
 	])) {
-		const va = normVal(k, a.styles[k] ?? ""),
-			vb = normVal(k, b.styles[k] ?? "");
-		if (va !== vb) {
-			// One side relied on a default (UA/inherit) while the other spelled it
-			// out, but they render identically — not a real difference. Skip for
-			// content-independent props by comparing the computed values.
-			if (
-				!LAYOUT.has(k) &&
-				(DEFAULTISH(va) || DEFAULTISH(vb)) &&
-				a.computed?.[k] === b.computed?.[k]
-			)
-				continue;
-			out.push(`${k}:  ${fmtSide(a, k) || "—"}  →  ${fmtSide(b, k) || "—"}`);
+		if (BORDER_KEYS.has(k) || GROUP_KEYS.has(k)) continue; // grouped below
+		const line = styleLine(a, b, k);
+		if (line) {
+			out.push(line);
 			styleDiffKeys.add(k);
 		}
+	}
+
+	// Box shorthands (margin/padding/gap) and the border collapse their
+	// individual longhand lines into one "shorthand: ref → ours" line each.
+	const lineOf = (g) => {
+		if (g.name === "border") return borderLine(a, b);
+		return boxGroupLine(a, b, g);
+	};
+	for (const g of [...BOX_GROUPS, { name: "border" }]) {
+		const gl = lineOf(g);
+		if (!gl) continue;
+		out.push(gl.line);
+		for (const k of gl.keys) styleDiffKeys.add(k);
 	}
 
 	// Box axes map to style props: w→width, h→height, x→left/right, y→top/bottom.
@@ -1034,14 +1207,20 @@ function diffStyles(a, b) {
 	return out;
 }
 
-function compare(a, b, path, report) {
-	const sel = path.join(" > ");
+// Emit one node's style changes (if any) as a report block under `sel`.
+function reportStyles(sel, a, b, report) {
 	const changes = diffStyles(a, b);
 	if (changes.length)
 		report.push(
 			sel + annotate(b ?? a) + "\n" + changes.map((c) => "    " + c).join("\n"),
 		);
+}
 
+// Walk a matched pair's children, diffing them and emitting the results into
+// `report`. `removed`/`added` are leftover children after the LCS pairing —
+// they're first repairable by tag, and anything still unpaired is a real
+// add/remove entry.
+function diffChildren(a, b, path, report) {
 	const removed = [],
 		added = [];
 	let ai = 0,
@@ -1083,6 +1262,11 @@ function compare(a, b, path, report) {
 		report.push(
 			`${[...path, seg(node, i, b.children)].join(" >")}${annotate(node)}\n    + present in project, absent in reference`,
 		);
+}
+
+function compare(a, b, path, report) {
+	reportStyles(path.join(" > "), a, b, report);
+	diffChildren(a, b, path, report);
 }
 
 // ==== target discovery (mirrors audit-css.mjs) =============================
