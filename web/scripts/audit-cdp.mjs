@@ -135,6 +135,11 @@ const PROPS = [
 	"text-transform",
 	"white-space",
 	"vertical-align",
+	"text-decoration",
+	"text-decoration-line",
+	"text-decoration-style",
+	"text-decoration-color",
+	"text-underline-offset",
 ];
 
 // Tags/elements never included in the snapshot.
@@ -360,6 +365,131 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 
 	// ---- cascade resolution ----------------------------------------------
 	// All declarations that apply to `el`, in cascade terms.
+	// ---- declaration parsing + shorthand expansion ------------------------
+	// Reading longhands off a rule misses shorthands: e.g. a rule written
+	// `font: 600 14px var(--font-mono)` yields an EMPTY font-size/font-weight/
+	// font-family on enumeration (getPropertyValue), and the browser even
+	// refuses to expand `font` inline when it contains a var(). So we parse the
+	// raw declaration text and expand shorthands into longhands — font by hand,
+	// everything else via a detached element whose cssText the browser expands.
+	const _tmp = document.createElement("div");
+
+	// Split a declaration block ("a:1; b:2") on top-level ';', ignoring braces,
+	// parens and quoted strings (so "content:';'" and var(...) survive).
+	function parseDecls(cssText) {
+		const parts = [];
+		let depth = 0,
+			cur = "",
+			inStr = null;
+		for (const ch of cssText) {
+			if (inStr) {
+				cur += ch;
+				if (ch === inStr) inStr = null;
+				continue;
+			}
+			if (ch === '"' || ch === "'") {
+				inStr = ch;
+				cur += ch;
+				continue;
+			}
+			if (ch === "(" || ch === "[") depth++;
+			else if (ch === ")" || ch === "]") depth--;
+			if (ch === ";" && depth === 0) {
+				if (cur.trim()) parts.push(cur.trim());
+				cur = "";
+			} else cur += ch;
+		}
+		if (cur.trim()) parts.push(cur.trim());
+		return parts;
+	}
+
+	// font — needs manual parsing: the browser can't expand it when a var()
+	// appears (commonly in the family), so enumerate longhands by substituting
+	// a plain family and reading back the resolved font sub-properties.
+	// Grammar:  [ <style>||<variant>||<weight>||<stretch> ]? <size>
+	//           [ / <line> ]? <family-list>   — everything except size is optional.
+	function expandFont(raw) {
+		const v = raw.trim();
+		// Locate the size token: a length/% literal or a clamp()/min()/max().
+		const sz = /(\d+(?:\.\d+)?(?:px|em|rem|%|pt|vh|vw)|clamp\([^)]*\)|min\([^)]*\)|max\([^)]*\))/.exec(
+			v,
+		);
+		if (!sz) return {};
+		const size = sz[0];
+		// Optional leading font-style/variant/weight/stretch prefix, then the
+		// trailing "/ line-height family" or "family".
+		const prefix = v.slice(0, sz.index).trim();
+		const after = v.slice(sz.index + size.length).trim();
+		const lm = /^\/\s*([^;\s]+)\s*([\s\S]*)$/.exec(after);
+		const lh = lm ? lm[1].trim() : "";
+		const family = (lm ? lm[2] : after).trim();
+		// Substitute a plain family so the browser can expand size/weight/line.
+		_tmp.style.cssText = `font: ${prefix ? prefix + " " : ""}${size}${lh ? " / " + lh : ""} serif`;
+		const out = {};
+		for (const ln of [
+			"font-style",
+			"font-variant",
+			"font-weight",
+			"font-stretch",
+			"font-size",
+			"line-height",
+		]) {
+			const val = _tmp.style.getPropertyValue(ln);
+			if (val !== "") out[ln] = val;
+		}
+		_tmp.style.cssText = "";
+		out["font-family"] = family.replace(/\s+/g, " ").trim();
+		return out;
+	}
+
+	// General shorthand -> longhands via the detached element (browser expands
+	// margin/padding/flex/gap/background/inset/etc. when read as inline style).
+	function expandShorthand(name, value) {
+		if (name === "font") return expandFont(value);
+		_tmp.style.cssText = `${name}: ${value}`;
+		const out = {};
+		for (let k = 0; k < _tmp.style.length; k++) {
+			const ln = _tmp.style.item(k);
+			const v = _tmp.style.getPropertyValue(ln);
+			if (v !== "") out[ln] = v;
+		}
+		_tmp.style.cssText = "";
+		return out;
+	}
+
+	// All declarations a stylesheet rule contributes, with shorthands expanded;
+	// explicit longhands win over expansion for the same property.
+	function declarationsOf(rule) {
+		const map = new Map();
+		const add = (name, value, important) => {
+			if (value === "" || map.has(name)) return;
+			map.set(name, { name, value, important: !!important });
+		};
+		const st = rule.style;
+		for (let k = 0; k < st.length; k++) {
+			const name = st.item(k);
+			add(
+				name,
+				st.getPropertyValue(name).trim(),
+				st.getPropertyPriority(name) === "important",
+			);
+		}
+		for (const part of parseDecls(st.cssText)) {
+			// name: value [!important]
+			const md = /^([^:]+):\s*([\s\S]*?)\s*(!important)?\s*$/.exec(part);
+			if (!md) continue;
+			const name = md[1].trim(),
+				value = md[2].trim(),
+				important = !!md[3];
+			// Skip longhands (already enumerated above) and any property that
+			// itself is already present with a value.
+			if (name.includes("-") || map.has(name)) continue;
+			for (const [ln, v] of Object.entries(expandShorthand(name, value) || {}))
+				add(ln, v, important);
+		}
+		return [...map.values()];
+	}
+
 	function matchedDeclarations(el, rules) {
 		const out = [];
 		for (const { rule, order, effective } of rules) {
@@ -379,19 +509,8 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 				}
 				if (!ok) continue;
 				const [a, b, c] = specCompound(cs);
-				const st = rule.style;
-				for (let k = 0; k < st.length; k++) {
-					const name = st.item(k);
-					out.push({
-						name,
-						value: st.getPropertyValue(name).trim(),
-						important: st.getPropertyPriority(name) === "important",
-						a,
-						b,
-						c,
-						order,
-					});
-				}
+				for (const d of declarationsOf(rule))
+					out.push({ ...d, a, b, c, order });
 			}
 		}
 		const inline = el.getAttribute("style");
@@ -778,6 +897,14 @@ function fmtSide(n, k) {
 	return res;
 }
 
+// Normalize spelled-out values that are visually/declaratively equivalent, so
+// they don't show up as phantom diffs (e.g. font-weight 400 == normal).
+function normVal(k, v) {
+	if (k === "font-weight")
+		return v === "normal" ? "400" : v === "bold" ? "700" : v;
+	return v;
+}
+
 function diffStyles(a, b) {
 	const out = [];
 	if (!a?.styles || !b?.styles)
@@ -798,8 +925,8 @@ function diffStyles(a, b) {
 		...Object.keys(a.styles),
 		...Object.keys(b.styles),
 	])) {
-		const va = a.styles[k] ?? "",
-			vb = b.styles[k] ?? "";
+		const va = normVal(k, a.styles[k] ?? ""),
+			vb = normVal(k, b.styles[k] ?? "");
 		if (va !== vb) {
 			// One side relied on a default (UA/inherit) while the other spelled it
 			// out, but they render identically — not a real difference. Skip for
