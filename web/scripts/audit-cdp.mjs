@@ -96,6 +96,13 @@ const PROPS = [
 	"column-gap",
 	"grid-template-columns",
 	"grid-template-rows",
+	"grid-area",
+	"grid-column",
+	"grid-column-start",
+	"grid-column-end",
+	"grid-row",
+	"grid-row-start",
+	"grid-row-end",
 	"margin-top",
 	"margin-right",
 	"margin-bottom",
@@ -475,7 +482,11 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 	}
 
 	// General shorthand -> longhands via the detached element (browser expands
-	// margin/padding/flex/gap/background/inset/etc. when read as inline style).
+	// margin/padding/flex/gap/background/inset/etc. when read as inline style),
+	// as long as the value contains no var(). A shorthand carrying var() can't
+	// be expanded by the CSSOM (it returns empty longhands, and inline styles
+	// refuse to split it), so fall back to keeping the shorthand itself under
+	// its own name — enough for PROPS like border-radius to compare.
 	function expandShorthand(name, value) {
 		if (name === "font") return expandFont(value);
 		_tmp.style.cssText = `${name}: ${value}`;
@@ -486,6 +497,7 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 			if (v !== "") out[ln] = v;
 		}
 		_tmp.style.cssText = "";
+		if (!Object.keys(out).length && value.includes("var(")) out[name] = value;
 		return out;
 	}
 
@@ -513,9 +525,11 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 			const name = md[1].trim(),
 				value = md[2].trim(),
 				important = !!md[3];
-			// Skip longhands (already enumerated above) and any property that
-			// itself is already present with a value.
-			if (name.includes("-") || map.has(name)) continue;
+			// Skip anything already present from enumeration (longhands with a
+			// real value). Don't blanket-skip hyphenated names: a shorthand
+			// carrying var() was enumerated as EMPTY longhands, so it must be
+			// re-parsed here to survive (e.g. border-radius: var(--radius)).
+			if (map.has(name)) continue;
 			for (const [ln, v] of Object.entries(expandShorthand(name, value) || {}))
 				add(ln, v, important);
 		}
