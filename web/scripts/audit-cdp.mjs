@@ -483,13 +483,21 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 
 	// General shorthand -> longhands via the detached element (browser expands
 	// margin/padding/flex/gap/background/inset/etc. when read as inline style),
-	// as long as the value contains no var(). A shorthand carrying var() can't
-	// be expanded by the CSSOM (it returns empty longhands, and inline styles
-	// refuse to split it), so fall back to keeping the shorthand itself under
-	// its own name — enough for PROPS like border-radius to compare.
-	function expandShorthand(name, value) {
+	// as long as the value carries no var(). A shorthand with var() can't be
+	// split by the CSSOM (empty longhands, inline styles refuse to expand it),
+	// so resolve the vars against the element's computed style first — that
+	// yields concrete longhands (e.g. background -> background-color). The
+	// resolved shorthand is ALSO kept under its own name so shorthand props in
+	// PROPS (e.g. border-radius) remain comparable rather than only surfacing
+	// as individual longhands that PROPS doesn't track.
+	function expandShorthand(name, value, cs) {
 		if (name === "font") return expandFont(value);
-		_tmp.style.cssText = `${name}: ${value}`;
+		let attempt = value;
+		if (value.includes("var(") && cs) {
+			const resolved = resolveVars(value, cs);
+			if (!resolved.includes("var(")) attempt = resolved;
+		}
+		_tmp.style.cssText = `${name}: ${attempt}`;
 		const out = {};
 		for (let k = 0; k < _tmp.style.length; k++) {
 			const ln = _tmp.style.item(k);
@@ -497,13 +505,15 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 			if (v !== "") out[ln] = v;
 		}
 		_tmp.style.cssText = "";
-		if (!Object.keys(out).length && value.includes("var(")) out[name] = value;
+		// Always keep the shorthand itself (with the resolved value) alongside
+		// its longhands; extra keys just aren't diffed unless in PROPS.
+		out[name] = attempt;
 		return out;
 	}
 
 	// All declarations a stylesheet rule contributes, with shorthands expanded;
 	// explicit longhands win over expansion for the same property.
-	function declarationsOf(rule) {
+	function declarationsOf(rule, cs) {
 		const map = new Map();
 		const add = (name, value, important) => {
 			if (value === "" || map.has(name)) return;
@@ -530,7 +540,7 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 			// carrying var() was enumerated as EMPTY longhands, so it must be
 			// re-parsed here to survive (e.g. border-radius: var(--radius)).
 			if (map.has(name)) continue;
-			for (const [ln, v] of Object.entries(expandShorthand(name, value) || {}))
+			for (const [ln, v] of Object.entries(expandShorthand(name, value, cs) || {}))
 				add(ln, v, important);
 		}
 		return [...map.values()];
@@ -538,6 +548,9 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 
 	function matchedDeclarations(el, rules) {
 		const out = [];
+		// Computed style for resolving var()s inside a rule's shorthand values
+		// (custom props inherit, so per-element lookup is correct).
+		const comp = getComputedStyle(el);
 		for (const { rule, order, effective } of rules) {
 			const sel = effective ?? rule.selectorText;
 			if (!sel) continue;
@@ -555,7 +568,7 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 				}
 				if (!ok) continue;
 				const [a, b, c] = specCompound(cs);
-				for (const d of declarationsOf(rule))
+				for (const d of declarationsOf(rule, comp))
 					out.push({ ...d, a, b, c, order });
 			}
 		}
