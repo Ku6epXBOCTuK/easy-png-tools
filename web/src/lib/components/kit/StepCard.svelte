@@ -55,7 +55,7 @@
 	.step-index {
 		grid-column: 1;
 		grid-row: 1;
-		font: 600 22px var(--font-mono);
+		font: 11px var(--font-mono);
 		color: var(--blue);
 		padding: 17px 0 0px 15px;
 		border-right: 1px solid var(--line);
@@ -92,6 +92,10 @@
 		background: transparent;
 		color: var(--muted);
 		cursor: pointer;
+		line-height: inherit;
+		& :global(svg) {
+			line-height: inherit;
+		}
 	}
 	.step-card :global(.drag) {
 		margin-top: 17px;

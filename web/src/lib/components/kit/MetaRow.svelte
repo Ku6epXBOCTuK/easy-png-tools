@@ -25,8 +25,7 @@
 	.meta-value {
 		margin-top: 5px;
 		line-height: normal;
-		font-family: var(--font-mono);
-		font-size: 11px;
+		font: 11px var(--font-mono);
 		color: var(--foreground);
 	}
 </style>

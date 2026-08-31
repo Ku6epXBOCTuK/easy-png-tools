@@ -59,11 +59,11 @@
 		color: var(--blue);
 	}
 	.tile-label span {
-		font: 10px var(--font-mono);
+		font: 9px var(--font-mono);
 		color: var(--blue);
 	}
 	.tile-label b {
-		font: 400 10px var(--font-mono);
+		font: 400 9px var(--font-mono);
 		color: var(--muted);
 		text-align: right;
 	}

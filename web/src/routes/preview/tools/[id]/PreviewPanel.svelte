@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { PixelImage } from "$lib/core/types";
+	import Button from "$lib/components/kit/Button.svelte";
+	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
+	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
+	import Dropzone from "$lib/components/kit/Dropzone.svelte";
+	import EmptyState from "$lib/components/kit/EmptyState.svelte";
+	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import Panel from "$lib/components/kit/Panel.svelte";
 	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import PreviewStack from "$lib/components/kit/PreviewStack.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
-	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
-	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
-	import Dropzone from "$lib/components/kit/Dropzone.svelte";
-	import Button from "$lib/components/kit/Button.svelte";
 	import StatusLine from "$lib/components/kit/StatusLine.svelte";
-	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import EmptyState from "$lib/components/kit/EmptyState.svelte";
+	import type { PixelImage } from "$lib/core/types";
 
 	interface PreviewItem {
 		toolId: string;

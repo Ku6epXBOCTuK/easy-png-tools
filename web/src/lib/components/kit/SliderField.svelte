@@ -39,10 +39,12 @@
 		margin-bottom: 8px;
 	}
 	output {
-		font: 11px var(--font-mono);
+		font: 10px var(--font-mono);
 		color: var(--foreground);
 	}
 	input[type="range"] {
+		color: var(--foreground);
+		line-height: inherit;
 		width: 100%;
 		accent-color: var(--blue);
 	}
