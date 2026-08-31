@@ -223,36 +223,62 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 	function collectRules() {
 		const rules = [];
 		let ruleOrder = 0;
-		const collect = (list, parentSel = "") => {
+		// Declared cascade-layer order, top-level names only, in declaration
+		// order (from `@layer a, b;` statements and first appearance of blocks).
+		// Unlayered author rules are a separate, always-winning tier.
+		const layerNames = [];
+		const ensureLayer = (name) => {
+			if (name && !layerNames.includes(name)) layerNames.push(name);
+		};
+		// `layers` is the cascade-layer path enclosing this rule; [] = unlayered.
+		const collect = (list, parentSel = "", layers = []) => {
 			for (const r of list || []) {
 				if (r == null) continue;
+				// Layer rules don't expose a reliable numeric .type in this
+				// Chromium (they report 0), so detect them by constructor.
+				const ctor = r.constructor?.name;
+				if (ctor === "CSSLayerStatementRule") {
+					// @layer a, b; — declares layer order, carries no declarations.
+					for (const n of r.nameList ?? []) ensureLayer(n);
+					continue;
+				}
+				if (ctor === "CSSLayerBlockRule") {
+					// @layer name { ... } — recurse with the layer appended.
+					ensureLayer(r.name);
+					const next = r.name ? [...layers, r.name] : layers;
+					try {
+						collect(r.cssRules, parentSel, next);
+					} catch {}
+					continue;
+				}
 				if (r.type === 1) {
 					let sel = r.selectorText;
 					if (parentSel && sel?.includes("&"))
 						sel = sel.replace(/&/g, parentSel);
-					rules.push({ rule: r, effective: sel, order: ruleOrder++ });
-					if (r.cssRules?.length) collect(r.cssRules, sel ?? parentSel);
+					rules.push({ rule: r, effective: sel, order: ruleOrder++, layers });
+					if (r.cssRules?.length) collect(r.cssRules, sel ?? parentSel, layers);
 				} else if (r.type === 3 && r.styleSheet) {
 					try {
-						collect(r.styleSheet.cssRules, parentSel);
+						collect(r.styleSheet.cssRules, parentSel, layers);
 					} catch {}
 				} else if (r.type === 4) {
 					if (r.media?.matches) {
 						try {
-							collect(r.cssRules, parentSel);
+							collect(r.cssRules, parentSel, layers);
 						} catch {}
 					}
 				} else if (r.type === 12) {
 					try {
-						if (CSS.supports(r.conditionText)) collect(r.cssRules, parentSel);
+						if (CSS.supports(r.conditionText))
+							collect(r.cssRules, parentSel, layers);
 					} catch {
 						try {
-							collect(r.cssRules, parentSel);
+							collect(r.cssRules, parentSel, layers);
 						} catch {}
 					}
 				} else if (r.type === 15) {
 					try {
-						collect(r.cssRules, parentSel);
+						collect(r.cssRules, parentSel, layers);
 					} catch {}
 				}
 			}
@@ -262,6 +288,12 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 				collect(sheet.cssRules);
 			} catch {}
 		}
+		// Layer rank: unlayered rules (empty path) always outrank layered ones;
+		// layered rules win by the position of their OUTERMOST layer in the
+		// declared order (later-declared layer wins over earlier).
+		const rankOf = (layers) =>
+			layers.length ? layerNames.indexOf(layers[0]) : Number.MAX_SAFE_INTEGER;
+		for (const rl of rules) rl.layerRank = rankOf(rl.layers);
 		return rules;
 	}
 
@@ -522,6 +554,7 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 					name,
 					value: st.getPropertyValue(name).trim(),
 					important: st.getPropertyPriority(name) === "important",
+					layerRank: Number.MAX_SAFE_INTEGER,
 					a: 1e6,
 					b: 0,
 					c: 0,
@@ -532,7 +565,14 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 		return out;
 	}
 
-	const keyOf = (d) => [d.important ? 1 : 0, d.a, d.b, d.c, d.order];
+	const keyOf = (d) => [
+		d.important ? 1 : 0,
+		d.layerRank ?? 0,
+		d.a,
+		d.b,
+		d.c,
+		d.order,
+	];
 	function betterThan(x, y) {
 		const kx = keyOf(x),
 			ky = keyOf(y);
@@ -565,6 +605,7 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED }) {
 						name: k,
 						value: v.value ?? "",
 						important: false,
+						layerRank: -1,
 						a: -1,
 						b: -1,
 						c: -1,
