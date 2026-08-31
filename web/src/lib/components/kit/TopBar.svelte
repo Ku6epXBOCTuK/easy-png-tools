@@ -77,6 +77,7 @@
 		gap: 10px;
 		font: 600 14px var(--font-mono);
 		color: var(--foreground);
+		text-decoration: none;
 	}
 	.brand-mark {
 		background: var(--blue);
@@ -101,7 +102,7 @@
 	}
 	.nav a {
 		color: var(--muted);
-		font: 12px var(--font-mono);
+		font: 10px var(--font-mono);
 		text-decoration: none;
 	}
 	.nav a:hover {

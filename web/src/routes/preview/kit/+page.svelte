@@ -1,29 +1,29 @@
 <script lang="ts">
+	import Badge from "$lib/components/kit/Badge.svelte";
+	import Button from "$lib/components/kit/Button.svelte";
+	import CheckboxField from "$lib/components/kit/CheckboxField.svelte";
+	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
+	import CodeBlock from "$lib/components/kit/CodeBlock.svelte";
+	import ColorField from "$lib/components/kit/ColorField.svelte";
+	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
+	import EmptyState from "$lib/components/kit/EmptyState.svelte";
+	import IconButton from "$lib/components/kit/IconButton.svelte";
+	import ImageCard from "$lib/components/kit/ImageCard.svelte";
+	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import Panel from "$lib/components/kit/Panel.svelte";
 	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
+	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
+	import Segmented from "$lib/components/kit/Segmented.svelte";
+	import SelectField from "$lib/components/kit/SelectField.svelte";
 	import SettingGroup from "$lib/components/kit/SettingGroup.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
-	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import Badge from "$lib/components/kit/Badge.svelte";
-	import Segmented from "$lib/components/kit/Segmented.svelte";
-	import StepCard from "$lib/components/kit/StepCard.svelte";
-	import ToolCard from "$lib/components/kit/ToolCard.svelte";
-	import ImageCard from "$lib/components/kit/ImageCard.svelte";
-	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
-	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
-	import StatusLine from "$lib/components/kit/StatusLine.svelte";
-	import Button from "$lib/components/kit/Button.svelte";
-	import IconButton from "$lib/components/kit/IconButton.svelte";
 	import SliderField from "$lib/components/kit/SliderField.svelte";
-	import ColorField from "$lib/components/kit/ColorField.svelte";
+	import StatusLine from "$lib/components/kit/StatusLine.svelte";
+	import StepCard from "$lib/components/kit/StepCard.svelte";
 	import TextField from "$lib/components/kit/TextField.svelte";
-	import SelectField from "$lib/components/kit/SelectField.svelte";
-	import CheckboxField from "$lib/components/kit/CheckboxField.svelte";
 	import Toggle from "$lib/components/kit/Toggle.svelte";
-	import EmptyState from "$lib/components/kit/EmptyState.svelte";
-	import CodeBlock from "$lib/components/kit/CodeBlock.svelte";
-	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
-	import { Plus, Trash2, Download, ImageOff, Palette } from "@lucide/svelte";
+	import ToolCard from "$lib/components/kit/ToolCard.svelte";
+	import { Download, ImageOff, Palette, Plus, Trash2 } from "@lucide/svelte";
 
 	let mode = $state("preview");
 	let radius = $state(8);
@@ -85,7 +85,7 @@
 			</SettingGroup>
 		</div>
 		<SettingsFooter>
-			<DownloadButton label="Download PNG" size="1.2 MB" onclick={() => {}} />
+			<DownloadButton label="Download PNG" onclick={() => {}} />
 		</SettingsFooter>
 	</Panel>
 
@@ -174,10 +174,10 @@
 			<ImageCard label="result.png · 512×512">
 				<CheckerCanvas size="sm" />
 			</ImageCard>
-			<PreviewTile label="tile-01">
+			<PreviewTile label="tile-01" caption="caption-01">
 				<CheckerCanvas size="sm" />
 			</PreviewTile>
-			<PreviewTile label="tile-02">
+			<PreviewTile label="tile-02" caption="caption-01">
 				<CheckerCanvas size="sm" />
 			</PreviewTile>
 		</div>

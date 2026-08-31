@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { resolve } from "$app/paths";
 	import { ArrowUpRight } from "@lucide/svelte";
 	import type { Component } from "svelte";
 	import Icon from "./Icon.svelte";
-	import { resolve } from "$app/paths";
 
 	interface Props {
 		title: string;
@@ -12,9 +12,11 @@
 		icon?: Component<{ size?: number; class?: string }>;
 	}
 	let { title, href, description, index, icon }: Props = $props();
+
+	let normalizedHref = $derived(href === "#" ? "/" : href);
 </script>
 
-<a class="tool-card" href={resolve(href)}>
+<a class="tool-card" href={resolve(normalizedHref)}>
 	{#if icon}<span class="tool-icon"><Icon {icon} size={19} /></span>{/if}
 	<span class="tool-copy">
 		<strong>{title}</strong>
