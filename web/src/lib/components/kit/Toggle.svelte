@@ -30,7 +30,7 @@
 		width: 32px;
 		height: 18px;
 		border: 1px solid var(--line);
-		border-radius: 999px;
+		border-radius: 0;
 		background: var(--background);
 		cursor: pointer;
 		padding: 0;
@@ -40,8 +40,6 @@
 		border-color: var(--blue);
 	}
 	.toggle-knob {
-		border-radius: 50%;
-		background: var(--foreground);
 		transition: transform 0.12s ease;
 	}
 	.toggle.on .toggle-knob {

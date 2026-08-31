@@ -49,13 +49,11 @@
 		min-height: 138px;
 		border: 1px solid var(--line);
 		background: var(--panel);
-		overflow: hidden;
 	}
 	.step-index {
 		font: 11px var(--font-mono);
 		color: var(--blue);
 		padding: 17px 0 0px 15px;
-		border-right: 1px solid var(--line);
 	}
 	.step-body {
 		padding: 15px 18px 18px;
@@ -65,7 +63,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 15px;
-		border-bottom: 1px solid var(--line);
+		border-color: var(--line);
 	}
 	.step-type {
 		color: var(--muted);

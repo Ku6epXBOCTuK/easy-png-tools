@@ -27,6 +27,7 @@
 		gap: 9px;
 		margin-top: 18px;
 		display: flex;
+		white-space: nowrap;
 	}
 	.download-btn:hover {
 		background: color-mix(in srgb, var(--blue) 88%, #000);

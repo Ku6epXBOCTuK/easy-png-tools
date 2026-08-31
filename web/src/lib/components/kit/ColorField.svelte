@@ -56,6 +56,7 @@
 		padding-left: 8px;
 		padding-right: 8px;
 		height: 32px;
+		border: 1px solid var(--line);
 	}
 	.swatch {
 		width: 14px;

@@ -28,7 +28,7 @@
 	let outlineWidth = $state(2);
 	let outlineColor = $state("#16202B");
 	let radius = $state(18);
-	let preserveAspect = $state(true);
+	let preserveAspect = $state(false);
 
 	const previewTiles = [
 		{ label: "SOURCE", caption: "original.png · 1200 × 800", bg: "#8d9aa5" },
@@ -204,10 +204,13 @@
 
 			<PreviewStack pad="16px 0">
 				{#each previewTiles as tile (tile.label)}
-					<PreviewTile label={tile.label} caption={tile.caption}>
+					<PreviewTile
+						label={tile.label}
+						caption={tile.caption}
+						active={tile.active || false}
+					>
 						<div
 							class="image-preview"
-							class:active={tile.active}
 							style="background:{tile.bg}; border-radius:{tile.radius ??
 								'0'}; box-shadow:{tile.ring ?? 'none'};"
 						>

@@ -103,6 +103,7 @@
 	.nav a {
 		color: var(--muted);
 		font: 10px var(--font-mono);
+		white-space: nowrap;
 		text-decoration: none;
 	}
 	.nav a:hover {
@@ -125,7 +126,6 @@
 		display: flex;
 		align-items: center;
 		border: 1px solid var(--line);
-		overflow: hidden;
 	}
 	.lang-btn {
 		border: 0;

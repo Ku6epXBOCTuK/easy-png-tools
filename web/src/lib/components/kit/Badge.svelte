@@ -25,7 +25,7 @@
 		line-height: normal;
 		font-family: var(--font-mono);
 		font-size: 10px;
-		border: 1px solid var(--line);
+		border: 0px solid var(--line);
 		color: var(--muted);
 	}
 	.badge--accent {

@@ -36,8 +36,6 @@
 		display: flex;
 		height: 32px;
 		border: 1px solid var(--line);
-		overflow: hidden;
-		background: var(--background);
 	}
 	.segment {
 		border: 0;

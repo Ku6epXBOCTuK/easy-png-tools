@@ -4,13 +4,14 @@
 	interface Props {
 		label: string;
 		caption: string;
+		active: boolean;
 		children: Snippet;
 	}
 
-	let { label, caption, children }: Props = $props();
+	let { label, caption, active, children }: Props = $props();
 </script>
 
-<div class="preview-tile">
+<div class="preview-tile" class:active>
 	<div class="tile-canvas">{@render children()}</div>
 	<div class="tile-label">
 		<span>{label}</span>
@@ -25,6 +26,9 @@
 		overflow: hidden;
 		border: 1px solid var(--line);
 		background: var(--background);
+		&.active {
+			border-color: var(--blue);
+		}
 	}
 	.tile-canvas {
 		width: 100%;
