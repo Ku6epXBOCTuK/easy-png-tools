@@ -36,7 +36,6 @@
 		display: flex;
 		height: 32px;
 		border: 1px solid var(--line);
-		border-radius: var(--radius);
 		overflow: hidden;
 		background: var(--background);
 	}
@@ -48,8 +47,8 @@
 		background: 0 0;
 		flex: 1;
 	}
-	.segment + .segment {
-		border-left: 1px solid var(--line);
+	.segment:last-child {
+		border-right: 0px;
 	}
 	.segment.selected {
 		background: var(--blue);

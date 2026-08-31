@@ -26,7 +26,6 @@
 		font-family: var(--font-mono);
 		font-size: 10px;
 		border: 1px solid var(--line);
-		border-radius: var(--radius);
 		color: var(--muted);
 	}
 	.badge--accent {

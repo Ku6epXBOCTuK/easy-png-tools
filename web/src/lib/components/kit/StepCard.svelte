@@ -48,21 +48,16 @@
 		grid-template-columns: 46px 20px 1fr;
 		min-height: 138px;
 		border: 1px solid var(--line);
-		border-radius: var(--radius);
 		background: var(--panel);
 		overflow: hidden;
 	}
 	.step-index {
-		grid-column: 1;
-		grid-row: 1;
 		font: 11px var(--font-mono);
 		color: var(--blue);
 		padding: 17px 0 0px 15px;
 		border-right: 1px solid var(--line);
 	}
 	.step-body {
-		grid-column: 2;
-		grid-row: 1 / span 2;
 		padding: 15px 18px 18px;
 	}
 	.step-heading {
@@ -94,6 +89,7 @@
 		cursor: pointer;
 		line-height: inherit;
 		& :global(svg) {
+			display: block;
 			line-height: inherit;
 		}
 	}

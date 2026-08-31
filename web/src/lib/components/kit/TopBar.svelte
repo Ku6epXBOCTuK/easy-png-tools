@@ -125,7 +125,6 @@
 		display: flex;
 		align-items: center;
 		border: 1px solid var(--line);
-		border-radius: var(--radius);
 		overflow: hidden;
 	}
 	.lang-btn {

@@ -61,7 +61,6 @@
 		width: 14px;
 		height: 14px;
 		border: 1px solid var(--line);
-		border-radius: var(--radius);
 		flex: none;
 	}
 	.color-field input {
