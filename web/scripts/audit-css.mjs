@@ -183,65 +183,64 @@ const keyOf = (n) =>
 	n.children.length === 0 ? `${normTag(n.tag)}|${n.text}` : normTag(n.tag);
 
 const snapshot = (page) =>
-	page.evaluate(
-		(styleFields) => {
-			const sig = (el) => {
-				const s = getComputedStyle(el);
-				const o = {};
-				for (const f of styleFields) o[f] = s[f];
-				return o;
+	page.evaluate((styleFields) => {
+		const sig = (el) => {
+			const s = getComputedStyle(el);
+			const o = {};
+			for (const f of styleFields) o[f] = s[f];
+			return o;
+		};
+		const rectOf = (el) => {
+			const r = el.getBoundingClientRect();
+			return {
+				x: Math.round(r.x),
+				y: Math.round(r.y),
+				w: Math.round(r.width),
+				h: Math.round(r.height),
 			};
-			const rectOf = (el) => {
-				const r = el.getBoundingClientRect();
-				return {
-					x: Math.round(r.x),
-					y: Math.round(r.y),
-					w: Math.round(r.width),
-					h: Math.round(r.height),
-				};
-			};
-			const readTokens = () => {
-				const s = getComputedStyle(document.documentElement);
-				const out = {};
-				for (const k of s) if (k.startsWith("--")) out[k] = s.getPropertyValue(k).trim();
-				return out;
-			};
-			const tokensLight = readTokens();
-			const prev = document.documentElement.getAttribute("data-theme");
-			document.documentElement.setAttribute("data-theme", "dark");
-			const tokensDark = readTokens();
-			if (prev) document.documentElement.setAttribute("data-theme", prev);
-			else document.documentElement.removeAttribute("data-theme");
+		};
+		const readTokens = () => {
+			const s = getComputedStyle(document.documentElement);
+			const out = {};
+			for (const k of s)
+				if (k.startsWith("--")) out[k] = s.getPropertyValue(k).trim();
+			return out;
+		};
+		const tokensLight = readTokens();
+		const prev = document.documentElement.getAttribute("data-theme");
+		document.documentElement.setAttribute("data-theme", "dark");
+		const tokensDark = readTokens();
+		if (prev) document.documentElement.setAttribute("data-theme", prev);
+		else document.documentElement.removeAttribute("data-theme");
 
-			const walk = (el) => {
-				const tag = el.tagName.toLowerCase();
-				if (["script", "style", "noscript", "template"].includes(tag)) return null;
-				if (el.id === "svelte-announcer") return null;
-				if (el.hasAttribute("hidden")) return null;
-				const cs = getComputedStyle(el);
-				if (cs.display === "none" || cs.visibility === "hidden") return null;
-				let ownText = "";
-				for (const c of el.childNodes)
-					if (c.nodeType === 3) ownText += c.textContent;
-				ownText = ownText.replace(/\s+/g, " ").trim();
-				const node = {
-					tag,
-					text: ownText,
-					style: sig(el),
-					rect: rectOf(el),
-					children: [],
-				};
-				if (tag === "svg") return node;
-				for (const child of el.children) {
-					const cn = walk(child);
-					if (cn) node.children.push(cn);
-				}
-				return node;
+		const walk = (el) => {
+			const tag = el.tagName.toLowerCase();
+			if (["script", "style", "noscript", "template"].includes(tag))
+				return null;
+			if (el.id === "svelte-announcer") return null;
+			if (el.hasAttribute("hidden")) return null;
+			const cs = getComputedStyle(el);
+			if (cs.display === "none" || cs.visibility === "hidden") return null;
+			let ownText = "";
+			for (const c of el.childNodes)
+				if (c.nodeType === 3) ownText += c.textContent;
+			ownText = ownText.replace(/\s+/g, " ").trim();
+			const node = {
+				tag,
+				text: ownText,
+				style: sig(el),
+				rect: rectOf(el),
+				children: [],
 			};
-			return { tokensLight, tokensDark, tree: walk(document.body) };
-		},
-		STYLE_FIELDS,
-	);
+			if (tag === "svg") return node;
+			for (const child of el.children) {
+				const cn = walk(child);
+				if (cn) node.children.push(cn);
+			}
+			return node;
+		};
+		return { tokensLight, tokensDark, tree: walk(document.body) };
+	}, STYLE_FIELDS);
 
 const TOK_NOISE = /^(--tw-|--lightningcss-|--default-)/;
 
@@ -284,12 +283,26 @@ function compareStyle(ours, ref, path, out) {
 		const aNode = ours.children[i];
 		const cands = bByKey.get(keyOf(aNode));
 		let bIdx = -1;
-		if (cands) for (const ci of cands) if (!used.has(ci)) { bIdx = ci; break; }
+		if (cands)
+			for (const ci of cands)
+				if (!used.has(ci)) {
+					bIdx = ci;
+					break;
+				}
 		if (bIdx >= 0) {
 			used.add(bIdx);
-			compareStyle(aNode, ref.children[bIdx], `${path} > ${aNode.tag}:${i + 1}`, out);
+			compareStyle(
+				aNode,
+				ref.children[bIdx],
+				`${path} > ${aNode.tag}:${i + 1}`,
+				out,
+			);
 		} else {
-			out.push({ path: `${path} > ${aNode.tag}:${i + 1}`, type: "added", tag: aNode.tag });
+			out.push({
+				path: `${path} > ${aNode.tag}:${i + 1}`,
+				type: "added",
+				tag: aNode.tag,
+			});
 		}
 	}
 	for (let j = 0; j < ref.children.length; j++) {
@@ -425,7 +438,9 @@ function toMarkdown(reports) {
 				: "_расхождений стилей нет_";
 			const struct = r.deltas
 				.filter((d) => d.type !== "style")
-				.map((d) => `- \`${d.path}\` — **${d.type}**${d.tag ? ` (${d.tag})` : ""}`)
+				.map(
+					(d) => `- \`${d.path}\` — **${d.type}**${d.tag ? ` (${d.tag})` : ""}`,
+				)
 				.join("\n");
 			return (
 				`\n\n## ${r.route}  (vs ${r.ref})\n\n` +
@@ -480,7 +495,11 @@ async function main() {
 		mkdirSync(resolve(WEB, "audit"), { recursive: true });
 		writeFileSync(
 			resolve(WEB, "audit/audit-report.json"),
-			JSON.stringify({ generatedAt: new Date().toISOString(), reports }, null, 2),
+			JSON.stringify(
+				{ generatedAt: new Date().toISOString(), reports },
+				null,
+				2,
+			),
 		);
 		writeFileSync(resolve(WEB, "audit/audit-report.md"), toMarkdown(reports));
 		console.log(`report: web/audit/audit-report.md`);
@@ -489,7 +508,9 @@ async function main() {
 		if (server) {
 			try {
 				if (process.platform === "win32")
-					spawn("taskkill", ["/pid", String(server.pid), "/f", "/t"], { stdio: "ignore" });
+					spawn("taskkill", ["/pid", String(server.pid), "/f", "/t"], {
+						stdio: "ignore",
+					});
 				else server.kill("SIGTERM");
 			} catch {}
 		}

@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import svelte from "eslint-plugin-svelte";
+import designTokens from "./eslint-plugins/index.js";
 import globals from "globals";
 import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
@@ -78,6 +79,24 @@ export default tseslint.config(
 			parserOptions: {
 				parser: tseslint.parser,
 			},
+		},
+		plugins: {
+			"design-tokens": designTokens,
+		},
+	},
+	// Правило дизайн-токенов: запрет хардкода цветов/размеров в style-блоках.
+	// Применяется к новому коду редизайна (см. newCode выше). Когда старый дизайн
+	// удалят, расширить glob на весь код, исключив (old)/.
+	{
+		files: svelteFiles,
+		plugins: {
+			"design-tokens": designTokens,
+		},
+		rules: {
+			"design-tokens/no-hardcoded-in-svelte": "error",
+			"design-tokens/no-category-mismatch": "error",
+			"design-tokens/no-token-definition-in-svelte": "error",
+			"design-tokens/no-undefined-in-svelte": "error",
 		},
 	},
 	// Полные recommended-наборы — только на новый код.

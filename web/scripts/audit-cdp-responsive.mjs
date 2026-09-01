@@ -16,9 +16,13 @@ for (let i = 0; i < process.argv.length; i++) {
 }
 if (!viewportSeen) args.push("--viewport", VIEWPORTS.join(","));
 
-const r = spawnSync(process.execPath, ["scripts/audit-cdp.mjs", ...args.slice(2)], {
-	stdio: "inherit",
-});
+const r = spawnSync(
+	process.execPath,
+	["scripts/audit-cdp.mjs", ...args.slice(2)],
+	{
+		stdio: "inherit",
+	},
+);
 if (r.error) {
 	console.error(r.error.message);
 	process.exit(1);

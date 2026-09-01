@@ -460,9 +460,10 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED, BOX_GROUPS }) {
 	function expandFont(raw) {
 		const v = raw.trim();
 		// Locate the size token: a length/% literal or a clamp()/min()/max().
-		const sz = /(\d+(?:\.\d+)?(?:px|em|rem|%|pt|vh|vw)|clamp\([^)]*\)|min\([^)]*\)|max\([^)]*\))/.exec(
-			v,
-		);
+		const sz =
+			/(\d+(?:\.\d+)?(?:px|em|rem|%|pt|vh|vw)|clamp\([^)]*\)|min\([^)]*\)|max\([^)]*\))/.exec(
+				v,
+			);
 		if (!sz) return {};
 		const size = sz[0];
 		// Optional leading font-style/variant/weight/stretch prefix, then the
@@ -550,7 +551,9 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED, BOX_GROUPS }) {
 			// carrying var() was enumerated as EMPTY longhands, so it must be
 			// re-parsed here to survive (e.g. border-radius: var(--radius)).
 			if (map.has(name)) continue;
-			for (const [ln, v] of Object.entries(expandShorthand(name, value, cs) || {}))
+			for (const [ln, v] of Object.entries(
+				expandShorthand(name, value, cs) || {},
+			))
 				add(ln, v, important);
 		}
 		return [...map.values()];
@@ -693,32 +696,32 @@ function snapshotDocument({ PROPS, NOISE_TAGS, INHERITED, BOX_GROUPS }) {
 			el.id === "svelte-announcer"
 		)
 			return null;
-	// Computed style drives var() resolution and the recorded computed values;
-	// computed once here and reused by the cascade matcher below.
-	const cs = getComputedStyle(el);
-	const specMap = new Map(inheritedEntries(inherited));
-	for (const [name, d] of resolve(matchedDeclarations(el, rules, cs))) {
-		const cur = specMap.get(name);
-		if (!cur || betterThan(d, cur) > 0) specMap.set(name, d);
-	}
-	// Box shorthands (margin/padding/gap): record the ORIGINAL declared value
-	// when one rule cleanly set every side (`consistent` cascade), so the report
-	// can show "20px 20px 20px 20px" vs a single "20px" the way the CSS spells
-	// it, not just the collapsed rendering.
-	const groups = {};
-	for (const g of BOX_GROUPS) {
-		const declared = specMap.get(g.name)?.value;
-		if (!declared) continue;
-		const expanded = expandShorthand(g.name, declared, cs);
-		const consistent = g.keys.every(
-			(k) => (expanded[k] ?? "") === (specMap.get(k)?.value ?? ""),
-		);
-		groups[g.name] = { declared, consistent };
-	}
+		// Computed style drives var() resolution and the recorded computed values;
+		// computed once here and reused by the cascade matcher below.
+		const cs = getComputedStyle(el);
+		const specMap = new Map(inheritedEntries(inherited));
+		for (const [name, d] of resolve(matchedDeclarations(el, rules, cs))) {
+			const cur = specMap.get(name);
+			if (!cur || betterThan(d, cur) > 0) specMap.set(name, d);
+		}
+		// Box shorthands (margin/padding/gap): record the ORIGINAL declared value
+		// when one rule cleanly set every side (`consistent` cascade), so the report
+		// can show "20px 20px 20px 20px" vs a single "20px" the way the CSS spells
+		// it, not just the collapsed rendering.
+		const groups = {};
+		for (const g of BOX_GROUPS) {
+			const declared = specMap.get(g.name)?.value;
+			if (!declared) continue;
+			const expanded = expandShorthand(g.name, declared, cs);
+			const consistent = g.keys.every(
+				(k) => (expanded[k] ?? "") === (specMap.get(k)?.value ?? ""),
+			);
+			groups[g.name] = { declared, consistent };
+		}
 
-	const styles = {};
-	const raw = {};
-	const computed = {};
+		const styles = {};
+		const raw = {};
+		const computed = {};
 		for (const p of PROPS) {
 			const c = cs.getPropertyValue(p);
 			computed[p] = c;
@@ -1083,7 +1086,10 @@ function borderOf(a, b, n) {
 function borderLine(a, b) {
 	const keys = [...BORDER_KEYS].filter((k) => isRealDiff(a, b, k));
 	if (!keys.length) return null;
-	return { line: `border:  ${borderOf(a, b, a)}  →  ${borderOf(a, b, b)}`, keys };
+	return {
+		line: `border:  ${borderOf(a, b, a)}  →  ${borderOf(a, b, b)}`,
+		keys,
+	};
 }
 
 // CSS box shorthands reported as one line instead of one line per longhand

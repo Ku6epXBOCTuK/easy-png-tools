@@ -42,11 +42,7 @@ export type ToggleField = {
 };
 
 export type FieldDef =
-	| SegmentedField
-	| ColorPairField
-	| SliderField
-	| ColorField
-	| ToggleField;
+	SegmentedField | ColorPairField | SliderField | ColorField | ToggleField;
 
 export interface PreviewToolView {
 	title: string;
@@ -63,7 +59,8 @@ export interface PreviewToolView {
 	fields: FieldDef[];
 }
 
-export type FieldValue = number | string | boolean | { from: string; to: string };
+export type FieldValue =
+	number | string | boolean | { from: string; to: string };
 
 function initValue(f: FieldDef): FieldValue {
 	switch (f.kind) {
@@ -114,8 +111,26 @@ const gradient: PreviewToolView = {
 			from: "#1769D2",
 			to: "#00A8C7",
 		},
-		{ id: "dir", kind: "direction", label: "DIRECTION", value: 135, min: 0, max: 360, suffix: "°", space: true },
-		{ id: "op", kind: "slider", label: "OPACITY", value: 100, min: 0, max: 100, suffix: "%", space: true },
+		{
+			id: "dir",
+			kind: "direction",
+			label: "DIRECTION",
+			value: 135,
+			min: 0,
+			max: 360,
+			suffix: "°",
+			space: true,
+		},
+		{
+			id: "op",
+			kind: "slider",
+			label: "OPACITY",
+			value: 100,
+			min: 0,
+			max: 100,
+			suffix: "%",
+			space: true,
+		},
 	],
 };
 

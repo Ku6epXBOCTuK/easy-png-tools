@@ -7,7 +7,13 @@
 		type PreviewToolView,
 		type SegmentedField,
 	} from "$lib/preview/tool-views";
-	import { Copy, Download, Check, RotateCcw, ChevronDown } from "@lucide/svelte";
+	import {
+		Copy,
+		Download,
+		Check,
+		RotateCcw,
+		ChevronDown,
+	} from "@lucide/svelte";
 
 	interface Props {
 		tool: ToolEntry;
@@ -31,7 +37,8 @@
 	const grad = $derived.by(() => {
 		if (!view || view.preview !== "gradient") return null;
 		const typeSel = num(form["type"]);
-		const type = (view.fields.find((f) => f.id === "type") as SegmentedField).options[typeSel];
+		const type = (view.fields.find((f) => f.id === "type") as SegmentedField)
+			.options[typeSel];
 		const cp = pair(form["stops"]);
 		const dir = num(form["dir"]);
 		const op = num(form["op"]);
@@ -39,14 +46,24 @@
 			type === "Radial"
 				? `radial-gradient(circle, ${cp.from} 0%, ${cp.to} 100%)`
 				: `linear-gradient(${dir}deg, ${cp.from} 0%, ${cp.to} 100%)`;
-		return { type, cp, dir, op, css, code: `background: ${css};\nopacity: ${op / 100};` };
+		return {
+			type,
+			cp,
+			dir,
+			op,
+			css,
+			code: `background: ${css};\nopacity: ${op / 100};`,
+		};
 	});
 
 	const DIRS = [0, 45, 90, 135, 180, 225, 270, 315];
 	const DIR_GLYPHS = ["→", "↗", "↑", "↖", "←", "↙", "↓", "↘"];
-	const SUBJECT_BG = "linear-gradient(145deg,#1769d2 0 38%,#00a8c7 38% 66%,#bd7411 66%)";
-	const SUBJECT_CLIP = "polygon(23% 11%, 73% 8%, 89% 30%, 79% 81%, 52% 93%, 17% 78%, 8% 39%)";
-	const CHECKER = "repeating-conic-gradient(#d7dce0 0 25%, #f3f5f6 0 50%) 50% / 28px 28px";
+	const SUBJECT_BG =
+		"linear-gradient(145deg,#1769d2 0 38%,#00a8c7 38% 66%,#bd7411 66%)";
+	const SUBJECT_CLIP =
+		"polygon(23% 11%, 73% 8%, 89% 30%, 79% 81%, 52% 93%, 17% 78%, 8% 39%)";
+	const CHECKER =
+		"repeating-conic-gradient(#d7dce0 0 25%, #f3f5f6 0 50%) 50% / 28px 28px";
 </script>
 
 {#if view}
@@ -77,7 +94,10 @@
 							<label>{f.label}</label>
 							<div class="segmented wide">
 								{#each f.options as opt, i}
-									<button class={i === sel ? "selected" : ""} onclick={() => (form[f.id] = i)}>
+									<button
+										class={i === sel ? "selected" : ""}
+										onclick={() => (form[f.id] = i)}
+									>
 										{opt}
 									</button>
 								{/each}
@@ -92,7 +112,8 @@
 									<span class="swatch" style="background:{cp.from}"></span>
 									<input
 										value={cp.from}
-										oninput={(e) => (form[f.id] = { from: e.currentTarget.value, to: cp.to })}
+										oninput={(e) =>
+											(form[f.id] = { from: e.currentTarget.value, to: cp.to })}
 									/>
 								</div>
 								<span class="stop-arrow">→</span>
@@ -100,7 +121,11 @@
 									<span class="swatch" style="background:{cp.to}"></span>
 									<input
 										value={cp.to}
-										oninput={(e) => (form[f.id] = { from: cp.from, to: e.currentTarget.value })}
+										oninput={(e) =>
+											(form[f.id] = {
+												from: cp.from,
+												to: e.currentTarget.value,
+											})}
 									/>
 								</div>
 							</div>
@@ -109,7 +134,10 @@
 					{:else if f.kind === "slider" || f.kind === "direction"}
 						{@const v = num(form[f.id])}
 						<div class="setting-group">
-							<label>{f.label} <output>{v}{f.space ? " " : ""}{f.suffix}</output></label>
+							<label
+								>{f.label}
+								<output>{v}{f.space ? " " : ""}{f.suffix}</output></label
+							>
 							<input
 								type="range"
 								min={f.min}
@@ -120,7 +148,10 @@
 							{#if f.kind === "direction"}
 								<div class="direction-grid">
 									{#each DIRS as a, i}
-										<button class={a === v ? "selected" : ""} onclick={() => (form[f.id] = a)}>
+										<button
+											class={a === v ? "selected" : ""}
+											onclick={() => (form[f.id] = a)}
+										>
 											{a}° {DIR_GLYPHS[i]}
 										</button>
 									{/each}
@@ -138,7 +169,10 @@
 							<label>{f.label}</label>
 							<div class="color-field">
 								<span class="swatch" style="background:{v}"></span>
-								<input value={v} oninput={(e) => (form[f.id] = e.currentTarget.value)} />
+								<input
+									value={v}
+									oninput={(e) => (form[f.id] = e.currentTarget.value)}
+								/>
 								{#if f.native}
 									<input
 										class="native-color"
@@ -160,7 +194,8 @@
 						<div class="setting-group toggle-group">
 							<label>
 								<span>{f.label}</span>
-								<b class="toggle" class:on onclick={() => (form[f.id] = !on)}></b>
+								<b class="toggle" class:on onclick={() => (form[f.id] = !on)}
+								></b>
 							</label>
 							<p>{f.note}</p>
 						</div>
@@ -182,12 +217,14 @@
 							<span class="label">{view.toolbarLabel}</span>
 							<strong>{view.fileName}</strong>
 						</div>
-					<div class="preview-actions">
-						<button class="secondary-btn"><Copy size={15} /> Copy CSS</button>
-						<button class="download-btn"
-							><Download size={15} /> {view.downloadLabel} <ChevronDown size={14} /></button
-						>
-					</div>
+						<div class="preview-actions">
+							<button class="secondary-btn"><Copy size={15} /> Copy CSS</button>
+							<button class="download-btn"
+								><Download size={15} />
+								{view.downloadLabel}
+								<ChevronDown size={14} /></button
+							>
+						</div>
 					</div>
 					<div class="large-canvas">
 						<div
@@ -201,7 +238,9 @@
 					<div class="code-block">
 						<div>
 							<span class="label">GENERATED CSS</span>
-							<button class="icon-btn" aria-label="Copy CSS"><Copy size={14} /></button>
+							<button class="icon-btn" aria-label="Copy CSS"
+								><Copy size={14} /></button
+							>
 						</div>
 						<pre>{grad?.code}</pre>
 					</div>
@@ -215,12 +254,16 @@
 						</div>
 						<div class="preview-actions">
 							<span class="processed"><Check size={14} /> processed</span>
-							<button class="download-btn"><Download size={15} /> Download result</button>
+							<button class="download-btn"
+								><Download size={15} /> Download result</button
+							>
 						</div>
 					</div>
 					<div class="comparison-grid">
 						<div class="image-card">
-							<div class="image-label"><span>SOURCE</span><b>original.png</b></div>
+							<div class="image-label">
+								<span>SOURCE</span><b>original.png</b>
+							</div>
 							<div class="remover-canvas source-canvas">
 								<div
 									class="subject subject-source"
@@ -232,7 +275,9 @@
 							</div>
 						</div>
 						<div class="image-card">
-							<div class="image-label"><span>RESULT</span><b>removed-bg.png</b></div>
+							<div class="image-label">
+								<span>RESULT</span><b>removed-bg.png</b>
+							</div>
 							<div class="remover-canvas" style="background:{CHECKER}">
 								<div
 									class="subject"

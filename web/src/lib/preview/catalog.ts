@@ -27,17 +27,20 @@ const REF: {
 			{
 				id: "jpg-to-png",
 				title: "Convert JPG to PNG",
-				description: "Re-encode JPEG files as lossless PNG while preserving transparency.",
+				description:
+					"Re-encode JPEG files as lossless PNG while preserving transparency.",
 			},
 			{
 				id: "webp-to-png",
 				title: "Convert WebP to PNG",
-				description: "Turn WebP images into a universal PNG format for any workflow.",
+				description:
+					"Turn WebP images into a universal PNG format for any workflow.",
 			},
 			{
 				id: "png-to-base64",
 				title: "PNG to Base64",
-				description: "Encode an image as a base64 string for embedding in code or styles.",
+				description:
+					"Encode an image as a base64 string for embedding in code or styles.",
 			},
 			{
 				id: "png-to-data-uri",
@@ -47,7 +50,8 @@ const REF: {
 			{
 				id: "convert-png-to-jpg",
 				title: "Convert PNG to JPG",
-				description: "Composite transparency over a selected backdrop and export JPEG.",
+				description:
+					"Composite transparency over a selected backdrop and export JPEG.",
 			},
 		],
 	},
@@ -58,12 +62,14 @@ const REF: {
 			{
 				id: "remove-background-png",
 				title: "Remove background PNG",
-				description: "Remove a solid background by color, tolerance, or edge-connected regions.",
+				description:
+					"Remove a solid background by color, tolerance, or edge-connected regions.",
 			},
 			{
 				id: "extract-alpha-mask-png",
 				title: "Extract alpha mask",
-				description: "Turn the alpha channel into a clean black-and-white mask.",
+				description:
+					"Turn the alpha channel into a clean black-and-white mask.",
 			},
 			{
 				id: "round-corners-png",
@@ -73,12 +79,14 @@ const REF: {
 			{
 				id: "add-stroke-png",
 				title: "Outline PNG",
-				description: "Add a colored ring around opaque content with adjustable thickness.",
+				description:
+					"Add a colored ring around opaque content with adjustable thickness.",
 			},
 			{
 				id: "change-png-opacity",
 				title: "Change PNG opacity",
-				description: "Multiply the alpha channel while keeping the original colors unchanged.",
+				description:
+					"Multiply the alpha channel while keeping the original colors unchanged.",
 			},
 		],
 	},
@@ -89,7 +97,8 @@ const REF: {
 			{
 				id: "linear-gradient-png",
 				title: "Create gradient PNG",
-				description: "Generate a smooth transition between two colors with direction controls.",
+				description:
+					"Generate a smooth transition between two colors with direction controls.",
 			},
 			{
 				id: "grayscale-png",
@@ -99,17 +108,20 @@ const REF: {
 			{
 				id: "invert-colors-png",
 				title: "Invert colors PNG",
-				description: "Invert every color channel while leaving alpha untouched.",
+				description:
+					"Invert every color channel while leaving alpha untouched.",
 			},
 			{
 				id: "adjust-brightness-contrast-png",
 				title: "Brightness & contrast",
-				description: "Adjust brightness and contrast across a controlled range.",
+				description:
+					"Adjust brightness and contrast across a controlled range.",
 			},
 			{
 				id: "temperature-png",
 				title: "Temperature PNG",
-				description: "Make an image warmer or cooler with a single precise control.",
+				description:
+					"Make an image warmer or cooler with a single precise control.",
 			},
 		],
 	},
@@ -120,12 +132,14 @@ const REF: {
 			{
 				id: "resize-png",
 				title: "Resize PNG",
-				description: "Scale an image with bilinear interpolation and optional aspect lock.",
+				description:
+					"Scale an image with bilinear interpolation and optional aspect lock.",
 			},
 			{
 				id: "crop-png",
 				title: "Crop PNG",
-				description: "Cut a rectangular area with exact coordinates and dimensions.",
+				description:
+					"Cut a rectangular area with exact coordinates and dimensions.",
 			},
 			{
 				id: "rotate-png",
@@ -140,7 +154,8 @@ const REF: {
 			{
 				id: "add-padding-png",
 				title: "Add padding to PNG",
-				description: "Expand the canvas on all sides by a chosen number of pixels.",
+				description:
+					"Expand the canvas on all sides by a chosen number of pixels.",
 			},
 		],
 	},
@@ -151,7 +166,8 @@ const REF: {
 			{
 				id: "blur-png",
 				title: "Blur PNG",
-				description: "Apply a fast Gaussian-style blur with transparent edge handling.",
+				description:
+					"Apply a fast Gaussian-style blur with transparent edge handling.",
 			},
 			{
 				id: "sharpen-png",
@@ -161,7 +177,8 @@ const REF: {
 			{
 				id: "vignette-png",
 				title: "Vignette PNG",
-				description: "Smoothly darken the image edges while preserving the center.",
+				description:
+					"Smoothly darken the image edges while preserving the center.",
 			},
 			{
 				id: "jpeg-artifacts-png",
@@ -177,7 +194,8 @@ const REF: {
 			{
 				id: "png-info",
 				title: "PNG info",
-				description: "Inspect dimensions, alpha presence, and unique color count.",
+				description:
+					"Inspect dimensions, alpha presence, and unique color count.",
 			},
 			{
 				id: "png-is-grayscale",

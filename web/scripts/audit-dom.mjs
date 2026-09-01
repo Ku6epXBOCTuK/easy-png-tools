@@ -143,7 +143,8 @@ const snapshot = (page) =>
 	page.evaluate(() => {
 		const walk = (el) => {
 			const tag = el.tagName.toLowerCase();
-			if (["script", "style", "noscript", "template"].includes(tag)) return null;
+			if (["script", "style", "noscript", "template"].includes(tag))
+				return null;
 			// SvelteKit ін'єктить #svelte-announcer (aria-live) прямо в <body>;
 			// у рефа (Next.js) його немає — це фреймворк-шум, не збіг дизайну.
 			if (el.id === "svelte-announcer") return null;
@@ -189,9 +190,7 @@ const normTag = (tag) => (STRUCT_TAGS.has(tag) ? "box" : tag);
 // текст — иначе малейшее отличие текста в обёртке каскадом роняет всё поддерево.
 // Листья (нет дочерних элементов) матчим по тегу + тексту.
 const keyOf = (n) =>
-	n.children.length === 0
-		? `${normTag(n.tag)}|${n.ownText}`
-		: normTag(n.tag);
+	n.children.length === 0 ? `${normTag(n.tag)}|${n.ownText}` : normTag(n.tag);
 
 function subtreeCount(node) {
 	let c = 1;
@@ -233,7 +232,12 @@ function matchChildren(ac, bc, path, out) {
 		const k = keyOf(aNode);
 		const cands = bByKey.get(k);
 		let bIdx = -1;
-		if (cands) for (const ci of cands) if (!used.has(ci)) { bIdx = ci; break; }
+		if (cands)
+			for (const ci of cands)
+				if (!used.has(ci)) {
+					bIdx = ci;
+					break;
+				}
 		if (bIdx >= 0) {
 			used.add(bIdx);
 			diffNodes(aNode, bc[bIdx], `${path} > ${aNode.tag}:${i + 1}`, out);
@@ -254,7 +258,14 @@ function diff(ours, ref, path, out) {
 }
 
 function tally(deltas) {
-	const c = { added: 0, removed: 0, tagMismatch: 0, textMismatch: 0, nodesAdded: 0, nodesRemoved: 0 };
+	const c = {
+		added: 0,
+		removed: 0,
+		tagMismatch: 0,
+		textMismatch: 0,
+		nodesAdded: 0,
+		nodesRemoved: 0,
+	};
 	for (const d of deltas) {
 		if (d.type in c) c[d.type]++;
 		if (d.type === "added") c.nodesAdded += d.nodes ?? 1;
@@ -317,10 +328,10 @@ function toMarkdown(reports) {
 								return `- \`${d.path}\` **text**: ours \`${d.ours}\` → ref \`${d.ref}\``;
 							if (d.type === "tagMismatch")
 								return `- \`${d.path}\` **tag**: ours \`${d.ours}\` → ref \`${d.ref}\``;
-						if (d.type === "added")
-							return `- \`${d.path}\` **added** (\`${d.tag}\`${d.text ? ` "${d.text}"` : ""} · ${d.nodes} узл.)`;
-						if (d.type === "removed")
-							return `- \`${d.path}\` **removed** (\`${d.tag}\`${d.text ? ` "${d.text}"` : ""} · ${d.nodes} узл.)`;
+							if (d.type === "added")
+								return `- \`${d.path}\` **added** (\`${d.tag}\`${d.text ? ` "${d.text}"` : ""} · ${d.nodes} узл.)`;
+							if (d.type === "removed")
+								return `- \`${d.path}\` **removed** (\`${d.tag}\`${d.text ? ` "${d.text}"` : ""} · ${d.nodes} узл.)`;
 							return "";
 						})
 						.join("\n")
@@ -376,7 +387,11 @@ async function main() {
 		mkdirSync(resolve(WEB, "audit"), { recursive: true });
 		writeFileSync(
 			resolve(WEB, "audit/dom-report.json"),
-			JSON.stringify({ generatedAt: new Date().toISOString(), reports }, null, 2),
+			JSON.stringify(
+				{ generatedAt: new Date().toISOString(), reports },
+				null,
+				2,
+			),
 		);
 		writeFileSync(resolve(WEB, "audit/dom-report.md"), toMarkdown(reports));
 		console.log(`report: web/audit/dom-report.md`);
