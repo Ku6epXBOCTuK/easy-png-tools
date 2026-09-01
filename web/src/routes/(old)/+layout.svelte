@@ -1,12 +1,12 @@
 <script lang="ts">
-	import "../../app.css";
-	import favicon from "$lib/assets/favicon.svg";
-	import { onMount } from "svelte";
 	import { resolve } from "$app/paths";
-	import { getLocale, initLocale, setLocale } from "$lib/i18n/locale.svelte";
-	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
-	import { t } from "$lib/i18n/t";
+	import favicon from "$lib/assets/favicon.svg";
 	import { LOCALES, type Locale } from "$lib/i18n/dict";
+	import { getLocale, initLocale, setLocale } from "$lib/i18n/locale.svelte";
+	import { t } from "$lib/i18n/t";
+	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
+	import { onMount } from "svelte";
+	import "../../old.css";
 
 	let { children } = $props();
 

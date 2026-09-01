@@ -17,7 +17,7 @@
 <style>
 	.page-grid {
 		display: grid;
-		grid-template-columns: minmax(0, 1.05fr) minmax(520px, 0.95fr);
+		grid-template-columns: repeat(auto-fit, minmax(calc(50% - 28px), 1fr));
 		align-items: start;
 		gap: 56px;
 		width: 100%;

@@ -2,8 +2,8 @@
 	import { page } from "$app/state";
 	import Footer from "$lib/components/kit/Footer.svelte";
 	import TopBar from "$lib/components/kit/TopBar.svelte";
-	import "$lib/styles/design2.css";
 	import type { Snippet } from "svelte";
+	import "../../preview.css";
 
 	interface Props {
 		children: Snippet;
@@ -72,8 +72,8 @@
 	main {
 		background-color: var(--background);
 		background-image:
-			linear-gradient(#dce2e7 1px, #0000 1px),
-			linear-gradient(90deg, #dce2e7 1px, #0000 1px);
+			linear-gradient(var(--background-muted) 1px, #0000 1px),
+			linear-gradient(90deg, var(--background-muted) 1px, #0000 1px);
 		background-size: 32px 32px;
 		min-height: 100vh;
 	}

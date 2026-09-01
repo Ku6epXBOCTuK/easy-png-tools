@@ -105,6 +105,10 @@
 		--font-mono: "IBM Plex Mono", monospace;
 
 		--background: #eef1f4;
+		--background-muted: #dce2e7;
+		--checker-background: #e4e8eb;
+		--checker-background-cross: #d2d8dc;
+
 		--panel: #f8fafb;
 		--foreground: #17212b;
 		--muted: #6d7883;
@@ -122,6 +126,10 @@
 
 	[data-theme="dark"] {
 		--background: #11171d;
+		--background-muted: #1e2a3447;
+		--checker-background: #202a31;
+		--checker-background-cross: #29343c;
+
 		--panel: #182129;
 		--foreground: #e8eef2;
 		--muted: #91a0ac;

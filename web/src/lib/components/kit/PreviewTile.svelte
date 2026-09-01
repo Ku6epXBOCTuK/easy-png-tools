@@ -37,12 +37,12 @@
 		min-height: clamp(300px, 22vw, 430px);
 		overflow: hidden;
 		aspect-ratio: 1.35;
-		background-color: #e4e8eb;
+		background-color: var(--checker-background);
 		background-image:
-			linear-gradient(45deg, #d2d8dc 25%, #0000 25%),
-			linear-gradient(-45deg, #d2d8dc 25%, #0000 25%),
-			linear-gradient(45deg, #0000 75%, #d2d8dc 75%),
-			linear-gradient(-45deg, #0000 75%, #d2d8dc 75%);
+			linear-gradient(45deg, var(--checker-background-cross) 25%, #0000 25%),
+			linear-gradient(-45deg, var(--checker-background-cross) 25%, #0000 25%),
+			linear-gradient(45deg, #0000 75%, var(--checker-background-cross) 75%),
+			linear-gradient(-45deg, #0000 75%, var(--checker-background-cross) 75%);
 		background-position:
 			0 0,
 			0 7px,

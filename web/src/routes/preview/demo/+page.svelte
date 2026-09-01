@@ -4,8 +4,8 @@
 	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
 	import FieldGrid from "$lib/components/kit/FieldGrid.svelte";
 	import IconButton from "$lib/components/kit/IconButton.svelte";
+	import PageGrid from "$lib/components/kit/layout/PageGrid.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import PageGrid from "$lib/components/kit/PageGrid.svelte";
 	import PipelineFooter from "$lib/components/kit/PipelineFooter.svelte";
 	import PreviewStack from "$lib/components/kit/PreviewStack.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
