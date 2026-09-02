@@ -1,6 +1,6 @@
 <script lang="ts">
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
-	import Panel from "$lib/components/kit/Panel.svelte";
+	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import SelectField from "$lib/components/kit/SelectField.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";

@@ -2,8 +2,8 @@
 	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
 	import Dropzone from "$lib/components/kit/Dropzone.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
+	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import Panel from "$lib/components/kit/Panel.svelte";
 	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import PreviewStack from "$lib/components/kit/PreviewStack.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";

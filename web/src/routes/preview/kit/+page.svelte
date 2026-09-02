@@ -5,8 +5,8 @@
 	import ColorField from "$lib/components/kit/ColorField.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
 	import ImageCard from "$lib/components/kit/ImageCard.svelte";
+	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import Panel from "$lib/components/kit/Panel.svelte";
 	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import Segmented from "$lib/components/kit/Segmented.svelte";

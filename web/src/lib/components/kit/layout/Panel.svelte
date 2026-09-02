@@ -13,8 +13,8 @@
 
 <style>
 	.panel {
-		background: var(--panel);
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
+		background: var(--color-panel);
+		border: var(--size-border) solid var(--color-border);
+		border-radius: var(--radius-s);
 	}
 </style>
