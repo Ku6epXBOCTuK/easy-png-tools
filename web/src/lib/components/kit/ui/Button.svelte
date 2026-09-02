@@ -27,8 +27,12 @@
 	aria-label={ariaLabel}
 	onclick={() => onclick?.()}
 >
-	{#if icon}<Icon {icon} size={14} />{/if}
-	<span class="btn-label">{label}</span>
+	{#if icon}
+		<Icon {icon} size={14} />
+	{/if}
+	{#if label}
+		<span class="btn-label">{label}</span>
+	{/if}
 </button>
 
 <style>

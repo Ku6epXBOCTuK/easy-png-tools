@@ -127,11 +127,20 @@
 		--space-m: 8px;
 		--space-l: 12px;
 		--space-xl: 16px;
+		--space-xxl: 24px;
+		--space-xxxl: 32px;
+
+		--space-brand: 32px;
+
+		--space-text-s: 0;
+		--space-text-m: 0.06em;
+		--space-text-l: 0.12em;
 
 		--size-border: 1px;
 		--size-border-thick: 2px;
 
 		--font-text: 10px;
+		--font-brand: 12px;
 		--font-button: 14px;
 
 		--radius-s: 0px;
