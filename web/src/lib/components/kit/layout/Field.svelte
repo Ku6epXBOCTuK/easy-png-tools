@@ -29,7 +29,7 @@
 	}
 	.field-hint {
 		font-family: var(--font-mono);
-		font-size: var(--font-text);
+		font-size: var(--font-size-s);
 		color: var(--color-text-muted);
 	}
 </style>

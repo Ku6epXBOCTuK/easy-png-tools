@@ -21,7 +21,7 @@
 	}
 	.nav a {
 		color: var(--color-text);
-		font: bold var(--font-text) var(--font-mono);
+		font: bold var(--font-size-s) var(--font-mono);
 		white-space: nowrap;
 		text-decoration: none;
 	}

@@ -17,15 +17,13 @@
 
 <style>
 	.mono-label {
-		font-family: var(--font-mono);
-		font-size: 10px;
-		font-weight: 400;
-		letter-spacing: 0.12em;
-		color: var(--muted);
+		font: normal var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-l);
+		color: var(--color-text-muted);
 		line-height: normal;
 	}
 
 	.accent {
-		color: var(--blue);
+		color: var(--color-accent);
 	}
 </style>

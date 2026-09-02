@@ -47,7 +47,7 @@
 		gap: var(--space-s);
 		line-height: normal;
 		font-family: var(--font-mono);
-		font-size: var(--font-text);
+		font-size: var(--font-size-s);
 		font-weight: bold;
 		border-width: var(--size-border-thick);
 		padding: var(--space-s) var(--space-m);

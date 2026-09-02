@@ -18,7 +18,7 @@
 		<span class="brand-mark">EP</span>
 		<span>easy-png-tools</span>
 		{#if crumb}
-			<span class="version">{crumb}</span>
+			<span class="crumb">{crumb}</span>
 		{/if}
 	</a>
 	<TopNav />
@@ -41,7 +41,7 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-m);
-		font: bold var(--font-button) var(--font-mono);
+		font: bold var(--font-size-l) var(--font-mono);
 		color: var(--color-text);
 		text-decoration: none;
 	}
@@ -50,12 +50,12 @@
 		color: var(--color-background);
 		width: var(--space-brand);
 		height: var(--space-brand);
-		font-size: var(--font-brand);
+		font-size: var(--font-size-m);
 		display: grid;
 		place-items: center;
 	}
-	.version {
-		font: var(--font-text) var(--font-mono);
+	.crumb {
+		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-l);
 		color: var(--color-main);
 	}

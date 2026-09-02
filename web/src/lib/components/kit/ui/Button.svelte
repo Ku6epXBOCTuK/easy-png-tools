@@ -44,7 +44,7 @@
 		border-color: var(--color-main);
 		border-width: var(--size-border-thick);
 		border-radius: var(--radius-s);
-		font-size: var(--font-button);
+		font-size: var(--font-size-l);
 		font-weight: bold;
 		cursor: pointer;
 		background: var(--color-main);

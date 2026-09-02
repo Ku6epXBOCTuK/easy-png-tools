@@ -14,7 +14,7 @@
 		justify-content: space-between;
 		padding: var(--space-xl);
 		border-top: var(--size-border) solid var(--color-border);
-		font: var(--font-text) var(--font-mono);
+		font: var(--font-size-s) var(--font-mono);
 		color: var(--color-text-muted);
 		& span {
 			display: flex;
