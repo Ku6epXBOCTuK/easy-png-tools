@@ -14,13 +14,13 @@
 	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
 	import IconButton from "$lib/components/kit/ui/IconButton.svelte";
+	import WorkspaceHeader from "$lib/components/kit/WorkspaceHeader.svelte";
 	import {
 		ChevronDown,
 		Plus,
 		Settings2,
 		SlidersHorizontal,
 	} from "@lucide/svelte";
-	import WorkspaceHeader from "./WorkspaceHeader.svelte";
 
 	let gradColor = $state("#DCEBFF");
 	let direction = $state(135);
