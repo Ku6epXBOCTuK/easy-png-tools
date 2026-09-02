@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Badge from "$lib/components/kit/Badge.svelte";
 	import Button from "$lib/components/kit/Button.svelte";
 	import CheckboxField from "$lib/components/kit/CheckboxField.svelte";
 	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
@@ -23,6 +22,7 @@
 	import TextField from "$lib/components/kit/TextField.svelte";
 	import Toggle from "$lib/components/kit/Toggle.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
+	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import { Download, ImageOff, Palette, Plus, Trash2 } from "@lucide/svelte";
 
 	let mode = $state("preview");

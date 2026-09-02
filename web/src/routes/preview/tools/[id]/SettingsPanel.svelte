@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { getTool } from "$lib/registry";
-	import Panel from "$lib/components/kit/Panel.svelte";
-	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
-	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
-	import StepCard from "$lib/components/kit/StepCard.svelte";
-	import Badge from "$lib/components/kit/Badge.svelte";
-	import SelectField from "$lib/components/kit/SelectField.svelte";
 	import Button from "$lib/components/kit/Button.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
+	import Panel from "$lib/components/kit/Panel.svelte";
+	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
+	import SelectField from "$lib/components/kit/SelectField.svelte";
+	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
+	import StepCard from "$lib/components/kit/StepCard.svelte";
+	import Badge from "$lib/components/kit/ui/Badge.svelte";
+	import { getTool } from "$lib/registry";
 	import ParamControl from "./ParamControl.svelte";
 
 	type ParamValue = string | number | boolean;

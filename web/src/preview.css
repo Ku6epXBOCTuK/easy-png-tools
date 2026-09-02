@@ -1,19 +1,13 @@
-@import "@fontsource/ibm-plex-sans/400.css";
-@import "@fontsource/ibm-plex-sans/500.css";
-@import "@fontsource/ibm-plex-sans/600.css";
-@import "@fontsource/ibm-plex-sans/700.css";
-@import "@fontsource/ibm-plex-mono/400.css";
-@import "@fontsource/ibm-plex-mono/500.css";
+@import url("@fontsource/ibm-plex-sans/400.css");
+@import url("@fontsource/ibm-plex-sans/500.css");
+@import url("@fontsource/ibm-plex-sans/600.css");
+@import url("@fontsource/ibm-plex-sans/700.css");
+@import url("@fontsource/ibm-plex-mono/400.css");
+@import url("@fontsource/ibm-plex-mono/500.css");
 
-/* Порядок cascade-слоёв (дубль из корневого +layout.svelte — идемпотентен и
-   страхует случай, когда design2.css грузится раньше корневого layout): */
 @layer app, design;
 
-/* Новый дизайн — слой design. В слое design правила выигрывают у того же
-   правила из слоя app (старый app.css) по слою, а не по порядку <link>,
-   поэтому утечка app.css на /preview при SPA-переходе не перебивает design2. */
 @layer design {
-	/* Минимальный reset (новый дизайн грузится только на preview-маршрутах). */
 	*,
 	*::before,
 	*::after,
@@ -25,7 +19,7 @@
 	}
 
 	* {
-		border-color: var(--line);
+		border-color: var(--color-border);
 	}
 
 	html,
@@ -34,21 +28,19 @@
 		padding: 0;
 	}
 
-	/* Базовая типографика и палитра: без этого весь текст наследует UA-дефолт
-	   (Times New Roman / чёрный), что даёт сотни расхождений с рефом. */
 	html {
 		color-scheme: light dark;
 		font-family: var(--font-sans);
-		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
 		line-height: 1.5;
 	}
 
 	body {
 		font-family: var(--font-sans);
-		color: var(--foreground);
-		background: var(--background);
+		color: var(--color-text);
+		background: var(--color-background);
 		-webkit-font-smoothing: antialiased;
-		text-rendering: optimizeLegibility;
+		text-rendering: optimizelegibility;
 	}
 
 	button,
@@ -68,77 +60,112 @@
 
 	button,
 	input:where([type="button"], [type="reset"], [type="submit"]) {
-		appearance: button;
+		appearance: auto;
 	}
 
-	/* Перебивки глобальных правил старого app.css (слой app ниже), чтобы при
-	   утечке app.css на /preview новый дизайн не получал старую типографику.
-	   Пустые — заполни при необходимости. */
 	a,
 	a:hover {
 		color: inherit;
 		text-decoration: none;
 	}
+
 	h1,
 	h2 {
 		font-size: revert;
 		line-height: revert;
 		letter-spacing: revert;
 	}
+
 	p,
 	label {
 		font-size: revert;
 	}
+
 	:focus-visible {
 		outline: revert;
 	}
+
 	svg {
 		vertical-align: middle;
 	}
-
-	/* Новый дизайн: токены (§2 плана redesign).
-	   Файл грузится только layout'ом новой ветки (preview/+layout), поэтому
-	   глобально не конфликтует со старым app.css. */
 
 	:root {
 		--font-sans: "IBM Plex Sans", sans-serif;
 		--font-mono: "IBM Plex Mono", monospace;
 
-		--background: #eef1f4;
-		--background-muted: #dce2e7;
-		--checker-background: #e4e8eb;
-		--checker-background-cross: #d2d8dc;
+		--brand-main: #86efac;
+		--brand-alt: hct(from var(--brand-main) calc(h + 90) c t);
 
-		--panel: #f8fafb;
-		--foreground: #17212b;
-		--muted: #6d7883;
-		--line: #cbd3da;
+		--color-background: hct(from var(--brand-main) h 8 95);
+		--color-background-muted: hct(from var(--brand-main) h 12 85);
+		--color-panel: hct(from var(--brand-main) h 6.5 98);
+		--color-checker-main: hct(from var(--brand-main) h 10.7 85.7);
+		--color-checker-alt: hct(from var(--brand-main) h 13.2 76);
 
-		--blue: #1769d2;
-		--cyan: #00a8c7;
-		--amber: #bd7411;
-		--success: rgb(35, 131, 84);
-		--success2: rgb(37, 169, 106);
-		--danger: #e5484d;
+		--color-border: hct(from var(--brand-main) h 13.1 69.4);
 
-		--radius: 4px;
+		--color-text: hct(from var(--brand-main) h 5.9 1.7);
+		--color-text-muted: hct(from var(--brand-main) h 13.4 19.2);
+		--color-text-accent: hct(from var(--brand-alt) h 5.9 1.7);
+		--color-text-accent-muted: hct(from var(--brand-alt) h 13.4 19.2);
+
+		--color-main: hct(from var(--brand-main) h 80 48);
+		--color-accent: hct(from var(--brand-alt) h 80 48);
+		--color-success: hct(160 80 48);
+		--color-warning: hct(80 80 48);
+		--color-danger: hct(30 80 48);
+		--color-info: hct(340 80 48);
+
+		--color-main-tint: hct(from var(--brand-main) h 65 55);
+		--color-accent-tint: hct(from var(--brand-alt) h 65 55);
+		--color-success-tint: hct(160 65 55);
+		--color-warning-tint: hct(80 65 55);
+		--color-danger-tint: hct(30 65 55);
+		--color-info-tint: hct(340 65 55);
+
+		--space-s: 4px;
+		--space-m: 8px;
+		--space-l: 12px;
+		--space-xl: 12px;
+
+		--size-border: 1px;
+		--size-border-thick: 2px;
+
+		--font-text: 10px;
+
+		--radius-s: 0px;
+		--radius-m: 4px;
 	}
 
 	[data-theme="dark"] {
-		--background: #11171d;
-		--background-muted: #1e2a3447;
-		--checker-background: #202a31;
-		--checker-background-cross: #29343c;
+		--brand-main: #86efac;
+		--brand-alt: hct(from var(--brand-main) calc(h + 90) c t);
 
-		--panel: #182129;
-		--foreground: #e8eef2;
-		--muted: #91a0ac;
-		--line: #33414c;
+		--color-background: hct(from var(--brand-main) h 15 6);
+		--color-background-muted: hct(from var(--brand-main) h 15 10);
+		--color-panel: hct(from var(--brand-main) h 12 8);
+		--color-checker-main: hct(from var(--brand-main) h 12 10);
+		--color-checker-alt: hct(from var(--brand-main) h 14 14);
 
-		--blue: #54a2ff;
-		--cyan: #00a8c7;
-		--amber: #bd7411;
-		--success: #25a96a;
-		--danger: #ff7479;
+		--color-border: hct(from var(--brand-main) h 15 25);
+
+		--color-text: hct(from var(--brand-main) h 25 90);
+		--color-text-muted: hct(from var(--brand-main) h 22 70);
+		--color-text-accent: hct(from var(--brand-alt) h 25 90);
+		--color-text-accent-muted: hct(from var(--brand-alt) h 22 70);
+
+		--color-main: hct(from var(--brand-main) h 60 50);
+		--color-accent: hct(from var(--brand-alt) h 60 50);
+		--color-success: hct(160 65 55);
+		--color-warning: hct(80 65 55);
+		--color-danger: hct(30 70 55);
+		--color-info: hct(340 65 55);
+
+		--color-main-tint: hct(from var(--brand-main) h 45 57);
+		--color-accent-tint: hct(from var(--brand-alt) h 45 57);
+		--color-success-tint: hct(160 50 60);
+		--color-warning-tint: hct(80 50 60);
+		--color-danger-tint: hct(30 50 60);
+		--color-info-tint: hct(340 50 60);
 	}
 }

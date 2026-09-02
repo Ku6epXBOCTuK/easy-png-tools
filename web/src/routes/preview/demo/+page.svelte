@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Badge from "$lib/components/kit/Badge.svelte";
 	import ColorField from "$lib/components/kit/ColorField.svelte";
 	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
 	import FieldGrid from "$lib/components/kit/FieldGrid.svelte";
@@ -14,6 +13,7 @@
 	import SliderField from "$lib/components/kit/SliderField.svelte";
 	import StepCard from "$lib/components/kit/StepCard.svelte";
 	import ToggleRow from "$lib/components/kit/ToggleRow.svelte";
+	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import {
 		ChevronDown,
 		Plus,
