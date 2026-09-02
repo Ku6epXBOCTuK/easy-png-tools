@@ -3,7 +3,6 @@
 	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
 	import CodeBlock from "$lib/components/kit/CodeBlock.svelte";
 	import ColorField from "$lib/components/kit/ColorField.svelte";
-	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
 	import IconButton from "$lib/components/kit/IconButton.svelte";
 	import ImageCard from "$lib/components/kit/ImageCard.svelte";
@@ -23,6 +22,7 @@
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
 	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import Button from "$lib/components/kit/ui/Button.svelte";
+	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
 	import { Download, ImageOff, Palette, Plus, Trash2 } from "@lucide/svelte";
 
 	let mode = $state("preview");

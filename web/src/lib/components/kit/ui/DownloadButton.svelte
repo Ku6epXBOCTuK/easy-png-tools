@@ -16,20 +16,21 @@
 
 <style>
 	.download-btn {
-		background: var(--blue);
-		color: #fff;
+		background: var(--color-main);
+		color: var(--color-background);
 		width: 100%;
-		height: 42px;
-		font: 11px var(--font-mono);
+		height: calc(5 * var(--space-m));
+		font-size: var(--font-button);
+		font-family: var(--font-mono);
 		border: 0;
 		justify-content: center;
 		align-items: center;
-		gap: 9px;
-		margin-top: 18px;
+		gap: var(--space-m);
+		margin-top: var(--space-xl);
 		display: flex;
 		white-space: nowrap;
 	}
 	.download-btn:hover {
-		background: color-mix(in srgb, var(--blue) 88%, #000);
+		background: var(--color-main-tint);
 	}
 </style>

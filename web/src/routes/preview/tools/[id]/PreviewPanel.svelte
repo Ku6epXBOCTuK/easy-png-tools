@@ -1,6 +1,5 @@
 <script lang="ts">
 	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
-	import DownloadButton from "$lib/components/kit/DownloadButton.svelte";
 	import Dropzone from "$lib/components/kit/Dropzone.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
@@ -10,6 +9,7 @@
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import StatusLine from "$lib/components/kit/StatusLine.svelte";
 	import Button from "$lib/components/kit/ui/Button.svelte";
+	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
 	import type { PixelImage } from "$lib/core/types";
 
 	interface PreviewItem {
