@@ -7,7 +7,6 @@
 	import ImageCard from "$lib/components/kit/ImageCard.svelte";
 	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import Segmented from "$lib/components/kit/Segmented.svelte";
 	import SelectField from "$lib/components/kit/SelectField.svelte";
@@ -58,8 +57,7 @@
 		<StatusLine label="rendering ok" />
 	</header>
 
-	<Panel>
-		<PanelHeading title="Buttons" eyebrow="controls" />
+	<Panel title="Buttons" eyebrow="controls">
 		<div class="stack">
 			<SettingGroup label="variants">
 				<Button onclick={() => {}} label="Primary" />
@@ -89,8 +87,7 @@
 		</SettingsFooter>
 	</Panel>
 
-	<Panel>
-		<PanelHeading title="Inputs" eyebrow="controls" />
+	<Panel title="Inputs" eyebrow="controls">
 		<div class="stack">
 			<SliderField
 				label="corner radius"
@@ -121,8 +118,7 @@
 		</div>
 	</Panel>
 
-	<Panel>
-		<PanelHeading title="Segmented & badges" eyebrow="controls" />
+	<Panel title="Segmented & badges" eyebrow="controls">
 		<div class="stack">
 			<Segmented
 				bind:value={mode}
@@ -143,8 +139,7 @@
 		</div>
 	</Panel>
 
-	<Panel>
-		<PanelHeading title="Steps" eyebrow="pipeline" />
+	<Panel title="Steps" eyebrow="pipeline">
 		<div class="stack">
 			<StepCard index={1} type="BACKGROUND" title="Gradient fill">
 				<ColorField label="color" bind:value={tint} />
@@ -155,8 +150,7 @@
 		</div>
 	</Panel>
 
-	<Panel>
-		<PanelHeading title="Tools" eyebrow="catalog" />
+	<Panel title="Tools" eyebrow="catalog">
 		<div class="tool-grid">
 			{#each tools as tool, i (tool.title)}
 				<ToolCard
@@ -170,8 +164,7 @@
 		</div>
 	</Panel>
 
-	<Panel>
-		<PanelHeading title="Preview" eyebrow="canvas" />
+	<Panel title="Preview" eyebrow="canvas">
 		<div class="preview-grid">
 			<ImageCard label="result.png · 512×512">
 				<CheckerCanvas size="sm" />
@@ -194,8 +187,7 @@
 		</SettingsFooter>
 	</Panel>
 
-	<Panel>
-		<PanelHeading title="States & code" eyebrow="misc" />
+	<Panel title="States & code" eyebrow="misc">
 		<div class="stack">
 			<EmptyState
 				icon={ImageOff}

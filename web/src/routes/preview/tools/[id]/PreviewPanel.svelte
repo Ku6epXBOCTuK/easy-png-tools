@@ -4,7 +4,6 @@
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
 	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import PreviewStack from "$lib/components/kit/PreviewStack.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import StatusLine from "$lib/components/kit/StatusLine.svelte";
@@ -52,14 +51,11 @@
 	}: Props = $props();
 </script>
 
-<Panel>
-	<PanelHeading title="Pipeline output" eyebrow="RESULT">
-		{#snippet actions()}
-			{#if resultUrl}
-				<DownloadButton label="Download result" onclick={onDownload} />
-			{/if}
-		{/snippet}
-	</PanelHeading>
+<Panel title="Pipeline output" eyebrow="RESULT">
+	{#if resultUrl}
+		<DownloadButton label="Download result" onclick={onDownload} />
+	{/if}
+
 	<div class="preview-body">
 		{#if chainError}
 			<EmptyState title="Pipeline failed" description={chainError} />

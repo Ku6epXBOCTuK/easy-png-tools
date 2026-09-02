@@ -63,7 +63,7 @@
 </script>
 
 <main class="preview-root" data-theme={theme}>
-	<TopBar {theme} {crumb} {status} ontoggle={toggle} />
+	<TopBar {theme} {crumb} ontoggle={toggle} />
 	{@render children()}
 	<Footer />
 </main>

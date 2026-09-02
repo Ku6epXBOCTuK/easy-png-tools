@@ -296,9 +296,6 @@
 		gap: 5px;
 		display: flex;
 	}
-	.image-preview.active {
-		border-color: var(--blue);
-	}
 	.sample-icon {
 		border: 1px solid;
 		padding: 3px 5px;

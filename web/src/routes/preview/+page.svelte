@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Panel from "$lib/components/kit/layout/Panel.svelte";
-	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
 	import TextField from "$lib/components/kit/TextField.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
@@ -28,8 +27,7 @@
 		</p>
 	</header>
 
-	<Panel>
-		<PanelHeading title="Search" eyebrow="tools" />
+	<Panel title="Search" eyebrow="tools">
 		<div class="ws-search">
 			<div class="ws-field">
 				<TextField
