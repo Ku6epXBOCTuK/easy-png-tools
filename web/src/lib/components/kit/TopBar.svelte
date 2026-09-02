@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
 	import { CircleQuestionMark, Moon, Sun } from "@lucide/svelte";
-	import IconButton from "./IconButton.svelte";
 	import StatusDot from "./StatusDot.svelte";
+	import IconButton from "./ui/IconButton.svelte";
 
 	interface Props {
 		theme: "light" | "dark";
@@ -35,13 +35,13 @@
 		<IconButton
 			icon={CircleQuestionMark}
 			label="Help"
-			variant="bare"
+			variant="clear"
 			onclick={() => {}}
 		/>
 		<IconButton
 			icon={theme === "light" ? Moon : Sun}
 			label="Toggle theme"
-			variant="bare"
+			variant="clear"
 			onclick={ontoggle}
 		/>
 		<div class="lang" role="group" aria-label="Language">

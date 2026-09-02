@@ -67,18 +67,21 @@
 		{#if needsSource && !sourceImg}
 			<Dropzone onfile={onFile} />
 		{:else if needsSource && sourceImg}
-			<Button variant="ghost" onclick={onClearSource}>Change image</Button>
+			<Button variant="outline" onclick={onClearSource} label="Change image" />
 		{/if}
 		<PreviewStack>
 			{#if needsSource && sourceImg}
-				<PreviewTile label="SOURCE">
+				<PreviewTile label="SOURCE" caption="">
 					<CheckerCanvas size="sm">
 						<img class="tile-img" src={sourceUrl} alt="source" />
 					</CheckerCanvas>
 				</PreviewTile>
 			{/if}
 			{#each stepOutputs as out, i (out.toolId + i)}
-				<PreviewTile label={`STEP ${String(i + 1).padStart(2, "0")}`}>
+				<PreviewTile
+					label={`STEP ${String(i + 1).padStart(2, "0")}`}
+					caption=""
+				>
 					<CheckerCanvas size="sm">
 						<img class="tile-img" src={out.url} alt={out.title} />
 					</CheckerCanvas>

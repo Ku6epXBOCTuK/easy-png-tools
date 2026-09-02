@@ -4,7 +4,6 @@
 	import CodeBlock from "$lib/components/kit/CodeBlock.svelte";
 	import ColorField from "$lib/components/kit/ColorField.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
-	import IconButton from "$lib/components/kit/IconButton.svelte";
 	import ImageCard from "$lib/components/kit/ImageCard.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import Panel from "$lib/components/kit/Panel.svelte";
@@ -23,6 +22,7 @@
 	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import Button from "$lib/components/kit/ui/Button.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
+	import IconButton from "$lib/components/kit/ui/IconButton.svelte";
 	import { Download, ImageOff, Palette, Plus, Trash2 } from "@lucide/svelte";
 
 	let mode = $state("preview");
@@ -62,18 +62,18 @@
 		<PanelHeading title="Buttons" eyebrow="controls" />
 		<div class="stack">
 			<SettingGroup label="variants">
-				<Button onclick={() => {}}>Primary</Button>
-				<Button variant="outline" onclick={() => {}}>Outline</Button>
-				<Button variant="accent" onclick={() => {}}>Accent</Button>
-				<Button variant="danger" onclick={() => {}}>Danger</Button>
+				<Button onclick={() => {}} label="Primary" />
+				<Button variant="outline" onclick={() => {}} label="Outline" />
+				<Button variant="accent" onclick={() => {}} label="Accent" />
+				<Button variant="danger" onclick={() => {}} label="Danger" />
 			</SettingGroup>
 			<SettingGroup label="states">
-				<Button disabled onclick={() => {}}>Disabled</Button>
+				<Button disabled onclick={() => {}} label="Disabled" />
 				<IconButton icon={Plus} label="Add" onclick={() => {}} />
 				<IconButton
 					icon={Trash2}
 					label="Delete"
-					variant="solid"
+					variant="primary"
 					onclick={() => {}}
 				/>
 				<IconButton
@@ -202,7 +202,7 @@
 				title="No image loaded"
 				description="Drop a PNG to start processing"
 			>
-				<Button onclick={() => {}}>Open file</Button>
+				<Button onclick={() => {}} label="Open file" />
 			</EmptyState>
 			<CodeBlock
 				code={'export const config = {\n  radius: 8,\n  tint: "#3b82f6",\n};'}

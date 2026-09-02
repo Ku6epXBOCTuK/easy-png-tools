@@ -1,26 +1,19 @@
 <script lang="ts">
-	import type { Component, Snippet } from "svelte";
-	import Icon from "../Icon.svelte";
-
-	const ButtonVariantDefine = {
-		PRIMARY: "primary",
-		OUTLINE: "outline",
-		ACCENT: "accent",
-		DANGER: "danger",
-	} as const;
-
-	type ButtonVariant =
-		(typeof ButtonVariantDefine)[keyof typeof ButtonVariantDefine];
+	import type { Component } from "svelte";
+	import { ButtonVariantDefine, type ButtonVariant } from "../define";
+	import Icon from "./Icon.svelte";
 
 	interface Props {
-		children: Snippet;
+		label: string;
+		ariaLabel?: string;
 		onclick?: () => void;
 		variant?: ButtonVariant;
 		icon?: Component<{ size?: number; class?: string }>;
 		disabled?: boolean;
 	}
 	let {
-		children,
+		label,
+		ariaLabel = label,
 		onclick,
 		variant = ButtonVariantDefine.PRIMARY,
 		icon,
@@ -28,9 +21,14 @@
 	}: Props = $props();
 </script>
 
-<button class="btn btn--{variant}" {disabled} onclick={() => onclick?.()}>
+<button
+	class="btn btn--{variant}"
+	{disabled}
+	aria-label={ariaLabel}
+	onclick={() => onclick?.()}
+>
 	{#if icon}<Icon {icon} size={14} />{/if}
-	<span class="btn-label">{@render children()}</span>
+	<span class="btn-label">{label}</span>
 </button>
 
 <style>

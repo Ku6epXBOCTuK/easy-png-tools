@@ -1,7 +1,6 @@
 <script lang="ts">
 	import ColorField from "$lib/components/kit/ColorField.svelte";
 	import FieldGrid from "$lib/components/kit/FieldGrid.svelte";
-	import IconButton from "$lib/components/kit/IconButton.svelte";
 	import PageGrid from "$lib/components/kit/layout/PageGrid.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import PipelineFooter from "$lib/components/kit/PipelineFooter.svelte";
@@ -14,6 +13,7 @@
 	import ToggleRow from "$lib/components/kit/ToggleRow.svelte";
 	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
+	import IconButton from "$lib/components/kit/ui/IconButton.svelte";
 	import {
 		ChevronDown,
 		Plus,
@@ -95,7 +95,7 @@
 				onremove={() => {}}
 			>
 				{#snippet tools()}
-					<Badge tone="success" check>AUTO</Badge>
+					<Badge tone="success" check label="AUTO" />
 				{/snippet}
 				<FieldGrid>
 					<ColorField label="COLOR" chevron bind:value={gradColor} />
@@ -128,7 +128,7 @@
 				onremove={() => {}}
 			>
 				{#snippet tools()}
-					<Badge tone="success" check>AUTO</Badge>
+					<Badge tone="success" check label="AUTO" />
 				{/snippet}
 				<div class="transform-note">
 					<SlidersHorizontal size={15} /> Automatic subject detection enabled
@@ -137,7 +137,7 @@
 
 			<StepCard index={3} type="STYLE" title="Add outline" onremove={() => {}}>
 				{#snippet tools()}
-					<Badge tone="success" check>AUTO</Badge>
+					<Badge tone="success" check label="AUTO" />
 				{/snippet}
 				<FieldGrid compact>
 					<SliderField
@@ -158,7 +158,7 @@
 				onremove={() => {}}
 			>
 				{#snippet tools()}
-					<Badge tone="success" check>AUTO</Badge>
+					<Badge tone="success" check label="AUTO" />
 				{/snippet}
 				<FieldGrid compact>
 					<SliderField

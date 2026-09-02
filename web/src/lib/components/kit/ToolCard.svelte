@@ -2,7 +2,7 @@
 	import { resolve } from "$app/paths";
 	import { ArrowUpRight } from "@lucide/svelte";
 	import type { Component } from "svelte";
-	import Icon from "./Icon.svelte";
+	import Icon from "./ui/Icon.svelte";
 
 	interface Props {
 		title: string;
@@ -72,16 +72,5 @@
 		font: 10px var(--font-mono);
 		color: var(--muted);
 		align-self: start;
-	}
-	.tool-arrow {
-		color: var(--blue);
-		opacity: 0;
-		transition:
-			opacity 0.12s ease,
-			transform 0.12s ease;
-	}
-	.tool-card:hover .tool-arrow {
-		opacity: 1;
-		transform: translate(2px, -2px);
 	}
 </style>

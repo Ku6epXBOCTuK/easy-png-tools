@@ -41,7 +41,7 @@
 <Panel>
 	<PanelHeading title="Pipeline" eyebrow="STEPS">
 		{#snippet actions()}
-			<Badge tone="accent">AUTO</Badge>
+			<Badge tone="accent" label="AUTO" />
 		{/snippet}
 	</PanelHeading>
 	<div class="pipeline-body">
@@ -78,7 +78,7 @@
 				options={chainOptions}
 				onchange={(v) => onSetAddId(v)}
 			/>
-			<Button variant="ghost" onclick={onAddStep}>Add step</Button>
+			<Button variant="outline" onclick={onAddStep} label="Add step" />
 		</div>
 	</SettingsFooter>
 </Panel>

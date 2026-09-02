@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Copy } from "@lucide/svelte";
-	import IconButton from "./IconButton.svelte";
+	import IconButton from "./ui/IconButton.svelte";
 
 	interface Props {
 		code: string;

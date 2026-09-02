@@ -38,7 +38,12 @@
 					placeholder="Search tools…"
 				/>
 			</div>
-			<Button icon={Search} variant="primary" onclick={() => {}}>Search</Button>
+			<Button
+				icon={Search}
+				variant="primary"
+				onclick={() => {}}
+				label="Search"
+			/>
 		</div>
 		<div class="ws-results">
 			{#each results as tool (tool.id)}
@@ -50,7 +55,7 @@
 			{/each}
 		</div>
 		<SettingsFooter>
-			<Button onclick={() => {}}>Open last project</Button>
+			<Button onclick={() => {}} label="Open last project" />
 		</SettingsFooter>
 	</Panel>
 </section>
