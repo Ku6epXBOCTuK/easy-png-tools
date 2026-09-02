@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
-	import MonoLabel from "./MonoLabel.svelte";
+	import MonoLabel from "../MonoLabel.svelte";
 
 	interface Props {
 		label: string;
@@ -20,16 +20,16 @@
 	.field {
 		display: flex;
 		flex-direction: column;
-		gap: 0.3rem;
+		gap: var(--space-s);
 	}
 	.field-control {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: var(--space-m);
 	}
 	.field-hint {
 		font-family: var(--font-mono);
-		font-size: 10px;
-		color: var(--muted);
+		font-size: var(--font-text);
+		color: var(--color-text-muted);
 	}
 </style>
