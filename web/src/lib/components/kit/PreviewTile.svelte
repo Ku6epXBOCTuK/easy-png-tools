@@ -4,11 +4,11 @@
 	interface Props {
 		label: string;
 		caption: string;
-		active: boolean;
+		active?: boolean;
 		children: Snippet;
 	}
 
-	let { label, caption, active, children }: Props = $props();
+	let { label, caption, active = false, children }: Props = $props();
 </script>
 
 <div class="preview-tile" class:active>

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Button from "$lib/components/kit/Button.svelte";
 	import CheckboxField from "$lib/components/kit/CheckboxField.svelte";
 	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
 	import CodeBlock from "$lib/components/kit/CodeBlock.svelte";
@@ -23,6 +22,7 @@
 	import Toggle from "$lib/components/kit/Toggle.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
 	import Badge from "$lib/components/kit/ui/Badge.svelte";
+	import Button from "$lib/components/kit/ui/Button.svelte";
 	import { Download, ImageOff, Palette, Plus, Trash2 } from "@lucide/svelte";
 
 	let mode = $state("preview");
@@ -63,7 +63,7 @@
 		<div class="stack">
 			<SettingGroup label="variants">
 				<Button onclick={() => {}}>Primary</Button>
-				<Button variant="ghost" onclick={() => {}}>Ghost</Button>
+				<Button variant="outline" onclick={() => {}}>Outline</Button>
 				<Button variant="accent" onclick={() => {}}>Accent</Button>
 				<Button variant="danger" onclick={() => {}}>Danger</Button>
 			</SettingGroup>
@@ -133,10 +133,12 @@
 				]}
 			/>
 			<SettingGroup label="tones">
-				<Badge>default</Badge>
-				<Badge tone="accent">accent</Badge>
-				<Badge tone="success">success</Badge>
-				<Badge tone="amber">amber</Badge>
+				<Badge label="default" />
+				<Badge tone="accent" label="accent" />
+				<Badge tone="success" label="success" />
+				<Badge tone="danger" label="default" />
+				<Badge tone="warning" label="warning" />
+				<Badge tone="info" label="info" />
 			</SettingGroup>
 		</div>
 	</Panel>

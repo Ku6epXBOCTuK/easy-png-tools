@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { TOOLS } from "$lib/registry";
 	import Panel from "$lib/components/kit/Panel.svelte";
 	import PanelHeading from "$lib/components/kit/PanelHeading.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
 	import TextField from "$lib/components/kit/TextField.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
-	import Button from "$lib/components/kit/Button.svelte";
+	import Button from "$lib/components/kit/ui/Button.svelte";
+	import { TOOLS } from "$lib/registry";
 	import { Search } from "@lucide/svelte";
 
 	let query = $state("");

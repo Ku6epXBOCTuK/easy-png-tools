@@ -126,12 +126,13 @@
 		--space-s: 4px;
 		--space-m: 8px;
 		--space-l: 12px;
-		--space-xl: 12px;
+		--space-xl: 16px;
 
 		--size-border: 1px;
 		--size-border-thick: 2px;
 
 		--font-text: 10px;
+		--font-button: 14px;
 
 		--radius-s: 0px;
 		--radius-m: 4px;
