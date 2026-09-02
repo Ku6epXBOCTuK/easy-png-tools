@@ -15,7 +15,7 @@
 		"lint": "eslint .",
 		"lint:css": "stylelint \"./src/**/*.css\"",
 		"lint:all": "node scripts/lint-all.mjs",
-		"lint:tokens": "node scripts/check-token-parity.mjs",
+		"lint:tokens": "node scripts/check-tokens.mjs",
 		"refs-cdp-audit": "node scripts/audit-cdp.mjs",
 		"refs-cdp-audit:large": "node scripts/audit-cdp.mjs --viewport 2560x1440",
 		"refs-cdp-audit:responsive": "node scripts/audit-cdp-responsive.mjs",
@@ -24,6 +24,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@panmdaa/colors": "^0.4.2",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",

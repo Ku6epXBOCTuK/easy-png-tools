@@ -91,18 +91,28 @@ scoped-путям (`kit/**`, `preview/**`).
 
 - `pnpm --dir web lint:css` — stylelint по всем `src/**/*.css` (`old.css` и
   `node_modules/build/.svelte-kit/static` игнорируются).
-- `pnpm --dir web exec node scripts/check-token-parity.mjs` — каждый цветовой
+- `pnpm --dir web exec node scripts/check-tokens.mjs` — токен-аудит по
+  preview.css (лёгкий оркестратор поверх `web/scripts/token-audit/*`);
+  проверяет три вещи. Каждый цветовой
   токен из `:root` обязан иметь пару в `[data-theme="dark"]` и наоборот.
-  Производные токены (значение содержит `var()`, напр. `oklch(from var(--...))`)
-  из пары исключены — они наследуют тему автоматически. Дополнительно выводит
-  **варнинг** о неиспользуемых токенах preview.css (определены, но нигде не
-  используются) — выход не меняется (only parity = exit 1).
+  Производные токены (значение содержит `var()`, напр. `hct(from var(--...))`)
+  из пары исключены — они наследуют тему автоматически. Выводит **варнинг** о
+  неиспользуемых токенах preview.css (определены, но нигде не используются) —
+  выход он не меняет. Провалом (exit 1) считаются только parity и hct-авторство.
+- Тот же скрипт проверяет **hct-only для цветов**: ЛЮБОЕ цветовое значение в
+  preview.css обязано быть `hct(...)` — и литерал, и производное
+  `hct(from var(...) h c t)` (вся палитра считается через hct-каналы; эммит в
+  sRGB-hex делает postcss-плагин `web/scripts/postcss-hct.mjs`). Исключения:
+  только `--brand-main` / `--brand-alt` (seed-токены, любая форма) и
+  `color-mix(...)` (единственный легальный способ смешать два токена).
+  `oklch()/rgb()/#hex` в `--color-*` запрещены.
 
 Токены-префиксы (целевой словарь дизайна):
 
 - Цвета: `--color-*`, бренд `--brand-main` / `--brand-alt` — единственные
   две переменные, которым разрешено быть hex/rgb, остальные цвета — только
-  `oklch()` и только в preview.css.
+  `hct()` (эммит в sRGB-hex делает postcss-плагин `web/scripts/postcss-hct.mjs`)
+  и только в preview.css.
 - Размеры: `--space-*`, `--text-*` (font-size), `--radius-*`, `--size-*`.
 - Брейкпоинты: `--bp-mobile` (640px), `--bp-tablet` (800px), `--bp-desktop`
   (1100px) — mobile-first.
