@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import Footer from "$lib/components/kit/Footer.svelte";
+	import Footer from "$lib/components/kit/layout/Footer.svelte";
 	import TopBar from "$lib/components/kit/TopBar.svelte";
 	import type { Snippet } from "svelte";
 	import "../../preview.css";
