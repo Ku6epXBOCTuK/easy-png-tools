@@ -16,6 +16,8 @@
 	}
 
 	let { param, value, onInput }: Props = $props();
+
+	// TODO: investigate - may be better move param fields switch to field component?
 </script>
 
 {#if param.type === "color"}
