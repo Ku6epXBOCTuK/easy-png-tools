@@ -1,7 +1,7 @@
 <script lang="ts">
+	import TextField from "$lib/components/kit/fields/TextField.svelte";
 	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
-	import TextField from "$lib/components/kit/TextField.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
 	import Button from "$lib/components/kit/ui/Button.svelte";
 	import { TOOLS } from "$lib/registry";

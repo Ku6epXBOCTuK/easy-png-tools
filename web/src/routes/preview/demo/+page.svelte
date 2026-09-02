@@ -1,15 +1,15 @@
 <script lang="ts">
-	import ColorField from "$lib/components/kit/ColorField.svelte";
-	import FieldGrid from "$lib/components/kit/FieldGrid.svelte";
+	import ColorField from "$lib/components/kit/fields/ColorField.svelte";
+	import FieldGrid from "$lib/components/kit/fields/FieldGrid.svelte";
+	import SliderField from "$lib/components/kit/fields/SliderField.svelte";
+	import ToggleRow from "$lib/components/kit/fields/ToggleRow.svelte";
 	import PageGrid from "$lib/components/kit/layout/PageGrid.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import PipelineFooter from "$lib/components/kit/PipelineFooter.svelte";
 	import PreviewStack from "$lib/components/kit/PreviewStack.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import SectionLabel from "$lib/components/kit/SectionLabel.svelte";
-	import SliderField from "$lib/components/kit/SliderField.svelte";
 	import StepCard from "$lib/components/kit/StepCard.svelte";
-	import ToggleRow from "$lib/components/kit/ToggleRow.svelte";
 	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
 	import IconButton from "$lib/components/kit/ui/IconButton.svelte";

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Field from "./layout/Field.svelte";
+	import Field from "./Field.svelte";
 
 	interface Props {
 		label: string;

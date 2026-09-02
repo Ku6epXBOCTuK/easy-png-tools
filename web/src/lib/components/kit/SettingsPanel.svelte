@@ -1,7 +1,7 @@
 <script lang="ts">
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
+	import SelectField from "$lib/components/kit/fields/SelectField.svelte";
 	import Panel from "$lib/components/kit/layout/Panel.svelte";
-	import SelectField from "$lib/components/kit/SelectField.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
 	import StepCard from "$lib/components/kit/StepCard.svelte";
 	import Button from "$lib/components/kit/ui/Button.svelte";

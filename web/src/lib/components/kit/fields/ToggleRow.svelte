@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Toggle from "./Toggle.svelte";
+	import Toggle from "../ui/Toggle.svelte";
 
 	interface Props {
 		label: string;

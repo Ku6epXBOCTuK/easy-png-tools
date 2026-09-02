@@ -1,11 +1,11 @@
 <script lang="ts">
+	import ColorField from "$lib/components/kit/fields/ColorField.svelte";
+	import NumberField from "$lib/components/kit/fields/NumberField.svelte";
+	import SelectField from "$lib/components/kit/fields/SelectField.svelte";
+	import SliderField from "$lib/components/kit/fields/SliderField.svelte";
+	import TextField from "$lib/components/kit/fields/TextField.svelte";
+	import ToggleRow from "$lib/components/kit/fields/ToggleRow.svelte";
 	import type { ParamDef } from "$lib/registry";
-	import ColorField from "$lib/components/kit/ColorField.svelte";
-	import SliderField from "$lib/components/kit/SliderField.svelte";
-	import SelectField from "$lib/components/kit/SelectField.svelte";
-	import ToggleRow from "$lib/components/kit/ToggleRow.svelte";
-	import TextField from "$lib/components/kit/TextField.svelte";
-	import NumberField from "$lib/components/kit/NumberField.svelte";
 
 	type ParamValue = string | number | boolean;
 

@@ -1,27 +1,27 @@
 <script lang="ts">
-	import CheckboxField from "$lib/components/kit/CheckboxField.svelte";
 	import CheckerCanvas from "$lib/components/kit/CheckerCanvas.svelte";
 	import CodeBlock from "$lib/components/kit/CodeBlock.svelte";
-	import ColorField from "$lib/components/kit/ColorField.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
+	import CheckboxField from "$lib/components/kit/fields/CheckboxField.svelte";
+	import ColorField from "$lib/components/kit/fields/ColorField.svelte";
+	import SelectField from "$lib/components/kit/fields/SelectField.svelte";
+	import SliderField from "$lib/components/kit/fields/SliderField.svelte";
+	import TextField from "$lib/components/kit/fields/TextField.svelte";
 	import ImageCard from "$lib/components/kit/ImageCard.svelte";
 	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
-	import SelectField from "$lib/components/kit/SelectField.svelte";
 	import SettingGroup from "$lib/components/kit/SettingGroup.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
-	import SliderField from "$lib/components/kit/SliderField.svelte";
 	import StatusLine from "$lib/components/kit/StatusLine.svelte";
 	import StepCard from "$lib/components/kit/StepCard.svelte";
-	import TextField from "$lib/components/kit/TextField.svelte";
-	import Toggle from "$lib/components/kit/Toggle.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
 	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import Button from "$lib/components/kit/ui/Button.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
 	import IconButton from "$lib/components/kit/ui/IconButton.svelte";
 	import Segmented from "$lib/components/kit/ui/Segmented.svelte";
+	import Toggle from "$lib/components/kit/ui/Toggle.svelte";
 	import { Download, ImageOff, Palette, Plus, Trash2 } from "@lucide/svelte";
 
 	let mode = $state("preview");
