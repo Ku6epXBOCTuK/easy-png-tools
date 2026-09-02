@@ -8,7 +8,6 @@
 	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
-	import Segmented from "$lib/components/kit/Segmented.svelte";
 	import SelectField from "$lib/components/kit/SelectField.svelte";
 	import SettingGroup from "$lib/components/kit/SettingGroup.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
@@ -22,6 +21,7 @@
 	import Button from "$lib/components/kit/ui/Button.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
 	import IconButton from "$lib/components/kit/ui/IconButton.svelte";
+	import Segmented from "$lib/components/kit/ui/Segmented.svelte";
 	import { Download, ImageOff, Palette, Plus, Trash2 } from "@lucide/svelte";
 
 	let mode = $state("preview");

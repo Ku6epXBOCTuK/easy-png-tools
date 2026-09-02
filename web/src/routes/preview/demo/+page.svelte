@@ -7,13 +7,13 @@
 	import PreviewStack from "$lib/components/kit/PreviewStack.svelte";
 	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import SectionLabel from "$lib/components/kit/SectionLabel.svelte";
-	import Segmented from "$lib/components/kit/Segmented.svelte";
 	import SliderField from "$lib/components/kit/SliderField.svelte";
 	import StepCard from "$lib/components/kit/StepCard.svelte";
 	import ToggleRow from "$lib/components/kit/ToggleRow.svelte";
 	import Badge from "$lib/components/kit/ui/Badge.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
 	import IconButton from "$lib/components/kit/ui/IconButton.svelte";
+	import Segmented from "$lib/components/kit/ui/Segmented.svelte";
 	import WorkspaceHeader from "$lib/components/kit/WorkspaceHeader.svelte";
 	import {
 		ChevronDown,

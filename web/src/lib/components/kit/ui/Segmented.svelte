@@ -7,9 +7,15 @@
 	interface Props {
 		options: Option[];
 		value?: string;
+		wide?: boolean;
 		onchange?: (value: string) => void;
 	}
-	let { options, value = $bindable(), onchange }: Props = $props();
+	let {
+		options,
+		wide = false,
+		value = $bindable(),
+		onchange,
+	}: Props = $props();
 
 	function select(v: string) {
 		value = v;
@@ -17,7 +23,7 @@
 	}
 </script>
 
-<div class="segmented" role="group">
+<div class="segmented" class:wide role="group">
 	{#each options as opt (opt.value)}
 		<button
 			type="button"
@@ -33,23 +39,27 @@
 
 <style>
 	.segmented {
-		display: flex;
-		height: 32px;
-		border: 1px solid var(--line);
+		display: inline-flex;
+		border: var(--size-border) solid var(--color-border);
+		cursor: pointer;
+		&.wide {
+			width: 100%;
+		}
 	}
 	.segment {
 		border: 0;
-		border-right: 1px solid var(--line);
-		color: var(--muted);
-		font: 10px var(--font-mono);
+		border-right: var(--size-border) solid var(--color-border);
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
 		background: 0 0;
+		padding: var(--space-m);
 		flex: 1;
 	}
 	.segment:last-child {
 		border-right: 0px;
 	}
 	.segment.selected {
-		background: var(--blue);
-		color: #fff;
+		background: var(--color-main);
+		color: var(--color-background);
 	}
 </style>
