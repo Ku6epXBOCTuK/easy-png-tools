@@ -16,6 +16,20 @@ export const SIZE_PROPS =
 	/^(width|height|min-width|max-width|min-height|max-height|padding|padding-top|padding-right|padding-bottom|padding-left|margin|margin-top|margin-right|margin-bottom|margin-left|gap|column-gap|row-gap|top|right|bottom|left|inset|font-size|letter-spacing|word-spacing|line-height|border-radius|border-top-left-radius|border-top-right-radius|border-bottom-left-radius|border-bottom-right-radius|border-width|border-top-width|border-right-width|border-bottom-width|border-left-width|flex-basis|background-size|border-spacing)$/;
 
 // =====================================================================
+// SHORTHAND properties that accept BOTH a color and a size. The browser
+// assigns their sub-properties by value type at runtime (length -> width,
+// color -> ...-color), so they cannot be category-checked positionally.
+//      border      -> border-width + border-color
+//      outline     -> outline-width + outline-color
+//      text-decoration -> text-decoration-line/-color/...
+//      column-rule     -> column-rule-width + column-rule-color
+// The longhands they expand to (border-width, border-color, ...) are already
+// covered individually by SIZE_PROPS / COLOR_PROPS.
+// =====================================================================
+export const MIXED_PROPS =
+	/^(border|border-top|border-right|border-bottom|border-left|outline|text-decoration|column-rule)$/;
+
+// =====================================================================
 // Properties that carry a DURATION (ms/s) — transitions/animations.
 // =====================================================================
 export const DURATION_PROPS =

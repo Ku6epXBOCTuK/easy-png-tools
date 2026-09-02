@@ -5,7 +5,13 @@
 // (--color-*, --brand-*). Crossing categories (e.g. padding: var(--color-x))
 // is a sign the wrong token is being reused.
 
-import { COLOR_PROPS, COLOR_TOKEN, SIZE_PROPS, SIZE_TOKEN } from "./lists.js";
+import {
+	COLOR_PROPS,
+	COLOR_TOKEN,
+	MIXED_PROPS,
+	SIZE_PROPS,
+	SIZE_TOKEN,
+} from "./lists.js";
 import { getStyleNodeLoc, getStyleRoot } from "./style-context.js";
 
 // Collect the token names referenced by var() in a value.
@@ -49,6 +55,14 @@ export default {
 				root.walkDecls((decl) => {
 					const prop = decl.prop ?? "";
 					const value = decl.value ?? "";
+
+					// Mixed shorthands (border, outline, text-decoration,
+					// column-rule) legitimately take BOTH a size and a color.
+					// The browser assigns sub-properties by value type at runtime,
+					// not by position, so skip category checks for them.
+					// Their longhands (border-width, border-color, ...) are still
+					// covered individually.
+					if (MIXED_PROPS.test(prop)) return;
 
 					const isSizeProp = SIZE_PROPS.test(prop);
 					const isColorProp = COLOR_PROPS.test(prop);
