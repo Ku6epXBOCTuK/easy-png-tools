@@ -1,4 +1,5 @@
 import type { CategoryId } from "./categories";
+import type { ToolSchema } from "./registry-schema";
 import { ToolError } from "./core/errors";
 import {
 	colorMask,
@@ -189,34 +190,22 @@ export type OutputFormat = {
 
 export type SourceMode = "file" | "none" | "text";
 
-export type ToolEntry = {
+export type ToolEntry<P = Record<string, unknown>> = {
 	id: string;
 	title: string;
 	description: string;
 	category: CategoryId;
 	sourceMode?: SourceMode;
 	params: ParamDef[];
-	run?: (
-		img: PixelImage,
-		params: Record<string, unknown>,
-	) => Promise<PixelImage> | PixelImage;
-	generate?: (
-		params: Record<string, unknown>,
-	) => Promise<PixelImage> | PixelImage;
-	toText?: (
-		img: PixelImage,
-		params: Record<string, unknown>,
-	) => Promise<string> | string;
-	runFromText?: (
-		text: string,
-		params: Record<string, unknown>,
-	) => Promise<PixelImage> | PixelImage;
+	/** Новая типизированная схема для нового UI. Опциональна — старый UI её не использует. */
+	schema?: ToolSchema<P>;
+	run?: (img: PixelImage, params: P) => Promise<PixelImage> | PixelImage;
+	generate?: (params: P) => Promise<PixelImage> | PixelImage;
+	toText?: (img: PixelImage, params: P) => Promise<string> | string;
+	runFromText?: (text: string, params: P) => Promise<PixelImage> | PixelImage;
 	/** Текстовый источник + текстовый результат без промежуточного изображения. */
 	textToText?: (text: string) => Promise<string> | string;
-	preview?: (
-		img: PixelImage,
-		params: Record<string, unknown>,
-	) => Promise<PixelImage> | PixelImage;
+	preview?: (img: PixelImage, params: P) => Promise<PixelImage> | PixelImage;
 	popularity?: number;
 	icon?: string;
 	resultType?: "image" | "info" | "text";
