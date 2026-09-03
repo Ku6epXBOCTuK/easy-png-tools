@@ -14,7 +14,9 @@
 		{ value: "color", label: "COLOR" },
 		{ value: "geometry", label: "GEOMETRY" },
 		{ value: "filters", label: "FILTERS" },
+		{ value: "text", label: "TEXT" },
 		{ value: "analyze", label: "ANALYZE" },
+		{ value: "generate", label: "GENERATE" },
 	];
 </script>
 

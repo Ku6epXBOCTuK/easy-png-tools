@@ -1,5 +1,5 @@
 import type { CategoryId } from "./categories";
-import type { ToolSchema } from "./registry-schema";
+import { field, toolSchema, type ToolSchema } from "./registry-schema";
 import { ToolError } from "./core/errors";
 import {
 	colorMask,
@@ -564,6 +564,16 @@ function hexToRgba(hex: string, alpha = 255): [number, number, number, number] {
 	];
 }
 
+interface AddBorderParams {
+	thickness: number;
+	color: string;
+}
+
+const addBorderSchema = toolSchema<AddBorderParams>({
+	thickness: field.number({ min: 1, max: 500, step: 1, default: 5 }),
+	color: field.color({ default: "#000000" }),
+});
+
 export const TOOLS: ToolEntry[] = [
 	...channelEntries(),
 	...maskEntries(),
@@ -933,6 +943,7 @@ export const TOOLS: ToolEntry[] = [
 		description:
 			"Draws a colored frame of the chosen thickness around the image.",
 		category: "geometry",
+		schema: addBorderSchema,
 		params: [
 			{
 				id: "thickness",
