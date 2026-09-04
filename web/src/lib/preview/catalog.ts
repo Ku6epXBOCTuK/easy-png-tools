@@ -1,4 +1,4 @@
-import { CATEGORIES } from "../categories";
+import { CATEGORY_IDS } from "./categories";
 import { TOOLS, type ToolEntry } from "../registry-new";
 
 export type PreviewGroup = {
@@ -23,7 +23,7 @@ const GROUP_LABELS: Record<string, string> = {
  * Preview-каталог: полный реестр инструментов, сгруппированный по категориям.
  * Больше не урезаем до референс-набора — показываем все инструменты из TOOLS.
  */
-export const PREVIEW_GROUPS: PreviewGroup[] = CATEGORIES.map((category) => ({
+export const PREVIEW_GROUPS: PreviewGroup[] = CATEGORY_IDS.map((category) => ({
 	id: category,
 	label: GROUP_LABELS[category] ?? category.toUpperCase(),
 	tools: TOOLS.filter((tool) => tool.category === category),

@@ -1,4 +1,4 @@
-import type { CategoryId } from "../categories";
+import type { CategoryId } from "../preview/categories";
 import type { ToolSchema } from "../registry-schema";
 import type { PixelImage } from "../core/types";
 

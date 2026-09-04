@@ -1,12 +1,15 @@
 # План: составные типы параметров и полная типизация pipeline
 
 > Статус: **в реализации.** Фаза 0 (фундамент) ✔, Фаза 1 (рабочий инструмент
-> в preview) ✔, Фаза 2 — начата: построен отдельный **новый registry**
-> (`web/src/lib/registry-new/`) с первыми инструментами (`add-border-png`,
-> `add-stroke-png`), preview переключён на него. Следующее: продолжить Фазу 2 —
-> следующий инструмент `find-contour-png` в новый registry.
+> в preview) ✔, Фаза 2 (простые инструменты без составных типов) — переведены
+> все одиночные инструменты (18 шт): `add-border-png`, `add-stroke-png`,
+> `find-contour-png` и весь блок 8-22 (convert/noise/pixelate/color/filters...).
+> Новый registry `web/src/lib/registry-new/` разбит по категориям
+> (`geometry`, `alpha`, `convert`, `analyze`, `filters`, `color`), preview
+> переключён на него. Следующее: Фаза 3 — инструменты с составными типами.
 >
-> Ключевые файлы нового registry: `web/src/lib/registry-new/{types,geometry,alpha,index}.ts`,
+> Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
+> (по файлу на категорию) + `web/src/lib/preview/categories.ts`,
 > `web/src/lib/registry-schema.ts`. Старый `web/src/lib/registry.ts` разбит по
 > категориям в `web/src/lib/registry/` (см. `registry.ts` — тонкий баррель).
 
@@ -20,6 +23,16 @@
 Это та же логика, что в `plan-redesign.md` применена к дизайну: параллельная
 сборка, изоляция от старого, затем новый становится основным и старый
 удаляется вместе со старым дизайном.
+
+**Правило копий (важно!):** если для нового UI/registry нужно внести изменения
+в файл, который **прямо или косвенно** уже используется `(old)` веткой, — этот
+файл **НЕ трогаем**. Вместо этого делаем **копию** в новом месте (например,
+в `lib/preview/`) и правим копию. Это приводит к дублированию, но
+**гарантированно не задевает старую ветку сайта**. Пример: категории — новый
+`lib/preview/categories.ts` (object as const) копирует и заменяет собой
+`../categories` для нового кода, старый `categories.ts` обслуживает `(old)` и
+остаётся без изменений. После перехода (Фаза 5) копия становится основной,
+а исходник удаляется вместе со старым UI.
 
 **Разделение схем: две независимые схемы.**
 
@@ -286,28 +299,32 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
 составных типов. Каждый — отдельный маленький diff (~15-30 строк), тем самым
 проверенным в Фазе 1 паттерном. **Переезжают в `registry-new`.**
 
-Переведено: `add-border-png` (Фаза 1), `add-stroke-png`. Следующий —
-`find-contour-png`.
+Переведено: `add-border-png` (Фаза 1), `add-stroke-png`, `find-contour-png`, плюс
+весь блок простых инструментов ниже (пункты 8-22). Следующее — Фаза 3.
 
 6. ~~add-stroke-png (color + slider)~~ → переведён в `registry-new` ✔
-7. find-contour-png (color + slider) — **следующий**
-8. convert-png-to-jpg (color + slider)
-9. convert-png-to-webp (slider)
-10. remove-color-from-png (color + slider)
-11. extract-color-from-png (color + slider)
-12. add-noise-png (slider + select + number)
-13. randomize-pixels-png (slider + number)
-14. pixelate-png (slider)
-15. vignette-png (slider)
-16. gamma-png (slider)
-17. temperature-png (slider)
-18. tint-png (color + slider)
-19. quantize-png (slider)
-20. custom-palette-png (text)
-21. dithering-png (slider + select)
-22. jpeg-artifacts-png (slider)
+7. ~~find-contour-png (color + slider)~~ → переведён в `registry-new` ✔
+8. ~~convert-png-to-jpg (color + slider)~~ → переведён в `registry-new` ✔
+9. ~~convert-png-to-webp (slider)~~ → переведён в `registry-new` ✔
+10. ~~remove-color-from-png (color + slider)~~ → переведён в `registry-new` ✔
+11. ~~extract-color-from-png (color + slider)~~ → переведён в `registry-new` ✔
+12. ~~add-noise-png (slider + select + number)~~ → переведён в `registry-new` ✔
+13. ~~randomize-pixels-png (slider + number)~~ → переведён в `registry-new` ✔
+14. ~~pixelate-png (slider)~~ → переведён в `registry-new` ✔
+15. ~~vignette-png (slider)~~ → переведён в `registry-new` ✔
+16. ~~gamma-png (slider)~~ → переведён в `registry-new` ✔
+17. ~~temperature-png (slider)~~ → переведён в `registry-new` ✔
+18. ~~tint-png (color + slider)~~ → переведён в `registry-new` ✔
+19. ~~quantize-png (slider)~~ → переведён в `registry-new` ✔
+20. ~~custom-palette-png (text)~~ → переведён в `registry-new` ✔
+21. ~~dithering-png (slider + select)~~ → переведён в `registry-new` ✔
+22. ~~jpeg-artifacts-png (slider)~~ → переведён в `registry-new` ✔
 
-(и т.п. — все одиночные инструменты в этом же ключе)
+> **Замечание (конвертеры):** старые `convert-png-to-jpg`/`convert-png-to-webp`
+> несли `output`-метаданные (`mime`/`ext`/`qualityParamId`) для выбора формата
+> вывода. В новом `ToolEntry<P>` поля `output` пока нет, поэтому при переводе
+> эти метаданные не перенесены — preview пока отдаёт результат как PNG.
+> Механика выбора формата/качества в новом UI — отдельный шаг (не блокирует Фазу 2).
 
 ### Фаза 3 — инструменты с составными типами (по типу, затем по инструментам)
 

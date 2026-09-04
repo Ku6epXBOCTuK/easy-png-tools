@@ -1,6 +1,7 @@
 import type { ToolEntry } from "./types";
 import { field, toolSchema } from "../registry-schema";
-import { strokeImage } from "../core/morphology";
+import { colorMask, removeColorToAlpha } from "../core/alpha";
+import { contourImage, strokeImage } from "../core/morphology";
 
 interface AddStrokeParams {
 	color: string;
@@ -22,4 +23,45 @@ const addStroke: ToolEntry<AddStrokeParams> = {
 	run: (img, p) => strokeImage(img, p.thickness, p.color),
 };
 
-export const alphaEntries = [addStroke];
+interface FindContourParams {
+	color: string;
+	thickness: number;
+}
+
+export const findContourSchema = toolSchema<FindContourParams>({
+	color: field.color({ default: "#000000" }),
+	thickness: field.slider({ min: 1, max: 5, step: 1, default: 1 }),
+});
+
+const findContour: ToolEntry<FindContourParams> = {
+	id: "find-contour-png",
+	title: "Find contour PNG",
+	description:
+		"Leaves only a line along the boundary of opaque regions in the chosen color and thickness.",
+	category: "alpha",
+	schema: findContourSchema,
+	run: (img, p) => contourImage(img, p.thickness, p.color),
+};
+
+interface RemoveColorParams {
+	targetColor: string;
+	tolerance: number;
+}
+
+export const removeColorSchema = toolSchema<RemoveColorParams>({
+	targetColor: field.color({ default: "#00ff00" }),
+	tolerance: field.slider({ min: 0, max: 100, step: 1, default: 10 }),
+});
+
+const removeColor: ToolEntry<RemoveColorParams> = {
+	id: "remove-color-from-png",
+	title: "Remove color from PNG (make transparent)",
+	description:
+		"Makes all pixels close to the chosen color transparent. The tolerance sets the allowed deviation as a percentage of the maximum color distance.",
+	category: "alpha",
+	schema: removeColorSchema,
+	run: (img, p) => removeColorToAlpha(img, p.targetColor, p.tolerance),
+	preview: (img, p) => colorMask(img, p.targetColor, p.tolerance),
+};
+
+export const alphaEntries = [addStroke, findContour, removeColor];
