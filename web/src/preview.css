@@ -144,9 +144,15 @@
 		--font-size-s: 12px;
 		--font-size-m: 14px;
 		--font-size-l: 16px;
+		--font-size-xl: 24px;
+		--font-size-2xl: 32px;
 
 		--radius-s: 0px;
 		--radius-m: 4px;
+
+		--bp-mobile: 640px;
+		--bp-tablet: 800px;
+		--bp-desktop: 1100px;
 	}
 
 	[data-theme="dark"] {
