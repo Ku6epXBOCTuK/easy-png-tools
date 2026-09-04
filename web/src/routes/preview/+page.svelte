@@ -4,7 +4,7 @@
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
 	import Button from "$lib/components/kit/ui/Button.svelte";
-	import { TOOLS } from "$lib/registry";
+	import { TOOLS } from "$lib/registry-new";
 	import { Search } from "@lucide/svelte";
 
 	let query = $state("");

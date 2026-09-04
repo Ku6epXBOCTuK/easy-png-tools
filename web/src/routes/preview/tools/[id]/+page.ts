@@ -1,4 +1,4 @@
-import { TOOLS } from "$lib/registry";
+import { TOOLS } from "$lib/registry-new";
 
 export const prerender = true;
 

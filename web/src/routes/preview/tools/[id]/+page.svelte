@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { getTool } from "$lib/registry";
-	import ToolView from "$lib/components/kit/ToolView.svelte";
+	import { getTool } from "$lib/registry-new";
 	import SchemaToolView from "$lib/components/kit/SchemaToolView.svelte";
 	import EmptyState from "$lib/components/kit/EmptyState.svelte";
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";
@@ -26,10 +25,8 @@
 			icon={ToolIcon}
 		/>
 	</div>
-{:else if tool.schema}
-	<SchemaToolView {tool} />
 {:else}
-	<ToolView {tool} />
+	<SchemaToolView {tool} />
 {/if}
 
 <style>

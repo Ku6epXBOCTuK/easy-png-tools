@@ -1,5 +1,5 @@
 import { CATEGORIES } from "../categories";
-import { TOOLS, type ToolEntry } from "../registry";
+import { TOOLS, type ToolEntry } from "../registry-new";
 
 export type PreviewGroup = {
 	id: string;

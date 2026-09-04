@@ -8,7 +8,7 @@
 		type ToolSchema,
 	} from "$lib/registry-schema";
 	import { executeStep } from "$lib/tools/executor";
-	import type { ToolEntry } from "$lib/registry";
+	import type { ToolEntry } from "$lib/registry-new";
 	import SchemaFields from "$lib/components/kit/SchemaFields.svelte";
 	import SchemaPreview from "$lib/components/kit/SchemaPreview.svelte";
 

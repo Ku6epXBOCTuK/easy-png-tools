@@ -1,10 +1,14 @@
 # План: составные типы параметров и полная типизация pipeline
 
-> Статус: **в реализации.** Фаза 0 (фундамент) — сделана. Следующее: Фаза 1 —
-> один полноценный рабочий инструмент в preview, затем масштабирование.
+> Статус: **в реализации.** Фаза 0 (фундамент) ✔, Фаза 1 (рабочий инструмент
+> в preview) ✔, Фаза 2 — начата: построен отдельный **новый registry**
+> (`web/src/lib/registry-new/`) с первыми инструментами (`add-border-png`,
+> `add-stroke-png`), preview переключён на него. Следующее: продолжить Фазу 2 —
+> следующий инструмент `find-contour-png` в новый registry.
 >
-> Файлы: `web/src/lib/registry.ts` (3918 строк), `web/src/lib/preview/tool-views.ts` (193 строки),
-> `web/src/lib/registry-schema.ts`.
+> Ключевые файлы нового registry: `web/src/lib/registry-new/{types,geometry,alpha,index}.ts`,
+> `web/src/lib/registry-schema.ts`. Старый `web/src/lib/registry.ts` разбит по
+> категориям в `web/src/lib/registry/` (см. `registry.ts` — тонкий баррель).
 
 ## Ключевая стратегия: параллельная сборка, старый UI не трогаем
 
@@ -29,6 +33,31 @@
 - Пока новый UI не готов — `schema` просто отсутствует у большинства
   инструментов, старый UI ничего не замечает.
 - Удаление старого UI (после перехода) попутно удаляет и старый `ParamDef[]`
+
+### Разделение registry по UI (новое решение, Фаза 2+)
+
+Помимо двух схем, registry тоже разделён по UI (по факту миграции):
+
+- **Старый registry** (`web/src/lib/registry.ts` + `registry/` +
+  `registry-helpers.ts`) — работает на старом UI, использует `ParamDef[]` и
+  `tool-views.ts`. **Не трогаем**; идёт под удаление вместе со старым UI.
+- **Новый registry** (`web/src/lib/registry-new/`) — строится **с нуля «как надо»**:
+  `ToolEntry<P>` с обязательным `schema`, типизированный `run`, **без** `ParamDef[]`
+  и **без** связи со старым. Импортирует core-функции (`expandCanvas`,
+  `strokeImage`, …) напрямую. Наполняется **по-инструментно** по мере миграции
+  (не разовым переводом всех 130). Preview показывает только переведённые
+  инструменты.
+
+Preview (`catalog.ts`, маршруты `preview/**`, `SchemaToolView`, `SchemaFields`)
+импортируют из `$lib/registry-new`. После удаления старого UI `registry-new/`
+переименуется в `registry`.
+
+**Нюанс по worker:** `executor.worker.ts` резолвит инструменты по `id` в
+**старом** registry. Для инструментов, существующих в обоих (сейчас
+`add-border/add-stroke`), worker работает. Для новых инструментов, которых нет в
+старом registry, worker не найдёт → `executeStep` откатится на `runDirect`
+(fallback в `catch`) — это корректно, но стоит поправить worker на новый registry
+при дальнейшей миграции.
 
 ## Проблема (текущая)
 
@@ -227,7 +256,11 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
 (лишний/неверный/отсутствующий ключ ловит TS), тесты, svelte-check без новых
 ошибок.
 
-### Фаза 1 — ОДИН полноценный рабочий инструмент в preview (срез)
+### Фаза 1 — ОДИН полноценный рабочий инструмент в preview (срез) ✔ (сделано)
+
+Инструмент переехал в `registry-new` и рендерится через `SchemaToolView`
+(`SchemaFields`/`SchemaPreview`); применение реально работает end-to-end до
+картинки. Паттерн подтверждён. `find-contour-png` — следующий в этой фазе-2.
 
 5. **Инструмент «добавить рамку» (`add-border-png`)** — сделать полностью
    рабочим в preview:
@@ -249,10 +282,13 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
 
 Одиночные/небольшие инструменты, где `interface Params` + `schema` не требуют
 составных типов. Каждый — отдельный маленький diff (~15-30 строк), тем самым
-проверенным в Фазе 1 паттерном:
+проверенным в Фазе 1 паттерном. **Переезжают в `registry-new`.**
 
-6. add-stroke-png (color + slider)
-7. find-contour-png (color + slider)
+Переведено: `add-border-png` (Фаза 1), `add-stroke-png`. Следующий —
+`find-contour-png`.
+
+6. ~~add-stroke-png (color + slider)~~ → переведён в `registry-new` ✔
+7. find-contour-png (color + slider) — **следующий**
 8. convert-png-to-jpg (color + slider)
 9. convert-png-to-webp (slider)
 10. remove-color-from-png (color + slider)
@@ -335,9 +371,8 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
 
 - **Старый UI** (`ParamForm.svelte`, группа `(old)/`) — **не трогаем.** Работает
   на `ParamDef[]` как раньше.
-- **Новый UI** (kit/`ParamControl.svelte`, новый pipeline) — читает
-  `ToolSchema<P>`; поддержка составных типов и пер-инструмент layout
-  (`schema.layout`).
+- **Новый UI** (kit/`SchemaToolView` + `SchemaFields` + `SchemaPreview`, читает
+  `ToolSchema<P>`) — сейчас рендерит поля по схеме (number/slider/color).
 - `tool-views.ts` — со временем поглощается registry (preview/lede/layout →
   meta инструмента). Отдельный шаг, НЕ блокирует типизацию params.
 
