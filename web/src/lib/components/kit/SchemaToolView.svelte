@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { decodeFile, encode } from "$lib/core/io";
+	import SchemaFields from "$lib/components/kit/SchemaFields.svelte";
+	import SchemaPreview from "$lib/components/kit/SchemaPreview.svelte";
 	import { debounce } from "$lib/core/debounce";
+	import { decodeFile, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
+	import { executeStep } from "$lib/preview/executor";
+	import type { ToolEntry } from "$lib/registry-new";
 	import {
 		defaultSchemaParams,
 		sanitizeSchemaParams,
 		type ToolSchema,
 	} from "$lib/registry-schema";
-	import { executeStep } from "$lib/tools/executor";
-	import type { ToolEntry } from "$lib/registry-new";
-	import SchemaFields from "$lib/components/kit/SchemaFields.svelte";
-	import SchemaPreview from "$lib/components/kit/SchemaPreview.svelte";
 
 	interface Props {
 		tool: ToolEntry;

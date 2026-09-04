@@ -52,12 +52,14 @@ Preview (`catalog.ts`, маршруты `preview/**`, `SchemaToolView`, `SchemaF
 импортируют из `$lib/registry-new`. После удаления старого UI `registry-new/`
 переименуется в `registry`.
 
-**Нюанс по worker:** `executor.worker.ts` резолвит инструменты по `id` в
-**старом** registry. Для инструментов, существующих в обоих (сейчас
-`add-border/add-stroke`), worker работает. Для новых инструментов, которых нет в
-старом registry, worker не найдёт → `executeStep` откатится на `runDirect`
-(fallback в `catch`) — это корректно, но стоит поправить worker на новый registry
-при дальнейшей миграции.
+**Executor/worker для нового UI (осознанное дублирование):** общий
+`executor.worker.ts` резолвит инструменты по `id` в **старом** registry — для
+новых инструментов их там нет. Поэтому `executor.ts` + `executor.worker.ts`
+**скопированы** в `web/src/lib/preview/` и переписаны под `registry-new` +
+`sanitizeSchemaParams`. Старый executor/worker под старый UI остаются
+нетронутыми; `SchemaToolView` использует `$lib/preview/executor`. Это
+дублирование необходимо до ухода старого UI (после — preview-executor заменяет
+общий).
 
 ## Проблема (текущая)
 
