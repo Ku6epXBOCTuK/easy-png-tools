@@ -1,50 +1,97 @@
 <script lang="ts">
-	import type { Dimension, DimensionSpec } from "$lib/registry-schema";
-	import NumberField from "./NumberField.svelte";
+	import type {
+		Dimension,
+		DimensionSpec,
+		FieldSpec,
+	} from "$lib/registry-schema";
 
 	interface Props {
 		label: string;
-		value: Dimension;
-		spec: DimensionSpec;
-		oninput?: (value: Dimension) => void;
+		value: unknown;
+		spec: FieldSpec;
+		onchange?: (value: Dimension) => void;
 	}
-	let { label, value = $bindable(), spec, oninput }: Props = $props();
+	let { label, value, spec, onchange }: Props = $props();
+
+	const sp = $derived(spec as DimensionSpec);
+	const current = $derived.by(() => {
+		const v = value as Partial<Dimension> | undefined;
+		return {
+			width:
+				typeof v?.width === "number" && Number.isFinite(v.width)
+					? v.width
+					: sp.width,
+			height:
+				typeof v?.height === "number" && Number.isFinite(v.height)
+					? v.height
+					: sp.height,
+		};
+	});
 
 	function setAxis(axis: "width" | "height", n: number) {
-		value = { ...value, [axis]: n };
-		oninput?.(value);
+		onchange?.({ ...current, [axis]: n });
 	}
 </script>
 
-<div class="dimension-field">
+<div class="control dimension-control">
 	<span class="dimension-label">{label}</span>
-	<NumberField
-		label="Width"
-		value={value.width}
-		min={spec.min}
-		max={spec.max}
-		oninput={(n) => setAxis("width", n)}
-	/>
-	<NumberField
-		label="Height"
-		value={value.height}
-		min={spec.min}
-		max={spec.max}
-		oninput={(n) => setAxis("height", n)}
-	/>
+	<div class="dimension-field">
+		<label class="dimension-axis">
+			<span>Width</span>
+			<input
+				type="number"
+				min={sp.min}
+				max={sp.max}
+				value={current.width}
+				oninput={(e) =>
+					setAxis("width", Number((e.target as HTMLInputElement).value))}
+			/>
+		</label>
+		<label class="dimension-axis">
+			<span>Height</span>
+			<input
+				type="number"
+				min={sp.min}
+				max={sp.max}
+				value={current.height}
+				oninput={(e) =>
+					setAxis("height", Number((e.target as HTMLInputElement).value))}
+			/>
+		</label>
+	</div>
 </div>
 
 <style>
+	.control {
+		display: grid;
+		gap: var(--space-m);
+		margin-bottom: var(--space-xl);
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-m);
+	}
+	.dimension-label {
+		color: var(--color-text);
+		font-size: var(--font-size-s);
+		letter-spacing: var(--space-text-l);
+		text-transform: uppercase;
+	}
 	.dimension-field {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: var(--space-m);
 	}
-	.dimension-label {
-		grid-column: 1 / -1;
+	.dimension-axis > span {
+		display: block;
+		margin-bottom: var(--space-m);
+	}
+	.dimension-axis input {
+		width: 100%;
+		padding: var(--space-m) var(--space-l);
+		background: var(--color-background);
+		border: var(--size-border) solid var(--color-border);
+		border-radius: var(--radius-s);
 		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
+		font: var(--font-size-s) var(--font-mono);
 	}
 </style>

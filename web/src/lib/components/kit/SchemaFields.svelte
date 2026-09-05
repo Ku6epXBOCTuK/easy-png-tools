@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { RotateCcw } from "@lucide/svelte";
-	import type { ToolSchema, Dimension } from "$lib/registry-schema";
+	import type { ToolSchema } from "$lib/registry-schema";
+	import CheckboxControl from "./fields/schema/CheckboxControl.svelte";
+	import ColorControl from "./fields/schema/ColorControl.svelte";
+	import RangeControl from "./fields/schema/RangeControl.svelte";
+	import SelectControl from "./fields/schema/SelectControl.svelte";
+	import TextControl from "./fields/schema/TextControl.svelte";
 	import DimensionField from "./fields/DimensionField.svelte";
 
 	interface Props {
@@ -11,6 +16,16 @@
 	}
 	let { schema, values, onchange, onreset }: Props = $props();
 
+	const FIELDS = {
+		number: RangeControl,
+		slider: RangeControl,
+		color: ColorControl,
+		select: SelectControl,
+		checkbox: CheckboxControl,
+		text: TextControl,
+		dimension: DimensionField,
+	} as const;
+
 	function labelOf(id: string): string {
 		return id
 			.replace(/([a-z])([A-Z])/g, "$1 $2")
@@ -20,73 +35,13 @@
 </script>
 
 {#each Object.entries(schema.fields) as [id, field] (id)}
-	{#if field.spec.kind === "number" || field.spec.kind === "slider"}
-		<label class="control">
-			<span>
-				{labelOf(id)}
-				<output>{String(values[id] ?? field.spec.default)}</output>
-			</span>
-			<input
-				type="range"
-				min={field.spec.min ?? 0}
-				max={field.spec.max ?? 100}
-				step={field.spec.step ?? 1}
-				value={Number(values[id] ?? field.spec.default)}
-				oninput={(e) =>
-					onchange(id, Number((e.target as HTMLInputElement).value))}
-			/>
-		</label>
-	{:else if field.spec.kind === "color"}
-		<label class="control color-control">
-			<span>{labelOf(id)}</span>
-			<span class="color-row">
-				<span
-					class="swatch"
-					style="background:{String(values[id] ?? field.spec.default)}"
-				></span>
-				<input
-					type="color"
-					value={String(values[id] ?? field.spec.default)}
-					oninput={(e) => onchange(id, (e.target as HTMLInputElement).value)}
-				/>
-			</span>
-		</label>
-	{:else if field.spec.kind === "select"}
-		<label class="control">
-			<span>{labelOf(id)}</span>
-			<select
-				class="select-field"
-				value={String(values[id] ?? field.spec.default)}
-				oninput={(e) => onchange(id, (e.target as HTMLSelectElement).value)}
-			>
-				{#each field.spec.options as option (option.value)}
-					<option value={option.value}>{option.label}</option>
-				{/each}
-			</select>
-		</label>
-	{:else if field.spec.kind === "checkbox"}
-		<label class="control checkbox-control">
-			<span>{labelOf(id)}</span>
-			<input
-				type="checkbox"
-				class="checkbox-field"
-				checked={Boolean(values[id] ?? field.spec.default)}
-				onchange={(e) => onchange(id, (e.target as HTMLInputElement).checked)}
-			/>
-		</label>
-	{:else if field.spec.kind === "dimension"}
-		<div class="control">
-			<DimensionField
-				label={labelOf(id)}
-				value={(values[id] as Dimension) ?? {
-					width: field.spec.width,
-					height: field.spec.height,
-				}}
-				spec={field.spec}
-				oninput={(v) => onchange(id, v)}
-			/>
-		</div>
-	{/if}
+	{@const Control = FIELDS[field.spec.kind]}
+	<Control
+		label={labelOf(id)}
+		value={values[id]}
+		spec={field.spec}
+		onchange={(v) => onchange(id, v)}
+	/>
 {/each}
 
 <div class="panel-foot">
@@ -97,67 +52,6 @@
 </div>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.control > span {
-		display: flex;
-		justify-content: space-between;
-	}
-	.control output {
-		color: var(--color-text);
-	}
-	input[type="range"] {
-		width: 100%;
-		accent-color: var(--color-main);
-		color: var(--color-text);
-	}
-	.select-field {
-		width: 100%;
-		padding: var(--space-m) var(--space-l);
-		background: var(--color-background);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-s);
-		color: var(--color-text);
-		font: var(--font-size-s) var(--font-mono);
-	}
-	.checkbox-control {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-	.checkbox-field {
-		width: var(--space-xl);
-		height: var(--space-xl);
-		accent-color: var(--color-main);
-	}
-	.color-control > span:first-child {
-		justify-content: flex-start;
-	}
-	.color-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-m);
-	}
-	.swatch {
-		width: var(--space-xxl);
-		height: var(--space-xxl);
-		border-radius: var(--radius-s);
-		border: var(--size-border) solid var(--color-border);
-	}
-	input[type="color"] {
-		width: 100%;
-		height: var(--space-xxl);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-s);
-		background: var(--color-background);
-		cursor: pointer;
-	}
 	.panel-foot {
 		display: flex;
 		justify-content: space-between;
