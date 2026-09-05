@@ -138,6 +138,23 @@ export interface FontStyleSpec {
 }
 
 /**
+ * Подложка-плашка под текстовой надписью: вкл/выкл, цвет и непрозрачность
+ * как один объект (add-text, date-stamp).
+ */
+export interface Plate {
+	enabled: boolean;
+	color: string;
+	opacity: number;
+}
+
+export interface PlateSpec {
+	kind: "plate";
+	enabled: boolean;
+	color: string;
+	opacity: number;
+}
+
+/**
  * «Объект as const» kind → спека поля. Единственный источник правды для
  * перечня kinds: `FieldSpecKind` = ключи map, `FieldSpec` = значение по любому
  * ключу (тот же union). Добавляем новый составной тип — добавляем сюда, и
@@ -155,6 +172,7 @@ export const fieldSpecs = {
 	offset: {} as OffsetSpec,
 	position9: {} as Position9Spec,
 	"font-style": {} as FontStyleSpec,
+	plate: {} as PlateSpec,
 } as const;
 
 export type FieldSpecKind = keyof typeof fieldSpecs;
@@ -232,6 +250,13 @@ export const field = {
 	}): Field<FontStyle> => ({
 		spec: { kind: "font-style", ...s },
 	}),
+	plate: (s: {
+		enabled: boolean;
+		color: string;
+		opacity: number;
+	}): Field<Plate> => ({
+		spec: { kind: "plate", ...s },
+	}),
 };
 
 /**
@@ -270,6 +295,12 @@ export function defaultSchemaParams<P>(
 				size: spec.size,
 				bold: spec.bold,
 				color: spec.color,
+			};
+		} else if (spec.kind === "plate") {
+			out[key] = {
+				enabled: spec.enabled,
+				color: spec.color,
+				opacity: spec.opacity,
 			};
 		} else {
 			out[key] = spec.default;
@@ -385,6 +416,28 @@ export function sanitizeSchemaParams<P>(
 						typeof r?.color === "string" && /^#[0-9a-f]{6}$/i.test(r.color)
 							? r.color
 							: spec.color,
+				};
+				break;
+			}
+			case "plate": {
+				const r =
+					typeof raw === "object" &&
+					raw !== null &&
+					"enabled" in raw &&
+					"color" in raw &&
+					"opacity" in raw
+						? (raw as Record<string, unknown>)
+						: undefined;
+				out[key] = {
+					enabled: typeof r?.enabled === "boolean" ? r.enabled : spec.enabled,
+					color:
+						typeof r?.color === "string" && /^#[0-9a-f]{6}$/i.test(r.color)
+							? r.color
+							: spec.color,
+					opacity:
+						typeof r?.opacity === "number" && Number.isFinite(r.opacity)
+							? clamp(r.opacity, 0, 100)
+							: spec.opacity,
 				};
 				break;
 			}

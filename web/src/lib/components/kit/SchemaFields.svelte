@@ -16,6 +16,7 @@
 	import OffsetControl from "./fields/schema/OffsetControl.svelte";
 	import PositionControl from "./fields/schema/PositionControl.svelte";
 	import FontStyleControl from "./fields/schema/FontStyleControl.svelte";
+	import PlateControl from "./fields/schema/PlateControl.svelte";
 
 	interface FieldControlProps {
 		label: string;
@@ -36,6 +37,7 @@
 		offset: OffsetControl,
 		position9: PositionControl,
 		"font-style": FontStyleControl,
+		plate: PlateControl,
 	};
 
 	interface Props {

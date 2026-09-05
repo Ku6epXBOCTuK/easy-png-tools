@@ -12,11 +12,13 @@
 > star-mask, wavy-mask); **составной тип `position9` — переведены
 > add-text-png и date-stamp-png** (водяной знак-картинка — отдельный шаг:
 > требует overlay-механику в новом превью); **составной тип `font-style`
-> полностью переведён** (text-to-png, add-text, date-stamp); preview
+> полностью переведён** (text-to-png, add-text, date-stamp); **составной тип
+> `plate` полностью переведён** (add-text, date-stamp); preview
 > научен применять **генераторы** (`executeGenerate`, кнопка Generate) и
 > рендерить все kinds схемы (slider/number/color/select/checkbox/dimension/
-> color-pair/offset/position9/font-style).
-> Следующее: `plate` (add-text → date-stamp).
+> color-pair/offset/position9/font-style/plate).
+> Следующее: `gradient` — собрать из dimension + color-pair + direction на
+> linear-gradient.
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -381,7 +383,13 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
     `field.fontStyle`, виджет `kit/fields/schema/FontStyleControl.svelte`,
     kind `font-style` в схеме (default/sanitize, clamp размера к min/max).
     Тесты: +1 (603 passed).
-29. `plate` — перевести add-text → date-stamp
+29. `plate` — **все 2 инструмента переведены** ✔ (`add-text-png`,
+    `date-stamp-png` — рефакторинг в `registry-new/text.ts`). Составной тип
+    во всех видах: вложенный объект `plate: { enabled, color, opacity }` +
+    `field.plate`, виджет `kit/fields/schema/PlateControl.svelte` (чекбокс +
+    цвет + слайдер непрозрачности, деактивируется при выключенной плашке),
+    kind `plate` в схеме (default/sanitize, clamp opacity к 0..100).
+    Покрытие тестов расширено (дефолты/sanitize plate в существующих тестах).
 30. `gradient` — собрать из dimension + color-pair + direction на
     linear-gradient (зависит от решения по gradient, см. план)
 

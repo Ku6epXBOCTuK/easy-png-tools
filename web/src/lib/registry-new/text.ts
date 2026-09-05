@@ -1,7 +1,7 @@
 import { formatStamp } from "../core/datefmt";
 import { drawTextBlock } from "../core/domText";
 import type { Position9 } from "../core/textdraw";
-import type { FontStyle } from "../registry-schema";
+import type { FontStyle, Plate } from "../registry-schema";
 import { field, toolSchema } from "../registry-schema";
 import type { ToolEntry } from "./types";
 
@@ -10,9 +10,7 @@ interface AddTextParams {
 	style: FontStyle;
 	position: Position9;
 	margin: number;
-	plate: boolean;
-	plateColor: string;
-	plateOpacity: number;
+	plate: Plate;
 }
 
 const addTextSchema = toolSchema<AddTextParams>({
@@ -27,9 +25,7 @@ const addTextSchema = toolSchema<AddTextParams>({
 	}),
 	position: field.position9({ default: "bottom-right" }),
 	margin: field.slider({ min: 0, max: 200, step: 1, default: 24 }),
-	plate: field.checkbox({ default: false }),
-	plateColor: field.color({ default: "#000000" }),
-	plateOpacity: field.slider({ min: 0, max: 100, step: 5, default: 60 }),
+	plate: field.plate({ enabled: false, color: "#000000", opacity: 60 }),
 });
 
 const addText: ToolEntry<AddTextParams> = {
@@ -50,8 +46,8 @@ const addText: ToolEntry<AddTextParams> = {
 			opacityPercent: 100,
 			position: p.position,
 			margin: p.margin,
-			plateColor: p.plate ? p.plateColor : undefined,
-			plateOpacityPercent: p.plateOpacity,
+			plateColor: p.plate.enabled ? p.plate.color : undefined,
+			plateOpacityPercent: p.plate.opacity,
 		}),
 };
 
@@ -60,9 +56,7 @@ interface DateStampParams {
 	style: FontStyle;
 	position: Position9;
 	margin: number;
-	plate: boolean;
-	plateColor: string;
-	plateOpacity: number;
+	plate: Plate;
 }
 
 const dateStampSchema = toolSchema<DateStampParams>({
@@ -80,9 +74,7 @@ const dateStampSchema = toolSchema<DateStampParams>({
 	}),
 	position: field.position9({ default: "bottom-right" }),
 	margin: field.slider({ min: 0, max: 200, step: 1, default: 20 }),
-	plate: field.checkbox({ default: true }),
-	plateColor: field.color({ default: "#000000" }),
-	plateOpacity: field.slider({ min: 0, max: 100, step: 5, default: 55 }),
+	plate: field.plate({ enabled: true, color: "#000000", opacity: 55 }),
 });
 
 const dateStamp: ToolEntry<DateStampParams> = {
@@ -103,8 +95,8 @@ const dateStamp: ToolEntry<DateStampParams> = {
 			opacityPercent: 100,
 			position: p.position,
 			margin: p.margin,
-			plateColor: p.plate ? p.plateColor : undefined,
-			plateOpacityPercent: p.plateOpacity,
+			plateColor: p.plate.enabled ? p.plate.color : undefined,
+			plateOpacityPercent: p.plate.opacity,
 		}),
 };
 

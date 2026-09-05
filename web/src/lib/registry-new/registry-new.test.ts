@@ -305,12 +305,16 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(s.offset).toEqual({ x: 50, y: 0 });
 	});
 
-	it("add-text: дефолты position9, font-style и текстовых полей", () => {
+	it("add-text: дефолты position9, font-style, plate и текстовых полей", () => {
 		const tool = TOOLS.find((t) => t.id === "add-text-png")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.position).toBe("bottom-right");
 		expect(d.text).toBe("Hello!");
-		expect(d.plate).toBe(false);
+		expect(d.plate).toEqual({
+			enabled: false,
+			color: "#000000",
+			opacity: 60,
+		});
 		expect(d.style).toEqual({
 			font: "sans",
 			size: 48,
@@ -319,7 +323,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		});
 	});
 
-	it("sanitize чинит мусор в position9, font-style и оставляет валидные значения", () => {
+	it("sanitize чинит мусор в position9, font-style, plate и оставляет валидные значения", () => {
 		const tool = TOOLS.find((t) => t.id === "date-stamp-png")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			format: "YYYY-MM-DD",
@@ -331,9 +335,11 @@ describe("registry-new (переведённые инструменты)", () =>
 			},
 			position: "somewhere-outside",
 			margin: 20,
-			plate: true,
-			plateColor: "#000000",
-			plateOpacity: 55,
+			plate: {
+				enabled: "yes",
+				color: "teal",
+				opacity: 500,
+			},
 		});
 		expect(s.position).toBe("bottom-right");
 		expect(s.style).toEqual({
@@ -341,6 +347,11 @@ describe("registry-new (переведённые инструменты)", () =>
 			size: 8,
 			bold: false,
 			color: "#ffffff",
+		});
+		expect(s.plate).toEqual({
+			enabled: true,
+			color: "#000000",
+			opacity: 100,
 		});
 		const valid = sanitizeSchemaParams(tool.schema, {
 			...defaultSchemaParams(tool.schema),
