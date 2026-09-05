@@ -6,6 +6,7 @@ import { analyzeEntries } from "./analyze";
 import { filtersEntries } from "./filters";
 import { colorEntries } from "./color";
 import { generateEntries } from "./generate";
+import { textEntries } from "./text";
 
 export type { ToolEntry } from "./types";
 
@@ -17,6 +18,7 @@ export const TOOLS: ToolEntry[] = [
 	...filtersEntries,
 	...colorEntries,
 	...generateEntries,
+	...textEntries,
 ] as unknown as ToolEntry[];
 
 export function getTool(id: string): ToolEntry | undefined {

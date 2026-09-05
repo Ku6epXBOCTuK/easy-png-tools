@@ -11,6 +11,8 @@
 //     с полями `P`, а `Field<P[K]>` тип-проверялся на соответствие `P[K]`.
 // Ошибки компилятора ловят расхождения между интерфейсом Params и схемой.
 
+import type { Position9 } from "./core/textdraw";
+
 export interface NumberSpec {
 	kind: "number";
 	default: number;
@@ -92,6 +94,27 @@ export interface OffsetSpec {
 }
 
 /**
+ * 9-позиционная сетка (3×3): top/middle/bottom × left/center/right.
+ * Значение совпадает со строковым типом `Position9` из core/textdraw.
+ */
+export const POSITION9_VALUES = [
+	"top-left",
+	"top-center",
+	"top-right",
+	"middle-left",
+	"center",
+	"middle-right",
+	"bottom-left",
+	"bottom-center",
+	"bottom-right",
+] as const;
+
+export interface Position9Spec {
+	kind: "position9";
+	default: Position9;
+}
+
+/**
  * «Объект as const» kind → спека поля. Единственный источник правды для
  * перечня kinds: `FieldSpecKind` = ключи map, `FieldSpec` = значение по любому
  * ключу (тот же union). Добавляем новый составной тип — добавляем сюда, и
@@ -107,6 +130,7 @@ export const fieldSpecs = {
 	dimension: {} as DimensionSpec,
 	"color-pair": {} as ColorPairSpec,
 	offset: {} as OffsetSpec,
+	position9: {} as Position9Spec,
 } as const;
 
 export type FieldSpecKind = keyof typeof fieldSpecs;
@@ -170,6 +194,9 @@ export const field = {
 		y: number;
 	}): Field<Offset> => ({
 		spec: { kind: "offset", ...s },
+	}),
+	position9: (s: { default: Position9 }): Field<Position9> => ({
+		spec: { kind: "position9", ...s },
 	}),
 };
 
@@ -286,6 +313,13 @@ export function sanitizeSchemaParams<P>(
 				out[key] = { from, to };
 				break;
 			}
+			case "position9":
+				out[key] =
+					typeof raw === "string" &&
+					(POSITION9_VALUES as readonly string[]).includes(raw)
+						? (raw as Position9)
+						: spec.default;
+				break;
 			case "offset": {
 				const r =
 					typeof raw === "object" && raw !== null && "x" in raw && "y" in raw

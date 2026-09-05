@@ -304,6 +304,37 @@ describe("registry-new (переведённые инструменты)", () =>
 		});
 		expect(s.offset).toEqual({ x: 50, y: 0 });
 	});
+
+	it("add-text: дефолты position9 и текстовых полей", () => {
+		const tool = TOOLS.find((t) => t.id === "add-text-png")!;
+		const d = defaultSchemaParams(tool.schema);
+		expect(d.position).toBe("bottom-right");
+		expect(d.text).toBe("Hello!");
+		expect(d.plate).toBe(false);
+	});
+
+	it("sanitize чинит мусор в position9 и оставляет валидные значения", () => {
+		const tool = TOOLS.find((t) => t.id === "date-stamp-png")!;
+		const s = sanitizeSchemaParams(tool.schema, {
+			format: "YYYY-MM-DD",
+			fontSize: 32,
+			color: "#ffffff",
+			font: "mono",
+			bold: "no" as unknown as boolean,
+			position: "somewhere-outside",
+			margin: 20,
+			plate: true,
+			plateColor: "#000000",
+			plateOpacity: 55,
+		});
+		expect(s.position).toBe("bottom-right");
+		expect(s.bold).toBe(false);
+		const valid = sanitizeSchemaParams(tool.schema, {
+			...defaultSchemaParams(tool.schema),
+			position: "top-center",
+		});
+		expect(valid.position).toBe("top-center");
+	});
 });
 
 function solid(width: number, height: number) {

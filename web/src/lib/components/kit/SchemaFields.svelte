@@ -14,6 +14,7 @@
 	import SelectControl from "./fields/schema/SelectControl.svelte";
 	import TextControl from "./fields/schema/TextControl.svelte";
 	import OffsetControl from "./fields/schema/OffsetControl.svelte";
+	import PositionControl from "./fields/schema/PositionControl.svelte";
 
 	interface FieldControlProps {
 		label: string;
@@ -32,6 +33,7 @@
 		text: TextControl,
 		dimension: DimensionField,
 		offset: OffsetControl,
+		position9: PositionControl,
 	};
 
 	interface Props {

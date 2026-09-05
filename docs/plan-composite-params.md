@@ -9,11 +9,13 @@
 > тип `color-pair` полностью переведён** (4 инструмента: blend-two,
 > step-colors, linear-gradient, two-colors); **составной тип `offset`
 > полностью переведён** (4 инструмента: circle-mask, square-mask,
-> star-mask, wavy-mask); preview
+> star-mask, wavy-mask); **составной тип `position9` — переведены
+> add-text-png и date-stamp-png** (водяной знак-картинка — отдельный шаг:
+> требует overlay-механику в новом превью); preview
 > научен применять **генераторы** (`executeGenerate`, кнопка Generate) и
 > рендерить все kinds схемы (slider/number/color/select/checkbox/dimension/
-> color-pair/offset).
-> Следующее: `position9` (add-text → date-stamp → watermark-image).
+> color-pair/offset/position9).
+> Следующее: `font-style` (text-to-png → add-text → date-stamp).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -362,7 +364,15 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
     `offset: { x, y }` + `field.offset`, виджет
     `kit/fields/schema/OffsetControl.svelte`, kind `offset` в схеме
     (default/sanitize). Тесты: +4 (600 passed).
-27. `position9` — перевести add-text → date-stamp → watermark-image
+27. `position9` — **переведены `add-text-png` и `date-stamp-png`** ✔ (run в
+    `registry-new/text.ts`, оба `domOnly`). Составной тип во всех видах:
+    значение — строка `Position9`, kind `position9` в схеме (default/sanitize
+    по `POSITION9_VALUES`), виджет 3×3 `kit/fields/schema/PositionControl.svelte`.
+    В `ToolEntry` добавлен флаг `domOnly` (превью-executor держит такие
+    инструменты вне worker). `watermark-image-png` — отдельный под-шаг:
+    ему нужен overlay-source (`getOverlay`/store), которого в новом превью пока
+    нет. Тесты: +2 (602 passed). `font-style` и `plate` на этих инструментах
+    сводятся в шаги 28-29.
 28. `font-style` — перевести text-to-png → add-text (если ещё не) →
     date-stamp
 29. `plate` — перевести add-text → date-stamp

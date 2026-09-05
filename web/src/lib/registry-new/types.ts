@@ -13,6 +13,8 @@ export type ToolEntry<P = Record<string, unknown>> = {
 	description: string;
 	category: CategoryId;
 	schema: ToolSchema<P>;
+	/** Требует DOM (canvas/document); превью-executor запускает напрямую, не в worker. */
+	domOnly?: boolean;
 	/** Применение к входному изображению. Для чистых генераторов отсутствует. */
 	run?(img: PixelImage, params: P): Promise<PixelImage> | PixelImage;
 	generate?(params: P): Promise<PixelImage> | PixelImage;
