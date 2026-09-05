@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import svelte from "eslint-plugin-svelte";
 import designTokens from "./eslint-plugins/index.js";
+import isolationPlugin from "./eslint-plugins/isolation/index.js";
 import globals from "globals";
 import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
@@ -112,6 +113,20 @@ export default tseslint.config(
 		files: ["**/*.svelte"],
 		rules: {
 			"prefer-const": "off",
+		},
+	},
+	// ===== Изоляция старого UI (old) и нового preview =====================
+	// Полная взаимная изоляция веток (см. plan-composite-params, Фаза 5).
+	// Кастомный плагин isolation/no-mixed-imports резолвит импорты по реальному
+	// пути (и $lib, и относительные) и ругается на old→new / new→old.
+	// Общее (core/, i18n/, theme) разрешено обоим.
+	{
+		files: ["**/*.{ts,svelte}"],
+		plugins: {
+			isolation: isolationPlugin,
+		},
+		rules: {
+			"isolation/no-mixed-imports": "error",
 		},
 	},
 	// prettier — последним, чтобы гасить форматирующие правила из recommended.

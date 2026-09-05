@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/preview/catalog";
-	import { TOOL_ICONS } from "$lib/tools/tool-icons";
+	import { TOOL_ICONS } from "$lib/preview/tool-icons";
 	import CatalogHeader from "$lib/components/kit/CatalogHeader.svelte";
 	import CatalogToolbar from "$lib/components/kit/CatalogToolbar.svelte";
 	import CatalogGroup from "$lib/components/kit/CatalogGroup.svelte";

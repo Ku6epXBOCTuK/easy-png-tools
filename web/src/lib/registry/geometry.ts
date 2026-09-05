@@ -1,6 +1,5 @@
 import type { ToolEntry } from "../registry";
 import { ToolError } from "../core/errors";
-import { field, toolSchema } from "../registry-schema";
 import {
 	crop,
 	expandCanvas,
@@ -24,16 +23,6 @@ import {
 	zoomImage,
 } from "../core/affine";
 import { num, str } from "../registry-helpers";
-
-interface AddBorderParams {
-	thickness: number;
-	color: string;
-}
-
-const addBorderSchema = toolSchema<AddBorderParams>({
-	thickness: field.number({ min: 1, max: 500, step: 1, default: 5 }),
-	color: field.color({ default: "#000000" }),
-});
 
 export function geometryEntries(): ToolEntry[] {
 	return [
@@ -241,7 +230,6 @@ export function geometryEntries(): ToolEntry[] {
 			description:
 				"Draws a colored frame of the chosen thickness around the image.",
 			category: "geometry",
-			schema: addBorderSchema,
 			params: [
 				{
 					id: "thickness",

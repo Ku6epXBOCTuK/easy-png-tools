@@ -1,6 +1,5 @@
 import type { ToolEntry } from "../registry";
 import { ToolError } from "../core/errors";
-import { field, toolSchema } from "../registry-schema";
 import {
 	colorMask,
 	extractAlphaMask,
@@ -32,16 +31,6 @@ import {
 } from "../core/shapes";
 import type { Position9 } from "../core/textdraw";
 import { num, str } from "../registry-helpers";
-
-interface AddStrokeParams {
-	color: string;
-	thickness: number;
-}
-
-const addStrokeSchema = toolSchema<AddStrokeParams>({
-	color: field.color({ default: "#ff0000" }),
-	thickness: field.slider({ min: 1, max: 10, step: 1, default: 3 }),
-});
 
 export function alphaEntries(): ToolEntry[] {
 	return [
@@ -412,7 +401,6 @@ export function alphaEntries(): ToolEntry[] {
 			description:
 				"Adds a colored ring outline around the opaque content with the chosen thickness.",
 			category: "alpha",
-			schema: addStrokeSchema,
 			params: [
 				{
 					id: "color",

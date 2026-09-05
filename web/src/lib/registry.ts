@@ -1,5 +1,4 @@
-import type { CategoryId } from "./categories";
-import type { ToolSchema } from "./registry-schema";
+﻿import type { CategoryId } from "./categories";
 import type { OutputMime } from "./core/io";
 import type { PixelImage } from "./core/types";
 
@@ -63,7 +62,6 @@ export type ToolEntry<P = Record<string, unknown>> = {
 	category: CategoryId;
 	sourceMode?: SourceMode;
 	params: ParamDef[];
-	schema?: ToolSchema<P>;
 	run?: (img: PixelImage, params: P) => Promise<PixelImage> | PixelImage;
 	generate?: (params: P) => Promise<PixelImage> | PixelImage;
 	toText?: (img: PixelImage, params: P) => Promise<string> | string;

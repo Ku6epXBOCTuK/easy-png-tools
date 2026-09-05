@@ -31,7 +31,8 @@
 > step-colors, placeholder, text-to-png), text (add-text, date-stamp),
 > filters (randomize-pixels, add-noise) — везде, где канвас отделён от
 > параметров эффекта либо фигура от позиции.
-> Следующее: шаг 34 — поглощение `tool-views.ts` (Фаза 5, зачистка).
+> Следующее: шаг 37 — перенос всех старых компонентов/библиотек в папки `old/`
+> (линтер-изоляция уже на месте, переезд — просто дописывание glob-паттерна).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -61,7 +62,7 @@
 `lib/preview/categories.ts` (object as const) копирует и заменяет собой
 `../categories` для нового кода, старый `categories.ts` обслуживает `(old)` и
 остаётся без изменений. После перехода (Фаза 5) копия становится основной,
-а исходник удаляется вместе со старым UI.
+а исходник продолжает обслуживать `(old)` UI (он не удаляется — см. шаг 35).
 
 **Разделение схем: две независимые схемы.**
 
@@ -81,8 +82,8 @@
 Помимо двух схем, registry тоже разделён по UI (по факту миграции):
 
 - **Старый registry** (`web/src/lib/registry.ts` + `registry/` +
-  `registry-helpers.ts`) — работает на старом UI, использует `ParamDef[]` и
-  `tool-views.ts`. **Не трогаем**; идёт под удаление вместе со старым UI.
+  `registry-helpers.ts`) — работает на старом UI, использует `ParamDef[]`.
+  **Не трогаем**; остаётся обслуживать `(old)/` маршруты (см. шаг 35).
 - **Новый registry** (`web/src/lib/registry-new/`) — строится **с нуля «как надо»**:
   `ToolEntry<P>` с обязательным `schema`, типизированный `run`, **без** `ParamDef[]`
   и **без** связи со старым. Импортирует core-функции (`expandCanvas`,
@@ -442,12 +443,50 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
       (Canvas/Colors/Text), text-to-png (Text/Background/Padding);
     - text: add-text, date-stamp (Text/Placement/Plate);
     - filters: randomize-pixels (Blocks), add-noise (Noise/Seed).
-    Инструменты с 1–3 простыми полями остались без layout (одна общая группа).
+      Инструменты с 1–3 простыми полями остались без layout (одна общая группа).
 
-### Фаза 5 — зачистка
+### Фаза 5 — изоляция старого UI
 
-34. Поглощение `tool-views.ts` (preview/lede/layout → meta инструмента).
-35. После перехода на новый дизайн — удаление старого UI и старого `ParamDef[]`.
+34. Поглощение `tool-views.ts` (preview/lede/layout → meta инструмента) ✔.
+    Отдельного `tool-views.ts` в репо нет: preview сразу строился на
+    `registry-new`. Meta инструмента живёт в `ToolEntry` (`title`, `description`,
+    `category`, `run`/`generate`), layout — в `schema.layout` (шаг 32), рендер —
+    `SchemaToolView`/`SchemaFields`/`SchemaPreview`. Дублирующей системы нет.
+35. Старый UI **не удаляется**, а выносится в `(old)/`-маршруты и остаётся там
+    временно (посмотреть, как работает, сравнить с новым; старые тесты
+    продолжают проходить):
+    - маршруты `(old)/{+page,demo,list-tools,tools/[id]}` — старый дизайн,
+      тянет `old.css` (не `design2.css`), старый header/footer;
+    - старый `registry.ts`/`registry/` + `ParamDef[]` обслуживают только
+      `(old)/`-инструменты — не удаляются, не рефакторятся;
+    - удаление происходит позже, отдельным решением (когда новый UI покроет
+      все инструменты и ревью завершено).
+36. **Линтер-изоляция веток** (гарантия, что old и preview не смешиваются) ✔.
+    Кастомный ESLint-плагин `web/eslint-plugins/isolation/no-mixed-imports`
+    Резолвит каждый импорт (и `$lib/...`, и относительные `./`/`../`) до
+    реального файла, классифицирует источник и цель по фактическому пути и
+    ругается на old→new и new→old. Конфигурация (`old`/`new` glob-паттерны,
+    `root`, `alias`) вынесена в настройки правила — единая точка правды:
+    - старое: `routes/(old)/**`, `lib/registry.ts`, `lib/registry/**`,
+      `lib/registry-helpers.ts`, `lib/categories.ts`, `lib/tools/**`,
+      `lib/components/**` (кроме `kit/`);
+    - новое: `routes/preview/**`, `lib/registry-new/**`, `lib/preview/**`,
+      `lib/registry-schema.ts`, `lib/registry-schema.test.ts`,
+      `lib/components/kit/**`;
+    - общее (разрешено обоим): всё прочее — `core/`, `i18n/`, `theme`,
+      `assets/`, корневой `lib` (`index.ts`, тесты).
+    Достигнутая полная изоляция (одиночные пересечения устранены):
+    - старые пилоты `registry/geometry.ts` (`add-border`) и `registry/alpha.ts`
+      (`add-stroke`) получали `schema` из нового `registry-schema` — убрано;
+      оба инструмента работают в старом UI через `params: ParamDef[]`,
+      в preview — через свои schema-версии в `registry-new/`;
+    - `registry.ts` больше не импортирует `ToolSchema` из `registry-schema`;
+    - preview `list-tools` тянул `TOOL_ICONS` из старого `lib/tools/tool-icons`
+      → создана копия `lib/preview/tool-icons.ts` (правило копий).
+37. Перенос всех старых компонентов/библиотек в папки `old/` (**следующее**):
+    переезд не трогает плагин — достаточно дописать один glob-паттерн в
+    настройку правила (например `lib/old/**`, `lib/components/old/**`), а сама
+    проверка работает по фактическим путям автоматически.
 
 ### Как ревьюить каждый шаг
 
@@ -484,8 +523,8 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
   на `ParamDef[]` как раньше.
 - **Новый UI** (kit/`SchemaToolView` + `SchemaFields` + `SchemaPreview`, читает
   `ToolSchema<P>`) — сейчас рендерит поля по схеме (number/slider/color).
-- `tool-views.ts` — со временем поглощается registry (preview/lede/layout →
-  meta инструмента). Отдельный шаг, НЕ блокирует типизацию params.
+- `tool-views.ts` отсутствует — preview/lede/layout уже живут в meta
+  инструмента (`ToolEntry` + `schema.layout`), дублирования нет.
 
 ## Оценка трудозатрат
 
@@ -498,15 +537,16 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
 | Миграция инструментов на interface Params + схемы     | Механическая, но крупная | ~8-12ч                 |
 | Новый рендер (kit/ParamControl) + составные виджеты   | Средняя                  | ~4-5ч                  |
 | Поглощение tool-views.ts                              | Средняя                  | ~1-2ч                  |
-| **Итого**                                             |                          | **~20-29ч** (поэтапно) |
+| Вынос старого UI в (old)/ + адаптация маршрутов       | Средняя-Низкая           | ~2-3ч                  |
+| **Итого**                                             |                          | **~22-32ч** (поэтапно) |
 
 > Оценка выросла по сравнению с ранней версией плана, потому что принят путь
 > «явный interface Params + схема + общий рендер с пер-инструмент layout» —
 > это полный рефакторинг pipeline, а не только добавление составных типов.
 >
 > Старый UI/`ParamDef[]`/старый pipeline в смету **не входят** — они не
-> рефакторятся, а продолжают работать до перехода (затем удаляются вместе со
-> старым дизайном).
+> рефакторятся, а продолжают работать на `(old)/`-маршрутах до перехода
+> (затем убираются отдельным решением — см. шаг 35).
 
 ## Порядок реализации (кратко)
 
@@ -525,7 +565,10 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
    отдельно.
 5. **Фаза 4** — масштаб UI на остальные: составные виджеты, пер-инструмент
    layout (для каждого инструмента — UI-макет).
-6. **Фаза 5** — поглощение `tool-views.ts`, затем удаление старого UI/`ParamDef[]`
+6. **Фаза 5** — изоляция: старый UI на `(old)/`-маршруты (не удаляется,
+   остаётся для ревью); preview на `registry-new` полностью;
+   линтер-изоляция веток (плагин `isolation`), затем перенос старых
+   компонентов/библиотек в папки `old/`.
 
 ## Зависимости
 

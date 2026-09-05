@@ -138,6 +138,29 @@ scoped-путям (`kit/**`, `preview/**`).
   определён в `src/preview.css` (словарь токенов) или локально в компоненте.
   Файл читается один раз и кэшируется (не `glob`-зависим).
 
+### Изоляция веток old ↔ preview
+
+`isolation/no-mixed-imports` (`web/eslint-plugins/isolation/no-mixed-imports.js`,
+включён на весь `**/*.{ts,svelte}`) — **полная взаимная изоляция** старого UI и
+новой preview-ветки. В отличие от `no-restricted-imports`, правило **резолвит**
+каждый импорт (и `$lib/...`, и относительные `./`/`../`) до реального файла и
+классифицирует стороны по фактическому пути, поэтому относительным импортом
+правило не обойти.
+
+- Старое: `routes/(old)/**`, `lib/registry.ts`, `lib/registry/**`,
+  `lib/registry-helpers.ts`, `lib/categories.ts`, `lib/tools/**`,
+  `lib/components/**` (кроме `kit/`).
+- Новое: `routes/preview/**`, `lib/registry-new/**`, `lib/preview/**`,
+  `lib/registry-schema.ts`, `lib/registry-schema.test.ts`, `lib/components/kit/**`.
+- Общее (разрешено обоим): `core/`, `i18n/`, `theme`, `assets/`, корневой `lib`.
+- Плагин **конфигурируем** (опции `old`/`new` + `root`/`alias` в
+  `eslint.config.js`): перенос старых файлов в папки `old/` — это правка
+  glob-паттернов в настройке, а не код правила.
+- Изоляция уже достигнута: старый `registry/` не тянет `registry-schema`
+  (пилоты add-border/add-stroke работают через `params`), `registry.ts` не
+  импортирует `ToolSchema`; preview-`list-tools` использует копию
+  `preview/tool-icons.ts`, а не старый `tools/tool-icons.ts`.
+
 Линтер только показывает ошибки, старый код (непрефиксованные токены, hex в
 preview.css) — известный техдолг, его НЕ чинить и не игнорировать правилами.
 
