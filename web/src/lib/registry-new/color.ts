@@ -1,8 +1,28 @@
-import { gammaCorrection, temperature, tint } from "../core/color";
+import { gammaCorrection, temperature, twoColors, tint } from "../core/color";
 import { parseHexList } from "../core/palette";
 import { ditherImage, mapToNearest, quantizeImage } from "../core/quantize";
-import { field, toolSchema } from "../registry-schema";
+import { field, toolSchema, type ColorPair } from "../registry-schema";
 import type { ToolEntry } from "./types";
+
+interface TwoColorsParams {
+	pair: ColorPair;
+	threshold: number;
+}
+
+export const twoColorsSchema = toolSchema<TwoColorsParams>({
+	pair: field.colorPair({ from: "#ffffff", to: "#000000" }),
+	threshold: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+});
+
+const twoColorsTool: ToolEntry<TwoColorsParams> = {
+	id: "two-colors-png",
+	title: "Two colors PNG",
+	description:
+		"Recolors the image into two chosen colors by luminance threshold.",
+	category: "color",
+	schema: twoColorsSchema,
+	run: (img, p) => twoColors(img, p.pair.from, p.pair.to, p.threshold),
+};
 
 interface GammaParams {
 	value: number;
@@ -123,6 +143,7 @@ const ditheringTool: ToolEntry<DitheringParams> = {
 };
 
 export const colorEntries = [
+	twoColorsTool,
 	gammaTool,
 	temperatureTool,
 	tintTool,

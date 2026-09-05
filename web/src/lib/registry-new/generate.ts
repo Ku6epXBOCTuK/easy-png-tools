@@ -2,8 +2,18 @@ import { renderTextToImage } from "../core/domText";
 import { colorSpectrum, drawGrid, randomColorBlocks } from "../core/gen-tools";
 import { gradientImage, noiseImage, solidImage } from "../core/generate";
 import { changeCanvasSize } from "../core/geometry";
-import { hexToRgb } from "../core/palette";
-import { field, toolSchema, type Dimension } from "../registry-schema";
+import {
+	hexToRgb,
+	renderBlend,
+	renderSwatches,
+	stepColors,
+} from "../core/palette";
+import {
+	field,
+	toolSchema,
+	type ColorPair,
+	type Dimension,
+} from "../registry-schema";
 import type { ToolEntry } from "./types";
 
 function rgba(hex: string): [number, number, number, number] {
@@ -89,15 +99,13 @@ const randomNoise: ToolEntry<RandomNoiseParams> = {
 
 interface LinearGradientParams {
 	size: Dimension;
-	fromColor: string;
-	toColor: string;
+	pair: ColorPair;
 	direction: "horizontal" | "vertical";
 }
 
 export const linearGradientSchema = toolSchema<LinearGradientParams>({
 	size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-	fromColor: field.color({ default: "#000000" }),
-	toColor: field.color({ default: "#ffffff" }),
+	pair: field.colorPair({ from: "#000000", to: "#ffffff" }),
 	direction: field.select({
 		default: "horizontal",
 		options: [
@@ -117,7 +125,7 @@ const linearGradient: ToolEntry<LinearGradientParams> = {
 	generate: (p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
-		return gradientImage(w, h, rgba(p.fromColor), rgba(p.toColor), p.direction);
+		return gradientImage(w, h, rgba(p.pair.from), rgba(p.pair.to), p.direction);
 	},
 };
 
@@ -263,6 +271,59 @@ const placeholder: ToolEntry<PlaceholderParams> = {
 	},
 };
 
+interface BlendTwoParams {
+	pair: ColorPair;
+	width: number;
+}
+
+export const blendTwoSchema = toolSchema<BlendTwoParams>({
+	pair: field.colorPair({ from: "#000000", to: "#ffffff" }),
+	width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+});
+
+const blendTwo: ToolEntry<BlendTwoParams> = {
+	id: "blend-two-png",
+	title: "Blend Two Colors PNG",
+	description: "A continuous horizontal gradient between two colors.",
+	category: "generate",
+	schema: blendTwoSchema,
+	generate: (p) => renderBlend(p.pair.from, p.pair.to, p.width),
+};
+
+interface StepColorsParams {
+	pair: ColorPair;
+	steps: number;
+	width: number;
+	layout: "strip" | "grid";
+}
+
+export const stepColorsSchema = toolSchema<StepColorsParams>({
+	pair: field.colorPair({ from: "#000000", to: "#ffffff" }),
+	steps: field.slider({ min: 2, max: 12, step: 1, default: 6 }),
+	width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+	layout: field.select({
+		default: "grid",
+		options: [
+			{ value: "grid", label: "Grid" },
+			{ value: "strip", label: "Strip" },
+		],
+	}),
+});
+
+const stepColorsTool: ToolEntry<StepColorsParams> = {
+	id: "step-colors-png",
+	title: "Color Steps PNG",
+	description: "A discrete set of evenly spaced steps between two colors.",
+	category: "generate",
+	schema: stepColorsSchema,
+	generate: (p) =>
+		renderSwatches(
+			stepColors(p.pair.from, p.pair.to, p.steps),
+			p.width,
+			p.layout,
+		),
+};
+
 export const generateEntries = [
 	createEmpty,
 	singleColor,
@@ -272,4 +333,6 @@ export const generateEntries = [
 	randomColors,
 	drawGridTool,
 	placeholder,
+	blendTwo,
+	stepColorsTool,
 ];

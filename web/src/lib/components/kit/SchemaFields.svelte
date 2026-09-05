@@ -3,6 +3,7 @@
 	import type { ToolSchema } from "$lib/registry-schema";
 	import CheckboxControl from "./fields/schema/CheckboxControl.svelte";
 	import ColorControl from "./fields/schema/ColorControl.svelte";
+	import ColorPairControl from "./fields/schema/ColorPairControl.svelte";
 	import RangeControl from "./fields/schema/RangeControl.svelte";
 	import SelectControl from "./fields/schema/SelectControl.svelte";
 	import TextControl from "./fields/schema/TextControl.svelte";
@@ -20,6 +21,7 @@
 		number: RangeControl,
 		slider: RangeControl,
 		color: ColorControl,
+		"color-pair": ColorPairControl,
 		select: SelectControl,
 		checkbox: CheckboxControl,
 		text: TextControl,

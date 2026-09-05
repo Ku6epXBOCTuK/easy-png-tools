@@ -5,10 +5,14 @@
 > все одиночные инструменты (18 шт). Фаза 3 — **составной тип `dimension`
 > полностью переведён** (12 инструментов: create-empty, single-color,
 > random-noise, linear-gradient, color-spectrum, random-colors, draw-grid,
-> placeholder, fit-on-background, change-canvas-size, resize, crop); preview
+> placeholder, fit-on-background, change-canvas-size, resize, crop); **составной
+> тип `color-pair` полностью переведён** (4 инструмента: blend-two,
+> step-colors, linear-gradient, two-colors); preview
 > научен применять **генераторы** (`executeGenerate`, кнопка Generate) и
-> рендерить все kinds схемы (slider/number/color/select/checkbox/dimension).
-> Следующее: `color-pair` (пилот blend-two-png → two-colors → step-colors).
+> рендерить все kinds схемы (slider/number/color/select/checkbox/dimension/
+> color-pair).
+> Следующее: `offset` (пилот circle-mask-png → square-mask → star-mask →
+> wavy-mask).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -345,8 +349,12 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
     Preview: генераторы применяются через `executeGenerate` (кнопка Generate),
     `SchemaFields` рендерит все kinds схемы (slider/number/color/select/
     checkbox/dimension). Тесты: 592 passed.
-25. `color-pair` — пилот (blend-two-png), затем two-colors → step-colors →
-    linear-gradient (уже переведён в dimension, здесь добавляется к нему)
+25. `color-pair` — **все 4 инструмента переведены** ✔ (`blend-two-png`,
+    `step-colors-png`, `linear-gradient-png` — генераторы в
+    `registry-new/generate.ts`, `two-colors-png` — run в `registry-new/color.ts`).
+    Составной тип во всех видах: вложенный объект `pair: { from, to }` +
+    `field.colorPair`, виджет `kit/fields/schema/ColorPairControl.svelte`,
+    kind `color-pair` в схеме (default/sanitize). Тесты: +4 (596 passed).
 26. `offset` — пилот (circle-mask-png), затем square-mask → star-mask →
     wavy-mask
 27. `position9` — перевести add-text → date-stamp → watermark-image

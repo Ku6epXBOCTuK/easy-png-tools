@@ -65,8 +65,7 @@ describe("registry-new (переведённые инструменты)", () =>
 			"linear-gradient-png",
 			{
 				size: { width: 40, height: 30 },
-				fromColor: "#000000",
-				toColor: "#ffffff",
+				pair: { from: "#000000", to: "#ffffff" },
 				direction: "horizontal",
 			},
 		],
@@ -181,6 +180,69 @@ describe("registry-new (переведённые инструменты)", () =>
 		const center = out.data[(10 * out.width + 10) * 4 + 3];
 		expect(topLeft).toBe(255);
 		expect(center).toBe(0);
+	});
+
+	it("blend-two: дефолты пары и работа генератора", async () => {
+		const tool = TOOLS.find((t) => t.id === "blend-two-png")!;
+		const d = defaultSchemaParams(tool.schema);
+		expect(d.pair).toEqual({ from: "#000000", to: "#ffffff" });
+		const img = await tool.generate!(
+			sanitizeSchemaParams(tool.schema, {
+				pair: { from: "#ff0000", to: "#0000ff" },
+				width: 128,
+			}),
+		);
+		expect(img.width).toBe(128);
+	});
+
+	it("step-colors: рендерит steps полос по паре", async () => {
+		const tool = TOOLS.find((t) => t.id === "step-colors-png")!;
+		const img = await tool.generate!(
+			sanitizeSchemaParams(tool.schema, {
+				pair: { from: "#000000", to: "#ffffff" },
+				steps: 4,
+				width: 128,
+				layout: "strip",
+			}),
+		);
+		expect(img.width).toBe(128);
+	});
+
+	it("two-colors: перекрашивает светлые/тёмные пиксели по паре", async () => {
+		const tool = TOOLS.find((t) => t.id === "two-colors-png")!;
+		// 50×1, левая половина тёмная, правая светлая
+		const data = new Uint8ClampedArray(50 * 4).fill(255);
+		const img = { width: 50, height: 1, data };
+		for (let x = 0; x < 25; x++) {
+			const i = x * 4;
+			data[i] = 0;
+			data[i + 1] = 0;
+			data[i + 2] = 0;
+		}
+		const out = await tool.run!(
+			img,
+			sanitizeSchemaParams(tool.schema, {
+				pair: { from: "#ffffff", to: "#ff0000" },
+				threshold: 50,
+			}),
+		);
+		// Светлый пиксель → from (#ffffff), тёмный → to (#ff0000)
+		expect(out.data[0]).toBe(255);
+		expect(out.data[1]).toBe(0);
+		expect(out.data[2]).toBe(0);
+		expect(out.data[100]).toBe(255);
+		expect(out.data[101]).toBe(255);
+		expect(out.data[102]).toBe(255);
+	});
+
+	it("sanitize чинит мусор в паре и клампит threshold", () => {
+		const tool = TOOLS.find((t) => t.id === "two-colors-png")!;
+		const s = sanitizeSchemaParams(tool.schema, {
+			pair: { from: "not-a-color", to: "#00ff00", extra: 1 },
+			threshold: 999,
+		});
+		expect(s.pair).toEqual({ from: "#ffffff", to: "#00ff00" });
+		expect(s.threshold).toBe(100);
 	});
 });
 

@@ -64,6 +64,18 @@ export interface DimensionSpec {
 	height: number;
 }
 
+/** Пара цветов «от → к» (градиенты, сведение к двум цветам и т.п.). */
+export interface ColorPair {
+	from: string;
+	to: string;
+}
+
+export interface ColorPairSpec {
+	kind: "color-pair";
+	from: string;
+	to: string;
+}
+
 export type FieldSpec =
 	| NumberSpec
 	| SliderSpec
@@ -71,7 +83,8 @@ export type FieldSpec =
 	| SelectSpec
 	| TextSpec
 	| CheckboxSpec
-	| DimensionSpec;
+	| DimensionSpec
+	| ColorPairSpec;
 
 /** `Field<T>`: runtime-спека поля + phantom-тип ожидаемого значения (number|string|boolean). */
 export interface Field<T> {
@@ -120,6 +133,9 @@ export const field = {
 	}): Field<Dimension> => ({
 		spec: { kind: "dimension", ...s },
 	}),
+	colorPair: (s: { from: string; to: string }): Field<ColorPair> => ({
+		spec: { kind: "color-pair", ...s },
+	}),
 };
 
 /**
@@ -148,6 +164,8 @@ export function defaultSchemaParams<P>(
 		const spec = schema.fields[key].spec;
 		if (spec.kind === "dimension") {
 			out[key] = { width: spec.width, height: spec.height };
+		} else if (spec.kind === "color-pair") {
+			out[key] = { from: spec.from, to: spec.to };
 		} else {
 			out[key] = spec.default;
 		}
@@ -210,6 +228,25 @@ export function sanitizeSchemaParams<P>(
 					width: clamp(w, spec.min, spec.max),
 					height: clamp(h, spec.min, spec.max),
 				};
+				break;
+			}
+			case "color-pair": {
+				const r =
+					typeof raw === "object" &&
+					raw !== null &&
+					"from" in raw &&
+					"to" in raw
+						? (raw as Record<string, unknown>)
+						: undefined;
+				const from =
+					typeof r?.from === "string" && /^#[0-9a-f]{6}$/i.test(r.from)
+						? r.from
+						: spec.from;
+				const to =
+					typeof r?.to === "string" && /^#[0-9a-f]{6}$/i.test(r.to)
+						? r.to
+						: spec.to;
+				out[key] = { from, to };
 				break;
 			}
 		}
