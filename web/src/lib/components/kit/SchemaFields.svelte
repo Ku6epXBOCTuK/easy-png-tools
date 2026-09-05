@@ -13,6 +13,7 @@
 	import RangeControl from "./fields/schema/RangeControl.svelte";
 	import SelectControl from "./fields/schema/SelectControl.svelte";
 	import TextControl from "./fields/schema/TextControl.svelte";
+	import OffsetControl from "./fields/schema/OffsetControl.svelte";
 
 	interface FieldControlProps {
 		label: string;
@@ -30,6 +31,7 @@
 		checkbox: CheckboxControl,
 		text: TextControl,
 		dimension: DimensionField,
+		offset: OffsetControl,
 	};
 
 	interface Props {

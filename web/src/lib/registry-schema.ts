@@ -76,6 +76,21 @@ export interface ColorPairSpec {
 	to: string;
 }
 
+/** Смещение фигуры/объекта по центру: x + y в процентах. */
+export interface Offset {
+	x: number;
+	y: number;
+}
+
+export interface OffsetSpec {
+	kind: "offset";
+	/** Общий диапазон для обеих осей (в процентах). */
+	min: number;
+	max: number;
+	x: number;
+	y: number;
+}
+
 /**
  * «Объект as const» kind → спека поля. Единственный источник правды для
  * перечня kinds: `FieldSpecKind` = ключи map, `FieldSpec` = значение по любому
@@ -91,6 +106,7 @@ export const fieldSpecs = {
 	checkbox: {} as CheckboxSpec,
 	dimension: {} as DimensionSpec,
 	"color-pair": {} as ColorPairSpec,
+	offset: {} as OffsetSpec,
 } as const;
 
 export type FieldSpecKind = keyof typeof fieldSpecs;
@@ -147,6 +163,14 @@ export const field = {
 	colorPair: (s: { from: string; to: string }): Field<ColorPair> => ({
 		spec: { kind: "color-pair", ...s },
 	}),
+	offset: (s: {
+		min: number;
+		max: number;
+		x: number;
+		y: number;
+	}): Field<Offset> => ({
+		spec: { kind: "offset", ...s },
+	}),
 };
 
 /**
@@ -177,6 +201,8 @@ export function defaultSchemaParams<P>(
 			out[key] = { width: spec.width, height: spec.height };
 		} else if (spec.kind === "color-pair") {
 			out[key] = { from: spec.from, to: spec.to };
+		} else if (spec.kind === "offset") {
+			out[key] = { x: spec.x, y: spec.y };
 		} else {
 			out[key] = spec.default;
 		}
@@ -258,6 +284,21 @@ export function sanitizeSchemaParams<P>(
 						? r.to
 						: spec.to;
 				out[key] = { from, to };
+				break;
+			}
+			case "offset": {
+				const r =
+					typeof raw === "object" && raw !== null && "x" in raw && "y" in raw
+						? (raw as Record<string, unknown>)
+						: undefined;
+				const x =
+					typeof r?.x === "number" && Number.isFinite(r.x) ? r.x : spec.x;
+				const y =
+					typeof r?.y === "number" && Number.isFinite(r.y) ? r.y : spec.y;
+				out[key] = {
+					x: clamp(x, spec.min, spec.max),
+					y: clamp(y, spec.min, spec.max),
+				};
 				break;
 			}
 		}

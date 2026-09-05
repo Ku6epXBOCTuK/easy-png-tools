@@ -244,6 +244,66 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(s.pair).toEqual({ from: "#ffffff", to: "#00ff00" });
 		expect(s.threshold).toBe(100);
 	});
+
+	it("circle-mask: срезает углы и сохраняет центр", async () => {
+		const tool = TOOLS.find((t) => t.id === "circle-mask-png")!;
+		const img = await tool.run!(
+			solid(100, 100),
+			sanitizeSchemaParams(tool.schema, {
+				size: 100,
+				offset: { x: 0, y: 0 },
+			}),
+		);
+		// Внешний угол (0,0) — вне круга радиуса 50 → прозрачен
+		expect(img.data[3]).toBe(0);
+		// Центр (50,50) — внутри
+		expect(img.data[(50 * img.width + 50) * 4 + 3]).toBe(255);
+	});
+
+	it("circle-mask: offset сдвигает фигуру", async () => {
+		const tool = TOOLS.find((t) => t.id === "circle-mask-png")!;
+		const img = await tool.run!(
+			solid(100, 100),
+			sanitizeSchemaParams(tool.schema, {
+				size: 50,
+				offset: { x: 50, y: 0 },
+			}),
+		);
+		// Радиус 25, центр смещён к x=100; пиксель (75,50) внутри, (49,50) снаружи
+		expect(img.data[(50 * img.width + 75) * 4 + 3]).toBe(255);
+		expect(img.data[(50 * img.width + 49) * 4 + 3]).toBe(0);
+	});
+
+	it("star-mask: сохраняет центр, режет углы", async () => {
+		const tool = TOOLS.find((t) => t.id === "star-mask-png")!;
+		const img = await tool.run!(
+			solid(100, 100),
+			sanitizeSchemaParams(tool.schema, {
+				points: 5,
+				innerRadius: 45,
+				size: 100,
+				rotation: 0,
+				offset: { x: 0, y: 0 },
+			}),
+		);
+		expect(img.data[(50 * img.width + 50) * 4 + 3]).toBe(255);
+		expect(img.data[3]).toBe(0);
+	});
+
+	it("sanitize клампит offset к min/max и чинит мусор", () => {
+		const tool = TOOLS.find((t) => t.id === "wavy-mask-png")!;
+		const s = sanitizeSchemaParams(tool.schema, {
+			size: 90,
+			amplitude: 8,
+			waves: 8,
+			phase: 0,
+			offset: { x: 999, y: "abc", extra: true } as unknown as Record<
+				string,
+				unknown
+			>,
+		});
+		expect(s.offset).toEqual({ x: 50, y: 0 });
+	});
 });
 
 function solid(width: number, height: number) {

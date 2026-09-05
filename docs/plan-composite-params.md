@@ -7,12 +7,13 @@
 > random-noise, linear-gradient, color-spectrum, random-colors, draw-grid,
 > placeholder, fit-on-background, change-canvas-size, resize, crop); **составной
 > тип `color-pair` полностью переведён** (4 инструмента: blend-two,
-> step-colors, linear-gradient, two-colors); preview
+> step-colors, linear-gradient, two-colors); **составной тип `offset`
+> полностью переведён** (4 инструмента: circle-mask, square-mask,
+> star-mask, wavy-mask); preview
 > научен применять **генераторы** (`executeGenerate`, кнопка Generate) и
 > рендерить все kinds схемы (slider/number/color/select/checkbox/dimension/
-> color-pair).
-> Следующее: `offset` (пилот circle-mask-png → square-mask → star-mask →
-> wavy-mask).
+> color-pair/offset).
+> Следующее: `position9` (add-text → date-stamp → watermark-image).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -355,8 +356,12 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
     Составной тип во всех видах: вложенный объект `pair: { from, to }` +
     `field.colorPair`, виджет `kit/fields/schema/ColorPairControl.svelte`,
     kind `color-pair` в схеме (default/sanitize). Тесты: +4 (596 passed).
-26. `offset` — пилот (circle-mask-png), затем square-mask → star-mask →
-    wavy-mask
+26. `offset` — **все 4 инструмента переведены** ✔ (`circle-mask-png`,
+    `square-mask-png`, `star-mask-png`, `wavy-mask-png` — run в
+    `registry-new/alpha.ts`). Составной тип во всех видах: вложенный объект
+    `offset: { x, y }` + `field.offset`, виджет
+    `kit/fields/schema/OffsetControl.svelte`, kind `offset` в схеме
+    (default/sanitize). Тесты: +4 (600 passed).
 27. `position9` — перевести add-text → date-stamp → watermark-image
 28. `font-style` — перевести text-to-png → add-text (если ещё не) →
     date-stamp

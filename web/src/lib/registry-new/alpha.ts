@@ -1,7 +1,15 @@
 import type { ToolEntry } from "./types";
 import { field, toolSchema } from "../registry-schema";
+import type { Offset } from "../registry-schema";
 import { colorMask, removeColorToAlpha } from "../core/alpha";
 import { contourImage, strokeImage } from "../core/morphology";
+import {
+	boxTest,
+	circleTest,
+	renderShape,
+	starTest,
+	wavyTest,
+} from "../core/shapes";
 
 interface AddStrokeParams {
 	color: string;
@@ -64,4 +72,130 @@ const removeColor: ToolEntry<RemoveColorParams> = {
 	preview: (img, p) => colorMask(img, p.targetColor, p.tolerance),
 };
 
-export const alphaEntries = [addStroke, findContour, removeColor];
+interface CircleMaskParams {
+	size: number;
+	offset: Offset;
+}
+
+const circleMaskSchema = toolSchema<CircleMaskParams>({
+	size: field.slider({ min: 20, max: 100, step: 1, default: 100 }),
+	offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
+});
+
+const circleMask: ToolEntry<CircleMaskParams> = {
+	id: "circle-mask-png",
+	title: "Circle Mask PNG",
+	description:
+		"Cuts the image into a circle. Diameter is set as a share of the smaller side.",
+	category: "alpha",
+	schema: circleMaskSchema,
+	run: (img, p) =>
+		renderShape(
+			img,
+			circleTest(p.size / 200),
+			p.offset.x / 100,
+			p.offset.y / 100,
+		),
+};
+
+interface SquareMaskParams {
+	widthPct: number;
+	heightPct: number;
+	offset: Offset;
+}
+
+const squareMaskSchema = toolSchema<SquareMaskParams>({
+	widthPct: field.slider({ min: 10, max: 100, step: 1, default: 100 }),
+	heightPct: field.slider({ min: 10, max: 100, step: 1, default: 100 }),
+	offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
+});
+
+const squareMask: ToolEntry<SquareMaskParams> = {
+	id: "square-mask-png",
+	title: "Square Mask PNG",
+	description:
+		"Cuts the image into a rectangle with sides as a share of the smaller side.",
+	category: "alpha",
+	schema: squareMaskSchema,
+	run: (img, p) =>
+		renderShape(
+			img,
+			boxTest(p.widthPct / 200, p.heightPct / 200),
+			p.offset.x / 100,
+			p.offset.y / 100,
+		),
+};
+
+interface StarMaskParams {
+	points: number;
+	innerRadius: number;
+	size: number;
+	rotation: number;
+	offset: Offset;
+}
+
+const starMaskSchema = toolSchema<StarMaskParams>({
+	points: field.slider({ min: 3, max: 12, step: 1, default: 5 }),
+	innerRadius: field.slider({ min: 10, max: 90, step: 1, default: 45 }),
+	size: field.slider({ min: 20, max: 100, step: 1, default: 100 }),
+	rotation: field.slider({ min: -180, max: 180, step: 1, default: 0 }),
+	offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
+});
+
+const starMask: ToolEntry<StarMaskParams> = {
+	id: "star-mask-png",
+	title: "Star Mask PNG",
+	description:
+		"Cuts the image into an n-pointed star with adjustable inner radius and rotation.",
+	category: "alpha",
+	schema: starMaskSchema,
+	run: (img, p) =>
+		renderShape(
+			img,
+			starTest(p.points, p.innerRadius / 100, p.size / 200, p.rotation),
+			p.offset.x / 100,
+			p.offset.y / 100,
+		),
+};
+
+interface WavyMaskParams {
+	size: number;
+	amplitude: number;
+	waves: number;
+	phase: number;
+	offset: Offset;
+}
+
+const wavyMaskSchema = toolSchema<WavyMaskParams>({
+	size: field.slider({ min: 20, max: 100, step: 1, default: 90 }),
+	amplitude: field.slider({ min: 2, max: 30, step: 1, default: 8 }),
+	waves: field.slider({ min: 3, max: 24, step: 1, default: 8 }),
+	phase: field.slider({ min: 0, max: 360, step: 1, default: 0 }),
+	offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
+});
+
+const wavyMask: ToolEntry<WavyMaskParams> = {
+	id: "wavy-mask-png",
+	title: "Wavy Mask PNG",
+	description:
+		"Cuts the image into a wavy-edged circle: radius is modulated by a sine with chosen amplitude and frequency.",
+	category: "alpha",
+	schema: wavyMaskSchema,
+	run: (img, p) =>
+		renderShape(
+			img,
+			wavyTest(p.size / 200, p.amplitude / 200, p.waves, p.phase),
+			p.offset.x / 100,
+			p.offset.y / 100,
+		),
+};
+
+export const alphaEntries = [
+	addStroke,
+	findContour,
+	removeColor,
+	circleMask,
+	squareMask,
+	starMask,
+	wavyMask,
+];
