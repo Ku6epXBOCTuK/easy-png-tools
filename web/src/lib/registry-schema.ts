@@ -205,16 +205,30 @@ export interface Field<T> {
 	__fieldT?: T;
 }
 
+export interface ToolLayoutGroup {
+	/** Подпись группы (пустая группа не рендерится). */
+	title?: string;
+	/** Количество колонок сетки внутри группы (по умолчанию 1). */
+	cols?: number;
+	/** Имена полей схемы, попадающих в группу. */
+	fields: string[];
+}
+
+export interface ToolSchemaLayout {
+	/** Группы полей виджета. Неупомянутые поля — в общей группе в конце. */
+	groups: ToolLayoutGroup[];
+}
+
 export interface ToolSchemaMeta {
 	/** Пер-инструмент раскладка полей (группировка/колонки). */
-	layout?: { group?: string; cols?: number };
+	layout?: ToolSchemaLayout;
 	/** Короткая подпись инструмента для нового UI (необязательно). */
 	label?: string;
 }
 
 export interface ToolSchema<P> {
 	fields: { [K in keyof P]: Field<P[K]> };
-	layout?: { group?: string; cols?: number };
+	layout?: ToolSchemaLayout;
 	label?: string;
 }
 

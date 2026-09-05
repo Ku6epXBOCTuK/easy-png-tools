@@ -13,20 +13,31 @@ interface AddTextParams {
 	plate: Plate;
 }
 
-const addTextSchema = toolSchema<AddTextParams>({
-	text: field.text({ default: "Hello!", placeholder: "Your text" }),
-	style: field.fontStyle({
-		min: 8,
-		max: 200,
-		size: 48,
-		font: "sans",
-		bold: true,
-		color: "#ffffff",
-	}),
-	position: field.position9({ default: "bottom-right" }),
-	margin: field.slider({ min: 0, max: 200, step: 1, default: 24 }),
-	plate: field.plate({ enabled: false, color: "#000000", opacity: 60 }),
-});
+const addTextSchema = toolSchema<AddTextParams>(
+	{
+		text: field.text({ default: "Hello!", placeholder: "Your text" }),
+		style: field.fontStyle({
+			min: 8,
+			max: 200,
+			size: 48,
+			font: "sans",
+			bold: true,
+			color: "#ffffff",
+		}),
+		position: field.position9({ default: "bottom-right" }),
+		margin: field.slider({ min: 0, max: 200, step: 1, default: 24 }),
+		plate: field.plate({ enabled: false, color: "#000000", opacity: 60 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Text", fields: ["text", "style"] },
+				{ title: "Placement", fields: ["position", "margin"] },
+				{ title: "Plate", fields: ["plate"] },
+			],
+		},
+	},
+);
 
 const addText: ToolEntry<AddTextParams> = {
 	id: "add-text-png",

@@ -26,7 +26,10 @@ const frameSchema = toolSchema<FrameParams>(
 			],
 		}),
 	},
-	{ layout: { group: "frame", cols: 2 }, label: "Frame" },
+	{
+		layout: { groups: [{ title: "Frame", fields: ["thickness", "color"] }] },
+		label: "Frame",
+	},
 );
 
 describe("registry-schema: дефолты из схемы", () => {
@@ -37,6 +40,30 @@ describe("registry-schema: дефолты из схемы", () => {
 			enabled: true,
 			count: "two",
 		});
+	});
+});
+
+describe("registry-schema: раскладка (schema.layout)", () => {
+	it("toolSchema сохраняет группы полей", () => {
+		expect(frameSchema.layout).toEqual({
+			groups: [{ title: "Frame", fields: ["thickness", "color"] }],
+		});
+	});
+
+	it("обе схемы без layout не добавляют layout", () => {
+		const plain = toolSchema<FrameParams>({
+			thickness: field.slider({ min: 1, max: 500, default: 5 }),
+			color: field.color({ default: "#000000" }),
+			enabled: field.checkbox({ default: true }),
+			count: field.select({
+				default: "two",
+				options: [
+					{ value: "one", label: "One" },
+					{ value: "two", label: "Two" },
+				],
+			}),
+		});
+		expect(plain.layout).toBeUndefined();
 	});
 });
 

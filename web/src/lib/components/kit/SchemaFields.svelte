@@ -56,16 +56,61 @@
 			.replace(/[_-]+/g, " ")
 			.replace(/\b\w/g, (c) => c.toUpperCase());
 	}
+
+	interface LayoutGroup {
+		key: string;
+		title?: string;
+		cols: number;
+		fields: string[];
+	}
+
+	const layoutGroups = $derived.by((): LayoutGroup[] => {
+		const all = Object.keys(schema.fields);
+		const groups = schema.layout?.groups ?? [];
+		const used: Record<string, true> = {};
+		const named = groups
+			.map((g, gi) => {
+				const fields = g.fields.filter((f) => {
+					if (used[f] || !(f in schema.fields)) return false;
+					used[f] = true;
+					return true;
+				});
+				return {
+					key: `${g.title ?? "group"}-${gi}`,
+					title: g.title,
+					cols: Math.max(1, Math.trunc(g.cols ?? 1)),
+					fields,
+				} satisfies LayoutGroup;
+			})
+			.filter((g) => g.fields.length > 0);
+		const rest = all.filter((f) => !used[f]);
+		if (rest.length > 0) {
+			named.push({ key: "__default", title: undefined, cols: 1, fields: rest });
+		}
+		return named;
+	});
 </script>
 
-{#each Object.entries(schema.fields) as [id, field] (id)}
-	{@const Control = FIELDS[field.spec.kind]}
-	<Control
-		label={labelOf(id)}
-		value={values[id]}
-		spec={field.spec}
-		onchange={(v) => onchange(id, v)}
-	/>
+{#each layoutGroups as group (group.key)}
+	{#if group.title}
+		<span class="group-title">{group.title}</span>
+	{/if}
+	<div
+		class="group-fields"
+		style:grid-template-columns={group.cols > 1
+			? `repeat(${group.cols}, minmax(0, 1fr))`
+			: undefined}
+	>
+		{#each group.fields as id (id)}
+			{@const Control = FIELDS[schema.fields[id].spec.kind]}
+			<Control
+				label={labelOf(id)}
+				value={values[id]}
+				spec={schema.fields[id].spec}
+				onchange={(v) => onchange(id, v)}
+			/>
+		{/each}
+	</div>
 {/each}
 
 <div class="panel-foot">
@@ -76,6 +121,23 @@
 </div>
 
 <style>
+	.group-title {
+		display: block;
+		margin-top: var(--space-l);
+		margin-bottom: var(--space-s);
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-l);
+		text-transform: uppercase;
+	}
+	.group-title:first-child {
+		margin-top: 0;
+	}
+	.group-fields {
+		display: grid;
+		grid-template-columns: 1fr;
+		column-gap: var(--space-l);
+	}
 	.panel-foot {
 		display: flex;
 		justify-content: space-between;

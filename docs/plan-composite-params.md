@@ -20,7 +20,12 @@
 > preview
 > научен применять **генераторы** (`executeGenerate`, кнопка Generate) и
 > рендерить все kinds схемы (slider/number/color/select/checkbox/dimension/
-> color-pair/offset/position9/font-style/plate/gradient).
+> color-pair/offset/position9/font-style/plate/gradient). **Пер-инструмент
+> раскладка `schema.layout` реализована** (шаг 32): тип `ToolSchemaLayout`
+> {groups: [{title?, cols?, fields}]}, рендер групп в `SchemaFields.svelte`
+> (заголовок группы + сетка колонок, неупомянутые поля — в общей группе),
+> пилот — `add-text` (группы Text/Placement/Plate).
+> Следующее: шаг 33 — UI-макет каждого переведённого инструмента (ревью по одному).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -411,7 +416,12 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
 31. По мере перевода инструментов в Фазе 2-3 — рендер схемы (из Фазы 1)
     покрывает их автоматически; составные виджеты (dimension, color-pair,
     offset, position9, font-style, plate, gradient) — по одному, каждый с ревью.
-32. Пер-инструмент layout (`schema.layout`): группировка полей рамки и т.п.
+32. Пер-инструмент layout (`schema.layout`) — **реализован** ✔.
+    `ToolSchemaLayout.groups: { title?, cols?, fields[] }` в registry-schema;
+    `SchemaFields.svelte` рендерит группы (подпись + сетка `1..n` колонок,
+    неупомянутые поля — в общей группе в конце, без заголовка). Пилот —
+    `add-text-png` (Text: text+style; Placement: position+margin; Plate).
+    Тесты: schema-layout в registry-schema.test.ts; полные запуски чисты.
 33. Для каждого переведённого инструмента — UI-макет, принимается отдельно.
 
 ### Фаза 5 — зачистка
