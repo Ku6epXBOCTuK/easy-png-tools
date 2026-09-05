@@ -76,15 +76,26 @@ export interface ColorPairSpec {
 	to: string;
 }
 
-export type FieldSpec =
-	| NumberSpec
-	| SliderSpec
-	| ColorSpec
-	| SelectSpec
-	| TextSpec
-	| CheckboxSpec
-	| DimensionSpec
-	| ColorPairSpec;
+/**
+ * «Объект as const» kind → спека поля. Единственный источник правды для
+ * перечня kinds: `FieldSpecKind` = ключи map, `FieldSpec` = значение по любому
+ * ключу (тот же union). Добавляем новый составной тип — добавляем сюда, и
+ * type-checker укажет, где его не хватает (record контролов, default/sanitize).
+ */
+export const fieldSpecs = {
+	number: {} as NumberSpec,
+	slider: {} as SliderSpec,
+	color: {} as ColorSpec,
+	select: {} as SelectSpec,
+	text: {} as TextSpec,
+	checkbox: {} as CheckboxSpec,
+	dimension: {} as DimensionSpec,
+	"color-pair": {} as ColorPairSpec,
+} as const;
+
+export type FieldSpecKind = keyof typeof fieldSpecs;
+export type FieldSpecOf<K extends FieldSpecKind> = (typeof fieldSpecs)[K];
+export type FieldSpec = FieldSpecOf<FieldSpecKind>;
 
 /** `Field<T>`: runtime-спека поля + phantom-тип ожидаемого значения (number|string|boolean). */
 export interface Field<T> {

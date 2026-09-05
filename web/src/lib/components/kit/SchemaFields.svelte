@@ -1,23 +1,27 @@
 <script lang="ts">
+	import type {
+		FieldSpec,
+		FieldSpecKind,
+		ToolSchema,
+	} from "$lib/registry-schema";
 	import { RotateCcw } from "@lucide/svelte";
-	import type { ToolSchema } from "$lib/registry-schema";
+	import type { Component } from "svelte";
+	import DimensionField from "./fields/DimensionField.svelte";
 	import CheckboxControl from "./fields/schema/CheckboxControl.svelte";
 	import ColorControl from "./fields/schema/ColorControl.svelte";
 	import ColorPairControl from "./fields/schema/ColorPairControl.svelte";
 	import RangeControl from "./fields/schema/RangeControl.svelte";
 	import SelectControl from "./fields/schema/SelectControl.svelte";
 	import TextControl from "./fields/schema/TextControl.svelte";
-	import DimensionField from "./fields/DimensionField.svelte";
 
-	interface Props {
-		schema: ToolSchema<Record<string, unknown>>;
-		values: Record<string, unknown>;
-		onchange: (id: string, value: unknown) => void;
-		onreset: () => void;
+	interface FieldControlProps {
+		label: string;
+		value: unknown;
+		spec: FieldSpec;
+		onchange?: (value: unknown) => void;
 	}
-	let { schema, values, onchange, onreset }: Props = $props();
 
-	const FIELDS = {
+	const FIELDS: Record<FieldSpecKind, Component<FieldControlProps>> = {
 		number: RangeControl,
 		slider: RangeControl,
 		color: ColorControl,
@@ -26,7 +30,15 @@
 		checkbox: CheckboxControl,
 		text: TextControl,
 		dimension: DimensionField,
-	} as const;
+	};
+
+	interface Props {
+		schema: ToolSchema<Record<string, unknown>>;
+		values: Record<string, unknown>;
+		onchange: (id: string, value: unknown) => void;
+		onreset: () => void;
+	}
+	let { schema, values, onchange, onreset }: Props = $props();
 
 	function labelOf(id: string): string {
 		return id
