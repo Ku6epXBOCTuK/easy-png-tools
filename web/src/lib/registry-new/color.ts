@@ -1,12 +1,8 @@
-import type { ToolEntry } from "./types";
-import { field, toolSchema } from "../registry-schema";
-import {
-	ditherImage,
-	mapToNearest,
-	quantizeImage,
-} from "../core/quantize";
 import { gammaCorrection, temperature, tint } from "../core/color";
 import { parseHexList } from "../core/palette";
+import { ditherImage, mapToNearest, quantizeImage } from "../core/quantize";
+import { field, toolSchema } from "../registry-schema";
+import type { ToolEntry } from "./types";
 
 interface GammaParams {
 	value: number;

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Check, Sparkles, Upload } from "@lucide/svelte";
-	import { toDataUrl } from "$lib/core/io";
-	import type { PixelImage } from "$lib/core/types";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
+	import { toDataUrl } from "$lib/core/io";
+	import type { PixelImage } from "$lib/core/types";
+	import { Check, Sparkles, Upload } from "@lucide/svelte";
 
 	interface Props {
 		source: PixelImage | null;
@@ -15,15 +15,25 @@
 		ongenerate?: () => void;
 		ondownload: () => void;
 	}
-	let { source, result, running, error, isGenerator = false, onupload, ongenerate, ondownload }: Props =
-		$props();
+	let {
+		source,
+		result,
+		running,
+		error,
+		isGenerator = false,
+		onupload,
+		ongenerate,
+		ondownload,
+	}: Props = $props();
 
 	let sourceUrl = $derived(source ? toDataUrl(source) : null);
 	let resultUrl = $derived(result ? toDataUrl(result) : null);
 </script>
 
 <div class="panel-head">
-	<span class="label">{isGenerator ? "GENERATOR / RESULT" : "SOURCE / RESULT"}</span>
+	<span class="label"
+		>{isGenerator ? "GENERATOR / RESULT" : "SOURCE / RESULT"}</span
+	>
 	<div class="head-actions">
 		{#if isGenerator}
 			<button
@@ -31,7 +41,8 @@
 				onclick={ongenerate}
 				disabled={running}
 			>
-				<Sparkles size={14} /> {running ? "Generating…" : "Generate"}
+				<Sparkles size={14} />
+				{running ? "Generating…" : "Generate"}
 			</button>
 		{:else}
 			<label class="upload">
@@ -75,7 +86,9 @@
 			{:else if running}
 				<Check size={22} />
 			{:else}
-				<span class="empty">{isGenerator ? "click Generate" : "no result yet"}</span>
+				<span class="empty">
+					{isGenerator ? "click Generate" : "no result yet"}
+				</span>
 			{/if}
 		</div>
 	</figure>
@@ -132,7 +145,7 @@
 	.generate-btn {
 		background: var(--color-main);
 		border-color: var(--color-main);
-		color: white;
+		color: var(--color-background);
 	}
 	.generate-btn:disabled {
 		opacity: 0.6;

@@ -112,7 +112,12 @@ export const field = {
 	checkbox: (s: Omit<CheckboxSpec, "kind">): Field<boolean> => ({
 		spec: { kind: "checkbox", ...s },
 	}),
-	dimension: (s: { min: number; max: number; width: number; height: number }): Field<Dimension> => ({
+	dimension: (s: {
+		min: number;
+		max: number;
+		width: number;
+		height: number;
+	}): Field<Dimension> => ({
 		spec: { kind: "dimension", ...s },
 	}),
 };

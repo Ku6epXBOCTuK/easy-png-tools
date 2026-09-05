@@ -51,11 +51,37 @@
 				/>
 			</span>
 		</label>
+	{:else if field.spec.kind === "select"}
+		<label class="control">
+			<span>{labelOf(id)}</span>
+			<select
+				class="select-field"
+				value={String(values[id] ?? field.spec.default)}
+				oninput={(e) => onchange(id, (e.target as HTMLSelectElement).value)}
+			>
+				{#each field.spec.options as option (option.value)}
+					<option value={option.value}>{option.label}</option>
+				{/each}
+			</select>
+		</label>
+	{:else if field.spec.kind === "checkbox"}
+		<label class="control checkbox-control">
+			<span>{labelOf(id)}</span>
+			<input
+				type="checkbox"
+				class="checkbox-field"
+				checked={Boolean(values[id] ?? field.spec.default)}
+				onchange={(e) => onchange(id, (e.target as HTMLInputElement).checked)}
+			/>
+		</label>
 	{:else if field.spec.kind === "dimension"}
 		<div class="control">
 			<DimensionField
 				label={labelOf(id)}
-				value={(values[id] as Dimension) ?? { width: field.spec.width, height: field.spec.height }}
+				value={(values[id] as Dimension) ?? {
+					width: field.spec.width,
+					height: field.spec.height,
+				}}
 				spec={field.spec}
 				oninput={(v) => onchange(id, v)}
 			/>
@@ -90,6 +116,25 @@
 		width: 100%;
 		accent-color: var(--color-main);
 		color: var(--color-text);
+	}
+	.select-field {
+		width: 100%;
+		padding: var(--space-m) var(--space-l);
+		background: var(--color-background);
+		border: var(--size-border) solid var(--color-border);
+		border-radius: var(--radius-s);
+		color: var(--color-text);
+		font: var(--font-size-s) var(--font-mono);
+	}
+	.checkbox-control {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.checkbox-field {
+		width: var(--space-xl);
+		height: var(--space-xl);
+		accent-color: var(--color-main);
 	}
 	.color-control > span:first-child {
 		justify-content: flex-start;

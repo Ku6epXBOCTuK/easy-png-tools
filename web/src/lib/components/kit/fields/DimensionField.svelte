@@ -42,9 +42,9 @@
 	}
 	.dimension-label {
 		grid-column: 1 / -1;
-		color: var(--foreground);
-		font-size: 11px;
-		letter-spacing: 0.5px;
+		color: var(--color-text);
+		font-size: var(--font-size-s);
+		letter-spacing: var(--space-text-l);
 		text-transform: uppercase;
 	}
 </style>

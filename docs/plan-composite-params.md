@@ -2,18 +2,22 @@
 
 > Статус: **в реализации.** Фаза 0 (фундамент) ✔, Фаза 1 (рабочий инструмент
 > в preview) ✔, Фаза 2 (простые инструменты без составных типов) — переведены
-> все одиночные инструменты (18 шт). Фаза 3 — **начата**: введён составной тип
-> `dimension` (вложенный объект в Params + `field.dimension`, новый kind в
-> `registry-schema` + мерge `DimensionField` в UI), переведён пилот
-> `create-empty-png`; preview научен применять **генераторы** (`executeGenerate`,
-> кнопка Generate вместо загрузки файла). Следующее: перевести остальные
-> dimension-инструменты (single-color → random-noise → ...).
+> все одиночные инструменты (18 шт). Фаза 3 — **составной тип `dimension`
+> полностью переведён** (12 инструментов: create-empty, single-color,
+> random-noise, linear-gradient, color-spectrum, random-colors, draw-grid,
+> placeholder, fit-on-background, change-canvas-size, resize, crop); preview
+> научен применять **генераторы** (`executeGenerate`, кнопка Generate) и
+> рендерить все kinds схемы (slider/number/color/select/checkbox/dimension).
+> Следующее: `color-pair` (пилот blend-two-png → two-colors → step-colors).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
-> (по файлу на категорию) + `web/src/lib/preview/categories.ts`,
-> `web/src/lib/registry-schema.ts` (kind `dimension`), `kit/fields/DimensionField.svelte`,
-> `preview/executor/index.ts` (`executeGenerate`). Старый `web/src/lib/registry.ts`
-> разбит по категориям в `web/src/lib/registry/` (см. `registry.ts` — тонкий баррель).
+> (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
+>
+> - `web/src/lib/preview/categories.ts`,
+>   `web/src/lib/registry-schema.ts` (kind `dimension`), `kit/fields/DimensionField.svelte`,
+>   `preview/executor/index.ts` (`executeGenerate`), `SchemaFields.svelte`
+>   (полный рендер kinds). Старый `web/src/lib/registry.ts` разбит по категориям
+>   в `web/src/lib/registry/` (см. `registry.ts` — тонкий баррель).
 
 ## Ключевая стратегия: параллельная сборка, старый UI не трогаем
 
@@ -330,15 +334,17 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
 
 ### Фаза 3 — инструменты с составными типами (по типу, затем по инструментам)
 
-24. `dimension` — составной тип введён ✔ (`field.dimension` + kind `dimension`
-    в `registry-schema`, вложенный объект `size: { width, height }` в Params,
-    виджет `kit/fields/DimensionField.svelte`).
-    Пилот `create-empty-png` переведён ✔; preview поддержал **генераторы**
-    (`preview/executor` + `executeGenerate`, кнопка Generate в `SchemaToolView`/
-    `SchemaPreview`, без входного файла).
-    Остальные по 1: single-color → random-noise → fit-on-background →
-    change-canvas-size → placeholder → draw-grid → random-colors →
-    color-spectrum → linear-gradient → resize → crop
+24. `dimension` — **переведены все 12 инструментов** ✔ (`create-empty-png`,
+    `single-color-png`, `random-noise-png`, `linear-gradient-png`,
+    `color-spectrum-png`, `random-colors-png`, `draw-grid-png`,
+    `placeholder-png` — генераторы в `registry-new/generate.ts`;
+    `fit-on-background-png`, `change-canvas-size-png`, `resize-png`,
+    `crop-png` — в `registry-new/geometry.ts`). Составной тип во всех видах:
+    вложенный объект `size: { width, height }` в Params + `field.dimension`,
+    виджет `kit/fields/DimensionField.svelte`.
+    Preview: генераторы применяются через `executeGenerate` (кнопка Generate),
+    `SchemaFields` рендерит все kinds схемы (slider/number/color/select/
+    checkbox/dimension). Тесты: 592 passed.
 25. `color-pair` — пилот (blend-two-png), затем two-colors → step-colors →
     linear-gradient (уже переведён в dimension, здесь добавляется к нему)
 26. `offset` — пилот (circle-mask-png), затем square-mask → star-mask →
