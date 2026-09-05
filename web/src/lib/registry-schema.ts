@@ -155,6 +155,24 @@ export interface PlateSpec {
 }
 
 /**
+ * Цветовой градиент: пара цветов + угол направления. 0° — слева направо,
+ * 90° — сверху вниз (прирост по часовой в пиксельных осях, ось Y вниз).
+ */
+export interface Gradient {
+	from: string;
+	to: string;
+	angle: number;
+}
+
+export interface GradientSpec {
+	kind: "gradient";
+	from: string;
+	to: string;
+	/** Направление градиента: 0..360°, угол в градусах. */
+	angle: number;
+}
+
+/**
  * «Объект as const» kind → спека поля. Единственный источник правды для
  * перечня kinds: `FieldSpecKind` = ключи map, `FieldSpec` = значение по любому
  * ключу (тот же union). Добавляем новый составной тип — добавляем сюда, и
@@ -173,6 +191,7 @@ export const fieldSpecs = {
 	position9: {} as Position9Spec,
 	"font-style": {} as FontStyleSpec,
 	plate: {} as PlateSpec,
+	gradient: {} as GradientSpec,
 } as const;
 
 export type FieldSpecKind = keyof typeof fieldSpecs;
@@ -257,6 +276,13 @@ export const field = {
 	}): Field<Plate> => ({
 		spec: { kind: "plate", ...s },
 	}),
+	gradient: (s: {
+		from: string;
+		to: string;
+		angle: number;
+	}): Field<Gradient> => ({
+		spec: { kind: "gradient", ...s },
+	}),
 };
 
 /**
@@ -301,6 +327,12 @@ export function defaultSchemaParams<P>(
 				enabled: spec.enabled,
 				color: spec.color,
 				opacity: spec.opacity,
+			};
+		} else if (spec.kind === "gradient") {
+			out[key] = {
+				from: spec.from,
+				to: spec.to,
+				angle: spec.angle,
 			};
 		} else {
 			out[key] = spec.default;
@@ -453,6 +485,31 @@ export function sanitizeSchemaParams<P>(
 				out[key] = {
 					x: clamp(x, spec.min, spec.max),
 					y: clamp(y, spec.min, spec.max),
+				};
+				break;
+			}
+			case "gradient": {
+				const r =
+					typeof raw === "object" &&
+					raw !== null &&
+					"from" in raw &&
+					"to" in raw &&
+					"angle" in raw
+						? (raw as Record<string, unknown>)
+						: undefined;
+				out[key] = {
+					from:
+						typeof r?.from === "string" && /^#[0-9a-f]{6}$/i.test(r.from)
+							? r.from
+							: spec.from,
+					to:
+						typeof r?.to === "string" && /^#[0-9a-f]{6}$/i.test(r.to)
+							? r.to
+							: spec.to,
+					angle:
+						typeof r?.angle === "number" && Number.isFinite(r.angle)
+							? clamp(r.angle, 0, 360)
+							: spec.angle,
 				};
 				break;
 			}

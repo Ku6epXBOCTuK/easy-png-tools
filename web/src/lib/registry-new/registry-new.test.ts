@@ -65,8 +65,11 @@ describe("registry-new (переведённые инструменты)", () =>
 			"linear-gradient-png",
 			{
 				size: { width: 40, height: 30 },
-				pair: { from: "#000000", to: "#ffffff" },
-				direction: "horizontal",
+				gradient: {
+					from: "#000000",
+					to: "#ffffff",
+					angle: 90,
+				},
 			},
 		],
 		[
@@ -233,6 +236,61 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(out.data[100]).toBe(255);
 		expect(out.data[101]).toBe(255);
 		expect(out.data[102]).toBe(255);
+	});
+
+	it("linear-gradient: дефолты gradient и направление по углу", async () => {
+		const tool = TOOLS.find((t) => t.id === "linear-gradient-png")!;
+		const d = defaultSchemaParams(tool.schema);
+		expect(d.gradient).toEqual({
+			from: "#000000",
+			to: "#ffffff",
+			angle: 0,
+		});
+		// 0° — слева направо: крайний левый пиксель = from, крайний правый = to
+		let img = await tool.generate!(
+			sanitizeSchemaParams(tool.schema, {
+				size: { width: 4, height: 1 },
+				gradient: { from: "#000000", to: "#ffffff", angle: 0 },
+			}),
+		);
+		expect(img.data[0]).toBe(0);
+		expect(img.data[12]).toBe(255);
+		// 90° — сверху вниз: верхний пиксель = from, нижний = to
+		img = await tool.generate!(
+			sanitizeSchemaParams(tool.schema, {
+				size: { width: 1, height: 4 },
+				gradient: { from: "#000000", to: "#ffffff", angle: 90 },
+			}),
+		);
+		expect(img.data[0]).toBe(0);
+		expect(img.data[12]).toBe(255);
+		// 180° — разворот: левый пиксель = to
+		img = await tool.generate!(
+			sanitizeSchemaParams(tool.schema, {
+				size: { width: 4, height: 1 },
+				gradient: { from: "#000000", to: "#ffffff", angle: 180 },
+			}),
+		);
+		expect(img.data[0]).toBe(255);
+		expect(img.data[12]).toBe(0);
+	});
+
+	it("sanitize чинит мусор в gradient и клампит angle в 0..360", () => {
+		const tool = TOOLS.find((t) => t.id === "linear-gradient-png")!;
+		const s = sanitizeSchemaParams(tool.schema, {
+			size: { width: 10, height: 10 },
+			gradient: {
+				from: "not-a-color",
+				to: "#00ff00",
+				angle: 720,
+				extra: 1,
+			},
+		});
+		expect(s.gradient).toEqual({
+			from: "#000000",
+			to: "#00ff00",
+			angle: 360,
+		});
 	});
 
 	it("sanitize чинит мусор в паре и клампит threshold", () => {

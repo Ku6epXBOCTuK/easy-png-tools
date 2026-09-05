@@ -1,7 +1,8 @@
 import { renderTextToImage } from "../core/domText";
 import { colorSpectrum, drawGrid, randomColorBlocks } from "../core/gen-tools";
-import { gradientImage, noiseImage, solidImage } from "../core/generate";
+import { noiseImage, solidImage } from "../core/generate";
 import { changeCanvasSize } from "../core/geometry";
+import type { PixelImage } from "../core/types";
 import {
 	hexToRgb,
 	renderBlend,
@@ -14,12 +15,52 @@ import {
 	type ColorPair,
 	type Dimension,
 	type FontStyle,
+	type Gradient,
 } from "../registry-schema";
 import type { ToolEntry } from "./types";
 
 function rgba(hex: string): [number, number, number, number] {
 	const { r, g, b } = hexToRgb(hex);
 	return [r, g, b, 255];
+}
+
+/**
+ * Линейный градиент по произвольному углу. 0° — слева направо, 90° — сверху
+ * вниз (рост угла по часовой, ось Y вниз). Угол задаёт направление оси
+ * градиента; t пикселя — нормализованная проекция на эту ось.
+ */
+function angleGradient(
+	width: number,
+	height: number,
+	fromRgba: [number, number, number, number],
+	toRgba: [number, number, number, number],
+	angle: number,
+): PixelImage {
+	const rad = (angle * Math.PI) / 180;
+	const vx = Math.cos(rad);
+	const vy = Math.sin(rad);
+	// Минимум и максимум проекции на ось достигаются в противоположных углах.
+	const rightX = vx >= 0 ? width - 1 : 0;
+	const bottomY = vy >= 0 ? height - 1 : 0;
+	const projMax = rightX * vx + bottomY * vy;
+	const projMin = (width - 1 - rightX) * vx + (height - 1 - bottomY) * vy;
+	const span = projMax - projMin;
+	const out: PixelImage = {
+		width,
+		height,
+		data: new Uint8ClampedArray(width * height * 4),
+	};
+	for (let y = 0; y < height; y++) {
+		for (let x = 0; x < width; x++) {
+			const t = span === 0 ? 0 : (x * vx + y * vy - projMin) / span;
+			const i = (y * width + x) * 4;
+			out.data[i] = fromRgba[0] + (toRgba[0] - fromRgba[0]) * t;
+			out.data[i + 1] = fromRgba[1] + (toRgba[1] - fromRgba[1]) * t;
+			out.data[i + 2] = fromRgba[2] + (toRgba[2] - fromRgba[2]) * t;
+			out.data[i + 3] = fromRgba[3] + (toRgba[3] - fromRgba[3]) * t;
+		}
+	}
+	return out;
 }
 
 interface CreateEmptyParams {
@@ -100,33 +141,31 @@ const randomNoise: ToolEntry<RandomNoiseParams> = {
 
 interface LinearGradientParams {
 	size: Dimension;
-	pair: ColorPair;
-	direction: "horizontal" | "vertical";
+	gradient: Gradient;
 }
 
 export const linearGradientSchema = toolSchema<LinearGradientParams>({
 	size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-	pair: field.colorPair({ from: "#000000", to: "#ffffff" }),
-	direction: field.select({
-		default: "horizontal",
-		options: [
-			{ value: "horizontal", label: "Horizontal" },
-			{ value: "vertical", label: "Vertical" },
-		],
-	}),
+	gradient: field.gradient({ from: "#000000", to: "#ffffff", angle: 0 }),
 });
 
 const linearGradient: ToolEntry<LinearGradientParams> = {
 	id: "linear-gradient-png",
 	title: "Create gradient PNG",
 	description:
-		"Generates a smooth transition between two colors, horizontally or vertically.",
+		"Generates a smooth transition between two colors along a chosen angle.",
 	category: "generate",
 	schema: linearGradientSchema,
 	generate: (p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
-		return gradientImage(w, h, rgba(p.pair.from), rgba(p.pair.to), p.direction);
+		return angleGradient(
+			w,
+			h,
+			rgba(p.gradient.from),
+			rgba(p.gradient.to),
+			p.gradient.angle,
+		);
 	},
 };
 

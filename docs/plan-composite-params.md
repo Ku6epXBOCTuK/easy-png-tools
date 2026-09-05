@@ -13,12 +13,14 @@
 > add-text-png и date-stamp-png** (водяной знак-картинка — отдельный шаг:
 > требует overlay-механику в новом превью); **составной тип `font-style`
 > полностью переведён** (text-to-png, add-text, date-stamp); **составной тип
-> `plate` полностью переведён** (add-text, date-stamp); preview
+> `plate` полностью переведён** (add-text, date-stamp); **составной тип
+> `gradient` полностью переведён** (linear-gradient): вместо горизонтального/
+> вертикального select — **угол 0..360°** (новый виджет `AngleControl`:
+> slider + кнопки-пресеты 0°/90°/180°/270°, переиспользуемый компонент);
+> preview
 > научен применять **генераторы** (`executeGenerate`, кнопка Generate) и
 > рендерить все kinds схемы (slider/number/color/select/checkbox/dimension/
-> color-pair/offset/position9/font-style/plate).
-> Следующее: `gradient` — собрать из dimension + color-pair + direction на
-> linear-gradient.
+> color-pair/offset/position9/font-style/plate/gradient).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -390,8 +392,19 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
     цвет + слайдер непрозрачности, деактивируется при выключенной плашке),
     kind `plate` в схеме (default/sanitize, clamp opacity к 0..100).
     Покрытие тестов расширено (дефолты/sanitize plate в существующих тестах).
-30. `gradient` — собрать из dimension + color-pair + direction на
-    linear-gradient (зависит от решения по gradient, см. план)
+30. `gradient` — **переведён** ✔ (linear-gradient-png). Направление градиента
+    — не горизонталь/вертикаль, а **произвольный угол**: новый переиспользуемый
+    виджет `kit/fields/schema/AngleControl.svelte` (слайдер 0..360° + кнопки
+    стандартных углов 0°/90°/180°/270° с активным состоянием). Составной тип
+    `gradient: { from, to, angle }` во всех видах (`field.gradient`, kind
+    `gradient` в схеме — default/sanitize, clamp угла к 0..360, валидация
+    цветов; виджет `kit/fields/schema/GradientControl.svelte` — пара цветов +
+    AngleControl). Рендер по углу — локальный `angleGradient` в
+    `registry-new/generate.ts` (core-`gradientImage` не трогали: он умеет
+    только horizontal/vertical и используется старым UI). Семантика: 0° слева
+    направо, 90° сверху вниз, рост угла по часовой (ось Y вниз); нормализация
+    по полному диапазону проекции на ось (180°/270° разворачивают градиент).
+    Тесты: дефолты, направление по углу (0°/90°/180°), sanitize/кламп.
 
 ### Фаза 4 — масштаб UI на остальные инструменты
 

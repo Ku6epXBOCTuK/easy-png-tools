@@ -17,6 +17,7 @@
 	import PositionControl from "./fields/schema/PositionControl.svelte";
 	import FontStyleControl from "./fields/schema/FontStyleControl.svelte";
 	import PlateControl from "./fields/schema/PlateControl.svelte";
+	import GradientControl from "./fields/schema/GradientControl.svelte";
 
 	interface FieldControlProps {
 		label: string;
@@ -38,6 +39,7 @@
 		position9: PositionControl,
 		"font-style": FontStyleControl,
 		plate: PlateControl,
+		gradient: GradientControl,
 	};
 
 	interface Props {
