@@ -24,8 +24,14 @@
 > раскладка `schema.layout` реализована** (шаг 32): тип `ToolSchemaLayout`
 > {groups: [{title?, cols?, fields}]}, рендер групп в `SchemaFields.svelte`
 > (заголовок группы + сетка колонок, неупомянутые поля — в общей группе),
-> пилот — `add-text` (группы Text/Placement/Plate).
-> Следующее: шаг 33 — UI-макет каждого переведённого инструмента (ревью по одному).
+> пилот — `add-text` (группы Text/Placement/Plate). **UI-макеты расставлены
+> по переведённым инструментам** (шаг 33): geometry (fit-on-background,
+> change-canvas-size, resize, crop), маски alpha (Shape/Position), generate
+> (create-empty, linear-gradient, color-spectrum, random-colors, draw-grid,
+> step-colors, placeholder, text-to-png), text (add-text, date-stamp),
+> filters (randomize-pixels, add-noise) — везде, где канвас отделён от
+> параметров эффекта либо фигура от позиции.
+> Следующее: шаг 34 — поглощение `tool-views.ts` (Фаза 5, зачистка).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -422,7 +428,21 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
     неупомянутые поля — в общей группе в конце, без заголовка). Пилот —
     `add-text-png` (Text: text+style; Placement: position+margin; Plate).
     Тесты: schema-layout в registry-schema.test.ts; полные запуски чисты.
-33. Для каждого переведённого инструмента — UI-макет, принимается отдельно.
+33. Для каждого переведённого инструмента — UI-макет **расставлен** ✔.
+    Layout-группы заданы там, где группировка содержательна (канвас отдельно
+    от параметров эффекта, фигура отдельно от позиции; составные виджеты —
+    внутри групп целиком):
+    - geometry: fit-on-background (Canvas/Background), change-canvas-size
+      (Canvas/Anchor), resize (Canvas/Scaling), crop (Offset/Crop area);
+    - alpha-маски: circle/square/star/wavy (Shape — с 2 колонками где плотно,
+      Position — offset);
+    - generate: create-empty (Canvas/Fill), linear-gradient (Canvas/Colors),
+      color-spectrum (Canvas/Spectrum), random-colors (Canvas/Random),
+      draw-grid (Canvas/Grid), step-colors (Colors/Output), placeholder
+      (Canvas/Colors/Text), text-to-png (Text/Background/Padding);
+    - text: add-text, date-stamp (Text/Placement/Plate);
+    - filters: randomize-pixels (Blocks), add-noise (Noise/Seed).
+    Инструменты с 1–3 простыми полями остались без layout (одна общая группа).
 
 ### Фаза 5 — зачистка
 

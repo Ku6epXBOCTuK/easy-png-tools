@@ -43,11 +43,21 @@ interface FitOnBackgroundParams {
 	color: string;
 }
 
-export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>({
-	size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-	transparent: field.checkbox({ default: false }),
-	color: field.color({ default: "#ffffff" }),
-});
+export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>(
+	{
+		size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
+		transparent: field.checkbox({ default: false }),
+		color: field.color({ default: "#ffffff" }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{ title: "Background", fields: ["transparent", "color"] },
+			],
+		},
+	},
+);
 
 const fitOnBackground: ToolEntry<FitOnBackgroundParams> = {
 	id: "fit-on-background-png",
@@ -80,23 +90,33 @@ interface ChangeCanvasSizeParams {
 	anchor: Anchor9;
 }
 
-export const changeCanvasSizeSchema = toolSchema<ChangeCanvasSizeParams>({
-	size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-	anchor: field.select({
-		default: "center",
-		options: [
-			{ value: "top-left", label: "Top left" },
-			{ value: "top-center", label: "Top center" },
-			{ value: "top-right", label: "Top right" },
-			{ value: "middle-left", label: "Middle left" },
-			{ value: "center", label: "Center" },
-			{ value: "middle-right", label: "Middle right" },
-			{ value: "bottom-left", label: "Bottom left" },
-			{ value: "bottom-center", label: "Bottom center" },
-			{ value: "bottom-right", label: "Bottom right" },
-		],
-	}),
-});
+export const changeCanvasSizeSchema = toolSchema<ChangeCanvasSizeParams>(
+	{
+		size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
+		anchor: field.select({
+			default: "center",
+			options: [
+				{ value: "top-left", label: "Top left" },
+				{ value: "top-center", label: "Top center" },
+				{ value: "top-right", label: "Top right" },
+				{ value: "middle-left", label: "Middle left" },
+				{ value: "center", label: "Center" },
+				{ value: "middle-right", label: "Middle right" },
+				{ value: "bottom-left", label: "Bottom left" },
+				{ value: "bottom-center", label: "Bottom center" },
+				{ value: "bottom-right", label: "Bottom right" },
+			],
+		}),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{ title: "Anchor", fields: ["anchor"] },
+			],
+		},
+	},
+);
 
 const changeCanvasSizeTool: ToolEntry<ChangeCanvasSizeParams> = {
 	id: "change-canvas-size-png",
@@ -119,10 +139,20 @@ interface ResizeParams {
 	keepAspect: boolean;
 }
 
-export const resizeSchema = toolSchema<ResizeParams>({
-	size: field.dimension({ min: 0, max: 20000, width: 0, height: 0 }),
-	keepAspect: field.checkbox({ default: true }),
-});
+export const resizeSchema = toolSchema<ResizeParams>(
+	{
+		size: field.dimension({ min: 0, max: 20000, width: 0, height: 0 }),
+		keepAspect: field.checkbox({ default: true }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{ title: "Scaling", fields: ["keepAspect"] },
+			],
+		},
+	},
+);
 
 const resizeTool: ToolEntry<ResizeParams> = {
 	id: "resize-png",
@@ -159,11 +189,21 @@ interface CropParams {
 	size: Dimension;
 }
 
-export const cropSchema = toolSchema<CropParams>({
-	x: field.number({ min: -100000, max: 100000, step: 1, default: 0 }),
-	y: field.number({ min: -100000, max: 100000, step: 1, default: 0 }),
-	size: field.dimension({ min: 0, max: 100000, width: 0, height: 0 }),
-});
+export const cropSchema = toolSchema<CropParams>(
+	{
+		x: field.number({ min: -100000, max: 100000, step: 1, default: 0 }),
+		y: field.number({ min: -100000, max: 100000, step: 1, default: 0 }),
+		size: field.dimension({ min: 0, max: 100000, width: 0, height: 0 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Offset", fields: ["x", "y"] },
+				{ title: "Crop area", fields: ["size"] },
+			],
+		},
+	},
+);
 
 const cropTool: ToolEntry<CropParams> = {
 	id: "crop-png",

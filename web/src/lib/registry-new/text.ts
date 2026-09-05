@@ -70,23 +70,34 @@ interface DateStampParams {
 	plate: Plate;
 }
 
-const dateStampSchema = toolSchema<DateStampParams>({
-	format: field.text({
-		default: "YYYY-MM-DD",
-		placeholder: "YYYY-MM-DD hh:mm",
-	}),
-	style: field.fontStyle({
-		min: 8,
-		max: 200,
-		size: 32,
-		font: "mono",
-		bold: false,
-		color: "#ffffff",
-	}),
-	position: field.position9({ default: "bottom-right" }),
-	margin: field.slider({ min: 0, max: 200, step: 1, default: 20 }),
-	plate: field.plate({ enabled: true, color: "#000000", opacity: 55 }),
-});
+const dateStampSchema = toolSchema<DateStampParams>(
+	{
+		format: field.text({
+			default: "YYYY-MM-DD",
+			placeholder: "YYYY-MM-DD hh:mm",
+		}),
+		style: field.fontStyle({
+			min: 8,
+			max: 200,
+			size: 32,
+			font: "mono",
+			bold: false,
+			color: "#ffffff",
+		}),
+		position: field.position9({ default: "bottom-right" }),
+		margin: field.slider({ min: 0, max: 200, step: 1, default: 20 }),
+		plate: field.plate({ enabled: true, color: "#000000", opacity: 55 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Text", fields: ["format", "style"] },
+				{ title: "Placement", fields: ["position", "margin"] },
+				{ title: "Plate", fields: ["plate"] },
+			],
+		},
+	},
+);
 
 const dateStamp: ToolEntry<DateStampParams> = {
 	id: "date-stamp-png",

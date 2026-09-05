@@ -77,10 +77,20 @@ interface CircleMaskParams {
 	offset: Offset;
 }
 
-const circleMaskSchema = toolSchema<CircleMaskParams>({
-	size: field.slider({ min: 20, max: 100, step: 1, default: 100 }),
-	offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
-});
+const circleMaskSchema = toolSchema<CircleMaskParams>(
+	{
+		size: field.slider({ min: 20, max: 100, step: 1, default: 100 }),
+		offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Shape", fields: ["size"] },
+				{ title: "Position", fields: ["offset"] },
+			],
+		},
+	},
+);
 
 const circleMask: ToolEntry<CircleMaskParams> = {
 	id: "circle-mask-png",
@@ -104,11 +114,25 @@ interface SquareMaskParams {
 	offset: Offset;
 }
 
-const squareMaskSchema = toolSchema<SquareMaskParams>({
-	widthPct: field.slider({ min: 10, max: 100, step: 1, default: 100 }),
-	heightPct: field.slider({ min: 10, max: 100, step: 1, default: 100 }),
-	offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
-});
+const squareMaskSchema = toolSchema<SquareMaskParams>(
+	{
+		widthPct: field.slider({ min: 10, max: 100, step: 1, default: 100 }),
+		heightPct: field.slider({ min: 10, max: 100, step: 1, default: 100 }),
+		offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
+	},
+	{
+		layout: {
+			groups: [
+				{
+					title: "Shape",
+					cols: 2,
+					fields: ["widthPct", "heightPct"],
+				},
+				{ title: "Position", fields: ["offset"] },
+			],
+		},
+	},
+);
 
 const squareMask: ToolEntry<SquareMaskParams> = {
 	id: "square-mask-png",
@@ -134,13 +158,27 @@ interface StarMaskParams {
 	offset: Offset;
 }
 
-const starMaskSchema = toolSchema<StarMaskParams>({
-	points: field.slider({ min: 3, max: 12, step: 1, default: 5 }),
-	innerRadius: field.slider({ min: 10, max: 90, step: 1, default: 45 }),
-	size: field.slider({ min: 20, max: 100, step: 1, default: 100 }),
-	rotation: field.slider({ min: -180, max: 180, step: 1, default: 0 }),
-	offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
-});
+const starMaskSchema = toolSchema<StarMaskParams>(
+	{
+		points: field.slider({ min: 3, max: 12, step: 1, default: 5 }),
+		innerRadius: field.slider({ min: 10, max: 90, step: 1, default: 45 }),
+		size: field.slider({ min: 20, max: 100, step: 1, default: 100 }),
+		rotation: field.slider({ min: -180, max: 180, step: 1, default: 0 }),
+		offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
+	},
+	{
+		layout: {
+			groups: [
+				{
+					title: "Shape",
+					cols: 2,
+					fields: ["points", "innerRadius", "size", "rotation"],
+				},
+				{ title: "Position", fields: ["offset"] },
+			],
+		},
+	},
+);
 
 const starMask: ToolEntry<StarMaskParams> = {
 	id: "star-mask-png",
@@ -166,13 +204,27 @@ interface WavyMaskParams {
 	offset: Offset;
 }
 
-const wavyMaskSchema = toolSchema<WavyMaskParams>({
-	size: field.slider({ min: 20, max: 100, step: 1, default: 90 }),
-	amplitude: field.slider({ min: 2, max: 30, step: 1, default: 8 }),
-	waves: field.slider({ min: 3, max: 24, step: 1, default: 8 }),
-	phase: field.slider({ min: 0, max: 360, step: 1, default: 0 }),
-	offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
-});
+const wavyMaskSchema = toolSchema<WavyMaskParams>(
+	{
+		size: field.slider({ min: 20, max: 100, step: 1, default: 90 }),
+		amplitude: field.slider({ min: 2, max: 30, step: 1, default: 8 }),
+		waves: field.slider({ min: 3, max: 24, step: 1, default: 8 }),
+		phase: field.slider({ min: 0, max: 360, step: 1, default: 0 }),
+		offset: field.offset({ min: -50, max: 50, x: 0, y: 0 }),
+	},
+	{
+		layout: {
+			groups: [
+				{
+					title: "Shape",
+					cols: 2,
+					fields: ["size", "amplitude", "waves", "phase"],
+				},
+				{ title: "Position", fields: ["offset"] },
+			],
+		},
+	},
+);
 
 const wavyMask: ToolEntry<WavyMaskParams> = {
 	id: "wavy-mask-png",

@@ -45,10 +45,17 @@ interface RandomizePixelsParams {
 	seed: number;
 }
 
-export const randomizePixelsSchema = toolSchema<RandomizePixelsParams>({
-	blockSize: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
-	seed: field.number({ min: 0, max: 999999, step: 1, default: 42 }),
-});
+export const randomizePixelsSchema = toolSchema<RandomizePixelsParams>(
+	{
+		blockSize: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
+		seed: field.number({ min: 0, max: 999999, step: 1, default: 42 }),
+	},
+	{
+		layout: {
+			groups: [{ title: "Blocks", cols: 2, fields: ["blockSize", "seed"] }],
+		},
+	},
+);
 
 const randomizePixels: ToolEntry<RandomizePixelsParams> = {
 	id: "randomize-pixels-png",
@@ -66,17 +73,27 @@ interface AddNoiseParams {
 	seed: number;
 }
 
-export const addNoiseSchema = toolSchema<AddNoiseParams>({
-	amount: field.slider({ min: 0, max: 100, step: 1, default: 25 }),
-	mode: field.select({
-		default: "mono",
-		options: [
-			{ value: "mono", label: "Monochrome grain" },
-			{ value: "color", label: "Color noise" },
-		],
-	}),
-	seed: field.number({ min: 0, max: 999999, step: 1, default: 1234 }),
-});
+export const addNoiseSchema = toolSchema<AddNoiseParams>(
+	{
+		amount: field.slider({ min: 0, max: 100, step: 1, default: 25 }),
+		mode: field.select({
+			default: "mono",
+			options: [
+				{ value: "mono", label: "Monochrome grain" },
+				{ value: "color", label: "Color noise" },
+			],
+		}),
+		seed: field.number({ min: 0, max: 999999, step: 1, default: 1234 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Noise", cols: 2, fields: ["amount", "mode"] },
+				{ title: "Seed", fields: ["seed"] },
+			],
+		},
+	},
+);
 
 const addNoiseTool: ToolEntry<AddNoiseParams> = {
 	id: "add-noise-png",

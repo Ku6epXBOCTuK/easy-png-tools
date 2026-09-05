@@ -69,11 +69,21 @@ interface CreateEmptyParams {
 	color: string;
 }
 
-export const createEmptySchema = toolSchema<CreateEmptyParams>({
-	size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-	transparent: field.checkbox({ default: true }),
-	color: field.color({ default: "#ffffff" }),
-});
+export const createEmptySchema = toolSchema<CreateEmptyParams>(
+	{
+		size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
+		transparent: field.checkbox({ default: true }),
+		color: field.color({ default: "#ffffff" }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{ title: "Fill", fields: ["transparent", "color"] },
+			],
+		},
+	},
+);
 
 const createEmpty: ToolEntry<CreateEmptyParams> = {
 	id: "create-empty-png",
@@ -144,10 +154,20 @@ interface LinearGradientParams {
 	gradient: Gradient;
 }
 
-export const linearGradientSchema = toolSchema<LinearGradientParams>({
-	size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-	gradient: field.gradient({ from: "#000000", to: "#ffffff", angle: 0 }),
-});
+export const linearGradientSchema = toolSchema<LinearGradientParams>(
+	{
+		size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
+		gradient: field.gradient({ from: "#000000", to: "#ffffff", angle: 0 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{ title: "Colors", fields: ["gradient"] },
+			],
+		},
+	},
+);
 
 const linearGradient: ToolEntry<LinearGradientParams> = {
 	id: "linear-gradient-png",
@@ -176,18 +196,28 @@ interface ColorSpectrumParams {
 	lightness: number;
 }
 
-export const colorSpectrumSchema = toolSchema<ColorSpectrumParams>({
-	size: field.dimension({ min: 1, max: 5000, width: 1024, height: 128 }),
-	direction: field.select({
-		default: "horizontal",
-		options: [
-			{ value: "horizontal", label: "Horizontal" },
-			{ value: "vertical", label: "Vertical" },
-		],
-	}),
-	saturation: field.slider({ min: 0, max: 100, step: 1, default: 100 }),
-	lightness: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
-});
+export const colorSpectrumSchema = toolSchema<ColorSpectrumParams>(
+	{
+		size: field.dimension({ min: 1, max: 5000, width: 1024, height: 128 }),
+		direction: field.select({
+			default: "horizontal",
+			options: [
+				{ value: "horizontal", label: "Horizontal" },
+				{ value: "vertical", label: "Vertical" },
+			],
+		}),
+		saturation: field.slider({ min: 0, max: 100, step: 1, default: 100 }),
+		lightness: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{ title: "Spectrum", fields: ["direction", "saturation", "lightness"] },
+			],
+		},
+	},
+);
 
 const colorSpectrumTool: ToolEntry<ColorSpectrumParams> = {
 	id: "color-spectrum-png",
@@ -209,11 +239,21 @@ interface RandomColorsParams {
 	seed: number;
 }
 
-export const randomColorsSchema = toolSchema<RandomColorsParams>({
-	size: field.dimension({ min: 1, max: 5000, width: 512, height: 512 }),
-	blockSize: field.slider({ min: 4, max: 256, step: 2, default: 64 }),
-	seed: field.number({ min: 0, max: 999999999, step: 1, default: 7 }),
-});
+export const randomColorsSchema = toolSchema<RandomColorsParams>(
+	{
+		size: field.dimension({ min: 1, max: 5000, width: 512, height: 512 }),
+		blockSize: field.slider({ min: 4, max: 256, step: 2, default: 64 }),
+		seed: field.number({ min: 0, max: 999999999, step: 1, default: 7 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{ title: "Random", cols: 2, fields: ["blockSize", "seed"] },
+			],
+		},
+	},
+);
 
 const randomColors: ToolEntry<RandomColorsParams> = {
 	id: "random-colors-png",
@@ -238,14 +278,28 @@ interface DrawGridParams {
 	transparentBg: boolean;
 }
 
-export const drawGridSchema = toolSchema<DrawGridParams>({
-	size: field.dimension({ min: 1, max: 5000, width: 512, height: 512 }),
-	cols: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
-	rows: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
-	lineWidth: field.slider({ min: 1, max: 40, step: 1, default: 2 }),
-	color: field.color({ default: "#111318" }),
-	transparentBg: field.checkbox({ default: true }),
-});
+export const drawGridSchema = toolSchema<DrawGridParams>(
+	{
+		size: field.dimension({ min: 1, max: 5000, width: 512, height: 512 }),
+		cols: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
+		rows: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
+		lineWidth: field.slider({ min: 1, max: 40, step: 1, default: 2 }),
+		color: field.color({ default: "#111318" }),
+		transparentBg: field.checkbox({ default: true }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{
+					title: "Grid",
+					cols: 2,
+					fields: ["cols", "rows", "lineWidth", "color", "transparentBg"],
+				},
+			],
+		},
+	},
+);
 
 const drawGridTool: ToolEntry<DrawGridParams> = {
 	id: "draw-grid-png",
@@ -276,12 +330,23 @@ interface PlaceholderParams {
 	showText: boolean;
 }
 
-export const placeholderSchema = toolSchema<PlaceholderParams>({
-	size: field.dimension({ min: 1, max: 5000, width: 800, height: 400 }),
-	backgroundColor: field.color({ default: "#dfe2e8" }),
-	color: field.color({ default: "#5c6470" }),
-	showText: field.checkbox({ default: true }),
-});
+export const placeholderSchema = toolSchema<PlaceholderParams>(
+	{
+		size: field.dimension({ min: 1, max: 5000, width: 800, height: 400 }),
+		backgroundColor: field.color({ default: "#dfe2e8" }),
+		color: field.color({ default: "#5c6470" }),
+		showText: field.checkbox({ default: true }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Canvas", fields: ["size"] },
+				{ title: "Colors", cols: 2, fields: ["backgroundColor", "color"] },
+				{ title: "Text", fields: ["showText"] },
+			],
+		},
+	},
+);
 
 const placeholder: ToolEntry<PlaceholderParams> = {
 	id: "placeholder-png",
@@ -337,18 +402,28 @@ interface StepColorsParams {
 	layout: "strip" | "grid";
 }
 
-export const stepColorsSchema = toolSchema<StepColorsParams>({
-	pair: field.colorPair({ from: "#000000", to: "#ffffff" }),
-	steps: field.slider({ min: 2, max: 12, step: 1, default: 6 }),
-	width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
-	layout: field.select({
-		default: "grid",
-		options: [
-			{ value: "grid", label: "Grid" },
-			{ value: "strip", label: "Strip" },
-		],
-	}),
-});
+export const stepColorsSchema = toolSchema<StepColorsParams>(
+	{
+		pair: field.colorPair({ from: "#000000", to: "#ffffff" }),
+		steps: field.slider({ min: 2, max: 12, step: 1, default: 6 }),
+		width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+		layout: field.select({
+			default: "grid",
+			options: [
+				{ value: "grid", label: "Grid" },
+				{ value: "strip", label: "Strip" },
+			],
+		}),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Colors", fields: ["pair"] },
+				{ title: "Output", cols: 2, fields: ["steps", "width", "layout"] },
+			],
+		},
+	},
+);
 
 const stepColorsTool: ToolEntry<StepColorsParams> = {
 	id: "step-colors-png",
@@ -372,20 +447,31 @@ interface TextToPngParams {
 	padding: number;
 }
 
-export const textToPngSchema = toolSchema<TextToPngParams>({
-	text: field.text({ default: "Hello!", placeholder: "Your text" }),
-	style: field.fontStyle({
-		min: 8,
-		max: 300,
-		size: 96,
-		font: "sans",
-		bold: true,
-		color: "#111318",
-	}),
-	transparentBg: field.checkbox({ default: false }),
-	backgroundColor: field.color({ default: "#ffffff" }),
-	padding: field.slider({ min: 0, max: 200, step: 2, default: 24 }),
-});
+export const textToPngSchema = toolSchema<TextToPngParams>(
+	{
+		text: field.text({ default: "Hello!", placeholder: "Your text" }),
+		style: field.fontStyle({
+			min: 8,
+			max: 300,
+			size: 96,
+			font: "sans",
+			bold: true,
+			color: "#111318",
+		}),
+		transparentBg: field.checkbox({ default: false }),
+		backgroundColor: field.color({ default: "#ffffff" }),
+		padding: field.slider({ min: 0, max: 200, step: 2, default: 24 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Text", fields: ["text", "style"] },
+				{ title: "Background", fields: ["transparentBg", "backgroundColor"] },
+				{ title: "Padding", fields: ["padding"] },
+			],
+		},
+	},
+);
 
 const textToPng: ToolEntry<TextToPngParams> = {
 	id: "text-to-png",
