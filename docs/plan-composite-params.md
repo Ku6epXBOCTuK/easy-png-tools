@@ -31,8 +31,10 @@
 > step-colors, placeholder, text-to-png), text (add-text, date-stamp),
 > filters (randomize-pixels, add-noise) — везде, где канвас отделён от
 > параметров эффекта либо фигура от позиции.
-> Следующее: шаг 37 — перенос всех старых компонентов/библиотек в папки `old/`
-> (линтер-изоляция уже на месте, переезд — просто дописывание glob-паттерна).
+> Следующее см. в `plan-migrate-remaining.md`: дожать перевод оставшихся
+> 85 инструментов в preview, закрыть известные долги, переезд в папки `old/`
+> (шаг 37, линтер-изоляция уже на месте) и последующая проверка в реальных
+> условиях с фидбеком.
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
