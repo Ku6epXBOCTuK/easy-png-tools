@@ -49,8 +49,29 @@ export interface CheckboxSpec {
 	default: boolean;
 }
 
+/** Составное поле «размеры»: width + height как один объект. */
+export interface Dimension {
+	width: number;
+	height: number;
+}
+
+export interface DimensionSpec {
+	kind: "dimension";
+	/** Общий диапазон для обоих измерений. */
+	min: number;
+	max: number;
+	width: number;
+	height: number;
+}
+
 export type FieldSpec =
-	NumberSpec | SliderSpec | ColorSpec | SelectSpec | TextSpec | CheckboxSpec;
+	| NumberSpec
+	| SliderSpec
+	| ColorSpec
+	| SelectSpec
+	| TextSpec
+	| CheckboxSpec
+	| DimensionSpec;
 
 /** `Field<T>`: runtime-спека поля + phantom-тип ожидаемого значения (number|string|boolean). */
 export interface Field<T> {
@@ -91,6 +112,9 @@ export const field = {
 	checkbox: (s: Omit<CheckboxSpec, "kind">): Field<boolean> => ({
 		spec: { kind: "checkbox", ...s },
 	}),
+	dimension: (s: { min: number; max: number; width: number; height: number }): Field<Dimension> => ({
+		spec: { kind: "dimension", ...s },
+	}),
 };
 
 /**
@@ -116,7 +140,12 @@ export function defaultSchemaParams<P>(
 ): Record<keyof P, unknown> {
 	const out = {} as Record<keyof P, unknown>;
 	for (const key of Object.keys(schema.fields) as (keyof P)[]) {
-		out[key] = schema.fields[key].spec.default;
+		const spec = schema.fields[key].spec;
+		if (spec.kind === "dimension") {
+			out[key] = { width: spec.width, height: spec.height };
+		} else {
+			out[key] = spec.default;
+		}
 	}
 	return out;
 }
@@ -156,6 +185,28 @@ export function sanitizeSchemaParams<P>(
 			case "text":
 				out[key] = typeof raw === "string" ? raw : spec.default;
 				break;
+			case "dimension": {
+				const r =
+					typeof raw === "object" &&
+					raw !== null &&
+					"width" in raw &&
+					"height" in raw
+						? (raw as Record<string, unknown>)
+						: undefined;
+				const w =
+					typeof r?.width === "number" && Number.isFinite(r.width)
+						? r.width
+						: spec.width;
+				const h =
+					typeof r?.height === "number" && Number.isFinite(r.height)
+						? r.height
+						: spec.height;
+				out[key] = {
+					width: clamp(w, spec.min, spec.max),
+					height: clamp(h, spec.min, spec.max),
+				};
+				break;
+			}
 		}
 	}
 	return out;

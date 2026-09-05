@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { RotateCcw } from "@lucide/svelte";
-	import type { ToolSchema } from "$lib/registry-schema";
+	import type { ToolSchema, Dimension } from "$lib/registry-schema";
+	import DimensionField from "./fields/DimensionField.svelte";
 
 	interface Props {
 		schema: ToolSchema<Record<string, unknown>>;
@@ -50,6 +51,15 @@
 				/>
 			</span>
 		</label>
+	{:else if field.spec.kind === "dimension"}
+		<div class="control">
+			<DimensionField
+				label={labelOf(id)}
+				value={(values[id] as Dimension) ?? { width: field.spec.width, height: field.spec.height }}
+				spec={field.spec}
+				oninput={(v) => onchange(id, v)}
+			/>
+		</div>
 	{/if}
 {/each}
 

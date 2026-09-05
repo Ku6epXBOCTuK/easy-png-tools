@@ -4,7 +4,7 @@
 	import { debounce } from "$lib/core/debounce";
 	import { decodeFile, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import { executeStep } from "$lib/preview/executor";
+	import { executeGenerate, executeStep } from "$lib/preview/executor";
 	import type { ToolEntry } from "$lib/registry-new";
 	import {
 		defaultSchemaParams,
@@ -20,6 +20,8 @@
 	const schema = $derived(
 		tool.schema as ToolSchema<Record<string, unknown>> | undefined,
 	);
+
+	const isGenerator = $derived(Boolean(tool.generate && !tool.run));
 
 	let values = $state<Record<string, unknown>>({});
 	let source = $state<PixelImage | null>(null);
@@ -56,12 +58,32 @@
 	}
 
 	async function run() {
-		if (!schema || !tool.run || !source) return;
+		if (!schema) return;
+		if (isGenerator) {
+			if (!tool.generate) return;
+			await runGenerate();
+			return;
+		}
+		if (!source) return;
+		error = "";
+		running = true;
+		const params = sanitizeSchemaParams(schema, values);
+		try {
+			result = await executeStep(tool, source, params);
+		} catch (e) {
+			error = errorText(e);
+		} finally {
+			running = false;
+		}
+	}
+
+	async function runGenerate() {
+		if (!schema || !tool.generate) return;
 		running = true;
 		error = "";
 		const params = sanitizeSchemaParams(schema, values);
 		try {
-			result = await executeStep(tool, source, params);
+			result = await executeGenerate(tool, params);
 		} catch (e) {
 			error = errorText(e);
 		} finally {
@@ -85,7 +107,7 @@
 	});
 
 	$effect(() => {
-		if (!source || !started) return;
+		if (isGenerator || !source || !started) return;
 		void values;
 		debouncedRun();
 		return () => debouncedRun.cancel();
@@ -122,7 +144,9 @@
 					{result}
 					{running}
 					{error}
+					{isGenerator}
 					onupload={handleFile}
+					ongenerate={runGenerate}
 					ondownload={download}
 				/>
 			</section>

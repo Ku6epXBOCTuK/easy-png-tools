@@ -13,7 +13,8 @@ export type ToolEntry<P = Record<string, unknown>> = {
 	description: string;
 	category: CategoryId;
 	schema: ToolSchema<P>;
-	run(img: PixelImage, params: P): Promise<PixelImage> | PixelImage;
+	/** Применение к входному изображению. Для чистых генераторов отсутствует. */
+	run?(img: PixelImage, params: P): Promise<PixelImage> | PixelImage;
 	generate?(params: P): Promise<PixelImage> | PixelImage;
 	toText?(img: PixelImage, params: P): Promise<string> | string;
 	runFromText?(text: string, params: P): Promise<PixelImage> | PixelImage;

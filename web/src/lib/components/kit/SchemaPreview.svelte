@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check, Upload } from "@lucide/svelte";
+	import { Check, Sparkles, Upload } from "@lucide/svelte";
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
@@ -10,10 +10,12 @@
 		result: PixelImage | null;
 		running: boolean;
 		error: string;
+		isGenerator?: boolean;
 		onupload: (file: File) => void;
+		ongenerate?: () => void;
 		ondownload: () => void;
 	}
-	let { source, result, running, error, onupload, ondownload }: Props =
+	let { source, result, running, error, isGenerator = false, onupload, ongenerate, ondownload }: Props =
 		$props();
 
 	let sourceUrl = $derived(source ? toDataUrl(source) : null);
@@ -21,19 +23,29 @@
 </script>
 
 <div class="panel-head">
-	<span class="label">SOURCE / RESULT</span>
+	<span class="label">{isGenerator ? "GENERATOR / RESULT" : "SOURCE / RESULT"}</span>
 	<div class="head-actions">
-		<label class="upload">
-			<Upload size={14} /> Open image
-			<input
-				type="file"
-				accept="image/*"
-				onchange={(e) => {
-					const f = (e.target as HTMLInputElement).files?.[0];
-					if (f) onupload(f);
-				}}
-			/>
-		</label>
+		{#if isGenerator}
+			<button
+				class="upload generate-btn"
+				onclick={ongenerate}
+				disabled={running}
+			>
+				<Sparkles size={14} /> {running ? "Generating…" : "Generate"}
+			</button>
+		{:else}
+			<label class="upload">
+				<Upload size={14} /> Open image
+				<input
+					type="file"
+					accept="image/*"
+					onchange={(e) => {
+						const f = (e.target as HTMLInputElement).files?.[0];
+						if (f) onupload(f);
+					}}
+				/>
+			</label>
+		{/if}
 		<DownloadButton label="Download result" onclick={ondownload} />
 	</div>
 </div>
@@ -43,17 +55,19 @@
 {/if}
 
 <div class="pair">
-	<figure class="tile">
-		<figcaption><span>SOURCE</span></figcaption>
-		<div class="canvas">
-			{#if sourceUrl}
-				<img src={sourceUrl} alt="source" />
-			{:else}
-				<span class="empty">choose an image</span>
-			{/if}
-		</div>
-	</figure>
-	<figure class="tile">
+	{#if !isGenerator}
+		<figure class="tile">
+			<figcaption><span>SOURCE</span></figcaption>
+			<div class="canvas">
+				{#if sourceUrl}
+					<img src={sourceUrl} alt="source" />
+				{:else}
+					<span class="empty">choose an image</span>
+				{/if}
+			</div>
+		</figure>
+	{/if}
+	<figure class="tile" class:full={isGenerator}>
 		<figcaption><span>RESULT {running ? "…" : ""}</span></figcaption>
 		<div class="canvas checker">
 			{#if resultUrl}
@@ -61,7 +75,7 @@
 			{:else if running}
 				<Check size={22} />
 			{:else}
-				<span class="empty">no result yet</span>
+				<span class="empty">{isGenerator ? "click Generate" : "no result yet"}</span>
 			{/if}
 		</div>
 	</figure>
@@ -115,6 +129,15 @@
 		color: var(--color-text-muted);
 		cursor: pointer;
 	}
+	.generate-btn {
+		background: var(--color-main);
+		border-color: var(--color-main);
+		color: white;
+	}
+	.generate-btn:disabled {
+		opacity: 0.6;
+		cursor: default;
+	}
 	.upload input {
 		display: none;
 	}
@@ -127,6 +150,9 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: var(--space-l);
+	}
+	.pair > .full {
+		grid-column: 1 / -1;
 	}
 	.tile figcaption {
 		display: flex;

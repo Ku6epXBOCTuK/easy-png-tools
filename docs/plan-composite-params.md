@@ -2,16 +2,18 @@
 
 > Статус: **в реализации.** Фаза 0 (фундамент) ✔, Фаза 1 (рабочий инструмент
 > в preview) ✔, Фаза 2 (простые инструменты без составных типов) — переведены
-> все одиночные инструменты (18 шт): `add-border-png`, `add-stroke-png`,
-> `find-contour-png` и весь блок 8-22 (convert/noise/pixelate/color/filters...).
-> Новый registry `web/src/lib/registry-new/` разбит по категориям
-> (`geometry`, `alpha`, `convert`, `analyze`, `filters`, `color`), preview
-> переключён на него. Следующее: Фаза 3 — инструменты с составными типами.
+> все одиночные инструменты (18 шт). Фаза 3 — **начата**: введён составной тип
+> `dimension` (вложенный объект в Params + `field.dimension`, новый kind в
+> `registry-schema` + мерge `DimensionField` в UI), переведён пилот
+> `create-empty-png`; preview научен применять **генераторы** (`executeGenerate`,
+> кнопка Generate вместо загрузки файла). Следующее: перевести остальные
+> dimension-инструменты (single-color → random-noise → ...).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию) + `web/src/lib/preview/categories.ts`,
-> `web/src/lib/registry-schema.ts`. Старый `web/src/lib/registry.ts` разбит по
-> категориям в `web/src/lib/registry/` (см. `registry.ts` — тонкий баррель).
+> `web/src/lib/registry-schema.ts` (kind `dimension`), `kit/fields/DimensionField.svelte`,
+> `preview/executor/index.ts` (`executeGenerate`). Старый `web/src/lib/registry.ts`
+> разбит по категориям в `web/src/lib/registry/` (см. `registry.ts` — тонкий баррель).
 
 ## Ключевая стратегия: параллельная сборка, старый UI не трогаем
 
@@ -328,9 +330,13 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
 
 ### Фаза 3 — инструменты с составными типами (по типу, затем по инструментам)
 
-24. `dimension` — ввести составной тип + перевести **один** пилот
-    (create-empty-png), ревью, затем остальные 11 по 1:
-    create-empty → single-color → random-noise → fit-on-background →
+24. `dimension` — составной тип введён ✔ (`field.dimension` + kind `dimension`
+    в `registry-schema`, вложенный объект `size: { width, height }` в Params,
+    виджет `kit/fields/DimensionField.svelte`).
+    Пилот `create-empty-png` переведён ✔; preview поддержал **генераторы**
+    (`preview/executor` + `executeGenerate`, кнопка Generate в `SchemaToolView`/
+    `SchemaPreview`, без входного файла).
+    Остальные по 1: single-color → random-noise → fit-on-background →
     change-canvas-size → placeholder → draw-grid → random-colors →
     color-spectrum → linear-gradient → resize → crop
 25. `color-pair` — пилот (blend-two-png), затем two-colors → step-colors →

@@ -5,6 +5,7 @@ import { convertEntries } from "./convert";
 import { analyzeEntries } from "./analyze";
 import { filtersEntries } from "./filters";
 import { colorEntries } from "./color";
+import { generateEntries } from "./generate";
 
 export type { ToolEntry } from "./types";
 
@@ -15,6 +16,7 @@ export const TOOLS: ToolEntry[] = [
 	...analyzeEntries,
 	...filtersEntries,
 	...colorEntries,
+	...generateEntries,
 ] as unknown as ToolEntry[];
 
 export function getTool(id: string): ToolEntry | undefined {

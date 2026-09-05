@@ -8,6 +8,9 @@ type MaybeRunnable = {
 		img: PixelImage,
 		params: Record<string, unknown>,
 	) => Promise<PixelImage> | PixelImage;
+	generate?: (
+		params: Record<string, unknown>,
+	) => Promise<PixelImage> | PixelImage;
 };
 
 export async function executeStep(
@@ -35,6 +38,21 @@ export async function executeStep(
 		void workerError;
 		return await runDirect(tool, img, params);
 	}
+}
+
+/**
+ * Применение инструмента-генератора (без входного изображения).
+ * Выполняется напрямую: worker-протокол рассчитан на передачу исходника,
+ * а генераторам вход не нужен.
+ */
+export async function executeGenerate(
+	tool: MaybeRunnable,
+	params: Record<string, unknown>,
+): Promise<PixelImage> {
+	if (!tool.generate) {
+		throw new Error("errors.noGenerate");
+	}
+	return await tool.generate(params);
 }
 
 async function runDirect(
