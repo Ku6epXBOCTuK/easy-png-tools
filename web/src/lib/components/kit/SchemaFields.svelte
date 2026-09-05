@@ -15,6 +15,7 @@
 	import TextControl from "./fields/schema/TextControl.svelte";
 	import OffsetControl from "./fields/schema/OffsetControl.svelte";
 	import PositionControl from "./fields/schema/PositionControl.svelte";
+	import FontStyleControl from "./fields/schema/FontStyleControl.svelte";
 
 	interface FieldControlProps {
 		label: string;
@@ -34,6 +35,7 @@
 		dimension: DimensionField,
 		offset: OffsetControl,
 		position9: PositionControl,
+		"font-style": FontStyleControl,
 	};
 
 	interface Props {

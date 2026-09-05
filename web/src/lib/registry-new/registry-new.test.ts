@@ -305,22 +305,30 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(s.offset).toEqual({ x: 50, y: 0 });
 	});
 
-	it("add-text: дефолты position9 и текстовых полей", () => {
+	it("add-text: дефолты position9, font-style и текстовых полей", () => {
 		const tool = TOOLS.find((t) => t.id === "add-text-png")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.position).toBe("bottom-right");
 		expect(d.text).toBe("Hello!");
 		expect(d.plate).toBe(false);
+		expect(d.style).toEqual({
+			font: "sans",
+			size: 48,
+			bold: true,
+			color: "#ffffff",
+		});
 	});
 
-	it("sanitize чинит мусор в position9 и оставляет валидные значения", () => {
+	it("sanitize чинит мусор в position9, font-style и оставляет валидные значения", () => {
 		const tool = TOOLS.find((t) => t.id === "date-stamp-png")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			format: "YYYY-MM-DD",
-			fontSize: 32,
-			color: "#ffffff",
-			font: "mono",
-			bold: "no" as unknown as boolean,
+			style: {
+				font: "comic-sans",
+				size: -500,
+				bold: "no",
+				color: "red",
+			},
 			position: "somewhere-outside",
 			margin: 20,
 			plate: true,
@@ -328,12 +336,46 @@ describe("registry-new (переведённые инструменты)", () =>
 			plateOpacity: 55,
 		});
 		expect(s.position).toBe("bottom-right");
-		expect(s.bold).toBe(false);
+		expect(s.style).toEqual({
+			font: "mono",
+			size: 8,
+			bold: false,
+			color: "#ffffff",
+		});
 		const valid = sanitizeSchemaParams(tool.schema, {
 			...defaultSchemaParams(tool.schema),
 			position: "top-center",
+			style: { font: "serif", size: 120, bold: true, color: "#00ff00" },
 		});
 		expect(valid.position).toBe("top-center");
+		expect(valid.style).toEqual({
+			font: "serif",
+			size: 120,
+			bold: true,
+			color: "#00ff00",
+		});
+	});
+
+	it("text-to-png: дефолты font-style и sanitize", () => {
+		const tool = TOOLS.find((t) => t.id === "text-to-png")!;
+		const d = defaultSchemaParams(tool.schema);
+		expect(d.style).toEqual({
+			font: "sans",
+			size: 96,
+			bold: true,
+			color: "#111318",
+		});
+		expect(d.transparentBg).toBe(false);
+		const s = sanitizeSchemaParams(tool.schema, {
+			style: { font: "sans", size: 9999, bold: false, color: "#123abc" },
+			padding: 200,
+		});
+		expect(s.style).toEqual({
+			font: "sans",
+			size: 300,
+			bold: false,
+			color: "#123abc",
+		});
 	});
 });
 

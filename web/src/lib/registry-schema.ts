@@ -12,6 +12,7 @@
 // Ошибки компилятора ловят расхождения между интерфейсом Params и схемой.
 
 import type { Position9 } from "./core/textdraw";
+import type { TextFont } from "./core/domText";
 
 export interface NumberSpec {
 	kind: "number";
@@ -115,6 +116,28 @@ export interface Position9Spec {
 }
 
 /**
+ * Стиль текстовой надписи: шрифт, размер, жирность и цвет как один объект
+ * (переиспользуется text-to-png, add-text, date-stamp).
+ */
+export interface FontStyle {
+	font: TextFont;
+	size: number;
+	bold: boolean;
+	color: string;
+}
+
+export interface FontStyleSpec {
+	kind: "font-style";
+	/** Диапазон размера шрифта. */
+	min: number;
+	max: number;
+	size: number;
+	font: TextFont;
+	bold: boolean;
+	color: string;
+}
+
+/**
  * «Объект as const» kind → спека поля. Единственный источник правды для
  * перечня kinds: `FieldSpecKind` = ключи map, `FieldSpec` = значение по любому
  * ключу (тот же union). Добавляем новый составной тип — добавляем сюда, и
@@ -131,6 +154,7 @@ export const fieldSpecs = {
 	"color-pair": {} as ColorPairSpec,
 	offset: {} as OffsetSpec,
 	position9: {} as Position9Spec,
+	"font-style": {} as FontStyleSpec,
 } as const;
 
 export type FieldSpecKind = keyof typeof fieldSpecs;
@@ -198,6 +222,16 @@ export const field = {
 	position9: (s: { default: Position9 }): Field<Position9> => ({
 		spec: { kind: "position9", ...s },
 	}),
+	fontStyle: (s: {
+		min: number;
+		max: number;
+		size: number;
+		font: TextFont;
+		bold: boolean;
+		color: string;
+	}): Field<FontStyle> => ({
+		spec: { kind: "font-style", ...s },
+	}),
 };
 
 /**
@@ -230,6 +264,13 @@ export function defaultSchemaParams<P>(
 			out[key] = { from: spec.from, to: spec.to };
 		} else if (spec.kind === "offset") {
 			out[key] = { x: spec.x, y: spec.y };
+		} else if (spec.kind === "font-style") {
+			out[key] = {
+				font: spec.font,
+				size: spec.size,
+				bold: spec.bold,
+				color: spec.color,
+			};
 		} else {
 			out[key] = spec.default;
 		}
@@ -320,6 +361,33 @@ export function sanitizeSchemaParams<P>(
 						? (raw as Position9)
 						: spec.default;
 				break;
+			case "font-style": {
+				const r =
+					typeof raw === "object" &&
+					raw !== null &&
+					"font" in raw &&
+					"size" in raw &&
+					"bold" in raw &&
+					"color" in raw
+						? (raw as Record<string, unknown>)
+						: undefined;
+				out[key] = {
+					font:
+						r?.font === "sans" || r?.font === "serif" || r?.font === "mono"
+							? r.font
+							: spec.font,
+					size:
+						typeof r?.size === "number" && Number.isFinite(r.size)
+							? clamp(r.size, spec.min, spec.max)
+							: spec.size,
+					bold: typeof r?.bold === "boolean" ? r.bold : spec.bold,
+					color:
+						typeof r?.color === "string" && /^#[0-9a-f]{6}$/i.test(r.color)
+							? r.color
+							: spec.color,
+				};
+				break;
+			}
 			case "offset": {
 				const r =
 					typeof raw === "object" && raw !== null && "x" in raw && "y" in raw

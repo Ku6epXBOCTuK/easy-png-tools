@@ -13,6 +13,7 @@ import {
 	toolSchema,
 	type ColorPair,
 	type Dimension,
+	type FontStyle,
 } from "../registry-schema";
 import type { ToolEntry } from "./types";
 
@@ -324,6 +325,50 @@ const stepColorsTool: ToolEntry<StepColorsParams> = {
 		),
 };
 
+interface TextToPngParams {
+	text: string;
+	style: FontStyle;
+	transparentBg: boolean;
+	backgroundColor: string;
+	padding: number;
+}
+
+export const textToPngSchema = toolSchema<TextToPngParams>({
+	text: field.text({ default: "Hello!", placeholder: "Your text" }),
+	style: field.fontStyle({
+		min: 8,
+		max: 300,
+		size: 96,
+		font: "sans",
+		bold: true,
+		color: "#111318",
+	}),
+	transparentBg: field.checkbox({ default: false }),
+	backgroundColor: field.color({ default: "#ffffff" }),
+	padding: field.slider({ min: 0, max: 200, step: 2, default: 24 }),
+});
+
+const textToPng: ToolEntry<TextToPngParams> = {
+	id: "text-to-png",
+	title: "Text to PNG",
+	description:
+		"Creates a PNG image from text: the canvas is sized to fit the label plus padding.",
+	category: "generate",
+	domOnly: true,
+	schema: textToPngSchema,
+	generate: (p) =>
+		renderTextToImage({
+			text: p.text,
+			fontSize: p.style.size,
+			font: p.style.font,
+			bold: p.style.bold,
+			color: p.style.color,
+			backgroundColor: p.backgroundColor,
+			transparentBg: p.transparentBg,
+			padding: p.padding,
+		}),
+};
+
 export const generateEntries = [
 	createEmpty,
 	singleColor,
@@ -335,4 +380,5 @@ export const generateEntries = [
 	placeholder,
 	blendTwo,
 	stepColorsTool,
+	textToPng,
 ];

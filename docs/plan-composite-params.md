@@ -11,11 +11,12 @@
 > полностью переведён** (4 инструмента: circle-mask, square-mask,
 > star-mask, wavy-mask); **составной тип `position9` — переведены
 > add-text-png и date-stamp-png** (водяной знак-картинка — отдельный шаг:
-> требует overlay-механику в новом превью); preview
+> требует overlay-механику в новом превью); **составной тип `font-style`
+> полностью переведён** (text-to-png, add-text, date-stamp); preview
 > научен применять **генераторы** (`executeGenerate`, кнопка Generate) и
 > рендерить все kinds схемы (slider/number/color/select/checkbox/dimension/
-> color-pair/offset/position9).
-> Следующее: `font-style` (text-to-png → add-text → date-stamp).
+> color-pair/offset/position9/font-style).
+> Следующее: `plate` (add-text → date-stamp).
 >
 > Ключевые файлы нового registry: `web/src/lib/registry-new/{types,index,*}.ts`
 > (по файлу на категорию: geometry/alpha/convert/analyze/filters/color/generate)
@@ -373,8 +374,13 @@ Typed field builders + `Field<T>` + `toolSchema<P>()` + `ToolSchema<P>` —
     ему нужен overlay-source (`getOverlay`/store), которого в новом превью пока
     нет. Тесты: +2 (602 passed). `font-style` и `plate` на этих инструментах
     сводятся в шаги 28-29.
-28. `font-style` — перевести text-to-png → add-text (если ещё не) →
-    date-stamp
+28. `font-style` — **все 3 инструмента переведены** ✔ (`text-to-png` —
+    генератор в `registry-new/generate.ts` (domOnly), `add-text-png`/
+    `date-stamp-png` — рефакторинг в `registry-new/text.ts`). Составной тип
+    во всех видах: вложенный объект `style: { font, size, bold, color }` +
+    `field.fontStyle`, виджет `kit/fields/schema/FontStyleControl.svelte`,
+    kind `font-style` в схеме (default/sanitize, clamp размера к min/max).
+    Тесты: +1 (603 passed).
 29. `plate` — перевести add-text → date-stamp
 30. `gradient` — собрать из dimension + color-pair + direction на
     linear-gradient (зависит от решения по gradient, см. план)

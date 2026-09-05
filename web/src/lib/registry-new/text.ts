@@ -1,21 +1,13 @@
-import type { ToolEntry } from "./types";
-import type { Position9 } from "../core/textdraw";
-import { drawTextBlock, type TextFont } from "../core/domText";
 import { formatStamp } from "../core/datefmt";
+import { drawTextBlock } from "../core/domText";
+import type { Position9 } from "../core/textdraw";
+import type { FontStyle } from "../registry-schema";
 import { field, toolSchema } from "../registry-schema";
-
-const FONT_OPTIONS = [
-	{ value: "sans", label: "Sans-serif" },
-	{ value: "serif", label: "Serif" },
-	{ value: "mono", label: "Monospace" },
-] satisfies { value: TextFont; label: string }[];
+import type { ToolEntry } from "./types";
 
 interface AddTextParams {
 	text: string;
-	fontSize: number;
-	color: string;
-	font: TextFont;
-	bold: boolean;
+	style: FontStyle;
 	position: Position9;
 	margin: number;
 	plate: boolean;
@@ -25,10 +17,14 @@ interface AddTextParams {
 
 const addTextSchema = toolSchema<AddTextParams>({
 	text: field.text({ default: "Hello!", placeholder: "Your text" }),
-	fontSize: field.slider({ min: 8, max: 200, step: 1, default: 48 }),
-	color: field.color({ default: "#ffffff" }),
-	font: field.select<TextFont>({ default: "sans", options: FONT_OPTIONS }),
-	bold: field.checkbox({ default: true }),
+	style: field.fontStyle({
+		min: 8,
+		max: 200,
+		size: 48,
+		font: "sans",
+		bold: true,
+		color: "#ffffff",
+	}),
 	position: field.position9({ default: "bottom-right" }),
 	margin: field.slider({ min: 0, max: 200, step: 1, default: 24 }),
 	plate: field.checkbox({ default: false }),
@@ -47,10 +43,10 @@ const addText: ToolEntry<AddTextParams> = {
 	run: (img, p) =>
 		drawTextBlock(img, {
 			text: p.text,
-			fontSize: p.fontSize,
-			font: p.font,
-			bold: p.bold,
-			color: p.color,
+			fontSize: p.style.size,
+			font: p.style.font,
+			bold: p.style.bold,
+			color: p.style.color,
 			opacityPercent: 100,
 			position: p.position,
 			margin: p.margin,
@@ -61,10 +57,7 @@ const addText: ToolEntry<AddTextParams> = {
 
 interface DateStampParams {
 	format: string;
-	fontSize: number;
-	color: string;
-	font: TextFont;
-	bold: boolean;
+	style: FontStyle;
 	position: Position9;
 	margin: number;
 	plate: boolean;
@@ -77,10 +70,14 @@ const dateStampSchema = toolSchema<DateStampParams>({
 		default: "YYYY-MM-DD",
 		placeholder: "YYYY-MM-DD hh:mm",
 	}),
-	fontSize: field.slider({ min: 8, max: 200, step: 1, default: 32 }),
-	color: field.color({ default: "#ffffff" }),
-	font: field.select<TextFont>({ default: "mono", options: FONT_OPTIONS }),
-	bold: field.checkbox({ default: false }),
+	style: field.fontStyle({
+		min: 8,
+		max: 200,
+		size: 32,
+		font: "mono",
+		bold: false,
+		color: "#ffffff",
+	}),
 	position: field.position9({ default: "bottom-right" }),
 	margin: field.slider({ min: 0, max: 200, step: 1, default: 20 }),
 	plate: field.checkbox({ default: true }),
@@ -99,10 +96,10 @@ const dateStamp: ToolEntry<DateStampParams> = {
 	run: (img, p) =>
 		drawTextBlock(img, {
 			text: formatStamp(new Date(), p.format),
-			fontSize: p.fontSize,
-			font: p.font,
-			bold: p.bold,
-			color: p.color,
+			fontSize: p.style.size,
+			font: p.style.font,
+			bold: p.style.bold,
+			color: p.style.color,
 			opacityPercent: 100,
 			position: p.position,
 			margin: p.margin,
