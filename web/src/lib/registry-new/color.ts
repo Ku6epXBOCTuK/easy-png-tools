@@ -1,4 +1,23 @@
-import { gammaCorrection, temperature, twoColors, tint } from "../core/color";
+import {
+	autoContrast,
+	brightnessContrast,
+	changeHue,
+	extractChannel,
+	gammaCorrection,
+	grayscale,
+	invert,
+	posterize,
+	sepia,
+	setOpacity,
+	swapChannels,
+	temperature,
+	thresholdBlackWhite,
+	tint,
+	twoColors,
+	type ChannelSwapPair,
+	type RgbChannel,
+} from "../core/color";
+import { renderSpace, SPACES, type SpaceId } from "../core/channels";
 import { parseHexList } from "../core/palette";
 import { ditherImage, mapToNearest, quantizeImage } from "../core/quantize";
 import { field, toolSchema, type ColorPair } from "../registry-schema";
@@ -142,6 +161,320 @@ const ditheringTool: ToolEntry<DitheringParams> = {
 	run: (img, p) => ditherImage(img, p.colors, p.pattern),
 };
 
+interface EmptyParams {}
+
+export const grayscaleSchema = toolSchema<EmptyParams>({});
+
+const grayscaleTool: ToolEntry<EmptyParams> = {
+	id: "grayscale-png",
+	title: "Grayscale PNG",
+	description:
+		"Converts the image to shades of gray using the BT.601 luminance formula. Alpha is preserved.",
+	category: "color",
+	schema: grayscaleSchema,
+	run: (img) => grayscale(img),
+};
+
+export const invertColorsSchema = toolSchema<EmptyParams>({});
+
+const invertColorsTool: ToolEntry<EmptyParams> = {
+	id: "invert-colors-png",
+	title: "Invert colors PNG",
+	description: "Inverts each color channel (255 − value). Alpha is unchanged.",
+	category: "color",
+	schema: invertColorsSchema,
+	run: (img) => invert(img),
+};
+
+interface BrightnessContrastParams {
+	brightness: number;
+	contrast: number;
+}
+
+export const brightnessContrastSchema = toolSchema<BrightnessContrastParams>(
+	{
+		brightness: field.slider({ min: -100, max: 100, step: 1, default: 0 }),
+		contrast: field.slider({ min: -100, max: 100, step: 1, default: 0 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Adjust", cols: 2, fields: ["brightness", "contrast"] },
+			],
+		},
+	},
+);
+
+const brightnessContrastTool: ToolEntry<BrightnessContrastParams> = {
+	id: "adjust-brightness-contrast-png",
+	title: "Brightness & contrast PNG",
+	description:
+		"Adjusts brightness and contrast in the range from −100 to +100. Zero means no change.",
+	category: "color",
+	schema: brightnessContrastSchema,
+	run: (img, p) => brightnessContrast(img, p.brightness, p.contrast),
+};
+
+interface OpacityParams {
+	percent: number;
+}
+
+export const opacitySchema = toolSchema<OpacityParams>({
+	percent: field.slider({ min: 0, max: 100, step: 1, default: 100 }),
+});
+
+const opacityTool: ToolEntry<OpacityParams> = {
+	id: "change-png-opacity",
+	title: "Change PNG opacity",
+	description:
+		"Multiplies the alpha channel by a percentage: 0% — fully transparent, 100% — unchanged.",
+	category: "color",
+	schema: opacitySchema,
+	run: (img, p) => setOpacity(img, p.percent),
+};
+
+export const sepiaSchema = toolSchema<EmptyParams>({});
+
+const sepiaTool: ToolEntry<EmptyParams> = {
+	id: "sepia-png",
+	title: "Sepia effect",
+	description: "Tints the image into the warm brown tones of classic sepia.",
+	category: "color",
+	schema: sepiaSchema,
+	run: (img) => sepia(img),
+};
+
+interface HueShiftParams {
+	degrees: number;
+}
+
+export const hueShiftSchema = toolSchema<HueShiftParams>({
+	degrees: field.slider({ min: -180, max: 180, step: 1, default: 0 }),
+});
+
+const hueShiftTool: ToolEntry<HueShiftParams> = {
+	id: "change-png-hue",
+	title: "Change hue PNG",
+	description:
+		"Shifts the hue around the circle. Saturation and lightness are preserved.",
+	category: "color",
+	schema: hueShiftSchema,
+	run: (img, p) => changeHue(img, p.degrees),
+};
+
+interface ExtractChannelParams {
+	channel: RgbChannel;
+}
+
+export const extractChannelSchema = toolSchema<ExtractChannelParams>({
+	channel: field.select({
+		default: "red",
+		options: [
+			{ value: "red", label: "Red" },
+			{ value: "green", label: "Green" },
+			{ value: "blue", label: "Blue" },
+		],
+	}),
+});
+
+const extractChannelTool: ToolEntry<ExtractChannelParams> = {
+	id: "extract-channel-png",
+	title: "Extract channel PNG",
+	description:
+		"Keeps only the chosen channel — red, green or blue — as shades of gray.",
+	category: "color",
+	schema: extractChannelSchema,
+	run: (img, p) => extractChannel(img, p.channel),
+};
+
+interface SwapChannelsParams {
+	pair: ChannelSwapPair;
+}
+
+export const swapChannelsSchema = toolSchema<SwapChannelsParams>({
+	pair: field.select({
+		default: "r-g",
+		options: [
+			{ value: "r-g", label: "Red ↔ Green" },
+			{ value: "r-b", label: "Red ↔ Blue" },
+			{ value: "g-b", label: "Green ↔ Blue" },
+		],
+	}),
+});
+
+const swapChannelsTool: ToolEntry<SwapChannelsParams> = {
+	id: "swap-channels-png",
+	title: "Swap channels PNG",
+	description:
+		"Swaps two color channels — a quick way to get unusual coloring.",
+	category: "color",
+	schema: swapChannelsSchema,
+	run: (img, p) => swapChannels(img, p.pair),
+};
+
+interface BlackAndWhiteParams {
+	threshold: number;
+}
+
+export const blackAndWhiteSchema = toolSchema<BlackAndWhiteParams>({
+	threshold: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+});
+
+const blackAndWhiteTool: ToolEntry<BlackAndWhiteParams> = {
+	id: "black-and-white-png",
+	title: "Black & white threshold PNG",
+	description:
+		"Hard binarization by luminance: every pixel becomes black or white.",
+	category: "color",
+	schema: blackAndWhiteSchema,
+	run: (img, p) => thresholdBlackWhite(img, p.threshold),
+};
+
+interface PosterizeParams {
+	levels: number;
+}
+
+export const posterizeSchema = toolSchema<PosterizeParams>({
+	levels: field.slider({ min: 2, max: 16, step: 1, default: 4 }),
+});
+
+const posterizeTool: ToolEntry<PosterizeParams> = {
+	id: "posterize-png",
+	title: "Posterize PNG",
+	description: "Reduces the number of levels per channel — a poster effect.",
+	category: "color",
+	schema: posterizeSchema,
+	run: (img, p) => posterize(img, p.levels),
+};
+
+export const autoContrastSchema = toolSchema<EmptyParams>({});
+
+const autoContrastTool: ToolEntry<EmptyParams> = {
+	id: "auto-contrast-png",
+	title: "Auto contrast PNG",
+	description:
+		"Stretches each channel's range across the full available brightness range.",
+	category: "color",
+	schema: autoContrastSchema,
+	run: (img) => autoContrast(img),
+};
+
+interface DecreaseColorCountParams {
+	maxColors: "2" | "4" | "8" | "16" | "32" | "64" | "128" | "256";
+}
+
+export const decreaseColorCountSchema = toolSchema<DecreaseColorCountParams>({
+	maxColors: field.select({
+		default: "16",
+		options: [
+			{ value: "2", label: "2" },
+			{ value: "4", label: "4" },
+			{ value: "8", label: "8" },
+			{ value: "16", label: "16" },
+			{ value: "32", label: "32" },
+			{ value: "64", label: "64" },
+			{ value: "128", label: "128" },
+			{ value: "256", label: "256" },
+		],
+	}),
+});
+
+const decreaseColorCountTool: ToolEntry<DecreaseColorCountParams> = {
+	id: "decrease-color-count-png",
+	title: "Decrease Color Count PNG",
+	description:
+		"Same median-cut engine with fixed power-of-two presets — quick way to drop to 2–256 colors.",
+	category: "color",
+	schema: decreaseColorCountSchema,
+	run: (img, p) => quantizeImage(img, Number(p.maxColors)).image,
+};
+
+interface ChannelParams {
+	component: string;
+	display: "gray" | "color";
+}
+
+type SpaceEntry = {
+	id: SpaceId;
+	suffix: string;
+	title: string;
+	description: string;
+};
+
+const CHANNEL_SPACES: SpaceEntry[] = [
+	{
+		id: "hsl",
+		suffix: "hsl",
+		title: "Split PNG into HSL",
+		description:
+			"Decomposes the image into Hue, Saturation and Lightness components.",
+	},
+	{
+		id: "hsv",
+		suffix: "hsv",
+		title: "Split PNG into HSV",
+		description:
+			"Decomposes the image into Hue, Saturation and Value (brightness) components.",
+	},
+	{
+		id: "hsi",
+		suffix: "hsi",
+		title: "Split PNG into HSI",
+		description:
+			"Decomposes the image into Hue, Saturation and Intensity components.",
+	},
+	{
+		id: "cmyk",
+		suffix: "cmyk",
+		title: "Convert PNG to CMYK Colors",
+		description:
+			"Decomposes the image into print-style Cyan, Magenta, Yellow and Key (black) components.",
+	},
+	{
+		id: "ycbcr",
+		suffix: "ycbcr",
+		title: "Convert PNG to YCbCr Colors",
+		description:
+			"Decomposes the image into Luma (Y) and Blue-difference / Red-difference chroma components.",
+	},
+	{
+		id: "lab",
+		suffix: "lab",
+		title: "Convert PNG to LAB Colors",
+		description:
+			"Decomposes the image into perceptual Lightness and green–magenta / blue–yellow opponents.",
+	},
+];
+
+function channelEntries(): ToolEntry<ChannelParams>[] {
+	return CHANNEL_SPACES.map((space) => {
+		const components = SPACES[space.id].components;
+		return {
+			id: `png-to-${space.suffix}`,
+			title: space.title,
+			description: space.description,
+			category: "color",
+			schema: toolSchema<ChannelParams>({
+				component: field.select({
+					default: components[0],
+					options: components.map((c) => ({
+						value: c,
+						label: c.toUpperCase(),
+					})),
+				}),
+				display: field.select({
+					default: "gray",
+					options: [
+						{ value: "gray", label: "Grayscale" },
+						{ value: "color", label: "Space as RGB" },
+					],
+				}),
+			}),
+			run: (img, p) => renderSpace(img, space.id, p.component, p.display),
+		} satisfies ToolEntry<ChannelParams>;
+	});
+}
+
 export const colorEntries = [
 	twoColorsTool,
 	gammaTool,
@@ -150,4 +483,17 @@ export const colorEntries = [
 	quantizeTool,
 	customPalette,
 	ditheringTool,
+	grayscaleTool,
+	invertColorsTool,
+	brightnessContrastTool,
+	opacityTool,
+	sepiaTool,
+	hueShiftTool,
+	extractChannelTool,
+	swapChannelsTool,
+	blackAndWhiteTool,
+	posterizeTool,
+	autoContrastTool,
+	decreaseColorCountTool,
+	...channelEntries(),
 ];
