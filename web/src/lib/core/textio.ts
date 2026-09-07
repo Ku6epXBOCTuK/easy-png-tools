@@ -85,7 +85,7 @@ export function stripDataUri(text: string): string {
 	return m ? text.slice(m[0].length) : text.trim();
 }
 
-export function base64ToBytes(text: string): Uint8Array {
+export function base64ToBytes(text: string): Uint8Array<ArrayBuffer> {
 	const clean = text.replace(/\s+/g, "");
 	const binary = atob(clean);
 	const bytes = new Uint8Array(binary.length);

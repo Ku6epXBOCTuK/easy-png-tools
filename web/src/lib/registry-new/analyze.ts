@@ -7,6 +7,9 @@ import {
 	rarityPredicate,
 	renderPredicateMask,
 } from "../core/masks";
+import { hasTransparency, isGrayscale, orientationOf } from "../core/analyze";
+import { encode } from "../core/io";
+import { base64ToBytes, looksLikePng, stripDataUri } from "../core/textio";
 
 interface ExtractColorParams {
 	color: string;
@@ -176,6 +179,83 @@ const uniqueColorMask: ToolEntry<UniqueColorParams> = {
 	run: (img, p) => renderMask(img, p, rarityPredicate(img, p.rarity)),
 };
 
+interface NoParams {}
+
+const emptySchema = toolSchema<NoParams>({});
+
+const verifyIsPng: ToolEntry<NoParams> = {
+	id: "verify-is-png",
+	title: "Verify If Image Is a PNG",
+	description:
+		"Checks the signature of pasted base64 / data-uri content and reports whether it is a real PNG.",
+	category: "analyze",
+	schema: emptySchema,
+	input: "text",
+	result: "verdict",
+	textToText: (text) =>
+		looksLikePng(base64ToBytes(stripDataUri(text)))
+			? "Yes — valid PNG signature."
+			: "No — the content is not a PNG.",
+};
+
+const pngIsGrayscale: ToolEntry<NoParams> = {
+	id: "png-is-grayscale",
+	title: "Check: is PNG grayscale?",
+	description: "Reports whether the image consists only of shades of gray.",
+	category: "analyze",
+	schema: emptySchema,
+	result: "verdict",
+	toText: (img) =>
+		isGrayscale(img) ? "Yes — grayscale." : "No — contains colors.",
+};
+
+const pngFileSize: ToolEntry<NoParams> = {
+	id: "png-file-size",
+	title: "PNG File Size",
+	description: "Encodes the image as PNG and reports the resulting file size.",
+	category: "analyze",
+	schema: emptySchema,
+	domOnly: true,
+	result: "verdict",
+	toText: async (img) => {
+		const blob = await encode(img, "image/png");
+		const kb = blob.size / 1024;
+		const kbText = kb >= 100 ? Math.round(kb).toString() : kb.toFixed(1);
+		return `${kbText} KB`;
+	},
+};
+
+const pngIsTransparent: ToolEntry<NoParams> = {
+	id: "png-is-transparent",
+	title: "Check: is PNG transparent?",
+	description:
+		"Reports whether the image contains transparent or semi-transparent pixels.",
+	category: "analyze",
+	schema: emptySchema,
+	result: "verdict",
+	toText: (img) =>
+		hasTransparency(img) ? "Yes — has transparency." : "No — fully opaque.",
+};
+
+const pngOrientation: ToolEntry<NoParams> = {
+	id: "png-orientation",
+	title: "PNG orientation",
+	description: "Reports whether it is portrait, landscape or square.",
+	category: "analyze",
+	schema: emptySchema,
+	result: "verdict",
+	toText: (img) => {
+		switch (orientationOf(img)) {
+			case "portrait":
+				return "Portrait";
+			case "landscape":
+				return "Landscape";
+			default:
+				return "Square";
+		}
+	},
+};
+
 export const analyzeEntries = [
 	extractColor,
 	showTransparent,
@@ -184,4 +264,9 @@ export const analyzeEntries = [
 	lightPixelMask,
 	darkPixelMask,
 	uniqueColorMask,
+	verifyIsPng,
+	pngIsGrayscale,
+	pngFileSize,
+	pngIsTransparent,
+	pngOrientation,
 ];
