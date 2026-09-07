@@ -1,8 +1,26 @@
 import type { ToolEntry } from "./types";
 import { field, toolSchema } from "../registry-schema";
 import type { Offset } from "../registry-schema";
-import { colorMask, removeColorToAlpha } from "../core/alpha";
-import { contourImage, strokeImage } from "../core/morphology";
+import {
+	colorMask,
+	extractAlphaMask,
+	flattenOntoColor,
+	hardenAlpha,
+	invertAlpha,
+	removeColorToAlpha,
+	roundCorners,
+	setAlphaChannel,
+} from "../core/alpha";
+import { backgroundMaskPreview, removeBackground } from "../core/background";
+import {
+	closingImage,
+	contourImage,
+	dilateImage,
+	erodeImage,
+	openingImage,
+	strokeImage,
+} from "../core/morphology";
+import { defringe, featherAlpha } from "../core/pixel-fx";
 import {
 	boxTest,
 	circleTest,
@@ -242,6 +260,251 @@ const wavyMask: ToolEntry<WavyMaskParams> = {
 		),
 };
 
+interface EmptyParams {}
+
+export const removeAlphaChannelSchema = toolSchema<EmptyParams>({});
+
+const removeAlphaChannel: ToolEntry<EmptyParams> = {
+	id: "remove-alpha-channel-png",
+	title: "Remove alpha channel PNG",
+	description:
+		"Composites the image over a white background and saves without transparency.",
+	category: "alpha",
+	schema: removeAlphaChannelSchema,
+	run: (img) => flattenOntoColor(img, "#ffffff"),
+};
+
+interface SetAlphaChannelParams {
+	percent: number;
+}
+
+export const setAlphaChannelSchema = toolSchema<SetAlphaChannelParams>({
+	percent: field.slider({ min: 0, max: 100, step: 1, default: 100 }),
+});
+
+const setAlphaChannelTool: ToolEntry<SetAlphaChannelParams> = {
+	id: "set-alpha-channel-png",
+	title: "Set alpha channel PNG",
+	description: "Assigns the same opacity to all pixels; colors stay unchanged.",
+	category: "alpha",
+	schema: setAlphaChannelSchema,
+	run: (img, p) => setAlphaChannel(img, p.percent),
+};
+
+export const extractAlphaMaskSchema = toolSchema<EmptyParams>({});
+
+const extractAlphaMaskTool: ToolEntry<EmptyParams> = {
+	id: "extract-alpha-mask-png",
+	title: "Extract alpha mask PNG",
+	description: "Turns transparency into a black-and-white opaque mask.",
+	category: "alpha",
+	schema: extractAlphaMaskSchema,
+	run: (img) => extractAlphaMask(img),
+};
+
+interface RoundCornersParams {
+	radius: number;
+}
+
+export const roundCornersSchema = toolSchema<RoundCornersParams>({
+	radius: field.slider({ min: 0, max: 50, step: 1, default: 10 }),
+});
+
+const roundCornersTool: ToolEntry<RoundCornersParams> = {
+	id: "round-corners-png",
+	title: "Round corners PNG",
+	description:
+		"Clips corners by a radius set as a percentage of half the smaller side.",
+	category: "alpha",
+	schema: roundCornersSchema,
+	run: (img, p) => roundCorners(img, p.radius),
+};
+
+export const invertAlphaSchema = toolSchema<EmptyParams>({});
+
+const invertAlphaTool: ToolEntry<EmptyParams> = {
+	id: "invert-alpha-png",
+	title: "Invert alpha PNG",
+	description: "Opaque areas become transparent and vice versa.",
+	category: "alpha",
+	schema: invertAlphaSchema,
+	run: (img) => invertAlpha(img),
+};
+
+interface RemoveBackgroundParams {
+	color: string;
+	tolerance: number;
+	outerOnly: boolean;
+	smooth: number;
+}
+
+export const removeBackgroundSchema = toolSchema<RemoveBackgroundParams>(
+	{
+		color: field.color({ default: "#ffffff" }),
+		tolerance: field.slider({ min: 0, max: 100, step: 1, default: 10 }),
+		outerOnly: field.checkbox({ default: true }),
+		smooth: field.slider({ min: 0, max: 8, step: 1, default: 1 }),
+	},
+	{
+		layout: {
+			groups: [
+				{
+					title: "Background",
+					cols: 2,
+					fields: ["color", "tolerance"],
+				},
+				{ title: "Options", fields: ["outerOnly", "smooth"] },
+			],
+		},
+	},
+);
+
+const removeBackgroundTool: ToolEntry<RemoveBackgroundParams> = {
+	id: "remove-background-png",
+	title: "Remove background PNG (smart)",
+	description:
+		"Removes a solid background: by color with tolerance, outer regions from the edges only, or every matching pixel. Can smooth the boundary.",
+	category: "alpha",
+	schema: removeBackgroundSchema,
+	run: (img, p) =>
+		removeBackground(img, {
+			color: p.color,
+			tolerancePercent: p.tolerance,
+			outerOnly: p.outerOnly,
+			smoothPasses: p.smooth,
+		}),
+	preview: (img, p) =>
+		backgroundMaskPreview(img, {
+			color: p.color,
+			tolerancePercent: p.tolerance,
+			outerOnly: p.outerOnly,
+			smoothPasses: p.smooth,
+		}),
+};
+
+interface MakeThickerParams {
+	radius: number;
+}
+
+export const makeThickerSchema = toolSchema<MakeThickerParams>({
+	radius: field.slider({ min: 1, max: 10, step: 1, default: 2 }),
+});
+
+const makeThickerTool: ToolEntry<MakeThickerParams> = {
+	id: "make-thicker-png",
+	title: "Thicken PNG",
+	description: "Expands opaque areas by the given number of pixels.",
+	category: "alpha",
+	schema: makeThickerSchema,
+	run: (img, p) => dilateImage(img, p.radius),
+};
+
+interface MakeThinnerParams {
+	radius: number;
+}
+
+export const makeThinnerSchema = toolSchema<MakeThinnerParams>({
+	radius: field.slider({ min: 1, max: 10, step: 1, default: 1 }),
+});
+
+const makeThinnerTool: ToolEntry<MakeThinnerParams> = {
+	id: "make-thinner-png",
+	title: "Thin PNG",
+	description: "Shrinks opaque areas — thins the strokes of text and details.",
+	category: "alpha",
+	schema: makeThinnerSchema,
+	run: (img, p) => erodeImage(img, p.radius),
+};
+
+interface FeatherEdgesParams {
+	radius: number;
+}
+
+export const featherEdgesSchema = toolSchema<FeatherEdgesParams>({
+	radius: field.slider({ min: 1, max: 20, step: 1, default: 3 }),
+});
+
+const featherEdgesTool: ToolEntry<FeatherEdgesParams> = {
+	id: "feather-edges-png",
+	title: "Feather Edges PNG",
+	description:
+		"Blurs only the alpha channel: hard cutout edges become soft and gradual, colors stay untouched.",
+	category: "alpha",
+	schema: featherEdgesSchema,
+	run: (img, p) => featherAlpha(img, p.radius),
+};
+
+interface CleanEdgesParams {
+	radius: number;
+}
+
+export const cleanEdgesSchema = toolSchema<CleanEdgesParams>({
+	radius: field.slider({ min: 1, max: 10, step: 1, default: 3 }),
+});
+
+const cleanEdgesTool: ToolEntry<CleanEdgesParams> = {
+	id: "clean-edges-png",
+	title: "Clean Edges PNG (defringe)",
+	description:
+		"Replaces edge-halo colors of semi-transparent pixels with the nearest fully opaque color. Alpha stays as is.",
+	category: "alpha",
+	schema: cleanEdgesSchema,
+	run: (img, p) => defringe(img, p.radius),
+};
+
+interface HardenAlphaParams {
+	threshold: number;
+}
+
+export const hardenAlphaSchema = toolSchema<HardenAlphaParams>({
+	threshold: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+});
+
+const hardenAlphaTool: ToolEntry<HardenAlphaParams> = {
+	id: "harden-alpha-png",
+	title: "Harden edges PNG",
+	description:
+		"Binarizes the alpha channel by threshold: semi-transparent pixels become either fully transparent or fully opaque.",
+	category: "alpha",
+	schema: hardenAlphaSchema,
+	run: (img, p) => hardenAlpha(img, p.threshold),
+};
+
+interface DespeckleAlphaParams {
+	radius: number;
+}
+
+export const despeckleAlphaSchema = toolSchema<DespeckleAlphaParams>({
+	radius: field.slider({ min: 1, max: 3, step: 1, default: 1 }),
+});
+
+const despeckleAlphaTool: ToolEntry<DespeckleAlphaParams> = {
+	id: "despeckle-alpha-png",
+	title: "Despeckle PNG",
+	description:
+		"Opening: removes lone semi-transparent pixels and small specks.",
+	category: "alpha",
+	schema: despeckleAlphaSchema,
+	run: (img, p) => openingImage(img, p.radius),
+};
+
+interface CloseHolesParams {
+	radius: number;
+}
+
+export const closeHolesSchema = toolSchema<CloseHolesParams>({
+	radius: field.slider({ min: 1, max: 3, step: 1, default: 1 }),
+});
+
+const closeHolesTool: ToolEntry<CloseHolesParams> = {
+	id: "close-holes-png",
+	title: "Close holes PNG",
+	description: "Closing: fills lone transparent dots inside the object.",
+	category: "alpha",
+	schema: closeHolesSchema,
+	run: (img, p) => closingImage(img, p.radius),
+};
+
 export const alphaEntries = [
 	addStroke,
 	findContour,
@@ -250,4 +513,17 @@ export const alphaEntries = [
 	squareMask,
 	starMask,
 	wavyMask,
+	removeAlphaChannel,
+	setAlphaChannelTool,
+	extractAlphaMaskTool,
+	roundCornersTool,
+	invertAlphaTool,
+	removeBackgroundTool,
+	makeThickerTool,
+	makeThinnerTool,
+	featherEdgesTool,
+	cleanEdgesTool,
+	hardenAlphaTool,
+	despeckleAlphaTool,
+	closeHolesTool,
 ];
