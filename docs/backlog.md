@@ -7,7 +7,7 @@
 
 2. **UI-эксперимент: параметры между исходником и результатом** — оценка S/M.
    Раскладка «Исходник → Параметры → Результат» в один ряд вместо параметров отдельным блоком снизу. Проверить на узких экранах; возможно за флагом/A-B, чтобы сравнить с текущей.
-   Ждет нового дизайна
+   Перекрыто редизайном: старый план (`docs/archive/plan-inline-params.md`) закрыт, страницы инструментов теперь `SchemaToolView`/`SchemaPreview`. Эксперимент переосмыслить уже для нового этапа инструментов (сетка source|params|result), если понадобится.
 
 3. **Сворачивать инструменты в chain** — оценка S.
    Тоггл сворачивания звена до заголовка «Шаг n: название» (превью скрываются). Состояние свёрнутости помнить в workspace-pipeline.
@@ -23,8 +23,50 @@
 
 7. **Конвертация формата — НЕ отдельный инструмент, а выбор в кнопке Download** — оценка M/L.
    Инструменты `convert-png-to-jpg` / `convert-png-to-webp` (и др. форматы) не должны жить как самостоятельные инструменты цепочки. Вместо этого — бесшовное внедрение выбора формата/качества прямо в кнопку/диалог **Download**: юзер скачивает результат в нужном формате (mime/ext/quality), а pipeline при этом не усложняется лишним звеном.
-   Связано с планом типизации: в новом `ToolEntry<P>` под `run` в `registry-new` нет поля `output` (mime/ext/qualityParamId), которое есть у старых конвертеров — см. `plan-composite-params.md`, замечание по Фазе 2. Формат-метаданные должны переехать в понятие «формат результата» на уровне скачивания, а не отдельного инструмента.
-   **Решение «не сейчас» (исследование, 2026-09):**
-   - В старом UI этот паттерн уже работает: `convert-*`-инструменты не конвертируют в `run`, а только настраивают `output` (mime/ext/qualityParamId), который читает `DownloadButton` → `encode(img, mime, quality)`. То есть формат уже фактически «поле скачивания» в старом pipeline.
-   - В новом preview `registry-new` поля `output` нет, `executor.worker` возвращает только пиксели, а `SchemaToolView.download()` захардкожен на `image/png` + имя `with-border.png`. Делать ретработу сейчас = параллельный спец-проект.
-   - **Когда делать:** вместе с достройкой нового download/сохранения в новом UI (в рамках `plan-composite-params`, Фаза 4/UI). Тогда выбор формата встраивается в download-flow естественно, без выдёргивания отдельным проектом. Не начинать, пока не закрыта типизация pipeline.
+   **Сделано (2026-09):** механическая часть реализована в preview — `ToolEntry.output` (`OutputFormat`: mime/ext/qualityParamId) в `registry-new/types.ts`; `SchemaToolView.download()` кодирует по `output` (jpg/webp/bmp уже настроены; `png-to-bmp` переведён сюда же).
+   **Осталось (UX-райз «Download»):**
+   - выбор формата/качества прямо в кнопке/диалоге Download для любого результата (не отдельными конвертерами);
+   - экспорт с лимитом размера → закрывает отложенный `reduce-to-size-png` (целевой KB, бинарный поиск по k из квантования).
+   Проработать вместе с достройкой download-флоу нового UI.
+
+8. **`watermark-image-png` (водяной знак картинкой)** — оценка M. Отложен из
+   миграции (`archive/plan-migrate-remaining.md`). Нужна overlay-механика:
+   второй источник изображения (getOverlay/store), параметры scale/opacity/
+   position/margin/aspect. Решается вместе с вопросом, как второй источник
+   картинки вписывается в schema-driven preview (`SchemaToolView`).
+
+9. **`png-info` (детальная информация о PNG)** — оценка M/L. Отложен из
+   миграции. Отдельный райз: exif-теги, редактирование, структурированный
+   вывод; нужен свой отдельный случай в UI, не «ещё один text/verdict».
+
+10. **Region-инструменты** (censor/erase/pixelate-area/blur-area/sharpen-area/
+    reverse-area) — ждут UI выделения области на превью. Из
+    `archive/plan-gap-waves.md` («вне очереди»).
+
+11. **Мультифайловый вывод** (split-parts, gif-frames, separate-colors) — ждут
+    механизма «результат = набор файлов». Из `archive/plan-gap-waves.md`.
+
+12. **Анимационные** (slow-reveal/fade/scrolling) — выход не PNG; отдельное
+    решение о формате. Из `archive/plan-gap-waves.md`.
+
+13. **HARD-серия** (glitch, barcode, signature-extract, handwritten-digital).
+    Из `archive/plan-gap-waves.md`.
+
+14. **Переезд старых файлов в папки `old/`** — оценка M. Шаг 37 закрытого
+    `archive/plan-composite-params.md` (и `archive/plan-migrate-remaining.md`):
+    перенос `lib/registry.ts`, `lib/registry/**`, `lib/registry-helpers.ts`,
+    `lib/categories.ts`, `lib/tools/**`, `lib/components/**` (кроме `kit/`) в
+    `lib/old/**`; в настройке isolation-плагина — один glob-паттерн
+    (`lib/old/**`), «новое»/«общее» не меняются. Предшествует C17
+    (`plan-redesign.md`, Шаг 5). Гейты: svelte-check 0, тесты зелёные,
+    prettier чист, `lint:all` = задокументированный остаток, обе ветки открываются.
+
+15. **Техдолг (чинить по заведённым задачам, не игнорировать правила)**:
+    - svelte-check error `ToolCard.svelte:19:36` (`goto(string)`).
+    - фейл `palette.test.ts` (ENOENT `src/app.css` — из-за него `pnpm test`
+      красный, хотя тесты 607 passed).
+    - `lint:all`: ~335 design-tokens ошибок в старых kit-компонентах;
+      неиспользуемые токены preview.css; a11y-warning `ColorField`;
+      пустой ruleset `Toggle.svelte`.
+    Целевое состояние перед переездом `old/` (см. №14): svelte-check 0 errors,
+    `pnpm test` зелёный, `lint:all` — только задокументированный остаток.

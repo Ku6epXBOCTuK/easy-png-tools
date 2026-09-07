@@ -1,5 +1,11 @@
 # План разработки: easy-png-tools
 
+> **Статус (2026-09-07):** Фаза 1 (полноценный TS-сайт) в основном выполнена —
+> сайт живёт, каталог переведён в типизированный `registry-new` (121/125),
+> идёт редизайн на `preview/*` по `plan-redesign.md` (параллельная ветка,
+> старый UI на `(old)/`). Фазы 2–8 (эталоны, Rust/wasm, CLI, harness) —
+> будущие, разделам ниже не запущены.
+
 ## 0. Решения
 
 - **Набор PNG-утилит, всё в браузере** (SvelteKit + `adapter-static`), данные не покидают машину.
@@ -124,9 +130,9 @@ easy-png-tools/
 ## 5. Команды верификации
 
 ```bash
-cd web && npm run dev      # разработка (Фаза 1+)
-cd web && npm run build    # статический экспорт
-npx playwright test        # эталоны + UI-регресс (Фаза 3+)
-cargo test                 # Rust-ядро против эталонных файлов (Фаза 4+)
+pnpm dev                    # разработка (Фаза 1+, обёртка `pnpm --dir web dev`)
+pnpm build                  # статический экспорт (обёртка `pnpm --dir web build`)
+pnpm --dir web exec playwright test # эталоны + UI-регресс (Фаза 3+)
+cargo test                  # Rust-ядро против эталонных файлов (Фаза 4+)
 harness compare tests/reference # сквозная сверка native + wasm (Фаза 7)
 ```

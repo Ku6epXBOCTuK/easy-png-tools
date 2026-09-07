@@ -1,5 +1,12 @@
 # План: аудит верности `preview/*` против `refs-html` (DOM → CSS)
 
+> **СТАТУС: РЕАЛИЗОВАН (2026-09-07) — устарел.** Скрипты
+> `web/scripts/audit-dom.mjs`, `audit-css.mjs`, `audit-cdp.mjs`,
+> `audit-cdp-responsive.mjs` и npm-скрипты `refs-dom-audit` /
+> `refs-css-audit` / `refs-cdp-audit` на месте; старый текстовый `audit.mjs`
+> удалён. Актуальная доводка верности и статус пунктов F — в
+> `plan-design-fix.md`.
+
 > Статус: к выполнению. Ветка `feat/redesign`.
 > Источник правды по пикселям: `refs-html/*.html` (статический экспорт рефа).
 > Актуальный рабочий аудит сейчас — `pnpm refs-audit` (`scripts/audit.mjs`), но он

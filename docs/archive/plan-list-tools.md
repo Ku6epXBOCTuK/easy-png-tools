@@ -1,5 +1,10 @@
 # Plan: `/preview/list-tools` → design2 (catalog)
 
+> **СТАТУС: ВЫПОЛНЕН (2026-09-07) — устарел.** Каталог
+> `/preview/list-tools` переписан на `CatalogHeader` / `CatalogToolbar` /
+> `CatalogGroup` / `ToolCard` (kit), поиск и фильтры функциональны.
+> Доводка верности против рефа остаётся в рамках `plan-design-fix.md`.
+
 Ветка `feat/redesign`. Цель — привести каталог инструментов к рефу
 `refs-html/list-tools.html`. Сейчас страница вообще не на design2: по
 мульти-аудиту `onlyOurs=257, onlyRef=54` (демо-страница — `18/11`).
