@@ -79,6 +79,14 @@ export interface ColorPairSpec {
 	to: string;
 }
 
+/** Список цветов (палитра): массив hex-строк. */
+export type ColorList = string[];
+
+export interface ColorListSpec {
+	kind: "colors";
+	default: string[];
+}
+
 /** Смещение фигуры/объекта по центру: x + y в процентах. */
 export interface Offset {
 	x: number;
@@ -187,6 +195,7 @@ export const fieldSpecs = {
 	checkbox: {} as CheckboxSpec,
 	dimension: {} as DimensionSpec,
 	"color-pair": {} as ColorPairSpec,
+	colors: {} as ColorListSpec,
 	offset: {} as OffsetSpec,
 	position9: {} as Position9Spec,
 	"font-style": {} as FontStyleSpec,
@@ -262,6 +271,9 @@ export const field = {
 	colorPair: (s: { from: string; to: string }): Field<ColorPair> => ({
 		spec: { kind: "color-pair", ...s },
 	}),
+	colors: (s: { default: string[] }): Field<ColorList> => ({
+		spec: { kind: "colors", ...s },
+	}),
 	offset: (s: {
 		min: number;
 		max: number;
@@ -327,6 +339,8 @@ export function defaultSchemaParams<P>(
 			out[key] = { width: spec.width, height: spec.height };
 		} else if (spec.kind === "color-pair") {
 			out[key] = { from: spec.from, to: spec.to };
+		} else if (spec.kind === "colors") {
+			out[key] = [...spec.default];
 		} else if (spec.kind === "offset") {
 			out[key] = { x: spec.x, y: spec.y };
 		} else if (spec.kind === "font-style") {
@@ -429,6 +443,15 @@ export function sanitizeSchemaParams<P>(
 						? r.to
 						: spec.to;
 				out[key] = { from, to };
+				break;
+			}
+			case "colors": {
+				const r =
+					Array.isArray(raw) &&
+					raw.every((c) => typeof c === "string" && /^#[0-9a-f]{6}$/i.test(c))
+						? (raw as string[])
+						: undefined;
+				out[key] = r && r.length > 0 ? [...r] : [...spec.default];
 				break;
 			}
 			case "position9":

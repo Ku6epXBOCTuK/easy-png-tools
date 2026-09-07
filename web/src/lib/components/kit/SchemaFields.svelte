@@ -10,6 +10,7 @@
 	import CheckboxControl from "./fields/schema/CheckboxControl.svelte";
 	import ColorControl from "./fields/schema/ColorControl.svelte";
 	import ColorPairControl from "./fields/schema/ColorPairControl.svelte";
+	import ColorsControl from "./fields/schema/ColorsControl.svelte";
 	import RangeControl from "./fields/schema/RangeControl.svelte";
 	import SelectControl from "./fields/schema/SelectControl.svelte";
 	import TextControl from "./fields/schema/TextControl.svelte";
@@ -31,6 +32,7 @@
 		slider: RangeControl,
 		color: ColorControl,
 		"color-pair": ColorPairControl,
+		colors: ColorsControl,
 		select: SelectControl,
 		checkbox: CheckboxControl,
 		text: TextControl,
