@@ -1,6 +1,14 @@
 import type { CategoryId } from "../preview/categories";
 import type { ToolSchema } from "../registry-schema";
 import type { PixelImage } from "../core/types";
+import type { OutputMime } from "../core/io";
+
+/** Формат скачивания, отличный от PNG (bmp/jpeg/webp). */
+export interface OutputFormat {
+	mime: OutputMime;
+	ext: string;
+	qualityParamId?: string;
+}
 
 /**
  * Инструмент нового registry: полностью типизирован на `Params`, схема —
@@ -22,5 +30,7 @@ export type ToolEntry<P = Record<string, unknown>> = {
 	runFromText?(text: string, params: P): Promise<PixelImage> | PixelImage;
 	textToText?(text: string): Promise<string> | string;
 	preview?(img: PixelImage, params: P): Promise<PixelImage> | PixelImage;
+	/** Формат/качество скачивания результата; по умолчанию — PNG. */
+	output?: OutputFormat;
 	icon?: string;
 };

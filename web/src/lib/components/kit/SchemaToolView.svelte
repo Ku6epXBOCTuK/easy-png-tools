@@ -92,12 +92,16 @@
 	}
 
 	async function download() {
-		if (!result) return;
-		const blob = await encode(result, "image/png");
+		if (!result || !schema) return;
+		const out = tool.output;
+		const quality = out?.qualityParamId
+			? Number(values[out.qualityParamId]) / 100
+			: undefined;
+		const blob = await encode(result, out?.mime ?? "image/png", quality);
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = "with-border.png";
+		a.download = `${tool.id}.${out?.ext ?? "png"}`;
 		a.click();
 		URL.revokeObjectURL(url);
 	}

@@ -21,6 +21,7 @@ const convertToJpg: ToolEntry<ConvertToJpgParams> = {
 	category: "convert",
 	schema: convertToJpgSchema,
 	run: (img, p) => flattenOntoColor(img, p.background),
+	output: { mime: "image/jpeg", ext: "jpg", qualityParamId: "quality" },
 };
 
 interface ConvertToWebpParams {
@@ -39,6 +40,22 @@ const convertToWebp: ToolEntry<ConvertToWebpParams> = {
 	category: "convert",
 	schema: convertToWebpSchema,
 	run: (img) => clonePixelImage(img),
+	output: { mime: "image/webp", ext: "webp", qualityParamId: "quality" },
 };
 
-export const convertEntries = [convertToJpg, convertToWebp];
+interface ConvertToBmpParams {}
+
+export const convertToBmpSchema = toolSchema<ConvertToBmpParams>({});
+
+const convertToBmp: ToolEntry<ConvertToBmpParams> = {
+	id: "png-to-bmp",
+	title: "Convert PNG to BMP",
+	description:
+		"Saves the image as 24-bit BMP without an alpha channel: transparency is replaced with a black background.",
+	category: "convert",
+	schema: convertToBmpSchema,
+	run: (img) => flattenOntoColor(img, "#000000"),
+	output: { mime: "image/bmp", ext: "bmp" },
+};
+
+export const convertEntries = [convertToJpg, convertToWebp, convertToBmp];
