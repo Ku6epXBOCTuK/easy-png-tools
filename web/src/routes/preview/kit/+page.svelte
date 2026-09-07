@@ -22,7 +22,10 @@
 	import IconButton from "$lib/components/kit/ui/IconButton.svelte";
 	import Segmented from "$lib/components/kit/ui/Segmented.svelte";
 	import Toggle from "$lib/components/kit/ui/Toggle.svelte";
-	import { Download, ImageOff, Palette, Plus, Trash2 } from "@lucide/svelte";
+	import { Download, ImageOff, Plus, Trash2 } from "@lucide/svelte";
+
+	import { TOOLS } from "$lib/registry-new";
+	import { TOOL_ICONS } from "$lib/preview/tool-icons";
 
 	let mode = $state("preview");
 	let radius = $state(8);
@@ -32,23 +35,9 @@
 	let lossless = $state(true);
 	let animated = $state(false);
 
-	const tools = [
-		{
-			title: "Gradient",
-			href: "#",
-			description: "Linear & radial gradients",
-		},
-		{
-			title: "Resize",
-			href: "#",
-			description: "Pixel-perfect scaling",
-		},
-		{
-			title: "Quantize",
-			href: "#",
-			description: "Reduce color depth",
-		},
-	];
+	const showcaseTools = TOOLS.filter((tool) =>
+		["linear-gradient-png", "resize-png", "quantize-png"].includes(tool.id),
+	);
 </script>
 
 <div class="showcase">
@@ -152,13 +141,13 @@
 
 	<Panel title="Tools" eyebrow="catalog">
 		<div class="tool-grid">
-			{#each tools as tool, i (tool.title)}
+			{#each showcaseTools as tool, i (tool.id)}
 				<ToolCard
 					title={tool.title}
-					href={tool.href}
+					id={tool.id}
 					description={tool.description}
 					index={i + 1}
-					icon={Palette}
+					icon={TOOL_ICONS[tool.id]}
 				/>
 			{/each}
 		</div>

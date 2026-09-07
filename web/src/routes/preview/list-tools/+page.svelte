@@ -33,7 +33,7 @@
 				{#each group.tools as tool, i (tool.id)}
 					<ToolCard
 						title={tool.title}
-						href={`/preview/tools/${tool.id}`}
+						id={tool.id}
 						description={tool.description}
 						index={i + 1}
 						icon={TOOL_ICONS[tool.id]}

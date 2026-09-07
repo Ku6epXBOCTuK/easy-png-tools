@@ -47,7 +47,7 @@
 			{#each results as tool (tool.id)}
 				<ToolCard
 					title={tool.title}
-					href="/preview/tools/{tool.id}"
+					id={tool.id}
 					description={tool.description}
 				/>
 			{/each}

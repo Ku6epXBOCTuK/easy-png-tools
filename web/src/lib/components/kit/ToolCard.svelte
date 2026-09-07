@@ -6,17 +6,15 @@
 
 	interface Props {
 		title: string;
-		href: string;
+		id: string;
 		description?: string;
 		index?: number;
 		icon?: Component<{ size?: number; class?: string }>;
 	}
-	let { title, href, description, index, icon }: Props = $props();
-
-	let normalizedHref = $derived(href === "#" ? "/" : href);
+	let { title, id, description, index, icon }: Props = $props();
 </script>
 
-<a class="tool-card" href={resolve(normalizedHref)}>
+<a class="tool-card" href={resolve("/preview/tools/[id]", { id })}>
 	{#if icon}<span class="tool-icon"><Icon {icon} size={19} /></span>{/if}
 	<span class="tool-copy">
 		<strong>{title}</strong>
