@@ -1,10 +1,26 @@
 import { ToolError } from "../core/errors";
 import {
+	rotateFreeImage,
+	skewImage,
+	transformImage,
+	zoomImage,
+} from "../core/affine";
+import {
+	centerByAlpha,
 	changeCanvasSize,
 	crop,
+	cropToRatio,
 	expandCanvas,
+	flip,
+	forceOrientation,
+	padToRatio,
 	resize,
+	rotate90,
+	symmetricCopy,
+	tile,
+	trimToContent,
 	type Anchor9,
+	type FlipAxis,
 } from "../core/geometry";
 import { field, toolSchema, type Dimension } from "../registry-schema";
 import type { ToolEntry } from "./types";
@@ -222,10 +238,349 @@ const cropTool: ToolEntry<CropParams> = {
 	},
 };
 
+interface RotateParams {
+	angle: "90" | "180" | "270";
+}
+
+export const rotateSchema = toolSchema<RotateParams>({
+	angle: field.select({
+		default: "90",
+		options: [
+			{ value: "90", label: "90° clockwise" },
+			{ value: "180", label: "180°" },
+			{ value: "270", label: "270° clockwise" },
+		],
+	}),
+});
+
+const rotateTool: ToolEntry<RotateParams> = {
+	id: "rotate-png",
+	title: "Rotate PNG",
+	description: "Rotates by 90°, 180° or 270° clockwise without quality loss.",
+	category: "geometry",
+	schema: rotateSchema,
+	run: (img, p) => rotate90(img, Number(p.angle) / 90),
+};
+
+interface FlipParams {
+	axis: FlipAxis;
+}
+
+export const flipSchema = toolSchema<FlipParams>({
+	axis: field.select({
+		default: "horizontal",
+		options: [
+			{ value: "horizontal", label: "Horizontal (left to right)" },
+			{ value: "vertical", label: "Vertical (top to bottom)" },
+		],
+	}),
+});
+
+const flipTool: ToolEntry<FlipParams> = {
+	id: "flip-png",
+	title: "Flip PNG",
+	description: "Mirrors horizontally or vertically without quality loss.",
+	category: "geometry",
+	schema: flipSchema,
+	run: (img, p) => flip(img, p.axis),
+};
+
+interface AddPaddingParams {
+	padding: number;
+	transparent: boolean;
+	color: string;
+}
+
+export const addPaddingSchema = toolSchema<AddPaddingParams>(
+	{
+		padding: field.number({ min: 1, max: 2000, step: 1, default: 10 }),
+		transparent: field.checkbox({ default: true }),
+		color: field.color({ default: "#ffffff" }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Padding", fields: ["padding"] },
+				{ title: "Fill", fields: ["transparent", "color"] },
+			],
+		},
+	},
+);
+
+const addPaddingTool: ToolEntry<AddPaddingParams> = {
+	id: "add-padding-png",
+	title: "Add padding to PNG",
+	description:
+		"Expands the canvas on all sides by the chosen number of pixels.",
+	category: "geometry",
+	schema: addPaddingSchema,
+	run: (img, p) =>
+		expandCanvas(
+			img,
+			p.padding,
+			p.padding,
+			p.padding,
+			p.padding,
+			p.transparent ? undefined : p.color,
+		),
+};
+
+interface TileParams {
+	columns: number;
+	rows: number;
+}
+
+export const tileSchema = toolSchema<TileParams>({
+	columns: field.number({ min: 1, max: 50, step: 1, default: 2 }),
+	rows: field.number({ min: 1, max: 50, step: 1, default: 2 }),
+});
+
+const tileTool: ToolEntry<TileParams> = {
+	id: "tile-png",
+	title: "Tile PNG",
+	description: "Repeats the image in a grid of the chosen columns and rows.",
+	category: "geometry",
+	schema: tileSchema,
+	run: (img, p) => tile(img, p.columns, p.rows),
+};
+
+interface EmptyParams {}
+
+export const centerByAlphaSchema = toolSchema<EmptyParams>({});
+
+const centerByAlphaTool: ToolEntry<EmptyParams> = {
+	id: "center-by-alpha-png",
+	title: "Center PNG by content",
+	description:
+		"Finds the opaque part of the image and centers it on the original canvas.",
+	category: "geometry",
+	schema: centerByAlphaSchema,
+	run: (img) => centerByAlpha(img),
+};
+
+interface SkewParams {
+	degX: number;
+	degY: number;
+}
+
+export const skewSchema = toolSchema<SkewParams>({
+	degX: field.slider({ min: -80, max: 80, step: 1, default: 0 }),
+	degY: field.slider({ min: -80, max: 80, step: 1, default: 0 }),
+});
+
+const skewTool: ToolEntry<SkewParams> = {
+	id: "skew-png",
+	title: "Skew PNG",
+	description:
+		"Shifts content horizontally and vertically — a perspective effect.",
+	category: "geometry",
+	schema: skewSchema,
+	run: (img, p) => skewImage(img, p.degX, p.degY),
+};
+
+interface RotateFreeParams {
+	angle: number;
+}
+
+export const rotateFreeSchema = toolSchema<RotateFreeParams>({
+	angle: field.slider({ min: -180, max: 180, step: 1, default: 15 }),
+});
+
+const rotateFreeTool: ToolEntry<RotateFreeParams> = {
+	id: "rotate-free-png",
+	title: "Rotate by custom angle",
+	description:
+		"Rotation by any angle. The canvas grows to fit the new bounds; corners stay transparent.",
+	category: "geometry",
+	schema: rotateFreeSchema,
+	run: (img, p) => rotateFreeImage(img, p.angle),
+};
+
+interface ZoomParams {
+	scale: number;
+}
+
+export const zoomSchema = toolSchema<ZoomParams>({
+	scale: field.slider({ min: 100, max: 500, step: 10, default: 200 }),
+});
+
+const zoomTool: ToolEntry<ZoomParams> = {
+	id: "zoom-png",
+	title: "Zoom PNG",
+	description:
+		"Magnifies content toward the center. The canvas keeps its size — edges are cropped.",
+	category: "geometry",
+	schema: zoomSchema,
+	run: (img, p) => zoomImage(img, p.scale),
+};
+
+interface TrimEmptySpaceParams {
+	threshold: number;
+}
+
+export const trimEmptySpaceSchema = toolSchema<TrimEmptySpaceParams>({
+	threshold: field.slider({ min: 0, max: 254, step: 1, default: 0 }),
+});
+
+const trimEmptySpaceTool: ToolEntry<TrimEmptySpaceParams> = {
+	id: "trim-empty-space-png",
+	title: "Trim Empty Space PNG",
+	description:
+		"Crops transparent borders around the content. Pixels with alpha above the threshold count as content.",
+	category: "geometry",
+	schema: trimEmptySpaceSchema,
+	run: (img, p) => trimToContent(img, p.threshold),
+};
+
+type AspectRatio = "1:1" | "4:3" | "3:4" | "3:2" | "2:3" | "16:9" | "9:16";
+
+interface ChangeAspectRatioParams {
+	ratio: AspectRatio;
+	mode: "crop" | "pad";
+}
+
+export const changeAspectRatioSchema = toolSchema<ChangeAspectRatioParams>({
+	ratio: field.select({
+		default: "1:1",
+		options: [
+			{ value: "1:1", label: "1:1" },
+			{ value: "4:3", label: "4:3" },
+			{ value: "3:4", label: "3:4" },
+			{ value: "3:2", label: "3:2" },
+			{ value: "2:3", label: "2:3" },
+			{ value: "16:9", label: "16:9" },
+			{ value: "9:16", label: "9:16" },
+		],
+	}),
+	mode: field.select({
+		default: "crop",
+		options: [
+			{ value: "crop", label: "Crop to fill" },
+			{ value: "pad", label: "Pad to fit" },
+		],
+	}),
+});
+
+const changeAspectRatioTool: ToolEntry<ChangeAspectRatioParams> = {
+	id: "change-aspect-ratio-png",
+	title: "Change Aspect Ratio PNG",
+	description:
+		"Fits the image into a target aspect ratio: crop the center to fill, or pad with transparency.",
+	category: "geometry",
+	schema: changeAspectRatioSchema,
+	run: (img, p) => {
+		const [rw, rh] = p.ratio.split(":").map(Number);
+		const ratio = rw / rh;
+		return p.mode === "pad" ? padToRatio(img, ratio) : cropToRatio(img, ratio);
+	},
+};
+
+interface SwapOrientationParams {
+	target: "portrait" | "landscape";
+}
+
+export const swapOrientationSchema = toolSchema<SwapOrientationParams>({
+	target: field.select({
+		default: "portrait",
+		options: [
+			{ value: "portrait", label: "Portrait" },
+			{ value: "landscape", label: "Landscape" },
+		],
+	}),
+});
+
+const swapOrientationTool: ToolEntry<SwapOrientationParams> = {
+	id: "swap-orientation-png",
+	title: "Swap Orientation PNG",
+	description:
+		"Rotates the image by 90° when its orientation differs from the target — landscape becomes portrait and back. Square images are untouched.",
+	category: "geometry",
+	schema: swapOrientationSchema,
+	run: (img, p) => forceOrientation(img, p.target),
+};
+
+type SymmetricAxis = "horizontal" | "vertical";
+type KeepSide = "left" | "right" | "top" | "bottom";
+
+interface SymmetricCopyParams {
+	axis: SymmetricAxis;
+	keepSide: KeepSide;
+}
+
+export const symmetricCopySchema = toolSchema<SymmetricCopyParams>({
+	axis: field.select({
+		default: "vertical",
+		options: [
+			{ value: "vertical", label: "Vertical (double width)" },
+			{ value: "horizontal", label: "Horizontal (double height)" },
+		],
+	}),
+	keepSide: field.select({
+		default: "left",
+		options: [
+			{ value: "left", label: "Left" },
+			{ value: "right", label: "Right" },
+			{ value: "top", label: "Top" },
+			{ value: "bottom", label: "Bottom" },
+		],
+	}),
+});
+
+const symmetricCopyTool: ToolEntry<SymmetricCopyParams> = {
+	id: "symmetric-copy-png",
+	title: "Symmetric Copy PNG",
+	description:
+		"Doubles the canvas by mirroring the kept side onto the empty half — instant symmetric pattern.",
+	category: "geometry",
+	schema: symmetricCopySchema,
+	run: (img, p) => symmetricCopy(img, p.axis, p.keepSide),
+};
+
+interface ShiftParams {
+	offsetX: number;
+	offsetY: number;
+	color: string;
+}
+
+export const shiftSchema = toolSchema<ShiftParams>({
+	offsetX: field.number({ min: -5000, max: 5000, step: 1, default: 0 }),
+	offsetY: field.number({ min: -5000, max: 5000, step: 1, default: 0 }),
+	color: field.color({ default: "#ffffff" }),
+});
+
+const shiftTool: ToolEntry<ShiftParams> = {
+	id: "shift-png",
+	title: "Shift PNG",
+	description: "Moves content by the given X and Y offset.",
+	category: "geometry",
+	schema: shiftSchema,
+	run: (img, p) =>
+		transformImage(
+			img,
+			[1, 0, 0, 1, -Math.trunc(p.offsetX), -Math.trunc(p.offsetY)],
+			img.width,
+			img.height,
+			p.color,
+		),
+};
+
 export const geometryEntries = [
 	addBorder,
 	fitOnBackground,
 	changeCanvasSizeTool,
 	resizeTool,
 	cropTool,
+	rotateTool,
+	flipTool,
+	addPaddingTool,
+	tileTool,
+	centerByAlphaTool,
+	skewTool,
+	rotateFreeTool,
+	zoomTool,
+	trimEmptySpaceTool,
+	changeAspectRatioTool,
+	swapOrientationTool,
+	symmetricCopyTool,
+	shiftTool,
 ];
