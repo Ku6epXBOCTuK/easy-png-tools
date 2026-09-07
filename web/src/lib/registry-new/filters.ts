@@ -1,8 +1,70 @@
 import type { ToolEntry } from "./types";
 import { field, toolSchema } from "../registry-schema";
-import { addNoise, pixelate, shuffleBlocks } from "../core/pixel-fx";
+import {
+	addNoise,
+	pixelate,
+	shuffleBlocks,
+	silhouette,
+} from "../core/pixel-fx";
+import { gaussianBlur, sharpen as sharpenImage } from "../core/convolution";
 import { vignette } from "../core/effects";
 import { jpegRoundtrip } from "../core/io";
+
+interface BlurParams {
+	radius: number;
+}
+
+export const blurSchema = toolSchema<BlurParams>({
+	radius: field.slider({ min: 1, max: 32, step: 1, default: 4 }),
+});
+
+const blurTool: ToolEntry<BlurParams> = {
+	id: "blur-png",
+	title: "Blur PNG",
+	description:
+		"Gaussian blur: three passes of separable box blur — fast at any radius. Transparent edges do not darken.",
+	category: "filters",
+	schema: blurSchema,
+	run: (img, p) => gaussianBlur(img, p.radius),
+};
+
+interface SharpenParams {
+	strength: number;
+}
+
+export const sharpenSchema = toolSchema<SharpenParams>({
+	strength: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+});
+
+const sharpenTool: ToolEntry<SharpenParams> = {
+	id: "sharpen-png",
+	title: "Sharpen PNG",
+	description:
+		"Emphasizes edges with a sharpening kernel; strength sets the blend with the original. 0% means no change.",
+	category: "filters",
+	schema: sharpenSchema,
+	run: (img, p) => sharpenImage(img, p.strength),
+};
+
+interface SilhouetteParams {
+	color: string;
+	threshold: number;
+}
+
+export const silhouetteSchema = toolSchema<SilhouetteParams>({
+	color: field.color({ default: "#111318" }),
+	threshold: field.slider({ min: 0, max: 100, step: 1, default: 10 }),
+});
+
+const silhouetteTool: ToolEntry<SilhouetteParams> = {
+	id: "silhouette-png",
+	title: "Silhouette PNG",
+	description:
+		"Turns all visible pixels into a single solid color while keeping their transparency — instant silhouette.",
+	category: "filters",
+	schema: silhouetteSchema,
+	run: (img, p) => silhouette(img, p.color, p.threshold * 2.55),
+};
 
 interface VignetteParams {
 	strength: number;
@@ -129,4 +191,7 @@ export const filtersEntries = [
 	randomizePixels,
 	addNoiseTool,
 	jpegArtifacts,
+	blurTool,
+	sharpenTool,
+	silhouetteTool,
 ];
