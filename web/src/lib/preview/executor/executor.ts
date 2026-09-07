@@ -55,6 +55,53 @@ export async function executeGenerate(
 	return await tool.generate(params);
 }
 
+type MaybeTextRunnable = MaybeRunnable & {
+	runFromText?: (
+		text: string,
+		params: Record<string, unknown>,
+	) => Promise<PixelImage> | PixelImage;
+	toText?: (
+		img: PixelImage,
+		params: Record<string, unknown>,
+	) => Promise<string> | string;
+	textToText?: (text: string) => Promise<string> | string;
+};
+
+/** Текст → изображение (text-source конвертеры). Выполняется напрямую. */
+export async function executeFromText(
+	tool: MaybeTextRunnable,
+	text: string,
+	params: Record<string, unknown>,
+): Promise<PixelImage> {
+	if (!tool.runFromText) {
+		throw new Error("errors.noTextInput");
+	}
+	return await tool.runFromText(text, params);
+}
+
+/** Изображение → текст (текстовые конвертеры и вердикты). */
+export async function executeToText(
+	tool: MaybeTextRunnable,
+	img: PixelImage,
+	params: Record<string, unknown>,
+): Promise<string> {
+	if (!tool.toText) {
+		throw new Error("errors.noTextResult");
+	}
+	return await tool.toText(img, params);
+}
+
+/** Текст → текст (напр. verify-is-png). */
+export async function executeTextToText(
+	tool: MaybeTextRunnable,
+	text: string,
+): Promise<string> {
+	if (!tool.textToText) {
+		throw new Error("errors.noTextResult");
+	}
+	return await tool.textToText(text);
+}
+
 async function runDirect(
 	tool: MaybeRunnable,
 	img: PixelImage,

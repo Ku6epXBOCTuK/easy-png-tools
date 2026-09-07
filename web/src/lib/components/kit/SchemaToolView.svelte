@@ -4,7 +4,13 @@
 	import { debounce } from "$lib/core/debounce";
 	import { decodeFile, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import { executeGenerate, executeStep } from "$lib/preview/executor";
+	import {
+		executeFromText,
+		executeGenerate,
+		executeStep,
+		executeTextToText,
+		executeToText,
+	} from "$lib/preview/executor";
 	import type { ToolEntry } from "$lib/registry-new";
 	import {
 		defaultSchemaParams,
@@ -22,10 +28,14 @@
 	);
 
 	const isGenerator = $derived(Boolean(tool.generate && !tool.run));
+	const inputMode = $derived(tool.input ?? "file");
+	const resultKind = $derived(tool.result ?? "image");
 
 	let values = $state<Record<string, unknown>>({});
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
+	let textSource = $state("");
+	let textResult = $state<string | null>(null);
 	let running = $state(false);
 	let error = $state("");
 	let started = $state(false);
@@ -45,6 +55,7 @@
 	function reset() {
 		values = schema ? defaultSchemaParams(schema) : {};
 		result = null;
+		textResult = null;
 		error = "";
 	}
 
@@ -64,12 +75,29 @@
 			await runGenerate();
 			return;
 		}
-		if (!source) return;
 		error = "";
-		running = true;
 		const params = sanitizeSchemaParams(schema, values);
+		running = true;
 		try {
-			result = await executeStep(tool, source, params);
+			if (inputMode === "text") {
+				if (!textSource.trim()) return;
+				if (tool.textToText) {
+					textResult = await executeTextToText(tool, textSource);
+					result = null;
+				} else {
+					result = await executeFromText(tool, textSource, params);
+					textResult = null;
+				}
+			} else {
+				if (!source) return;
+				if (resultKind !== "image" && tool.toText) {
+					textResult = await executeToText(tool, source, params);
+					result = null;
+				} else {
+					result = await executeStep(tool, source, params);
+					textResult = null;
+				}
+			}
 		} catch (e) {
 			error = errorText(e);
 		} finally {
@@ -106,12 +134,32 @@
 		URL.revokeObjectURL(url);
 	}
 
+	async function copyText() {
+		if (!textResult) return;
+		try {
+			await navigator.clipboard.writeText(textResult);
+		} catch (e) {
+			error = errorText(e);
+		}
+	}
+
+	async function downloadText() {
+		if (!textResult) return;
+		const blob = new Blob([textResult], { type: "text/plain" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = `${tool.id}.txt`;
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
 	$effect(() => {
 		init();
 	});
 
 	$effect(() => {
-		if (isGenerator || !source || !started) return;
+		if (inputMode === "text" || isGenerator || !source || !started) return;
 		void values;
 		debouncedRun();
 		return () => debouncedRun.cancel();
@@ -146,11 +194,20 @@
 				<SchemaPreview
 					{source}
 					{result}
+					{textSource}
+					{textResult}
+					{resultKind}
 					{running}
 					{error}
 					{isGenerator}
 					onupload={handleFile}
 					ongenerate={runGenerate}
+					ontextsource={(t) => {
+						textSource = t;
+					}}
+					onrendertext={run}
+					oncopytext={copyText}
+					ondownloadtxt={downloadText}
 					ondownload={download}
 				/>
 			</section>

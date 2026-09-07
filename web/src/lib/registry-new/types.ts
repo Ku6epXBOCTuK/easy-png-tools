@@ -23,6 +23,10 @@ export type ToolEntry<P = Record<string, unknown>> = {
 	schema: ToolSchema<P>;
 	/** Требует DOM (canvas/document); превью-executor запускает напрямую, не в worker. */
 	domOnly?: boolean;
+	/** Чем управляется инструмент: файлом (по умолчанию), текстом или ничем (генератор). */
+	input?: "file" | "text" | "none";
+	/** Тип результата: картинка (по умолчанию), большой текст или короткий вердикт. */
+	result?: "image" | "text" | "verdict";
 	/** Применение к входному изображению. Для чистых генераторов отсутствует. */
 	run?(img: PixelImage, params: P): Promise<PixelImage> | PixelImage;
 	generate?(params: P): Promise<PixelImage> | PixelImage;

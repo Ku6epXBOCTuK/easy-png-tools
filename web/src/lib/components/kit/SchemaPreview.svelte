@@ -1,6 +1,8 @@
 <script lang="ts">
 	import MetaList from "$lib/components/kit/MetaList.svelte";
 	import DownloadButton from "$lib/components/kit/ui/DownloadButton.svelte";
+	import SchemaTextResult from "$lib/components/kit/SchemaTextResult.svelte";
+	import SchemaTextSource from "$lib/components/kit/SchemaTextSource.svelte";
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import { Check, Sparkles, Upload } from "@lucide/svelte";
@@ -8,23 +10,40 @@
 	interface Props {
 		source: PixelImage | null;
 		result: PixelImage | null;
+		textSource?: string;
+		textResult?: string | null;
+		resultKind?: "image" | "text" | "verdict";
 		running: boolean;
 		error: string;
 		isGenerator?: boolean;
 		onupload: (file: File) => void;
 		ongenerate?: () => void;
+		ontextsource?: (text: string) => void;
+		onrendertext?: () => void;
+		oncopytext?: () => void;
+		ondownloadtxt?: () => void;
 		ondownload: () => void;
 	}
 	let {
 		source,
 		result,
+		textSource = "",
+		textResult = null,
+		resultKind = "image",
 		running,
 		error,
 		isGenerator = false,
 		onupload,
 		ongenerate,
+		ontextsource,
+		onrendertext,
+		oncopytext,
+		ondownloadtxt,
 		ondownload,
 	}: Props = $props();
+
+	const isTextInput = $derived(ontextsource !== undefined && !isGenerator);
+	const isImageDownload = $derived(resultKind === "image" && Boolean(result));
 
 	let sourceUrl = $derived(source ? toDataUrl(source) : null);
 	let resultUrl = $derived(result ? toDataUrl(result) : null);
@@ -44,7 +63,7 @@
 				<Sparkles size={14} />
 				{running ? "Generating…" : "Generate"}
 			</button>
-		{:else}
+		{:else if !isTextInput}
 			<label class="upload">
 				<Upload size={14} /> Open image
 				<input
@@ -57,7 +76,9 @@
 				/>
 			</label>
 		{/if}
-		<DownloadButton label="Download result" onclick={ondownload} />
+		{#if isImageDownload}
+			<DownloadButton label="Download result" onclick={ondownload} />
+		{/if}
 	</div>
 </div>
 
@@ -70,7 +91,16 @@
 		<figure class="tile">
 			<figcaption><span>SOURCE</span></figcaption>
 			<div class="canvas">
-				{#if sourceUrl}
+				{#if isTextInput}
+					<div class="text-source-wrap">
+						<SchemaTextSource
+							value={textSource}
+							disabled={running}
+							oninput={ontextsource ?? (() => {})}
+							onrender={onrendertext ?? (() => {})}
+						/>
+					</div>
+				{:else if sourceUrl}
 					<img src={sourceUrl} alt="source" />
 				{:else}
 					<span class="empty">choose an image</span>
@@ -78,10 +108,28 @@
 			</div>
 		</figure>
 	{/if}
-	<figure class="tile" class:full={isGenerator}>
+	<figure class="tile" class:full={isGenerator || resultKind !== "image"}>
 		<figcaption><span>RESULT {running ? "…" : ""}</span></figcaption>
-		<div class="canvas checker">
-			{#if resultUrl}
+		<div class="canvas" class:checker={resultKind === "image"}>
+			{#if resultKind === "text" && textResult}
+				<div class="text-result-wrap">
+					<SchemaTextResult
+						value={textResult}
+						kind="text"
+						oncopy={oncopytext ?? (() => {})}
+						ondownload={ondownloadtxt ?? (() => {})}
+					/>
+				</div>
+			{:else if resultKind === "verdict" && textResult}
+				<div class="text-result-wrap">
+					<SchemaTextResult
+						value={textResult}
+						kind="verdict"
+						oncopy={oncopytext ?? (() => {})}
+						ondownload={ondownloadtxt ?? (() => {})}
+					/>
+				</div>
+			{:else if resultKind === "image" && resultUrl}
 				<img src={resultUrl} alt="result" />
 			{:else if running}
 				<Check size={22} />
@@ -99,11 +147,25 @@
 		items={[
 			{
 				caption: "SOURCE",
-				value: source ? `${source.width} × ${source.height} px` : "—",
+				value:
+					!isGenerator && !isTextInput
+						? source
+							? `${source.width} × ${source.height} px`
+							: "—"
+						: isTextInput
+							? "text"
+							: "—",
 			},
 			{
 				caption: "RESULT",
-				value: result ? `${result.width} × ${result.height} px` : "—",
+				value:
+					resultKind === "image"
+						? result
+							? `${result.width} × ${result.height} px`
+							: "—"
+						: textResult
+							? "text"
+							: "—",
 			},
 			{ caption: "FORMAT", value: "PNG" },
 		]}
@@ -201,6 +263,12 @@
 	}
 	.empty {
 		font: var(--font-size-s) var(--font-mono);
+	}
+	.text-source-wrap,
+	.text-result-wrap {
+		width: 100%;
+		padding: var(--space-l);
+		box-sizing: border-box;
 	}
 	.meta {
 		margin-top: var(--space-l);
