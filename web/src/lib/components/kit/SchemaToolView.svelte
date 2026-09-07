@@ -196,10 +196,10 @@
 					{result}
 					{textSource}
 					{textResult}
+					{inputMode}
 					{resultKind}
 					{running}
 					{error}
-					{isGenerator}
 					onupload={handleFile}
 					ongenerate={runGenerate}
 					ontextsource={(t) => {
