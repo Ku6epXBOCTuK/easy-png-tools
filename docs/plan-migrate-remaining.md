@@ -1,10 +1,9 @@
 # План: дожать перевод инструментов в preview и переезд ветки `old/`
 
-> Статус: **переведено всё простое, осталось 23 спец-случая.** Основа —
-> `plan-composite-params.md` (Фазы 1–5). Текущее
-> состояние: **101 инструмент из 125 переведены в `registry-new`** (включая
-> ранее переведённые 40; из оставшихся 85 перенесены 62 простых), старый UI
-> уже живёт на `(old)/`-маршрутах, линтер-изоляция old↔preview на месте
+> Статус: **переведено 121 из 125; остальные 4 — отложены/закрыты решениями.**
+> Текущее
+> состояние: **121 инструмент переведён в `registry-new`**, старый UI уже живёт
+> на `(old)/`-маршрутах, линтер-изоляция old↔preview на месте
 > (плагин `isolation/no-mixed-imports`). Здесь — что сделать, чтобы:
 >
 > 1. в preview был **весь** каталог инструментов (плюс закрыты известные долги);
@@ -18,14 +17,16 @@
 
 ## Текущая картина (факты)
 
-- `registry.ts` + `registry/` — **125 инструментов**; `registry-new/` — **101**;
-  остаток — **23 спец-случая**. (Ранний подсчёт «104» был занижен: извлечение
-  суффиксом `-png` теряло каналы `png-to-hsl/…`, текстовые вердикты
-  `png-info` и т.п. и обратные конвертеры `png-to-base64/…`.)
-- Preview (`/preview`) показывает переведённые 101; старый UI работает
+- `registry.ts` + `registry/` — **125 инструментов**; `registry-new/` — **121**.
+  Не переведены только: `png-info` (отложен, хвост-фича с exif), `compress-png`
+  и `reduce-to-size-png` (закрыто решениями, см. ниже), `watermark-image-png`
+  (overlay — единственный реальный остаток).
+- Preview (`/preview`) показывает переведённые; старый UI работает
   на `/`-маршрутах (группа `(old)/`): `+page`, `demo`, `list-tools`,
-  `tools/[id]`. Все «простые» инструменты переведены (color 18, filters 3,
-  geometry 13, alpha 13, generate 8, analyze-маски 6, text 1).
+  `tools/[id]`. Переведено всё кроме четырёх хвостов: color 18, filters 3,
+  geometry 13, alpha 13 (+watermark-image в остатке), generate 10 (mix/sort),
+  analyze 12 (6 масок + verify + 5 вердиктов), convert 14 (jpg/webp/bmp +
+  5 png→texт + 6 text→png), text `watermark-tile-png`.
 - Плагин `isolation/no-mixed-imports` (`web/eslint-plugins/isolation/`)
   полностью разделяет ветки: старый `lib/registry.ts|/registry/**`,
   `lib/registry-helpers.ts`, `lib/categories.ts`, `lib/tools/**`,
@@ -42,45 +43,41 @@
   `ColorField.svelte`, пустой ruleset в `Toggle.svelte`, неиспользуемые токены
   в `preview.css`.
 
-## Скоуп перевода: осталось 23 особых случая
+## Скоуп перевода: переведено всё переводимое (отложено 4 хвоста)
 
-Все инструменты без специальных фич переведены (суммарно 62 простых из 85,
-плюс ранее переведённые 40). Остаток — 23 инструмента, требующих достройки
-фундамента preview. По категориям:
+Каталог дожат до предела текущих решений: переведено 121 из 125. Оставшиеся
+4 инструмента **отложены осознанно** (не делаем сейчас):
 
-- **alpha — 1**: `watermark-image-png`.
-- **analyze — 6**: text-вердикты `png-info`, `png-is-grayscale`,
-  `png-file-size`, `png-is-transparent`, `png-orientation`, `verify-is-png`.
-- **generate — 2**: `mix-colors-png`, `sort-colors-png` (списки значений).
-- **convert — 14**: text-source-конвертеры
-  `base64/data-uri/hex/bytes/rgb-values-to-png` + обратные
-  `png-to-base64/…`; output/формат `compress-png`, `reduce-to-size-png`,
-  `png-to-bmp`; `svg-to-png` (text-source + DOM).
+- **`watermark-image-png` (alpha)** — **отложен**. Нужна overlay-механика
+  (второе изображение-знак через `getOverlay`/store + параметры
+  scale/opacity/position/margin/aspect); решается отдельно, вместе с вопросом,
+  как второй источник изображения вписывается в schema-driven preview.
+- **`png-info`** — **отложен осознанно**: будет серьёзно дорабатываться
+  отдельным райзом (exif-теги, редактирование, структурированный вывод),
+  для него нужен свой отдельный случай в UI, не «ещё один text/verdict».
+- **`compress-png`** — **закрыт как дубликат** `decrease-color-count-png`:
+  пресеты сжатия 192/96/44 добавлены прямо в схему `decrease-color-count`.
+- **`reduce-to-size-png`** — **отложен** до достройки кнопки Download
+  (backlog №7, «экспорт с лимитом размера»).
 
-### Особые случаи (требуют достройки фундамента, не просто перевод)
+### Переведено в этом проходе (text-механика)
 
-1. **`watermark-image-png`** — нужна overlay-механика: второе изображение-знак
-   (`getOverlay`/store), которое загружается на странице инструмента и
-   применяется поверх. В новом preview это единственный непереведённый
-   инструмент с источником-картинкой помимо основного входа. Учесть связь с
-   `overlay-store` (упомянут в `plan-redesign.md`).
-2. **Text-source / text-вердикты** (вход: `base64/data-uri/hex/bytes/
-   rgb-values-to-png`, `svg-to-png`; выход-вердикт: `png-to-base64/…`,
-   аналитические `png-info`, `png-is-grayscale`, `png-file-size`,
-   `png-is-transparent`, `png-orientation`, `verify-is-png`) — тип `ToolEntry`
-   уже имеет `toText`/`textToText`/`runFromText`, но executor превью их **не
-   вызывает** (только `run`/`generate`). Нужно решить, как подаётся текст-вход
-   (текстовое поле/паста на странице инструмента) и как показывается результат
-   для вердиктных инструментов (в конверсиях — не картинка, а текст/бейдж), и
-   протащить эти поля через executor/UI.
-3. **Output/формат** (`compress-png`, `reduce-to-size-png`, `png-to-bmp`;
-   пересекается с `convert-png-to-jpg`/`webp`) — по `backlog.md` №7 формат
-   переезжает в кнопку Download, а не в отдельный инструмент. Перед переводом
-   решить: переводим как инструменты с quality-параметром или дожидаемся
-   достройки download-формата.
-4. **`mix-colors` / `sort-colors`** — нужен список значений (цвета/веса или
-   источник). В схеме нет list-kind: либо новый kind, либо фиксированное
-   число слотов, либо отложить до отдельной задачи про списки.
+- **Типы:** `ToolEntry.input: "file" | "text" | "none"`,
+  `ToolEntry.result: "image" | "text" | "verdict"`, `OutputFormat` (mime/ext/
+  qualityParamId) для download.
+- **Executor:** `executeFromText` / `executeToText` / `executeTextToText`
+  (прямые, без worker), экспорт в `preview/executor/index.ts`.
+- **UI:** `SchemaTextSource` (textarea + Render), `SchemaTextResult`
+  (кол-блок с Copy/Download .txt или бейдж-вердикт по префиксу Yes/No),
+  интеграция в `SchemaPreview`/`SchemaToolView` (режимы file/text/generate,
+  рендер image/text/verdict, скрытие image-download для text-результата).
+- **Инструменты:** convert 5×png→text (base64/data-uri/hex/bytes/rgb-values),
+  6×text→png (base64/data-uri/hex/bytes/rgb-values/svg, +width), analyze
+  verify-is-png (text→text) и 5 вердиктов (grayscale/file-size/transparent/
+  orientation). Доработка: `base64ToBytes` сужен до `Uint8Array<ArrayBuffer>`
+  (совместимость с `decodeBytes`).
+- **Гейты:** eslint 0, prettier чист, svelte-check — только предсуществующий
+  ToolCard, тесты — только предсуществующий фейл `palette.test.ts`.
 
 ## Известные долги перед переездом (завести tasks и закрыть)
 
@@ -96,15 +93,17 @@ a11y `ColorField`, пустой ruleset `Toggle`. Плюс два, мешающ�
 ## Шаги перевода остатка (порядок)
 
 1. **Простые пачки** — **выполнено**: color (18) → filters (3) → geometry (13)
-   → alpha (13/14, кроме watermark-image) → generate (8/10) → analyze-маски
-   (6/12) → text `watermark-tile-png`. Каждая пачка после себя гнала гейты
-   (eslint/svelte-check/тесты/prettier); в тестах только предсуществующий фейл
-   `palette.test.ts`.
-2. **Особые случаи** — отдельным переговоренным решением (overlay для
-   watermark-image, text-source/вердикты — через `toText`/`runFromText` в
-   executor, output-формат, списки для mix/sort). Это единственный реальный
-   объём для дожатия каталога.
-3. После категории — `schema.layout` для сгруппированных инструментов
+   → alpha (13/14, кроме watermark-image) → generate (10, включая mix/sort
+   через kind `colors`) → analyze-маски (6) → text `watermark-tile-png`.
+2. **Text-механика** — **выполнено**: типы `input`/`result` + output-формат,
+   executor `executeFromText`/`toText`/`textToText`, UI
+   `SchemaTextSource`/`SchemaTextResult` + интеграция в preview, перевод
+   конвертеров convert (5 png→text + 6 text→png) и analyze (verify + 5
+   вердиктов). `png-info` отложен отдельным райзом (exif).
+3. **Шаг про overlay не делается** — `watermark-image-png` **отложен решением**
+   (см. «Скоуп перевода» выше), отдельным райзом вместе с вопросом второго
+   источника изображения в schema-driven preview.
+4. После категории — `schema.layout` для сгруппированных инструментов
    (шаг 32-33 паттерн) и ручная проверка в `/preview`.
 
 ## Переезд в `old/` (шаг 37 основного плана)
@@ -135,7 +134,8 @@ a11y `ColorField`, пустой ruleset `Toggle`. Плюс два, мешающ�
    дефолты совпадают со старыми, валидация/клампы поведения не меняют,
    результат эквивалентен старому UI (сверить на одинаковых входах).
 2. **Тяжёлые кейсы руками:** генераторы, маски, font-style/plate/gradient на
-   всем наборе, watermark-image (после overlay), text-source, output-формат.
+   всем наборе, text-source, output-формат. (`watermark-image` — позже, после
+   overlay-райза.)
 3. **Сбор фидбека** — отдельные задачи на каждый найденный фикс; чеклист
    зафиксировать в этом документе по мере находок (или ссылкой на tasks).
 4. Сверка каталога с `tools-map.md` (покрытие/дедупликация
@@ -158,14 +158,15 @@ a11y `ColorField`, пустой ruleset `Toggle`. Плюс два, мешающ�
 
 ## Оценка трудозатрат
 
-| Часть                                                            | Сложность       | Оценка                |
-| ---------------------------------------------------------------- | --------------- | --------------------- |
-| Простые инструменты (color/filters/geometry/alpha/generate/маски/text) | Низкая-Средняя | **выполнено** (62 шт) |
-| Особые случаи (overlay/text-source/format/списки)                | Средняя-Высокая | ~4-6ч + ревью решения |
-| Долги (ToolCard, palette.test.ts, lint:all остаток)              | Средняя         | ~2-4ч                 |
-| Переезд в `old/` + конфиг плагина + гейты                        | Средняя-Низкая  | ~2-4ч                 |
-| Проверка/фидбек + правки                                         | Зависит         | ~3-6ч                 |
-| **Итого**                                                        |                 | **~11-20ч** по фазам  |
+| Часть                                                                  | Сложность      | Оценка                    |
+| ---------------------------------------------------------------------- | -------------- | ------------------------- |
+| Простые инструменты (color/filters/geometry/alpha/generate/маски/text) | Низкая-Средняя | **выполнено** (62 шт)     |
+| Text-механика + конвертеры/вердикты                                    | Средняя        | **выполнено** (16 шт)     |
+| watermark-image / png-info / reduce-to-size (отложены решениями)       | Высокая        | отложено, отдельные райзы |
+| Долги (ToolCard, palette.test.ts, lint:all остаток)                    | Средняя        | ~2-4ч                     |
+| Переезд в `old/` + конфиг плагина + гейты                              | Средняя-Низкая | ~2-4ч                     |
+| Проверка/фидбек + правки                                               | Зависит        | ~3-6ч                     |
+| **Итого**                                                              |                | **~9-18ч** по фазам       |
 
 > Оценки ориентировочные; особые случаи — с ревью решения, объём финальных
 > правок по фидбеку не предсказуем.
