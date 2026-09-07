@@ -22,8 +22,8 @@
 	}
 </script>
 
-<div class="control-block">
-	<label>{label}</label>
+<label class="control-block">
+	<span class="control-title">{label}</span>
 	<div class="color-field">
 		<span class="swatch" class:dark style="background:{value}"></span>
 		<input
@@ -35,13 +35,13 @@
 		/>
 		{#if chevron}<ChevronDown class="icon" size={14} />{/if}
 	</div>
-</div>
+</label>
 
 <style>
 	.control-block :global(.icon) {
 		color: var(--foreground);
 	}
-	label {
+	.control-title {
 		display: flex;
 		justify-content: space-between;
 		font: 10px var(--font-mono);

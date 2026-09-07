@@ -42,6 +42,4 @@
 	.toggle-knob {
 		transition: transform 0.12s ease;
 	}
-	.toggle.on .toggle-knob {
-	}
 </style>
