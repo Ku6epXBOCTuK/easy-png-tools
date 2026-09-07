@@ -7,11 +7,13 @@ import {
 	analogousSet,
 	complementarySet,
 	hexToRgb,
+	mixColors,
 	monochromaticSet,
 	renderBlend,
 	renderSwatches,
 	renderWheel,
 	shadeSet,
+	sortPalette,
 	stepColors,
 	tetradicSet,
 	triadicSet,
@@ -642,6 +644,97 @@ const shadesTool: ToolEntry<ShadesParams> = {
 		renderSwatches(shadeSet(p.baseColor, p.count, p.depth), p.width, p.layout),
 };
 
+interface MixColorsParams {
+	colors: string[];
+	width: number;
+}
+
+export const mixColorsSchema = toolSchema<MixColorsParams>(
+	{
+		colors: field.colors({ default: ["#ff0000", "#00ff00", "#0000ff"] }),
+		width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Colors", fields: ["colors"] },
+				{ title: "Output", fields: ["width"] },
+			],
+		},
+	},
+);
+
+const mixColorsTool: ToolEntry<MixColorsParams> = {
+	id: "mix-colors-png",
+	title: "Mix Colors PNG",
+	description:
+		"Averages the selected colors into one swatch. Colors become one uniform fill.",
+	category: "generate",
+	schema: mixColorsSchema,
+	generate: (p) => renderSwatches([mixColors(p.colors)], p.width, "strip"),
+};
+
+interface SortColorsParams {
+	colors: string[];
+	order: "hue" | "luma" | "sat";
+	width: number;
+	layout: "strip" | "grid";
+}
+
+export const sortColorsSchema = toolSchema<SortColorsParams>(
+	{
+		colors: field.colors({
+			default: [
+				"#ff0000",
+				"#ff8800",
+				"#ffff00",
+				"#00cc44",
+				"#0066ff",
+				"#8800ff",
+			],
+		}),
+		order: field.select({
+			default: "hue",
+			options: [
+				{ value: "hue", label: "Hue" },
+				{ value: "luma", label: "Brightness" },
+				{ value: "sat", label: "Saturation" },
+			],
+		}),
+		width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+		layout: field.select({
+			default: "grid",
+			options: [
+				{ value: "grid", label: "Grid" },
+				{ value: "strip", label: "Strip" },
+			],
+		}),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Colors", fields: ["colors"] },
+				{
+					title: "Output",
+					cols: 2,
+					fields: ["order", "width", "layout"],
+				},
+			],
+		},
+	},
+);
+
+const sortColorsTool: ToolEntry<SortColorsParams> = {
+	id: "sort-colors-png",
+	title: "Sort Colors PNG",
+	description:
+		"Renders the chosen colors as swatches sorted by hue, brightness or saturation.",
+	category: "generate",
+	schema: sortColorsSchema,
+	generate: (p) =>
+		renderSwatches(sortPalette(p.colors, p.order), p.width, p.layout),
+};
+
 interface TextToPngParams {
 	text: string;
 	style: FontStyle;
@@ -716,5 +809,7 @@ export const generateEntries = [
 	analogousTool,
 	monochromaticTool,
 	shadesTool,
+	mixColorsTool,
+	sortColorsTool,
 	textToPng,
 ];
