@@ -1,13 +1,20 @@
-import { renderTextToImage } from "../core/domText";
+import { renderEmoji, renderTextToImage } from "../core/domText";
 import { colorSpectrum, drawGrid, randomColorBlocks } from "../core/gen-tools";
 import { noiseImage, solidImage } from "../core/generate";
 import { changeCanvasSize } from "../core/geometry";
 import type { PixelImage } from "../core/types";
 import {
+	analogousSet,
+	complementarySet,
 	hexToRgb,
+	monochromaticSet,
 	renderBlend,
 	renderSwatches,
+	renderWheel,
+	shadeSet,
 	stepColors,
+	tetradicSet,
+	triadicSet,
 } from "../core/palette";
 import {
 	field,
@@ -439,6 +446,202 @@ const stepColorsTool: ToolEntry<StepColorsParams> = {
 		),
 };
 
+interface EmojiToPngParams {
+	emoji: string;
+	size: number;
+}
+
+export const emojiToPngSchema = toolSchema<EmojiToPngParams>({
+	emoji: field.text({ default: "😀" }),
+	size: field.slider({ min: 32, max: 1024, step: 16, default: 256 }),
+});
+
+const emojiToPng: ToolEntry<EmojiToPngParams> = {
+	id: "emoji-to-png",
+	title: "Emoji to PNG",
+	description:
+		"Renders an emoji or any Unicode symbol as a transparent PNG of the chosen size.",
+	category: "generate",
+	domOnly: true,
+	schema: emojiToPngSchema,
+	generate: (p) => renderEmoji(p.emoji, Math.round(p.size)),
+};
+
+interface ColorWheelParams {
+	size: number;
+	lightness: number;
+}
+
+export const colorWheelSchema = toolSchema<ColorWheelParams>({
+	size: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+	lightness: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+});
+
+const colorWheelTool: ToolEntry<ColorWheelParams> = {
+	id: "color-wheel-png",
+	title: "Color Wheel PNG",
+	description:
+		"Generates an HSL color wheel: hue around the circle, saturation from center to edge, chosen lightness.",
+	category: "generate",
+	schema: colorWheelSchema,
+	generate: (p) => renderWheel(p.size, p.lightness),
+};
+
+interface PaletteBaseParams {
+	baseColor: string;
+	width: number;
+	layout: "strip" | "grid";
+}
+
+const paletteBaseSchema = {
+	baseColor: field.color({ default: "#2563eb" }),
+	width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+	layout: field.select({
+		default: "grid",
+		options: [
+			{ value: "grid", label: "Grid" },
+			{ value: "strip", label: "Strip" },
+		],
+	}),
+};
+
+const paletteLayoutGroup = {
+	layout: {
+		groups: [
+			{ title: "Base color", fields: ["baseColor"] },
+			{
+				title: "Output",
+				cols: 2,
+				fields: ["width", "layout"],
+			},
+		],
+	},
+};
+
+const complementaryTool: ToolEntry<PaletteBaseParams> = {
+	id: "complementary-png",
+	title: "Complementary Palette PNG",
+	description:
+		"Two opposite colors on the color wheel — the base and its complement.",
+	category: "generate",
+	schema: toolSchema<PaletteBaseParams>(
+		{ ...paletteBaseSchema },
+		{ ...paletteLayoutGroup },
+	),
+	generate: (p) =>
+		renderSwatches(complementarySet(p.baseColor), p.width, p.layout),
+};
+
+const triadicTool: ToolEntry<PaletteBaseParams> = {
+	id: "triadic-png",
+	title: "Triadic Palette PNG",
+	description: "Three colors evenly spaced 120° apart on the color wheel.",
+	category: "generate",
+	schema: toolSchema<PaletteBaseParams>(
+		{
+			...paletteBaseSchema,
+			baseColor: field.color({ default: "#ff0000" }),
+		},
+		{ ...paletteLayoutGroup },
+	),
+	generate: (p) => renderSwatches(triadicSet(p.baseColor), p.width, p.layout),
+};
+
+const tetradicTool: ToolEntry<PaletteBaseParams> = {
+	id: "tetradic-png",
+	title: "Tetradic Palette PNG",
+	description:
+		"Four colors in two complementary pairs, 90° apart on the wheel.",
+	category: "generate",
+	schema: toolSchema<PaletteBaseParams>(
+		{
+			...paletteBaseSchema,
+			baseColor: field.color({ default: "#8000ff" }),
+		},
+		{ ...paletteLayoutGroup },
+	),
+	generate: (p) => renderSwatches(tetradicSet(p.baseColor), p.width, p.layout),
+};
+
+interface AnalogousParams extends PaletteBaseParams {
+	spread: number;
+	count: number;
+}
+
+const analogousTool: ToolEntry<AnalogousParams> = {
+	id: "analogous-png",
+	title: "Analogous Palette PNG",
+	description:
+		"Neighboring hues around the base color — calm, related color scheme.",
+	category: "generate",
+	schema: toolSchema<AnalogousParams>(
+		{
+			...paletteBaseSchema,
+			baseColor: field.color({ default: "#22c55e" }),
+			spread: field.slider({ min: 10, max: 90, step: 5, default: 30 }),
+			count: field.slider({ min: 3, max: 9, step: 1, default: 5 }),
+		},
+		{ ...paletteLayoutGroup },
+	),
+	generate: (p) =>
+		renderSwatches(
+			analogousSet(p.baseColor, p.spread, p.count),
+			p.width,
+			p.layout,
+		),
+};
+
+interface MonochromaticParams extends PaletteBaseParams {
+	count: number;
+	range: number;
+}
+
+const monochromaticTool: ToolEntry<MonochromaticParams> = {
+	id: "monochromatic-png",
+	title: "Monochromatic Palette PNG",
+	description:
+		"Tones of a single hue: lightness varies within the chosen range, hue and saturation stay fixed.",
+	category: "generate",
+	schema: toolSchema<MonochromaticParams>(
+		{
+			...paletteBaseSchema,
+			baseColor: field.color({ default: "#0ea5e9" }),
+			count: field.slider({ min: 2, max: 9, step: 1, default: 5 }),
+			range: field.slider({ min: 10, max: 90, step: 5, default: 40 }),
+		},
+		{ ...paletteLayoutGroup },
+	),
+	generate: (p) =>
+		renderSwatches(
+			monochromaticSet(p.baseColor, p.count, p.range),
+			p.width,
+			p.layout,
+		),
+};
+
+interface ShadesParams extends PaletteBaseParams {
+	count: number;
+	depth: number;
+}
+
+const shadesTool: ToolEntry<ShadesParams> = {
+	id: "shades-png",
+	title: "Shade Ramp PNG",
+	description: "A ramp of the base color getting darker step by step.",
+	category: "generate",
+	schema: toolSchema<ShadesParams>(
+		{
+			...paletteBaseSchema,
+			baseColor: field.color({ default: "#f59e0b" }),
+			count: field.slider({ min: 2, max: 9, step: 1, default: 5 }),
+			depth: field.slider({ min: 10, max: 90, step: 5, default: 50 }),
+		},
+		{ ...paletteLayoutGroup },
+	),
+	generate: (p) =>
+		renderSwatches(shadeSet(p.baseColor, p.count, p.depth), p.width, p.layout),
+};
+
 interface TextToPngParams {
 	text: string;
 	style: FontStyle;
@@ -505,5 +708,13 @@ export const generateEntries = [
 	placeholder,
 	blendTwo,
 	stepColorsTool,
+	emojiToPng,
+	colorWheelTool,
+	complementaryTool,
+	triadicTool,
+	tetradicTool,
+	analogousTool,
+	monochromaticTool,
+	shadesTool,
 	textToPng,
 ];

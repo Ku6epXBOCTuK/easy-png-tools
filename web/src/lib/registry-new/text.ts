@@ -1,5 +1,5 @@
 import { formatStamp } from "../core/datefmt";
-import { drawTextBlock } from "../core/domText";
+import { drawTextBlock, drawTextTile } from "../core/domText";
 import type { Position9 } from "../core/textdraw";
 import type { FontStyle, Plate } from "../registry-schema";
 import { field, toolSchema } from "../registry-schema";
@@ -122,4 +122,65 @@ const dateStamp: ToolEntry<DateStampParams> = {
 		}),
 };
 
-export const textEntries = [addText, dateStamp];
+interface WatermarkTileParams {
+	text: string;
+	style: FontStyle;
+	opacity: number;
+	angle: number;
+	stepX: number;
+	stepY: number;
+}
+
+const watermarkTileSchema = toolSchema<WatermarkTileParams>(
+	{
+		text: field.text({ default: "DRAFT", placeholder: "Watermark text" }),
+		style: field.fontStyle({
+			min: 12,
+			max: 160,
+			size: 56,
+			font: "sans",
+			bold: true,
+			color: "#ffffff",
+		}),
+		opacity: field.slider({ min: 5, max: 100, step: 5, default: 30 }),
+		angle: field.slider({ min: -90, max: 90, step: 1, default: -30 }),
+		stepX: field.slider({ min: 40, max: 600, step: 10, default: 220 }),
+		stepY: field.slider({ min: 40, max: 600, step: 10, default: 180 }),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "Watermark", fields: ["text", "style", "opacity"] },
+				{
+					title: "Tile",
+					cols: 2,
+					fields: ["angle", "stepX", "stepY"],
+				},
+			],
+		},
+	},
+);
+
+const watermarkTile: ToolEntry<WatermarkTileParams> = {
+	id: "watermark-tile-png",
+	title: "Watermark Tile PNG",
+	description:
+		"Covers the image with a repeating diagonal semi-transparent text tile — a protection watermark.",
+	category: "text",
+	domOnly: true,
+	schema: watermarkTileSchema,
+	run: (img, p) =>
+		drawTextTile(img, {
+			text: p.text,
+			fontSize: p.style.size,
+			font: p.style.font,
+			bold: p.style.bold,
+			color: p.style.color,
+			opacityPercent: p.opacity,
+			stepX: p.stepX,
+			stepY: p.stepY,
+			angleDeg: p.angle,
+		}),
+};
+
+export const textEntries = [addText, dateStamp, watermarkTile];
