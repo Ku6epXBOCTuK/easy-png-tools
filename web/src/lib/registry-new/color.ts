@@ -360,7 +360,8 @@ const autoContrastTool: ToolEntry<EmptyParams> = {
 };
 
 interface DecreaseColorCountParams {
-	maxColors: "2" | "4" | "8" | "16" | "32" | "64" | "128" | "256";
+	maxColors:
+		"2" | "4" | "8" | "16" | "32" | "44" | "64" | "96" | "128" | "192" | "256";
 }
 
 export const decreaseColorCountSchema = toolSchema<DecreaseColorCountParams>({
@@ -370,10 +371,13 @@ export const decreaseColorCountSchema = toolSchema<DecreaseColorCountParams>({
 			{ value: "2", label: "2" },
 			{ value: "4", label: "4" },
 			{ value: "8", label: "8" },
-			{ value: "16", label: "16" },
+			{ value: "16", label: "16 (extreme)" },
 			{ value: "32", label: "32" },
+			{ value: "44", label: "44 (strong)" },
 			{ value: "64", label: "64" },
+			{ value: "96", label: "96 (balanced)" },
 			{ value: "128", label: "128" },
+			{ value: "192", label: "192 (light)" },
 			{ value: "256", label: "256" },
 		],
 	}),
@@ -383,7 +387,7 @@ const decreaseColorCountTool: ToolEntry<DecreaseColorCountParams> = {
 	id: "decrease-color-count-png",
 	title: "Decrease Color Count PNG",
 	description:
-		"Same median-cut engine with fixed power-of-two presets — quick way to drop to 2–256 colors.",
+		"Median-cut engine as a quick way to drop to 2–256 colors. Presets marked (extreme/strong/balanced/light) match the classic compression levels.",
 	category: "color",
 	schema: decreaseColorCountSchema,
 	run: (img, p) => quantizeImage(img, Number(p.maxColors)).image,
