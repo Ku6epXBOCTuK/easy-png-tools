@@ -21,7 +21,7 @@
 		justify-content: space-between;
 		gap: var(--space-xl);
 		padding: var(--space-m) var(--space-xl);
-		border-bottom: 1px solid var(--color-border);
+		border-bottom: var(--size-border) solid var(--color-border);
 	}
 	.setting-control {
 		display: flex;

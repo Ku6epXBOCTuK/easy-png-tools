@@ -16,6 +16,6 @@
 		justify-content: flex-end;
 		gap: var(--space-m);
 		padding: var(--space-l) var(--space-xl);
-		border-top: 1px solid var(--color-border);
+		border-top: var(--size-border) solid var(--color-border);
 	}
 </style>

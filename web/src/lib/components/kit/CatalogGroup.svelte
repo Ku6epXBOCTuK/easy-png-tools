@@ -31,7 +31,7 @@
 		justify-content: space-between;
 		gap: var(--space-xl);
 		padding-bottom: var(--space-m);
-		border-bottom: 1px solid var(--color-border);
+		border-bottom: var(--size-border) solid var(--color-border);
 	}
 	.group-title span {
 		font: var(--font-size-s) var(--font-mono);

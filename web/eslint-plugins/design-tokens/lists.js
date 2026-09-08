@@ -6,14 +6,14 @@
 // Properties that accept a COLOR.
 // =====================================================================
 export const COLOR_PROPS =
-	/^(color|background|background-color|border|border-color|border-top|border-right|border-bottom|border-left|outline|outline-color|box-shadow|text-shadow|fill|stroke|fill-color|stroke-color|stop-color|flood-color|lighting-color|column-rule|column-rule-color|text-decoration|text-decoration-color|caret-color|accent-color|border-top-color|border-right-color|border-bottom-color|border-left-color)$/;
+	/^(color|background|background-color|background-image|border|border-color|border-top|border-right|border-bottom|border-left|outline|outline-color|box-shadow|text-shadow|fill|stroke|fill-color|stroke-color|stop-color|flood-color|lighting-color|column-rule|column-rule-color|text-decoration|text-decoration-color|caret-color|accent-color|border-top-color|border-right-color|border-bottom-color|border-left-color)$/;
 
 // =====================================================================
 // Properties that accept a SIZE (px/rem/em).
 // z-index is handled separately (it's an integer, not a length).
 // =====================================================================
 export const SIZE_PROPS =
-	/^(width|height|min-width|max-width|min-height|max-height|padding|padding-top|padding-right|padding-bottom|padding-left|margin|margin-top|margin-right|margin-bottom|margin-left|gap|column-gap|row-gap|top|right|bottom|left|inset|font-size|letter-spacing|word-spacing|line-height|border-radius|border-top-left-radius|border-top-right-radius|border-bottom-left-radius|border-bottom-right-radius|border-width|border-top-width|border-right-width|border-bottom-width|border-left-width|flex-basis|background-size|border-spacing)$/;
+	/^(width|height|min-width|max-width|min-height|max-height|padding|padding-top|padding-right|padding-bottom|padding-left|margin|margin-top|margin-right|margin-bottom|margin-left|gap|column-gap|row-gap|top|right|bottom|left|inset|font|font-size|letter-spacing|word-spacing|line-height|border-radius|border-top-left-radius|border-top-right-radius|border-bottom-left-radius|border-bottom-right-radius|border-width|border-top-width|border-right-width|border-bottom-width|border-left-width|flex-basis|background-size|background-position|border-spacing|grid-template-columns|grid-template-rows)$/;
 
 // =====================================================================
 // SHORTHAND properties that accept BOTH a color and a size. The browser

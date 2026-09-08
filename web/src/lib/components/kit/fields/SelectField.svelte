@@ -35,7 +35,7 @@
 		font-size: var(--font-size-s);
 		color: var(--color-text);
 		background: var(--color-background);
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-m);
 		padding: var(--space-s) var(--space-m);
 	}

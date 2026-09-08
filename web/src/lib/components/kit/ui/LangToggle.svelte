@@ -23,7 +23,7 @@
 	.lang {
 		display: flex;
 		align-items: center;
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 	}
 	.lang-btn {
 		border: 0;

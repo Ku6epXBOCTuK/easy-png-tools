@@ -56,12 +56,12 @@
 		padding-left: var(--space-m);
 		padding-right: var(--space-m);
 		height: var(--space-xxxl);
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 	}
 	.swatch {
 		width: var(--space-l);
 		height: var(--space-l);
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		flex: none;
 	}
 	.color-field input {

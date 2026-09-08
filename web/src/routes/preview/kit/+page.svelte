@@ -216,13 +216,16 @@
 	}
 	.tool-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(var(--size-card-min), 1fr));
 		gap: var(--space-l);
 		padding: var(--space-l) var(--space-xl);
 	}
 	.preview-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		grid-template-columns: repeat(
+			auto-fill,
+			minmax(var(--size-card-min-narrow), 1fr)
+		);
 		gap: var(--space-l);
 		padding: var(--space-l) var(--space-xl);
 	}

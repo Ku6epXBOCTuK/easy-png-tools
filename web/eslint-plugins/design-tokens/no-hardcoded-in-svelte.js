@@ -9,6 +9,7 @@ import {
 	DURATION_PROPS,
 	FORBIDDEN_DURATION_TOKEN,
 	FORBIDDEN_SIZE_TOKEN,
+	MIXED_PROPS,
 	SIZE_PROPS,
 } from "./lists.js";
 import { getStyleNodeLoc, getStyleRoot } from "./style-context.js";
@@ -125,13 +126,16 @@ export default {
 					// Sub-rule 2: sizes.
 					// Fire only on a real remaining px/rem/em token — percentages
 					// (width: 80%) and unitless values (line-height: 1.5) stay legal.
-					// Only legal absolute length is a single 1px border line.
-					if (SIZE_PROPS.test(prop)) {
+					// The only legal absolute length is a 0px reset line.
+					// MIXED_PROPS (border/outline shorthands) are checked for their
+					// SIZE half too — a border width must come from var(--size-*).
+					if (SIZE_PROPS.test(prop) || MIXED_PROPS.test(prop)) {
 						const withoutVars = stripVars(value);
-						const match = withoutVars.match(FORBIDDEN_SIZE_TOKEN);
-						if (match) {
+						const reported = new Set();
+						for (const match of withoutVars.matchAll(FORBIDDEN_SIZE_TOKEN)) {
 							const shown = match[0];
-							if (shown !== "1px" && shown !== "0px") {
+							if (shown !== "0px" && !reported.has(shown)) {
+								reported.add(shown);
 								report(decl, "hardcodedSize", { prop, value: shown });
 							}
 						}
@@ -150,12 +154,13 @@ export default {
 							)
 							.trim();
 						if (withoutKeywords !== "" && withoutKeywords !== "0") {
-							const match = value.match(COLOR_LITERAL);
-							if (match) {
-								report(decl, "hardcodedColor", {
-									prop,
-									value: match[0].trim(),
-								});
+							const reported = new Set();
+							for (const match of value.matchAll(COLOR_LITERAL)) {
+								const shown = match[0].trim();
+								if (!reported.has(shown)) {
+									reported.add(shown);
+									report(decl, "hardcodedColor", { prop, value: shown });
+								}
 							}
 						}
 					}

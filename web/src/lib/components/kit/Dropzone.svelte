@@ -66,7 +66,7 @@
 		gap: var(--space-m);
 		min-height: var(--size-panel-min-height);
 		padding: var(--space-xxxl);
-		border: 1px dashed var(--color-border);
+		border: var(--size-border) dashed var(--color-border);
 		border-radius: var(--radius-m);
 		color: var(--color-text-muted);
 		background: var(--color-background);

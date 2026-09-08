@@ -24,7 +24,7 @@
 <style>
 	.code-block {
 		position: relative;
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-m);
 		background: var(--color-background);
 		padding: var(--space-m) var(--space-l);

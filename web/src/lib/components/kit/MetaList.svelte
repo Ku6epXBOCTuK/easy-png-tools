@@ -15,7 +15,7 @@
 
 <style>
 	.meta-list {
-		border-top: 1px solid var(--color-border);
+		border-top: var(--size-border) solid var(--color-border);
 		grid-template-columns: repeat(3, 1fr);
 		gap: var(--space-m);
 		padding-top: var(--space-l);

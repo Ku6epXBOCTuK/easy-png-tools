@@ -156,7 +156,13 @@
 
 		--size-tool-icon: 42px;
 		--size-tool-min-height: 106px;
+		--size-tool-arrow: 18px;
 		--size-step-min-height: 138px;
+		--size-step-index: 46px;
+		--size-step-grip: 20px;
+		--size-card-min: 240px;
+		--size-card-min-narrow: 200px;
+		--size-workspace-min: 260px;
 		--size-content-max: 880px;
 		--size-content-max-wide: 1680px;
 
@@ -165,6 +171,7 @@
 		--font-size-l: 16px;
 		--font-size-xl: 24px;
 		--font-size-2xl: 32px;
+		--font-size-xs: 10px;
 
 		--radius-s: 0px;
 		--radius-m: 4px;

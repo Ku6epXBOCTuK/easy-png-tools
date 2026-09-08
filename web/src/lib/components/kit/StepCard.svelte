@@ -45,9 +45,9 @@
 <style>
 	.step-card {
 		display: grid;
-		grid-template-columns: 46px 20px 1fr;
+		grid-template-columns: var(--size-step-index) var(--size-step-grip) 1fr;
 		min-height: var(--size-step-min-height);
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		background: var(--color-panel);
 	}
 	.step-index {

@@ -101,7 +101,7 @@
 	}
 	.ws-results {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(var(--size-card-min), 1fr));
 		gap: var(--space-l);
 		padding: var(--space-m) var(--space-xl);
 	}

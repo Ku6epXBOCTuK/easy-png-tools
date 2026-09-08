@@ -55,7 +55,7 @@
 		align-items: center;
 		gap: var(--space-m);
 		padding: var(--space-m) var(--space-l);
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-m);
 		background: var(--color-panel);
 		color: var(--color-text-muted);
@@ -78,7 +78,7 @@
 		color: var(--color-text-muted);
 	}
 	.catalog-filters button {
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		background: transparent;
 		color: var(--color-text-muted);
 		font: var(--font-size-s) var(--font-mono);

@@ -20,7 +20,7 @@
 		flex-direction: column;
 		gap: var(--space-s);
 		margin: 0;
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-m);
 		padding: var(--space-m);
 		background: var(--color-panel);

@@ -64,8 +64,8 @@
 		flex-wrap: wrap;
 		margin-top: var(--space-page-top);
 		padding-top: var(--space-xxl);
-		border-top: 1px solid var(--color-border);
-		font: 10px var(--font-mono);
+		border-top: var(--size-border) solid var(--color-border);
+		font: var(--font-size-xs) var(--font-mono);
 		letter-spacing: var(--space-text-l);
 		color: var(--color-text-muted);
 	}

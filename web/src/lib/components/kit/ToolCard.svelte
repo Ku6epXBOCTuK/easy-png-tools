@@ -29,12 +29,14 @@
 <style>
 	.tool-card {
 		display: grid;
-		grid-template-columns: var(--size-tool-icon) minmax(0, 1fr) 24px 18px;
+		grid-template-columns: var(--size-tool-icon) minmax(0, 1fr) var(
+				--space-xxl
+			) var(--size-tool-arrow);
 		align-items: center;
 		gap: var(--space-l);
 		min-height: var(--size-tool-min-height);
 		padding: var(--space-xl);
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-m);
 		background: var(--color-panel);
 		color: var(--color-text);
@@ -63,7 +65,7 @@
 		color: var(--color-text);
 	}
 	.tool-copy span {
-		font: 12px/1.5 var(--font-mono);
+		font: var(--font-size-s)/1.5 var(--font-mono);
 		color: var(--color-text-muted);
 	}
 	.tool-index {

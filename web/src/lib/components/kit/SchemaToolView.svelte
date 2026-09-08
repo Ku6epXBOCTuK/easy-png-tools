@@ -267,7 +267,10 @@
 	}
 	.workspace {
 		display: grid;
-		grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr);
+		grid-template-columns: minmax(var(--size-workspace-min), 1fr) minmax(
+				0,
+				2fr
+			);
 		gap: var(--space-xxl);
 		align-items: start;
 	}

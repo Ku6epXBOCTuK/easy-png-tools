@@ -29,7 +29,7 @@
 		position: relative;
 		width: var(--space-xxxl);
 		height: var(--space-xl);
-		border: 1px solid var(--color-border);
+		border: var(--size-border) solid var(--color-border);
 		border-radius: 0;
 		background: var(--color-background);
 		cursor: pointer;
