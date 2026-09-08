@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pnpm --dir web dev",
     "build": "pnpm --dir web build",
-    "format": "pnpm --dir web format",
+    "format": "pnpm format:docs && pnpm --dir web format",
+    "format:docs": "prettier --write docs --log-level warn",
+    "check:docs": "prettier --check docs",
     "html": "pnpm --dir refs build && node scripts/extract-static.mjs refs/.next/server/app refs-html",
     "cdp-audit": "pnpm --dir web refs-cdp-audit:large"
   },
@@ -21,5 +23,8 @@
       "onFail": "download"
     }
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "prettier": "^3.9.6"
+  }
 }

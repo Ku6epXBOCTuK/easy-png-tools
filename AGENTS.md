@@ -11,9 +11,13 @@
 - Сборка: `pnpm --dir web build`, проверка типов: `pnpm --dir web exec svelte-check --tsconfig ./tsconfig.json`,
   тесты: `pnpm --dir web test` (Vitest), e2e: `pnpm --dir web test:e2e` (Playwright,
   `web/e2e/`, свой webServer на `pnpm build` + `scripts/serve-static.mjs`, порт 4173).
-- Форматирование: `pnpm --dir web format` (Prettier + `prettier-plugin-svelte`,
+- Форматирование: два независимых прогона. Корневой prettier форматирует
+  только markdown `docs/` (`.prettierrc` + allowlist `.prettierignore` в корне,
+  `pnpm format:docs`, проверка — `pnpm check:docs`). Код `web/` форматируется
+  отдельно: `pnpm --dir web format` (Prettier + `prettier-plugin-svelte`,
   конфиг `web/.prettierrc`, игнор `web/.prettierignore`). Проверка без записи:
-  `pnpm --dir web exec prettier --check .`.
+  `pnpm --dir web exec prettier --check .`. Оба прогона сразу: `pnpm format`
+  в корне.
 - Линтинг: `pnpm --dir web lint` (ESLint, flat-конфиг `web/eslint.config.js`).
   Устроен инкрементально:
   - На **весь код** — парсинг TS/Svelte + правило

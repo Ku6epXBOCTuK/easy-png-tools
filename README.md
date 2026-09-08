@@ -51,7 +51,8 @@ Static output is written to `web/build/`.
 | `pnpm --dir web test`    | Run unit tests (Vitest)   |
 | `pnpm --dir web check`   | Type-check (svelte-check) |
 | `pnpm --dir web lint`    | Lint (ESLint)             |
-| `pnpm --dir web format`  | Format (Prettier)         |
+| `pnpm --dir web format`  | Format code (Prettier)    |
+| `pnpm format:docs`       | Format docs (Prettier)    |
 | `pnpm --dir web preview` | Preview production build  |
 
 ## Project Structure

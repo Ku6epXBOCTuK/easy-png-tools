@@ -1,7 +1,9 @@
 ﻿# Карта инструментов: реализовано · добавить · идеи
 
-> Живой документ для сверки с каталогом. Формат записи: `id / название — параметры через запятую`.
-> Источник сравнения: onlinepngtools.com (311 уникальных; 107 из них — нишевые клоны серий Logo*/Icon*/Stamp*/Signature* поверх обычных операций).
+> Живой документ для сверки с каталогом. Формат записи:
+> `id / название — параметры через запятую`. Источник сравнения:
+> onlinepngtools.com (311 уникальных; 107 из них — нишевые клоны серий
+> Logo*/Icon*/Stamp*/Signature* поверх обычных операций).
 
 ---
 
@@ -21,8 +23,10 @@
 - png-to-base64 / base64-to-png — строка
 - png-to-data-uri / data-uri-to-png — строка
 - png-to-hex — rrggbbaa по строкам / hex-to-png — tokens + width
-- png-to-bytes — десятичные RGBA-байты по строкам / bytes-to-png — tokens + width
-- png-to-rgb-values — rgba(r,g,b,a) по пикселям / rgb-values-to-png — числа + width
+- png-to-bytes — десятичные RGBA-байты по строкам / bytes-to-png — tokens +
+  width
+- png-to-rgb-values — rgba(r,g,b,a) по пикселям / rgb-values-to-png — числа +
+  width
 - svg-to-png — width результата
 - verify-is-png — текстовый источник (base64/data-uri), вердикт по сигнатуре
 
@@ -41,7 +45,8 @@
 - harden-alpha-png — threshold
 - feather-edges-png — radius (размытие только альфы)
 - clean-edges-png — radius (defringe: RGB от ближайшего непрозрачного)
-- watermark-image-png — вторая картинка-знак (загружается на странице), scale, opacity, position, margin
+- watermark-image-png — вторая картинка-знак (загружается на странице), scale,
+  opacity, position, margin
 - despeckle-alpha-png / close-holes-png — radius
 - center-by-alpha-png — без параметров
 - round-corners-png — radius
@@ -52,7 +57,8 @@
 
 ### Цвет
 
-- grayscale-png / invert-colors-png / sepia-png / auto-contrast-png — без параметров
+- grayscale-png / invert-colors-png / sepia-png / auto-contrast-png — без
+  параметров
 - adjust-brightness-contrast-png — brightness, contrast
 - change-png-hue — degrees
 - extract-channel-png — channel (r/g/b)
@@ -73,7 +79,8 @@
 
 ### Разложение каналов
 
-- png-to-hsl / png-to-hsv / png-to-hsi — component (h/s/l и т.п.), display (gray | space-as-rgb)
+- png-to-hsl / png-to-hsv / png-to-hsi — component (h/s/l и т.п.), display (gray
+  | space-as-rgb)
 - png-to-cmyk — component (c/m/y/k), display
 - png-to-ycbcr — component (y/cb/cr), display
 - png-to-lab — component (l/a/b), display
@@ -117,12 +124,15 @@
 ### Маски по свойствам пикселей
 
 - show-transparent-png — color, opacity (подсветка прозрачных/полупрозрачных)
-- show-grayscale-pixels-png — tolerance, mode (binary/highlight), highlightColor, highlightOpacity
+- show-grayscale-pixels-png — tolerance, mode (binary/highlight),
+  highlightColor, highlightOpacity
 - show-color-pixels-png — tolerance, mode, highlightColor, highlightOpacity
 - light-pixel-mask-png — threshold, mode, highlightColor, highlightOpacity
 - dark-pixel-mask-png — threshold, mode, highlightColor, highlightOpacity
-- unique-color-mask-png — rarity (макс. повторов), mode, highlightColor, highlightOpacity
-- extract-color-from-png — color, tolerance (оставить близкие, остальное прозрачным)
+- unique-color-mask-png — rarity (макс. повторов), mode, highlightColor,
+  highlightOpacity
+- extract-color-from-png — color, tolerance (оставить близкие, остальное
+  прозрачным)
 
 ### Генерация
 
@@ -130,7 +140,8 @@
 - single-color-png — width, height, color
 - random-noise-png — width, height, seed
 - linear-gradient-png — width, height, fromColor, toColor, direction
-- text-to-png — text, fontSize, font, bold, color, transparentBg, backgroundColor, padding
+- text-to-png — text, fontSize, font, bold, color, transparentBg,
+  backgroundColor, padding
 - emoji-to-png — emoji, size
 - placeholder-png — width, height, backgroundColor, color, showText
 - color-spectrum-png — width, height, direction, saturation, lightness
@@ -139,13 +150,17 @@
 
 ### Текст
 
-- add-text-png — text, fontSize, color, font, bold, position (3×3), margin, plate, plateColor, plateOpacity
-- date-stamp-png — format, fontSize, color, font, bold, position, margin, plate, plateColor, plateOpacity
-- watermark-tile-png — text, fontSize, color, opacity, angle, stepX, stepY, font, bold
+- add-text-png — text, fontSize, color, font, bold, position (3×3), margin,
+  plate, plateColor, plateOpacity
+- date-stamp-png — format, fontSize, color, font, bold, position, margin, plate,
+  plateColor, plateOpacity
+- watermark-tile-png — text, fontSize, color, opacity, angle, stepX, stepY,
+  font, bold
 
 ### Палитры и цветовые утилиты
 
-- color-wheel-generator — size, кольца/сектора, показ hex при клике (у нас — статичный свотч-полотно)
+- color-wheel-generator — size, кольца/сектора, показ hex при клике (у нас —
+  статичный свотч-полотно)
 - complementary-palette — baseColor
 - monochromatic-palette — baseColor, count
 - analogous-palette — baseColor, spread
@@ -154,7 +169,8 @@
 - similar-shades-palette — baseColor, count, range
 - sort-colors — источник (палитра-картинка или список), порядок (hsl/luma)
 - mix-colors — colors[], веса?
-- average-color — colors[]; blend-two — a, b, steps; step-between — a, b, steps (три частных случая одного движка)
+- average-color — colors[]; blend-two — a, b, steps; step-between — a, b, steps
+  (три частных случая одного движка)
 
 ---
 
@@ -193,7 +209,8 @@
 
 ### Прочее единичное
 
-- pick-a-color — пипетка уже есть в превью; отдельная страница не планируется (покрыто)
+- pick-a-color — пипетка уже есть в превью; отдельная страница не планируется
+  (покрыто)
 - preview/test на цветных фонах — фича превью, не инструмент (решить позже)
 - extract-barcode — HARD, вне планов
 
@@ -201,8 +218,17 @@
 
 ## 3. Идеи на рассмотрение (нужна архитектура или спорная ценность)
 
-- **Region-инструменты** — требуется UI выделения прямоугольника/ластика на превью: censor-region, erase-region, pixelate-area, blur-area, sharpen-area, reverse-colors-area. Один раз делаем selection-компонент — получаем сразу шесть инструментов.
-- **Мультифайловый вывод** — сейчас инструмент отдаёт одну картинку: split-into-parts, gif-to-frames, separate-colors, multiply-grid-as-files. Нужен механизм «результат = набор файлов» (zip?).
-- **Анимационные эффекты** — slow-reveal, fade-in/out, disappearing, scrolling: это видео/GIF на выходе, а не PNG. Отдельное решение о формате результата.
-- **HARD-хвост** — glitch-art, extract-signature, handwritten→digital, extract-barcode.
-- **Нишевые серии** (logo/icon/stamp/signature — 107 клонов у источника) — сознательно не копируем: это обычные операции над конкретным контентом, у нас они доступны через базовые инструменты + цепочки.
+- **Region-инструменты** — требуется UI выделения прямоугольника/ластика на
+  превью: censor-region, erase-region, pixelate-area, blur-area, sharpen-area,
+  reverse-colors-area. Один раз делаем selection-компонент — получаем сразу
+  шесть инструментов.
+- **Мультифайловый вывод** — сейчас инструмент отдаёт одну картинку:
+  split-into-parts, gif-to-frames, separate-colors, multiply-grid-as-files.
+  Нужен механизм «результат = набор файлов» (zip?).
+- **Анимационные эффекты** — slow-reveal, fade-in/out, disappearing, scrolling:
+  это видео/GIF на выходе, а не PNG. Отдельное решение о формате результата.
+- **HARD-хвост** — glitch-art, extract-signature, handwritten→digital,
+  extract-barcode.
+- **Нишевые серии** (logo/icon/stamp/signature — 107 клонов у источника) —
+  сознательно не копируем: это обычные операции над конкретным контентом, у нас
+  они доступны через базовые инструменты + цепочки.
