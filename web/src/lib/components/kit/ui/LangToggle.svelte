@@ -23,22 +23,22 @@
 	.lang {
 		display: flex;
 		align-items: center;
-		border: 1px solid var(--line);
+		border: 1px solid var(--color-border);
 	}
 	.lang-btn {
 		border: 0;
 		background: transparent;
-		color: var(--muted);
-		font: 10px var(--font-mono);
-		padding: 6px 9px;
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+		padding: var(--space-s) var(--space-m);
 		cursor: pointer;
 	}
 	.lang-div {
-		color: var(--foreground);
+		color: var(--color-text);
 		font-family: var(--font-sans);
 	}
 	.lang-btn.active {
-		background: var(--foreground);
-		color: var(--background);
+		background: var(--color-text);
+		color: var(--color-background);
 	}
 </style>

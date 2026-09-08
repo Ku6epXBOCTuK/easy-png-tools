@@ -138,10 +138,14 @@
 
 		--space-brand: 32px;
 
+		--space-page-top: 48px;
+		--space-page-bottom: 72px;
+
 		--space-text-s: 0;
 		--space-text-m: 0.04em;
 		--space-text-l: 0.08em;
 		--space-text-xl: 0.12em;
+		--space-text-2xl: 0.18em;
 
 		--size-border: 1px;
 		--size-border-thick: 2px;
@@ -149,6 +153,12 @@
 		--size-preview-canvas-min-height-s: 180px;
 		--size-preview-canvas-min-height-l: 360px;
 		--size-panel-min-height: 220px;
+
+		--size-tool-icon: 42px;
+		--size-tool-min-height: 106px;
+		--size-step-min-height: 138px;
+		--size-content-max: 880px;
+		--size-content-max-wide: 1680px;
 
 		--font-size-s: 12px;
 		--font-size-m: 14px;

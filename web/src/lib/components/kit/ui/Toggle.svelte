@@ -27,19 +27,19 @@
 <style>
 	.toggle {
 		position: relative;
-		width: 32px;
-		height: 18px;
-		border: 1px solid var(--line);
+		width: var(--space-xxxl);
+		height: var(--space-xl);
+		border: 1px solid var(--color-border);
 		border-radius: 0;
-		background: var(--background);
+		background: var(--color-background);
 		cursor: pointer;
 		padding: 0;
 	}
 	.toggle.on {
-		background: var(--blue);
-		border-color: var(--blue);
+		background: var(--color-main);
+		border-color: var(--color-main);
 	}
 	.toggle-knob {
-		transition: transform 0.12s ease;
+		transition: transform var(--duration-s) ease;
 	}
 </style>

@@ -15,10 +15,10 @@
 
 <style>
 	.meta-list {
-		border-top: 1px solid var(--line);
+		border-top: 1px solid var(--color-border);
 		grid-template-columns: repeat(3, 1fr);
-		gap: 8px;
-		padding-top: 14px;
+		gap: var(--space-m);
+		padding-top: var(--space-l);
 		display: grid;
 	}
 </style>

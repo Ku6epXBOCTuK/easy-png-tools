@@ -13,19 +13,19 @@
 
 <style>
 	.meta-row {
-		gap: 5px;
+		gap: var(--space-s);
 		display: grid;
 	}
 	.meta-caption {
 		font-family: var(--font-mono);
-		font-size: 9px;
-		color: var(--muted);
+		font-size: var(--font-size-s);
+		color: var(--color-text-muted);
 		line-height: normal;
 	}
 	.meta-value {
-		margin-top: 5px;
+		margin-top: var(--space-s);
 		line-height: normal;
-		font: 11px var(--font-mono);
-		color: var(--foreground);
+		font: var(--font-size-s) var(--font-mono);
+		color: var(--color-text);
 	}
 </style>

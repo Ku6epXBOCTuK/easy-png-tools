@@ -19,13 +19,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
-		padding: 0.6rem 1rem;
-		border-bottom: 1px solid var(--line);
+		gap: var(--space-xl);
+		padding: var(--space-m) var(--space-xl);
+		border-bottom: 1px solid var(--color-border);
 	}
 	.setting-control {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: var(--space-m);
 	}
 </style>

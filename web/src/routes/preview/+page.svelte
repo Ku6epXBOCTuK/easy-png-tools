@@ -60,40 +60,40 @@
 
 <style>
 	.workspace {
-		max-width: 880px;
+		max-width: var(--size-content-max);
 		margin: 0 auto;
-		padding: 2.5rem 1.25rem 4rem;
+		padding: var(--space-page-top) var(--space-xl) var(--space-page-bottom);
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--space-xxl);
 	}
 	.ws-head {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--space-m);
 	}
 	.ws-eyebrow {
 		font-family: var(--font-mono);
-		font-size: 12px;
-		letter-spacing: 0.18em;
-		color: var(--muted);
+		font-size: var(--font-size-s);
+		letter-spacing: var(--space-text-2xl);
+		color: var(--color-text-muted);
 	}
 	.ws-title {
 		margin: 0;
-		font-size: 2rem;
+		font-size: var(--font-size-2xl);
 		font-weight: 700;
-		color: var(--foreground);
+		color: var(--color-text);
 	}
 	.ws-lede {
 		margin: 0;
 		max-width: 56ch;
-		color: var(--muted);
-		font-size: 0.95rem;
+		color: var(--color-text-muted);
+		font-size: var(--font-size-l);
 	}
 	.ws-search {
 		display: flex;
-		gap: 0.5rem;
-		padding: 0.75rem 1rem;
+		gap: var(--space-m);
+		padding: var(--space-l) var(--space-xl);
 		align-items: center;
 	}
 	.ws-field {
@@ -102,7 +102,7 @@
 	.ws-results {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-		gap: 0.75rem;
-		padding: 0.5rem 1rem 1rem;
+		gap: var(--space-l);
+		padding: var(--space-m) var(--space-xl);
 	}
 </style>

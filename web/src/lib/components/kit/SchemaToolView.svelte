@@ -293,7 +293,7 @@
 	.no-schema {
 		font: var(--font-size-s) var(--font-mono);
 	}
-	@media (max-width: var(--bp-tablet)) {
+	@media (--bp-tablet) {
 		.workspace {
 			grid-template-columns: 1fr;
 		}

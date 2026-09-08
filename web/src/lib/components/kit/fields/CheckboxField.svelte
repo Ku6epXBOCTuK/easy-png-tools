@@ -21,12 +21,12 @@
 	.checkbox-field {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.5rem;
-		font-size: 0.85rem;
-		color: var(--foreground);
+		gap: var(--space-m);
+		font-size: var(--font-size-m);
+		color: var(--color-text);
 		cursor: pointer;
 	}
 	.checkbox-field input {
-		accent-color: var(--blue);
+		accent-color: var(--color-main);
 	}
 </style>

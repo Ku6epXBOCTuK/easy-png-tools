@@ -23,18 +23,18 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
-		padding: 0.75rem 1rem;
-		border-bottom: 1px solid var(--line);
+		gap: var(--space-xl);
+		padding: var(--space-l) var(--space-xl);
+		border-bottom: 1px solid var(--color-border);
 	}
 	.heading-text {
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
+		gap: var(--space-s);
 	}
 	.heading-title {
-		font-size: 0.95rem;
+		font-size: var(--font-size-m);
 		font-weight: 600;
-		color: var(--foreground);
+		color: var(--color-text);
 	}
 </style>

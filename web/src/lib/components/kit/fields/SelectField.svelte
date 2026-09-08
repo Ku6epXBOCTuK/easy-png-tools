@@ -32,11 +32,11 @@
 	.select-field {
 		width: 100%;
 		font-family: var(--font-mono);
-		font-size: 11px;
-		color: var(--foreground);
-		background: var(--background);
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		padding: 0.35rem 0.5rem;
+		font-size: var(--font-size-s);
+		color: var(--color-text);
+		background: var(--color-background);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-m);
+		padding: var(--space-s) var(--space-m);
 	}
 </style>

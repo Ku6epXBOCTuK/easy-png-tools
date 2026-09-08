@@ -46,44 +46,44 @@
 	.step-card {
 		display: grid;
 		grid-template-columns: 46px 20px 1fr;
-		min-height: 138px;
-		border: 1px solid var(--line);
-		background: var(--panel);
+		min-height: var(--size-step-min-height);
+		border: 1px solid var(--color-border);
+		background: var(--color-panel);
 	}
 	.step-index {
-		font: 11px var(--font-mono);
-		color: var(--blue);
-		padding: 17px 0 0px 15px;
+		font: var(--font-size-s) var(--font-mono);
+		color: var(--color-main);
+		padding: var(--space-xl) 0 0px var(--space-xl);
 	}
 	.step-body {
-		padding: 15px 18px 18px;
+		padding: var(--space-xl) var(--space-xl) var(--space-xl);
 	}
 	.step-heading {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 15px;
-		border-color: var(--line);
+		gap: var(--space-xl);
+		border-color: var(--color-border);
 	}
 	.step-type {
-		color: var(--muted);
-		font: 10px var(--font-mono);
-		letter-spacing: 0.12em;
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-xl);
 	}
 	.step-title {
-		margin: 5px 0 18px;
-		font: 600 15px var(--font-mono);
-		color: var(--foreground);
+		margin: var(--space-s) 0 var(--space-xl);
+		font: 600 var(--font-size-m) var(--font-mono);
+		color: var(--color-text);
 	}
 	.step-tools {
 		display: flex;
 		align-items: center;
-		gap: 13px;
+		gap: var(--space-l);
 	}
 	.step-remove {
 		border: 0;
 		background: transparent;
-		color: var(--muted);
+		color: var(--color-text-muted);
 		cursor: pointer;
 		line-height: inherit;
 		& :global(svg) {
@@ -92,13 +92,13 @@
 		}
 	}
 	.step-card :global(.drag) {
-		margin-top: 17px;
-		color: var(--line);
+		margin-top: var(--space-xl);
+		color: var(--color-border);
 	}
 	.step-remove:hover {
-		color: var(--danger);
+		color: var(--color-danger);
 	}
 	.step-body > :not(.step-heading) {
-		padding: 0.75rem;
+		padding: var(--space-l);
 	}
 </style>

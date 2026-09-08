@@ -14,8 +14,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
-		gap: 0.5rem;
-		padding: 0.75rem 1rem;
-		border-top: 1px solid var(--line);
+		gap: var(--space-m);
+		padding: var(--space-l) var(--space-xl);
+		border-top: 1px solid var(--color-border);
 	}
 </style>

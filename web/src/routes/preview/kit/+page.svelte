@@ -192,10 +192,12 @@
 	.showcase {
 		max-width: none;
 		margin: 0 auto;
-		padding: 2.5rem clamp(24px, 4vw, 72px) 4rem;
+		padding: var(--space-page-top)
+			clamp(var(--space-xxl), 4vw, var(--space-page-bottom))
+			var(--space-page-bottom);
 		display: flex;
 		flex-direction: column;
-		gap: 1.25rem;
+		gap: var(--space-xl);
 	}
 	.showcase-head {
 		display: flex;
@@ -204,9 +206,9 @@
 	}
 	.showcase-eyebrow {
 		font-family: var(--font-mono);
-		font-size: 12px;
-		letter-spacing: 0.18em;
-		color: var(--muted);
+		font-size: var(--font-size-s);
+		letter-spacing: var(--space-text-2xl);
+		color: var(--color-text-muted);
 	}
 	.stack {
 		display: flex;
@@ -215,13 +217,13 @@
 	.tool-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-		gap: 0.75rem;
-		padding: 0.75rem 1rem;
+		gap: var(--space-l);
+		padding: var(--space-l) var(--space-xl);
 	}
 	.preview-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 0.75rem;
-		padding: 0.75rem 1rem;
+		gap: var(--space-l);
+		padding: var(--space-l) var(--space-xl);
 	}
 </style>

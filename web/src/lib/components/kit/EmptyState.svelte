@@ -23,20 +23,20 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 2rem 1rem;
+		gap: var(--space-m);
+		padding: var(--space-xxxl) var(--space-xl);
 		text-align: center;
-		color: var(--muted);
+		color: var(--color-text-muted);
 	}
 	.empty-icon {
-		color: var(--muted);
+		color: var(--color-text-muted);
 	}
 	.empty-title {
-		color: var(--foreground);
-		font-size: 0.95rem;
+		color: var(--color-text);
+		font-size: var(--font-size-m);
 	}
 	.empty-desc {
-		font-size: 0.8rem;
+		font-size: var(--font-size-s);
 		max-width: 32ch;
 	}
 </style>

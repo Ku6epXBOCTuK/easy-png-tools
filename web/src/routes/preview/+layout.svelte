@@ -32,18 +32,11 @@
 	});
 
 	let crumb = $derived(toCrumb(page.url.pathname));
-	let status = $derived(toStatus(page.url.pathname));
 
 	const CRUMB: Record<string, string> = {
 		"/preview/list-tools": "CATALOG",
 		"/preview/tools/linear-gradient-png": "GRADIENT",
 		"/preview/tools/remove-background-png": "BACKGROUND REMOVER",
-	};
-
-	const STATUS: Record<string, string> = {
-		"/preview/list-tools": "LOCAL MODE / READY",
-		"/preview/tools/linear-gradient-png": "LIVE PREVIEW",
-		"/preview/tools/remove-background-png": "AUTO PROCESSING",
 	};
 
 	function toCrumb(path: string): string {
@@ -53,10 +46,6 @@
 				path.split("/").filter(Boolean).pop()?.toUpperCase() ??
 				"PREVIEW")
 		);
-	}
-
-	function toStatus(path: string): string {
-		return STATUS[path] ?? "AUTO PIPELINE";
 	}
 </script>
 
@@ -70,9 +59,9 @@
 	main {
 		background-color: var(--color-background);
 		background-image:
-			linear-gradient(var(--background-muted) 1px, #0000 1px),
-			linear-gradient(90deg, var(--background-muted) 1px, #0000 1px);
-		background-size: 32px 32px;
+			linear-gradient(var(--color-background-muted) 1px, #0000 1px),
+			linear-gradient(90deg, var(--color-background-muted) 1px, #0000 1px);
+		background-size: var(--space-xxxl) var(--space-xxxl);
 		min-height: 100vh;
 	}
 </style>

@@ -20,13 +20,13 @@
 		display: grid;
 		place-items: center;
 		overflow: hidden;
-		background-color: #0b0f14;
+		background-color: var(--color-text);
 		background-image:
 			linear-gradient(45deg, #1a2129 25%, transparent 25%),
 			linear-gradient(-45deg, #1a2129 25%, transparent 25%),
 			linear-gradient(45deg, transparent 75%, #1a2129 75%),
 			linear-gradient(-45deg, transparent 75%, #1a2129 75%);
-		background-size: 20px 20px;
+		background-size: var(--space-xl) var(--space-xl);
 		background-position:
 			0 0,
 			0 10px,
@@ -35,10 +35,10 @@
 	}
 
 	.checker-canvas--sm {
-		min-height: 180px;
+		min-height: var(--size-preview-canvas-min-height-s);
 	}
 
 	.checker-canvas--large {
-		min-height: 360px;
+		min-height: var(--size-preview-canvas-min-height-l);
 	}
 </style>

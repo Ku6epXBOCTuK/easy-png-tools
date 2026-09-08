@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Search, Filter } from "@lucide/svelte";
+	import { Filter, Search } from "@lucide/svelte";
 
 	interface Props {
 		query: string;
@@ -46,50 +46,50 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
+		gap: var(--space-xl);
 		flex-wrap: wrap;
-		padding: 1.25rem 0;
+		padding: var(--space-xl) 0;
 	}
 	.catalog-search {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 0.5rem 0.75rem;
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		background: var(--panel);
-		color: var(--muted);
+		gap: var(--space-m);
+		padding: var(--space-m) var(--space-l);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-m);
+		background: var(--color-panel);
+		color: var(--color-text-muted);
 	}
 	.catalog-search input {
 		border: none;
 		background: transparent;
 		outline: none;
-		color: var(--foreground);
-		font: 12px var(--font-mono);
+		color: var(--color-text);
+		font: var(--font-size-s) var(--font-mono);
 	}
 	.catalog-search input::placeholder {
-		color: var(--muted);
+		color: var(--color-text-muted);
 	}
 	.catalog-filters {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.4rem;
+		gap: var(--space-s);
 		flex-wrap: wrap;
-		color: var(--muted);
+		color: var(--color-text-muted);
 	}
 	.catalog-filters button {
-		border: 1px solid var(--line);
+		border: 1px solid var(--color-border);
 		background: transparent;
-		color: var(--muted);
-		font: 10px var(--font-mono);
-		letter-spacing: 0.06em;
-		padding: 0.4rem 0.6rem;
-		border-radius: var(--radius);
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-m);
+		padding: var(--space-s) var(--space-m);
+		border-radius: var(--radius-m);
 		cursor: pointer;
 	}
 	.catalog-filters button.active {
-		background: var(--blue);
-		color: #fff;
-		border-color: var(--blue);
+		background: var(--color-main);
+		color: var(--color-background);
+		border-color: var(--color-main);
 	}
 </style>

@@ -18,6 +18,6 @@
 	.status-line {
 		display: inline-flex;
 		align-items: center;
-		gap: 6px;
+		gap: var(--space-s);
 	}
 </style>

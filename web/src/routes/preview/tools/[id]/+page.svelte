@@ -31,8 +31,10 @@
 
 <style>
 	.notfound {
-		max-width: 1680px;
+		max-width: var(--size-content-max-wide);
 		margin: 0 auto;
-		padding: 48px clamp(24px, 4vw, 72px) 72px;
+		padding: var(--space-page-top)
+			clamp(var(--space-xxl), 4vw, var(--space-page-bottom))
+			var(--space-page-bottom);
 	}
 </style>

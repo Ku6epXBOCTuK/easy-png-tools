@@ -139,7 +139,7 @@
 	.meta {
 		margin-top: var(--space-l);
 	}
-	@media (max-width: var(--bp-tablet)) {
+	@media (--bp-tablet) {
 		.pair {
 			grid-template-columns: 1fr;
 		}

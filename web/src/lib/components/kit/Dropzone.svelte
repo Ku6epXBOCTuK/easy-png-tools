@@ -63,32 +63,32 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 0.5rem;
-		min-height: 220px;
-		padding: 2rem;
-		border: 1px dashed var(--line);
-		border-radius: var(--radius);
-		color: var(--muted);
-		background: var(--background);
+		gap: var(--space-m);
+		min-height: var(--size-panel-min-height);
+		padding: var(--space-xxxl);
+		border: 1px dashed var(--color-border);
+		border-radius: var(--radius-m);
+		color: var(--color-text-muted);
+		background: var(--color-background);
 		cursor: pointer;
 		text-align: center;
 		transition:
-			border-color 0.15s ease,
-			background 0.15s ease;
+			border-color var(--duration-m) ease,
+			background var(--duration-m) ease;
 	}
 	.dropzone:hover,
 	.dropzone:focus-visible,
 	.dropzone.dragging {
-		border-color: var(--blue);
-		color: var(--foreground);
+		border-color: var(--color-main);
+		color: var(--color-text);
 		outline: none;
 	}
 	.dz-title {
-		font: 600 0.9rem var(--font-mono);
-		color: var(--foreground);
+		font: 600 var(--font-size-m) var(--font-mono);
+		color: var(--color-text);
 	}
 	.dz-sub {
-		font: 10px var(--font-mono);
-		letter-spacing: 0.04em;
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-m);
 	}
 </style>

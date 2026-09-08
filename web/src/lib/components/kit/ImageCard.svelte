@@ -18,15 +18,15 @@
 	.image-card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.4rem;
+		gap: var(--space-s);
 		margin: 0;
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		padding: 0.6rem;
-		background: var(--panel);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-m);
+		padding: var(--space-m);
+		background: var(--color-panel);
 	}
 	.image-canvas {
-		border-radius: var(--radius);
+		border-radius: var(--radius-m);
 		overflow: hidden;
 	}
 </style>

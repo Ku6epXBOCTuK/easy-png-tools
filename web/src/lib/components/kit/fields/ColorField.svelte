@@ -39,42 +39,42 @@
 
 <style>
 	.control-block :global(.icon) {
-		color: var(--foreground);
+		color: var(--color-text);
 	}
 	.control-title {
 		display: flex;
 		justify-content: space-between;
-		font: 10px var(--font-mono);
-		letter-spacing: 0.08em;
-		color: var(--muted);
-		margin-bottom: 8px;
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-l);
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-m);
 	}
 	.color-field {
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		padding-left: 8px;
-		padding-right: 8px;
-		height: 32px;
-		border: 1px solid var(--line);
+		gap: var(--space-m);
+		padding-left: var(--space-m);
+		padding-right: var(--space-m);
+		height: var(--space-xxxl);
+		border: 1px solid var(--color-border);
 	}
 	.swatch {
-		width: 14px;
-		height: 14px;
-		border: 1px solid var(--line);
+		width: var(--space-l);
+		height: var(--space-l);
+		border: 1px solid var(--color-border);
 		flex: none;
 	}
 	.color-field input {
 		min-width: 0;
-		color: var(--foreground);
-		font: 11px var(--font-mono);
+		color: var(--color-text);
+		font: var(--font-size-s) var(--font-mono);
 		background: 0 0;
 		border: 0;
 		outline: 0;
 		flex: 1;
 	}
 	.color-field :global(svg) {
-		color: var(--muted);
+		color: var(--color-text-muted);
 		flex: none;
 	}
 </style>

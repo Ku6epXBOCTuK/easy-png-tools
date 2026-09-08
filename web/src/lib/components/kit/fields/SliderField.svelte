@@ -33,19 +33,19 @@
 	label {
 		display: flex;
 		justify-content: space-between;
-		font: 10px var(--font-mono);
-		letter-spacing: 0.08em;
-		color: var(--muted);
-		margin-bottom: 8px;
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-l);
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-m);
 	}
 	output {
-		font: 10px var(--font-mono);
-		color: var(--foreground);
+		font: var(--font-size-s) var(--font-mono);
+		color: var(--color-text);
 	}
 	input[type="range"] {
-		color: var(--foreground);
+		color: var(--color-text);
 		line-height: inherit;
 		width: 100%;
-		accent-color: var(--blue);
+		accent-color: var(--color-main);
 	}
 </style>

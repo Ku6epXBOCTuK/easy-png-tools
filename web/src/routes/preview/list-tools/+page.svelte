@@ -49,25 +49,27 @@
 
 <style>
 	.catalog-page {
-		padding: 60px clamp(24px, 4vw, 72px) 72px;
+		padding: var(--space-page-top)
+			clamp(var(--space-xxl), 4vw, var(--space-page-bottom))
+			var(--space-page-bottom);
 	}
 	.catalog-groups {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 56px 28px;
+		gap: var(--space-page-top) var(--space-xxl);
 	}
 	.catalog-footer {
 		display: flex;
-		gap: 1.5rem;
+		gap: var(--space-xxl);
 		flex-wrap: wrap;
-		margin-top: 56px;
-		padding-top: 24px;
-		border-top: 1px solid var(--line);
+		margin-top: var(--space-page-top);
+		padding-top: var(--space-xxl);
+		border-top: 1px solid var(--color-border);
 		font: 10px var(--font-mono);
-		letter-spacing: 0.08em;
-		color: var(--muted);
+		letter-spacing: var(--space-text-l);
+		color: var(--color-text-muted);
 	}
-	@media (max-width: 800px) {
+	@media (--bp-tablet) {
 		.catalog-groups {
 			grid-template-columns: 1fr;
 		}

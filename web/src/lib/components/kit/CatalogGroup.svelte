@@ -23,29 +23,29 @@
 	.catalog-group {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--space-xl);
 	}
 	.group-title {
 		display: flex;
 		align-items: baseline;
 		justify-content: space-between;
-		gap: 1rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 1px solid var(--line);
+		gap: var(--space-xl);
+		padding-bottom: var(--space-m);
+		border-bottom: 1px solid var(--color-border);
 	}
 	.group-title span {
-		font: 12px var(--font-mono);
-		letter-spacing: 0.14em;
-		color: var(--foreground);
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-xl);
+		color: var(--color-text);
 	}
 	.group-title i {
-		font: 10px var(--font-mono);
+		font: var(--font-size-s) var(--font-mono);
 		font-style: normal;
-		letter-spacing: 0.08em;
-		color: var(--muted);
+		letter-spacing: var(--space-text-l);
+		color: var(--color-text-muted);
 	}
 	.tool-cards {
 		display: grid;
-		gap: 10px;
+		gap: var(--space-m);
 	}
 </style>

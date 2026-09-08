@@ -29,46 +29,46 @@
 <style>
 	.tool-card {
 		display: grid;
-		grid-template-columns: 42px minmax(0, 1fr) 24px 18px;
+		grid-template-columns: var(--size-tool-icon) minmax(0, 1fr) 24px 18px;
 		align-items: center;
-		gap: 14px;
-		min-height: 106px;
-		padding: 16px;
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		background: var(--panel);
-		color: var(--foreground);
+		gap: var(--space-l);
+		min-height: var(--size-tool-min-height);
+		padding: var(--space-xl);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-m);
+		background: var(--color-panel);
+		color: var(--color-text);
 		text-decoration: none;
 	}
 	.tool-card:hover {
-		border-color: var(--blue);
+		border-color: var(--color-main);
 	}
 	.tool-icon {
-		width: 42px;
-		height: 42px;
+		width: var(--size-tool-icon);
+		height: var(--size-tool-icon);
 		display: grid;
 		place-items: center;
-		background: color-mix(in srgb, var(--blue) 12%, transparent);
-		color: var(--blue);
-		border-radius: var(--radius);
+		background: var(--color-main-soft);
+		color: var(--color-main);
+		border-radius: var(--radius-m);
 	}
 	.tool-copy {
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
+		gap: var(--space-s);
 		min-width: 0;
 	}
 	.tool-copy strong {
-		font: 600 13px var(--font-mono);
-		color: var(--foreground);
+		font: 600 var(--font-size-s) var(--font-mono);
+		color: var(--color-text);
 	}
 	.tool-copy span {
 		font: 12px/1.5 var(--font-mono);
-		color: var(--muted);
+		color: var(--color-text-muted);
 	}
 	.tool-index {
-		font: 10px var(--font-mono);
-		color: var(--muted);
+		font: var(--font-size-s) var(--font-mono);
+		color: var(--color-text-muted);
 		align-self: start;
 	}
 </style>

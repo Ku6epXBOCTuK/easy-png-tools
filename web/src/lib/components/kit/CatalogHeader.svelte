@@ -25,26 +25,26 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-end;
-		gap: 1.5rem;
+		gap: var(--space-xxl);
 		flex-wrap: wrap;
 	}
 	.eyebrow {
-		font: 12px var(--font-mono);
-		letter-spacing: 0.18em;
-		color: var(--muted);
-		margin-bottom: 0.5rem;
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-xl);
+		color: var(--color-text-muted);
+		margin-bottom: var(--space-m);
 	}
 	h1 {
 		margin: 0;
-		font-size: 2rem;
+		font-size: var(--font-size-2xl);
 		font-weight: 700;
-		color: var(--foreground);
+		color: var(--color-text);
 	}
 	p {
-		margin: 0.5rem 0 0;
+		margin: var(--space-m) 0 0;
 		max-width: 56ch;
-		color: var(--muted);
-		font-size: 0.95rem;
+		color: var(--color-text-muted);
+		font-size: var(--font-size-m);
 	}
 	.catalog-total {
 		display: flex;
@@ -53,14 +53,14 @@
 		line-height: 1;
 	}
 	.catalog-total b {
-		font: 700 2rem var(--font-mono);
-		color: var(--foreground);
+		font: 700 var(--font-size-2xl) var(--font-mono);
+		color: var(--color-text);
 	}
 	.catalog-total span {
-		font: 10px var(--font-mono);
-		letter-spacing: 0.08em;
-		color: var(--muted);
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-l);
+		color: var(--color-text-muted);
 		text-align: right;
-		margin-top: 0.35rem;
+		margin-top: var(--space-s);
 	}
 </style>

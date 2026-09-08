@@ -24,27 +24,27 @@
 <style>
 	.code-block {
 		position: relative;
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		background: var(--background);
-		padding: 0.6rem 0.8rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-m);
+		background: var(--color-background);
+		padding: var(--space-m) var(--space-l);
 	}
 	.code-lang {
 		font-family: var(--font-mono);
-		font-size: 10px;
+		font-size: var(--font-size-s);
 		text-transform: uppercase;
-		color: var(--muted);
+		color: var(--color-text-muted);
 	}
 	.code-pre {
 		margin: 0;
 		overflow: auto;
 		font-family: var(--font-mono);
-		font-size: 11px;
-		color: var(--foreground);
+		font-size: var(--font-size-s);
+		color: var(--color-text);
 	}
 	.code-copy {
 		position: absolute;
-		top: 0.4rem;
-		right: 0.4rem;
+		top: var(--space-s);
+		right: var(--space-s);
 	}
 </style>
