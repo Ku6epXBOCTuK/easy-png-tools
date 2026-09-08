@@ -1,8 +1,11 @@
 # План: тестирование preview перед промоушеном в главную
 
-> Статус: план тестирования ветки preview (`web/src/routes/preview/**`,
-> регистр `lib/registry-new/`, 121 инструмент) перед шагом C17 из
-> `docs/plan-redesign.md` (переезд preview → реальные маршруты).
+> Статус: **реализация завершена**. Playwright-набор в `web/e2e/`
+> (108 тестов: 104 прошли, 4 `test.fixme` — известные баги №1–4 ниже),
+> ручной чек-лист — `docs/checklist-manual-testing.md`. План ветки preview
+> (`web/src/routes/preview/**`, регистр `lib/registry-new/`, 121 инструмент)
+> перед шагом C17 из `docs/plan-redesign.md` (переезд preview → реальные
+> маршруты).
 >
 > Охват: **документация плана** — реализация тестов (Playwright-раннер,
 > сами тесты) делается отдельными задачами после ревью этого документа.
@@ -13,6 +16,7 @@
 > Команды для проверки в процессе:
 >
 > - `pnpm --dir web test` — существующий Vitest (42 файла, 121 инструмент частично покрыт юнит-тестами).
+> - `pnpm --dir web test:e2e` — Playwright (`web/e2e/`), сборка + `scripts/serve-static.mjs` на 4173.
 > - `pnpm --dir web exec svelte-check --tsconfig ./tsconfig.json` — проверка типов.
 > - `pnpm --dir web lint:all` — ESLint + stylelint + токен-аудит.
 > - `pnpm --dir web build` — статическая сборка (adapter-static).
@@ -158,10 +162,30 @@ GEOMETRY / FILTERS / TEXT / ANALYZE / GENERATE. Режимы инструмен�
 
 ## 6. Шаги реализации (после ревью)
 
-1. Playwright-раннер: `web/playwright.config.ts` (webServer на `pnpm build +
-preview`, baseURL), папка `web/e2e/`, npm-скрипт `test:e2e`.
-2. Фикстуры PNG: с альфой, без альфы, 1×1, большой, повреждённый.
-3. Написать e2e по блокам A–D и секции 3 (авто-часть).
-4. Ручной чек-лист из секции 3 (ручная часть) — отдельный прогон.
-5. Найденные баги — отдельными атомарными задачами; исправления по конвенции
-   AGENTS.md (lint:all после правок).
+1. ✅ Playwright-раннер: `web/playwright.config.ts` (webServer на `pnpm build +
+   `scripts/serve-static.mjs` `--port 4173`), папка `web/e2e/`, npm-скрипт
+   `test:e2e`.
+2. ✅ Фикстуры PNG (генерируются в рантайме, `web/e2e/helpers/fixtures.ts`):
+   с альфой, без альфы, 1×1, большой, повреждённый, ландшафт.
+3. ✅ E2E по блокам A–D и секции 3 (авто-часть): `navigation.spec.ts`,
+   `catalog.spec.ts`, `pipeline.spec.ts`, `text-and-verdicts.spec.ts`,
+   `tools-smoke.spec.ts` (матрица ~71 инструмента), `generators.spec.ts`,
+   `known-issues.spec.ts` (fixme).
+4. ✅ Ручной чек-лист из секции 3 (ручная часть) —
+   `docs/checklist-manual-testing.md` (разделы A–G, включая известные баги).
+5. ✅ Найденные баги (зафиксированы как `test.fixme` + чек-лист §G):
+   1. генераторы (21/121) не имеют кнопки «Generate» и полей схемы —
+      результат через UI недостижим;
+   2. `resize-png` с дефолтом 0×0 → `errors.resizeSize` при любом входе;
+   3. `crop-png` с дефолтом 0×0 → `errors.cropSize` при любом входе;
+   4. ключи ошибок показываются сырыми (`errors.*`) вместо переведённого
+      текста из `en.ts`/`ru.ts`.
+   Исправления — отдельными атомарными задачами по конвенции AGENTS.md
+   (после правок: `lint:all`, `test:e2e`).
+
+## 7. Итоговое состояние на момент сдачи
+
+- `pnpm --dir web test:e2e` — **104 passed, 4 skipped (fixme), 0 failed**.
+- `pnpm --dir web lint:all` и `svelte-check` — зелёные.
+- Визуальный слой, краевые PNG/параметры, кросс-браузеры — остаются на ручной
+  прогон по `docs/checklist-manual-testing.md`.

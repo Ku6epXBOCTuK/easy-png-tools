@@ -9,7 +9,8 @@
   обёртки в корне: `pnpm build`, `pnpm dev` (это `pnpm --dir web ...`).
   Не использовать npm.
 - Сборка: `pnpm --dir web build`, проверка типов: `pnpm --dir web exec svelte-check --tsconfig ./tsconfig.json`,
-  тесты: `pnpm --dir web test`.
+  тесты: `pnpm --dir web test` (Vitest), e2e: `pnpm --dir web test:e2e` (Playwright,
+  `web/e2e/`, свой webServer на `pnpm build` + `scripts/serve-static.mjs`, порт 4173).
 - Форматирование: `pnpm --dir web format` (Prettier + `prettier-plugin-svelte`,
   конфиг `web/.prettierrc`, игнор `web/.prettierignore`). Проверка без записи:
   `pnpm --dir web exec prettier --check .`.

@@ -1,5 +1,32 @@
 # Backlog
 
+## Баги preview
+
+Зарегистрированы при написании e2e (`web/e2e/`, `pnpm --dir web test:e2e`) и
+ручного чек-листа — см. `docs/checklist-manual-testing.md` (раздел G). Каждый
+зафиксирован как `test.fixme`. После фикса бага: убрать соответствующий
+`test.fixme` и отметить пункт G в чек-листе как пройденный.
+
+1. **Генераторы без кнопки «Generate»** — все 21 инструмент категории GENERATE
+   открываются, но в UI нет кнопки Generate и полей схемы (только RU/EN/Reset);
+   результат через UI недостижим. В `SchemaToolView.svelte` `isGenerator`
+   определяется как `tool.generate && !tool.run`, кнопка рисуется только если
+   `ongenerate` прокинут, а для генераторов с дефолтным `input: "file"` — нет.
+   Ожидание: поля схемы + кнопка «Generate», результат-картинка по дефолтам.
+   Fixme: `web/e2e/generators.spec.ts`.
+2. **resize-png с дефолтами падает** — схема по умолчанию `size: 0×0` +
+   `keepAspect: true` → при загрузке ЛЮБОГО PNG сразу `errors.resizeSize` (alert),
+   результата нет. `registry-new/geometry.ts`. Ожидание: осмысленный дефолт-размер
+   (например, исходный) либо кнопка, а не авто-ошибка.
+3. **crop-png с дефолтами падает** — аналогично: `width: 0, height: 0` → сразу
+   `errors.cropSize`. `registry-new/geometry.ts`. Ожидание: базовый кроп по
+   умолчанию либо внятное предзаполнение.
+4. **Сырые ключи ошибок в UI** — alert на tool-странице показывает сырой ключ
+   i18n (`errors.resizeSize`), а не сообщение из `en.ts` / `ru.ts` (там
+   `resizeSize: "Width and/or height must be positive"`). Проверяется на
+   resize-png / crop-png. Ожидание: человекочитаемое сообщение на текущем языке.
+   Fixme: `web/e2e/known-issues.spec.ts` (тест «error message localized»).
+
 ## Идеи
 
 1. **Менять первый инструмент цепочки** — оценка M.
