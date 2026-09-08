@@ -46,6 +46,7 @@
 	}
 	.tool-cards {
 		display: grid;
+		grid-template-columns: 1fr 1fr;
 		gap: var(--space-m);
 	}
 </style>

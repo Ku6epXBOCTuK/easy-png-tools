@@ -13,6 +13,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: var(--space-xl);
+		background: var(--color-background);
 		border-top: var(--size-border) solid var(--color-border);
 		font: var(--font-size-s) var(--font-mono);
 		color: var(--color-text-muted);

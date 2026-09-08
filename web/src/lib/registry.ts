@@ -2,14 +2,16 @@
 import type { OutputMime } from "./core/io";
 import type { PixelImage } from "./core/types";
 
-import { convertEntries } from "./registry/convert";
-import { geometryEntries } from "./registry/geometry";
 import { alphaEntries } from "./registry/alpha";
-import { colorEntries } from "./registry/color";
 import { analyzeEntries } from "./registry/analyze";
-import { generateEntries } from "./registry/generate";
-import { textEntries } from "./registry/text";
+import { colorEntries } from "./registry/color";
+import { convertEntries } from "./registry/convert";
 import { filterEntries } from "./registry/filters";
+import { generateEntries } from "./registry/generate";
+import { geometryEntries } from "./registry/geometry";
+import { textEntries } from "./registry/text";
+
+// TODO: remove convert tools - move to load image \ download button flow
 
 export type ParamDef =
 	| {
@@ -119,7 +121,6 @@ export const TOOLS: ToolEntry[] = [
 	..._analyze.slice(11, 13),
 ];
 
-import { TOOL_ICONS } from "./tools/tool-icons";
 import { TOOL_POPULARITY } from "./tools/tool-popularity";
 
 for (const entry of TOOLS) {

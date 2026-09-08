@@ -1,108 +1,78 @@
 <script lang="ts">
-	import TextField from "$lib/components/kit/fields/TextField.svelte";
-	import Panel from "$lib/components/kit/layout/Panel.svelte";
-	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
+	import CatalogGroup from "$lib/components/kit/CatalogGroup.svelte";
+	import CatalogHeader from "$lib/components/kit/CatalogHeader.svelte";
+	import CatalogToolbar from "$lib/components/kit/CatalogToolbar.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
-	import Button from "$lib/components/kit/ui/Button.svelte";
-	import { TOOLS } from "$lib/registry-new";
-	import { Search } from "@lucide/svelte";
+	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/preview/catalog";
+	import { TOOL_ICONS } from "$lib/preview/tool-icons";
 
 	let query = $state("");
-	const results = $derived(
-		TOOLS.filter((t) =>
-			(t.title + " " + t.description)
-				.toLowerCase()
-				.includes(query.toLowerCase()),
-		).slice(0, 24),
+	let category = $state<string>("all");
+
+	const groups = $derived(
+		PREVIEW_GROUPS.map((g) => ({
+			id: g.id,
+			label: g.label,
+			tools: g.tools.filter(
+				(t) =>
+					(category === "all" || category === g.id) &&
+					(query.trim() === "" ||
+						t.title.toLowerCase().includes(query.trim().toLowerCase()) ||
+						t.description.toLowerCase().includes(query.trim().toLowerCase())),
+			),
+		})).filter((g) => g.tools.length > 0),
 	);
+
+	// TODO: make main page different from catalog - larger and simpler search, no categories
 </script>
 
-<section class="workspace">
-	<header class="ws-head">
-		<span class="ws-eyebrow">EASY PNG TOOLS</span>
-		<h1 class="ws-title">Workspace</h1>
-		<p class="ws-lede">
-			Откройте PNG-инструмент, загрузите изображение и получите результат без
-			установки и регистрации.
-		</p>
-	</header>
-
-	<Panel title="Search" eyebrow="tools">
-		<div class="ws-search">
-			<div class="ws-field">
-				<TextField
-					label="Search tools"
-					bind:value={query}
-					placeholder="Search tools…"
-				/>
-			</div>
-			<Button
-				icon={Search}
-				variant="primary"
-				onclick={() => {}}
-				label="Search"
-			/>
-		</div>
-		<div class="ws-results">
-			{#each results as tool (tool.id)}
-				<ToolCard
-					title={tool.title}
-					id={tool.id}
-					description={tool.description}
-				/>
-			{/each}
-		</div>
-		<SettingsFooter>
-			<Button onclick={() => {}} label="Open last project" />
-		</SettingsFooter>
-	</Panel>
-</section>
+<div class="catalog-page">
+	<CatalogHeader total={PREVIEW_TOTAL} />
+	<CatalogToolbar bind:query bind:category />
+	<div class="catalog-groups">
+		{#each groups as group (group.id)}
+			<CatalogGroup label={group.label} count={group.tools.length}>
+				{#each group.tools as tool, i (tool.id)}
+					<ToolCard
+						title={tool.title}
+						id={tool.id}
+						description={tool.description}
+						index={i + 1}
+						icon={TOOL_ICONS[tool.id]}
+					/>
+				{/each}
+			</CatalogGroup>
+		{/each}
+	</div>
+	<footer class="catalog-footer">
+		ALL OPERATIONS RUN LOCALLY <span>•</span> YOUR FILES NEVER LEAVE THIS DEVICE
+	</footer>
+</div>
 
 <style>
-	.workspace {
-		max-width: var(--size-content-max);
-		margin: 0 auto;
-		padding: var(--space-page-top) var(--space-xl) var(--space-page-bottom);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-xxl);
+	.catalog-page {
+		padding: var(--space-page-top)
+			clamp(var(--space-xxl), 4vw, var(--space-page-bottom))
+			var(--space-page-bottom);
 	}
-	.ws-head {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-m);
-	}
-	.ws-eyebrow {
-		font-family: var(--font-mono);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-2xl);
-		color: var(--color-text-muted);
-	}
-	.ws-title {
-		margin: 0;
-		font-size: var(--font-size-2xl);
-		font-weight: 700;
-		color: var(--color-text);
-	}
-	.ws-lede {
-		margin: 0;
-		max-width: 56ch;
-		color: var(--color-text-muted);
-		font-size: var(--font-size-l);
-	}
-	.ws-search {
-		display: flex;
-		gap: var(--space-m);
-		padding: var(--space-l) var(--space-xl);
-		align-items: center;
-	}
-	.ws-field {
-		flex: 1;
-	}
-	.ws-results {
+	.catalog-groups {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(var(--size-card-min), 1fr));
-		gap: var(--space-l);
-		padding: var(--space-m) var(--space-xl);
+		gap: var(--space-page-top) var(--space-xxl);
+	}
+	.catalog-footer {
+		display: flex;
+		gap: var(--space-xxl);
+		flex-wrap: wrap;
+		margin-top: var(--space-page-top);
+		padding-top: var(--space-xxl);
+		border-top: var(--size-border) solid var(--color-border);
+		font: var(--font-size-xs) var(--font-mono);
+		letter-spacing: var(--space-text-l);
+		color: var(--color-text-muted);
+	}
+	@media (--bp-tablet) {
+		.catalog-groups {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

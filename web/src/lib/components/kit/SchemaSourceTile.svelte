@@ -1,7 +1,7 @@
 <script lang="ts">
-	import SchemaTextSource from "./SchemaTextSource.svelte";
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
+	import SchemaTextSource from "./SchemaTextSource.svelte";
 
 	interface Props {
 		mode: "file" | "text";
@@ -58,7 +58,7 @@
 		justify-content: center;
 		min-height: clamp(var(--space-brand), 30vh, 60vh);
 		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-m);
+		border-radius: var(--radius-s);
 		overflow: hidden;
 		background: var(--color-background-muted);
 		color: var(--color-text-muted);

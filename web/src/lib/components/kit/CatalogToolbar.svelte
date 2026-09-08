@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Filter, Search } from "@lucide/svelte";
+	import { Funnel, Search } from "@lucide/svelte";
 
 	interface Props {
 		query: string;
@@ -18,6 +18,8 @@
 		{ value: "analyze", label: "ANALYZE" },
 		{ value: "generate", label: "GENERATE" },
 	];
+
+	// TODO: Button component
 </script>
 
 <div class="catalog-toolbar">
@@ -30,13 +32,15 @@
 		/>
 	</label>
 	<div class="catalog-filters">
-		<Filter size={15} />
+		<Funnel size={15} />
 		{#each FILTERS as f (f.value)}
 			<button
 				type="button"
 				class:active={category === f.value}
-				onclick={() => (category = f.value)}>{f.label}</button
+				onclick={() => (category = f.value)}
 			>
+				{f.label}
+			</button>
 		{/each}
 	</div>
 </div>
@@ -79,7 +83,7 @@
 	}
 	.catalog-filters button {
 		border: var(--size-border) solid var(--color-border);
-		background: transparent;
+		background: var(--color-panel);
 		color: var(--color-text-muted);
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-m);

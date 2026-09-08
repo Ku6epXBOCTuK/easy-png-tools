@@ -29,9 +29,9 @@
 <style>
 	.tool-card {
 		display: grid;
-		grid-template-columns: var(--size-tool-icon) minmax(0, 1fr) var(
-				--space-xxl
-			) var(--size-tool-arrow);
+		grid-template-columns:
+			var(--size-tool-icon) minmax(0, 1fr) var(--space-xxl)
+			var(--size-tool-arrow);
 		align-items: center;
 		gap: var(--space-l);
 		min-height: var(--size-tool-min-height);

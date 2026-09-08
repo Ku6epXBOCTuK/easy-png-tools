@@ -56,12 +56,14 @@
 </main>
 
 <style>
-	main {
+	.preview-root {
 		background-color: var(--color-background);
 		background-image:
 			linear-gradient(var(--color-background-muted) 1px, transparent 1px),
 			linear-gradient(90deg, var(--color-background-muted) 1px, transparent 1px);
 		background-size: var(--space-xxxl) var(--space-xxxl);
 		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
 	}
 </style>

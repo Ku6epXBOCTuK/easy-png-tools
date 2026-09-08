@@ -176,8 +176,9 @@
 		--radius-s: 0px;
 		--radius-m: 4px;
 
-		--duration-s: 0.12s;
-		--duration-m: 0.15s;
+		--duration-s: 0.15s;
+		--duration-m: 0.3s;
+		--duration-l: 0.8s;
 	}
 
 	[data-theme="dark"] {

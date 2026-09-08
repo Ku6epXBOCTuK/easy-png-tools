@@ -221,6 +221,7 @@
 	.schema-tool {
 		padding: calc(var(--space-xxxl) + var(--space-l))
 			clamp(var(--space-m), 4vw, var(--space-xxxl));
+		flex: 1;
 	}
 	.header {
 		display: flex;

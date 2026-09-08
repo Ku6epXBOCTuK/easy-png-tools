@@ -26,6 +26,7 @@
 		gap: var(--space-xl);
 		padding: var(--space-l) var(--space-xl);
 		border-bottom: var(--size-border) solid var(--color-border);
+		margin-bottom: var(--space-m);
 	}
 	.heading-text {
 		display: flex;

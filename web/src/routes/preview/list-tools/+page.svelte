@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/preview/catalog";
-	import { TOOL_ICONS } from "$lib/preview/tool-icons";
+	import CatalogGroup from "$lib/components/kit/CatalogGroup.svelte";
 	import CatalogHeader from "$lib/components/kit/CatalogHeader.svelte";
 	import CatalogToolbar from "$lib/components/kit/CatalogToolbar.svelte";
-	import CatalogGroup from "$lib/components/kit/CatalogGroup.svelte";
 	import ToolCard from "$lib/components/kit/ToolCard.svelte";
+	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/preview/catalog";
+	import { TOOL_ICONS } from "$lib/preview/tool-icons";
 
 	let query = $state("");
 	let category = $state<string>("all");
@@ -22,6 +22,8 @@
 			),
 		})).filter((g) => g.tools.length > 0),
 	);
+
+	// TODO: переделать расположение - категория выводится в 2 колонки, а не как сейчас - каждая категория - 1 колонка и две категории в ряд
 </script>
 
 <div class="catalog-page">
@@ -55,7 +57,6 @@
 	}
 	.catalog-groups {
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: var(--space-page-top) var(--space-xxl);
 	}
 	.catalog-footer {

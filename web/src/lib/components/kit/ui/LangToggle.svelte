@@ -9,8 +9,10 @@
 		type="button"
 		class="lang-btn"
 		class:active={lang === "RU"}
-		onclick={() => (lang = "RU")}>RU</button
-	><span class="lang-div">/</span>
+		onclick={() => (lang = "RU")}
+	>
+		RU
+	</button>
 	<button
 		type="button"
 		class="lang-btn"

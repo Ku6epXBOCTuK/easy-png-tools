@@ -73,8 +73,8 @@
 		cursor: pointer;
 		text-align: center;
 		transition:
-			border-color var(--duration-m) ease,
-			background var(--duration-m) ease;
+			border-color var(--duration-s) ease,
+			background var(--duration-s) ease;
 	}
 	.dropzone:hover,
 	.dropzone:focus-visible,
