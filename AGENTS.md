@@ -114,8 +114,12 @@ scoped-путям (`kit/**`, `preview/**`).
   `hct()` (эммит в sRGB-hex делает postcss-плагин `web/scripts/postcss-hct.mjs`)
   и только в preview.css.
 - Размеры: `--space-*`, `--text-*` (font-size), `--radius-*`, `--size-*`.
-- Брейкпоинты: `--bp-mobile` (640px), `--bp-tablet` (800px), `--bp-desktop`
-  (1100px) — mobile-first.
+- Брейкпоинты: `@custom-media --bp-mobile (max-width: 640px)` /
+  `--bp-tablet (800px)` / `--bp-desktop (1100px)` — объявляются в preview.css,
+  используются как `@media (--bp-*)`. CSS-переменные в `@media` не работают,
+  поэтому отдельных `--bp-*` токенов нет; раскрытие делает postcss-плагин
+  `postcss-custom-media` (конфиг `web/postcss.config.js`, определения
+  подтягиваются через `@csstools/postcss-global-data`).
 - z-index: `--z-*`; длительности/анимации: `--duration-*`, `--ease-*`.
 - Правило `custom-property-pattern` в stylelint тестирует паттерн **без** `--`
   (`--x` → `x`), а `declaration-property-value-disallowed-list` — целиком с `--`.

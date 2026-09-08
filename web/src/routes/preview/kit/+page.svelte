@@ -10,7 +10,6 @@
 	import ImageCard from "$lib/components/kit/ImageCard.svelte";
 	import Panel from "$lib/components/kit/layout/Panel.svelte";
 	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import PreviewTile from "$lib/components/kit/PreviewTile.svelte";
 	import SettingGroup from "$lib/components/kit/SettingGroup.svelte";
 	import SettingsFooter from "$lib/components/kit/SettingsFooter.svelte";
 	import StatusLine from "$lib/components/kit/StatusLine.svelte";
@@ -24,8 +23,8 @@
 	import Toggle from "$lib/components/kit/ui/Toggle.svelte";
 	import { Download, ImageOff, Plus, Trash2 } from "@lucide/svelte";
 
-	import { TOOLS } from "$lib/registry-new";
 	import { TOOL_ICONS } from "$lib/preview/tool-icons";
+	import { TOOLS } from "$lib/registry-new";
 
 	let mode = $state("preview");
 	let radius = $state(8);
@@ -158,12 +157,6 @@
 			<ImageCard label="result.png · 512×512">
 				<CheckerCanvas size="sm" />
 			</ImageCard>
-			<PreviewTile label="tile-01" caption="caption-01">
-				<CheckerCanvas size="sm" />
-			</PreviewTile>
-			<PreviewTile label="tile-02" caption="caption-01">
-				<CheckerCanvas size="sm" />
-			</PreviewTile>
 		</div>
 		<SettingsFooter>
 			<MetaList

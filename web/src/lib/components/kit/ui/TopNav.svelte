@@ -3,7 +3,6 @@
 </script>
 
 <nav class="nav">
-	<a href={resolve("/preview/demo")}>Workspace</a>
 	<a href={resolve("/preview/list-tools")}>Catalog</a>
 	<a href={resolve("/preview/tools/linear-gradient-png")}>Gradient</a>
 	<a href={resolve("/preview/tools/remove-background-png")}>

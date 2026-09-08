@@ -35,14 +35,12 @@
 	let status = $derived(toStatus(page.url.pathname));
 
 	const CRUMB: Record<string, string> = {
-		"/preview/demo": "WORKSPACE",
 		"/preview/list-tools": "CATALOG",
 		"/preview/tools/linear-gradient-png": "GRADIENT",
 		"/preview/tools/remove-background-png": "BACKGROUND REMOVER",
 	};
 
 	const STATUS: Record<string, string> = {
-		"/preview/demo": "AUTO PIPELINE",
 		"/preview/list-tools": "LOCAL MODE / READY",
 		"/preview/tools/linear-gradient-png": "LIVE PREVIEW",
 		"/preview/tools/remove-background-png": "AUTO PROCESSING",
@@ -70,7 +68,7 @@
 
 <style>
 	main {
-		background-color: var(--background);
+		background-color: var(--color-background);
 		background-image:
 			linear-gradient(var(--background-muted) 1px, #0000 1px),
 			linear-gradient(90deg, var(--background-muted) 1px, #0000 1px);

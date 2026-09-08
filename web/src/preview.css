@@ -5,6 +5,10 @@
 @import url("@fontsource/ibm-plex-mono/400.css");
 @import url("@fontsource/ibm-plex-mono/500.css");
 
+@custom-media --bp-mobile (max-width: 640px);
+@custom-media --bp-tablet (max-width: 800px);
+@custom-media --bp-desktop (max-width: 1100px);
+
 @layer app, design;
 
 @layer design {
@@ -118,6 +122,7 @@
 		--color-info: hct(340 80 48);
 
 		--color-main-tint: hct(from var(--brand-main) h 65 55);
+		--color-main-soft: color-mix(in srgb, var(--color-main) 12%, transparent);
 		--color-accent-tint: hct(from var(--brand-alt) h 65 55);
 		--color-success-tint: hct(160 65 55);
 		--color-warning-tint: hct(80 65 55);
@@ -141,6 +146,10 @@
 		--size-border: 1px;
 		--size-border-thick: 2px;
 
+		--size-preview-canvas-min-height-s: 180px;
+		--size-preview-canvas-min-height-l: 360px;
+		--size-panel-min-height: 220px;
+
 		--font-size-s: 12px;
 		--font-size-m: 14px;
 		--font-size-l: 16px;
@@ -150,9 +159,8 @@
 		--radius-s: 0px;
 		--radius-m: 4px;
 
-		--bp-mobile: 640px;
-		--bp-tablet: 800px;
-		--bp-desktop: 1100px;
+		--duration-s: 0.12s;
+		--duration-m: 0.15s;
 	}
 
 	[data-theme="dark"] {

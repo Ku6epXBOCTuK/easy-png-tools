@@ -36,7 +36,9 @@ export default {
 			hardcodedZIndex:
 				"Hardcoded z-index '{{value}}'. Use a var(--z-...) token.",
 			hardcodedBreakpoint:
-				"Hardcoded breakpoint '{{value}}' in @media. Use a var(--bp-...) token.",
+				"Hardcoded breakpoint '{{value}}' in @media. Use the @custom-media name instead: declare `@custom-media --bp-* (...)` in preview.css and write `@media (--bp-*)`.",
+			varInMedia:
+				"var() inside @media '{{value}}'. Custom properties do not resolve in media queries — declare `@custom-media --bp-* (...)` in preview.css and use `@media (--bp-*)`.",
 			colorMix:
 				"color-mix() in component ({{value}}). Tokenize the result in the design CSS file.",
 		},
@@ -69,6 +71,10 @@ export default {
 				const BREAKPOINT_RE =
 					/(?:(?:max|min)-width)\s*:\s*(?!var\()(\d+(?:\.\d+)?(?:px|rem|em))/gi;
 
+				// Custom properties do not resolve inside @media conditions, so any
+				// var(--bp-*) inside @media is a latent bug — the block never applies.
+				const VAR_IN_MEDIA_RE = /var\(\s*(--[a-zA-Z0-9-]+)/g;
+
 				// Sub-rule 6: color-mix() is banned anywhere in a component style.
 				const COLOR_MIX_RE = /color-mix\s*\(/gi;
 
@@ -79,6 +85,10 @@ export default {
 					BREAKPOINT_RE.lastIndex = 0;
 					while ((m = BREAKPOINT_RE.exec(params)) !== null) {
 						report(atRule, "hardcodedBreakpoint", { value: m[1] });
+					}
+					VAR_IN_MEDIA_RE.lastIndex = 0;
+					while ((m = VAR_IN_MEDIA_RE.exec(params)) !== null) {
+						report(atRule, "varInMedia", { value: m[1] });
 					}
 				});
 

@@ -23,10 +23,10 @@ export default {
 		//   ^(brand-main|brand-alt)$                         — brand exceptions
 		//   |^(color|space|size|text|radius|bp|font)-        — prefixed
 		"custom-property-pattern": [
-			"^(brand-main|brand-alt)$|^(color|space|size|text|radius|bp|font)-",
+			"^(brand-main|brand-alt)$|^(color|space|size|text|radius|bp|font|duration|ease|z)-",
 			{
 				message:
-					'"%s" must be prefixed: --color-*, --space-*, --size-*, --text-*, --radius-*, --bp-*, --font-*; brand: only --brand-main/--brand-alt',
+					'"%s" must be prefixed: --color-*, --space-*, --size-*, --text-*, --radius-*, --bp-*, --font-*, --duration-*, --ease-*, --z-*; brand: only --brand-main/--brand-alt',
 			},
 		],
 		// Rule: !important is banned in CSS files. Overriding a look must happen
