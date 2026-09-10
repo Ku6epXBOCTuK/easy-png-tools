@@ -37,9 +37,9 @@ export default {
 			hardcodedZIndex:
 				"Hardcoded z-index '{{value}}'. Use a var(--z-...) token.",
 			hardcodedBreakpoint:
-				"Hardcoded breakpoint '{{value}}' in @media. Use the @custom-media name instead: declare `@custom-media --bp-* (...)` in preview.css and write `@media (--bp-*)`.",
+				"Hardcoded breakpoint '{{value}}' in @media. Use the @custom-media name instead: declare `@custom-media --bp-* (...)` in app.css and write `@media (--bp-*)`.",
 			varInMedia:
-				"var() inside @media '{{value}}'. Custom properties do not resolve in media queries — declare `@custom-media --bp-* (...)` in preview.css and use `@media (--bp-*)`.",
+				"var() inside @media '{{value}}'. Custom properties do not resolve in media queries — declare `@custom-media --bp-* (...)` in app.css and use `@media (--bp-*)`.",
 			colorMix:
 				"color-mix() in component ({{value}}). Tokenize the result in the design CSS file.",
 		},

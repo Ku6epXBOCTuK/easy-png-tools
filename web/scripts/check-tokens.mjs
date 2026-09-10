@@ -1,5 +1,5 @@
 // Design-token audit, one command: theme parity, hct-only color authorship and
-// unused-token warnings over src/preview.css.
+// unused-token warnings over src/app.css.
 //
 // Usage: pnpm --dir web exec node scripts/check-tokens.mjs
 // Exit code 1 when a failing check (parity or color authorship) reports.
@@ -36,10 +36,10 @@ async function main() {
 
 	const unused = checkUnused(root);
 	if (unused.length > 0) {
-		console.log("\nUnused tokens (defined in preview.css, never used):");
+		console.log("\nUnused tokens (defined in app.css, never used):");
 		for (const token of unused) console.log(`  ${token}`);
 	} else {
-		console.log("All preview.css tokens are used somewhere.");
+		console.log("All app.css tokens are used somewhere.");
 	}
 
 	if (failed) process.exitCode = 1;

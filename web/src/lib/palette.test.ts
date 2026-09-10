@@ -5,7 +5,7 @@ import { Color } from "@panmdaa/colors";
 
 declare const process: { cwd(): string };
 
-const css = readFileSync("src/preview.css", "utf8");
+const css = readFileSync("src/app.css", "utf8");
 
 type Hct = { h: number; c: number; t: number };
 

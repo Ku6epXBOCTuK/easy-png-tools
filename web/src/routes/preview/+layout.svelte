@@ -3,7 +3,7 @@
 	import Footer from "$lib/components/kit/layout/Footer.svelte";
 	import TopBar from "$lib/components/kit/layout/TopBar.svelte";
 	import type { Snippet } from "svelte";
-	import "../../preview.css";
+	import "../../app.css";
 
 	interface Props {
 		children: Snippet;

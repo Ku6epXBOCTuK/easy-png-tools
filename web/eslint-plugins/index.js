@@ -3,7 +3,7 @@
  *
  * Goal: a single source of truth for design. In Svelte components, hardcoded
  * colors and sizes are banned; everything must come from CSS variables (tokens
- * in preview.css). Rules inspect the postcss AST of Svelte <style> blocks
+ * in app.css). Rules inspect the postcss AST of Svelte <style> blocks
  * exposed by svelte-eslint-parser.
  */
 import noCategoryMismatch from "./design-tokens/no-category-mismatch.js";

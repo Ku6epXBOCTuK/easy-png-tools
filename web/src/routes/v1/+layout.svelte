@@ -6,7 +6,7 @@
 	import { t } from "$lib/i18n/t";
 	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
 	import { onMount } from "svelte";
-	import "../../old.css";
+	import "../../app_v1.css";
 
 	let { children } = $props();
 

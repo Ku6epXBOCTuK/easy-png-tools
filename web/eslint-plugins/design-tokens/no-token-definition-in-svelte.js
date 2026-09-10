@@ -2,7 +2,7 @@
 // A custom property may be DEFINED inside a component's <style> block, but its
 // value must not introduce a design primitive: a raw color literal (hex/rgb/
 // oklch/named) or an absolute size (px/rem/em). This keeps the design surface
-// (colors/sizes) a single source of truth in preview.css, while still allowing
+// (colors/sizes) a single source of truth in app.css, while still allowing
 // local DERIVED variables built from tokens: var(--...), calc(), unitless
 // ratios (--ratio: 1.5) — those are legitimate component-local state.
 
@@ -24,7 +24,7 @@ export default {
 		},
 		messages: {
 			tokenPrimitive:
-				"Custom property '{{prop}}' defines a primitive '{{value}}' in a component. Move it to preview.css or derive it from tokens via var()/calc().",
+				"Custom property '{{prop}}' defines a primitive '{{value}}' in a component. Move it to app.css or derive it from tokens via var()/calc().",
 		},
 		schema: [],
 	},

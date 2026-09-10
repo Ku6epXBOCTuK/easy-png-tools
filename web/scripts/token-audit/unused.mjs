@@ -1,4 +1,4 @@
-// Unused tokens: defined in preview.css but never referenced via var()
+// Unused tokens: defined in app.css but never referenced via var()
 // anywhere in src. A dead token is not the single source of truth — it's dust.
 // Reported as a warning; it does not fail the run.
 

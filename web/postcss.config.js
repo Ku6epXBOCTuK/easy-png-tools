@@ -4,10 +4,10 @@ import postcssCustomMedia from "postcss-custom-media";
 
 export default {
 	plugins: [
-		// Breakpoints live only in preview.css (next to the --bp-* tokens);
+		// Breakpoints live only in app.css (next to the --bp-* tokens);
 		// global-data injects them so @media (--bp-*) expands in every file.
 		postcssGlobalData({
-			files: ["src/preview.css"],
+			files: ["src/app.css"],
 		}),
 		postcssCustomMedia({
 			preserve: false,

@@ -1,4 +1,4 @@
-// Shared plumbing for the design-token audits: reading preview.css, scanning
+// Shared plumbing for the design-token audits: reading app.css, scanning
 // for var() usages across src, and the color/form predicates the checks use.
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -7,7 +7,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import postcss from "postcss";
 
-export const FILE = new URL("../../src/preview.css", import.meta.url);
+export const FILE = new URL("../../src/app.css", import.meta.url);
 const SRC_DIR = fileURLToPath(new URL("../../src/", import.meta.url));
 
 // A var(--x) REFERENCE anywhere in the app (primary argument only).
@@ -65,7 +65,7 @@ export function collectTokens(root, selector) {
 	return map;
 }
 
-// Parse preview.css once and hand out the postcss root plus both theme maps.
+// Parse app.css once and hand out the postcss root plus both theme maps.
 export async function parsePreview() {
 	const css = await readFile(FILE, "utf8");
 	const root = postcss.parse(css);

@@ -1,12 +1,12 @@
 // Stylelint config — design-token enforcement for easy-png-tools.
 // FWHM: keeps the design system a single source of truth. Colors and sizes must
 // come from prefixed tokens; direct color values are allowed only for the two
-// brand tokens. old.css is the legacy design and is ignored (removed later).
+// brand tokens. app_v1.css is the legacy design and is ignored (removed later).
 
 export default {
 	extends: ["stylelint-config-standard"],
 	ignoreFiles: [
-		"src/old.css",
+		"src/app_v1.css",
 		"**/node_modules/**",
 		"**/build/**",
 		"**/.svelte-kit/**",
@@ -52,7 +52,7 @@ export default {
 	},
 	overrides: [
 		{
-			// Applies to every CSS file EXCEPT old.css (already in ignoreFiles) —
+			// Applies to every CSS file EXCEPT app_v1.css (already in ignoreFiles) —
 			// the legacy design is exempt and will be removed later.
 			files: ["src/**/*.css"],
 			rules: {

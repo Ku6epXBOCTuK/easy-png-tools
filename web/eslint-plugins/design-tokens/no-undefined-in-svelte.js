@@ -1,6 +1,6 @@
 // Rule: NO UNDEFINED CSS-TOKEN USAGE IN COMPONENTS.
 // A var(--...) referenced in a Svelte <style> block must exist in the design
-// token file (src/preview.css) or be a local override defined in the same
+// token file (src/app.css) or be a local override defined in the same
 // component. Catches typos and drop-in tokens that were never added to the
 // "single source of truth".
 
@@ -16,7 +16,7 @@ const VAR_REF_RE = /var\(\s*(--[\w-]+)/g;
 const definedCache = new Map();
 
 function getDefinedTokens(cwd) {
-	const file = resolve(cwd, "src/preview.css");
+	const file = resolve(cwd, "src/app.css");
 	if (!existsSync(file)) return null;
 	if (definedCache.has(file)) return definedCache.get(file);
 
@@ -34,13 +34,13 @@ export default {
 		type: "problem",
 		docs: {
 			description:
-				"Disallow referencing a CSS variable that is not defined in preview.css (design token file) and not defined locally in the component.",
+				"Disallow referencing a CSS variable that is not defined in app.css (design token file) and not defined locally in the component.",
 			category: "Design tokens",
 			recommended: true,
 		},
 		messages: {
 			undefinedToken:
-				"CSS variable '{{token}}' is not defined in preview.css and not locally in this component.",
+				"CSS variable '{{token}}' is not defined in app.css and not locally in this component.",
 		},
 		schema: [],
 	},

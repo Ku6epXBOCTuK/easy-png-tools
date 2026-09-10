@@ -1,4 +1,4 @@
-// Color authorship: every color value in preview.css must be authored as hct()
+// Color authorship: every color value in app.css must be authored as hct()
 // — literals AND derived forms (hct(from var(...) h c t) with channel math) —
 // so the whole palette is computed through HCT channels and output as sRGB by
 // the postcss-hct plugin. Exceptions: the seed tokens --brand-main/--brand-alt
