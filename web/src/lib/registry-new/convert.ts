@@ -1,4 +1,4 @@
-import type { ToolEntry } from "./types";
+import { imgTool, textGen, type ToolEntry } from "./types";
 import { field, toolSchema } from "../registry-schema";
 import { flattenOntoColor } from "../core/alpha";
 import {
@@ -33,7 +33,8 @@ const convertToJpg: ToolEntry<ConvertToJpgParams> = {
 		"Transparency is composited over the chosen backdrop color (white by default) and saved as JPEG.",
 	category: "convert",
 	schema: convertToJpgSchema,
-	run: (img, p) => flattenOntoColor(img, p.background),
+	input: "image",
+	run: imgTool((img, p) => flattenOntoColor(img, p.background)),
 	output: { mime: "image/jpeg", ext: "jpg", qualityParamId: "quality" },
 };
 
@@ -52,7 +53,8 @@ const convertToWebp: ToolEntry<ConvertToWebpParams> = {
 		"Re-encodes the image into WebP with adjustable quality. Transparency is preserved.",
 	category: "convert",
 	schema: convertToWebpSchema,
-	run: (img) => clonePixelImage(img),
+	input: "image",
+	run: imgTool((img) => clonePixelImage(img)),
 	output: { mime: "image/webp", ext: "webp", qualityParamId: "quality" },
 };
 
@@ -67,7 +69,8 @@ const convertToBmp: ToolEntry<ConvertToBmpParams> = {
 		"Saves the image as 24-bit BMP without an alpha channel: transparency is replaced with a black background.",
 	category: "convert",
 	schema: convertToBmpSchema,
-	run: (img) => flattenOntoColor(img, "#000000"),
+	input: "image",
+	run: imgTool((img) => flattenOntoColor(img, "#000000")),
 	output: { mime: "image/bmp", ext: "bmp" },
 };
 
@@ -82,8 +85,9 @@ const pngToBase64: ToolEntry<NoParams> = {
 		"Encodes the image into a base64 string for embedding in code or styles.",
 	category: "convert",
 	schema: emptySchema,
+	input: "image",
 	result: "text",
-	toText: (img) => toBase64(img),
+	run: imgTool((img) => toBase64(img)),
 };
 
 const pngToDataUri: ToolEntry<NoParams> = {
@@ -93,8 +97,9 @@ const pngToDataUri: ToolEntry<NoParams> = {
 		"Builds a full data-uri (data:image/png;base64,…) for embedding in HTML/CSS.",
 	category: "convert",
 	schema: emptySchema,
+	input: "image",
 	result: "text",
-	toText: (img) => toDataUrl(img),
+	run: imgTool((img) => toDataUrl(img)),
 };
 
 const pngToHex: ToolEntry<NoParams> = {
@@ -104,8 +109,9 @@ const pngToHex: ToolEntry<NoParams> = {
 		"Shows all pixels as rrggbbaa hex values — row by row, space separated.",
 	category: "convert",
 	schema: emptySchema,
+	input: "image",
 	result: "text",
-	toText: (img) => pixelsToHex(img),
+	run: imgTool((img) => pixelsToHex(img)),
 };
 
 const pngToBytes: ToolEntry<NoParams> = {
@@ -115,8 +121,9 @@ const pngToBytes: ToolEntry<NoParams> = {
 		"Lists every pixel as four decimal bytes (R G B A), one image row per line.",
 	category: "convert",
 	schema: emptySchema,
+	input: "image",
 	result: "text",
-	toText: (img) => imageToByteRows(img),
+	run: imgTool((img) => imageToByteRows(img)),
 };
 
 const pngToRgbValues: ToolEntry<NoParams> = {
@@ -125,8 +132,9 @@ const pngToRgbValues: ToolEntry<NoParams> = {
 	description: "Lists every pixel as rgba(r, g, b, a), one image row per line.",
 	category: "convert",
 	schema: emptySchema,
+	input: "image",
 	result: "text",
-	toText: (img) => imageToRgbValues(img),
+	run: imgTool((img) => imageToRgbValues(img)),
 };
 
 const base64ToPng: ToolEntry<NoParams> = {
@@ -137,7 +145,7 @@ const base64ToPng: ToolEntry<NoParams> = {
 	category: "convert",
 	schema: emptySchema,
 	input: "text",
-	runFromText: async (text) => decodeBytes(base64ToBytes(stripDataUri(text))),
+	run: textGen((text) => decodeBytes(base64ToBytes(stripDataUri(text)))),
 };
 
 const dataUriToPng: ToolEntry<NoParams> = {
@@ -147,7 +155,7 @@ const dataUriToPng: ToolEntry<NoParams> = {
 	category: "convert",
 	schema: emptySchema,
 	input: "text",
-	runFromText: async (text) => decodeBytes(base64ToBytes(stripDataUri(text))),
+	run: textGen((text) => decodeBytes(base64ToBytes(stripDataUri(text)))),
 };
 
 interface HexToPngParams {
@@ -166,7 +174,7 @@ const hexToPng: ToolEntry<HexToPngParams> = {
 	category: "convert",
 	schema: hexToPngSchema,
 	input: "text",
-	runFromText: (text, p) => hexToPixels(text, Math.trunc(p.width)),
+	run: textGen((text, p) => hexToPixels(text, Math.trunc(p.width))),
 };
 
 interface BytesToPngParams {
@@ -185,7 +193,7 @@ const bytesToPng: ToolEntry<BytesToPngParams> = {
 	category: "convert",
 	schema: bytesToPngSchema,
 	input: "text",
-	runFromText: (text, p) => bytesToImage(text, Math.trunc(p.width)),
+	run: textGen((text, p) => bytesToImage(text, Math.trunc(p.width))),
 };
 
 interface RgbValuesToPngParams {
@@ -204,7 +212,7 @@ const rgbValuesToPng: ToolEntry<RgbValuesToPngParams> = {
 	category: "convert",
 	schema: rgbValuesToPngSchema,
 	input: "text",
-	runFromText: (text, p) => rgbValuesToImage(text, Math.trunc(p.width)),
+	run: textGen((text, p) => rgbValuesToImage(text, Math.trunc(p.width))),
 };
 
 interface SvgToPngParams {
@@ -224,7 +232,7 @@ const svgToPng: ToolEntry<SvgToPngParams> = {
 	schema: svgToPngSchema,
 	input: "text",
 	domOnly: true,
-	runFromText: (text, p) => decodeSvgText(text, Math.trunc(p.width)),
+	run: textGen((text, p) => decodeSvgText(text, Math.trunc(p.width))),
 };
 
 export const convertEntries = [

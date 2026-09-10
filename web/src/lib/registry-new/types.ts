@@ -1,8 +1,8 @@
+import { ToolError } from "../core/errors";
+import type { OutputMime } from "../core/io";
+import type { PixelImage } from "../core/types";
 import type { CategoryId } from "../preview/categories";
 import type { ToolSchema } from "../registry-schema";
-import type { PixelImage } from "../core/types";
-import type { OutputMime } from "../core/io";
-import { ToolError } from "../core/errors";
 
 /** Формат скачивания, отличный от PNG (bmp/jpeg/webp). */
 export interface OutputFormat {
@@ -83,21 +83,21 @@ export function requireText<P>(ctx: ToolContext<P>): string {
  * из контекста. Позволяет оставить тело инструмента в виде `(img, p) => …`.
  */
 export function imgTool<P>(
-	fn: (img: PixelImage, params: P) => ToolResult,
-): (ctx: ToolContext<P>) => ToolResult {
+	fn: (img: PixelImage, params: P) => ToolResult | Promise<ToolResult>,
+): (ctx: ToolContext<P>) => ToolResult | Promise<ToolResult> {
 	return (ctx) => fn(requireSource(ctx), ctx.params);
 }
 
 /** Обёртка для генераторов: инструменту нужны только параметры. */
 export function genTool<P>(
-	fn: (params: P) => ToolResult,
-): (ctx: ToolContext<P>) => ToolResult {
+	fn: (params: P) => ToolResult | Promise<ToolResult>,
+): (ctx: ToolContext<P>) => ToolResult | Promise<ToolResult> {
 	return (ctx) => fn(ctx.params);
 }
 
 /** Обёртка для text-to-image инструментов: подставляет `text` и `params`. */
 export function textGen<P>(
-	fn: (text: string, params: P) => ToolResult,
-): (ctx: ToolContext<P>) => ToolResult {
+	fn: (text: string, params: P) => ToolResult | Promise<ToolResult>,
+): (ctx: ToolContext<P>) => ToolResult | Promise<ToolResult> {
 	return (ctx) => fn(requireText(ctx), ctx.params);
 }
