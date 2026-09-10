@@ -1,0 +1,11 @@
+:root {
+	--color-fg: #101010;
+
+	--space-1: calc(var(--size-1) / 2);
+
+	--z-nav: 100;
+
+	--duration-fast: 120ms;
+
+	--text-md: 0.875rem;
+}

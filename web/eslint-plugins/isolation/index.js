@@ -1,8 +1,8 @@
 /**
  * Local ESLint plugin "isolation".
  *
- * Guarantees full isolation between the old UI branch and the new (preview)
- * branch. Unlike no-restricted-imports (which matches the literal import
+ * Guarantees full isolation between the old (v1, archived) UI branch and the
+ * new one. Unlike no-restricted-imports (which matches the literal import
  * specifier string only), these rules RESOLVE the specifier to a real file
  * (supporting both `$lib/...` aliases and relative `./`/`../` paths) and then
  * classify both sides by their actual location on disk.

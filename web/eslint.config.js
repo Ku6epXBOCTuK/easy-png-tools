@@ -1,16 +1,18 @@
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import svelte from "eslint-plugin-svelte";
-import designTokens from "./eslint-plugins/index.js";
-import isolationPlugin from "./eslint-plugins/isolation/index.js";
 import globals from "globals";
 import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
+import designTokens from "./eslint-plugins/index.js";
+import isolationPlugin from "./eslint-plugins/isolation/index.js";
 
+// FIXME: надо игнорировать старые файлы, после переноса пути новых компонентов включают старые
 // Новый код редизайна: к нему применяем полные recommended-наборы уже сейчас.
 // Когда старый дизайн удалим (C19), этот scoped-блок убирается и recommended
 // включается на весь код (см. план-redesign §10, шаг 6).
-const newCode = ["**/src/lib/components/kit/**", "**/src/routes/preview/**"];
+const newCode = ["**/src/lib/components/**", "**/src/routes/**"];
+const oldCode = ["**/src/lib/v1/**", "**/src/routes/v1/**"];
 
 // Полные recommended-наборы — только на новый код (см. ниже, блок перед prettier).
 const jsRecommended = Array.isArray(js.configs.recommended)
@@ -21,10 +23,19 @@ const svelteRecommended = Array.isArray(svelte.configs["flat/recommended"])
 	: [svelte.configs["flat/recommended"]];
 // Svelte-рекомендации применяем только к .svelte-файлам нового кода, иначе
 // svelte-eslint-parser "съедает" обычные .ts в тех же папках (напр. +page.ts).
-const svelteFiles = [
-	"**/src/lib/components/kit/**/*.svelte",
-	"**/src/routes/preview/**/*.svelte",
+const newSvelteFiles = [
+	"**/src/lib/components/**/*.svelte",
+	"**/src/routes/**/*.svelte",
 ];
+const oldSvelteFiles = [
+	"**/src/lib/v1/**/*.svelte",
+	"**/src/routes/v1/**/*.svelte",
+];
+
+// FIXME:
+// The signature '(...configs: InfiniteDepthConfigWithExtends[]): ConfigArray' of 'tseslint.config' is deprecated.ts
+// Migrate to defineConfig(...)
+// The core defineConfig(...) helper is a nearly exact clone of tseslint.config(...)
 
 export default tseslint.config(
 	{
@@ -60,8 +71,23 @@ export default tseslint.config(
 						"e2e/tools-smoke.spec.ts",
 						"e2e/generators.spec.ts",
 						"e2e/known-issues.spec.ts",
+						// Тесты и фикстуры кастомных линт-правил лежат вне src/ (не в
+						// tsconfig), поэтому для типизированного парсинга резолвятся
+						// через default-проект. Перечисляются точечно: `**` в
+						// allowDefaultProject запрещён tseslint.
+						"eslint-plugins/__tests__/design-tokens.test.ts",
+						"eslint-plugins/__tests__/helpers.ts",
+						"eslint-plugins/__tests__/no-mixed-imports.test.ts",
+						"eslint-plugins/__fixtures__/src/lib/v1/old.ts",
+						"eslint-plugins/__fixtures__/src/lib/core/errors.ts",
+						"eslint-plugins/__fixtures__/src/lib/i18n/t.ts",
+						"eslint-plugins/__fixtures__/src/lib/theme.svelte.ts",
+						"eslint-plugins/__fixtures__/src/lib/components/CheckerCanvas.svelte",
+						"eslint-plugins/__fixtures__/src/lib/components/ui/Button.svelte",
+						"eslint-plugins/__fixtures__/src/routes/+page.svelte",
+						"eslint-plugins/__fixtures__/src/routes/v1/+layout.svelte",
 					],
-					maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 12,
+					maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 32,
 				},
 				extraFileExtensions: [".svelte"],
 			},
@@ -100,7 +126,8 @@ export default tseslint.config(
 	// Применяется к новому коду редизайна (см. newCode выше). Когда старый дизайн
 	// удалят, расширить glob на весь код, исключив (old)/.
 	{
-		files: svelteFiles,
+		files: newSvelteFiles,
+		ignores: oldSvelteFiles,
 		plugins: {
 			"design-tokens": designTokens,
 		},
@@ -113,9 +140,21 @@ export default tseslint.config(
 	},
 	// Полные recommended-наборы — только на новый код.
 	...[
-		...jsRecommended.map((cfg) => ({ ...cfg, files: newCode })),
-		...tseslint.configs.recommended.map((cfg) => ({ ...cfg, files: newCode })),
-		...svelteRecommended.map((cfg) => ({ ...cfg, files: svelteFiles })),
+		...jsRecommended.map((cfg) => ({
+			...cfg,
+			files: newCode,
+			ignores: oldCode,
+		})),
+		...tseslint.configs.recommended.map((cfg) => ({
+			...cfg,
+			files: newCode,
+			ignores: oldCode,
+		})),
+		...svelteRecommended.map((cfg) => ({
+			...cfg,
+			files: newSvelteFiles,
+			ignores: oldSvelteFiles,
+		})),
 	],
 
 	// В Svelte 5 пропсы деструктурируются через `let` (конвенция документации и

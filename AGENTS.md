@@ -43,6 +43,30 @@
   размеры в kit, не-Prefix токены в preview.css и т.п.) — техдолг: чинить
   только по заведённым tasks, не игнорировать правилом.
 
+### Тесты кастомных линт-правил
+
+Линт-правила в `web/eslint-plugins/` покрыты юнит-тестами (Vitest):
+
+- `web/eslint-plugins/__tests__/design-tokens.test.ts` — три чистых правила
+  (`no-hardcoded-in-svelte`, `no-category-mismatch`,
+  `no-token-definition-in-svelte`) через `RuleTester` со строковыми кейсами;
+  `no-undefined-in-svelte` — через `Linter` API, т.к. читает словарь токенов из
+  `__fixtures__/src/app.css` (не из реального `src/app.css`).
+- `web/eslint-plugins/__tests__/no-mixed-imports.test.ts` — isolation-правило
+  через `Linter` API с `cwd` на `__fixtures__`: правило резолвит импорты по
+  реальным файлам, поэтому цели импортов обязаны существовать на диске.
+- Хелпер `__tests__/helpers.ts` собирает `Linter` с `cwd = __fixtures__` —
+  `process.cwd()` не трогается, реальные `src/` не читаются.
+
+Запуск: `pnpm --dir web test:rules` (`vitest run eslint-plugins/__tests__`).
+Полный `pnpm --dir web test` тоже их гоняет.
+
+Фикстуры живут в `web/eslint-plugins/__fixtures__/` и сами прогоняются линтом
+(`eslint .`), поэтому добавление/правка стабов — тоже работа с валидным кодом.
+Помнить: `allowDefaultProject` в `eslint.config.js` перечисляет test-файлы и
+фикстуры точечно (glob'ы с `**` там запрещены tseslint) — при добавлении
+файлов в `__tests__/`/`__fixtures__/` дописать их туда же.
+
 ## Правила кода
 
 ### Svelte 5: типизация props через `interface Props`

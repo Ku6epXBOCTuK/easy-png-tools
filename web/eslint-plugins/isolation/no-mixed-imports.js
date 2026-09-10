@@ -1,5 +1,5 @@
 /**
- * Isolation rule: forbid mixing the "old" and the "new" (preview) branches.
+ * Isolation rule: forbid mixing the "old" (v1) and the "new" branches.
  *
  * The rule RESOLVES every import specifier to a real file (handles both the
  * `$lib/...` alias and relative `./` / `../` paths), classifies the source
@@ -17,13 +17,19 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const DEFAULT_OLD = ["routes/(old)/**", "lib/old/**"];
+// NEW declared as an allowlist: `lib/**` descends into v1/ and the shared dirs
+// (core/, i18n/, assets/, theme), so matching by prefix would misclassify them.
+// Negations (`!`) carve old paths out of `routes/**`.
+const DEFAULT_OLD = ["routes/v1/**", "lib/v1/**"];
 
 const DEFAULT_NEW = [
-	"routes/preview/**",
-	"lib/components/kit/**",
-	"lib/preview/**",
-	"lib/registry-new/**",
+	"routes/**",
+	"!routes/v1/**",
+	"lib/components/**",
+	"lib/registry/**",
+	"lib/catalog.ts",
+	"lib/categories.ts",
+	"lib/tool-icons.ts",
 	"lib/registry-schema.ts",
 	"lib/registry-schema.test.ts",
 ];
@@ -92,7 +98,7 @@ export default {
 		type: "problem",
 		docs: {
 			description:
-				"Forbid imports between the old UI branch and the new (preview) branch.",
+				"Forbid imports between the old (v1) UI branch and the new branch.",
 			category: "Best Practices",
 		},
 		schema: [
