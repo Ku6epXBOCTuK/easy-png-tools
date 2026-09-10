@@ -24,20 +24,13 @@
 
 <div class="app">
 	<header>
-		<a href={resolve("/")} class="brand">easy-png-tools</a>
+		<a href={resolve("/v1/")} class="brand">easy-png-tools</a>
 		<nav aria-label={t("header.sectionsAria")}>
-			<a class="nav-link workspace-link" href={resolve("/")}
+			<a class="nav-link workspace-link" href={resolve("/v1/")}
 				>{t("header.workspace")}</a
 			>
-			<a class="nav-link" href={resolve("/list-tools")}>{t("header.catalog")}</a
+			<a class="nav-link" href={resolve("/v1/list-tools")}>{t("header.catalog")}</a
 			>
-			<a
-				class="nav-link preview-v2"
-				href={resolve("/preview")}
-				onclick={() => localStorage.setItem("easy-png-tools:preview-v2", "1")}
-			>
-				Preview v2
-			</a>
 			<div class="lang-switch" role="group" aria-label="Language / Язык">
 				{#each LOCALES as l (l)}
 					<button
