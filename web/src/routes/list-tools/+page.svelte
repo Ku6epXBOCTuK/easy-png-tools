@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/catalog";
 	import CatalogGroup from "$lib/components/CatalogGroup.svelte";
 	import CatalogHeader from "$lib/components/CatalogHeader.svelte";
 	import CatalogToolbar from "$lib/components/CatalogToolbar.svelte";
 	import ToolCard from "$lib/components/ToolCard.svelte";
-	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/preview/catalog";
-	import { TOOL_ICONS } from "$lib/preview/tool-icons";
+	import { TOOL_ICONS } from "$lib/tool-icons";
 
 	let query = $state("");
 	let category = $state<string>("all");

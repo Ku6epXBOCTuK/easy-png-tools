@@ -35,10 +35,6 @@
 		padding: var(--space-s) var(--space-m);
 		cursor: pointer;
 	}
-	.lang-div {
-		color: var(--color-text);
-		font-family: var(--font-sans);
-	}
 	.lang-btn.active {
 		background: var(--color-text);
 		color: var(--color-background);

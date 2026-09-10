@@ -23,8 +23,8 @@
 	import Toggle from "$lib/components/ui/Toggle.svelte";
 	import { Download, ImageOff, Plus, Trash2 } from "@lucide/svelte";
 
-	import { TOOL_ICONS } from "$lib/preview/tool-icons";
 	import { TOOLS } from "$lib/registry-new";
+	import { TOOL_ICONS } from "$lib/tool-icons";
 
 	let mode = $state("preview");
 	let radius = $state(8);

@@ -5,8 +5,8 @@
 	import { ToolError } from "$lib/core/errors";
 	import { decodeFile, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
+	import { execute } from "$lib/executor";
 	import { t } from "$lib/i18n/t";
-	import { execute } from "$lib/preview/executor";
 	import type { ToolEntry } from "$lib/registry-new";
 	import {
 		defaultSchemaParams,

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { PREVIEW_GROUPS } from "../preview/catalog";
+import { PREVIEW_GROUPS } from "../catalog";
+import type { PixelImage } from "../core/types";
 import { TOOLS } from "../registry-new";
 import { defaultSchemaParams, sanitizeSchemaParams } from "../registry-schema";
-import type { PixelImage } from "../core/types";
 import type { ToolResult } from "./types";
 
 function asImage(result: ToolResult): PixelImage {

@@ -1,7 +1,7 @@
+import type { CategoryId } from "../categories";
 import { ToolError } from "../core/errors";
 import type { OutputMime } from "../core/io";
 import type { PixelImage } from "../core/types";
-import type { CategoryId } from "../preview/categories";
 import type { ToolSchema } from "../registry-schema";
 
 /** Формат скачивания, отличный от PNG (bmp/jpeg/webp). */
