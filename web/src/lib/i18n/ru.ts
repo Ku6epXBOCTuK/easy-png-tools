@@ -113,6 +113,8 @@ export const ru: Dict = {
 	},
 	errors: {
 		noImageRun: "Этот инструмент не обрабатывает изображения",
+		sourceRequired: "Сначала загрузите изображение",
+		textRequired: "Сначала введите текст",
 		workerFailed: "Ошибка исполнения в воркере",
 		workerUnavailable: "Воркер недоступен",
 		notFound: "Инструмент не найден",

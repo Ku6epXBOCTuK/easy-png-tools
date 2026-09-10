@@ -112,6 +112,8 @@ export const en: Dict = {
 	},
 	errors: {
 		noImageRun: "This tool does not process images",
+		sourceRequired: "Upload an image first",
+		textRequired: "Enter text first",
 		workerFailed: "Worker execution failed",
 		workerUnavailable: "Worker is unavailable",
 		notFound: "Tool not found",
