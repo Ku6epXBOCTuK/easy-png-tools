@@ -58,23 +58,23 @@
 `list-tools` → `/`, `tools/[id]` → `/`, витрину `kit` → `/kit`. Удалить
 `preview/+layout.svelte` (корневой shell заменяет его).
 
-### 4. Flatten `kit/` → `components/`
+### 4. Update hardcoded `/preview/` URLs
+
+В компонентах с захардкоженными путями `/preview/` заменить на корневые.
+
+### 5. Flatten `kit/` → `components/`
 
 Перенести компоненты из `lib/components/kit/` в `lib/components/`, обновить все
 импорты, удалить пустую `kit/`.
 
-### 5. Flatten `preview/` → `lib/`
+### 6. Flatten `preview/` → `lib/`
 
 Перенести код из `lib/previw/` в `lib/`, обновить все импорты, удалить пустую
 `preview/`.
 
-### 6. Перенести `old/` → `v1/`
+### 7. Перенести `old/` → `v1/`
 
 - `$lib/old/` — переименовать в `lib/v1/`, обновить все импорты
-
-### 7. Update hardcoded `/preview/` URLs
-
-В компонентах с захардкоженными путями `/preview/` заменить на корневые.
 
 ### 8. E2E тесты + playwright config
 
