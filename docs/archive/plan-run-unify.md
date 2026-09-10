@@ -1,11 +1,9 @@
 # План: единый `run(ctx)` в registry-new (унификация 5 режимов исполнения)
 
-> Статус: выполняется пошагово (ремонтограф: 11 шагов, ревью после каждого).
-> Ветка `feat/redesign`. Убивает пару багов-классов «инструмент с generate
-> показывает загрузку и не выдаёт результат» (linear-gradient-png и все
-> генераторы): причина — `input` не задан, диспетч по факту наличия методов.
-> Целевое состояние по завершении: `svelte-check` → 0 errors, `pnpm test` →
-> зелёный, `lint` → без ошибок. E2E не делаем.
+> **СТАТУС: ВЫПОЛНЕН (2026-09-10) — устарел.** Убивал пару багов-классов
+> «инструмент с generate показывает загрузку и не выдаёт результат»
+> (linear-gradient-png и все генераторы): причина — `input` не задан, диспетч по
+> факту наличия методов.
 
 ## Исходная проблема
 
@@ -97,6 +95,10 @@ export async function execute(
 
 ## Шаги (ревью после каждого)
 
+Все 11 шагов выполнены; гейт пройден: `svelte-check` → 0 errors,
+`pnpm --dir web lint` → чисто, `pnpm --dir web test` → 618/618 зелёный. E2E не
+делали.
+
 | #   | Шаг             | Файлы                                                                                                  | Что                                                                                                                                     |
 | --- | --------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Типы            | `registry-new/types.ts`                                                                                | новый `ToolEntry`/`ToolContext`/`ToolResult`/`InputMode "image"`, хелперы `requireSource`/`requireText` + `imgTool`/`genTool`/`textGen` |
@@ -109,11 +111,15 @@ export async function execute(
 | 8   | Альфа/цвет      | `registry-new/alpha.ts`, `color.ts`                                                                    | run → `run(ctx)` + `input: "image"`                                                                                                     |
 | 9   | Фильтры         | `registry-new/filters.ts`                                                                              | run → `run(ctx)` + `input: "image"`                                                                                                     |
 | 10  | Тесты           | `registry-new/registry-new.test.ts`                                                                    | `generate!`/`run!` → `run(ctx)`; guard-тест: `input` всегда задан, image-инструменты работают с источником, `none` — без                |
-| 11  | Гейт            | —                                                                                                      | `pnpm --dir web exec svelte-check --tsconfig ./tsconfig.json`, `pnpm --dir web lint`, `pnpm --dir web test`                             |
+| 11  | Гейт            | —                                                                                                      | `svelte-check` → 0 errors, `pnpm --dir web lint` → чисто, `pnpm --dir web test` → 618/618                                               |
 
-Примечание по миграции: `input: "image"` добавляется всем run-инструментам (~80
-шт.), `input: "text"` уже стоит у 7 text-инструментов, `input: "none"` — у 21
-генератора.
+Примечание шага 8: поля `preview:` (маска у remove-color/remove-background)
+удалены — новый executor зовёт `run()` напрямую; идея вернуть отображение маски
+— в `docs/backlog.md` №17. Prettier-варнинги `prettier --check` по
+SchemaToolView.svelte и executor-файлам — предсуществующий долг.
+
+По миграции: `input: "image"` добавлен всем run-инструментам (~80 шт.),
+`input: "text"` стоит у 7 text-инструментов, `input: "none"` — у 21 генератора.
 
 ## Известные последствия
 
