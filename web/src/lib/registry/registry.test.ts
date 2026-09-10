@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { TOOLS } from ".";
 import { PREVIEW_GROUPS } from "../catalog";
 import type { PixelImage } from "../core/types";
-import { TOOLS } from "../registry-new";
 import { defaultSchemaParams, sanitizeSchemaParams } from "../registry-schema";
 import type { ToolResult } from "./types";
 

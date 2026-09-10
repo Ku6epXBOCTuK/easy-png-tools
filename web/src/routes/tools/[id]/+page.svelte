@@ -1,7 +1,7 @@
 <script lang="ts">
 	import EmptyState from "$lib/components/EmptyState.svelte";
 	import SchemaToolView from "$lib/components/SchemaToolView.svelte";
-	import { getTool } from "$lib/registry-new";
+	import { getTool } from "$lib/registry";
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";
 
 	interface Props {

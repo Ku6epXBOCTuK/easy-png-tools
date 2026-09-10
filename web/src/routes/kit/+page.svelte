@@ -23,7 +23,7 @@
 	import Toggle from "$lib/components/ui/Toggle.svelte";
 	import { Download, ImageOff, Plus, Trash2 } from "@lucide/svelte";
 
-	import { TOOLS } from "$lib/registry-new";
+	import { TOOLS } from "$lib/registry";
 	import { TOOL_ICONS } from "$lib/tool-icons";
 
 	let mode = $state("preview");

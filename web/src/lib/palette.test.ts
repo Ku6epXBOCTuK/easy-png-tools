@@ -1,7 +1,6 @@
-import { describe, expect, it } from "vitest";
-// @ts-expect-error node types are not wired into svelte-check; vitest resolves fine
-import { readFileSync } from "node:fs";
 import { Color } from "@panmdaa/colors";
+import { readFileSync } from "node:fs";
+import { describe, expect, it } from "vitest";
 
 declare const process: { cwd(): string };
 

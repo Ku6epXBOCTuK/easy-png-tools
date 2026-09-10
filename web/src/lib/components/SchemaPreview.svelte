@@ -4,7 +4,7 @@
 	import SchemaResultTile from "$lib/components/SchemaResultTile.svelte";
 	import SchemaSourceTile from "$lib/components/SchemaSourceTile.svelte";
 	import type { PixelImage } from "$lib/core/types";
-	import type { InputMode, ResultKind } from "$lib/registry-new";
+	import type { InputMode, ResultKind } from "$lib/registry";
 
 	interface Props {
 		inputMode: InputMode;

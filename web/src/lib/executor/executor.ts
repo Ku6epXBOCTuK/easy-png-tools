@@ -1,7 +1,7 @@
 import { ToolError } from "$lib/core/errors";
 import type { PixelImage } from "$lib/core/types";
+import type { ToolContext, ToolEntry, ToolResult } from "$lib/registry";
 import { sanitizeSchemaParams } from "$lib/registry-schema";
-import type { ToolContext, ToolEntry, ToolResult } from "$lib/registry-new";
 
 /** Вход единой точки исполнения. `source`/`text` — по контракту `tool.input`. */
 export type ExecuteContext = {

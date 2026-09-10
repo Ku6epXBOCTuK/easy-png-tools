@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import type { InputMode } from "$lib/registry-new";
+	import type { InputMode } from "$lib/registry";
 	import SchemaTextSource from "./SchemaTextSource.svelte";
 
 	interface Props {

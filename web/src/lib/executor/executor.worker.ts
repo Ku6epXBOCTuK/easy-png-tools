@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 import { ToolError } from "$lib/core/errors";
 import type { PixelImage } from "$lib/core/types";
-import { getTool } from "$lib/registry-new";
+import { getTool } from "$lib/registry";
 import { sanitizeSchemaParams } from "$lib/registry-schema";
 
 type WorkerRequest = {

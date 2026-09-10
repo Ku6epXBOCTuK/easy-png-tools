@@ -7,7 +7,7 @@
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
 	import { t } from "$lib/i18n/t";
-	import type { ToolEntry } from "$lib/registry-new";
+	import type { ToolEntry } from "$lib/registry";
 	import {
 		defaultSchemaParams,
 		sanitizeSchemaParams,
