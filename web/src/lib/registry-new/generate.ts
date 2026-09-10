@@ -2,7 +2,6 @@ import { renderEmoji, renderTextToImage } from "../core/domText";
 import { colorSpectrum, drawGrid, randomColorBlocks } from "../core/gen-tools";
 import { noiseImage, solidImage } from "../core/generate";
 import { changeCanvasSize } from "../core/geometry";
-import type { PixelImage } from "../core/types";
 import {
 	analogousSet,
 	complementarySet,
@@ -18,6 +17,7 @@ import {
 	tetradicSet,
 	triadicSet,
 } from "../core/palette";
+import type { PixelImage } from "../core/types";
 import {
 	field,
 	toolSchema,
@@ -26,7 +26,7 @@ import {
 	type FontStyle,
 	type Gradient,
 } from "../registry-schema";
-import type { ToolEntry } from "./types";
+import { genTool, type ToolEntry } from "./types";
 
 function rgba(hex: string): [number, number, number, number] {
 	const { r, g, b } = hexToRgb(hex);
@@ -101,14 +101,15 @@ const createEmpty: ToolEntry<CreateEmptyParams> = {
 		"Creates a blank canvas of the chosen dimensions, either transparent or filled with a solid color.",
 	category: "generate",
 	schema: createEmptySchema,
-	generate: (p) => {
+	input: "none",
+	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		if (p.transparent) {
 			return solidImage(w, h, [0, 0, 0, 0]);
 		}
 		return solidImage(w, h, rgba(p.color));
-	},
+	}),
 };
 
 interface SingleColorParams {
@@ -127,11 +128,12 @@ const singleColor: ToolEntry<SingleColorParams> = {
 	description: "Generates a rectangle of the given size and color.",
 	category: "generate",
 	schema: singleColorSchema,
-	generate: (p) => {
+	input: "none",
+	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		return solidImage(w, h, rgba(p.color));
-	},
+	}),
 };
 
 interface RandomNoiseParams {
@@ -151,11 +153,12 @@ const randomNoise: ToolEntry<RandomNoiseParams> = {
 		"Generates an image with random pixels. The seed fixes the result: one seed — one image.",
 	category: "generate",
 	schema: randomNoiseSchema,
-	generate: (p) => {
+	input: "none",
+	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		return noiseImage(w, h, p.seed);
-	},
+	}),
 };
 
 interface LinearGradientParams {
@@ -185,7 +188,8 @@ const linearGradient: ToolEntry<LinearGradientParams> = {
 		"Generates a smooth transition between two colors along a chosen angle.",
 	category: "generate",
 	schema: linearGradientSchema,
-	generate: (p) => {
+	input: "none",
+	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		return angleGradient(
@@ -195,7 +199,7 @@ const linearGradient: ToolEntry<LinearGradientParams> = {
 			rgba(p.gradient.to),
 			p.gradient.angle,
 		);
-	},
+	}),
 };
 
 interface ColorSpectrumParams {
@@ -235,11 +239,12 @@ const colorSpectrumTool: ToolEntry<ColorSpectrumParams> = {
 		"Full hue rainbow 0–360° along the chosen axis with adjustable saturation and lightness.",
 	category: "generate",
 	schema: colorSpectrumSchema,
-	generate: (p) => {
+	input: "none",
+	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		return colorSpectrum(w, h, p.direction, p.saturation, p.lightness);
-	},
+	}),
 };
 
 interface RandomColorsParams {
@@ -271,11 +276,12 @@ const randomColors: ToolEntry<RandomColorsParams> = {
 		"Fills the canvas with random vivid color blocks. Deterministic by seed.",
 	category: "generate",
 	schema: randomColorsSchema,
-	generate: (p) => {
+	input: "none",
+	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		return randomColorBlocks(w, h, p.blockSize, p.seed);
-	},
+	}),
 };
 
 interface DrawGridParams {
@@ -317,7 +323,8 @@ const drawGridTool: ToolEntry<DrawGridParams> = {
 		"Draws a grid with custom columns, rows and line width on a transparent or white background.",
 	category: "generate",
 	schema: drawGridSchema,
-	generate: (p) => {
+	input: "none",
+	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		return drawGrid(
@@ -329,7 +336,7 @@ const drawGridTool: ToolEntry<DrawGridParams> = {
 			p.color,
 			p.transparentBg,
 		);
-	},
+	}),
 };
 
 interface PlaceholderParams {
@@ -364,7 +371,8 @@ const placeholder: ToolEntry<PlaceholderParams> = {
 		"Generates a placeholder rectangle with its dimensions printed in the center.",
 	category: "generate",
 	schema: placeholderSchema,
-	generate: (p) => {
+	input: "none",
+	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		let out = solidImage(w, h, rgba(p.backgroundColor));
@@ -382,7 +390,7 @@ const placeholder: ToolEntry<PlaceholderParams> = {
 			out = changeCanvasSize(label, w, h, "center");
 		}
 		return out;
-	},
+	}),
 };
 
 interface BlendTwoParams {
@@ -401,7 +409,8 @@ const blendTwo: ToolEntry<BlendTwoParams> = {
 	description: "A continuous horizontal gradient between two colors.",
 	category: "generate",
 	schema: blendTwoSchema,
-	generate: (p) => renderBlend(p.pair.from, p.pair.to, p.width),
+	input: "none",
+	run: genTool((p) => renderBlend(p.pair.from, p.pair.to, p.width)),
 };
 
 interface StepColorsParams {
@@ -440,12 +449,14 @@ const stepColorsTool: ToolEntry<StepColorsParams> = {
 	description: "A discrete set of evenly spaced steps between two colors.",
 	category: "generate",
 	schema: stepColorsSchema,
-	generate: (p) =>
+	input: "none",
+	run: genTool((p) =>
 		renderSwatches(
 			stepColors(p.pair.from, p.pair.to, p.steps),
 			p.width,
 			p.layout,
 		),
+	),
 };
 
 interface EmojiToPngParams {
@@ -466,7 +477,8 @@ const emojiToPng: ToolEntry<EmojiToPngParams> = {
 	category: "generate",
 	domOnly: true,
 	schema: emojiToPngSchema,
-	generate: (p) => renderEmoji(p.emoji, Math.round(p.size)),
+	input: "none",
+	run: genTool((p) => renderEmoji(p.emoji, Math.round(p.size))),
 };
 
 interface ColorWheelParams {
@@ -486,7 +498,8 @@ const colorWheelTool: ToolEntry<ColorWheelParams> = {
 		"Generates an HSL color wheel: hue around the circle, saturation from center to edge, chosen lightness.",
 	category: "generate",
 	schema: colorWheelSchema,
-	generate: (p) => renderWheel(p.size, p.lightness),
+	input: "none",
+	run: genTool((p) => renderWheel(p.size, p.lightness)),
 };
 
 interface PaletteBaseParams {
@@ -530,8 +543,10 @@ const complementaryTool: ToolEntry<PaletteBaseParams> = {
 		{ ...paletteBaseSchema },
 		{ ...paletteLayoutGroup },
 	),
-	generate: (p) =>
+	input: "none",
+	run: genTool((p) =>
 		renderSwatches(complementarySet(p.baseColor), p.width, p.layout),
+	),
 };
 
 const triadicTool: ToolEntry<PaletteBaseParams> = {
@@ -546,7 +561,10 @@ const triadicTool: ToolEntry<PaletteBaseParams> = {
 		},
 		{ ...paletteLayoutGroup },
 	),
-	generate: (p) => renderSwatches(triadicSet(p.baseColor), p.width, p.layout),
+	input: "none",
+	run: genTool((p) =>
+		renderSwatches(triadicSet(p.baseColor), p.width, p.layout),
+	),
 };
 
 const tetradicTool: ToolEntry<PaletteBaseParams> = {
@@ -562,7 +580,10 @@ const tetradicTool: ToolEntry<PaletteBaseParams> = {
 		},
 		{ ...paletteLayoutGroup },
 	),
-	generate: (p) => renderSwatches(tetradicSet(p.baseColor), p.width, p.layout),
+	input: "none",
+	run: genTool((p) =>
+		renderSwatches(tetradicSet(p.baseColor), p.width, p.layout),
+	),
 };
 
 interface AnalogousParams extends PaletteBaseParams {
@@ -585,12 +606,14 @@ const analogousTool: ToolEntry<AnalogousParams> = {
 		},
 		{ ...paletteLayoutGroup },
 	),
-	generate: (p) =>
+	input: "none",
+	run: genTool((p) =>
 		renderSwatches(
 			analogousSet(p.baseColor, p.spread, p.count),
 			p.width,
 			p.layout,
 		),
+	),
 };
 
 interface MonochromaticParams extends PaletteBaseParams {
@@ -613,12 +636,14 @@ const monochromaticTool: ToolEntry<MonochromaticParams> = {
 		},
 		{ ...paletteLayoutGroup },
 	),
-	generate: (p) =>
+	input: "none",
+	run: genTool((p) =>
 		renderSwatches(
 			monochromaticSet(p.baseColor, p.count, p.range),
 			p.width,
 			p.layout,
 		),
+	),
 };
 
 interface ShadesParams extends PaletteBaseParams {
@@ -640,8 +665,10 @@ const shadesTool: ToolEntry<ShadesParams> = {
 		},
 		{ ...paletteLayoutGroup },
 	),
-	generate: (p) =>
+	input: "none",
+	run: genTool((p) =>
 		renderSwatches(shadeSet(p.baseColor, p.count, p.depth), p.width, p.layout),
+	),
 };
 
 interface MixColorsParams {
@@ -671,7 +698,8 @@ const mixColorsTool: ToolEntry<MixColorsParams> = {
 		"Averages the selected colors into one swatch. Colors become one uniform fill.",
 	category: "generate",
 	schema: mixColorsSchema,
-	generate: (p) => renderSwatches([mixColors(p.colors)], p.width, "strip"),
+	input: "none",
+	run: genTool((p) => renderSwatches([mixColors(p.colors)], p.width, "strip")),
 };
 
 interface SortColorsParams {
@@ -731,8 +759,10 @@ const sortColorsTool: ToolEntry<SortColorsParams> = {
 		"Renders the chosen colors as swatches sorted by hue, brightness or saturation.",
 	category: "generate",
 	schema: sortColorsSchema,
-	generate: (p) =>
+	input: "none",
+	run: genTool((p) =>
 		renderSwatches(sortPalette(p.colors, p.order), p.width, p.layout),
+	),
 };
 
 interface TextToPngParams {
@@ -777,7 +807,8 @@ const textToPng: ToolEntry<TextToPngParams> = {
 	category: "generate",
 	domOnly: true,
 	schema: textToPngSchema,
-	generate: (p) =>
+	input: "none",
+	run: genTool((p) =>
 		renderTextToImage({
 			text: p.text,
 			fontSize: p.style.size,
@@ -788,6 +819,7 @@ const textToPng: ToolEntry<TextToPngParams> = {
 			transparentBg: p.transparentBg,
 			padding: p.padding,
 		}),
+	),
 };
 
 export const generateEntries = [
