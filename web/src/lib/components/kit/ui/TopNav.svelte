@@ -3,9 +3,9 @@
 </script>
 
 <nav class="nav">
-	<a href={resolve("/preview")}>Home page</a>
-	<a href={resolve("/preview/list-tools")}>Catalog</a>
-	<a href={resolve("/preview/kit")}> UI Kit </a>
+	<a href={resolve("/")}>Home page</a>
+	<a href={resolve("/list-tools")}>Catalog</a>
+	<a href={resolve("/kit")}> UI Kit </a>
 </nav>
 
 <style>
