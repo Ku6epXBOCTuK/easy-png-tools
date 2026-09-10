@@ -1,4 +1,4 @@
-import type { ToolEntry } from "./types";
+import { imgTool, type ToolEntry } from "./types";
 import { field, toolSchema } from "../registry-schema";
 import {
 	addNoise,
@@ -25,7 +25,8 @@ const blurTool: ToolEntry<BlurParams> = {
 		"Gaussian blur: three passes of separable box blur — fast at any radius. Transparent edges do not darken.",
 	category: "filters",
 	schema: blurSchema,
-	run: (img, p) => gaussianBlur(img, p.radius),
+	input: "image",
+	run: imgTool((img, p) => gaussianBlur(img, p.radius)),
 };
 
 interface SharpenParams {
@@ -43,7 +44,8 @@ const sharpenTool: ToolEntry<SharpenParams> = {
 		"Emphasizes edges with a sharpening kernel; strength sets the blend with the original. 0% means no change.",
 	category: "filters",
 	schema: sharpenSchema,
-	run: (img, p) => sharpenImage(img, p.strength),
+	input: "image",
+	run: imgTool((img, p) => sharpenImage(img, p.strength)),
 };
 
 interface SilhouetteParams {
@@ -63,7 +65,8 @@ const silhouetteTool: ToolEntry<SilhouetteParams> = {
 		"Turns all visible pixels into a single solid color while keeping their transparency — instant silhouette.",
 	category: "filters",
 	schema: silhouetteSchema,
-	run: (img, p) => silhouette(img, p.color, p.threshold * 2.55),
+	input: "image",
+	run: imgTool((img, p) => silhouette(img, p.color, p.threshold * 2.55)),
 };
 
 interface VignetteParams {
@@ -81,7 +84,8 @@ const vignetteTool: ToolEntry<VignetteParams> = {
 		"Smoothly darkens the edges of the image, leaving the center untouched.",
 	category: "filters",
 	schema: vignetteSchema,
-	run: (img, p) => vignette(img, p.strength),
+	input: "image",
+	run: imgTool((img, p) => vignette(img, p.strength)),
 };
 
 interface PixelateParams {
@@ -99,7 +103,8 @@ const pixelateTool: ToolEntry<PixelateParams> = {
 		"Averages every blockSize×blockSize area into one color — classic mosaic.",
 	category: "filters",
 	schema: pixelateSchema,
-	run: (img, p) => pixelate(img, p.blockSize),
+	input: "image",
+	run: imgTool((img, p) => pixelate(img, p.blockSize)),
 };
 
 interface RandomizePixelsParams {
@@ -126,7 +131,8 @@ const randomizePixels: ToolEntry<RandomizePixelsParams> = {
 		"Shuffles blocks of the image between positions. Same seed gives the same arrangement.",
 	category: "filters",
 	schema: randomizePixelsSchema,
-	run: (img, p) => shuffleBlocks(img, p.blockSize, p.seed),
+	input: "image",
+	run: imgTool((img, p) => shuffleBlocks(img, p.blockSize, p.seed)),
 };
 
 interface AddNoiseParams {
@@ -164,7 +170,8 @@ const addNoiseTool: ToolEntry<AddNoiseParams> = {
 		"Adds film-grain style noise. Deterministic by seed; monochrome keeps original hue balance.",
 	category: "filters",
 	schema: addNoiseSchema,
-	run: (img, p) => addNoise(img, p.amount, p.mode, p.seed),
+	input: "image",
+	run: imgTool((img, p) => addNoise(img, p.amount, p.mode, p.seed)),
 };
 
 interface JpegArtifactsParams {
@@ -182,7 +189,8 @@ const jpegArtifacts: ToolEntry<JpegArtifactsParams> = {
 		"Simulates low-quality JPEG re-compression — visible blocks and smeared colors.",
 	category: "filters",
 	schema: jpegArtifactsSchema,
-	run: (img, p) => jpegRoundtrip(img, p.quality),
+	input: "image",
+	run: imgTool((img, p) => jpegRoundtrip(img, p.quality)),
 };
 
 export const filtersEntries = [
