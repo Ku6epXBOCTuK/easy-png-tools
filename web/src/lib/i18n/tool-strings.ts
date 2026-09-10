@@ -1,6 +1,6 @@
-import type { ParamDef, ToolEntry } from "$lib/old/registry";
-import type { SearchDoc } from "./matching";
+import type { ParamDef, ToolEntry } from "$lib/v1/registry";
 import { getMergedDict } from "./locale.svelte";
+import type { SearchDoc } from "./matching";
 import { ru } from "./ru";
 
 /**

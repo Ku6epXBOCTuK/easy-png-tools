@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { TOOLS } from "../old/registry";
-import { normalizeForSearch, scoreDoc, type SearchDoc } from "./matching";
+import { TOOLS } from "../v1/registry";
 import { setLocale } from "./locale.svelte";
+import { normalizeForSearch, scoreDoc, type SearchDoc } from "./matching";
 import { toolSearchDoc } from "./tool-strings";
 
 describe("normalizeForSearch", () => {

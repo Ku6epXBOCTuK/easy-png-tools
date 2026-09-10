@@ -1,6 +1,6 @@
 <script lang="ts">
-	import ToolPage from "$lib/old/components/ToolPage.svelte";
-	import { getTool } from "$lib/old/registry";
+	import ToolPage from "$lib/v1/components/ToolPage.svelte";
+	import { getTool } from "$lib/v1/registry";
 
 	const base = getTool("linear-gradient-png")!;
 </script>

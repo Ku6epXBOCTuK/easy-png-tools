@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { TOOLS } from "../old/registry";
+import { isChainable, TOOLS } from "../v1/registry";
 import { normalizeForSearch, scoreDoc } from "./matching";
 import { toolSearchDoc } from "./tool-strings";
-import { isChainable } from "../old/registry";
 
 function hits(q: string): string[] {
 	const nq = normalizeForSearch(q);

@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { setLocale } from "./locale.svelte";
-import { t } from "./t";
+import { TOOLS } from "../v1/registry";
 import { LOCALE_TAGS } from "./dict";
+import { setLocale } from "./locale.svelte";
 import { normalizeForSearch, scoreDoc } from "./matching";
+import { t } from "./t";
 import { toolSearchDoc } from "./tool-strings";
-import { TOOLS } from "../old/registry";
 
 afterEach(() => {
 	setLocale("ru");

@@ -1,6 +1,6 @@
-import { error } from "@sveltejs/kit";
-import { getTool, TOOLS } from "$lib/old/registry";
 import { t } from "$lib/i18n/t";
+import { getTool, TOOLS } from "$lib/v1/registry";
+import { error } from "@sveltejs/kit";
 import type { EntryGenerator, PageLoad } from "./$types";
 
 export const entries: EntryGenerator = () =>

@@ -1,14 +1,14 @@
 <script lang="ts">
-	import Button from "../ui/Button.svelte";
-	import DownloadButton from "../DownloadButton.svelte";
-	import EmptyState from "../ui/EmptyState.svelte";
-	import InfoPanel from "../InfoPanel.svelte";
-	import Preview from "../Preview.svelte";
-	import TextResult from "./TextResult.svelte";
 	import type { ImageInfo } from "$lib/core/analyze";
 	import type { PixelImage } from "$lib/core/types";
-	import { outputOf, type ToolEntry } from "$lib/old/registry";
 	import { t } from "$lib/i18n/t";
+	import { outputOf, type ToolEntry } from "$lib/v1/registry";
+	import DownloadButton from "../DownloadButton.svelte";
+	import InfoPanel from "../InfoPanel.svelte";
+	import Preview from "../Preview.svelte";
+	import Button from "../ui/Button.svelte";
+	import EmptyState from "../ui/EmptyState.svelte";
+	import TextResult from "./TextResult.svelte";
 
 	type Status = "idle" | "loaded" | "processing" | "error";
 

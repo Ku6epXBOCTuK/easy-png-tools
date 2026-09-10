@@ -1,20 +1,19 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
-	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/old/registry";
 	import type { ImageInfo } from "$lib/core/analyze";
 	import type { PixelImage } from "$lib/core/types";
 	import { t } from "$lib/i18n/t";
-	import { toolTitle } from "$lib/i18n/tool-strings";
-	import { TOOL_ICONS } from "$lib/old/tools/tool-icons";
+	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/v1/registry";
+	import { TOOL_ICONS } from "$lib/v1/tools/tool-icons";
+	import type { Snippet } from "svelte";
 	import DownloadButton from "../DownloadButton.svelte";
-	import Button from "../ui/Button.svelte";
-	import EmptyState from "../ui/EmptyState.svelte";
+	import Preview from "../Preview.svelte";
 	import OverlayCard from "../tool/OverlayCard.svelte";
 	import ParamsCard from "../tool/ParamsCard.svelte";
 	import ResultCard from "../tool/ResultCard.svelte";
 	import SourceCard from "../tool/SourceCard.svelte";
 	import TextInputCard from "../tool/TextInputCard.svelte";
-	import Preview from "../Preview.svelte";
+	import Button from "../ui/Button.svelte";
+	import EmptyState from "../ui/EmptyState.svelte";
 	import type { StageStatus } from "./stage-props";
 
 	interface Props {

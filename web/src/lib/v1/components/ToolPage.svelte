@@ -7,34 +7,27 @@
 		unsupportedImageError,
 	} from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
+	import { t } from "$lib/i18n/t";
+	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
 	import {
 		defaultParams,
 		getTool,
-		outputOf,
 		sanitizeParams,
 		type ToolEntry,
-	} from "$lib/old/registry";
+	} from "$lib/v1/registry";
+	import { createAutoRunner } from "$lib/v1/tools/auto-run";
+	import { executeStep } from "$lib/v1/tools/executor";
+	import { clearOverlay, setOverlay } from "$lib/v1/tools/overlay-store.svelte";
 	import {
 		loadStoredSteps,
 		newStepId,
 		saveSteps,
 		type PipelineStep,
-	} from "$lib/old/tools/pipeline";
-	import { TOOL_ICONS } from "$lib/old/tools/tool-icons";
-	import DownloadButton from "./DownloadButton.svelte";
-	import ParamForm from "./ParamForm.svelte";
-	import Preview from "./Preview.svelte";
-	import ToolSearch from "./search/ToolSearch.svelte";
-	import { createAutoRunner } from "$lib/old/tools/auto-run";
-	import { executeStep } from "$lib/old/tools/executor";
-	import {
-		clearOverlay,
-		setOverlay,
-	} from "$lib/old/tools/overlay-store.svelte";
-	import { t } from "$lib/i18n/t";
-	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
-	import type { StageStatus } from "./stage/stage-props";
+	} from "$lib/v1/tools/pipeline";
+	import { TOOL_ICONS } from "$lib/v1/tools/tool-icons";
 	import ChainToolBlock from "./chain/ChainToolBlock.svelte";
+	import ToolSearch from "./search/ToolSearch.svelte";
+	import type { StageStatus } from "./stage/stage-props";
 	import ToolStage from "./stage/ToolStage.svelte";
 	import ToolStageClassic from "./stage/ToolStageClassic.svelte";
 

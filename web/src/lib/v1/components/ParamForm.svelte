@@ -1,12 +1,12 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/t";
+	import { optionLabel, paramLabel } from "$lib/i18n/tool-strings";
+	import type { ParamDef, ToolEntry } from "$lib/v1/registry";
 	import CheckboxField from "./ui/CheckboxField.svelte";
 	import ColorField from "./ui/ColorField.svelte";
 	import SelectField from "./ui/SelectField.svelte";
 	import SliderField from "./ui/SliderField.svelte";
 	import TextField from "./ui/TextField.svelte";
-	import type { ParamDef, ToolEntry } from "$lib/old/registry";
-	import { optionLabel, paramLabel } from "$lib/i18n/tool-strings";
-	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		tool: ToolEntry;

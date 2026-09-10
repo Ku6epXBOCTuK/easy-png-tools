@@ -1,4 +1,4 @@
-import type { CategoryId } from "../old/categories";
+import type { CategoryId } from "../v1/categories";
 
 export const LOCALES = ["ru", "en"] as const;
 export type Locale = (typeof LOCALES)[number];

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ToolPage from "$lib/old/components/ToolPage.svelte";
-	import { getTool } from "$lib/old/registry";
 	import { t } from "$lib/i18n/t";
 	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
+	import ToolPage from "$lib/v1/components/ToolPage.svelte";
+	import { getTool } from "$lib/v1/registry";
 
 	let { data } = $props();
 
