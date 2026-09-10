@@ -3,7 +3,7 @@ import { drawTextBlock, drawTextTile } from "../core/domText";
 import type { Position9 } from "../core/textdraw";
 import type { FontStyle, Plate } from "../registry-schema";
 import { field, toolSchema } from "../registry-schema";
-import type { ToolEntry } from "./types";
+import { imgTool, type ToolEntry } from "./types";
 
 interface AddTextParams {
 	text: string;
@@ -47,7 +47,8 @@ const addText: ToolEntry<AddTextParams> = {
 	category: "text",
 	domOnly: true,
 	schema: addTextSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		drawTextBlock(img, {
 			text: p.text,
 			fontSize: p.style.size,
@@ -60,6 +61,7 @@ const addText: ToolEntry<AddTextParams> = {
 			plateColor: p.plate.enabled ? p.plate.color : undefined,
 			plateOpacityPercent: p.plate.opacity,
 		}),
+	),
 };
 
 interface DateStampParams {
@@ -107,7 +109,8 @@ const dateStamp: ToolEntry<DateStampParams> = {
 	category: "text",
 	domOnly: true,
 	schema: dateStampSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		drawTextBlock(img, {
 			text: formatStamp(new Date(), p.format),
 			fontSize: p.style.size,
@@ -120,6 +123,7 @@ const dateStamp: ToolEntry<DateStampParams> = {
 			plateColor: p.plate.enabled ? p.plate.color : undefined,
 			plateOpacityPercent: p.plate.opacity,
 		}),
+	),
 };
 
 interface WatermarkTileParams {
@@ -169,7 +173,8 @@ const watermarkTile: ToolEntry<WatermarkTileParams> = {
 	category: "text",
 	domOnly: true,
 	schema: watermarkTileSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		drawTextTile(img, {
 			text: p.text,
 			fontSize: p.style.size,
@@ -181,6 +186,7 @@ const watermarkTile: ToolEntry<WatermarkTileParams> = {
 			stepY: p.stepY,
 			angleDeg: p.angle,
 		}),
+	),
 };
 
 export const textEntries = [addText, dateStamp, watermarkTile];
