@@ -12,8 +12,11 @@
   тесты: `pnpm --dir web test` (Vitest), e2e: `pnpm --dir web test:e2e` (Playwright,
   `web/e2e/`, свой webServer на `pnpm build` + `scripts/serve-static.mjs`, порт 4173).
 - Форматирование: два независимых прогона. Корневой prettier форматирует
-  только markdown `docs/` (`.prettierrc` + allowlist `.prettierignore` в корне,
-  `pnpm format:docs`, проверка — `pnpm check:docs`). Код `web/` форматируется
+  только markdown `docs/` (`.prettierrc` в корне, `pnpm format:docs`, проверка —
+  `pnpm check:docs`). Корневой `.prettierignore` — только точечные исключения
+  (node_modules, refs-html…), без `/*`-allowlist: он глушит формат-он-сейв
+  для всего `web/` (файлы резолвятся как ignored и дочерние конфиги не
+  применяются). Код `web/` форматируется
   отдельно: `pnpm --dir web format` (Prettier + `prettier-plugin-svelte`,
   конфиг `web/.prettierrc`, игнор `web/.prettierignore`). Проверка без записи:
   `pnpm --dir web exec prettier --check .`. Оба прогона сразу: `pnpm format`
