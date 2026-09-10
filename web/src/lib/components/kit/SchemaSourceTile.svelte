@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
+	import type { InputMode } from "$lib/registry-new";
 	import SchemaTextSource from "./SchemaTextSource.svelte";
 
 	interface Props {
-		mode: "file" | "text";
+		mode: InputMode;
 		source: PixelImage | null;
 		textSource?: string;
 		running?: boolean;
@@ -35,10 +36,12 @@
 					onrender={onrendertext ?? (() => {})}
 				/>
 			</div>
-		{:else if sourceUrl}
+		{:else if mode === "image" && sourceUrl}
 			<img src={sourceUrl} alt="source" />
-		{:else}
+		{:else if mode === "image"}
 			<span class="empty">choose an image</span>
+		{:else}
+			<span class="empty">no source — configure the parameters</span>
 		{/if}
 	</div>
 </figure>

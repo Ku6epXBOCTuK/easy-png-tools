@@ -4,10 +4,11 @@
 	import SchemaResultTile from "$lib/components/kit/SchemaResultTile.svelte";
 	import SchemaSourceTile from "$lib/components/kit/SchemaSourceTile.svelte";
 	import type { PixelImage } from "$lib/core/types";
+	import type { InputMode, ResultKind } from "$lib/registry-new";
 
 	interface Props {
-		inputMode?: "file" | "text" | "none";
-		resultKind?: "image" | "text" | "verdict";
+		inputMode: InputMode;
+		resultKind?: ResultKind;
 		source: PixelImage | null;
 		result: PixelImage | null;
 		textSource?: string;
@@ -23,7 +24,7 @@
 		ondownload: () => void;
 	}
 	let {
-		inputMode = "file",
+		inputMode,
 		resultKind = "image",
 		source,
 		result,
@@ -80,21 +81,19 @@
 {/if}
 
 <div class="pair">
-	{#if !isGenerator}
-		<SchemaSourceTile
-			mode={inputMode === "text" ? "text" : "file"}
-			{source}
-			{textSource}
-			{running}
-			ontextinput={ontextsource}
-			{onrendertext}
-		/>
-	{/if}
+	<SchemaSourceTile
+		mode={inputMode}
+		{source}
+		{textSource}
+		{running}
+		ontextinput={ontextsource}
+		{onrendertext}
+	/>
 	<SchemaResultTile
 		{resultKind}
 		{result}
 		{textResult}
-		wide={isGenerator || resultKind !== "image"}
+		wide={resultKind !== "image"}
 		{running}
 		oncopy={oncopytext}
 		{ondownloadtxt}

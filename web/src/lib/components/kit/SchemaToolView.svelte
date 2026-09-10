@@ -2,15 +2,11 @@
 	import SchemaFields from "$lib/components/kit/SchemaFields.svelte";
 	import SchemaPreview from "$lib/components/kit/SchemaPreview.svelte";
 	import { debounce } from "$lib/core/debounce";
+	import { ToolError } from "$lib/core/errors";
 	import { decodeFile, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import {
-		executeFromText,
-		executeGenerate,
-		executeStep,
-		executeTextToText,
-		executeToText,
-	} from "$lib/preview/executor";
+	import { t } from "$lib/i18n/t";
+	import { execute } from "$lib/preview/executor";
 	import type { ToolEntry } from "$lib/registry-new";
 	import {
 		defaultSchemaParams,
@@ -27,8 +23,7 @@
 		tool.schema as ToolSchema<Record<string, unknown>> | undefined,
 	);
 
-	const isGenerator = $derived(Boolean(tool.generate && !tool.run));
-	const inputMode = $derived(tool.input ?? "file");
+	const inputMode = $derived(tool.input);
 	const resultKind = $derived(tool.result ?? "image");
 
 	let values = $state<Record<string, unknown>>({});
@@ -70,48 +65,21 @@
 
 	async function run() {
 		if (!schema) return;
-		if (isGenerator) {
-			if (!tool.generate) return;
-			await runGenerate();
-			return;
-		}
 		error = "";
-		const params = sanitizeSchemaParams(schema, values);
 		running = true;
 		try {
-			if (inputMode === "text") {
-				if (!textSource.trim()) return;
-				if (tool.textToText) {
-					textResult = await executeTextToText(tool, textSource);
-					result = null;
-				} else {
-					result = await executeFromText(tool, textSource, params);
-					textResult = null;
-				}
+			const out = await execute(tool, {
+				params: sanitizeSchemaParams(schema, values),
+				source: source ?? undefined,
+				text: textSource || undefined,
+			});
+			if (resultKind === "image") {
+				result = out as PixelImage;
+				textResult = null;
 			} else {
-				if (!source) return;
-				if (resultKind !== "image" && tool.toText) {
-					textResult = await executeToText(tool, source, params);
-					result = null;
-				} else {
-					result = await executeStep(tool, source, params);
-					textResult = null;
-				}
+				textResult = out as string;
+				result = null;
 			}
-		} catch (e) {
-			error = errorText(e);
-		} finally {
-			running = false;
-		}
-	}
-
-	async function runGenerate() {
-		if (!schema || !tool.generate) return;
-		running = true;
-		error = "";
-		const params = sanitizeSchemaParams(schema, values);
-		try {
-			result = await executeGenerate(tool, params);
 		} catch (e) {
 			error = errorText(e);
 		} finally {
@@ -159,14 +127,16 @@
 	});
 
 	$effect(() => {
-		if (inputMode === "text" || isGenerator || !source || !started) return;
+		if (inputMode !== "image" || !source || !started) return;
 		void values;
 		debouncedRun();
 		return () => debouncedRun.cancel();
 	});
 
 	function errorText(e: unknown): string {
-		return e instanceof Error ? e.message : String(e);
+		if (e instanceof ToolError) return t(e.key, e.vars);
+		if (e instanceof Error) return e.message;
+		return String(e);
 	}
 </script>
 
@@ -201,9 +171,9 @@
 					{running}
 					{error}
 					onupload={handleFile}
-					ongenerate={runGenerate}
-					ontextsource={(t) => {
-						textSource = t;
+					ongenerate={run}
+					ontextsource={(textValue) => {
+						textSource = textValue;
 					}}
 					onrendertext={run}
 					oncopytext={copyText}

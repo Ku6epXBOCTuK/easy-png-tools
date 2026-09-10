@@ -3,7 +3,7 @@
 	import { Sparkles, Upload } from "@lucide/svelte";
 
 	interface Props {
-		inputMode: "file" | "text" | "none";
+		inputMode: "image" | "text" | "none";
 		canDownload: boolean;
 		running: boolean;
 		onupload: (file: File) => void;
@@ -26,7 +26,7 @@
 			<Sparkles size={14} />
 			{running ? "Generating…" : "Generate"}
 		</button>
-	{:else if inputMode === "file"}
+	{:else if inputMode === "image"}
 		<label class="btn upload">
 			<Upload size={14} /> Open image
 			<input
