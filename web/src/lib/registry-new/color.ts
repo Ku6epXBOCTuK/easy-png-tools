@@ -21,7 +21,7 @@ import { renderSpace, SPACES, type SpaceId } from "../core/channels";
 import { parseHexList } from "../core/palette";
 import { ditherImage, mapToNearest, quantizeImage } from "../core/quantize";
 import { field, toolSchema, type ColorPair } from "../registry-schema";
-import type { ToolEntry } from "./types";
+import { imgTool, type ToolEntry } from "./types";
 
 interface TwoColorsParams {
 	pair: ColorPair;
@@ -40,7 +40,8 @@ const twoColorsTool: ToolEntry<TwoColorsParams> = {
 		"Recolors the image into two chosen colors by luminance threshold.",
 	category: "color",
 	schema: twoColorsSchema,
-	run: (img, p) => twoColors(img, p.pair.from, p.pair.to, p.threshold),
+	input: "image",
+	run: imgTool((img, p) => twoColors(img, p.pair.from, p.pair.to, p.threshold)),
 };
 
 interface GammaParams {
@@ -58,7 +59,8 @@ const gammaTool: ToolEntry<GammaParams> = {
 		"Corrects midtone brightness. <1 darker, >1 lighter, 1 — unchanged.",
 	category: "color",
 	schema: gammaSchema,
-	run: (img, p) => gammaCorrection(img, p.value),
+	input: "image",
+	run: imgTool((img, p) => gammaCorrection(img, p.value)),
 };
 
 interface TemperatureParams {
@@ -76,7 +78,8 @@ const temperatureTool: ToolEntry<TemperatureParams> = {
 		"Positive values make the image warmer (more orange), negative ones cooler (more blue).",
 	category: "color",
 	schema: temperatureSchema,
-	run: (img, p) => temperature(img, p.percent),
+	input: "image",
+	run: imgTool((img, p) => temperature(img, p.percent)),
 };
 
 interface TintParams {
@@ -96,7 +99,8 @@ const tintTool: ToolEntry<TintParams> = {
 		"Multiplies color channels by the chosen tint with the given strength.",
 	category: "color",
 	schema: tintSchema,
-	run: (img, p) => tint(img, p.color, p.strength),
+	input: "image",
+	run: imgTool((img, p) => tint(img, p.color, p.strength)),
 };
 
 interface QuantizeParams {
@@ -114,7 +118,8 @@ const quantizeTool: ToolEntry<QuantizeParams> = {
 		"Reduces the image to k colors via median-cut palette. Transparent pixels are preserved.",
 	category: "color",
 	schema: quantizeSchema,
-	run: (img, p) => quantizeImage(img, p.colors).image,
+	input: "image",
+	run: imgTool((img, p) => quantizeImage(img, p.colors).image),
 };
 
 interface CustomPaletteParams {
@@ -132,7 +137,8 @@ const customPalette: ToolEntry<CustomPaletteParams> = {
 		"Maps every pixel to the nearest color from your comma-separated hex list.",
 	category: "color",
 	schema: customPaletteSchema,
-	run: (img, p) => mapToNearest(img, parseHexList(p.colors)),
+	input: "image",
+	run: imgTool((img, p) => mapToNearest(img, parseHexList(p.colors))),
 };
 
 interface DitheringParams {
@@ -158,7 +164,8 @@ const ditheringTool: ToolEntry<DitheringParams> = {
 		"Applies Floyd–Steinberg error diffusion or ordered Bayer dithering while reducing to k colors.",
 	category: "color",
 	schema: ditheringSchema,
-	run: (img, p) => ditherImage(img, p.colors, p.pattern),
+	input: "image",
+	run: imgTool((img, p) => ditherImage(img, p.colors, p.pattern)),
 };
 
 interface EmptyParams {}
@@ -172,7 +179,8 @@ const grayscaleTool: ToolEntry<EmptyParams> = {
 		"Converts the image to shades of gray using the BT.601 luminance formula. Alpha is preserved.",
 	category: "color",
 	schema: grayscaleSchema,
-	run: (img) => grayscale(img),
+	input: "image",
+	run: imgTool((img) => grayscale(img)),
 };
 
 export const invertColorsSchema = toolSchema<EmptyParams>({});
@@ -183,7 +191,8 @@ const invertColorsTool: ToolEntry<EmptyParams> = {
 	description: "Inverts each color channel (255 − value). Alpha is unchanged.",
 	category: "color",
 	schema: invertColorsSchema,
-	run: (img) => invert(img),
+	input: "image",
+	run: imgTool((img) => invert(img)),
 };
 
 interface BrightnessContrastParams {
@@ -212,7 +221,8 @@ const brightnessContrastTool: ToolEntry<BrightnessContrastParams> = {
 		"Adjusts brightness and contrast in the range from −100 to +100. Zero means no change.",
 	category: "color",
 	schema: brightnessContrastSchema,
-	run: (img, p) => brightnessContrast(img, p.brightness, p.contrast),
+	input: "image",
+	run: imgTool((img, p) => brightnessContrast(img, p.brightness, p.contrast)),
 };
 
 interface OpacityParams {
@@ -230,7 +240,8 @@ const opacityTool: ToolEntry<OpacityParams> = {
 		"Multiplies the alpha channel by a percentage: 0% — fully transparent, 100% — unchanged.",
 	category: "color",
 	schema: opacitySchema,
-	run: (img, p) => setOpacity(img, p.percent),
+	input: "image",
+	run: imgTool((img, p) => setOpacity(img, p.percent)),
 };
 
 export const sepiaSchema = toolSchema<EmptyParams>({});
@@ -241,7 +252,8 @@ const sepiaTool: ToolEntry<EmptyParams> = {
 	description: "Tints the image into the warm brown tones of classic sepia.",
 	category: "color",
 	schema: sepiaSchema,
-	run: (img) => sepia(img),
+	input: "image",
+	run: imgTool((img) => sepia(img)),
 };
 
 interface HueShiftParams {
@@ -259,7 +271,8 @@ const hueShiftTool: ToolEntry<HueShiftParams> = {
 		"Shifts the hue around the circle. Saturation and lightness are preserved.",
 	category: "color",
 	schema: hueShiftSchema,
-	run: (img, p) => changeHue(img, p.degrees),
+	input: "image",
+	run: imgTool((img, p) => changeHue(img, p.degrees)),
 };
 
 interface ExtractChannelParams {
@@ -284,7 +297,8 @@ const extractChannelTool: ToolEntry<ExtractChannelParams> = {
 		"Keeps only the chosen channel — red, green or blue — as shades of gray.",
 	category: "color",
 	schema: extractChannelSchema,
-	run: (img, p) => extractChannel(img, p.channel),
+	input: "image",
+	run: imgTool((img, p) => extractChannel(img, p.channel)),
 };
 
 interface SwapChannelsParams {
@@ -309,7 +323,8 @@ const swapChannelsTool: ToolEntry<SwapChannelsParams> = {
 		"Swaps two color channels — a quick way to get unusual coloring.",
 	category: "color",
 	schema: swapChannelsSchema,
-	run: (img, p) => swapChannels(img, p.pair),
+	input: "image",
+	run: imgTool((img, p) => swapChannels(img, p.pair)),
 };
 
 interface BlackAndWhiteParams {
@@ -327,7 +342,8 @@ const blackAndWhiteTool: ToolEntry<BlackAndWhiteParams> = {
 		"Hard binarization by luminance: every pixel becomes black or white.",
 	category: "color",
 	schema: blackAndWhiteSchema,
-	run: (img, p) => thresholdBlackWhite(img, p.threshold),
+	input: "image",
+	run: imgTool((img, p) => thresholdBlackWhite(img, p.threshold)),
 };
 
 interface PosterizeParams {
@@ -344,7 +360,8 @@ const posterizeTool: ToolEntry<PosterizeParams> = {
 	description: "Reduces the number of levels per channel — a poster effect.",
 	category: "color",
 	schema: posterizeSchema,
-	run: (img, p) => posterize(img, p.levels),
+	input: "image",
+	run: imgTool((img, p) => posterize(img, p.levels)),
 };
 
 export const autoContrastSchema = toolSchema<EmptyParams>({});
@@ -356,7 +373,8 @@ const autoContrastTool: ToolEntry<EmptyParams> = {
 		"Stretches each channel's range across the full available brightness range.",
 	category: "color",
 	schema: autoContrastSchema,
-	run: (img) => autoContrast(img),
+	input: "image",
+	run: imgTool((img) => autoContrast(img)),
 };
 
 interface DecreaseColorCountParams {
@@ -390,7 +408,8 @@ const decreaseColorCountTool: ToolEntry<DecreaseColorCountParams> = {
 		"Median-cut engine as a quick way to drop to 2–256 colors. Presets marked (extreme/strong/balanced/light) match the classic compression levels.",
 	category: "color",
 	schema: decreaseColorCountSchema,
-	run: (img, p) => quantizeImage(img, Number(p.maxColors)).image,
+	input: "image",
+	run: imgTool((img, p) => quantizeImage(img, Number(p.maxColors)).image),
 };
 
 interface ChannelParams {
@@ -474,7 +493,10 @@ function channelEntries(): ToolEntry<ChannelParams>[] {
 					],
 				}),
 			}),
-			run: (img, p) => renderSpace(img, space.id, p.component, p.display),
+			input: "image",
+			run: imgTool((img, p) =>
+				renderSpace(img, space.id, p.component, p.display),
+			),
 		} satisfies ToolEntry<ChannelParams>;
 	});
 }

@@ -1,8 +1,7 @@
-import type { ToolEntry } from "./types";
+import { imgTool, type ToolEntry } from "./types";
 import { field, toolSchema } from "../registry-schema";
 import type { Offset } from "../registry-schema";
 import {
-	colorMask,
 	extractAlphaMask,
 	flattenOntoColor,
 	hardenAlpha,
@@ -11,7 +10,7 @@ import {
 	roundCorners,
 	setAlphaChannel,
 } from "../core/alpha";
-import { backgroundMaskPreview, removeBackground } from "../core/background";
+import { removeBackground } from "../core/background";
 import {
 	closingImage,
 	contourImage,
@@ -46,7 +45,8 @@ const addStroke: ToolEntry<AddStrokeParams> = {
 		"Adds a colored ring outline around the opaque content with the chosen thickness.",
 	category: "alpha",
 	schema: addStrokeSchema,
-	run: (img, p) => strokeImage(img, p.thickness, p.color),
+	input: "image",
+	run: imgTool((img, p) => strokeImage(img, p.thickness, p.color)),
 };
 
 interface FindContourParams {
@@ -66,7 +66,8 @@ const findContour: ToolEntry<FindContourParams> = {
 		"Leaves only a line along the boundary of opaque regions in the chosen color and thickness.",
 	category: "alpha",
 	schema: findContourSchema,
-	run: (img, p) => contourImage(img, p.thickness, p.color),
+	input: "image",
+	run: imgTool((img, p) => contourImage(img, p.thickness, p.color)),
 };
 
 interface RemoveColorParams {
@@ -86,8 +87,8 @@ const removeColor: ToolEntry<RemoveColorParams> = {
 		"Makes all pixels close to the chosen color transparent. The tolerance sets the allowed deviation as a percentage of the maximum color distance.",
 	category: "alpha",
 	schema: removeColorSchema,
-	run: (img, p) => removeColorToAlpha(img, p.targetColor, p.tolerance),
-	preview: (img, p) => colorMask(img, p.targetColor, p.tolerance),
+	input: "image",
+	run: imgTool((img, p) => removeColorToAlpha(img, p.targetColor, p.tolerance)),
 };
 
 interface CircleMaskParams {
@@ -117,13 +118,15 @@ const circleMask: ToolEntry<CircleMaskParams> = {
 		"Cuts the image into a circle. Diameter is set as a share of the smaller side.",
 	category: "alpha",
 	schema: circleMaskSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		renderShape(
 			img,
 			circleTest(p.size / 200),
 			p.offset.x / 100,
 			p.offset.y / 100,
 		),
+	),
 };
 
 interface SquareMaskParams {
@@ -159,13 +162,15 @@ const squareMask: ToolEntry<SquareMaskParams> = {
 		"Cuts the image into a rectangle with sides as a share of the smaller side.",
 	category: "alpha",
 	schema: squareMaskSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		renderShape(
 			img,
 			boxTest(p.widthPct / 200, p.heightPct / 200),
 			p.offset.x / 100,
 			p.offset.y / 100,
 		),
+	),
 };
 
 interface StarMaskParams {
@@ -205,13 +210,15 @@ const starMask: ToolEntry<StarMaskParams> = {
 		"Cuts the image into an n-pointed star with adjustable inner radius and rotation.",
 	category: "alpha",
 	schema: starMaskSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		renderShape(
 			img,
 			starTest(p.points, p.innerRadius / 100, p.size / 200, p.rotation),
 			p.offset.x / 100,
 			p.offset.y / 100,
 		),
+	),
 };
 
 interface WavyMaskParams {
@@ -251,13 +258,15 @@ const wavyMask: ToolEntry<WavyMaskParams> = {
 		"Cuts the image into a wavy-edged circle: radius is modulated by a sine with chosen amplitude and frequency.",
 	category: "alpha",
 	schema: wavyMaskSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		renderShape(
 			img,
 			wavyTest(p.size / 200, p.amplitude / 200, p.waves, p.phase),
 			p.offset.x / 100,
 			p.offset.y / 100,
 		),
+	),
 };
 
 interface EmptyParams {}
@@ -271,7 +280,8 @@ const removeAlphaChannel: ToolEntry<EmptyParams> = {
 		"Composites the image over a white background and saves without transparency.",
 	category: "alpha",
 	schema: removeAlphaChannelSchema,
-	run: (img) => flattenOntoColor(img, "#ffffff"),
+	input: "image",
+	run: imgTool((img) => flattenOntoColor(img, "#ffffff")),
 };
 
 interface SetAlphaChannelParams {
@@ -288,7 +298,8 @@ const setAlphaChannelTool: ToolEntry<SetAlphaChannelParams> = {
 	description: "Assigns the same opacity to all pixels; colors stay unchanged.",
 	category: "alpha",
 	schema: setAlphaChannelSchema,
-	run: (img, p) => setAlphaChannel(img, p.percent),
+	input: "image",
+	run: imgTool((img, p) => setAlphaChannel(img, p.percent)),
 };
 
 export const extractAlphaMaskSchema = toolSchema<EmptyParams>({});
@@ -299,7 +310,8 @@ const extractAlphaMaskTool: ToolEntry<EmptyParams> = {
 	description: "Turns transparency into a black-and-white opaque mask.",
 	category: "alpha",
 	schema: extractAlphaMaskSchema,
-	run: (img) => extractAlphaMask(img),
+	input: "image",
+	run: imgTool((img) => extractAlphaMask(img)),
 };
 
 interface RoundCornersParams {
@@ -317,7 +329,8 @@ const roundCornersTool: ToolEntry<RoundCornersParams> = {
 		"Clips corners by a radius set as a percentage of half the smaller side.",
 	category: "alpha",
 	schema: roundCornersSchema,
-	run: (img, p) => roundCorners(img, p.radius),
+	input: "image",
+	run: imgTool((img, p) => roundCorners(img, p.radius)),
 };
 
 export const invertAlphaSchema = toolSchema<EmptyParams>({});
@@ -328,7 +341,8 @@ const invertAlphaTool: ToolEntry<EmptyParams> = {
 	description: "Opaque areas become transparent and vice versa.",
 	category: "alpha",
 	schema: invertAlphaSchema,
-	run: (img) => invertAlpha(img),
+	input: "image",
+	run: imgTool((img) => invertAlpha(img)),
 };
 
 interface RemoveBackgroundParams {
@@ -366,20 +380,15 @@ const removeBackgroundTool: ToolEntry<RemoveBackgroundParams> = {
 		"Removes a solid background: by color with tolerance, outer regions from the edges only, or every matching pixel. Can smooth the boundary.",
 	category: "alpha",
 	schema: removeBackgroundSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		removeBackground(img, {
 			color: p.color,
 			tolerancePercent: p.tolerance,
 			outerOnly: p.outerOnly,
 			smoothPasses: p.smooth,
 		}),
-	preview: (img, p) =>
-		backgroundMaskPreview(img, {
-			color: p.color,
-			tolerancePercent: p.tolerance,
-			outerOnly: p.outerOnly,
-			smoothPasses: p.smooth,
-		}),
+	),
 };
 
 interface MakeThickerParams {
@@ -396,7 +405,8 @@ const makeThickerTool: ToolEntry<MakeThickerParams> = {
 	description: "Expands opaque areas by the given number of pixels.",
 	category: "alpha",
 	schema: makeThickerSchema,
-	run: (img, p) => dilateImage(img, p.radius),
+	input: "image",
+	run: imgTool((img, p) => dilateImage(img, p.radius)),
 };
 
 interface MakeThinnerParams {
@@ -413,7 +423,8 @@ const makeThinnerTool: ToolEntry<MakeThinnerParams> = {
 	description: "Shrinks opaque areas — thins the strokes of text and details.",
 	category: "alpha",
 	schema: makeThinnerSchema,
-	run: (img, p) => erodeImage(img, p.radius),
+	input: "image",
+	run: imgTool((img, p) => erodeImage(img, p.radius)),
 };
 
 interface FeatherEdgesParams {
@@ -431,7 +442,8 @@ const featherEdgesTool: ToolEntry<FeatherEdgesParams> = {
 		"Blurs only the alpha channel: hard cutout edges become soft and gradual, colors stay untouched.",
 	category: "alpha",
 	schema: featherEdgesSchema,
-	run: (img, p) => featherAlpha(img, p.radius),
+	input: "image",
+	run: imgTool((img, p) => featherAlpha(img, p.radius)),
 };
 
 interface CleanEdgesParams {
@@ -449,7 +461,8 @@ const cleanEdgesTool: ToolEntry<CleanEdgesParams> = {
 		"Replaces edge-halo colors of semi-transparent pixels with the nearest fully opaque color. Alpha stays as is.",
 	category: "alpha",
 	schema: cleanEdgesSchema,
-	run: (img, p) => defringe(img, p.radius),
+	input: "image",
+	run: imgTool((img, p) => defringe(img, p.radius)),
 };
 
 interface HardenAlphaParams {
@@ -467,7 +480,8 @@ const hardenAlphaTool: ToolEntry<HardenAlphaParams> = {
 		"Binarizes the alpha channel by threshold: semi-transparent pixels become either fully transparent or fully opaque.",
 	category: "alpha",
 	schema: hardenAlphaSchema,
-	run: (img, p) => hardenAlpha(img, p.threshold),
+	input: "image",
+	run: imgTool((img, p) => hardenAlpha(img, p.threshold)),
 };
 
 interface DespeckleAlphaParams {
@@ -485,7 +499,8 @@ const despeckleAlphaTool: ToolEntry<DespeckleAlphaParams> = {
 		"Opening: removes lone semi-transparent pixels and small specks.",
 	category: "alpha",
 	schema: despeckleAlphaSchema,
-	run: (img, p) => openingImage(img, p.radius),
+	input: "image",
+	run: imgTool((img, p) => openingImage(img, p.radius)),
 };
 
 interface CloseHolesParams {
@@ -502,7 +517,8 @@ const closeHolesTool: ToolEntry<CloseHolesParams> = {
 	description: "Closing: fills lone transparent dots inside the object.",
 	category: "alpha",
 	schema: closeHolesSchema,
-	run: (img, p) => closingImage(img, p.radius),
+	input: "image",
+	run: imgTool((img, p) => closingImage(img, p.radius)),
 };
 
 export const alphaEntries = [
