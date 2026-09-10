@@ -371,7 +371,10 @@ src/routes/preview/tools/[id]/+page.svelte
       shell. Убрать флаг/кнопку. **И обновить `newCode` в
       `web/eslint.config.js`:** заменить `src/routes/preview/**` на
       `src/routes/**` (после переезда все маршруты — новый дизайн), компонентный
-      glob `src/lib/components/kit/**` пока оставить.
+      glob `src/lib/components/kit/**` пока оставить. **И снять
+      `noindex, nofollow`** со страницы инструмента
+      (`preview/tools/[id]/+page.svelte`) — страницы становятся боевыми
+      лендингами ровно в момент переезда (SEO: `plan-seo.md`, S1a).
 - [ ] **[C18]** Правки импортов/редиректов после переноса, проверка билда.
 
 ### Шаг 6. Удаление старого

@@ -10,3 +10,6 @@ refs/public/placeholder-logo.png
 refs/public/placeholder.svg
 web/audit/cdp-audit*.txt
 css-lint.txt
+
+# Локальные планы с приватной информацией (выбранное имя домена) — не коммитить
+docs/plan-domain.local.md
