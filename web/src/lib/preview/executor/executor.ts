@@ -1,116 +1,66 @@
 import { ToolError } from "$lib/core/errors";
 import type { PixelImage } from "$lib/core/types";
+import { sanitizeSchemaParams } from "$lib/registry-schema";
+import type { ToolContext, ToolEntry, ToolResult } from "$lib/registry-new";
 
-type MaybeRunnable = {
-	id: string;
-	domOnly?: boolean;
-	run?: (
-		img: PixelImage,
-		params: Record<string, unknown>,
-	) => Promise<PixelImage> | PixelImage;
-	generate?: (
-		params: Record<string, unknown>,
-	) => Promise<PixelImage> | PixelImage;
+/** Вход единой точки исполнения. `source`/`text` — по контракту `tool.input`. */
+export type ExecuteContext = {
+	params: Record<string, unknown>;
+	source?: PixelImage;
+	text?: string;
 };
 
-export async function executeStep(
-	tool: MaybeRunnable,
-	img: PixelImage,
-	params: Record<string, unknown>,
-): Promise<PixelImage> {
-	if (!tool.run) {
-		throw new Error("errors.noImageRun");
+/**
+ * Единственная точка исполнения инструмента. Валидирует наличие входа по
+ * `tool.input`, санитит параметры и запускает `tool.run`. Выбор места
+ * исполнения (worker/поток) — внутренняя забота executor'а, диспетча методов
+ * нет: у любого инструмента один `run(ctx)`.
+ */
+export async function execute(
+	tool: ToolEntry,
+	ctx: ExecuteContext,
+): Promise<ToolResult> {
+	const params = sanitizeSchemaParams(tool.schema, ctx.params);
+	if (tool.input === "image" && !ctx.source) {
+		throw new ToolError("errors.sourceRequired");
 	}
-	if (tool.domOnly) {
-		return await runDirect(tool, img, params);
+	if (tool.input === "text" && !ctx.text?.trim()) {
+		throw new ToolError("errors.textRequired");
 	}
-	if (typeof Worker === "undefined") {
-		return await runDirect(tool, img, params);
-	}
-	const worker = ensureWorker();
-	if (worker === null) {
-		return await runDirect(tool, img, params);
-	}
-	try {
-		return await runInWorker(worker, tool.id, img, params);
-	} catch (workerError) {
-		disableWorker();
-		void workerError;
-		return await runDirect(tool, img, params);
-	}
+	return route(tool, { params, source: ctx.source, text: ctx.text });
 }
 
 /**
- * Применение инструмента-генератора (без входного изображения).
- * Выполняется напрямую: worker-протокол рассчитан на передачу исходника,
- * а генераторам вход не нужен.
+ * Маршрутизация по способу исполнения. В worker уходит всё, кроме
+ * domOnly-инструментов: даже текстовые вердикты могут быть тяжёлыми
+ * (гистограммы, сложный анализ), поэтому ограничивать по типу результата
+ * неверно. Ограничение одно — доступ к DOM, которого в worker нет.
  */
-export async function executeGenerate(
-	tool: MaybeRunnable,
-	params: Record<string, unknown>,
-): Promise<PixelImage> {
-	if (!tool.generate) {
-		throw new Error("errors.noGenerate");
+async function route(
+	tool: ToolEntry,
+	ctx: ExecuteContext,
+): Promise<ToolResult> {
+	if (tool.domOnly || typeof Worker === "undefined") {
+		return await runDirect(tool, ctx);
 	}
-	return await tool.generate(params);
-}
-
-type MaybeTextRunnable = MaybeRunnable & {
-	runFromText?: (
-		text: string,
-		params: Record<string, unknown>,
-	) => Promise<PixelImage> | PixelImage;
-	toText?: (
-		img: PixelImage,
-		params: Record<string, unknown>,
-	) => Promise<string> | string;
-	textToText?: (text: string) => Promise<string> | string;
-};
-
-/** Текст → изображение (text-source конвертеры). Выполняется напрямую. */
-export async function executeFromText(
-	tool: MaybeTextRunnable,
-	text: string,
-	params: Record<string, unknown>,
-): Promise<PixelImage> {
-	if (!tool.runFromText) {
-		throw new Error("errors.noTextInput");
+	const worker = ensureWorker();
+	if (worker === null) {
+		return await runDirect(tool, ctx);
 	}
-	return await tool.runFromText(text, params);
-}
-
-/** Изображение → текст (текстовые конвертеры и вердикты). */
-export async function executeToText(
-	tool: MaybeTextRunnable,
-	img: PixelImage,
-	params: Record<string, unknown>,
-): Promise<string> {
-	if (!tool.toText) {
-		throw new Error("errors.noTextResult");
+	try {
+		return await runInWorker(worker, tool, ctx);
+	} catch (workerError) {
+		disableWorker();
+		void workerError;
+		return await runDirect(tool, ctx);
 	}
-	return await tool.toText(img, params);
-}
-
-/** Текст → текст (напр. verify-is-png). */
-export async function executeTextToText(
-	tool: MaybeTextRunnable,
-	text: string,
-): Promise<string> {
-	if (!tool.textToText) {
-		throw new Error("errors.noTextResult");
-	}
-	return await tool.textToText(text);
 }
 
 async function runDirect(
-	tool: MaybeRunnable,
-	img: PixelImage,
-	params: Record<string, unknown>,
-): Promise<PixelImage> {
-	if (!tool.run) {
-		throw new Error("errors.noImageRun");
-	}
-	return await tool.run(img, params);
+	tool: ToolEntry,
+	ctx: ExecuteContext,
+): Promise<ToolResult> {
+	return await tool.run(ctx as ToolContext<Record<string, unknown>>);
 }
 
 let worker: Worker | null = null;
@@ -118,7 +68,7 @@ let workerTried = false;
 let nextRequestId = 1;
 const pending = new Map<
 	number,
-	{ resolve: (img: PixelImage) => void; reject: (e: Error) => void }
+	{ resolve: (result: ToolResult) => void; reject: (e: Error) => void }
 >();
 
 function ensureWorker(): Worker | null {
@@ -138,6 +88,7 @@ function ensureWorker(): Worker | null {
 				width?: number;
 				height?: number;
 				data?: Uint8ClampedArray;
+				text?: string;
 				error?: string;
 				errorKey?: string;
 				errorVars?: Record<string, string | number>;
@@ -151,6 +102,8 @@ function ensureWorker(): Worker | null {
 					height: payload.height,
 					data: new Uint8ClampedArray(payload.data),
 				});
+			} else if (payload.ok && typeof payload.text === "string") {
+				entry.resolve(payload.text);
 			} else if (payload.errorKey) {
 				entry.reject(new ToolError(payload.errorKey, payload.errorVars));
 			} else {
@@ -180,22 +133,24 @@ function disableWorker(): void {
 
 function runInWorker(
 	workerInstance: Worker,
-	toolId: string,
-	img: PixelImage,
-	params: Record<string, unknown>,
-): Promise<PixelImage> {
+	tool: ToolEntry,
+	ctx: ExecuteContext,
+): Promise<ToolResult> {
 	return new Promise((resolve, reject) => {
 		const id = nextRequestId++;
 		pending.set(id, { resolve, reject });
 		workerInstance.postMessage({
 			id,
-			toolId,
-			image: {
-				width: img.width,
-				height: img.height,
-				data: new Uint8ClampedArray(img.data),
-			},
-			params,
+			toolId: tool.id,
+			params: ctx.params,
+			source: ctx.source
+				? {
+						width: ctx.source.width,
+						height: ctx.source.height,
+						data: new Uint8ClampedArray(ctx.source.data),
+					}
+				: undefined,
+			text: ctx.text,
 		});
 	});
 }

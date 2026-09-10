@@ -8,7 +8,22 @@ import { colorEntries } from "./color";
 import { generateEntries } from "./generate";
 import { textEntries } from "./text";
 
-export type { ToolEntry } from "./types";
+export {
+	genTool,
+	imgTool,
+	textGen,
+	requireSource,
+	requireText,
+	INPUT_MODES,
+	RESULT_KINDS,
+} from "./types";
+export type {
+	InputMode,
+	ResultKind,
+	ToolContext,
+	ToolEntry,
+	ToolResult,
+} from "./types";
 
 export const TOOLS: ToolEntry[] = [
 	...geometryEntries,

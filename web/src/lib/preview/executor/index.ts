@@ -1,7 +1,2 @@
-export {
-	executeFromText,
-	executeGenerate,
-	executeStep,
-	executeTextToText,
-	executeToText,
-} from "./executor";
+export { execute } from "./executor";
+export type { ExecuteContext } from "./executor";

@@ -7,9 +7,27 @@ import { sanitizeSchemaParams } from "$lib/registry-schema";
 type WorkerRequest = {
 	id: number;
 	toolId: string;
-	image: { width: number; height: number; data: Uint8ClampedArray };
 	params: Record<string, unknown>;
+	source?: { width: number; height: number; data: Uint8ClampedArray };
+	text?: string;
 };
+
+type WorkerResponse =
+	| {
+			id: number;
+			ok: true;
+			width?: number;
+			height?: number;
+			data?: Uint8ClampedArray;
+			text?: string;
+	  }
+	| {
+			id: number;
+			ok: false;
+			error?: string;
+			errorKey?: string;
+			errorVars?: Record<string, string | number>;
+	  };
 
 self.onmessage = (event: MessageEvent<WorkerRequest>) => {
 	void handle(event.data);
@@ -21,23 +39,36 @@ async function handle(request: WorkerRequest): Promise<void> {
 		if (!tool?.run) {
 			throw new Error("errors.noImageRun");
 		}
-		const image: PixelImage = {
-			width: request.image.width,
-			height: request.image.height,
-			data: new Uint8ClampedArray(request.image.data),
-		};
-		const output = await tool.run(
-			image,
-			sanitizeSchemaParams(tool.schema, request.params),
+		const source: PixelImage | undefined = request.source
+			? {
+					width: request.source.width,
+					height: request.source.height,
+					data: new Uint8ClampedArray(request.source.data),
+				}
+			: undefined;
+		const output = await tool.run({
+			params: sanitizeSchemaParams(tool.schema, request.params),
+			source,
+			text: request.text,
+		});
+		if (typeof output === "string") {
+			(self as unknown as Worker).postMessage({
+				id: request.id,
+				ok: true,
+				text: output,
+			} satisfies WorkerResponse);
+			return;
+		}
+		(self as unknown as Worker).postMessage(
+			{
+				id: request.id,
+				ok: true,
+				width: output.width,
+				height: output.height,
+				data: output.data,
+			} satisfies WorkerResponse,
+			[output.data.buffer],
 		);
-		const payload = {
-			id: request.id,
-			ok: true,
-			width: output.width,
-			height: output.height,
-			data: output.data,
-		};
-		(self as unknown as Worker).postMessage(payload, [output.data.buffer]);
 	} catch (e) {
 		const toolError = e instanceof ToolError ? e : undefined;
 		(self as unknown as Worker).postMessage({
@@ -46,6 +77,6 @@ async function handle(request: WorkerRequest): Promise<void> {
 			error: e instanceof Error ? e.message : String(e),
 			errorKey: toolError?.key,
 			errorVars: toolError?.vars,
-		});
+		} satisfies WorkerResponse);
 	}
 }
