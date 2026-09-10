@@ -17,12 +17,7 @@
 		"lint": "eslint .",
 		"lint:css": "stylelint \"./src/**/*.css\"",
 		"lint:all": "node scripts/lint-all.mjs",
-		"lint:tokens": "node scripts/check-tokens.mjs",
-		"refs-cdp-audit": "node scripts/audit-cdp.mjs",
-		"refs-cdp-audit:large": "node scripts/audit-cdp.mjs --viewport 2560x1440",
-		"refs-cdp-audit:responsive": "node scripts/audit-cdp-responsive.mjs",
-		"refs-css-audit": "node scripts/audit-css.mjs",
-		"refs-dom-audit": "node scripts/audit-dom.mjs"
+		"lint:tokens": "node scripts/check-tokens.mjs"
 	},
 	"devDependencies": {
 		"@csstools/postcss-global-data": "^4.0.0",
