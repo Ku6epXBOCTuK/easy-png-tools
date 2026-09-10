@@ -23,7 +23,7 @@ import {
 	type FlipAxis,
 } from "../core/geometry";
 import { field, toolSchema, type Dimension } from "../registry-schema";
-import type { ToolEntry } from "./types";
+import { imgTool, type ToolEntry } from "./types";
 
 interface AddBorderParams {
 	thickness: number;
@@ -42,7 +42,8 @@ const addBorder: ToolEntry<AddBorderParams> = {
 		"Draws a colored frame of the chosen thickness around the image.",
 	category: "geometry",
 	schema: addBorderSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		expandCanvas(
 			img,
 			p.thickness,
@@ -51,6 +52,7 @@ const addBorder: ToolEntry<AddBorderParams> = {
 			p.thickness,
 			p.color,
 		),
+	),
 };
 
 interface FitOnBackgroundParams {
@@ -82,7 +84,8 @@ const fitOnBackground: ToolEntry<FitOnBackgroundParams> = {
 		"Places the image centered on a canvas of the given size with a transparent or colored background.",
 	category: "geometry",
 	schema: fitOnBackgroundSchema,
-	run: (img, p) => {
+	input: "image",
+	run: imgTool((img, p) => {
 		const width = Math.trunc(p.size.width);
 		const height = Math.trunc(p.size.height);
 		if (width <= 0 || height <= 0) {
@@ -98,7 +101,7 @@ const fitOnBackground: ToolEntry<FitOnBackgroundParams> = {
 			Math.max(0, height - img.height - top),
 			p.transparent ? undefined : p.color,
 		);
-	},
+	}),
 };
 
 interface ChangeCanvasSizeParams {
@@ -141,13 +144,15 @@ const changeCanvasSizeTool: ToolEntry<ChangeCanvasSizeParams> = {
 		"Sets the exact canvas size: overflow is cropped, missing space is filled with transparency. Anchor picks which part of the image stays.",
 	category: "geometry",
 	schema: changeCanvasSizeSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		changeCanvasSize(
 			img,
 			Math.trunc(p.size.width),
 			Math.trunc(p.size.height),
 			p.anchor,
 		),
+	),
 };
 
 interface ResizeParams {
@@ -177,7 +182,8 @@ const resizeTool: ToolEntry<ResizeParams> = {
 		"Scales the image with bilinear interpolation. With aspect kept, one side defines the scale; if both are set, the image fits inside them.",
 	category: "geometry",
 	schema: resizeSchema,
-	run: (img, p) => {
+	input: "image",
+	run: imgTool((img, p) => {
 		const keepAspect = p.keepAspect;
 		let w = Math.trunc(p.size.width);
 		let h = Math.trunc(p.size.height);
@@ -196,7 +202,7 @@ const resizeTool: ToolEntry<ResizeParams> = {
 			throw new ToolError("errors.resizeSize");
 		}
 		return resize(img, w, h);
-	},
+	}),
 };
 
 interface CropParams {
@@ -228,14 +234,15 @@ const cropTool: ToolEntry<CropParams> = {
 		"Cuts out a rectangular area. Coordinates and sizes may go beyond the image — the area is clipped to the intersection.",
 	category: "geometry",
 	schema: cropSchema,
-	run: (img, p) => {
+	input: "image",
+	run: imgTool((img, p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
 		if (w <= 0 || h <= 0) {
 			throw new ToolError("errors.cropSize");
 		}
 		return crop(img, Math.trunc(p.x), Math.trunc(p.y), w, h);
-	},
+	}),
 };
 
 interface RotateParams {
@@ -259,7 +266,8 @@ const rotateTool: ToolEntry<RotateParams> = {
 	description: "Rotates by 90°, 180° or 270° clockwise without quality loss.",
 	category: "geometry",
 	schema: rotateSchema,
-	run: (img, p) => rotate90(img, Number(p.angle) / 90),
+	input: "image",
+	run: imgTool((img, p) => rotate90(img, Number(p.angle) / 90)),
 };
 
 interface FlipParams {
@@ -282,7 +290,8 @@ const flipTool: ToolEntry<FlipParams> = {
 	description: "Mirrors horizontally or vertically without quality loss.",
 	category: "geometry",
 	schema: flipSchema,
-	run: (img, p) => flip(img, p.axis),
+	input: "image",
+	run: imgTool((img, p) => flip(img, p.axis)),
 };
 
 interface AddPaddingParams {
@@ -314,7 +323,8 @@ const addPaddingTool: ToolEntry<AddPaddingParams> = {
 		"Expands the canvas on all sides by the chosen number of pixels.",
 	category: "geometry",
 	schema: addPaddingSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		expandCanvas(
 			img,
 			p.padding,
@@ -323,6 +333,7 @@ const addPaddingTool: ToolEntry<AddPaddingParams> = {
 			p.padding,
 			p.transparent ? undefined : p.color,
 		),
+	),
 };
 
 interface TileParams {
@@ -341,7 +352,8 @@ const tileTool: ToolEntry<TileParams> = {
 	description: "Repeats the image in a grid of the chosen columns and rows.",
 	category: "geometry",
 	schema: tileSchema,
-	run: (img, p) => tile(img, p.columns, p.rows),
+	input: "image",
+	run: imgTool((img, p) => tile(img, p.columns, p.rows)),
 };
 
 interface EmptyParams {}
@@ -355,7 +367,8 @@ const centerByAlphaTool: ToolEntry<EmptyParams> = {
 		"Finds the opaque part of the image and centers it on the original canvas.",
 	category: "geometry",
 	schema: centerByAlphaSchema,
-	run: (img) => centerByAlpha(img),
+	input: "image",
+	run: imgTool((img) => centerByAlpha(img)),
 };
 
 interface SkewParams {
@@ -375,7 +388,8 @@ const skewTool: ToolEntry<SkewParams> = {
 		"Shifts content horizontally and vertically — a perspective effect.",
 	category: "geometry",
 	schema: skewSchema,
-	run: (img, p) => skewImage(img, p.degX, p.degY),
+	input: "image",
+	run: imgTool((img, p) => skewImage(img, p.degX, p.degY)),
 };
 
 interface RotateFreeParams {
@@ -393,7 +407,8 @@ const rotateFreeTool: ToolEntry<RotateFreeParams> = {
 		"Rotation by any angle. The canvas grows to fit the new bounds; corners stay transparent.",
 	category: "geometry",
 	schema: rotateFreeSchema,
-	run: (img, p) => rotateFreeImage(img, p.angle),
+	input: "image",
+	run: imgTool((img, p) => rotateFreeImage(img, p.angle)),
 };
 
 interface ZoomParams {
@@ -411,7 +426,8 @@ const zoomTool: ToolEntry<ZoomParams> = {
 		"Magnifies content toward the center. The canvas keeps its size — edges are cropped.",
 	category: "geometry",
 	schema: zoomSchema,
-	run: (img, p) => zoomImage(img, p.scale),
+	input: "image",
+	run: imgTool((img, p) => zoomImage(img, p.scale)),
 };
 
 interface TrimEmptySpaceParams {
@@ -429,7 +445,8 @@ const trimEmptySpaceTool: ToolEntry<TrimEmptySpaceParams> = {
 		"Crops transparent borders around the content. Pixels with alpha above the threshold count as content.",
 	category: "geometry",
 	schema: trimEmptySpaceSchema,
-	run: (img, p) => trimToContent(img, p.threshold),
+	input: "image",
+	run: imgTool((img, p) => trimToContent(img, p.threshold)),
 };
 
 type AspectRatio = "1:1" | "4:3" | "3:4" | "3:2" | "2:3" | "16:9" | "9:16";
@@ -468,11 +485,12 @@ const changeAspectRatioTool: ToolEntry<ChangeAspectRatioParams> = {
 		"Fits the image into a target aspect ratio: crop the center to fill, or pad with transparency.",
 	category: "geometry",
 	schema: changeAspectRatioSchema,
-	run: (img, p) => {
+	input: "image",
+	run: imgTool((img, p) => {
 		const [rw, rh] = p.ratio.split(":").map(Number);
 		const ratio = rw / rh;
 		return p.mode === "pad" ? padToRatio(img, ratio) : cropToRatio(img, ratio);
-	},
+	}),
 };
 
 interface SwapOrientationParams {
@@ -496,7 +514,8 @@ const swapOrientationTool: ToolEntry<SwapOrientationParams> = {
 		"Rotates the image by 90° when its orientation differs from the target — landscape becomes portrait and back. Square images are untouched.",
 	category: "geometry",
 	schema: swapOrientationSchema,
-	run: (img, p) => forceOrientation(img, p.target),
+	input: "image",
+	run: imgTool((img, p) => forceOrientation(img, p.target)),
 };
 
 type SymmetricAxis = "horizontal" | "vertical";
@@ -533,7 +552,8 @@ const symmetricCopyTool: ToolEntry<SymmetricCopyParams> = {
 		"Doubles the canvas by mirroring the kept side onto the empty half — instant symmetric pattern.",
 	category: "geometry",
 	schema: symmetricCopySchema,
-	run: (img, p) => symmetricCopy(img, p.axis, p.keepSide),
+	input: "image",
+	run: imgTool((img, p) => symmetricCopy(img, p.axis, p.keepSide)),
 };
 
 interface ShiftParams {
@@ -554,7 +574,8 @@ const shiftTool: ToolEntry<ShiftParams> = {
 	description: "Moves content by the given X and Y offset.",
 	category: "geometry",
 	schema: shiftSchema,
-	run: (img, p) =>
+	input: "image",
+	run: imgTool((img, p) =>
 		transformImage(
 			img,
 			[1, 0, 0, 1, -Math.trunc(p.offsetX), -Math.trunc(p.offsetY)],
@@ -562,6 +583,7 @@ const shiftTool: ToolEntry<ShiftParams> = {
 			img.height,
 			p.color,
 		),
+	),
 };
 
 export const geometryEntries = [
