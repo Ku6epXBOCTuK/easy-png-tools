@@ -24,13 +24,14 @@
 
 <div class="app">
 	<header>
-		<a href={resolve("/v1/")} class="brand">easy-png-tools</a>
+		<a href={resolve("/v1")} class="brand">easy-png-tools</a>
 		<nav aria-label={t("header.sectionsAria")}>
-			<a class="nav-link workspace-link" href={resolve("/v1/")}
-				>{t("header.workspace")}</a
-			>
-			<a class="nav-link" href={resolve("/v1/list-tools")}>{t("header.catalog")}</a
-			>
+			<a class="nav-link workspace-link" href={resolve("/v1")}>
+				{t("header.workspace")}
+			</a>
+			<a class="nav-link" href={resolve("/v1/list-tools")}>
+				{t("header.catalog")}
+			</a>
 			<div class="lang-switch" role="group" aria-label="Language / Язык">
 				{#each LOCALES as l (l)}
 					<button
@@ -163,24 +164,11 @@
 		font-weight: 600;
 		color: var(--link);
 	}
-
-	.preview-v2 {
-		color: var(--accent);
-		border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
-	}
-
-	.preview-v2:hover {
-		background: var(--accent);
-		color: var(--bg);
-		text-decoration: none;
-	}
-
 	main {
 		flex: 1;
 		width: 100%;
 		padding: var(--space-4) var(--space-5);
 	}
-
 	footer {
 		padding: var(--space-3) var(--space-4);
 		border-top: 1px solid var(--border);
