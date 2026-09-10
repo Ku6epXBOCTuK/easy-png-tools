@@ -1,8 +1,8 @@
 <script lang="ts">
-	import MetaList from "$lib/components/kit/MetaList.svelte";
-	import SchemaActions from "$lib/components/kit/SchemaActions.svelte";
-	import SchemaResultTile from "$lib/components/kit/SchemaResultTile.svelte";
-	import SchemaSourceTile from "$lib/components/kit/SchemaSourceTile.svelte";
+	import MetaList from "$lib/components/MetaList.svelte";
+	import SchemaActions from "$lib/components/SchemaActions.svelte";
+	import SchemaResultTile from "$lib/components/SchemaResultTile.svelte";
+	import SchemaSourceTile from "$lib/components/SchemaSourceTile.svelte";
 	import type { PixelImage } from "$lib/core/types";
 	import type { InputMode, ResultKind } from "$lib/registry-new";
 

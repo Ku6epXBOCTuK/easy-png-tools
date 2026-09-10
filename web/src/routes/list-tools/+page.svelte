@@ -1,8 +1,8 @@
 <script lang="ts">
-	import CatalogGroup from "$lib/components/kit/CatalogGroup.svelte";
-	import CatalogHeader from "$lib/components/kit/CatalogHeader.svelte";
-	import CatalogToolbar from "$lib/components/kit/CatalogToolbar.svelte";
-	import ToolCard from "$lib/components/kit/ToolCard.svelte";
+	import CatalogGroup from "$lib/components/CatalogGroup.svelte";
+	import CatalogHeader from "$lib/components/CatalogHeader.svelte";
+	import CatalogToolbar from "$lib/components/CatalogToolbar.svelte";
+	import ToolCard from "$lib/components/ToolCard.svelte";
 	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/preview/catalog";
 	import { TOOL_ICONS } from "$lib/preview/tool-icons";
 

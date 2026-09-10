@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import favicon from "$lib/assets/favicon.svg";
-	import Footer from "$lib/components/kit/layout/Footer.svelte";
-	import TopBar from "$lib/components/kit/layout/TopBar.svelte";
+	import Footer from "$lib/components/layout/Footer.svelte";
+	import TopBar from "$lib/components/layout/TopBar.svelte";
 	import { initLocale } from "$lib/i18n/locale.svelte";
 	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
 	import type { Snippet } from "svelte";

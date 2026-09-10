@@ -1,6 +1,6 @@
 <script lang="ts">
-	import SchemaFields from "$lib/components/kit/SchemaFields.svelte";
-	import SchemaPreview from "$lib/components/kit/SchemaPreview.svelte";
+	import SchemaFields from "$lib/components/SchemaFields.svelte";
+	import SchemaPreview from "$lib/components/SchemaPreview.svelte";
 	import { debounce } from "$lib/core/debounce";
 	import { ToolError } from "$lib/core/errors";
 	import { decodeFile, encode } from "$lib/core/io";
