@@ -13,7 +13,7 @@ export function trackErrors(page: Page): ErrorSink {
 }
 
 export async function openTool(page: Page, id: string): Promise<void> {
-	await page.goto(`/preview/tools/${id}`);
+	await page.goto(`/tools/${id}`);
 	await expect(page.locator(".schema-tool h1")).toBeVisible();
 }
 

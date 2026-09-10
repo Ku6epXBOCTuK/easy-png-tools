@@ -1,12 +1,7 @@
 import { expect, test } from "playwright/test";
-import { trackErrors, expectNoErrors } from "./helpers/page";
+import { expectNoErrors, trackErrors } from "./helpers/page";
 
-const ROUTES = [
-	"/preview",
-	"/preview/list-tools",
-	"/preview/kit",
-	"/preview/tools/flip-png",
-];
+const ROUTES = ["/", "/list-tools", "/kit", "/tools/flip-png"];
 
 for (const route of ROUTES) {
 	test(`page ${route} loads without errors`, async ({ page }) => {
@@ -19,14 +14,23 @@ for (const route of ROUTES) {
 }
 
 test("unknown tool route responds 404 on static build", async ({ page }) => {
-	const resp = await page.goto("/preview/tools/definitely-not-a-tool");
+	const resp = await page.goto("/tools/definitely-not-a-tool");
 	expect(resp?.status()).toBe(404);
 });
 
+// FIXME:
+// Error: expect(received).toBe(expected) // Object.is equality
+
+//     Expected: "dark"
+//     Received: null
+
+//       36 |      expect(["light", "dark"]).toContain(before);
+//       37 |      expect(["light", "dark"]).toContain(after);
+//     > 38 |      expect(stored).toBe(after);
 test("theme toggle flips preview theme and persists to localStorage", async ({
 	page,
 }) => {
-	await page.goto("/preview");
+	await page.goto("/");
 	const root = page.locator("main.preview-root");
 	const before = await root.getAttribute("data-theme");
 	await expect(async () => {
@@ -44,7 +48,7 @@ test("theme toggle flips preview theme and persists to localStorage", async ({
 });
 
 test("language toggle marks the active button", async ({ page }) => {
-	await page.goto("/preview");
+	await page.goto("/");
 	const group = page.getByRole("group", { name: "Language" });
 	await expect(async () => {
 		await group.getByRole("button", { name: "EN" }).click();

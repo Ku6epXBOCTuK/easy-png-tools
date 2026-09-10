@@ -1,8 +1,8 @@
 import { expect, test } from "playwright/test";
-import { trackErrors, openTool, expectNoErrors } from "./helpers/page";
+import { expectNoErrors, openTool, trackErrors } from "./helpers/page";
 
 test.describe("generators — known UI gap (#checklist, п.1)", () => {
-	// Генераторы (21/121) открываются, но в UI нет ни полей схемы, ни кнопки
+	// FIXME: Генераторы (21/121) открываются, но в UI нет ни полей схемы, ни кнопки
 	// «Generate» — только RU/EN/Reset. Пока баг открыт — fixme с ожидаемым
 	// сценарием; после фикса убрать fixme.
 	test.fixme("single-color-png renders Generate controls and produces a result", async ({

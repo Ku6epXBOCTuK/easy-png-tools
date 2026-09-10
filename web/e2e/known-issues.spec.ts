@@ -2,7 +2,7 @@ import { expect, test } from "playwright/test";
 import { opaquePng } from "./helpers/fixtures";
 import { openTool, uploadImage } from "./helpers/page";
 
-// Весь файл — зарегистрированные баги preview (см. docs/checklist-manual-testing.md
+// FIXME: Весь файл — зарегистрированные баги preview (см. docs/checklist-manual-testing.md
 // → «Известные баги preview»). Тела assert'ят ОЖИДАЕМОЕ поведение. Статус fixme
 // означает «мы знаем, что сейчас падает»; когда баг починят — убрать fixme и
 // тест станет зелёным «сам по себе».
