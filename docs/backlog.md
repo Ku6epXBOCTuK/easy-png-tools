@@ -185,15 +185,8 @@
     (`plan-redesign.md`, Шаг 5). Гейты: svelte-check 0, тесты зелёные, prettier
     чист, `lint:all` = задокументированный остаток, обе ветки открываются.
 
-15. **Техдолг (чинить по заведённым задачам, не игнорировать правила)**:
-    - svelte-check error `ToolCard.svelte:19:36` (`goto(string)`).
-    - фейл `palette.test.ts` (ENOENT `src/app.css` — из-за него `pnpm test`
-      красный, хотя тесты 607 passed).
-    - `lint:all`: ~335 design-tokens ошибок в старых kit-компонентах;
-      неиспользуемые токены preview.css; a11y-warning `ColorField`; пустой
-      ruleset `Toggle.svelte`. Целевое состояние перед переездом `old/` (см.
-      №14): svelte-check 0 errors, `pnpm test` зелёный, `lint:all` — только
-      задокументированный остаток.
+15. ~~**Техдолг (чинить по заведённым задачам, не игнорировать правила)**~~
+    ЗАКРЫТО. Подробности: `docs/archive/plan-tech-debt.md`.
 
 16. **Контраст текста на акцентных кнопках — пересмотреть после готовности
     сайта**. Текст `--color-background` на фоне `--color-main`/`--color-accent`
