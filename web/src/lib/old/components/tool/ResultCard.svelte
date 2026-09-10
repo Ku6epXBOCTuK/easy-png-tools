@@ -7,7 +7,7 @@
 	import TextResult from "./TextResult.svelte";
 	import type { ImageInfo } from "$lib/core/analyze";
 	import type { PixelImage } from "$lib/core/types";
-	import { outputOf, type ToolEntry } from "$lib/registry";
+	import { outputOf, type ToolEntry } from "$lib/old/registry";
 	import { t } from "$lib/i18n/t";
 
 	type Status = "idle" | "loaded" | "processing" | "error";

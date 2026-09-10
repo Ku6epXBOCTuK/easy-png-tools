@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { TOOLS } from "../registry";
+import { TOOLS } from "../old/registry";
 import { en } from "./en";
 import { ru } from "./ru";
 

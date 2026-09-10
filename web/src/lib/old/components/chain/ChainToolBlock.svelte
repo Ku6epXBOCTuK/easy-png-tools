@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/registry";
+	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/old/registry";
 	import type { PixelImage } from "$lib/core/types";
 	import { t } from "$lib/i18n/t";
 	import { toolTitle } from "$lib/i18n/tool-strings";
@@ -8,7 +8,7 @@
 	import EmptyState from "../ui/EmptyState.svelte";
 	import ParamsCard from "../tool/ParamsCard.svelte";
 	import Preview from "../Preview.svelte";
-	import { TOOL_ICONS } from "$lib/tools/tool-icons";
+	import { TOOL_ICONS } from "$lib/old/tools/tool-icons";
 
 	interface Props {
 		index: number;

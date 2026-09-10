@@ -1,5 +1,5 @@
-import type { PixelImage } from "../core/types";
-import { ToolError } from "../core/errors";
+import type { PixelImage } from "../../core/types";
+import { ToolError } from "../../core/errors";
 
 type MaybeRunnable = {
 	id: string;

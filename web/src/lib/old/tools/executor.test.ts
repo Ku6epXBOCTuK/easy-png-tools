@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { executeStep } from "./executor";
-import { makeImage } from "../core/test-helpers";
-import type { PixelImage } from "../core/types";
+import { makeImage } from "../../core/test-helpers";
+import type { PixelImage } from "../../core/types";
 
 function cloneOf(img: PixelImage): PixelImage {
 	return {

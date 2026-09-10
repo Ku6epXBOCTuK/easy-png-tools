@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { TOOLS } from "../registry";
+import { TOOLS } from "../old/registry";
 import { normalizeForSearch, scoreDoc, type SearchDoc } from "./matching";
 import { setLocale } from "./locale.svelte";
 import { toolSearchDoc } from "./tool-strings";

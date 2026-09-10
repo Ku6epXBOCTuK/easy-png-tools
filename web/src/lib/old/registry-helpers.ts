@@ -1,4 +1,4 @@
-import { ToolError } from "./core/errors";
+import { ToolError } from "../core/errors";
 
 export function num(params: Record<string, unknown>, id: string): number {
 	const v = params[id];

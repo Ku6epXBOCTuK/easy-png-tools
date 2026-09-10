@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isChainable, TOOLS } from "$lib/registry";
+	import { isChainable, TOOLS } from "$lib/old/registry";
 	import { LOCALE_TAGS } from "$lib/i18n/dict";
 	import { getLocale } from "$lib/i18n/locale.svelte";
 	import { normalizeForSearch, scoreDoc } from "$lib/i18n/matching";

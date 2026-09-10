@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { getTool, TOOLS } from "$lib/registry";
+import { getTool, TOOLS } from "$lib/old/registry";
 import { t } from "$lib/i18n/t";
 import type { EntryGenerator, PageLoad } from "./$types";
 

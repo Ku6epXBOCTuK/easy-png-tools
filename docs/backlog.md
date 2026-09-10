@@ -176,14 +176,11 @@
 13. **HARD-серия** (glitch, barcode, signature-extract, handwritten-digital). Из
     `archive/plan-gap-waves.md`.
 
-14. **Переезд старых файлов в папки `old/`** — оценка M. Шаг 37 закрытого
-    `archive/plan-composite-params.md` (и `archive/plan-migrate-remaining.md`):
-    перенос `lib/registry.ts`, `lib/registry/**`, `lib/registry-helpers.ts`,
-    `lib/categories.ts`, `lib/tools/**`, `lib/components/**` (кроме `kit/`) в
-    `lib/old/**`; в настройке isolation-плагина — один glob-паттерн
-    (`lib/old/**`), «новое»/«общее» не меняются. Предшествует C17
-    (`plan-redesign.md`, Шаг 5). Гейты: svelte-check 0, тесты зелёные, prettier
-    чист, `lint:all` = задокументированный остаток, обе ветки открываются.
+14. ~~**Переезд старых файлов в папки `old/`**~~ — **ЗАКРЫТО.** Старые файлы
+    (`lib/registry.ts`, `lib/registry/`, `lib/registry-helpers.ts`,
+    `lib/categories.ts`, `lib/tools/`, `lib/components/` кроме `kit/`) перенесены
+    в `lib/old/`. Isolation-плагин упрощён до `lib/old/**`. Все импорты обновлены.
+    svelte-check 0, тесты 618/618, lint:all чист, билд проходит.
 
 15. ~~**Техдолг (чинить по заведённым задачам, не игнорировать правила)**~~
     ЗАКРЫТО. Подробности: `docs/archive/plan-tech-debt.md`.

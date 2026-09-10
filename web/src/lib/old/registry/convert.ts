@@ -1,20 +1,20 @@
 import type { ToolEntry } from "../registry";
-import { clonePixelImage } from "../core/types";
-import { flattenOntoColor } from "../core/alpha";
-import { toBase64, toDataUrl, decodeSvgText, encode } from "../core/io";
-import { pixelsToHex, hexToPixels } from "../core/text";
+import { clonePixelImage } from "../../core/types";
+import { flattenOntoColor } from "../../core/alpha";
+import { toBase64, toDataUrl, decodeSvgText, encode } from "../../core/io";
+import { pixelsToHex, hexToPixels } from "../../core/text";
 import {
 	imageToByteRows,
 	bytesToImage,
 	imageToRgbValues,
 	rgbValuesToImage,
-} from "../core/textio";
+} from "../../core/textio";
 import {
 	COMPRESSION_LEVELS,
 	findMaxColorsWithin,
 	type CompressionLevel,
-} from "../core/compress";
-import { quantizeImage } from "../core/quantize";
+} from "../../core/compress";
+import { quantizeImage } from "../../core/quantize";
 import { num, str } from "../registry-helpers";
 
 function decodeToPng(

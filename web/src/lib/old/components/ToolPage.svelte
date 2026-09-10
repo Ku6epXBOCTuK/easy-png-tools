@@ -13,21 +13,24 @@
 		outputOf,
 		sanitizeParams,
 		type ToolEntry,
-	} from "$lib/registry";
+	} from "$lib/old/registry";
 	import {
 		loadStoredSteps,
 		newStepId,
 		saveSteps,
 		type PipelineStep,
-	} from "$lib/tools/pipeline";
-	import { TOOL_ICONS } from "$lib/tools/tool-icons";
+	} from "$lib/old/tools/pipeline";
+	import { TOOL_ICONS } from "$lib/old/tools/tool-icons";
 	import DownloadButton from "./DownloadButton.svelte";
 	import ParamForm from "./ParamForm.svelte";
 	import Preview from "./Preview.svelte";
 	import ToolSearch from "./search/ToolSearch.svelte";
-	import { createAutoRunner } from "$lib/tools/auto-run";
-	import { executeStep } from "$lib/tools/executor";
-	import { clearOverlay, setOverlay } from "$lib/tools/overlay-store.svelte";
+	import { createAutoRunner } from "$lib/old/tools/auto-run";
+	import { executeStep } from "$lib/old/tools/executor";
+	import {
+		clearOverlay,
+		setOverlay,
+	} from "$lib/old/tools/overlay-store.svelte";
 	import { t } from "$lib/i18n/t";
 	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
 	import type { StageStatus } from "./stage/stage-props";

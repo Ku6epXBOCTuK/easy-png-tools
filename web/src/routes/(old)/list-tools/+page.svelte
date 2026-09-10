@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { CATEGORIES } from "$lib/categories";
+	import { CATEGORIES } from "$lib/old/categories";
 	import { resolve } from "$app/paths";
 	import { t } from "$lib/i18n/t";
 	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
-	import ToolCard from "$lib/components/search/ToolCard.svelte";
-	import { TOOLS } from "$lib/registry";
+	import ToolCard from "$lib/old/components/search/ToolCard.svelte";
+	import { TOOLS } from "$lib/old/registry";
 </script>
 
 <svelte:head>

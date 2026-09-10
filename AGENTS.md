@@ -159,9 +159,7 @@ scoped-путям (`kit/**`, `preview/**`).
 классифицирует стороны по фактическому пути, поэтому относительным импортом
 правило не обойти.
 
-- Старое: `routes/(old)/**`, `lib/registry.ts`, `lib/registry/**`,
-  `lib/registry-helpers.ts`, `lib/categories.ts`, `lib/tools/**`,
-  `lib/components/**` (кроме `kit/`).
+- Старое: `routes/(old)/**`, `lib/old/**`.
 - Новое: `routes/preview/**`, `lib/registry-new/**`, `lib/preview/**`,
   `lib/registry-schema.ts`, `lib/registry-schema.test.ts`, `lib/components/kit/**`.
 - Общее (разрешено обоим): `core/`, `i18n/`, `theme`, `assets/`, корневой `lib`.

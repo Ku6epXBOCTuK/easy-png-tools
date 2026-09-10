@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TOOL_ICONS } from "$lib/tools/tool-icons";
+	import { TOOL_ICONS } from "$lib/old/tools/tool-icons";
 
 	interface Props {
 		toolId: string;

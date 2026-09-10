@@ -1,13 +1,13 @@
 import type { ToolEntry } from "../registry";
-import { gaussianBlur, sharpen as sharpenImage } from "../core/convolution";
-import { vignette } from "../core/effects";
+import { gaussianBlur, sharpen as sharpenImage } from "../../core/convolution";
+import { vignette } from "../../core/effects";
 import {
 	pixelate,
 	shuffleBlocks,
 	addNoise,
 	silhouette,
-} from "../core/pixel-fx";
-import { jpegRoundtrip } from "../core/io";
+} from "../../core/pixel-fx";
+import { jpegRoundtrip } from "../../core/io";
 import { num, str } from "../registry-helpers";
 
 export function filterEntries(): ToolEntry[] {

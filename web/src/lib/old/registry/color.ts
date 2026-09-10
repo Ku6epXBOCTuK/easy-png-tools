@@ -17,10 +17,10 @@ import {
 	twoColors,
 	type ChannelSwapPair,
 	type RgbChannel,
-} from "../core/color";
-import { renderSpace, SPACES, type SpaceId } from "../core/channels";
-import { quantizeImage, ditherImage, mapToNearest } from "../core/quantize";
-import { parseHexList } from "../core/palette";
+} from "../../core/color";
+import { renderSpace, SPACES, type SpaceId } from "../../core/channels";
+import { quantizeImage, ditherImage, mapToNearest } from "../../core/quantize";
+import { parseHexList } from "../../core/palette";
 import { num, str } from "../registry-helpers";
 
 type SpaceEntry = {

@@ -1,6 +1,6 @@
 import type { ImageInfo } from "$lib/core/analyze";
 import type { PixelImage } from "$lib/core/types";
-import type { ToolEntry } from "$lib/registry";
+import type { ToolEntry } from "$lib/old/registry";
 
 export type StageStatus = "idle" | "loaded" | "processing" | "error";
 

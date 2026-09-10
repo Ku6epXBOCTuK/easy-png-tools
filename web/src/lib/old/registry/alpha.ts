@@ -1,5 +1,5 @@
 import type { ToolEntry } from "../registry";
-import { ToolError } from "../core/errors";
+import { ToolError } from "../../core/errors";
 import {
 	colorMask,
 	extractAlphaMask,
@@ -9,8 +9,8 @@ import {
 	removeColorToAlpha,
 	roundCorners,
 	setAlphaChannel,
-} from "../core/alpha";
-import { backgroundMaskPreview, removeBackground } from "../core/background";
+} from "../../core/alpha";
+import { backgroundMaskPreview, removeBackground } from "../../core/background";
 import {
 	closingImage,
 	contourImage,
@@ -18,9 +18,9 @@ import {
 	erodeImage,
 	openingImage,
 	strokeImage,
-} from "../core/morphology";
-import { featherAlpha, defringe } from "../core/pixel-fx";
-import { drawImageWatermark } from "../core/domText";
+} from "../../core/morphology";
+import { featherAlpha, defringe } from "../../core/pixel-fx";
+import { drawImageWatermark } from "../../core/domText";
 import { getOverlay } from "../tools/overlay-store.svelte";
 import {
 	renderShape,
@@ -28,8 +28,8 @@ import {
 	boxTest,
 	starTest,
 	wavyTest,
-} from "../core/shapes";
-import type { Position9 } from "../core/textdraw";
+} from "../../core/shapes";
+import type { Position9 } from "../../core/textdraw";
 import { num, str } from "../registry-helpers";
 
 export function alphaEntries(): ToolEntry[] {

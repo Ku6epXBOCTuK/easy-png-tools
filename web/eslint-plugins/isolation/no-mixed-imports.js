@@ -17,16 +17,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const DEFAULT_OLD = [
-	"routes/(old)/**",
-	"lib/registry/**",
-	"lib/registry.ts",
-	"lib/registry-helpers.ts",
-	"lib/categories.ts",
-	"lib/tools/**",
-	"lib/components/**",
-	"!lib/components/kit/**",
-];
+const DEFAULT_OLD = ["routes/(old)/**", "lib/old/**"];
 
 const DEFAULT_NEW = [
 	"routes/preview/**",

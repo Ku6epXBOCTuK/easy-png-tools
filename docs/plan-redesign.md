@@ -358,8 +358,8 @@ src/routes/preview/tools/[id]/+page.svelte
 
 ### Шаг 5. Сделать новый дизайн основным — СЛЕДУЮЩИЙ ЭТАП
 
-> Tech debt закрыт. Перед стартом C17: переезд старых файлов в `old/`
-> (backlog №14) и покупка домена (`plan-domain.local.md`).
+> Tech debt закрыт. Перед стартом C17: покупка домена (`plan-domain.local.md`).
+> Переезд старых файлов в `lib/old/` (backlog №14) — **выполнено**.
 
 - [ ] **[C17]** Перенести `preview/*` → реальные маршруты (move), удалить
       `(old)/`, корневой `+layout.svelte` импортирует `design2.css` + новый

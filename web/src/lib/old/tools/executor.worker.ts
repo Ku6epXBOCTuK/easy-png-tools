@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
-import type { PixelImage } from "../core/types";
-import { ToolError } from "../core/errors";
+import type { PixelImage } from "../../core/types";
+import { ToolError } from "../../core/errors";
 import { getTool, sanitizeParams } from "../registry";
 
 type WorkerRequest = {

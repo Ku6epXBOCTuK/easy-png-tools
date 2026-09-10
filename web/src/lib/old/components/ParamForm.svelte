@@ -4,7 +4,7 @@
 	import SelectField from "./ui/SelectField.svelte";
 	import SliderField from "./ui/SliderField.svelte";
 	import TextField from "./ui/TextField.svelte";
-	import type { ParamDef, ToolEntry } from "$lib/registry";
+	import type { ParamDef, ToolEntry } from "$lib/old/registry";
 	import { optionLabel, paramLabel } from "$lib/i18n/tool-strings";
 	import { t } from "$lib/i18n/t";
 

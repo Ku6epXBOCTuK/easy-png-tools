@@ -2,7 +2,7 @@
 	import Button from "./ui/Button.svelte";
 	import { downloadBlob, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import type { OutputFormat } from "$lib/registry";
+	import type { OutputFormat } from "$lib/old/registry";
 	import { t } from "$lib/i18n/t";
 
 	interface Props {

@@ -1,6 +1,6 @@
 ﻿import type { CategoryId } from "./categories";
-import type { OutputMime } from "./core/io";
-import type { PixelImage } from "./core/types";
+import type { OutputMime } from "../core/io";
+import type { PixelImage } from "../core/types";
 
 import { alphaEntries } from "./registry/alpha";
 import { analyzeEntries } from "./registry/analyze";

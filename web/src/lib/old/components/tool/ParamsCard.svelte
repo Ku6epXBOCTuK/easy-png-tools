@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ParamForm from "../ParamForm.svelte";
-	import type { ParamDef, ToolEntry } from "$lib/registry";
+	import type { ParamDef, ToolEntry } from "$lib/old/registry";
 	import { t } from "$lib/i18n/t";
 
 	interface Props {

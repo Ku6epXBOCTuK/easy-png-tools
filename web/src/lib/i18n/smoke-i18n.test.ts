@@ -4,7 +4,7 @@ import { t } from "./t";
 import { LOCALE_TAGS } from "./dict";
 import { normalizeForSearch, scoreDoc } from "./matching";
 import { toolSearchDoc } from "./tool-strings";
-import { TOOLS } from "../registry";
+import { TOOLS } from "../old/registry";
 
 afterEach(() => {
 	setLocale("ru");

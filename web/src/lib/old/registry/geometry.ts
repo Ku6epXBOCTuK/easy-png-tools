@@ -1,5 +1,5 @@
 import type { ToolEntry } from "../registry";
-import { ToolError } from "../core/errors";
+import { ToolError } from "../../core/errors";
 import {
 	crop,
 	expandCanvas,
@@ -15,13 +15,13 @@ import {
 	symmetricCopy,
 	trimToContent,
 	type Anchor9,
-} from "../core/geometry";
+} from "../../core/geometry";
 import {
 	rotateFreeImage,
 	skewImage,
 	transformImage,
 	zoomImage,
-} from "../core/affine";
+} from "../../core/affine";
 import { num, str } from "../registry-helpers";
 
 export function geometryEntries(): ToolEntry[] {

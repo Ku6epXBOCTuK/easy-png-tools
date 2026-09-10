@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { getTool } from "$lib/registry";
+	import { getTool } from "$lib/old/registry";
 	import { t } from "$lib/i18n/t";
 	import { toolTitle } from "$lib/i18n/tool-strings";
-	import ToolPage from "$lib/components/ToolPage.svelte";
-	import ToolSearch from "$lib/components/search/ToolSearch.svelte";
-	import Button from "$lib/components/ui/Button.svelte";
+	import ToolPage from "$lib/old/components/ToolPage.svelte";
+	import ToolSearch from "$lib/old/components/search/ToolSearch.svelte";
+	import Button from "$lib/old/components/ui/Button.svelte";
 
 	const LAST_TOOL_KEY = "last-tool-id";
 

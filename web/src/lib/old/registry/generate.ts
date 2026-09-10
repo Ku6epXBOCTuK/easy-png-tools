@@ -1,9 +1,17 @@
 import type { ToolEntry } from "../registry";
-import { ToolError } from "../core/errors";
-import { solidImage, noiseImage, gradientImage } from "../core/generate";
-import { colorSpectrum, drawGrid, randomColorBlocks } from "../core/gen-tools";
-import { renderTextToImage, renderEmoji, type TextFont } from "../core/domText";
-import { changeCanvasSize } from "../core/geometry";
+import { ToolError } from "../../core/errors";
+import { solidImage, noiseImage, gradientImage } from "../../core/generate";
+import {
+	colorSpectrum,
+	drawGrid,
+	randomColorBlocks,
+} from "../../core/gen-tools";
+import {
+	renderTextToImage,
+	renderEmoji,
+	type TextFont,
+} from "../../core/domText";
+import { changeCanvasSize } from "../../core/geometry";
 import {
 	renderWheel,
 	renderSwatches,
@@ -19,7 +27,7 @@ import {
 	stepColors,
 	sortPalette,
 	type SortKey,
-} from "../core/palette";
+} from "../../core/palette";
 import { num, str, bool } from "../registry-helpers";
 
 function hexToRgba(hex: string, alpha = 255): [number, number, number, number] {

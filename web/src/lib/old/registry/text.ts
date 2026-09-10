@@ -1,7 +1,7 @@
 import type { ToolEntry } from "../registry";
-import { drawTextBlock, drawTextTile, type TextFont } from "../core/domText";
-import { formatStamp } from "../core/datefmt";
-import type { Position9 } from "../core/textdraw";
+import { drawTextBlock, drawTextTile, type TextFont } from "../../core/domText";
+import { formatStamp } from "../../core/datefmt";
+import type { Position9 } from "../../core/textdraw";
 import { num, str, bool } from "../registry-helpers";
 
 export function textEntries(): ToolEntry[] {

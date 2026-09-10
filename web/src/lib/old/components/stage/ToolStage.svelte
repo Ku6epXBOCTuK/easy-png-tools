@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
-	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/registry";
+	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/old/registry";
 	import type { ImageInfo } from "$lib/core/analyze";
 	import type { PixelImage } from "$lib/core/types";
 	import { t } from "$lib/i18n/t";
 	import { toolTitle } from "$lib/i18n/tool-strings";
-	import { TOOL_ICONS } from "$lib/tools/tool-icons";
+	import { TOOL_ICONS } from "$lib/old/tools/tool-icons";
 	import DownloadButton from "../DownloadButton.svelte";
 	import Button from "../ui/Button.svelte";
 	import EmptyState from "../ui/EmptyState.svelte";
