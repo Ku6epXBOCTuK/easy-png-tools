@@ -11,12 +11,16 @@
 //   shared-> everything else: core/, i18n/, theme, ...
 import { describe, expect, it } from "vitest";
 import noMixedImports from "../isolation/no-mixed-imports.js";
-import { verifyInFixtures, type FlatConfig } from "./helpers.js";
+import { asRuleModule, verifyInFixtures, type FlatConfig } from "./helpers.js";
 
 const isolationConfig: FlatConfig = [
 	{
 		files: ["**/*.{ts,svelte}"],
-		plugins: { isolation: { rules: { "no-mixed-imports": noMixedImports } } },
+		plugins: {
+			isolation: {
+				rules: { "no-mixed-imports": asRuleModule(noMixedImports) },
+			},
+		},
 		rules: { "isolation/no-mixed-imports": "error" },
 	},
 ];

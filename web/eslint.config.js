@@ -6,6 +6,7 @@ import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
 import designTokens from "./eslint-plugins/index.js";
 import isolationPlugin from "./eslint-plugins/isolation/index.js";
+import conventionsPlugin from "./eslint-plugins/conventions/index.js";
 
 // FIXME: надо игнорировать старые файлы, после переноса пути новых компонентов включают старые
 // Новый код редизайна: к нему применяем полные recommended-наборы уже сейчас.
@@ -76,6 +77,8 @@ export default tseslint.config(
 						// через default-проект. Перечисляются точечно: `**` в
 						// allowDefaultProject запрещён tseslint.
 						"eslint-plugins/__tests__/design-tokens.test.ts",
+						"eslint-plugins/__tests__/interface-props.test.ts",
+						"eslint-plugins/__tests__/no-string-union-alias.test.ts",
 						"eslint-plugins/__tests__/helpers.ts",
 						"eslint-plugins/__tests__/no-mixed-imports.test.ts",
 						"eslint-plugins/__fixtures__/src/lib/v1/old.ts",
@@ -136,6 +139,31 @@ export default tseslint.config(
 			"design-tokens/no-category-mismatch": "error",
 			"design-tokens/no-token-definition-in-svelte": "error",
 			"design-tokens/no-undefined-in-svelte": "error",
+		},
+	},
+	// Конвенция Svelte 5: пропсы через локальный `interface Props` +
+	// `let {...}: Props = $props()` (плагин conventions/interface-props).
+	// Только Svelte-файлы нового кода (см. newSvelteFiles).
+	{
+		files: newSvelteFiles,
+		ignores: oldSvelteFiles,
+		plugins: {
+			conventions: conventionsPlugin,
+		},
+		rules: {
+			"conventions/interface-props": "error",
+		},
+	},
+	// Запрет строковых union-алиасов в пользу `as const` объектов
+	// (плагин conventions/no-string-union-alias). TS и Svelte-скрипты нового кода.
+	{
+		files: newCode,
+		ignores: oldCode,
+		plugins: {
+			conventions: conventionsPlugin,
+		},
+		rules: {
+			"conventions/no-string-union-alias": "error",
 		},
 	},
 	// Полные recommended-наборы — только на новый код.

@@ -8,15 +8,15 @@
 //     (see __tests__/helpers.ts). The fixture dictionary has exactly five
 //     tokens; anything else must be reported even if it exists in the REAL
 //     web/src/app.css.
-import { RuleTester, Linter } from "eslint";
+import { RuleTester } from "eslint";
 import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
 import { describe, expect, it } from "vitest";
-import noHardcoded from "../design-tokens/no-hardcoded-in-svelte.js";
 import noCategoryMismatch from "../design-tokens/no-category-mismatch.js";
+import noHardcoded from "../design-tokens/no-hardcoded-in-svelte.js";
 import noTokenDefinition from "../design-tokens/no-token-definition-in-svelte.js";
 import noUndefined from "../design-tokens/no-undefined-in-svelte.js";
-import { verifyInFixtures, type FlatConfig } from "./helpers.js";
+import { asRuleModule, verifyInFixtures, type FlatConfig } from "./helpers.js";
 
 const parserOptions = {
 	parser: tseslint.parser,
@@ -45,7 +45,7 @@ const frame = (style: string) => ({
 });
 
 describe("design-tokens/no-hardcoded-in-svelte", () => {
-	ruleTester.run("no-hardcoded-in-svelte", noHardcoded, {
+	ruleTester.run("no-hardcoded-in-svelte", asRuleModule(noHardcoded), {
 		valid: [
 			frame(".box { color: var(--color-fg); }"),
 			frame(".box { padding: var(--space-3); }"),
@@ -97,7 +97,7 @@ describe("design-tokens/no-hardcoded-in-svelte", () => {
 });
 
 describe("design-tokens/no-category-mismatch", () => {
-	ruleTester.run("no-category-mismatch", noCategoryMismatch, {
+	ruleTester.run("no-category-mismatch", asRuleModule(noCategoryMismatch), {
 		valid: [
 			frame(".box { padding: var(--space-1); }"),
 			frame(".box { color: var(--color-fg); }"),
@@ -117,27 +117,31 @@ describe("design-tokens/no-category-mismatch", () => {
 });
 
 describe("design-tokens/no-token-definition-in-svelte", () => {
-	ruleTester.run("no-token-definition-in-svelte", noTokenDefinition, {
-		valid: [
-			frame(".box { --local: var(--color-fg); }"),
-			frame(".box { --local: calc(var(--space-1) * 2); }"),
-			frame(".box { --ratio: 1.5; }"),
-		],
-		invalid: [
-			{
-				...frame(".box { --local: #ff0000; }"),
-				errors: [{ messageId: "tokenPrimitive" }],
-			},
-			{
-				...frame(".box { --local: 12px; }"),
-				errors: [{ messageId: "tokenPrimitive" }],
-			},
-			{
-				...frame(".box { --local: oklch(0.5 0.1 240); }"),
-				errors: [{ messageId: "tokenPrimitive" }],
-			},
-		],
-	});
+	ruleTester.run(
+		"no-token-definition-in-svelte",
+		asRuleModule(noTokenDefinition),
+		{
+			valid: [
+				frame(".box { --local: var(--color-fg); }"),
+				frame(".box { --local: calc(var(--space-1) * 2); }"),
+				frame(".box { --ratio: 1.5; }"),
+			],
+			invalid: [
+				{
+					...frame(".box { --local: #ff0000; }"),
+					errors: [{ messageId: "tokenPrimitive" }],
+				},
+				{
+					...frame(".box { --local: 12px; }"),
+					errors: [{ messageId: "tokenPrimitive" }],
+				},
+				{
+					...frame(".box { --local: oklch(0.5 0.1 240); }"),
+					errors: [{ messageId: "tokenPrimitive" }],
+				},
+			],
+		},
+	);
 });
 
 describe("design-tokens/no-undefined-in-svelte", () => {
@@ -145,7 +149,9 @@ describe("design-tokens/no-undefined-in-svelte", () => {
 		{
 			files: ["**/*.svelte"],
 			plugins: {
-				"design-tokens": { rules: { "no-undefined-in-svelte": noUndefined } },
+				"design-tokens": {
+					rules: { "no-undefined-in-svelte": asRuleModule(noUndefined) },
+				},
 			},
 			rules: { "design-tokens/no-undefined-in-svelte": "error" },
 			languageOptions: {
