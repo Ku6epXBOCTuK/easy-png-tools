@@ -9,7 +9,8 @@
     "build": "pnpm --dir web build",
     "format": "pnpm format:docs && pnpm --dir web format",
     "format:docs": "prettier --write docs --log-level warn",
-    "check:docs": "prettier --check docs"
+    "check:docs": "prettier --check docs",
+    "generate:fixtures": "node tests/fixtures/manual-edge-cases/generate.mjs"
   },
   "keywords": [],
   "author": "Ku6epXBOCTuK",
