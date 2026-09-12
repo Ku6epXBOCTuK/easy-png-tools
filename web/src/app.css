@@ -101,11 +101,11 @@
 		--brand-main: #86efac;
 		--brand-alt: hct(from var(--brand-main) calc(h + 90) c t);
 
-		--color-background: hct(from var(--brand-main) h 8 95);
-		--color-background-muted: hct(from var(--brand-main) h 12 85);
-		--color-panel: hct(from var(--brand-main) h 6.5 98);
-		--color-checker-main: hct(from var(--brand-main) h 10.7 85.7);
-		--color-checker-alt: hct(from var(--brand-main) h 13.2 76);
+		--color-background: hct(from var(--brand-main) h 2 95);
+		--color-background-muted: hct(from var(--brand-main) h 4 85);
+		--color-panel: hct(from var(--brand-main) h 3 98);
+		--color-checker-main: hct(from var(--brand-main) h 5 85.7);
+		--color-checker-alt: hct(from var(--brand-main) h 7 76);
 
 		--color-border: hct(from var(--brand-main) h 13.1 69.4);
 
@@ -186,13 +186,13 @@
 		--brand-main: #86efac;
 		--brand-alt: hct(from var(--brand-main) calc(h + 90) c t);
 
-		--color-background: hct(from var(--brand-main) h 15 6);
-		--color-background-muted: hct(from var(--brand-main) h 15 10);
-		--color-panel: hct(from var(--brand-main) h 12 8);
-		--color-checker-main: hct(from var(--brand-main) h 12 10);
-		--color-checker-alt: hct(from var(--brand-main) h 14 14);
+		--color-background: hct(from var(--brand-main) h 2 16);
+		--color-background-muted: hct(from var(--brand-main) h 4 24);
+		--color-panel: hct(from var(--brand-main) h 3 26);
+		--color-checker-main: hct(from var(--brand-main) h 6 16);
+		--color-checker-alt: hct(from var(--brand-main) h 8 24);
 
-		--color-border: hct(from var(--brand-main) h 15 25);
+		--color-border: hct(from var(--brand-main) h 8 40);
 
 		--color-text: hct(from var(--brand-main) h 25 90);
 		--color-text-muted: hct(from var(--brand-main) h 22 70);

@@ -160,11 +160,9 @@
 	<div class="schema-tool">
 		<header class="header">
 			<div class="title-block">
-				<span class="eyebrow">PNG PROCESSING <span>/</span> SINGLE TOOL</span>
 				<h1>{tool.title}</h1>
 				<p class="lede">{tool.description}</p>
 			</div>
-			<span class="status"><i></i> LIVE PREVIEW</span>
 		</header>
 
 		<div class="workspace">
@@ -221,14 +219,11 @@
 		line-height: 1.1;
 		color: var(--color-text);
 	}
-	.eyebrow,
-	.label,
-	.status {
+	.label {
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-l);
 		color: var(--color-text-muted);
 	}
-	.eyebrow span,
 	.label {
 		color: var(--color-main);
 	}
@@ -238,19 +233,6 @@
 		color: var(--color-text-muted);
 		font-size: var(--font-size-s);
 		line-height: 1.5;
-	}
-	.status {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-m);
-		align-self: flex-start;
-		white-space: nowrap;
-	}
-	.status i {
-		width: var(--size-border-thick);
-		height: var(--size-border-thick);
-		border-radius: 50%;
-		background: var(--color-success);
 	}
 	.workspace {
 		display: grid;

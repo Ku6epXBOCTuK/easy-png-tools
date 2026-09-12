@@ -7,7 +7,6 @@
 
 <div class="catalog-head">
 	<div>
-		<div class="eyebrow">EASY-PNG-TOOLS / CATALOG</div>
 		<h1>Tool catalog</h1>
 		<p>
 			Focused utilities for working with PNG. Inspect, transform, and export —
@@ -27,12 +26,6 @@
 		align-items: flex-end;
 		gap: var(--space-xxl);
 		flex-wrap: wrap;
-	}
-	.eyebrow {
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-xl);
-		color: var(--color-text-muted);
-		margin-bottom: var(--space-m);
 	}
 	h1 {
 		margin: 0;
