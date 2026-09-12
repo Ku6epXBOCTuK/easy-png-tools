@@ -20,6 +20,7 @@ type WorkerResponse =
 			height?: number;
 			data?: Uint8ClampedArray;
 			text?: string;
+			files?: WorkerImageFile[];
 	  }
 	| {
 			id: number;
@@ -28,6 +29,13 @@ type WorkerResponse =
 			errorKey?: string;
 			errorVars?: Record<string, string | number>;
 	  };
+
+type WorkerImageFile = {
+	name: string;
+	width: number;
+	height: number;
+	data: Uint8ClampedArray;
+};
 
 self.onmessage = (event: MessageEvent<WorkerRequest>) => {
 	void handle(event.data);
@@ -57,6 +65,19 @@ async function handle(request: WorkerRequest): Promise<void> {
 				ok: true,
 				text: output,
 			} satisfies WorkerResponse);
+			return;
+		}
+		if ("files" in output) {
+			const files = output.files.map((file) => ({
+				name: file.name,
+				width: file.image.width,
+				height: file.image.height,
+				data: file.image.data,
+			}));
+			(self as unknown as Worker).postMessage(
+				{ id: request.id, ok: true, files } satisfies WorkerResponse,
+				files.map((file) => file.data.buffer),
+			);
 			return;
 		}
 		(self as unknown as Worker).postMessage(

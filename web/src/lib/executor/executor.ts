@@ -88,6 +88,12 @@ function ensureWorker(): Worker | null {
 				width?: number;
 				height?: number;
 				data?: Uint8ClampedArray;
+				files?: {
+					name: string;
+					width: number;
+					height: number;
+					data: Uint8ClampedArray;
+				}[];
 				text?: string;
 				error?: string;
 				errorKey?: string;
@@ -101,6 +107,17 @@ function ensureWorker(): Worker | null {
 					width: payload.width,
 					height: payload.height,
 					data: new Uint8ClampedArray(payload.data),
+				});
+			} else if (payload.ok && Array.isArray(payload.files)) {
+				entry.resolve({
+					files: payload.files.map((file) => ({
+						name: file.name,
+						image: {
+							width: file.width,
+							height: file.height,
+							data: new Uint8ClampedArray(file.data),
+						},
+					})),
 				});
 			} else if (payload.ok && typeof payload.text === "string") {
 				entry.resolve(payload.text);
