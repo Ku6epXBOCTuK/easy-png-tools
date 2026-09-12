@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ImageInfo } from "$lib/core/analyze";
 	import type { PixelImage } from "$lib/core/types";
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 	import { outputOf, type ToolEntry } from "$lib/v1/registry";
 	import DownloadButton from "../DownloadButton.svelte";
 	import InfoPanel from "../InfoPanel.svelte";

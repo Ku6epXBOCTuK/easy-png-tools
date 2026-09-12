@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { LOCALE_TAGS } from "$lib/i18n/dict";
-	import { getLocale } from "$lib/i18n/locale.svelte";
-	import { normalizeForSearch, scoreDoc } from "$lib/i18n/matching";
-	import { t } from "$lib/i18n/t";
+	import { LOCALE_TAGS } from "$lib/v1/i18n/dict";
+	import { getLocale } from "$lib/v1/i18n/locale.svelte";
+	import { normalizeForSearch, scoreDoc } from "$lib/v1/i18n/matching";
+	import { t } from "$lib/v1/i18n/t";
 	import {
 		toolDescription,
 		toolSearchDoc,
 		toolTitle,
-	} from "$lib/i18n/tool-strings";
+	} from "$lib/v1/i18n/tool-strings";
 	import { isChainable, TOOLS } from "$lib/v1/registry";
 	import ToolCard from "./ToolCard.svelte";
 

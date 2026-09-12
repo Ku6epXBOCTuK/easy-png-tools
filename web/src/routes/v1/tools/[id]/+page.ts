@@ -1,4 +1,4 @@
-import { t } from "$lib/i18n/t";
+import { t } from "$lib/v1/i18n/t";
 import { getTool, TOOLS } from "$lib/v1/registry";
 import { error } from "@sveltejs/kit";
 import type { EntryGenerator, PageLoad } from "./$types";

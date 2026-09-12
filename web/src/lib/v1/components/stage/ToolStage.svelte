@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ImageInfo } from "$lib/core/analyze";
 	import type { PixelImage } from "$lib/core/types";
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/v1/registry";
 	import { TOOL_ICONS } from "$lib/v1/tools/tool-icons";
 	import type { Snippet } from "svelte";

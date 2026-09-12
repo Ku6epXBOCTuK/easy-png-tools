@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { downloadBlob, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 	import type { OutputFormat } from "$lib/v1/registry";
 	import Button from "./ui/Button.svelte";
 

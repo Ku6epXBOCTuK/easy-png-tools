@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PixelImage } from "$lib/core/types";
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 	import DropOverlay from "../DropOverlay.svelte";
 	import DropZone from "../DropZone.svelte";
 	import Preview from "../Preview.svelte";

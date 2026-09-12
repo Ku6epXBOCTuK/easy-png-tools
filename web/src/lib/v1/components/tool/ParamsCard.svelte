@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 	import type { ParamDef, ToolEntry } from "$lib/v1/registry";
 	import ParamForm from "../ParamForm.svelte";
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PixelImage } from "$lib/core/types";
-	import { t } from "$lib/i18n/t";
-	import { toolTitle } from "$lib/i18n/tool-strings";
+	import { t } from "$lib/v1/i18n/t";
+	import { toolTitle } from "$lib/v1/i18n/tool-strings";
 	import { outputOf, sanitizeParams, type ToolEntry } from "$lib/v1/registry";
 	import { TOOL_ICONS } from "$lib/v1/tools/tool-icons";
 	import DownloadButton from "../DownloadButton.svelte";

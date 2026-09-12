@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { t } from "$lib/i18n/t";
-	import { optionLabel, paramLabel } from "$lib/i18n/tool-strings";
+	import { t } from "$lib/v1/i18n/t";
+	import { optionLabel, paramLabel } from "$lib/v1/i18n/tool-strings";
 	import type { ParamDef, ToolEntry } from "$lib/v1/registry";
 	import CheckboxField from "./ui/CheckboxField.svelte";
 	import ColorField from "./ui/ColorField.svelte";

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
 	import favicon from "$lib/assets/favicon.svg";
-	import { LOCALES, type Locale } from "$lib/i18n/dict";
-	import { getLocale, initLocale, setLocale } from "$lib/i18n/locale.svelte";
-	import { t } from "$lib/i18n/t";
+	import { LOCALES, type Locale } from "$lib/v1/i18n/dict";
+	import { getLocale, initLocale, setLocale } from "$lib/v1/i18n/locale.svelte";
+	import { t } from "$lib/v1/i18n/t";
 	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
 	import { onMount } from "svelte";
 	import "../../app_v1.css";

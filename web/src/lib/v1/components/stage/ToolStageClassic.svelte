@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 	import ParamsCard from "../tool/ParamsCard.svelte";
 	import ResultCard from "../tool/ResultCard.svelte";
 	import SourceCard from "../tool/SourceCard.svelte";

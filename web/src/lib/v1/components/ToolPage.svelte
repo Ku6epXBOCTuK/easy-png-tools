@@ -7,8 +7,8 @@
 		unsupportedImageError,
 	} from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import { t } from "$lib/i18n/t";
-	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
+	import { t } from "$lib/v1/i18n/t";
+	import { toolDescription, toolTitle } from "$lib/v1/i18n/tool-strings";
 	import {
 		defaultParams,
 		getTool,

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 	import type { PixelImage } from "$lib/core/types";
 	import DropZone from "../DropZone.svelte";
 	import Preview from "../Preview.svelte";

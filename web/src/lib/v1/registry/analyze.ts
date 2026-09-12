@@ -14,7 +14,7 @@ import {
 import { looksLikePng, base64ToBytes, stripDataUri } from "../../core/textio";
 import { clonePixelImage, type PixelImage } from "../../core/types";
 import { encode } from "../../core/io";
-import { t } from "../../i18n/t";
+import { t } from "../i18n/t";
 import { num, str } from "../registry-helpers";
 
 type MaskToolSpec = {

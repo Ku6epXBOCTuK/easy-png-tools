@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { ImageInfo } from "$lib/core/analyze";
-	import { LOCALE_TAGS } from "$lib/i18n/dict";
-	import { getLocale } from "$lib/i18n/locale.svelte";
-	import { t } from "$lib/i18n/t";
+	import { LOCALE_TAGS } from "$lib/v1/i18n/dict";
+	import { getLocale } from "$lib/v1/i18n/locale.svelte";
+	import { t } from "$lib/v1/i18n/t";
 
 	interface Props {
 		info: ImageInfo | null;

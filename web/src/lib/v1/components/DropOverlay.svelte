@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
 	import { isSupportedImage, unsupportedImageError } from "$lib/core/io";
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 
 	interface Props {
 		onFile: (file: File) => void;

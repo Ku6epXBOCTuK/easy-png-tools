@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Field from "./Field.svelte";
-	import { t } from "$lib/i18n/t";
+	import { t } from "$lib/v1/i18n/t";
 
 	interface Props {
 		id: string;

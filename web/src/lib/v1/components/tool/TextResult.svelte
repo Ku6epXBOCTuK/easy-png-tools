@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { downloadBlob } from "$lib/core/io";
-	import { t } from "$lib/i18n/t";
-	import { getMergedDict } from "$lib/i18n/locale.svelte";
+	import { t } from "$lib/v1/i18n/t";
+	import { getMergedDict } from "$lib/v1/i18n/locale.svelte";
 
 	interface Props {
 		text: string;

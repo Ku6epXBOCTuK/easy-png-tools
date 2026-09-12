@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { t } from "$lib/i18n/t";
-	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
+	import { t } from "$lib/v1/i18n/t";
+	import { toolDescription, toolTitle } from "$lib/v1/i18n/tool-strings";
 	import ToolPage from "$lib/v1/components/ToolPage.svelte";
 	import { getTool } from "$lib/v1/registry";
 

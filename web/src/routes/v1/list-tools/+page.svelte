@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
-	import { t } from "$lib/i18n/t";
-	import { toolDescription, toolTitle } from "$lib/i18n/tool-strings";
+	import { t } from "$lib/v1/i18n/t";
+	import { toolDescription, toolTitle } from "$lib/v1/i18n/tool-strings";
 	import { CATEGORIES } from "$lib/v1/categories";
 	import ToolCard from "$lib/v1/components/search/ToolCard.svelte";
 	import { TOOLS } from "$lib/v1/registry";
