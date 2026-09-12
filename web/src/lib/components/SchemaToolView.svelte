@@ -8,12 +8,12 @@
 	import { execute } from "$lib/executor";
 	import { t } from "$lib/i18n/t";
 	import type { FileResult, ToolEntry } from "$lib/registry";
-	import { downloadZip } from "$lib/zip";
 	import {
 		defaultSchemaParams,
 		sanitizeSchemaParams,
 		type ToolSchema,
 	} from "$lib/registry-schema";
+	import { downloadZip } from "$lib/zip";
 
 	interface Props {
 		tool: ToolEntry;
@@ -142,7 +142,8 @@
 	});
 
 	$effect(() => {
-		if (inputMode !== "image" || !source || !started) return;
+		// TODO: can any edge case start infinite loop?
+		if (!started) return;
 		void values;
 		debouncedRun();
 		return () => debouncedRun.cancel();
@@ -187,7 +188,6 @@
 					{running}
 					{error}
 					onupload={handleFile}
-					ongenerate={run}
 					ontextsource={(textValue) => {
 						textSource = textValue;
 					}}

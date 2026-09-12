@@ -1,32 +1,20 @@
 <script lang="ts">
+	import { Upload } from "@lucide/svelte";
 	import DownloadButton from "./ui/DownloadButton.svelte";
-	import { Sparkles, Upload } from "@lucide/svelte";
 
 	interface Props {
 		inputMode: "image" | "text" | "none";
 		canDownload: boolean;
 		running: boolean;
 		onupload: (file: File) => void;
-		ongenerate: () => void;
 		ondownload: () => void;
 	}
-	let {
-		inputMode,
-		canDownload,
-		running,
-		onupload,
-		ongenerate,
-		ondownload,
-	}: Props = $props();
+	let { inputMode, canDownload, running, onupload, ondownload }: Props =
+		$props();
 </script>
 
 <div class="actions">
-	{#if inputMode === "none"}
-		<button class="btn generate" onclick={ongenerate} disabled={running}>
-			<Sparkles size={14} />
-			{running ? "Generating…" : "Generate"}
-		</button>
-	{:else if inputMode === "image"}
+	{#if inputMode === "image"}
 		<label class="btn upload">
 			<Upload size={14} /> Open image
 			<input
@@ -40,7 +28,11 @@
 		</label>
 	{/if}
 	{#if canDownload}
-		<DownloadButton label="Download result" onclick={ondownload} />
+		<DownloadButton
+			label="Download result"
+			onclick={ondownload}
+			disabled={running}
+		/>
 	{/if}
 </div>
 
@@ -61,15 +53,6 @@
 		font: var(--font-size-s) var(--font-mono);
 		color: var(--color-text-muted);
 		cursor: pointer;
-	}
-	.generate {
-		background: var(--color-main);
-		border-color: var(--color-main);
-		color: var(--color-background);
-	}
-	.generate:disabled {
-		opacity: 0.6;
-		cursor: default;
 	}
 	.upload input {
 		display: none;

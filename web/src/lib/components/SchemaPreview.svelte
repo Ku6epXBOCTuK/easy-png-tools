@@ -17,7 +17,6 @@
 		running?: boolean;
 		error?: string;
 		onupload: (file: File) => void;
-		ongenerate?: () => void;
 		ontextsource?: (text: string) => void;
 		onrendertext?: () => void;
 		oncopytext?: () => void;
@@ -35,7 +34,6 @@
 		running = false,
 		error = "",
 		onupload,
-		ongenerate,
 		ontextsource,
 		onrendertext,
 		oncopytext,
@@ -43,16 +41,16 @@
 		ondownload,
 	}: Props = $props();
 
-	const isGenerator = $derived(inputMode === "none");
-	const sourceValue = $derived(
-		isGenerator
-			? "—"
-			: inputMode === "text"
-				? "text"
-				: source
-					? `${source.width} × ${source.height} px`
-					: "—",
-	);
+	const sourceValue = $derived.by(() => {
+		switch (inputMode) {
+			case "none":
+				return "—";
+			case "text":
+				return "text";
+			case "image":
+				return source ? `${source.width} × ${source.height} px` : "—";
+		}
+	});
 	const resultValue = $derived(
 		resultKind === "image"
 			? result
@@ -77,15 +75,12 @@
 </script>
 
 <div class="panel-head">
-	<span class="label"
-		>{isGenerator ? "GENERATOR / RESULT" : "SOURCE / RESULT"}</span
-	>
+	<span class="label">PREVIEW PANEL</span>
 	<SchemaActions
 		{inputMode}
 		canDownload={hasResult}
 		{running}
 		{onupload}
-		ongenerate={ongenerate ?? (() => {})}
 		{ondownload}
 	/>
 </div>
