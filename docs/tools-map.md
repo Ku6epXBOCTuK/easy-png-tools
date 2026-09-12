@@ -99,6 +99,7 @@
 - add-border-png — thickness, color
 - fit-on-background-png — width, height, transparent, color
 - tile-png — columns, rows
+- split-into-parts-png — columns, rows (мультифайловый вывод, zip)
 - trim-empty-space-png — threshold (альфа)
 - change-canvas-size-png — width, height, anchor (3×3)
 - change-aspect-ratio-png — ratio (пресеты), mode (crop/pad)
@@ -222,9 +223,9 @@
   превью: censor-region, erase-region, pixelate-area, blur-area, sharpen-area,
   reverse-colors-area. Один раз делаем selection-компонент — получаем сразу
   шесть инструментов.
-- **Мультифайловый вывод** — сейчас инструмент отдаёт одну картинку:
-  split-into-parts, gif-to-frames, separate-colors, multiply-grid-as-files.
-  Нужен механизм «результат = набор файлов» (zip?).
+- **Мультифайловый вывод** — механизм «результат = набор файлов» (zip)
+  реализован Остальные 1→many: gif-to-frames, separate-colors,
+  multiply-grid-as-files — подключаются по мере нужды.
 - **Анимационные эффекты** — slow-reveal, fade-in/out, disappearing, scrolling:
   это видео/GIF на выходе, а не PNG. Отдельное решение о формате результата.
 - **HARD-хвост** — glitch-art, extract-signature, handwritten→digital,
