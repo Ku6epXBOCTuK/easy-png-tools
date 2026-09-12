@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import type { FileResult } from "$lib/registry";
-	import { Check, RefreshCw } from "@lucide/svelte";
+	import type { FileResult, ResultKind } from "$lib/registry";
+	import { Check } from "@lucide/svelte";
 	import SchemaTextResult from "./SchemaTextResult.svelte";
+	import PreviewTile from "./layout/PreviewTile.svelte";
 
 	interface Props {
-		resultKind?: "image" | "text" | "verdict" | "files";
+		resultKind?: ResultKind;
 		result: PixelImage | null;
 		fileResult?: FileResult | null;
 		textResult?: string | null;
@@ -33,20 +34,13 @@
 				}))
 			: [],
 	);
+
+	let parts = $derived(
+		resultKind === "files" && fileResult ? fileResult.files.length : undefined,
+	);
 </script>
 
-<figure class="tile">
-	<figcaption>
-		<span>
-			RESULT
-			{#if resultKind === "files" && fileResult}
-				<span class="count">{fileResult.files.length} parts</span>
-			{/if}
-			{#if running}
-				<RefreshCw class="rotating" size="16" />
-			{/if}
-		</span>
-	</figcaption>
+<PreviewTile label="RESULT" viewMode={resultKind} loading={running} {parts}>
 	<div class="canvas" class:checker={resultKind === "image"}>
 		{#if resultKind === "text" && textResult}
 			<div class="text-result-wrap">
@@ -83,20 +77,9 @@
 			<span class="empty">no result yet</span>
 		{/if}
 	</div>
-</figure>
+</PreviewTile>
 
 <style>
-	.tile figcaption {
-		display: flex;
-		align-items: center;
-		gap: var(--space-m);
-		margin-bottom: var(--space-m);
-		font: var(--font-size-s) var(--font-mono);
-		color: var(--color-text-muted);
-		& :global(.rotating) {
-			animation: rotate var(--duration-l) linear infinite;
-		}
-	}
 	.canvas {
 		display: flex;
 		align-items: center;
@@ -109,8 +92,10 @@
 		color: var(--color-text-muted);
 	}
 	.canvas img {
-		width: 100%;
-		height: 100%;
+		width: auto;
+		max-width: 100%;
+		height: auto;
+		max-height: 100vh;
 		object-fit: contain;
 		display: block;
 	}
@@ -123,10 +108,6 @@
 	}
 	.empty {
 		font: var(--font-size-s) var(--font-mono);
-	}
-	.count {
-		margin-left: var(--space-m);
-		color: var(--color-main);
 	}
 	.parts-grid {
 		display: grid;
@@ -169,14 +150,5 @@
 		width: 100%;
 		padding: var(--space-l);
 		box-sizing: border-box;
-	}
-
-	@keyframes rotate {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
 	}
 </style>

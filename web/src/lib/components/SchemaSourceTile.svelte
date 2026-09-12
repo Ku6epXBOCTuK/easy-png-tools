@@ -2,6 +2,7 @@
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import type { InputMode } from "$lib/registry";
+	import PreviewTile from "./layout/PreviewTile.svelte";
 	import SchemaTextSource from "./SchemaTextSource.svelte";
 
 	interface Props {
@@ -24,61 +25,26 @@
 	const sourceUrl = $derived(source ? toDataUrl(source) : null);
 </script>
 
-<figure class="tile">
-	<figcaption><span>SOURCE</span></figcaption>
-	<div class="canvas" class:checker={mode === "image"}>
-		{#if mode === "text"}
-			<div class="text-source-wrap">
-				<SchemaTextSource
-					value={textSource}
-					disabled={running}
-					oninput={ontextinput ?? (() => {})}
-					onrender={onrendertext ?? (() => {})}
-				/>
-			</div>
-		{:else if mode === "image" && sourceUrl}
-			<img src={sourceUrl} alt="source" />
-		{:else if mode === "image"}
-			<span class="empty">choose an image</span>
-		{:else}
-			<span class="empty">no source — configure the parameters</span>
-		{/if}
-	</div>
-</figure>
+<PreviewTile label="SOURCE" viewMode={mode}>
+	{#if mode === "text"}
+		<div class="text-source-wrap">
+			<SchemaTextSource
+				value={textSource}
+				disabled={running}
+				oninput={ontextinput ?? (() => {})}
+				onrender={onrendertext ?? (() => {})}
+			/>
+		</div>
+	{:else if mode === "image" && sourceUrl}
+		<img src={sourceUrl} alt="source" />
+	{:else if mode === "image"}
+		<span class="empty">choose an image</span>
+	{:else}
+		<span class="empty">no source — configure the parameters</span>
+	{/if}
+</PreviewTile>
 
 <style>
-	.tile figcaption {
-		display: flex;
-		align-items: center;
-		gap: var(--space-m);
-		margin-bottom: var(--space-m);
-		font: var(--font-size-s) var(--font-mono);
-		color: var(--color-text-muted);
-	}
-	.canvas {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-height: clamp(var(--space-brand), 30vh, 60vh);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-s);
-		overflow: hidden;
-		background: var(--color-background-muted);
-		color: var(--color-text-muted);
-	}
-	.canvas img {
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-		display: block;
-	}
-	.canvas.checker {
-		background: repeating-conic-gradient(
-				var(--color-checker-main) 0 25%,
-				var(--color-checker-alt) 0 50%
-			)
-			50% / 28px 28px;
-	}
 	.empty {
 		font: var(--font-size-s) var(--font-mono);
 	}
