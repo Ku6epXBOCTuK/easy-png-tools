@@ -4,13 +4,14 @@
 	import SchemaResultTile from "$lib/components/SchemaResultTile.svelte";
 	import SchemaSourceTile from "$lib/components/SchemaSourceTile.svelte";
 	import type { PixelImage } from "$lib/core/types";
-	import type { InputMode, ResultKind } from "$lib/registry";
+	import type { FileResult, InputMode, ResultKind } from "$lib/registry";
 
 	interface Props {
 		inputMode: InputMode;
 		resultKind?: ResultKind;
 		source: PixelImage | null;
 		result: PixelImage | null;
+		fileResult?: FileResult | null;
 		textSource?: string;
 		textResult?: string | null;
 		running?: boolean;
@@ -28,6 +29,7 @@
 		resultKind = "image",
 		source,
 		result,
+		fileResult = null,
 		textSource = "",
 		textResult = null,
 		running = false,
@@ -56,9 +58,21 @@
 			? result
 				? `${result.width} × ${result.height} px`
 				: "—"
-			: textResult
-				? "text"
-				: "—",
+			: resultKind === "files"
+				? fileResult
+					? `${fileResult.files.length} parts`
+					: "—"
+				: textResult
+					? "text"
+					: "—",
+	);
+	const formatValue = $derived(resultKind === "files" ? "ZIP (PNG)" : "PNG");
+	const hasResult = $derived(
+		resultKind === "image"
+			? Boolean(result)
+			: resultKind === "files"
+				? Boolean(fileResult)
+				: Boolean(textResult),
 	);
 </script>
 
@@ -68,7 +82,7 @@
 	>
 	<SchemaActions
 		{inputMode}
-		canDownload={resultKind === "image" && Boolean(result)}
+		canDownload={hasResult}
 		{running}
 		{onupload}
 		ongenerate={ongenerate ?? (() => {})}
@@ -92,8 +106,8 @@
 	<SchemaResultTile
 		{resultKind}
 		{result}
+		{fileResult}
 		{textResult}
-		wide={resultKind !== "image"}
 		{running}
 		oncopy={oncopytext}
 		{ondownloadtxt}
@@ -105,7 +119,7 @@
 		items={[
 			{ caption: "SOURCE", value: sourceValue },
 			{ caption: "RESULT", value: resultValue },
-			{ caption: "FORMAT", value: "PNG" },
+			{ caption: "FORMAT", value: formatValue },
 		]}
 	/>
 </div>

@@ -7,7 +7,8 @@
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
 	import { t } from "$lib/i18n/t";
-	import type { ToolEntry } from "$lib/registry";
+	import type { FileResult, ToolEntry } from "$lib/registry";
+	import { downloadZip } from "$lib/zip";
 	import {
 		defaultSchemaParams,
 		sanitizeSchemaParams,
@@ -29,6 +30,7 @@
 	let values = $state<Record<string, unknown>>({});
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
+	let fileResult = $state<FileResult | null>(null);
 	let textSource = $state("");
 	let textResult = $state<string | null>(null);
 	let running = $state(false);
@@ -50,6 +52,7 @@
 	function reset() {
 		values = schema ? defaultSchemaParams(schema) : {};
 		result = null;
+		fileResult = null;
 		textResult = null;
 		error = "";
 	}
@@ -76,9 +79,15 @@
 			if (resultKind === "image") {
 				result = out as PixelImage;
 				textResult = null;
+				fileResult = null;
+			} else if (resultKind === "files") {
+				fileResult = out as FileResult;
+				result = null;
+				textResult = null;
 			} else {
 				textResult = out as string;
 				result = null;
+				fileResult = null;
 			}
 		} catch (e) {
 			error = errorText(e);
@@ -88,7 +97,13 @@
 	}
 
 	async function download() {
-		if (!result || !schema) return;
+		if (!schema) return;
+		if (resultKind === "files") {
+			if (!fileResult) return;
+			await downloadZip(fileResult.files, `${tool.id}.zip`);
+			return;
+		}
+		if (!result) return;
 		const out = tool.output;
 		const quality = out?.qualityParamId
 			? Number(values[out.qualityParamId]) / 100
@@ -164,6 +179,7 @@
 				<SchemaPreview
 					{source}
 					{result}
+					{fileResult}
 					{textSource}
 					{textResult}
 					{inputMode}

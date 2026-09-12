@@ -6,7 +6,7 @@ import { defaultSchemaParams, sanitizeSchemaParams } from "../registry-schema";
 import type { ToolResult } from "./types";
 
 function asImage(result: ToolResult): PixelImage {
-	if (typeof result === "string") {
+	if (typeof result === "string" || "files" in result) {
 		throw new Error("expected an image result");
 	}
 	return result;
