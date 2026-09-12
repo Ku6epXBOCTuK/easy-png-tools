@@ -91,7 +91,8 @@
 Общий план: `docs/plan-platform.md`; WASM-ядро и CLI уже в `docs/roadmap.md`
 (фазы 3–8) — здесь только новые треки.
 
-- [ ] PWA: manifest + service worker, оффлайн-режим, установка (после C19 и S1)
+- [ ] PWA: manifest + service worker, оффлайн-режим, установка (после C17 и S1;
+      C19 отложен — не блокер)
 - [ ] API: спайк серверного ядра (нативный Rust vs edge-wasm), ключи, free tier
       (после wasm-фаз 5–7)
 
