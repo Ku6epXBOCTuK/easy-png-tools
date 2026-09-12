@@ -3,7 +3,7 @@ import { TOOLS } from ".";
 import { PREVIEW_GROUPS } from "../catalog";
 import type { PixelImage } from "../core/types";
 import { defaultSchemaParams, sanitizeSchemaParams } from "../registry-schema";
-import type { ToolResult } from "./types";
+import type { FileResult, ToolResult } from "./types";
 
 function asImage(result: ToolResult): PixelImage {
 	if (typeof result === "string" || "files" in result) {
@@ -516,6 +516,90 @@ describe("registry-new (переведённые инструменты)", () =>
 		});
 	});
 });
+
+describe("split-into-parts-png", () => {
+	it("объявлен с result=files и дефолтом 2x2", () => {
+		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		expect(tool).toBeDefined();
+		expect(tool.result).toBe("files");
+		const defaults = sanitizeSchemaParams(tool.schema, {});
+		expect(defaults.columns).toBe(2);
+		expect(defaults.rows).toBe(2);
+	});
+
+	it("на ровном размере даёт cols*rows частей одинакового размера", async () => {
+		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		const files = asFiles(
+			await tool.run({
+				source: solid(100, 100),
+				params: sanitizeSchemaParams(tool.schema, {
+					columns: 2,
+					rows: 2,
+				}),
+			}),
+		).files;
+		expect(files).toHaveLength(4);
+		for (const file of files) {
+			expect(file.image.width).toBe(50);
+			expect(file.image.height).toBe(50);
+		}
+		expect(files.map((f) => f.name)).toEqual([
+			"part-1-1.png",
+			"part-1-2.png",
+			"part-2-1.png",
+			"part-2-2.png",
+		]);
+	});
+
+	it("на неделимом размере части строго равные (канвас дополняется)", async () => {
+		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		const files = asFiles(
+			await tool.run({
+				source: solid(101, 77),
+				params: sanitizeSchemaParams(tool.schema, {
+					columns: 3,
+					rows: 2,
+				}),
+			}),
+		).files;
+		expect(files).toHaveLength(6);
+		for (const file of files) {
+			expect(file.image.width).toBe(34);
+			expect(file.image.height).toBe(39);
+		}
+	});
+
+	it("работает максимум 6x6 = 36 частей", async () => {
+		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		const files = asFiles(
+			await tool.run({
+				source: solid(120, 120),
+				params: sanitizeSchemaParams(tool.schema, {
+					columns: 6,
+					rows: 6,
+				}),
+			}),
+		).files;
+		expect(files).toHaveLength(36);
+	});
+
+	it("выбрасывает errors.tooManyParts при переполнении", () => {
+		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		expect(() =>
+			tool.run({
+				source: solid(120, 120),
+				params: { columns: 1000, rows: 1000 },
+			}),
+		).toThrow("errors.tooManyParts");
+	});
+});
+
+function asFiles(result: ToolResult): FileResult {
+	if (typeof result === "string" || !("files" in result)) {
+		throw new Error("expected a files result");
+	}
+	return result;
+}
 
 function solid(width: number, height: number) {
 	const data = new Uint8ClampedArray(width * height * 4).fill(255);

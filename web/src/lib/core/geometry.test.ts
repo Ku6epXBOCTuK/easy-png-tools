@@ -6,9 +6,11 @@ import {
 	flip,
 	resize,
 	rotate90,
+	splitToParts,
 	tile,
 } from "./geometry";
-import { makeImage } from "./test-helpers";
+import { expectImageEqual, makeImage } from "./test-helpers";
+import type { PixelImage } from "./types";
 
 const square = () =>
 	makeImage(2, 2, [
@@ -208,5 +210,115 @@ describe("resize", () => {
 		const img = twoByTwo();
 		expect(() => resize(img, 0, 10)).toThrow(/errors\.sizeInt/);
 		expect(() => resize(img, 10.5, 10)).toThrow(/errors\.sizeInt/);
+	});
+});
+
+describe("splitToParts", () => {
+	function grid(w: number, h: number): PixelImage {
+		const pixels: number[][] = [];
+		for (let y = 0; y < h; y++) {
+			for (let x = 0; x < w; x++) {
+				const v = y * w + x + 1;
+				pixels.push([v, v, v, 255]);
+			}
+		}
+		return makeImage(w, h, pixels);
+	}
+
+	it("ровное деление 4x4 на 2x2 даёт четыре части 2x2 в row-major порядке", () => {
+		const parts = splitToParts(grid(4, 4), 2, 2);
+		expect(parts).toHaveLength(4);
+		for (const part of parts) {
+			expect(part.width).toBe(2);
+			expect(part.height).toBe(2);
+		}
+		expectImageEqual(parts[0], [
+			[1, 1, 1, 255],
+			[2, 2, 2, 255],
+			[5, 5, 5, 255],
+			[6, 6, 6, 255],
+		]);
+		expectImageEqual(parts[1], [
+			[3, 3, 3, 255],
+			[4, 4, 4, 255],
+			[7, 7, 7, 255],
+			[8, 8, 8, 255],
+		]);
+		expectImageEqual(parts[2], [
+			[9, 9, 9, 255],
+			[10, 10, 10, 255],
+			[13, 13, 13, 255],
+			[14, 14, 14, 255],
+		]);
+		expectImageEqual(parts[3], [
+			[11, 11, 11, 255],
+			[12, 12, 12, 255],
+			[15, 15, 15, 255],
+			[16, 16, 16, 255],
+		]);
+	});
+
+	it("неделимый размер: канвас дополняется прозрачным, части одинаковые", () => {
+		const parts = splitToParts(grid(5, 3), 2, 2);
+		expect(parts).toHaveLength(4);
+		for (const part of parts) {
+			expect(part.width).toBe(3);
+			expect(part.height).toBe(2);
+		}
+		expectImageEqual(parts[0], [
+			[1, 1, 1, 255],
+			[2, 2, 2, 255],
+			[3, 3, 3, 255],
+			[6, 6, 6, 255],
+			[7, 7, 7, 255],
+			[8, 8, 8, 255],
+		]);
+		expectImageEqual(parts[1], [
+			[4, 4, 4, 255],
+			[5, 5, 5, 255],
+			[0, 0, 0, 0],
+			[9, 9, 9, 255],
+			[10, 10, 10, 255],
+			[0, 0, 0, 0],
+		]);
+		expectImageEqual(parts[2], [
+			[11, 11, 11, 255],
+			[12, 12, 12, 255],
+			[13, 13, 13, 255],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+		]);
+		expectImageEqual(parts[3], [
+			[14, 14, 14, 255],
+			[15, 15, 15, 255],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+		]);
+	});
+
+	it("одна колонка или строка — полосы без паддинга", () => {
+		const parts = splitToParts(grid(3, 4), 1, 2);
+		expect(parts).toHaveLength(2);
+		expect(parts[0].width).toBe(3);
+		expect(parts[0].height).toBe(2);
+		expect(parts[1].height).toBe(2);
+	});
+
+	it("части в row-major порядке: последний кусок содержит правый нижний пиксель", () => {
+		const img = grid(5, 3);
+		const parts = splitToParts(img, 2, 2);
+		expect(parts[parts.length - 1].data[0]).toBe(14);
+		expect(parts[parts.length - 1].data[4]).toBe(15);
+		expect(parts[parts.length - 1].data[8]).toBe(0);
+	});
+
+	it("дробные и нулевые значения колонок/строк нормализуются", () => {
+		const parts = splitToParts(grid(6, 6), 2.9, 0);
+		expect(parts).toHaveLength(2);
+		expect(parts[0].width).toBe(3);
+		expect(parts[0].height).toBe(6);
 	});
 });
