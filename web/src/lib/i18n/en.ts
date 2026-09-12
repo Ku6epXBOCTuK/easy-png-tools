@@ -150,6 +150,7 @@ export const en: Dict = {
 		resizeSize: "Width and/or height must be positive",
 		cropSize: "Crop width and height must be positive",
 		sizePositive: "Dimensions must be positive and finite",
+		tooManyParts: "Too many parts ({count}). Maximum is 1000.",
 	},
 	tools: {
 		"png-file-size": {
