@@ -56,6 +56,36 @@ export function tile(
 	return out;
 }
 
+/**
+ * Разрезает изображение на сетку columns × rows строго равных частей.
+ * Холст дополняется прозрачным до кратного размера (`ceil(width / cols)`),
+ * поэтому весь исходный контент сохраняется. Порядок — row-major: сначала все
+ * столбцы первой строки (part 1-1, 1-2, …), затем второй и т.д.
+ */
+export function splitToParts(
+	img: PixelImage,
+	columns: number,
+	rows: number,
+): PixelImage[] {
+	const cols = Math.max(1, Math.trunc(columns));
+	const rowsCount = Math.max(1, Math.trunc(rows));
+	const pieceW = Math.ceil(img.width / cols);
+	const pieceH = Math.ceil(img.height / rowsCount);
+	const gridW = pieceW * cols;
+	const gridH = pieceH * rowsCount;
+	const padded =
+		gridW === img.width && gridH === img.height
+			? img
+			: expandCanvas(img, 0, 0, gridW - img.width, gridH - img.height);
+	const parts: PixelImage[] = [];
+	for (let row = 0; row < rowsCount; row++) {
+		for (let col = 0; col < cols; col++) {
+			parts.push(crop(padded, col * pieceW, row * pieceH, pieceW, pieceH));
+		}
+	}
+	return parts;
+}
+
 export function centerByAlpha(img: PixelImage): PixelImage {
 	let minX = img.width;
 	let minY = img.height;
