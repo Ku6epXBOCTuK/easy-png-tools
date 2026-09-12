@@ -19,11 +19,15 @@ export const INPUT_MODES = {
 } as const;
 export type InputMode = (typeof INPUT_MODES)[keyof typeof INPUT_MODES];
 
-/** Тип результата: картинка (по умолчанию), большой текст или короткий вердикт. */
+/**
+ * Тип результата: картинка (по умолчанию), большой текст, короткий вердикт
+ * или набор файлов (1 → many, скачивается zip-архивом).
+ */
 export const RESULT_KINDS = {
 	image: "image",
 	text: "text",
 	verdict: "verdict",
+	files: "files",
 } as const;
 export type ResultKind = (typeof RESULT_KINDS)[keyof typeof RESULT_KINDS];
 
@@ -34,7 +38,18 @@ export interface ToolContext<P> {
 	text?: string;
 }
 
-export type ToolResult = PixelImage | string;
+/** Один файл мультифайлового результата (1 → many). */
+export interface ToolImageFile {
+	name: string;
+	image: PixelImage;
+}
+
+/** Результат-набор файлов; скачивается zip-архивом. */
+export interface FileResult {
+	files: ToolImageFile[];
+}
+
+export type ToolResult = PixelImage | string | FileResult;
 
 /**
  * Инструмент нового registry: полностью типизирован на `Params`, схема —

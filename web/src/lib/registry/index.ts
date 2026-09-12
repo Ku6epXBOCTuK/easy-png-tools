@@ -23,6 +23,8 @@ export type {
 	ToolContext,
 	ToolEntry,
 	ToolResult,
+	ToolImageFile,
+	FileResult,
 } from "./types";
 
 export const TOOLS: ToolEntry[] = [
