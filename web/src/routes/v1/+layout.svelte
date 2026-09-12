@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
-	import favicon from "$lib/assets/favicon.svg";
 	import { LOCALES, type Locale } from "$lib/v1/i18n/dict";
 	import { getLocale, initLocale, setLocale } from "$lib/v1/i18n/locale.svelte";
 	import { t } from "$lib/v1/i18n/t";
@@ -19,7 +18,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="/favicon.svg" />
 </svelte:head>
 
 <div class="app">

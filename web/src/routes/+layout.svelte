@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import favicon from "$lib/assets/favicon.svg";
 	import Footer from "$lib/components/layout/Footer.svelte";
 	import TopBar from "$lib/components/layout/TopBar.svelte";
 	import { initLocale } from "$lib/i18n/locale.svelte";
@@ -45,7 +44,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="/favicon.svg" />
 </svelte:head>
 
 <main class="preview-root" data-theme={theme}>

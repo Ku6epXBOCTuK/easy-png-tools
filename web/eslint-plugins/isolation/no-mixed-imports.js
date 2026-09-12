@@ -5,7 +5,7 @@
  * `$lib/...` alias and relative `./` / `../` paths), classifies the source
  * file and each import target by their actual location, and reports whenever an
  * "old" file imports a "new" one or vice versa. Files that match neither side
- * are "shared" (core/, i18n/, theme, assets, tests, ...) and can import freely.
+ * are "shared" (core/, theme, assets, tests, ...) and can import freely.
  *
  * Options (object, all optional):
  *   - root:   path from lint cwd to the source dir (default "src");
@@ -17,21 +17,19 @@
 import fs from "node:fs";
 import path from "node:path";
 
-// NEW declared as an allowlist: `lib/**` descends into v1/ and the shared dirs
-// (core/, i18n/, assets/, theme), so matching by prefix would misclassify them.
-// Negations (`!`) carve old paths out of `routes/**`.
+// NEW declared as an allowlist: `lib/**` descends into v1/ and the shared
+// packages (core/, theme), so negations carve them back out; `routes/**`
+// needs `!routes/v1/**` for the old branch. Last-match-wins
+// (see matchesGlobList).
 const DEFAULT_OLD = ["routes/v1/**", "lib/v1/**"];
 
 const DEFAULT_NEW = [
 	"routes/**",
 	"!routes/v1/**",
-	"lib/components/**",
-	"lib/registry/**",
-	"lib/catalog.ts",
-	"lib/categories.ts",
-	"lib/tool-icons.ts",
-	"lib/registry-schema.ts",
-	"lib/registry-schema.test.ts",
+	"lib/**",
+	"!lib/v1/**",
+	"!lib/core/**",
+	"!lib/theme.svelte.ts",
 ];
 
 /** Escape everything except glob metacharacters, then handle **, *, ?. */

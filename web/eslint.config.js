@@ -82,6 +82,7 @@ export default tseslint.config(
 						"eslint-plugins/__tests__/helpers.ts",
 						"eslint-plugins/__tests__/no-mixed-imports.test.ts",
 						"eslint-plugins/__fixtures__/src/lib/v1/old.ts",
+						"eslint-plugins/__fixtures__/src/lib/v1/i18n/t.ts",
 						"eslint-plugins/__fixtures__/src/lib/core/errors.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/t.ts",
 						"eslint-plugins/__fixtures__/src/lib/theme.svelte.ts",
@@ -197,7 +198,7 @@ export default tseslint.config(
 	// Полная взаимная изоляция веток (см. plan-composite-params, Фаза 5).
 	// Кастомный плагин isolation/no-mixed-imports резолвит импорты по реальному
 	// пути (и $lib, и относительные) и ругается на old→new / new→old.
-	// Общее (core/, i18n/, theme) разрешено обоим.
+	// Общее (core/, theme) разрешено обоим.
 	{
 		files: ["**/*.{ts,svelte}"],
 		plugins: {

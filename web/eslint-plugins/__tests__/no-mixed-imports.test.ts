@@ -7,8 +7,8 @@
 //
 // Side map (mirrors the defaults in no-mixed-imports.js):
 //   old   -> routes/v1/**, lib/v1/**
-//   new   -> routes/** (minus v1), lib/components/**, lib/registry/** + a few
-//   shared-> everything else: core/, i18n/, theme, ...
+//   new   -> routes/** (minus v1), lib/** (minus lib/v1/** and shared)
+//   shared-> everything else: core/, theme
 import { describe, expect, it } from "vitest";
 import noMixedImports from "../isolation/no-mixed-imports.js";
 import { asRuleModule, verifyInFixtures, type FlatConfig } from "./helpers.js";
@@ -80,15 +80,27 @@ describe("isolation/no-mixed-imports", () => {
 		expectClean("lib/v1/old.ts", 'import { e } from "../core/errors";');
 	});
 
-	it("allows old -> shared (i18n and theme via $lib)", () => {
-		expectClean("routes/v1/+layout.svelte", 'import { t } from "$lib/i18n/t";');
+	it("flags old -> root i18n ($lib/i18n is the new branch now)", () => {
+		expectViolation(
+			"routes/v1/+layout.svelte",
+			'import { t } from "$lib/i18n/t";',
+			"old",
+			"new",
+		);
+	});
+
+	it("allows old -> own i18n copy and theme via $lib", () => {
+		expectClean(
+			"routes/v1/+layout.svelte",
+			'import { t } from "$lib/v1/i18n/t";',
+		);
 		expectClean(
 			"routes/v1/+layout.svelte",
 			'import { g } from "$lib/theme.svelte";',
 		);
 	});
 
-	it("allows new -> shared and new -> new", () => {
+	it("allows new -> new (root i18n and components)", () => {
 		expectClean("routes/+page.svelte", 'import { t } from "$lib/i18n/t";');
 		expectClean(
 			"routes/+page.svelte",
@@ -96,11 +108,26 @@ describe("isolation/no-mixed-imports", () => {
 		);
 	});
 
-	it("leaves shared files unrestricted in both directions", () => {
-		expectClean("lib/i18n/t.ts", 'import { o } from "$lib/v1/old";');
+	it("flags new i18n importing old and leaves core shared", () => {
+		expectViolation(
+			"lib/i18n/t.ts",
+			'import { o } from "$lib/v1/old";',
+			"new",
+			"old",
+		);
 		expectClean(
 			"lib/core/errors.ts",
 			'import { c } from "$lib/components/CheckerCanvas.svelte";',
+		);
+	});
+
+	it("keeps the old i18n copy on the old side", () => {
+		expectClean("lib/v1/i18n/t.ts", 'import { o } from "$lib/v1/old";');
+		expectViolation(
+			"lib/v1/i18n/t.ts",
+			'import { c } from "$lib/components/CheckerCanvas.svelte";',
+			"old",
+			"new",
 		);
 	});
 });
