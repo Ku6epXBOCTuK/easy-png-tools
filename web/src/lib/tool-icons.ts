@@ -91,6 +91,7 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	"add-border-png": Frame,
 	"fit-on-background-png": ImageIcon,
 	"tile-png": Grid3x3,
+	"split-into-parts-png": Grid3x3,
 	"center-by-alpha-png": Crosshair,
 	"create-empty-png": FilePlus2,
 	"single-color-png": PaintBucket,

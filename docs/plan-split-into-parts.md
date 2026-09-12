@@ -39,8 +39,10 @@ ZIP-архивом.
 8. **UI:** `SchemaToolView.svelte` (`fileResult`, Download → zip),
    `SchemaPreview.svelte` (canDownload для files), `SchemaResultTile.svelte`
    (сетка-превью частей, мета «N parts / ZIP»).
-9. **i18n:** записи `split-into-parts-png` в `ru.ts` и `en.ts` + поисковые
-   строки в `matching.ts` при необходимости.
+9. **i18n:** переводы в `ru.ts`/`en.ts` **не добавляем** — словари `tools`
+   привязаны к v1-реестру (тест «нет лишних ключей»), а preview берёт заголовки
+   из registry (EN). Перевод придёт вместе с беклог-задачей «i18n в preview».
+   Поиск по id/заголовку работает из registry.
 10. **Тесты:** юнит `splitToParts`, registry (result: "files"), i18n coverage.
 11. **Docs:** `docs/backlog.md` (задача «процесс 1 → many и many → 1», отметить
     пункт 11 «Мультифайловый вывод»), `docs/tools-map.md` (перенос из идей).
