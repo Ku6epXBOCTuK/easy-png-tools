@@ -30,10 +30,10 @@ ZIP-архивом.
    через `crop`.
 4. **`web/src/lib/zip.ts` (новый):** `downloadZip(files, zipName)` через
    `zipSync`.
-5. **`core/errors.ts`:** ключ `errors.tooManyParts` (лимит cols·rows ≤ 1000).
+5. **`core/errors.ts`:** ключ `errors.tooManyParts` (страховочный лимит
+   cols·rows ≤ 1000; при максимуме 6×6 недостижим).
 6. **`registry/geometry.ts`:** схема (`columns`, `rows`, дефолт 2×2, min 1,
-   max 50)
-   - entry `split-into-parts-png` в `geometryEntries`.
+   max 6 — максимум 36 частей) + entry `split-into-parts-png` в `geometryEntries`.
 7. **Executor:** сериализация/десериализация `FileResult` в `executor.worker.ts`
    и тип ветки в `executor.ts`.
 8. **UI:** `SchemaToolView.svelte` (`fileResult`, Download → zip),

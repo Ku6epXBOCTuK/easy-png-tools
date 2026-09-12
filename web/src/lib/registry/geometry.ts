@@ -16,6 +16,7 @@ import {
 	padToRatio,
 	resize,
 	rotate90,
+	splitToParts,
 	symmetricCopy,
 	tile,
 	trimToContent,
@@ -23,7 +24,12 @@ import {
 	type FlipAxis,
 } from "../core/geometry";
 import { field, toolSchema, type Dimension } from "../registry-schema";
-import { imgTool, type ToolEntry } from "./types";
+import {
+	imgTool,
+	requireSource,
+	type ToolEntry,
+	type ToolImageFile,
+} from "./types";
 
 interface AddBorderParams {
 	thickness: number;
@@ -356,6 +362,51 @@ const tileTool: ToolEntry<TileParams> = {
 	run: imgTool((img, p) => tile(img, p.columns, p.rows)),
 };
 
+const MAX_SPLIT_PARTS = 1000;
+
+interface SplitPartsParams {
+	columns: number;
+	rows: number;
+}
+
+export const splitPartsSchema = toolSchema<SplitPartsParams>({
+	columns: field.number({ min: 1, max: 6, step: 1, default: 2 }),
+	rows: field.number({ min: 1, max: 6, step: 1, default: 2 }),
+});
+
+const splitPartsTool: ToolEntry<SplitPartsParams> = {
+	id: "split-into-parts-png",
+	title: "Split PNG into parts",
+	description:
+		"Divides the image into a grid of equal-sized parts. The canvas is padded with transparency to keep every part the same size.",
+	category: "geometry",
+	schema: splitPartsSchema,
+	input: "image",
+	result: "files",
+	run: (ctx) => {
+		const img = requireSource(ctx);
+		const params = ctx.params as SplitPartsParams;
+		const cols = Math.max(1, Math.trunc(params.columns));
+		const rowsCount = Math.max(1, Math.trunc(params.rows));
+		const count = cols * rowsCount;
+		if (count > MAX_SPLIT_PARTS) {
+			throw new ToolError("errors.tooManyParts", { count });
+		}
+		const parts = splitToParts(img, cols, rowsCount);
+		const rowLen = String(rowsCount).length;
+		const colLen = String(cols).length;
+		const files: ToolImageFile[] = parts.map((image, index) => {
+			const col = (index % cols) + 1;
+			const row = Math.floor(index / cols) + 1;
+			return {
+				name: `part-${String(row).padStart(rowLen, "0")}-${String(col).padStart(colLen, "0")}.png`,
+				image,
+			};
+		});
+		return { files };
+	},
+};
+
 interface EmptyParams {}
 
 export const centerByAlphaSchema = toolSchema<EmptyParams>({});
@@ -605,4 +656,5 @@ export const geometryEntries = [
 	swapOrientationTool,
 	symmetricCopyTool,
 	shiftTool,
+	splitPartsTool,
 ];
