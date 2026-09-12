@@ -4,6 +4,7 @@
 		FieldSpecKind,
 		ToolSchema,
 	} from "$lib/registry-schema";
+	import { fieldLabel as labelOf } from "$lib/i18n/schema-tool-strings";
 	import { RotateCcw } from "@lucide/svelte";
 	import type { Component } from "svelte";
 	import DimensionField from "./fields/DimensionField.svelte";
