@@ -53,4 +53,12 @@ export type Dict = {
 	ui: Record<string, string>;
 	errors: Record<string, string>;
 	tools: Record<string, ToolStrings>;
+	/** Действия панели результата/генерации (Generate, Open image…). */
+	actions?: Record<string, string>;
+	/** Поля ввода текста нового UI (placeholder, Try sample…). */
+	textSource?: Record<string, string>;
+	/** Подписи полей по ключу (решение C: label-ключ на поле). */
+	fields?: Record<string, string>;
+	/** Заголовки групп полей по ключу (решение A). */
+	groups?: Record<string, string>;
 };

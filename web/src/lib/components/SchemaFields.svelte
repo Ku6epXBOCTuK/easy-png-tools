@@ -4,7 +4,7 @@
 		FieldSpecKind,
 		ToolSchema,
 	} from "$lib/registry-schema";
-	import { fieldLabel as labelOf } from "$lib/i18n/schema-tool-strings";
+	import { fieldLabel } from "$lib/i18n/schema-tool-strings";
 	import { RotateCcw } from "@lucide/svelte";
 	import type { Component } from "svelte";
 	import DimensionField from "./fields/DimensionField.svelte";
@@ -53,13 +53,6 @@
 	}
 	let { schema, values, onchange, onreset }: Props = $props();
 
-	function labelOf(id: string): string {
-		return id
-			.replace(/([a-z])([A-Z])/g, "$1 $2")
-			.replace(/[_-]+/g, " ")
-			.replace(/\b\w/g, (c) => c.toUpperCase());
-	}
-
 	interface LayoutGroup {
 		key: string;
 		title?: string;
@@ -107,7 +100,7 @@
 		{#each group.fields as id (id)}
 			{@const Control = FIELDS[schema.fields[id].spec.kind]}
 			<Control
-				label={labelOf(id)}
+				label={fieldLabel(schema.fields[id], id)}
 				value={values[id]}
 				spec={schema.fields[id].spec}
 				onchange={(v) => onchange(id, v)}
