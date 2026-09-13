@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/t";
 	import type {
 		ColorList,
 		ColorListSpec,
@@ -59,14 +60,16 @@
 					class="remove"
 					onclick={() => removeColor(i)}
 					disabled={current.length <= 1}
-					aria-label="Remove color"
+					aria-label={t("ui.removeColor")}
 				>
 					×
 				</button>
 			</div>
 		{/each}
 	</div>
-	<button type="button" class="add" onclick={addColor}>+ Add color</button>
+	<button type="button" class="add" onclick={addColor}
+		>{t("ui.addColor")}</button
+	>
 </div>
 
 <style>

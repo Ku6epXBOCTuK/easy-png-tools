@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AngleControl from "./AngleControl.svelte";
+	import { t } from "$lib/i18n/t";
 	import type { FieldSpec, Gradient, GradientSpec } from "$lib/registry-schema";
 
 	interface Props {
@@ -32,7 +33,7 @@
 	<span class="gradient-label">{label}</span>
 	<div class="gradient-colors">
 		<label class="color-field">
-			<span>From</span>
+			<span>{t("ui.from")}</span>
 			<span class="swatch" style="background:{current.from}"></span>
 			<input
 				type="color"
@@ -41,7 +42,7 @@
 			/>
 		</label>
 		<label class="color-field">
-			<span>To</span>
+			<span>{t("ui.to")}</span>
 			<span class="swatch" style="background:{current.to}"></span>
 			<input
 				type="color"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/t";
 	import type { TextFont } from "$lib/core/domText";
 	import type {
 		FieldSpec,
@@ -35,10 +36,10 @@
 		onchange?.({ ...current, [key]: val });
 	}
 
-	const FONTS: { value: TextFont; label: string }[] = [
-		{ value: "sans", label: "Sans" },
-		{ value: "serif", label: "Serif" },
-		{ value: "mono", label: "Mono" },
+	const FONTS: { value: TextFont; labelKey: string }[] = [
+		{ value: "sans", labelKey: "ui.fontSans" },
+		{ value: "serif", labelKey: "ui.fontSerif" },
+		{ value: "mono", labelKey: "ui.fontMono" },
 	];
 </script>
 
@@ -46,7 +47,7 @@
 	<span class="fs-label">{label}</span>
 	<div class="fs-grid">
 		<label class="fs-cell">
-			<span class="fs-sub">Font</span>
+			<span class="fs-sub">{t("ui.font")}</span>
 			<select
 				class="fs-select"
 				value={current.font}
@@ -54,12 +55,12 @@
 					set("font", (e.target as HTMLSelectElement).value as TextFont)}
 			>
 				{#each FONTS as option (option.value)}
-					<option value={option.value}>{option.label}</option>
+					<option value={option.value}>{t(option.labelKey)}</option>
 				{/each}
 			</select>
 		</label>
 		<label class="fs-cell">
-			<span class="fs-sub">Size</span>
+			<span class="fs-sub">{t("ui.size")}</span>
 			<input
 				class="fs-input"
 				type="number"
@@ -71,7 +72,7 @@
 			/>
 		</label>
 		<label class="fs-cell">
-			<span class="fs-sub">Color</span>
+			<span class="fs-sub">{t("ui.color")}</span>
 			<span class="fs-color">
 				<span class="swatch" style="background:{current.color}"></span>
 				<input
@@ -83,7 +84,7 @@
 			</span>
 		</label>
 		<label class="fs-cell fs-bold">
-			<span class="fs-sub">Bold</span>
+			<span class="fs-sub">{t("ui.bold")}</span>
 			<input
 				type="checkbox"
 				checked={current.bold}

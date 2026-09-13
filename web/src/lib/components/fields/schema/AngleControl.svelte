@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/t";
+
 	interface Preset {
 		value: number;
 		label: string;
@@ -15,7 +17,7 @@
 	}
 
 	let {
-		label = "Angle",
+		label = t("ui.angle"),
 		value,
 		min = 0,
 		max = 360,

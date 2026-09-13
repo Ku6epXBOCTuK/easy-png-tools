@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/t";
 	import type {
 		Dimension,
 		DimensionSpec,
@@ -37,7 +38,7 @@
 	<span class="dimension-label">{label}</span>
 	<div class="dimension-field">
 		<label class="dimension-axis">
-			<span>Width</span>
+			<span>{t("ui.width")}</span>
 			<input
 				type="number"
 				min={sp.min}
@@ -48,7 +49,7 @@
 			/>
 		</label>
 		<label class="dimension-axis">
-			<span>Height</span>
+			<span>{t("ui.height")}</span>
 			<input
 				type="number"
 				min={sp.min}

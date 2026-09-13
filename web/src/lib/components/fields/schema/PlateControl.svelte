@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/t";
 	import type { FieldSpec, Plate, PlateSpec } from "$lib/registry-schema";
 
 	interface Props {
@@ -31,7 +32,7 @@
 	<span class="plate-label">{label}</span>
 	<div class="plate-row {current.enabled ? '' : 'off'}">
 		<label class="plate-enabled">
-			<span>Backing plate</span>
+			<span>{t("ui.backingPlate")}</span>
 			<input
 				type="checkbox"
 				checked={current.enabled}
@@ -49,7 +50,7 @@
 		</label>
 		<label class="plate-opacity">
 			<span>
-				Opacity
+				{t("ui.opacity")}
 				<output>{current.opacity}%</output>
 			</span>
 			<input

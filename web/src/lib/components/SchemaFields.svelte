@@ -4,7 +4,8 @@
 		FieldSpecKind,
 		ToolSchema,
 	} from "$lib/registry-schema";
-	import { fieldLabel } from "$lib/i18n/schema-tool-strings";
+	import { fieldLabel, groupLabel } from "$lib/i18n/schema-tool-strings";
+	import { t } from "$lib/i18n/t";
 	import { RotateCcw } from "@lucide/svelte";
 	import type { Component } from "svelte";
 	import DimensionField from "./fields/DimensionField.svelte";
@@ -89,7 +90,7 @@
 
 {#each layoutGroups as group (group.key)}
 	{#if group.title}
-		<span class="group-title">{group.title}</span>
+		<span class="group-title">{groupLabel(group.title)}</span>
 	{/if}
 	<div
 		class="group-fields"
@@ -111,9 +112,10 @@
 
 <div class="panel-foot">
 	<button class="reset-btn" onclick={onreset}>
-		<RotateCcw size={14} /> Reset
+		<RotateCcw size={14} />
+		{t("ui.reset")}
 	</button>
-	<span class="auto-note"><i></i> updates automatically</span>
+	<span class="auto-note"><i></i> {t("ui.autoUpdate")}</span>
 </div>
 
 <style>
