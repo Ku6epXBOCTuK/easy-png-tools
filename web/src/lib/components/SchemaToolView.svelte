@@ -179,7 +179,13 @@
 					<span class="label">{t("paramsCard.toolSettings")}</span>
 					<strong>{t("paramsCard.configureOutput")}</strong>
 				</div>
-				<SchemaFields {schema} {values} onchange={setValue} onreset={reset} />
+				<SchemaFields
+					{schema}
+					{values}
+					toolId={tool.id}
+					onchange={setValue}
+					onreset={reset}
+				/>
 			</section>
 
 			<section class="panel">

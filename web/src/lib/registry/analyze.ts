@@ -1,5 +1,5 @@
-import { imgTool, textGen, type ToolEntry } from "./types";
-import { field, toolSchema } from "../registry-schema";
+import { hasTransparency, isGrayscale, orientationOf } from "../core/analyze";
+import { encode } from "../core/io";
 import {
 	extractByColor,
 	isGrayscaleish,
@@ -7,10 +7,10 @@ import {
 	rarityPredicate,
 	renderPredicateMask,
 } from "../core/masks";
-import { hasTransparency, isGrayscale, orientationOf } from "../core/analyze";
-import { encode } from "../core/io";
 import { base64ToBytes, looksLikePng, stripDataUri } from "../core/textio";
 import { t } from "../i18n/t";
+import { field, toolSchema } from "../registry-schema";
+import { imgTool, textGen, type ToolEntry } from "./types";
 
 interface ExtractColorParams {
 	color: string;
@@ -18,8 +18,14 @@ interface ExtractColorParams {
 }
 
 export const extractColorSchema = toolSchema<ExtractColorParams>({
-	color: field.color({ default: "#00ff88" }),
-	tolerance: field.slider({ min: 0, max: 50, step: 1, default: 10 }),
+	color: field.color({ label: "fields.color", default: "#00ff88" }),
+	tolerance: field.slider({
+		label: "fields.colorTolerance",
+		min: 0,
+		max: 50,
+		step: 1,
+		default: 10,
+	}),
 });
 
 const extractColor: ToolEntry<ExtractColorParams> = {
@@ -41,14 +47,21 @@ interface MaskParams {
 
 const maskBaseFields = {
 	mode: field.select({
+		label: "fields.mode",
 		default: "binary",
 		options: [
 			{ value: "binary", label: "Black & white mask" },
 			{ value: "highlight", label: "Color highlight" },
 		],
 	}),
-	color: field.color({ default: "#ff00aa" }),
-	opacity: field.slider({ min: 0, max: 100, step: 5, default: 70 }),
+	color: field.color({ label: "fields.highlightColor", default: "#ff00aa" }),
+	opacity: field.slider({
+		label: "fields.opacity",
+		min: 0,
+		max: 100,
+		step: 5,
+		default: 70,
+	}),
 };
 
 function renderMask(
@@ -66,6 +79,7 @@ function renderMask(
 export const showTransparentSchema = toolSchema<MaskParams>({
 	...maskBaseFields,
 	mode: field.select({
+		label: "fields.mode",
 		default: "highlight",
 		options: [
 			{ value: "binary", label: "Black & white mask" },
@@ -91,7 +105,13 @@ interface GrayscalePixelsParams extends MaskParams {
 
 export const showGrayscalePixelsSchema = toolSchema<GrayscalePixelsParams>({
 	...maskBaseFields,
-	tolerance: field.slider({ min: 0, max: 64, step: 1, default: 0 }),
+	tolerance: field.slider({
+		label: "fields.channelTolerance",
+		min: 0,
+		max: 64,
+		step: 1,
+		default: 0,
+	}),
 });
 
 const showGrayscalePixels: ToolEntry<GrayscalePixelsParams> = {
@@ -113,7 +133,13 @@ interface ColorPixelsParams extends MaskParams {
 
 export const showColorPixelsSchema = toolSchema<ColorPixelsParams>({
 	...maskBaseFields,
-	tolerance: field.slider({ min: 0, max: 64, step: 1, default: 8 }),
+	tolerance: field.slider({
+		label: "fields.channelTolerance",
+		min: 0,
+		max: 64,
+		step: 1,
+		default: 8,
+	}),
 });
 
 const showColorPixels: ToolEntry<ColorPixelsParams> = {
@@ -135,7 +161,13 @@ interface LightPixelParams extends MaskParams {
 
 export const lightPixelMaskSchema = toolSchema<LightPixelParams>({
 	...maskBaseFields,
-	threshold: field.slider({ min: 0, max: 100, step: 1, default: 70 }),
+	threshold: field.slider({
+		label: "fields.lumaThreshold",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 70,
+	}),
 });
 
 const lightPixelMask: ToolEntry<LightPixelParams> = {
@@ -156,7 +188,13 @@ interface DarkPixelParams extends MaskParams {
 
 export const darkPixelMaskSchema = toolSchema<DarkPixelParams>({
 	...maskBaseFields,
-	threshold: field.slider({ min: 0, max: 100, step: 1, default: 30 }),
+	threshold: field.slider({
+		label: "fields.lumaThreshold",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 30,
+	}),
 });
 
 const darkPixelMask: ToolEntry<DarkPixelParams> = {
@@ -177,7 +215,13 @@ interface UniqueColorParams extends MaskParams {
 
 export const uniqueColorMaskSchema = toolSchema<UniqueColorParams>({
 	...maskBaseFields,
-	rarity: field.slider({ min: 1, max: 50, step: 1, default: 1 }),
+	rarity: field.slider({
+		label: "fields.rarity",
+		min: 1,
+		max: 50,
+		step: 1,
+		default: 1,
+	}),
 });
 
 const uniqueColorMask: ToolEntry<UniqueColorParams> = {

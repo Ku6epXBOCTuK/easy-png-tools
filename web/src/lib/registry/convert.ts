@@ -1,6 +1,6 @@
-import { imgTool, textGen, type ToolEntry } from "./types";
-import { field, toolSchema } from "../registry-schema";
 import { flattenOntoColor } from "../core/alpha";
+import { decodeBytes, decodeSvgText, toBase64, toDataUrl } from "../core/io";
+import { hexToPixels, pixelsToHex } from "../core/text";
 import {
 	base64ToBytes,
 	bytesToImage,
@@ -9,12 +9,18 @@ import {
 	rgbValuesToImage,
 	stripDataUri,
 } from "../core/textio";
-import { hexToPixels, pixelsToHex } from "../core/text";
 import { clonePixelImage } from "../core/types";
-import { decodeBytes, decodeSvgText, toBase64, toDataUrl } from "../core/io";
+import { field, toolSchema } from "../registry-schema";
+import { imgTool, textGen, type ToolEntry } from "./types";
 
 const widthProps = (defaultValue: number) =>
-	field.number({ min: 1, max: 10000, step: 1, default: defaultValue });
+	field.number({
+		label: "fields.width",
+		min: 1,
+		max: 10000,
+		step: 1,
+		default: defaultValue,
+	});
 
 interface ConvertToJpgParams {
 	background: string;
@@ -22,8 +28,14 @@ interface ConvertToJpgParams {
 }
 
 export const convertToJpgSchema = toolSchema<ConvertToJpgParams>({
-	background: field.color({ default: "#ffffff" }),
-	quality: field.slider({ min: 1, max: 100, step: 1, default: 90 }),
+	background: field.color({ label: "fields.background", default: "#ffffff" }),
+	quality: field.slider({
+		label: "fields.quality",
+		min: 1,
+		max: 100,
+		step: 1,
+		default: 90,
+	}),
 });
 
 const convertToJpg: ToolEntry<ConvertToJpgParams> = {
@@ -43,7 +55,13 @@ interface ConvertToWebpParams {
 }
 
 export const convertToWebpSchema = toolSchema<ConvertToWebpParams>({
-	quality: field.slider({ min: 1, max: 100, step: 1, default: 90 }),
+	quality: field.slider({
+		label: "fields.quality",
+		min: 1,
+		max: 100,
+		step: 1,
+		default: 90,
+	}),
 });
 
 const convertToWebp: ToolEntry<ConvertToWebpParams> = {

@@ -1,21 +1,27 @@
-import { imgTool, type ToolEntry } from "./types";
-import { field, toolSchema } from "../registry-schema";
+import { gaussianBlur, sharpen as sharpenImage } from "../core/convolution";
+import { vignette } from "../core/effects";
+import { jpegRoundtrip } from "../core/io";
 import {
 	addNoise,
 	pixelate,
 	shuffleBlocks,
 	silhouette,
 } from "../core/pixel-fx";
-import { gaussianBlur, sharpen as sharpenImage } from "../core/convolution";
-import { vignette } from "../core/effects";
-import { jpegRoundtrip } from "../core/io";
+import { field, toolSchema } from "../registry-schema";
+import { imgTool, type ToolEntry } from "./types";
 
 interface BlurParams {
 	radius: number;
 }
 
 export const blurSchema = toolSchema<BlurParams>({
-	radius: field.slider({ min: 1, max: 32, step: 1, default: 4 }),
+	radius: field.slider({
+		label: "fields.radius",
+		min: 1,
+		max: 32,
+		step: 1,
+		default: 4,
+	}),
 });
 
 const blurTool: ToolEntry<BlurParams> = {
@@ -34,7 +40,13 @@ interface SharpenParams {
 }
 
 export const sharpenSchema = toolSchema<SharpenParams>({
-	strength: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+	strength: field.slider({
+		label: "fields.strength",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 50,
+	}),
 });
 
 const sharpenTool: ToolEntry<SharpenParams> = {
@@ -54,8 +66,14 @@ interface SilhouetteParams {
 }
 
 export const silhouetteSchema = toolSchema<SilhouetteParams>({
-	color: field.color({ default: "#111318" }),
-	threshold: field.slider({ min: 0, max: 100, step: 1, default: 10 }),
+	color: field.color({ label: "fields.fillColor", default: "#111318" }),
+	threshold: field.slider({
+		label: "fields.threshold",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 10,
+	}),
 });
 
 const silhouetteTool: ToolEntry<SilhouetteParams> = {
@@ -74,7 +92,13 @@ interface VignetteParams {
 }
 
 export const vignetteSchema = toolSchema<VignetteParams>({
-	strength: field.slider({ min: 0, max: 100, step: 5, default: 50 }),
+	strength: field.slider({
+		label: "fields.strength",
+		min: 0,
+		max: 100,
+		step: 5,
+		default: 50,
+	}),
 });
 
 const vignetteTool: ToolEntry<VignetteParams> = {
@@ -93,7 +117,13 @@ interface PixelateParams {
 }
 
 export const pixelateSchema = toolSchema<PixelateParams>({
-	blockSize: field.slider({ min: 2, max: 64, step: 1, default: 8 }),
+	blockSize: field.slider({
+		label: "fields.blockSize",
+		min: 2,
+		max: 64,
+		step: 1,
+		default: 8,
+	}),
 });
 
 const pixelateTool: ToolEntry<PixelateParams> = {
@@ -114,8 +144,20 @@ interface RandomizePixelsParams {
 
 export const randomizePixelsSchema = toolSchema<RandomizePixelsParams>(
 	{
-		blockSize: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
-		seed: field.number({ min: 0, max: 999999, step: 1, default: 42 }),
+		blockSize: field.slider({
+			label: "fields.blockSize",
+			min: 1,
+			max: 64,
+			step: 1,
+			default: 8,
+		}),
+		seed: field.number({
+			label: "fields.seed",
+			min: 0,
+			max: 999999,
+			step: 1,
+			default: 42,
+		}),
 	},
 	{
 		layout: {
@@ -145,15 +187,28 @@ interface AddNoiseParams {
 
 export const addNoiseSchema = toolSchema<AddNoiseParams>(
 	{
-		amount: field.slider({ min: 0, max: 100, step: 1, default: 25 }),
+		amount: field.slider({
+			label: "fields.amount",
+			min: 0,
+			max: 100,
+			step: 1,
+			default: 25,
+		}),
 		mode: field.select({
+			label: "fields.mode",
 			default: "mono",
 			options: [
 				{ value: "mono", label: "Monochrome grain" },
 				{ value: "color", label: "Color noise" },
 			],
 		}),
-		seed: field.number({ min: 0, max: 999999, step: 1, default: 1234 }),
+		seed: field.number({
+			label: "fields.seed",
+			min: 0,
+			max: 999999,
+			step: 1,
+			default: 1234,
+		}),
 	},
 	{
 		layout: {
@@ -181,7 +236,13 @@ interface JpegArtifactsParams {
 }
 
 export const jpegArtifactsSchema = toolSchema<JpegArtifactsParams>({
-	quality: field.slider({ min: 1, max: 50, step: 1, default: 10 }),
+	quality: field.slider({
+		label: "fields.quality",
+		min: 1,
+		max: 50,
+		step: 1,
+		default: 10,
+	}),
 });
 
 const jpegArtifacts: ToolEntry<JpegArtifactsParams> = {

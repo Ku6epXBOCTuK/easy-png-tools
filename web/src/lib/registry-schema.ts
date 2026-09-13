@@ -14,7 +14,15 @@
 import type { Position9 } from "./core/textdraw";
 import type { TextFont } from "./core/domText";
 
-export interface NumberSpec {
+/**
+ * Общее необязательное поле всех спеков: ключ подписи поля в словаре.
+ * Рендерится через `fieldLabel` (решение C) — без ключа используется `labelOf(id)`.
+ */
+export interface FieldSpecBase {
+	label?: string;
+}
+
+export interface NumberSpec extends FieldSpecBase {
 	kind: "number";
 	default: number;
 	min?: number;
@@ -22,7 +30,7 @@ export interface NumberSpec {
 	step?: number;
 }
 
-export interface SliderSpec {
+export interface SliderSpec extends FieldSpecBase {
 	kind: "slider";
 	default: number;
 	min: number;
@@ -30,24 +38,24 @@ export interface SliderSpec {
 	step?: number;
 }
 
-export interface ColorSpec {
+export interface ColorSpec extends FieldSpecBase {
 	kind: "color";
 	default: string;
 }
 
-export interface SelectSpec<V extends string = string> {
+export interface SelectSpec<V extends string = string> extends FieldSpecBase {
 	kind: "select";
 	default: V;
 	options: { value: V; label: string }[];
 }
 
-export interface TextSpec {
+export interface TextSpec extends FieldSpecBase {
 	kind: "text";
 	default: string;
 	placeholder?: string;
 }
 
-export interface CheckboxSpec {
+export interface CheckboxSpec extends FieldSpecBase {
 	kind: "checkbox";
 	default: boolean;
 }
@@ -58,7 +66,7 @@ export interface Dimension {
 	height: number;
 }
 
-export interface DimensionSpec {
+export interface DimensionSpec extends FieldSpecBase {
 	kind: "dimension";
 	/** Общий диапазон для обоих измерений. */
 	min: number;
@@ -73,7 +81,7 @@ export interface ColorPair {
 	to: string;
 }
 
-export interface ColorPairSpec {
+export interface ColorPairSpec extends FieldSpecBase {
 	kind: "color-pair";
 	from: string;
 	to: string;
@@ -82,7 +90,7 @@ export interface ColorPairSpec {
 /** Список цветов (палитра): массив hex-строк. */
 export type ColorList = string[];
 
-export interface ColorListSpec {
+export interface ColorListSpec extends FieldSpecBase {
 	kind: "colors";
 	default: string[];
 }
@@ -93,7 +101,7 @@ export interface Offset {
 	y: number;
 }
 
-export interface OffsetSpec {
+export interface OffsetSpec extends FieldSpecBase {
 	kind: "offset";
 	/** Общий диапазон для обеих осей (в процентах). */
 	min: number;
@@ -118,7 +126,7 @@ export const POSITION9_VALUES = [
 	"bottom-right",
 ] as const;
 
-export interface Position9Spec {
+export interface Position9Spec extends FieldSpecBase {
 	kind: "position9";
 	default: Position9;
 }
@@ -134,7 +142,7 @@ export interface FontStyle {
 	color: string;
 }
 
-export interface FontStyleSpec {
+export interface FontStyleSpec extends FieldSpecBase {
 	kind: "font-style";
 	/** Диапазон размера шрифта. */
 	min: number;
@@ -155,7 +163,7 @@ export interface Plate {
 	opacity: number;
 }
 
-export interface PlateSpec {
+export interface PlateSpec extends FieldSpecBase {
 	kind: "plate";
 	enabled: boolean;
 	color: string;
@@ -172,7 +180,7 @@ export interface Gradient {
 	angle: number;
 }
 
-export interface GradientSpec {
+export interface GradientSpec extends FieldSpecBase {
 	kind: "gradient";
 	from: string;
 	to: string;

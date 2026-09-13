@@ -1,13 +1,16 @@
 <script lang="ts">
+	import { optionLabel } from "$lib/i18n/schema-tool-strings";
 	import type { FieldSpec, SelectSpec } from "$lib/registry-schema";
 
 	interface Props {
 		label: string;
 		value: unknown;
 		spec: FieldSpec;
+		toolId: string;
+		fieldId: string;
 		onchange?: (value: string) => void;
 	}
-	let { label, value, spec, onchange }: Props = $props();
+	let { label, value, spec, toolId, fieldId, onchange }: Props = $props();
 
 	const sp = $derived(spec as SelectSpec);
 	const current = $derived(
@@ -25,7 +28,9 @@
 		oninput={(e) => onchange?.((e.target as HTMLSelectElement).value)}
 	>
 		{#each sp.options as option (option.value)}
-			<option value={option.value}>{option.label}</option>
+			<option value={option.value}>
+				{optionLabel(toolId, fieldId, option.value, option.label)}
+			</option>
 		{/each}
 	</select>
 </label>

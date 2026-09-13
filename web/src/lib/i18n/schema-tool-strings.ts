@@ -33,6 +33,16 @@ export function groupLabel(title: string): string {
 	return t(title);
 }
 
+/** Подпись опции select: словарь `tools[id].options[fieldId][value]`, фолбэк — label из схемы. */
+export function optionLabel(
+	toolId: string,
+	fieldId: string,
+	value: string,
+	fallback: string,
+): string {
+	return getMergedDict().tools[toolId]?.options?.[fieldId]?.[value] ?? fallback;
+}
+
 export function verdictText(toolId: string, key: string): string {
 	return getMergedDict().tools[toolId]?.results?.[key] ?? key;
 }

@@ -26,6 +26,8 @@
 		label: string;
 		value: unknown;
 		spec: FieldSpec;
+		toolId: string;
+		fieldId: string;
 		onchange?: (value: unknown) => void;
 	}
 
@@ -49,10 +51,11 @@
 	interface Props {
 		schema: ToolSchema<Record<string, unknown>>;
 		values: Record<string, unknown>;
+		toolId: string;
 		onchange: (id: string, value: unknown) => void;
 		onreset: () => void;
 	}
-	let { schema, values, onchange, onreset }: Props = $props();
+	let { schema, values, toolId, onchange, onreset }: Props = $props();
 
 	interface LayoutGroup {
 		key: string;
@@ -104,6 +107,8 @@
 				label={fieldLabel(schema.fields[id], id)}
 				value={values[id]}
 				spec={schema.fields[id].spec}
+				{toolId}
+				fieldId={id}
 				onchange={(v) => onchange(id, v)}
 			/>
 		{/each}

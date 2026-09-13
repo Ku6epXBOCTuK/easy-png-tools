@@ -203,7 +203,26 @@ export const en: Dict = {
 		tooManyParts: "Too many parts ({count}). Maximum is 1000.",
 		toolUnknown: 'No tool is registered under "{id}".',
 	},
-	fields: {},
+	fields: {
+		amount: "Amount",
+		background: "Background",
+		blockSize: "Block size",
+		channelTolerance: "Channel tolerance",
+		color: "Color",
+		colorTolerance: "Color tolerance",
+		fillColor: "Fill color",
+		highlightColor: "Highlight color",
+		lumaThreshold: "Luminance threshold",
+		mode: "Mode",
+		opacity: "Opacity",
+		quality: "Quality",
+		radius: "Radius",
+		rarity: "Rarity",
+		seed: "Seed",
+		strength: "Strength",
+		threshold: "Threshold",
+		width: "Width",
+	},
 	groups: {
 		adjust: "Adjust",
 		anchor: "Anchor",
@@ -262,6 +281,41 @@ export const en: Dict = {
 				orientationPortrait: "Portrait — height is greater than width.",
 				orientationLandscape: "Landscape — width is greater than height.",
 				orientationSquare: "Square — the sides are equal.",
+			},
+		},
+		"show-transparent-png": {
+			options: {
+				mode: { binary: "Black & white mask", highlight: "Color highlight" },
+			},
+		},
+		"show-grayscale-pixels-png": {
+			options: {
+				mode: { binary: "Black & white mask", highlight: "Color highlight" },
+			},
+		},
+		"show-color-pixels-png": {
+			options: {
+				mode: { binary: "Black & white mask", highlight: "Color highlight" },
+			},
+		},
+		"light-pixel-mask-png": {
+			options: {
+				mode: { binary: "Black & white mask", highlight: "Color highlight" },
+			},
+		},
+		"dark-pixel-mask-png": {
+			options: {
+				mode: { binary: "Black & white mask", highlight: "Color highlight" },
+			},
+		},
+		"unique-color-mask-png": {
+			options: {
+				mode: { binary: "Black & white mask", highlight: "Color highlight" },
+			},
+		},
+		"add-noise-png": {
+			options: {
+				mode: { mono: "Monochrome grain", color: "Color noise" },
 			},
 		},
 	},
