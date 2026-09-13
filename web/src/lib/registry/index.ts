@@ -1,30 +1,31 @@
-import type { ToolEntry } from "./types";
-import { geometryEntries } from "./geometry";
 import { alphaEntries } from "./alpha";
-import { convertEntries } from "./convert";
 import { analyzeEntries } from "./analyze";
-import { filtersEntries } from "./filters";
 import { colorEntries } from "./color";
+import { convertEntries } from "./convert";
+import { filtersEntries } from "./filters";
 import { generateEntries } from "./generate";
+import { geometryEntries } from "./geometry";
 import { textEntries } from "./text";
+import type { ToolEntry } from "./types";
 
 export {
 	genTool,
 	imgTool,
-	textGen,
+	INPUT_MODES,
 	requireSource,
 	requireText,
-	INPUT_MODES,
 	RESULT_KINDS,
+	textGen,
 } from "./types";
 export type {
+	FileResult,
 	InputMode,
 	ResultKind,
 	ToolContext,
 	ToolEntry,
-	ToolResult,
 	ToolImageFile,
-	FileResult,
+	ToolResult,
+	VerdictResult,
 } from "./types";
 
 export const TOOLS: ToolEntry[] = [

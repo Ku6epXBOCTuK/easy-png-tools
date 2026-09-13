@@ -12,6 +12,7 @@
 		result: PixelImage | null;
 		fileResult?: FileResult | null;
 		textResult?: string | null;
+		textVars?: Record<string, string | number>;
 		toolId?: string;
 		running?: boolean;
 		oncopy?: () => void;
@@ -22,6 +23,7 @@
 		result,
 		fileResult = null,
 		textResult = null,
+		textVars = undefined,
 		toolId = "",
 		running = false,
 		oncopy,
@@ -64,6 +66,7 @@
 				<SchemaTextResult
 					value={textResult}
 					kind="verdict"
+					vars={textVars}
 					{toolId}
 					oncopy={oncopy ?? (() => {})}
 					ondownload={ondownloadtxt ?? (() => {})}

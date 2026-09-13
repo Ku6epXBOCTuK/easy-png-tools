@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { Copy, Download, FileText } from "@lucide/svelte";
-	import { verdictTone, verdictText } from "$lib/i18n/schema-tool-strings";
+	import { verdictText, verdictTone } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
+	import { Copy, Download, FileText } from "@lucide/svelte";
 	import IconButton from "./ui/IconButton.svelte";
 
 	interface Props {
 		value: string;
 		kind: "text" | "verdict";
 		toolId?: string;
+		vars?: Record<string, string | number>;
 		fileName?: string;
 		oncopy: () => void;
 		ondownload: () => void;
@@ -16,6 +17,7 @@
 		value,
 		kind,
 		toolId = "",
+		vars = undefined,
 		fileName = "result.txt",
 		oncopy,
 		ondownload,
@@ -23,7 +25,7 @@
 
 	const tone = $derived(verdictTone(value));
 	const displayValue = $derived(
-		kind === "verdict" && toolId ? verdictText(toolId, value) : value,
+		kind === "verdict" && toolId ? verdictText(toolId, value, vars) : value,
 	);
 </script>
 

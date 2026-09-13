@@ -4,6 +4,11 @@
 	import CatalogHeader from "$lib/components/CatalogHeader.svelte";
 	import CatalogToolbar from "$lib/components/CatalogToolbar.svelte";
 	import ToolCard from "$lib/components/ToolCard.svelte";
+	import {
+		searchTools,
+		toolDescription,
+		toolTitle,
+	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import { TOOL_ICONS } from "$lib/tool-icons";
 
@@ -14,12 +19,8 @@
 		PREVIEW_GROUPS.map((g) => ({
 			id: g.id,
 			label: t(`categories.${g.id}`),
-			tools: g.tools.filter(
-				(t) =>
-					(category === "all" || category === g.id) &&
-					(query.trim() === "" ||
-						t.title.toLowerCase().includes(query.trim().toLowerCase()) ||
-						t.description.toLowerCase().includes(query.trim().toLowerCase())),
+			tools: searchTools(g.tools, query).filter(
+				() => category === "all" || category === g.id,
 			),
 		})).filter((g) => g.tools.length > 0),
 	);
@@ -35,9 +36,9 @@
 			<CatalogGroup label={group.label} count={group.tools.length}>
 				{#each group.tools as tool, i (tool.id)}
 					<ToolCard
-						title={tool.title}
+						title={toolTitle(tool)}
 						id={tool.id}
-						description={tool.description}
+						description={toolDescription(tool)}
 						index={i + 1}
 						icon={TOOL_ICONS[tool.id]}
 					/>

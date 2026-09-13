@@ -20,6 +20,7 @@ type WorkerResponse =
 			height?: number;
 			data?: Uint8ClampedArray;
 			text?: string;
+			textVars?: Record<string, string | number>;
 			files?: WorkerImageFile[];
 	  }
 	| {
@@ -64,6 +65,15 @@ async function handle(request: WorkerRequest): Promise<void> {
 				id: request.id,
 				ok: true,
 				text: output,
+			} satisfies WorkerResponse);
+			return;
+		}
+		if ("key" in output) {
+			(self as unknown as Worker).postMessage({
+				id: request.id,
+				ok: true,
+				text: output.key,
+				textVars: output.vars,
 			} satisfies WorkerResponse);
 			return;
 		}

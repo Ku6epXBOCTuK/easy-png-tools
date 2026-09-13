@@ -38,6 +38,9 @@
 	let fileResult = $state<FileResult | null>(null);
 	let textSource = $state("");
 	let textResult = $state<string | null>(null);
+	let verdictVars = $state<Record<string, string | number> | undefined>(
+		undefined,
+	);
 	let running = $state(false);
 	let error = $state("");
 	let started = $state(false);
@@ -59,6 +62,7 @@
 		result = null;
 		fileResult = null;
 		textResult = null;
+		verdictVars = undefined;
 		error = "";
 	}
 
@@ -90,7 +94,16 @@
 				result = null;
 				textResult = null;
 			} else {
-				textResult = out as string;
+				if (typeof out === "string") {
+					textResult = out;
+					verdictVars = undefined;
+				} else if (out && "key" in out) {
+					textResult = out.key;
+					verdictVars = out.vars;
+				} else {
+					textResult = null;
+					verdictVars = undefined;
+				}
 				result = null;
 				fileResult = null;
 			}
@@ -125,7 +138,9 @@
 	async function copyText() {
 		if (!textResult) return;
 		const copyValue =
-			resultKind === "verdict" ? verdictText(tool.id, textResult) : textResult;
+			resultKind === "verdict"
+				? verdictText(tool.id, textResult, verdictVars)
+				: textResult;
 		try {
 			await navigator.clipboard.writeText(copyValue);
 		} catch (e) {
@@ -196,6 +211,7 @@
 					{fileResult}
 					{textSource}
 					{textResult}
+					textVars={verdictVars}
 					{inputMode}
 					{resultKind}
 					{running}

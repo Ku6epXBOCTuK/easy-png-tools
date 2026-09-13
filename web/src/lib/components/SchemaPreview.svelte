@@ -16,6 +16,7 @@
 		fileResult?: FileResult | null;
 		textSource?: string;
 		textResult?: string | null;
+		textVars?: Record<string, string | number>;
 		running?: boolean;
 		error?: string;
 		onupload: (file: File) => void;
@@ -34,6 +35,7 @@
 		fileResult = null,
 		textSource = "",
 		textResult = null,
+		textVars = undefined,
 		running = false,
 		error = "",
 		onupload,
@@ -106,6 +108,7 @@
 		{result}
 		{fileResult}
 		{textResult}
+		{textVars}
 		{toolId}
 		{running}
 		oncopy={oncopytext}

@@ -49,7 +49,18 @@ export interface FileResult {
 	files: ToolImageFile[];
 }
 
-export type ToolResult = PixelImage | string | FileResult;
+/**
+ * Вердикт с подстановками: `key` — ключ словаря (`tools[id].results[key]`),
+ * `vars` — значения для интерполяции `{name}`. Локализация выполняется на
+ * стороне UI; из run() (и тем более из worker) локализованные строки не
+ * возвращаются.
+ */
+export interface VerdictResult {
+	key: string;
+	vars?: Record<string, string | number>;
+}
+
+export type ToolResult = PixelImage | string | FileResult | VerdictResult;
 
 /**
  * Инструмент нового registry: полностью типизирован на `Params`, схема —

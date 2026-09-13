@@ -8,7 +8,6 @@ import {
 	renderPredicateMask,
 } from "../core/masks";
 import { base64ToBytes, looksLikePng, stripDataUri } from "../core/textio";
-import { t } from "../i18n/t";
 import { field, toolSchema } from "../registry-schema";
 import { imgTool, textGen, type ToolEntry } from "./types";
 
@@ -277,7 +276,7 @@ const pngFileSize: ToolEntry<NoParams> = {
 		const blob = await encode(img, "image/png");
 		const kb = blob.size / 1024;
 		const kbText = kb >= 100 ? Math.round(kb).toString() : kb.toFixed(1);
-		return t("tools.png-file-size.results.line", { kb: kbText });
+		return { key: "line", vars: { kb: kbText } };
 	}),
 };
 

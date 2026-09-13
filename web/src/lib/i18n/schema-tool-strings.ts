@@ -1,9 +1,9 @@
 import type { ToolEntry } from "$lib/registry";
 import type { Field } from "$lib/registry-schema";
-import { ru } from "./ru";
 import { getMergedDict } from "./locale.svelte";
-import type { SearchDoc } from "./matching";
-import { t } from "./t";
+import { normalizeForSearch, scoreDoc, type SearchDoc } from "./matching";
+import { ru } from "./ru";
+import { interpolate, t } from "./t";
 
 function labelOf(id: string): string {
 	return id
@@ -43,8 +43,15 @@ export function optionLabel(
 	return getMergedDict().tools[toolId]?.options?.[fieldId]?.[value] ?? fallback;
 }
 
-export function verdictText(toolId: string, key: string): string {
-	return getMergedDict().tools[toolId]?.results?.[key] ?? key;
+export function verdictText(
+	toolId: string,
+	key: string,
+	vars?: Record<string, string | number>,
+): string {
+	return interpolate(
+		getMergedDict().tools[toolId]?.results?.[key] ?? key,
+		vars,
+	);
 }
 
 export function verdictTone(key: string): "success" | "danger" | "info" {
@@ -72,4 +79,18 @@ export function toolSearchDoc(tool: ToolEntry): SearchDoc {
 			tool.description,
 		]),
 	};
+}
+
+/**
+ * Кросс-языковой поиск по каталогу: скор через `scoreDoc` на
+ * `toolSearchDoc` (заголовки/описания всех локалей). Порядок каталога
+ * сохраняется, элементы без совпадения отбрасываются.
+ */
+export function searchTools(
+	tools: readonly ToolEntry[],
+	query: string,
+): ToolEntry[] {
+	const q = normalizeForSearch(query.trim());
+	if (q.length === 0) return [...tools];
+	return tools.filter((tool) => scoreDoc(toolSearchDoc(tool), q) !== null);
 }

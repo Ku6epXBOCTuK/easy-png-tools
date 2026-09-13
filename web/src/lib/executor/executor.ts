@@ -95,6 +95,7 @@ function ensureWorker(): Worker | null {
 					data: Uint8ClampedArray;
 				}[];
 				text?: string;
+				textVars?: Record<string, string | number>;
 				error?: string;
 				errorKey?: string;
 				errorVars?: Record<string, string | number>;
@@ -120,7 +121,11 @@ function ensureWorker(): Worker | null {
 					})),
 				});
 			} else if (payload.ok && typeof payload.text === "string") {
-				entry.resolve(payload.text);
+				entry.resolve(
+					payload.textVars
+						? { key: payload.text, vars: payload.textVars }
+						: payload.text,
+				);
 			} else if (payload.errorKey) {
 				entry.reject(new ToolError(payload.errorKey, payload.errorVars));
 			} else {
