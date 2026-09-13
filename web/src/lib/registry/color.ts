@@ -208,7 +208,7 @@ export const brightnessContrastSchema = toolSchema<BrightnessContrastParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Adjust", cols: 2, fields: ["brightness", "contrast"] },
+				{ title: "groups.adjust", cols: 2, fields: ["brightness", "contrast"] },
 			],
 		},
 	},

@@ -76,8 +76,8 @@ export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
-				{ title: "Background", fields: ["transparent", "color"] },
+				{ title: "groups.canvas", fields: ["size"] },
+				{ title: "groups.background", fields: ["transparent", "color"] },
 			],
 		},
 	},
@@ -136,8 +136,8 @@ export const changeCanvasSizeSchema = toolSchema<ChangeCanvasSizeParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
-				{ title: "Anchor", fields: ["anchor"] },
+				{ title: "groups.canvas", fields: ["size"] },
+				{ title: "groups.anchor", fields: ["anchor"] },
 			],
 		},
 	},
@@ -174,8 +174,8 @@ export const resizeSchema = toolSchema<ResizeParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
-				{ title: "Scaling", fields: ["keepAspect"] },
+				{ title: "groups.canvas", fields: ["size"] },
+				{ title: "groups.scaling", fields: ["keepAspect"] },
 			],
 		},
 	},
@@ -226,8 +226,8 @@ export const cropSchema = toolSchema<CropParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Offset", fields: ["x", "y"] },
-				{ title: "Crop area", fields: ["size"] },
+				{ title: "groups.offset", fields: ["x", "y"] },
+				{ title: "groups.cropArea", fields: ["size"] },
 			],
 		},
 	},
@@ -315,8 +315,8 @@ export const addPaddingSchema = toolSchema<AddPaddingParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Padding", fields: ["padding"] },
-				{ title: "Fill", fields: ["transparent", "color"] },
+				{ title: "groups.padding", fields: ["padding"] },
+				{ title: "groups.fill", fields: ["transparent", "color"] },
 			],
 		},
 	},

@@ -31,9 +31,9 @@ const addTextSchema = toolSchema<AddTextParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Text", fields: ["text", "style"] },
-				{ title: "Placement", fields: ["position", "margin"] },
-				{ title: "Plate", fields: ["plate"] },
+				{ title: "groups.text", fields: ["text", "style"] },
+				{ title: "groups.placement", fields: ["position", "margin"] },
+				{ title: "groups.plate", fields: ["plate"] },
 			],
 		},
 	},
@@ -93,9 +93,9 @@ const dateStampSchema = toolSchema<DateStampParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Text", fields: ["format", "style"] },
-				{ title: "Placement", fields: ["position", "margin"] },
-				{ title: "Plate", fields: ["plate"] },
+				{ title: "groups.text", fields: ["format", "style"] },
+				{ title: "groups.placement", fields: ["position", "margin"] },
+				{ title: "groups.plate", fields: ["plate"] },
 			],
 		},
 	},
@@ -154,9 +154,9 @@ const watermarkTileSchema = toolSchema<WatermarkTileParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Watermark", fields: ["text", "style", "opacity"] },
+				{ title: "groups.watermark", fields: ["text", "style", "opacity"] },
 				{
-					title: "Tile",
+					title: "groups.tile",
 					cols: 2,
 					fields: ["angle", "stepX", "stepY"],
 				},

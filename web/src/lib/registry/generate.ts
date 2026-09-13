@@ -87,8 +87,8 @@ export const createEmptySchema = toolSchema<CreateEmptyParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
-				{ title: "Fill", fields: ["transparent", "color"] },
+				{ title: "groups.canvas", fields: ["size"] },
+				{ title: "groups.fill", fields: ["transparent", "color"] },
 			],
 		},
 	},
@@ -174,8 +174,8 @@ export const linearGradientSchema = toolSchema<LinearGradientParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
-				{ title: "Colors", fields: ["gradient"] },
+				{ title: "groups.canvas", fields: ["size"] },
+				{ title: "groups.colors", fields: ["gradient"] },
 			],
 		},
 	},
@@ -225,8 +225,11 @@ export const colorSpectrumSchema = toolSchema<ColorSpectrumParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
-				{ title: "Spectrum", fields: ["direction", "saturation", "lightness"] },
+				{ title: "groups.canvas", fields: ["size"] },
+				{
+					title: "groups.spectrum",
+					fields: ["direction", "saturation", "lightness"],
+				},
 			],
 		},
 	},
@@ -262,8 +265,8 @@ export const randomColorsSchema = toolSchema<RandomColorsParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
-				{ title: "Random", cols: 2, fields: ["blockSize", "seed"] },
+				{ title: "groups.canvas", fields: ["size"] },
+				{ title: "groups.random", cols: 2, fields: ["blockSize", "seed"] },
 			],
 		},
 	},
@@ -305,9 +308,9 @@ export const drawGridSchema = toolSchema<DrawGridParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
+				{ title: "groups.canvas", fields: ["size"] },
 				{
-					title: "Grid",
+					title: "groups.grid",
 					cols: 2,
 					fields: ["cols", "rows", "lineWidth", "color", "transparentBg"],
 				},
@@ -356,9 +359,13 @@ export const placeholderSchema = toolSchema<PlaceholderParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Canvas", fields: ["size"] },
-				{ title: "Colors", cols: 2, fields: ["backgroundColor", "color"] },
-				{ title: "Text", fields: ["showText"] },
+				{ title: "groups.canvas", fields: ["size"] },
+				{
+					title: "groups.colors",
+					cols: 2,
+					fields: ["backgroundColor", "color"],
+				},
+				{ title: "groups.text", fields: ["showText"] },
 			],
 		},
 	},
@@ -436,8 +443,12 @@ export const stepColorsSchema = toolSchema<StepColorsParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Colors", fields: ["pair"] },
-				{ title: "Output", cols: 2, fields: ["steps", "width", "layout"] },
+				{ title: "groups.colors", fields: ["pair"] },
+				{
+					title: "groups.output",
+					cols: 2,
+					fields: ["steps", "width", "layout"],
+				},
 			],
 		},
 	},
@@ -523,9 +534,9 @@ const paletteBaseSchema = {
 const paletteLayoutGroup = {
 	layout: {
 		groups: [
-			{ title: "Base color", fields: ["baseColor"] },
+			{ title: "groups.baseColor", fields: ["baseColor"] },
 			{
-				title: "Output",
+				title: "groups.output",
 				cols: 2,
 				fields: ["width", "layout"],
 			},
@@ -684,8 +695,8 @@ export const mixColorsSchema = toolSchema<MixColorsParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Colors", fields: ["colors"] },
-				{ title: "Output", fields: ["width"] },
+				{ title: "groups.colors", fields: ["colors"] },
+				{ title: "groups.output", fields: ["width"] },
 			],
 		},
 	},
@@ -741,9 +752,9 @@ export const sortColorsSchema = toolSchema<SortColorsParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Colors", fields: ["colors"] },
+				{ title: "groups.colors", fields: ["colors"] },
 				{
-					title: "Output",
+					title: "groups.output",
 					cols: 2,
 					fields: ["order", "width", "layout"],
 				},
@@ -791,9 +802,12 @@ export const textToPngSchema = toolSchema<TextToPngParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Text", fields: ["text", "style"] },
-				{ title: "Background", fields: ["transparentBg", "backgroundColor"] },
-				{ title: "Padding", fields: ["padding"] },
+				{ title: "groups.text", fields: ["text", "style"] },
+				{
+					title: "groups.background",
+					fields: ["transparentBg", "backgroundColor"],
+				},
+				{ title: "groups.padding", fields: ["padding"] },
 			],
 		},
 	},

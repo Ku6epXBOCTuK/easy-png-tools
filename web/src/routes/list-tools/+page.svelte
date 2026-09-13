@@ -13,7 +13,7 @@
 	const groups = $derived(
 		PREVIEW_GROUPS.map((g) => ({
 			id: g.id,
-			label: g.label,
+			label: t(`categories.${g.id}`),
 			tools: g.tools.filter(
 				(t) =>
 					(category === "all" || category === g.id) &&

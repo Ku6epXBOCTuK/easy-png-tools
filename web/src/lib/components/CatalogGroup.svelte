@@ -38,6 +38,7 @@
 	.group-title span {
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-xl);
+		text-transform: uppercase;
 		color: var(--color-text);
 	}
 	.group-title i {

@@ -119,7 +119,9 @@ export const randomizePixelsSchema = toolSchema<RandomizePixelsParams>(
 	},
 	{
 		layout: {
-			groups: [{ title: "Blocks", cols: 2, fields: ["blockSize", "seed"] }],
+			groups: [
+				{ title: "groups.blocks", cols: 2, fields: ["blockSize", "seed"] },
+			],
 		},
 	},
 );
@@ -156,8 +158,8 @@ export const addNoiseSchema = toolSchema<AddNoiseParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Noise", cols: 2, fields: ["amount", "mode"] },
-				{ title: "Seed", fields: ["seed"] },
+				{ title: "groups.noise", cols: 2, fields: ["amount", "mode"] },
+				{ title: "groups.seed", fields: ["seed"] },
 			],
 		},
 	},

@@ -104,8 +104,8 @@ const circleMaskSchema = toolSchema<CircleMaskParams>(
 	{
 		layout: {
 			groups: [
-				{ title: "Shape", fields: ["size"] },
-				{ title: "Position", fields: ["offset"] },
+				{ title: "groups.shape", fields: ["size"] },
+				{ title: "groups.position", fields: ["offset"] },
 			],
 		},
 	},
@@ -145,11 +145,11 @@ const squareMaskSchema = toolSchema<SquareMaskParams>(
 		layout: {
 			groups: [
 				{
-					title: "Shape",
+					title: "groups.shape",
 					cols: 2,
 					fields: ["widthPct", "heightPct"],
 				},
-				{ title: "Position", fields: ["offset"] },
+				{ title: "groups.position", fields: ["offset"] },
 			],
 		},
 	},
@@ -193,11 +193,11 @@ const starMaskSchema = toolSchema<StarMaskParams>(
 		layout: {
 			groups: [
 				{
-					title: "Shape",
+					title: "groups.shape",
 					cols: 2,
 					fields: ["points", "innerRadius", "size", "rotation"],
 				},
-				{ title: "Position", fields: ["offset"] },
+				{ title: "groups.position", fields: ["offset"] },
 			],
 		},
 	},
@@ -241,11 +241,11 @@ const wavyMaskSchema = toolSchema<WavyMaskParams>(
 		layout: {
 			groups: [
 				{
-					title: "Shape",
+					title: "groups.shape",
 					cols: 2,
 					fields: ["size", "amplitude", "waves", "phase"],
 				},
-				{ title: "Position", fields: ["offset"] },
+				{ title: "groups.position", fields: ["offset"] },
 			],
 		},
 	},
@@ -363,11 +363,11 @@ export const removeBackgroundSchema = toolSchema<RemoveBackgroundParams>(
 		layout: {
 			groups: [
 				{
-					title: "Background",
+					title: "groups.background",
 					cols: 2,
 					fields: ["color", "tolerance"],
 				},
-				{ title: "Options", fields: ["outerOnly", "smooth"] },
+				{ title: "groups.options", fields: ["outerOnly", "smooth"] },
 			],
 		},
 	},
