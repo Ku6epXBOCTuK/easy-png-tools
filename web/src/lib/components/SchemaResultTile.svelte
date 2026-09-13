@@ -12,6 +12,7 @@
 		result: PixelImage | null;
 		fileResult?: FileResult | null;
 		textResult?: string | null;
+		toolId?: string;
 		running?: boolean;
 		oncopy?: () => void;
 		ondownloadtxt?: () => void;
@@ -21,6 +22,7 @@
 		result,
 		fileResult = null,
 		textResult = null,
+		toolId = "",
 		running = false,
 		oncopy,
 		ondownloadtxt,
@@ -62,6 +64,7 @@
 				<SchemaTextResult
 					value={textResult}
 					kind="verdict"
+					{toolId}
 					oncopy={oncopy ?? (() => {})}
 					ondownload={ondownloadtxt ?? (() => {})}
 				/>

@@ -6,7 +6,11 @@
 	import { decodeFile, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
-	import { toolDescription, toolTitle } from "$lib/i18n/schema-tool-strings";
+	import {
+		toolDescription,
+		toolTitle,
+		verdictText,
+	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import type { FileResult, ToolEntry } from "$lib/registry";
 	import {
@@ -120,8 +124,10 @@
 
 	async function copyText() {
 		if (!textResult) return;
+		const copyValue =
+			resultKind === "verdict" ? verdictText(tool.id, textResult) : textResult;
 		try {
-			await navigator.clipboard.writeText(textResult);
+			await navigator.clipboard.writeText(copyValue);
 		} catch (e) {
 			error = errorText(e);
 		}
@@ -178,6 +184,7 @@
 
 			<section class="panel">
 				<SchemaPreview
+					toolId={tool.id}
 					{source}
 					{result}
 					{fileResult}

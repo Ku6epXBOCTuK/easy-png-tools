@@ -10,6 +10,7 @@ import {
 import { hasTransparency, isGrayscale, orientationOf } from "../core/analyze";
 import { encode } from "../core/io";
 import { base64ToBytes, looksLikePng, stripDataUri } from "../core/textio";
+import { t } from "../i18n/t";
 
 interface ExtractColorParams {
 	color: string;
@@ -204,9 +205,7 @@ const verifyIsPng: ToolEntry<NoParams> = {
 	input: "text",
 	result: "verdict",
 	run: textGen((text) =>
-		looksLikePng(base64ToBytes(stripDataUri(text)))
-			? "Yes — valid PNG signature."
-			: "No — the content is not a PNG.",
+		looksLikePng(base64ToBytes(stripDataUri(text))) ? "verifyYes" : "verifyNo",
 	),
 };
 
@@ -218,9 +217,7 @@ const pngIsGrayscale: ToolEntry<NoParams> = {
 	schema: emptySchema,
 	input: "image",
 	result: "verdict",
-	run: imgTool((img) =>
-		isGrayscale(img) ? "Yes — grayscale." : "No — contains colors.",
-	),
+	run: imgTool((img) => (isGrayscale(img) ? "grayscaleYes" : "grayscaleNo")),
 };
 
 const pngFileSize: ToolEntry<NoParams> = {
@@ -236,7 +233,7 @@ const pngFileSize: ToolEntry<NoParams> = {
 		const blob = await encode(img, "image/png");
 		const kb = blob.size / 1024;
 		const kbText = kb >= 100 ? Math.round(kb).toString() : kb.toFixed(1);
-		return `${kbText} KB`;
+		return t("tools.png-file-size.results.line", { kb: kbText });
 	}),
 };
 
@@ -250,7 +247,7 @@ const pngIsTransparent: ToolEntry<NoParams> = {
 	input: "image",
 	result: "verdict",
 	run: imgTool((img) =>
-		hasTransparency(img) ? "Yes — has transparency." : "No — fully opaque.",
+		hasTransparency(img) ? "transparentYes" : "transparentNo",
 	),
 };
 
@@ -265,11 +262,11 @@ const pngOrientation: ToolEntry<NoParams> = {
 	run: imgTool((img) => {
 		switch (orientationOf(img)) {
 			case "portrait":
-				return "Portrait";
+				return "orientationPortrait";
 			case "landscape":
-				return "Landscape";
+				return "orientationLandscape";
 			default:
-				return "Square";
+				return "orientationSquare";
 		}
 	}),
 };

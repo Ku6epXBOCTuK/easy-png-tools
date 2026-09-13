@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { Copy, Download, FileText } from "@lucide/svelte";
+	import { verdictTone, verdictText } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import IconButton from "./ui/IconButton.svelte";
 
 	interface Props {
 		value: string;
 		kind: "text" | "verdict";
+		toolId?: string;
 		fileName?: string;
 		oncopy: () => void;
 		ondownload: () => void;
@@ -13,17 +15,15 @@
 	let {
 		value,
 		kind,
+		toolId = "",
 		fileName = "result.txt",
 		oncopy,
 		ondownload,
 	}: Props = $props();
 
-	const tone = $derived(
-		/^(yes|true)/i.test(value.trim())
-			? "success"
-			: /^(no|false)/i.test(value.trim())
-				? "danger"
-				: "info",
+	const tone = $derived(verdictTone(value));
+	const displayValue = $derived(
+		kind === "verdict" && toolId ? verdictText(toolId, value) : value,
 	);
 </script>
 
@@ -31,7 +31,7 @@
 	<div class="verdict">
 		<span class="verdict-label">{t("resultCard.result")}</span>
 		<div class="badge badge-tone--{tone}" role="status">
-			<span class="verdict-text">{value}</span>
+			<span class="verdict-text">{displayValue}</span>
 			<IconButton icon={Copy} label={t("textResult.copy")} onclick={oncopy} />
 		</div>
 	</div>

@@ -10,6 +10,7 @@
 	interface Props {
 		inputMode: InputMode;
 		resultKind?: ResultKind;
+		toolId: string;
 		source: PixelImage | null;
 		result: PixelImage | null;
 		fileResult?: FileResult | null;
@@ -27,6 +28,7 @@
 	let {
 		inputMode,
 		resultKind = "image",
+		toolId,
 		source,
 		result,
 		fileResult = null,
@@ -104,6 +106,7 @@
 		{result}
 		{fileResult}
 		{textResult}
+		{toolId}
 		{running}
 		oncopy={oncopytext}
 		{ondownloadtxt}
