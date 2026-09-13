@@ -1,24 +1,22 @@
 <script lang="ts">
-	let lang = $state("RU");
+	import { LOCALES, type Locale } from "$lib/i18n/dict";
+	import { getLocale, setLocale } from "$lib/i18n/locale.svelte";
 
-	// TODO: change to sectioned dual buttons
+	const LANG_LABELS: Record<Locale, string> = { ru: "RU", en: "EN" };
 </script>
 
 <div class="lang" role="group" aria-label="Language">
-	<button
-		type="button"
-		class="lang-btn"
-		class:active={lang === "RU"}
-		onclick={() => (lang = "RU")}
-	>
-		RU
-	</button>
-	<button
-		type="button"
-		class="lang-btn"
-		class:active={lang === "EN"}
-		onclick={() => (lang = "EN")}>EN</button
-	>
+	{#each LOCALES as l (l)}
+		<button
+			type="button"
+			class="lang-btn"
+			class:active={getLocale() === l}
+			aria-pressed={getLocale() === l}
+			onclick={() => setLocale(l)}
+		>
+			{LANG_LABELS[l]}
+		</button>
+	{/each}
 </div>
 
 <style>
