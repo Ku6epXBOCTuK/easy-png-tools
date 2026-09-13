@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
+	import { t } from "$lib/i18n/t";
 </script>
 
 <nav class="nav">
-	<a href={resolve("/")}>Home page</a>
-	<a href={resolve("/list-tools")}>Catalog</a>
-	<a href={resolve("/kit")}> UI Kit </a>
+	<a href={resolve("/")}>{t("header.home")}</a>
+	<a href={resolve("/list-tools")}>{t("header.catalog")}</a>
+	<a href={resolve("/kit")}>{t("header.uiKit")}</a>
 </nav>
 
 <style>

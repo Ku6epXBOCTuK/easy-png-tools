@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		label: string;
@@ -12,7 +13,8 @@
 <section class="catalog-group">
 	<div class="group-title">
 		<span>{label}</span>
-		<i>{count.toString().padStart(2, "0")} <!-- --> TOOLS</i>
+		<i>{count.toString().padStart(2, "0")} <!-- --> {t("catalog.toolsCount")}</i
+		>
 	</div>
 	<div class="tool-cards">
 		{@render children()}

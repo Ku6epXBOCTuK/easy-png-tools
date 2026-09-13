@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { LOCALES, type Locale } from "$lib/i18n/dict";
 	import { getLocale, setLocale } from "$lib/i18n/locale.svelte";
+	import { t } from "$lib/i18n/t";
 
 	const LANG_LABELS: Record<Locale, string> = { ru: "RU", en: "EN" };
 </script>
 
-<div class="lang" role="group" aria-label="Language">
+<div class="lang" role="group" aria-label={t("ui.language")}>
 	{#each LOCALES as l (l)}
 		<button
 			type="button"

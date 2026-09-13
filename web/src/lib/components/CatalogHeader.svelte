@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/t";
+
 	interface Props {
 		total: number;
 	}
@@ -7,15 +9,12 @@
 
 <div class="catalog-head">
 	<div>
-		<h1>Tool catalog</h1>
-		<p>
-			Focused utilities for working with PNG. Inspect, transform, and export —
-			locally in your browser.
-		</p>
+		<h1>{t("catalog.heading")}</h1>
+		<p>{t("catalog.lead")}</p>
 	</div>
 	<div class="catalog-total">
 		<b>{total}</b>
-		<span>TOOLS<br /> AVAILABLE</span>
+		<span>{t("catalog.toolsAvailable")}</span>
 	</div>
 </div>
 

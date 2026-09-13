@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Funnel, Search } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		query: string;
@@ -8,15 +9,15 @@
 	let { query = $bindable(), category = $bindable() }: Props = $props();
 
 	const FILTERS = [
-		{ value: "all", label: "ALL" },
-		{ value: "convert", label: "CONVERT" },
-		{ value: "alpha", label: "TRANSPARENCY" },
-		{ value: "color", label: "COLOR" },
-		{ value: "geometry", label: "GEOMETRY" },
-		{ value: "filters", label: "FILTERS" },
-		{ value: "text", label: "TEXT" },
-		{ value: "analyze", label: "ANALYZE" },
-		{ value: "generate", label: "GENERATE" },
+		{ value: "all", label: t("categories.all") },
+		{ value: "convert", label: t("categories.convert") },
+		{ value: "alpha", label: t("categories.alpha") },
+		{ value: "color", label: t("categories.color") },
+		{ value: "geometry", label: t("categories.geometry") },
+		{ value: "filters", label: t("categories.filters") },
+		{ value: "text", label: t("categories.text") },
+		{ value: "analyze", label: t("categories.analyze") },
+		{ value: "generate", label: t("categories.generate") },
 	];
 
 	// TODO: Button component
@@ -26,8 +27,8 @@
 	<label class="catalog-search">
 		<Search size={16} />
 		<input
-			aria-label="Search tools"
-			placeholder="Search tools..."
+			aria-label={t("search.aria")}
+			placeholder={t("search.placeholder")}
 			bind:value={query}
 		/>
 	</label>
@@ -87,6 +88,7 @@
 		color: var(--color-text-muted);
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-m);
+		text-transform: uppercase;
 		padding: var(--space-s) var(--space-m);
 		border-radius: var(--radius-m);
 		cursor: pointer;

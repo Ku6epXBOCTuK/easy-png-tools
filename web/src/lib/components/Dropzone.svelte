@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Upload } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		accept?: string;
@@ -53,8 +54,8 @@
 		onchange={(e) => handleFiles((e.target as HTMLInputElement).files)}
 	/>
 	<Upload size={22} />
-	<span class="dz-title">Drop a PNG here</span>
-	<span class="dz-sub">or click to browse — processed locally</span>
+	<span class="dz-title">{t("dropZone.pickTitle")}</span>
+	<span class="dz-sub">{t("dropZone.pickHint")}</span>
 </div>
 
 <style>

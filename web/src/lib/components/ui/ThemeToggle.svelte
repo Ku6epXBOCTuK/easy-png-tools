@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Moon, Sun } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 	import IconButton from "../ui/IconButton.svelte";
 
 	interface Props {
@@ -14,7 +15,7 @@
 
 <IconButton
 	icon={theme === "light" ? Moon : Sun}
-	label="Toggle theme"
+	label={t("ui.themeToggle")}
 	variant="clear"
 	onclick={ontoggle}
 />
