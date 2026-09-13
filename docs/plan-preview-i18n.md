@@ -245,7 +245,7 @@
 
 ### Фаза 6: Тесты
 
-- **6.1** `new-tools-i18n.test.ts` — полнота словарей для нового registry:
+- **6.1** `tools-i18n.test.ts` — полнота словарей для текущего registry:
   title/description ru для всех инструментов, каждый `label`-ключ схемы есть в
   `fields`, каждый `groups`-ключ есть в `groups`, без лишних ключей.
 - **6.2** Фикс `known-issues.spec.ts` test.fixme — ошибки локализуются.
