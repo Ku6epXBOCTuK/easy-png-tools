@@ -32,11 +32,13 @@ export type HeaderStrings = {
 	catalog: string;
 	sectionsAria: string;
 	footerNote: string;
+	home: string;
+	uiKit: string;
 };
 
 export type Dict = {
 	header: HeaderStrings;
-	categories: Record<CategoryId, string>;
+	categories: Record<CategoryId | "all", string>;
 	home: Record<string, string>;
 	catalog: Record<string, string>;
 	toolPage: Record<string, string>;

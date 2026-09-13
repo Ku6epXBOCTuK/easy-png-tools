@@ -1,14 +1,17 @@
-﻿import type { Dict } from "./dict";
+import type { Dict } from "./dict";
 
 export const ru: Dict = {
 	header: {
 		workspace: "Рабочая область",
 		catalog: "Каталог",
 		sectionsAria: "Разделы",
+		home: "Главная",
+		uiKit: "UI Kit",
 		footerNote:
 			"Все операции выполняются локально в вашем браузере — файлы никуда не отправляются.",
 	},
 	categories: {
+		all: "Все",
 		convert: "Конвертация",
 		alpha: "Прозрачность",
 		color: "Цвет",
@@ -31,7 +34,9 @@ export const ru: Dict = {
 		metaDescription:
 			"Полный каталог PNG-утилит: конвертация, прозрачность, цвет, геометрия, анализ и генерация изображений.",
 		heading: "Каталог инструментов",
-		lead: "{count} утилит для работы с PNG. Все операции выполняются локально в браузере.",
+		lead: "Утилиты для работы с PNG. Анализируйте, преобразуйте и экспортируйте — локально в браузере.",
+		toolsAvailable: "Инструментов доступно",
+		toolsCount: "Инструментов",
 	},
 	toolPage: {
 		fallbackTitle: "Инструмент",
@@ -54,6 +59,9 @@ export const ru: Dict = {
 	},
 	sourceCard: {
 		replaceImage: "Заменить изображение",
+		chooseImage: "выберите изображение",
+		noSource: "нет источника — настройте параметры",
+		alt: "Исходное изображение",
 	},
 	resultCard: {
 		emptyTitle: "Результат появится здесь",
@@ -63,9 +71,15 @@ export const ru: Dict = {
 		recalc: "Пересчёт…",
 		nextTool: "⛓ Следующий инструмент",
 		breakChain: "✂ Оборвать цепочку",
+		noResult: "результата пока нет",
+		parts: "частей",
+		format: "Формат",
+		alt: "Изображение-результат",
 	},
 	paramsCard: {
 		noParams: "У этого инструмента нет параметров — результат уже готов.",
+		configureOutput: "Настроить вывод",
+		noSchema: "У этого инструмента пока нет схемы.",
 	},
 	textInput: {
 		heading: "Текст",
@@ -78,6 +92,17 @@ export const ru: Dict = {
 		copied: "Скопировано",
 		copy: "Копировать",
 		downloadTxt: "Скачать .txt",
+	},
+	actions: {
+		generate: "Сгенерировать",
+		generating: "Генерация…",
+		openImage: "Открыть изображение",
+		downloadResult: "Скачать результат",
+	},
+	textSource: {
+		placeholder: "Вставьте base64 / hex / байты…",
+		trySample: "Попробовать образец",
+		render: "Отрисовать текст",
 	},
 	download: {
 		busy: "Готовим файл…",
@@ -93,6 +118,8 @@ export const ru: Dict = {
 	dropZone: {
 		pickDefault: "Перетащите изображение сюда или нажмите, чтобы выбрать файл",
 		overlayDefault: "Отпустите файл, чтобы заменить изображение",
+		pickTitle: "Перетащите PNG сюда",
+		pickHint: "или нажмите, чтобы выбрать — всё локально",
 	},
 	search: {
 		placeholder: "Найдите инструмент…",
@@ -110,6 +137,25 @@ export const ru: Dict = {
 		overlayTitle: "Знак",
 		overlayDrop: "Перетащите PNG-знак или нажмите",
 		overlayRemove: "Убрать знак",
+		autoUpdate: "обновляется автоматически",
+		width: "Ширина",
+		height: "Высота",
+		from: "От",
+		to: "До",
+		font: "Шрифт",
+		size: "Размер",
+		color: "Цвет",
+		bold: "Жирный",
+		fontSans: "Без засечек",
+		fontSerif: "С засечками",
+		fontMono: "Моноширинный",
+		opacity: "Непрозрачность",
+		angle: "Угол",
+		backingPlate: "Подложка",
+		addColor: "+ Добавить цвет",
+		removeColor: "Удалить цвет",
+		themeToggle: "Переключить тему",
+		language: "Язык",
 	},
 	errors: {
 		noImageRun: "Этот инструмент не обрабатывает изображения",
@@ -152,29 +198,11 @@ export const ru: Dict = {
 		cropSize: "Ширина и высота области обрезки должны быть положительными",
 		sizePositive: "Размеры должны быть положительными и конечными",
 		tooManyParts: "Слишком много частей ({count}). Ограничение — 1000.",
+		toolUnknown: "Инструмента с id «{id}» нет в реестре.",
 	},
+	fields: {},
+	groups: {},
 	tools: {
-		"jpg-to-png": {
-			title: "Конвертировать JPG в PNG",
-			description:
-				"Открывает JPEG и сохраняет его как PNG без потерь. Прозрачность, если была, сохраняется.",
-		},
-		"webp-to-png": {
-			title: "Конвертировать WebP в PNG",
-			description: "Перекодирует WebP-изображение в универсальный PNG.",
-		},
-		"gif-to-png": {
-			title: "Конвертировать GIF в PNG",
-			description: "Достаёт первый кадр GIF-анимации и сохраняет его как PNG.",
-		},
-		"bmp-to-png": {
-			title: "Конвертировать BMP в PNG",
-			description: "Перекодирует BMP в компактный PNG без потерь.",
-		},
-		"ico-to-png": {
-			title: "Конвертировать ICO в PNG",
-			description: "Превращает иконку .ico в обычный PNG нужного размера.",
-		},
 		"png-to-bmp": {
 			title: "Конвертировать PNG в BMP",
 			description:
@@ -288,6 +316,11 @@ export const ru: Dict = {
 				"Повторяет изображение сеткой из выбранного числа столбцов и строк.",
 			params: { columns: "Столбцов", rows: "Строк" },
 		},
+		"split-into-parts-png": {
+			title: "Разрезать PNG на части",
+			description:
+				"Делит изображение на сетку одинаковых по размеру частей. Холст дополняется прозрачностью, чтобы каждая часть была одного размера.",
+		},
 		"center-by-alpha-png": {
 			title: "Центрировать PNG по содержимому",
 			description:
@@ -357,6 +390,36 @@ export const ru: Dict = {
 					"g-b": "Зелёный ↔ Синий",
 				},
 			},
+		},
+		cmyk: {
+			title: "Конвертировать PNG в цвета CMYK",
+			description:
+				"Раскладывает изображение на печатные компоненты Cyan, Magenta, Yellow и Key (чёрный).",
+		},
+		hsl: {
+			title: "Разбить PNG на HSL",
+			description:
+				"Раскладывает изображение на компоненты тона, насыщенности и светлоты.",
+		},
+		hsi: {
+			title: "Разбить PNG на HSI",
+			description:
+				"Раскладывает изображение на компоненты тона, насыщенности и интенсивности.",
+		},
+		hsv: {
+			title: "Разбить PNG на HSV",
+			description:
+				"Раскладывает изображение на компоненты тона, насыщенности и значения (яркости).",
+		},
+		lab: {
+			title: "Конвертировать PNG в цвета LAB",
+			description:
+				"Раскладывает изображение на перцепционную светлоту и оппонентные пары зелёный–пурпур / синий–жёлтый.",
+		},
+		ycbcr: {
+			title: "Конвертировать PNG в цвета YCbCr",
+			description:
+				"Раскладывает изображение на яркость (Y) и цветоразностные компоненты Cb / Cr.",
 		},
 		"black-and-white-png": {
 			title: "Чёрно-белый PNG по порогу",
@@ -476,11 +539,6 @@ export const ru: Dict = {
 				targetColor: "Цвет для удаления",
 				tolerance: "Порог похожести, %",
 			},
-		},
-		"png-info": {
-			title: "Информация о PNG",
-			description:
-				"Показывает размеры, наличие альфа-канала и количество уникальных цветов загруженного изображения.",
 		},
 		"create-empty-png": {
 			title: "Создать пустой PNG",
@@ -640,83 +698,6 @@ export const ru: Dict = {
 			results: {
 				grayscaleYes: "Да — все пиксели являются оттенками серого.",
 				grayscaleNo: "Нет — найдены цветные пиксели.",
-			},
-		},
-		"png-to-hsl": {
-			title: "Разложить PNG в HSL",
-			description:
-				"Раскладывает изображение на компоненты Тон, Насыщенность и Светлота.",
-			params: { component: "Компонент", display: "Режим показа" },
-			options: {
-				component: { h: "Тон (H)", s: "Насыщенность (S)", l: "Светлота (L)" },
-				display: { gray: "Градациями серого", color: "Пространство как RGB" },
-			},
-		},
-		"png-to-hsv": {
-			title: "Разложить PNG в HSV",
-			description:
-				"Раскладывает изображение на Тон, Насыщенность и Яркость (Value).",
-			params: { component: "Компонент", display: "Режим показа" },
-			options: {
-				component: { h: "Тон (H)", s: "Насыщенность (S)", v: "Яркость (V)" },
-				display: { gray: "Градациями серого", color: "Пространство как RGB" },
-			},
-		},
-		"png-to-hsi": {
-			title: "Разложить PNG в HSI",
-			description:
-				"Раскладывает изображение на Тон, Насыщенность и Интенсивность.",
-			params: { component: "Компонент", display: "Режим показа" },
-			options: {
-				component: {
-					h: "Тон (H)",
-					s: "Насыщенность (S)",
-					i: "Интенсивность (I)",
-				},
-				display: { gray: "Градациями серого", color: "Пространство как RGB" },
-			},
-		},
-		"png-to-cmyk": {
-			title: "PNG в CMYK-цвета",
-			description:
-				"Раскладывает изображение на печатные компоненты: Голубой, Пурпурный, Жёлтый и Чёрный (Key).",
-			params: { component: "Компонент", display: "Режим показа" },
-			options: {
-				component: {
-					c: "Голубой (C)",
-					m: "Пурпурный (M)",
-					y: "Жёлтый (Y)",
-					k: "Чёрный (K)",
-				},
-				display: { gray: "Градациями серого", color: "Пространство как RGB" },
-			},
-		},
-		"png-to-ycbcr": {
-			title: "PNG в YCbCr-цвета",
-			description:
-				"Раскладывает изображение на Яркость (Y) и цветоразностные компоненты Cb / Cr.",
-			params: { component: "Компонент", display: "Режим показа" },
-			options: {
-				component: {
-					y: "Яркость (Y)",
-					cb: "Синий-разностный (Cb)",
-					cr: "Красный-разностный (Cr)",
-				},
-				display: { gray: "Градациями серого", color: "Пространство как RGB" },
-			},
-		},
-		"png-to-lab": {
-			title: "PNG в LAB-цвета",
-			description:
-				"Раскладывает изображение на perceptual-компоненты: Светлость, зелёный–пурпурный и синий–жёлтый.",
-			params: { component: "Компонент", display: "Режим показа" },
-			options: {
-				component: {
-					l: "Светлость (L)",
-					a: "Зелёный–пурпурный (a)",
-					b: "Синий–жёлтый (b)",
-				},
-				display: { gray: "Градациями серого", color: "Пространство как RGB" },
 			},
 		},
 		"circle-mask-png": {
@@ -1024,29 +1005,6 @@ export const ru: Dict = {
 				pattern: { "floyd-steinberg": "Флойд–Стейнберг", bayer: "Байер 4×4" },
 			},
 		},
-		"compress-png": {
-			title: "Сжать PNG",
-			description:
-				"Уменьшает размер PNG сокращением палитры до выбранного уровня. Честный компромисс: меньше цветов — меньше файл.",
-			params: { level: "Уровень сжатия" },
-			options: {
-				level: {
-					light: "Лёгкий (192 цвета)",
-					balanced: "Сбалансированный (96 цветов)",
-					strong: "Сильный (44 цвета)",
-					extreme: "Экстремальный (16 цветов)",
-				},
-			},
-		},
-		"reduce-to-size-png": {
-			title: "Вписать PNG в размер",
-			description:
-				"Бинарным поиском подбирает размер палитры, чтобы закодированный PNG уложился в целевое количество КБ. Если не влезает даже при 2 цветах — вернёт двухцветный вариант.",
-			params: {
-				targetKB: "Целевой размер, КБ",
-				maxColors: "Максимум цветов для перебора",
-			},
-		},
 		"png-file-size": {
 			title: "Размер файла PNG",
 			description:
@@ -1165,30 +1123,6 @@ export const ru: Dict = {
 					sans: "Без засечек",
 					serif: "С засечками",
 					mono: "Моноширинный",
-				},
-			},
-		},
-		"watermark-image-png": {
-			title: "Знак картинкой PNG",
-			description:
-				"Накладывает другой PNG (логотип, подпись): масштаб от ширины холста, прозрачность, позиция 3×3. Знак живёт, пока открыта страница, — после восстановления цепочки выберите его заново.",
-			params: {
-				scale: "Ширина знака, % от холста",
-				opacity: "Непрозрачность, %",
-				position: "Позиция",
-				margin: "Отступ, px",
-			},
-			options: {
-				position: {
-					"top-left": "Сверху слева",
-					"top-center": "Сверху по центру",
-					"top-right": "Сверху справа",
-					"middle-left": "По центру слева",
-					center: "По центру",
-					"middle-right": "По центру справа",
-					"bottom-left": "Снизу слева",
-					"bottom-center": "Снизу по центру",
-					"bottom-right": "Снизу справа",
 				},
 			},
 		},

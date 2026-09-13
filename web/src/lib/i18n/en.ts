@@ -5,10 +5,13 @@ export const en: Dict = {
 		workspace: "Workspace",
 		catalog: "Catalog",
 		sectionsAria: "Sections",
+		home: "Home page",
+		uiKit: "UI Kit",
 		footerNote:
 			"All operations run locally in your browser — your files are never uploaded anywhere.",
 	},
 	categories: {
+		all: "All",
 		convert: "Convert",
 		alpha: "Transparency",
 		color: "Color",
@@ -30,7 +33,9 @@ export const en: Dict = {
 		metaDescription:
 			"Full catalog of PNG utilities: convert, transparency, color, geometry, analysis and image generation.",
 		heading: "Tool catalog",
-		lead: "{count} utilities for working with PNG. Everything runs locally in your browser.",
+		lead: "Focused utilities for working with PNG. Inspect, transform, and export — locally in your browser.",
+		toolsAvailable: "Tools available",
+		toolsCount: "Tools",
 	},
 	toolPage: {
 		fallbackTitle: "Tool",
@@ -53,6 +58,9 @@ export const en: Dict = {
 	},
 	sourceCard: {
 		replaceImage: "Replace image",
+		chooseImage: "choose an image",
+		noSource: "no source — configure the parameters",
+		alt: "Source image",
 	},
 	resultCard: {
 		emptyTitle: "The result will appear here",
@@ -62,9 +70,15 @@ export const en: Dict = {
 		recalc: "Recalculating…",
 		nextTool: "⛓ Next tool",
 		breakChain: "✂ Break the chain",
+		noResult: "no result yet",
+		parts: "parts",
+		format: "Format",
+		alt: "Result image",
 	},
 	paramsCard: {
 		noParams: "This tool has no parameters — the result is ready as is.",
+		configureOutput: "Configure output",
+		noSchema: "This tool has no schema yet.",
 	},
 	textInput: {
 		heading: "Text",
@@ -77,6 +91,17 @@ export const en: Dict = {
 		copied: "Copied",
 		copy: "Copy",
 		downloadTxt: "Download .txt",
+	},
+	actions: {
+		generate: "Generate",
+		generating: "Generating…",
+		openImage: "Open image",
+		downloadResult: "Download result",
+	},
+	textSource: {
+		placeholder: "Paste base64 / hex / bytes…",
+		trySample: "Try sample",
+		render: "Render text",
 	},
 	download: {
 		busy: "Preparing file…",
@@ -92,6 +117,8 @@ export const en: Dict = {
 	dropZone: {
 		pickDefault: "Drop an image here or click to choose a file",
 		overlayDefault: "Release the file to replace the image",
+		pickTitle: "Drop a PNG here",
+		pickHint: "or click to browse — processed locally",
 	},
 	search: {
 		placeholder: "Find a tool…",
@@ -109,6 +136,25 @@ export const en: Dict = {
 		overlayTitle: "Watermark",
 		overlayDrop: "Drop a watermark PNG or click",
 		overlayRemove: "Remove watermark",
+		autoUpdate: "updates automatically",
+		width: "Width",
+		height: "Height",
+		from: "From",
+		to: "To",
+		font: "Font",
+		size: "Size",
+		color: "Color",
+		bold: "Bold",
+		fontSans: "Sans",
+		fontSerif: "Serif",
+		fontMono: "Mono",
+		opacity: "Opacity",
+		angle: "Angle",
+		backingPlate: "Backing plate",
+		addColor: "+ Add color",
+		removeColor: "Remove color",
+		themeToggle: "Toggle theme",
+		language: "Language",
 	},
 	errors: {
 		noImageRun: "This tool does not process images",
@@ -151,7 +197,10 @@ export const en: Dict = {
 		cropSize: "Crop width and height must be positive",
 		sizePositive: "Dimensions must be positive and finite",
 		tooManyParts: "Too many parts ({count}). Maximum is 1000.",
+		toolUnknown: 'No tool is registered under "{id}".',
 	},
+	fields: {},
+	groups: {},
 	tools: {
 		"png-file-size": {
 			results: {
