@@ -12,7 +12,7 @@ test.describe("generators — known UI gap (#checklist, п.1)", () => {
 		const generate = page.getByRole("button", { name: "Generate" });
 		await expect(generate).toBeVisible();
 		await generate.click();
-		await expect(page.locator('img[alt="result"]')).toBeVisible();
+		await expect(page.locator('img[alt="Result image"]')).toBeVisible();
 	});
 
 	test("create-empty-png page opens without errors", async ({ page }) => {

@@ -1,12 +1,12 @@
 import { expect, test } from "playwright/test";
-import { opaquePng, transparentPng } from "./helpers/fixtures";
 import type { SourceFile } from "./helpers/fixtures";
+import { opaquePng, transparentPng } from "./helpers/fixtures";
 import {
-	trackErrors,
-	openTool,
-	uploadImage,
 	expectNoErrorAlert,
 	expectNoErrors,
+	openTool,
+	trackErrors,
+	uploadImage,
 } from "./helpers/page";
 
 type Kind = "image" | "text-out" | "verdict";
@@ -101,7 +101,7 @@ test.describe("smoke: tools produce output without errors", () => {
 			const outputLocator = (): ReturnType<typeof page.locator> => {
 				switch (kind) {
 					case "image":
-						return page.locator('img[alt="result"]');
+						return page.locator('img[alt="Result image"]');
 					case "text-out":
 						return page.locator(".result-pre code");
 					case "verdict":

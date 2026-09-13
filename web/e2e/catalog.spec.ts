@@ -1,7 +1,7 @@
 import { expect, test } from "playwright/test";
 import { expectNoErrors, trackErrors } from "./helpers/page";
 
-const TOTAL = 121;
+const TOTAL = 122;
 const GROUPS = 8;
 
 test("catalog shows total and all groups", async ({ page }) => {
@@ -33,7 +33,7 @@ test("category filter shows only matching group and resets on ALL", async ({
 		await page.getByRole("button", { name: "CONVERT" }).click();
 		await expect(page.locator(".catalog-group")).toHaveCount(1);
 	}).toPass();
-	await expect(page.locator(".catalog-group")).toContainText("CONVERT");
+	await expect(page.locator(".catalog-group")).toContainText("Convert");
 	const convertCards = await page.locator(".tool-card").count();
 	expect(convertCards).toBeGreaterThan(0);
 	expect(convertCards).toBeLessThan(allCount);

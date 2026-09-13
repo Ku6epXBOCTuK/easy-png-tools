@@ -15,7 +15,7 @@ test.describe("known bugs — documented as fixme", () => {
 		await openTool(page, "resize-png");
 		await uploadImage(page, opaquePng);
 		await expect(page.locator("[role='alert']")).toHaveCount(0);
-		await expect(page.locator('img[alt="result"]')).toBeVisible();
+		await expect(page.locator('img[alt="Result image"]')).toBeVisible();
 	});
 
 	test.fixme("crop-png: upload produces a cropped result (no alert)", async ({
@@ -24,6 +24,6 @@ test.describe("known bugs — documented as fixme", () => {
 		await openTool(page, "crop-png");
 		await uploadImage(page, opaquePng);
 		await expect(page.locator("[role='alert']")).toHaveCount(0);
-		await expect(page.locator('img[alt="result"]')).toBeVisible();
+		await expect(page.locator('img[alt="Result image"]')).toBeVisible();
 	});
 });

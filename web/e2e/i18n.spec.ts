@@ -2,6 +2,20 @@ import { expect, test } from "playwright/test";
 import { opaquePng } from "./helpers/fixtures";
 import { openTool, uploadImage } from "./helpers/page";
 
+test("поиск каталога находит по названию из другой локали", async ({
+	page,
+}) => {
+	await page.goto("/list-tools");
+	const input = page.locator(".catalog-search input");
+	const flipCard = page.locator('a.tool-card[href*="flip-png"]');
+	await input.fill("отразить");
+	await expect(flipCard).toContainText("Flip PNG");
+	await page.getByRole("button", { name: "RU", exact: true }).click();
+	await expect(flipCard).toContainText("Отразить PNG");
+	await input.fill("flip");
+	await expect(flipCard).toContainText("Отразить PNG");
+});
+
 test("RU/EN: переключение переводит заголовок инструмента", async ({
 	page,
 }) => {

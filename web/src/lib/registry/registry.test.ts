@@ -6,7 +6,7 @@ import { defaultSchemaParams, sanitizeSchemaParams } from "../registry-schema";
 import type { FileResult, ToolResult } from "./types";
 
 function asImage(result: ToolResult): PixelImage {
-	if (typeof result === "string" || "files" in result) {
+	if (typeof result === "string" || "files" in result || "key" in result) {
 		throw new Error("expected an image result");
 	}
 	return result;
@@ -595,7 +595,7 @@ describe("split-into-parts-png", () => {
 });
 
 function asFiles(result: ToolResult): FileResult {
-	if (typeof result === "string" || !("files" in result)) {
+	if (typeof result === "string" || "key" in result || !("files" in result)) {
 		throw new Error("expected a files result");
 	}
 	return result;
