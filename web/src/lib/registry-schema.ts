@@ -11,8 +11,8 @@
 //     с полями `P`, а `Field<P[K]>` тип-проверялся на соответствие `P[K]`.
 // Ошибки компилятора ловят расхождения между интерфейсом Params и схемой.
 
-import type { Position9 } from "./core/textdraw";
 import type { TextFont } from "./core/domText";
+import type { Position9 } from "./core/textdraw";
 
 /**
  * Общее необязательное поле всех спеков: ключ подписи поля в словаре.
@@ -269,6 +269,7 @@ export const field = {
 		spec: { kind: "checkbox", ...s },
 	}),
 	dimension: (s: {
+		label?: string;
 		min: number;
 		max: number;
 		width: number;
@@ -276,13 +277,18 @@ export const field = {
 	}): Field<Dimension> => ({
 		spec: { kind: "dimension", ...s },
 	}),
-	colorPair: (s: { from: string; to: string }): Field<ColorPair> => ({
+	colorPair: (s: {
+		label?: string;
+		from: string;
+		to: string;
+	}): Field<ColorPair> => ({
 		spec: { kind: "color-pair", ...s },
 	}),
-	colors: (s: { default: string[] }): Field<ColorList> => ({
+	colors: (s: { label?: string; default: string[] }): Field<ColorList> => ({
 		spec: { kind: "colors", ...s },
 	}),
 	offset: (s: {
+		label?: string;
 		min: number;
 		max: number;
 		x: number;
@@ -290,10 +296,11 @@ export const field = {
 	}): Field<Offset> => ({
 		spec: { kind: "offset", ...s },
 	}),
-	position9: (s: { default: Position9 }): Field<Position9> => ({
+	position9: (s: { label?: string; default: Position9 }): Field<Position9> => ({
 		spec: { kind: "position9", ...s },
 	}),
 	fontStyle: (s: {
+		label?: string;
 		min: number;
 		max: number;
 		size: number;
@@ -304,6 +311,7 @@ export const field = {
 		spec: { kind: "font-style", ...s },
 	}),
 	plate: (s: {
+		label?: string;
 		enabled: boolean;
 		color: string;
 		opacity: number;
@@ -311,6 +319,7 @@ export const field = {
 		spec: { kind: "plate", ...s },
 	}),
 	gradient: (s: {
+		label?: string;
 		from: string;
 		to: string;
 		angle: number;

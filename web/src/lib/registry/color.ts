@@ -29,8 +29,18 @@ interface TwoColorsParams {
 }
 
 export const twoColorsSchema = toolSchema<TwoColorsParams>({
-	pair: field.colorPair({ from: "#ffffff", to: "#000000" }),
-	threshold: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+	pair: field.colorPair({
+		label: "fields.colorPair",
+		from: "#ffffff",
+		to: "#000000",
+	}),
+	threshold: field.slider({
+		label: "fields.threshold",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 50,
+	}),
 });
 
 const twoColorsTool: ToolEntry<TwoColorsParams> = {
@@ -49,7 +59,13 @@ interface GammaParams {
 }
 
 export const gammaSchema = toolSchema<GammaParams>({
-	value: field.slider({ min: 0.1, max: 3, step: 0.05, default: 1 }),
+	value: field.slider({
+		label: "fields.gamma",
+		min: 0.1,
+		max: 3,
+		step: 0.05,
+		default: 1,
+	}),
 });
 
 const gammaTool: ToolEntry<GammaParams> = {
@@ -68,7 +84,13 @@ interface TemperatureParams {
 }
 
 export const temperatureSchema = toolSchema<TemperatureParams>({
-	percent: field.slider({ min: -100, max: 100, step: 1, default: 0 }),
+	percent: field.slider({
+		label: "fields.percent",
+		min: -100,
+		max: 100,
+		step: 1,
+		default: 0,
+	}),
 });
 
 const temperatureTool: ToolEntry<TemperatureParams> = {
@@ -88,8 +110,14 @@ interface TintParams {
 }
 
 export const tintSchema = toolSchema<TintParams>({
-	color: field.color({ default: "#ffb060" }),
-	strength: field.slider({ min: 0, max: 100, step: 1, default: 30 }),
+	color: field.color({ label: "fields.color", default: "#ffb060" }),
+	strength: field.slider({
+		label: "fields.strength",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 30,
+	}),
 });
 
 const tintTool: ToolEntry<TintParams> = {
@@ -108,7 +136,13 @@ interface QuantizeParams {
 }
 
 export const quantizeSchema = toolSchema<QuantizeParams>({
-	colors: field.slider({ min: 2, max: 64, step: 1, default: 16 }),
+	colors: field.slider({
+		label: "fields.colorCount",
+		min: 2,
+		max: 64,
+		step: 1,
+		default: 16,
+	}),
 });
 
 const quantizeTool: ToolEntry<QuantizeParams> = {
@@ -127,7 +161,7 @@ interface CustomPaletteParams {
 }
 
 export const customPaletteSchema = toolSchema<CustomPaletteParams>({
-	colors: field.text({ default: "#000000,#ffffff" }),
+	colors: field.text({ label: "fields.hexList", default: "#000000,#ffffff" }),
 });
 
 const customPalette: ToolEntry<CustomPaletteParams> = {
@@ -147,8 +181,15 @@ interface DitheringParams {
 }
 
 export const ditheringSchema = toolSchema<DitheringParams>({
-	colors: field.slider({ min: 2, max: 16, step: 1, default: 4 }),
+	colors: field.slider({
+		label: "fields.colorCount",
+		min: 2,
+		max: 16,
+		step: 1,
+		default: 4,
+	}),
 	pattern: field.select({
+		label: "fields.pattern",
 		default: "floyd-steinberg",
 		options: [
 			{ value: "floyd-steinberg", label: "Floyd–Steinberg" },
@@ -202,8 +243,20 @@ interface BrightnessContrastParams {
 
 export const brightnessContrastSchema = toolSchema<BrightnessContrastParams>(
 	{
-		brightness: field.slider({ min: -100, max: 100, step: 1, default: 0 }),
-		contrast: field.slider({ min: -100, max: 100, step: 1, default: 0 }),
+		brightness: field.slider({
+			label: "fields.brightness",
+			min: -100,
+			max: 100,
+			step: 1,
+			default: 0,
+		}),
+		contrast: field.slider({
+			label: "fields.contrast",
+			min: -100,
+			max: 100,
+			step: 1,
+			default: 0,
+		}),
 	},
 	{
 		layout: {
@@ -230,7 +283,13 @@ interface OpacityParams {
 }
 
 export const opacitySchema = toolSchema<OpacityParams>({
-	percent: field.slider({ min: 0, max: 100, step: 1, default: 100 }),
+	percent: field.slider({
+		label: "fields.percent",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 100,
+	}),
 });
 
 const opacityTool: ToolEntry<OpacityParams> = {
@@ -261,7 +320,13 @@ interface HueShiftParams {
 }
 
 export const hueShiftSchema = toolSchema<HueShiftParams>({
-	degrees: field.slider({ min: -180, max: 180, step: 1, default: 0 }),
+	degrees: field.slider({
+		label: "fields.degrees",
+		min: -180,
+		max: 180,
+		step: 1,
+		default: 0,
+	}),
 });
 
 const hueShiftTool: ToolEntry<HueShiftParams> = {
@@ -281,6 +346,7 @@ interface ExtractChannelParams {
 
 export const extractChannelSchema = toolSchema<ExtractChannelParams>({
 	channel: field.select({
+		label: "fields.channel",
 		default: "red",
 		options: [
 			{ value: "red", label: "Red" },
@@ -307,6 +373,7 @@ interface SwapChannelsParams {
 
 export const swapChannelsSchema = toolSchema<SwapChannelsParams>({
 	pair: field.select({
+		label: "fields.channelPair",
 		default: "r-g",
 		options: [
 			{ value: "r-g", label: "Red ↔ Green" },
@@ -332,7 +399,13 @@ interface BlackAndWhiteParams {
 }
 
 export const blackAndWhiteSchema = toolSchema<BlackAndWhiteParams>({
-	threshold: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+	threshold: field.slider({
+		label: "fields.threshold",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 50,
+	}),
 });
 
 const blackAndWhiteTool: ToolEntry<BlackAndWhiteParams> = {
@@ -351,7 +424,13 @@ interface PosterizeParams {
 }
 
 export const posterizeSchema = toolSchema<PosterizeParams>({
-	levels: field.slider({ min: 2, max: 16, step: 1, default: 4 }),
+	levels: field.slider({
+		label: "fields.levels",
+		min: 2,
+		max: 16,
+		step: 1,
+		default: 4,
+	}),
 });
 
 const posterizeTool: ToolEntry<PosterizeParams> = {
@@ -384,6 +463,7 @@ interface DecreaseColorCountParams {
 
 export const decreaseColorCountSchema = toolSchema<DecreaseColorCountParams>({
 	maxColors: field.select({
+		label: "fields.maxColors",
 		default: "16",
 		options: [
 			{ value: "2", label: "2" },
@@ -479,6 +559,7 @@ function channelEntries(): ToolEntry<ChannelParams>[] {
 			category: "color",
 			schema: toolSchema<ChannelParams>({
 				component: field.select({
+					label: "fields.component",
 					default: components[0],
 					options: components.map((c) => ({
 						value: c,
@@ -486,6 +567,7 @@ function channelEntries(): ToolEntry<ChannelParams>[] {
 					})),
 				}),
 				display: field.select({
+					label: "fields.display",
 					default: "gray",
 					options: [
 						{ value: "gray", label: "Grayscale" },

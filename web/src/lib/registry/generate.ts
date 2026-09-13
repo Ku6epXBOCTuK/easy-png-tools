@@ -80,9 +80,15 @@ interface CreateEmptyParams {
 
 export const createEmptySchema = toolSchema<CreateEmptyParams>(
 	{
-		size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-		transparent: field.checkbox({ default: true }),
-		color: field.color({ default: "#ffffff" }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 1,
+			max: 20000,
+			width: 800,
+			height: 600,
+		}),
+		transparent: field.checkbox({ label: "fields.transparent", default: true }),
+		color: field.color({ label: "fields.fillColor", default: "#ffffff" }),
 	},
 	{
 		layout: {
@@ -118,8 +124,14 @@ interface SingleColorParams {
 }
 
 export const singleColorSchema = toolSchema<SingleColorParams>({
-	size: field.dimension({ min: 1, max: 20000, width: 256, height: 256 }),
-	color: field.color({ default: "#ff0000" }),
+	size: field.dimension({
+		label: "fields.canvasSize",
+		min: 1,
+		max: 20000,
+		width: 256,
+		height: 256,
+	}),
+	color: field.color({ label: "fields.color", default: "#ff0000" }),
 });
 
 const singleColor: ToolEntry<SingleColorParams> = {
@@ -142,8 +154,20 @@ interface RandomNoiseParams {
 }
 
 export const randomNoiseSchema = toolSchema<RandomNoiseParams>({
-	size: field.dimension({ min: 1, max: 5000, width: 512, height: 512 }),
-	seed: field.number({ min: 0, max: 999999999, step: 1, default: 1 }),
+	size: field.dimension({
+		label: "fields.canvasSize",
+		min: 1,
+		max: 5000,
+		width: 512,
+		height: 512,
+	}),
+	seed: field.number({
+		label: "fields.seed",
+		min: 0,
+		max: 999999999,
+		step: 1,
+		default: 1,
+	}),
 });
 
 const randomNoise: ToolEntry<RandomNoiseParams> = {
@@ -168,8 +192,19 @@ interface LinearGradientParams {
 
 export const linearGradientSchema = toolSchema<LinearGradientParams>(
 	{
-		size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-		gradient: field.gradient({ from: "#000000", to: "#ffffff", angle: 0 }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 1,
+			max: 20000,
+			width: 800,
+			height: 600,
+		}),
+		gradient: field.gradient({
+			label: "fields.gradient",
+			from: "#000000",
+			to: "#ffffff",
+			angle: 0,
+		}),
 	},
 	{
 		layout: {
@@ -211,16 +246,35 @@ interface ColorSpectrumParams {
 
 export const colorSpectrumSchema = toolSchema<ColorSpectrumParams>(
 	{
-		size: field.dimension({ min: 1, max: 5000, width: 1024, height: 128 }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 1,
+			max: 5000,
+			width: 1024,
+			height: 128,
+		}),
 		direction: field.select({
+			label: "fields.direction",
 			default: "horizontal",
 			options: [
 				{ value: "horizontal", label: "Horizontal" },
 				{ value: "vertical", label: "Vertical" },
 			],
 		}),
-		saturation: field.slider({ min: 0, max: 100, step: 1, default: 100 }),
-		lightness: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+		saturation: field.slider({
+			label: "fields.saturation",
+			min: 0,
+			max: 100,
+			step: 1,
+			default: 100,
+		}),
+		lightness: field.slider({
+			label: "fields.lightness",
+			min: 0,
+			max: 100,
+			step: 1,
+			default: 50,
+		}),
 	},
 	{
 		layout: {
@@ -258,9 +312,27 @@ interface RandomColorsParams {
 
 export const randomColorsSchema = toolSchema<RandomColorsParams>(
 	{
-		size: field.dimension({ min: 1, max: 5000, width: 512, height: 512 }),
-		blockSize: field.slider({ min: 4, max: 256, step: 2, default: 64 }),
-		seed: field.number({ min: 0, max: 999999999, step: 1, default: 7 }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 1,
+			max: 5000,
+			width: 512,
+			height: 512,
+		}),
+		blockSize: field.slider({
+			label: "fields.blockSize",
+			min: 4,
+			max: 256,
+			step: 2,
+			default: 64,
+		}),
+		seed: field.number({
+			label: "fields.seed",
+			min: 0,
+			max: 999999999,
+			step: 1,
+			default: 7,
+		}),
 	},
 	{
 		layout: {
@@ -298,12 +370,39 @@ interface DrawGridParams {
 
 export const drawGridSchema = toolSchema<DrawGridParams>(
 	{
-		size: field.dimension({ min: 1, max: 5000, width: 512, height: 512 }),
-		cols: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
-		rows: field.slider({ min: 1, max: 64, step: 1, default: 8 }),
-		lineWidth: field.slider({ min: 1, max: 40, step: 1, default: 2 }),
-		color: field.color({ default: "#111318" }),
-		transparentBg: field.checkbox({ default: true }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 1,
+			max: 5000,
+			width: 512,
+			height: 512,
+		}),
+		cols: field.slider({
+			label: "fields.cols",
+			min: 1,
+			max: 64,
+			step: 1,
+			default: 8,
+		}),
+		rows: field.slider({
+			label: "fields.rows",
+			min: 1,
+			max: 64,
+			step: 1,
+			default: 8,
+		}),
+		lineWidth: field.slider({
+			label: "fields.lineWidth",
+			min: 1,
+			max: 40,
+			step: 1,
+			default: 2,
+		}),
+		color: field.color({ label: "fields.lineColor", default: "#111318" }),
+		transparentBg: field.checkbox({
+			label: "fields.transparentBg",
+			default: true,
+		}),
 	},
 	{
 		layout: {
@@ -351,10 +450,19 @@ interface PlaceholderParams {
 
 export const placeholderSchema = toolSchema<PlaceholderParams>(
 	{
-		size: field.dimension({ min: 1, max: 5000, width: 800, height: 400 }),
-		backgroundColor: field.color({ default: "#dfe2e8" }),
-		color: field.color({ default: "#5c6470" }),
-		showText: field.checkbox({ default: true }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 1,
+			max: 5000,
+			width: 800,
+			height: 400,
+		}),
+		backgroundColor: field.color({
+			label: "fields.backgroundColor",
+			default: "#dfe2e8",
+		}),
+		color: field.color({ label: "fields.textColor", default: "#5c6470" }),
+		showText: field.checkbox({ label: "fields.showText", default: true }),
 	},
 	{
 		layout: {
@@ -406,8 +514,18 @@ interface BlendTwoParams {
 }
 
 export const blendTwoSchema = toolSchema<BlendTwoParams>({
-	pair: field.colorPair({ from: "#000000", to: "#ffffff" }),
-	width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+	pair: field.colorPair({
+		label: "fields.colorPair",
+		from: "#000000",
+		to: "#ffffff",
+	}),
+	width: field.slider({
+		label: "fields.width",
+		min: 128,
+		max: 1024,
+		step: 16,
+		default: 512,
+	}),
 });
 
 const blendTwo: ToolEntry<BlendTwoParams> = {
@@ -429,10 +547,27 @@ interface StepColorsParams {
 
 export const stepColorsSchema = toolSchema<StepColorsParams>(
 	{
-		pair: field.colorPair({ from: "#000000", to: "#ffffff" }),
-		steps: field.slider({ min: 2, max: 12, step: 1, default: 6 }),
-		width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+		pair: field.colorPair({
+			label: "fields.colorPair",
+			from: "#000000",
+			to: "#ffffff",
+		}),
+		steps: field.slider({
+			label: "fields.steps",
+			min: 2,
+			max: 12,
+			step: 1,
+			default: 6,
+		}),
+		width: field.slider({
+			label: "fields.width",
+			min: 128,
+			max: 1024,
+			step: 16,
+			default: 512,
+		}),
 		layout: field.select({
+			label: "fields.layout",
 			default: "grid",
 			options: [
 				{ value: "grid", label: "Grid" },
@@ -476,8 +611,14 @@ interface EmojiToPngParams {
 }
 
 export const emojiToPngSchema = toolSchema<EmojiToPngParams>({
-	emoji: field.text({ default: "😀" }),
-	size: field.slider({ min: 32, max: 1024, step: 16, default: 256 }),
+	emoji: field.text({ label: "fields.emoji", default: "😀" }),
+	size: field.slider({
+		label: "fields.imageSize",
+		min: 32,
+		max: 1024,
+		step: 16,
+		default: 256,
+	}),
 });
 
 const emojiToPng: ToolEntry<EmojiToPngParams> = {
@@ -498,8 +639,20 @@ interface ColorWheelParams {
 }
 
 export const colorWheelSchema = toolSchema<ColorWheelParams>({
-	size: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
-	lightness: field.slider({ min: 0, max: 100, step: 1, default: 50 }),
+	size: field.slider({
+		label: "fields.imageSize",
+		min: 128,
+		max: 1024,
+		step: 16,
+		default: 512,
+	}),
+	lightness: field.slider({
+		label: "fields.lightness",
+		min: 0,
+		max: 100,
+		step: 1,
+		default: 50,
+	}),
 });
 
 const colorWheelTool: ToolEntry<ColorWheelParams> = {
@@ -520,9 +673,16 @@ interface PaletteBaseParams {
 }
 
 const paletteBaseSchema = {
-	baseColor: field.color({ default: "#2563eb" }),
-	width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+	baseColor: field.color({ label: "fields.baseColor", default: "#2563eb" }),
+	width: field.slider({
+		label: "fields.width",
+		min: 128,
+		max: 1024,
+		step: 16,
+		default: 512,
+	}),
 	layout: field.select({
+		label: "fields.layout",
 		default: "grid",
 		options: [
 			{ value: "grid", label: "Grid" },
@@ -568,7 +728,7 @@ const triadicTool: ToolEntry<PaletteBaseParams> = {
 	schema: toolSchema<PaletteBaseParams>(
 		{
 			...paletteBaseSchema,
-			baseColor: field.color({ default: "#ff0000" }),
+			baseColor: field.color({ label: "fields.baseColor", default: "#ff0000" }),
 		},
 		{ ...paletteLayoutGroup },
 	),
@@ -587,7 +747,7 @@ const tetradicTool: ToolEntry<PaletteBaseParams> = {
 	schema: toolSchema<PaletteBaseParams>(
 		{
 			...paletteBaseSchema,
-			baseColor: field.color({ default: "#8000ff" }),
+			baseColor: field.color({ label: "fields.baseColor", default: "#8000ff" }),
 		},
 		{ ...paletteLayoutGroup },
 	),
@@ -611,9 +771,21 @@ const analogousTool: ToolEntry<AnalogousParams> = {
 	schema: toolSchema<AnalogousParams>(
 		{
 			...paletteBaseSchema,
-			baseColor: field.color({ default: "#22c55e" }),
-			spread: field.slider({ min: 10, max: 90, step: 5, default: 30 }),
-			count: field.slider({ min: 3, max: 9, step: 1, default: 5 }),
+			baseColor: field.color({ label: "fields.baseColor", default: "#22c55e" }),
+			spread: field.slider({
+				label: "fields.spread",
+				min: 10,
+				max: 90,
+				step: 5,
+				default: 30,
+			}),
+			count: field.slider({
+				label: "fields.count",
+				min: 3,
+				max: 9,
+				step: 1,
+				default: 5,
+			}),
 		},
 		{ ...paletteLayoutGroup },
 	),
@@ -641,9 +813,21 @@ const monochromaticTool: ToolEntry<MonochromaticParams> = {
 	schema: toolSchema<MonochromaticParams>(
 		{
 			...paletteBaseSchema,
-			baseColor: field.color({ default: "#0ea5e9" }),
-			count: field.slider({ min: 2, max: 9, step: 1, default: 5 }),
-			range: field.slider({ min: 10, max: 90, step: 5, default: 40 }),
+			baseColor: field.color({ label: "fields.baseColor", default: "#0ea5e9" }),
+			count: field.slider({
+				label: "fields.count",
+				min: 2,
+				max: 9,
+				step: 1,
+				default: 5,
+			}),
+			range: field.slider({
+				label: "fields.range",
+				min: 10,
+				max: 90,
+				step: 5,
+				default: 40,
+			}),
 		},
 		{ ...paletteLayoutGroup },
 	),
@@ -670,9 +854,21 @@ const shadesTool: ToolEntry<ShadesParams> = {
 	schema: toolSchema<ShadesParams>(
 		{
 			...paletteBaseSchema,
-			baseColor: field.color({ default: "#f59e0b" }),
-			count: field.slider({ min: 2, max: 9, step: 1, default: 5 }),
-			depth: field.slider({ min: 10, max: 90, step: 5, default: 50 }),
+			baseColor: field.color({ label: "fields.baseColor", default: "#f59e0b" }),
+			count: field.slider({
+				label: "fields.count",
+				min: 2,
+				max: 9,
+				step: 1,
+				default: 5,
+			}),
+			depth: field.slider({
+				label: "fields.depth",
+				min: 10,
+				max: 90,
+				step: 5,
+				default: 50,
+			}),
 		},
 		{ ...paletteLayoutGroup },
 	),
@@ -689,8 +885,17 @@ interface MixColorsParams {
 
 export const mixColorsSchema = toolSchema<MixColorsParams>(
 	{
-		colors: field.colors({ default: ["#ff0000", "#00ff00", "#0000ff"] }),
-		width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+		colors: field.colors({
+			label: "fields.colorList",
+			default: ["#ff0000", "#00ff00", "#0000ff"],
+		}),
+		width: field.slider({
+			label: "fields.width",
+			min: 128,
+			max: 1024,
+			step: 16,
+			default: 512,
+		}),
 	},
 	{
 		layout: {
@@ -723,6 +928,7 @@ interface SortColorsParams {
 export const sortColorsSchema = toolSchema<SortColorsParams>(
 	{
 		colors: field.colors({
+			label: "fields.colorList",
 			default: [
 				"#ff0000",
 				"#ff8800",
@@ -733,6 +939,7 @@ export const sortColorsSchema = toolSchema<SortColorsParams>(
 			],
 		}),
 		order: field.select({
+			label: "fields.order",
 			default: "hue",
 			options: [
 				{ value: "hue", label: "Hue" },
@@ -740,8 +947,15 @@ export const sortColorsSchema = toolSchema<SortColorsParams>(
 				{ value: "sat", label: "Saturation" },
 			],
 		}),
-		width: field.slider({ min: 128, max: 1024, step: 16, default: 512 }),
+		width: field.slider({
+			label: "fields.width",
+			min: 128,
+			max: 1024,
+			step: 16,
+			default: 512,
+		}),
 		layout: field.select({
+			label: "fields.layout",
 			default: "grid",
 			options: [
 				{ value: "grid", label: "Grid" },
@@ -786,8 +1000,13 @@ interface TextToPngParams {
 
 export const textToPngSchema = toolSchema<TextToPngParams>(
 	{
-		text: field.text({ default: "Hello!", placeholder: "Your text" }),
+		text: field.text({
+			label: "fields.text",
+			default: "Hello!",
+			placeholder: "Your text",
+		}),
 		style: field.fontStyle({
+			label: "fields.textStyle",
 			min: 8,
 			max: 300,
 			size: 96,
@@ -795,9 +1014,21 @@ export const textToPngSchema = toolSchema<TextToPngParams>(
 			bold: true,
 			color: "#111318",
 		}),
-		transparentBg: field.checkbox({ default: false }),
-		backgroundColor: field.color({ default: "#ffffff" }),
-		padding: field.slider({ min: 0, max: 200, step: 2, default: 24 }),
+		transparentBg: field.checkbox({
+			label: "fields.transparentBg",
+			default: false,
+		}),
+		backgroundColor: field.color({
+			label: "fields.backgroundColor",
+			default: "#ffffff",
+		}),
+		padding: field.slider({
+			label: "fields.padding",
+			min: 0,
+			max: 200,
+			step: 2,
+			default: 24,
+		}),
 	},
 	{
 		layout: {

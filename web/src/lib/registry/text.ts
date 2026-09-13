@@ -15,8 +15,13 @@ interface AddTextParams {
 
 const addTextSchema = toolSchema<AddTextParams>(
 	{
-		text: field.text({ default: "Hello!", placeholder: "Your text" }),
+		text: field.text({
+			label: "fields.text",
+			default: "Hello!",
+			placeholder: "Your text",
+		}),
 		style: field.fontStyle({
+			label: "fields.textStyle",
 			min: 8,
 			max: 200,
 			size: 48,
@@ -24,9 +29,23 @@ const addTextSchema = toolSchema<AddTextParams>(
 			bold: true,
 			color: "#ffffff",
 		}),
-		position: field.position9({ default: "bottom-right" }),
-		margin: field.slider({ min: 0, max: 200, step: 1, default: 24 }),
-		plate: field.plate({ enabled: false, color: "#000000", opacity: 60 }),
+		position: field.position9({
+			label: "fields.position",
+			default: "bottom-right",
+		}),
+		margin: field.slider({
+			label: "fields.margin",
+			min: 0,
+			max: 200,
+			step: 1,
+			default: 24,
+		}),
+		plate: field.plate({
+			label: "fields.plate",
+			enabled: false,
+			color: "#000000",
+			opacity: 60,
+		}),
 	},
 	{
 		layout: {
@@ -75,10 +94,12 @@ interface DateStampParams {
 const dateStampSchema = toolSchema<DateStampParams>(
 	{
 		format: field.text({
+			label: "fields.dateFormat",
 			default: "YYYY-MM-DD",
 			placeholder: "YYYY-MM-DD hh:mm",
 		}),
 		style: field.fontStyle({
+			label: "fields.textStyle",
 			min: 8,
 			max: 200,
 			size: 32,
@@ -86,9 +107,23 @@ const dateStampSchema = toolSchema<DateStampParams>(
 			bold: false,
 			color: "#ffffff",
 		}),
-		position: field.position9({ default: "bottom-right" }),
-		margin: field.slider({ min: 0, max: 200, step: 1, default: 20 }),
-		plate: field.plate({ enabled: true, color: "#000000", opacity: 55 }),
+		position: field.position9({
+			label: "fields.position",
+			default: "bottom-right",
+		}),
+		margin: field.slider({
+			label: "fields.margin",
+			min: 0,
+			max: 200,
+			step: 1,
+			default: 20,
+		}),
+		plate: field.plate({
+			label: "fields.plate",
+			enabled: true,
+			color: "#000000",
+			opacity: 55,
+		}),
 	},
 	{
 		layout: {
@@ -137,8 +172,13 @@ interface WatermarkTileParams {
 
 const watermarkTileSchema = toolSchema<WatermarkTileParams>(
 	{
-		text: field.text({ default: "DRAFT", placeholder: "Watermark text" }),
+		text: field.text({
+			label: "fields.text",
+			default: "DRAFT",
+			placeholder: "Watermark text",
+		}),
 		style: field.fontStyle({
+			label: "fields.textStyle",
 			min: 12,
 			max: 160,
 			size: 56,
@@ -146,10 +186,34 @@ const watermarkTileSchema = toolSchema<WatermarkTileParams>(
 			bold: true,
 			color: "#ffffff",
 		}),
-		opacity: field.slider({ min: 5, max: 100, step: 5, default: 30 }),
-		angle: field.slider({ min: -90, max: 90, step: 1, default: -30 }),
-		stepX: field.slider({ min: 40, max: 600, step: 10, default: 220 }),
-		stepY: field.slider({ min: 40, max: 600, step: 10, default: 180 }),
+		opacity: field.slider({
+			label: "fields.opacity",
+			min: 5,
+			max: 100,
+			step: 5,
+			default: 30,
+		}),
+		angle: field.slider({
+			label: "fields.angle",
+			min: -90,
+			max: 90,
+			step: 1,
+			default: -30,
+		}),
+		stepX: field.slider({
+			label: "fields.stepX",
+			min: 40,
+			max: 600,
+			step: 10,
+			default: 220,
+		}),
+		stepY: field.slider({
+			label: "fields.stepY",
+			min: 40,
+			max: 600,
+			step: 10,
+			default: 180,
+		}),
 	},
 	{
 		layout: {

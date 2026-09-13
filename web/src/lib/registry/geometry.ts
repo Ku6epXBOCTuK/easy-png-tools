@@ -37,8 +37,14 @@ interface AddBorderParams {
 }
 
 export const addBorderSchema = toolSchema<AddBorderParams>({
-	thickness: field.number({ min: 1, max: 500, step: 1, default: 5 }),
-	color: field.color({ default: "#000000" }),
+	thickness: field.number({
+		label: "fields.thickness",
+		min: 1,
+		max: 500,
+		step: 1,
+		default: 5,
+	}),
+	color: field.color({ label: "fields.borderColor", default: "#000000" }),
 });
 
 const addBorder: ToolEntry<AddBorderParams> = {
@@ -69,9 +75,18 @@ interface FitOnBackgroundParams {
 
 export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>(
 	{
-		size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
-		transparent: field.checkbox({ default: false }),
-		color: field.color({ default: "#ffffff" }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 1,
+			max: 20000,
+			width: 800,
+			height: 600,
+		}),
+		transparent: field.checkbox({
+			label: "fields.transparent",
+			default: false,
+		}),
+		color: field.color({ label: "fields.background", default: "#ffffff" }),
 	},
 	{
 		layout: {
@@ -117,8 +132,15 @@ interface ChangeCanvasSizeParams {
 
 export const changeCanvasSizeSchema = toolSchema<ChangeCanvasSizeParams>(
 	{
-		size: field.dimension({ min: 1, max: 20000, width: 800, height: 600 }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 1,
+			max: 20000,
+			width: 800,
+			height: 600,
+		}),
 		anchor: field.select({
+			label: "fields.anchor",
 			default: "center",
 			options: [
 				{ value: "top-left", label: "Top left" },
@@ -168,8 +190,14 @@ interface ResizeParams {
 
 export const resizeSchema = toolSchema<ResizeParams>(
 	{
-		size: field.dimension({ min: 0, max: 20000, width: 0, height: 0 }),
-		keepAspect: field.checkbox({ default: true }),
+		size: field.dimension({
+			label: "fields.canvasSize",
+			min: 0,
+			max: 20000,
+			width: 0,
+			height: 0,
+		}),
+		keepAspect: field.checkbox({ label: "fields.keepAspect", default: true }),
 	},
 	{
 		layout: {
@@ -219,9 +247,27 @@ interface CropParams {
 
 export const cropSchema = toolSchema<CropParams>(
 	{
-		x: field.number({ min: -100000, max: 100000, step: 1, default: 0 }),
-		y: field.number({ min: -100000, max: 100000, step: 1, default: 0 }),
-		size: field.dimension({ min: 0, max: 100000, width: 0, height: 0 }),
+		x: field.number({
+			label: "fields.x",
+			min: -100000,
+			max: 100000,
+			step: 1,
+			default: 0,
+		}),
+		y: field.number({
+			label: "fields.y",
+			min: -100000,
+			max: 100000,
+			step: 1,
+			default: 0,
+		}),
+		size: field.dimension({
+			label: "fields.cropAreaSize",
+			min: 0,
+			max: 100000,
+			width: 0,
+			height: 0,
+		}),
 	},
 	{
 		layout: {
@@ -257,6 +303,7 @@ interface RotateParams {
 
 export const rotateSchema = toolSchema<RotateParams>({
 	angle: field.select({
+		label: "fields.angle",
 		default: "90",
 		options: [
 			{ value: "90", label: "90° clockwise" },
@@ -282,6 +329,7 @@ interface FlipParams {
 
 export const flipSchema = toolSchema<FlipParams>({
 	axis: field.select({
+		label: "fields.axis",
 		default: "horizontal",
 		options: [
 			{ value: "horizontal", label: "Horizontal (left to right)" },
@@ -308,9 +356,15 @@ interface AddPaddingParams {
 
 export const addPaddingSchema = toolSchema<AddPaddingParams>(
 	{
-		padding: field.number({ min: 1, max: 2000, step: 1, default: 10 }),
-		transparent: field.checkbox({ default: true }),
-		color: field.color({ default: "#ffffff" }),
+		padding: field.number({
+			label: "fields.padding",
+			min: 1,
+			max: 2000,
+			step: 1,
+			default: 10,
+		}),
+		transparent: field.checkbox({ label: "fields.transparent", default: true }),
+		color: field.color({ label: "fields.fillColor", default: "#ffffff" }),
 	},
 	{
 		layout: {
@@ -348,8 +402,20 @@ interface TileParams {
 }
 
 export const tileSchema = toolSchema<TileParams>({
-	columns: field.number({ min: 1, max: 50, step: 1, default: 2 }),
-	rows: field.number({ min: 1, max: 50, step: 1, default: 2 }),
+	columns: field.number({
+		label: "fields.columns",
+		min: 1,
+		max: 50,
+		step: 1,
+		default: 2,
+	}),
+	rows: field.number({
+		label: "fields.rows",
+		min: 1,
+		max: 50,
+		step: 1,
+		default: 2,
+	}),
 });
 
 const tileTool: ToolEntry<TileParams> = {
@@ -370,8 +436,20 @@ interface SplitPartsParams {
 }
 
 export const splitPartsSchema = toolSchema<SplitPartsParams>({
-	columns: field.number({ min: 1, max: 6, step: 1, default: 2 }),
-	rows: field.number({ min: 1, max: 6, step: 1, default: 2 }),
+	columns: field.number({
+		label: "fields.columns",
+		min: 1,
+		max: 6,
+		step: 1,
+		default: 2,
+	}),
+	rows: field.number({
+		label: "fields.rows",
+		min: 1,
+		max: 6,
+		step: 1,
+		default: 2,
+	}),
 });
 
 const splitPartsTool: ToolEntry<SplitPartsParams> = {
@@ -428,8 +506,20 @@ interface SkewParams {
 }
 
 export const skewSchema = toolSchema<SkewParams>({
-	degX: field.slider({ min: -80, max: 80, step: 1, default: 0 }),
-	degY: field.slider({ min: -80, max: 80, step: 1, default: 0 }),
+	degX: field.slider({
+		label: "fields.skewX",
+		min: -80,
+		max: 80,
+		step: 1,
+		default: 0,
+	}),
+	degY: field.slider({
+		label: "fields.skewY",
+		min: -80,
+		max: 80,
+		step: 1,
+		default: 0,
+	}),
 });
 
 const skewTool: ToolEntry<SkewParams> = {
@@ -448,7 +538,13 @@ interface RotateFreeParams {
 }
 
 export const rotateFreeSchema = toolSchema<RotateFreeParams>({
-	angle: field.slider({ min: -180, max: 180, step: 1, default: 15 }),
+	angle: field.slider({
+		label: "fields.angle",
+		min: -180,
+		max: 180,
+		step: 1,
+		default: 15,
+	}),
 });
 
 const rotateFreeTool: ToolEntry<RotateFreeParams> = {
@@ -467,7 +563,13 @@ interface ZoomParams {
 }
 
 export const zoomSchema = toolSchema<ZoomParams>({
-	scale: field.slider({ min: 100, max: 500, step: 10, default: 200 }),
+	scale: field.slider({
+		label: "fields.scalePct",
+		min: 100,
+		max: 500,
+		step: 10,
+		default: 200,
+	}),
 });
 
 const zoomTool: ToolEntry<ZoomParams> = {
@@ -486,7 +588,13 @@ interface TrimEmptySpaceParams {
 }
 
 export const trimEmptySpaceSchema = toolSchema<TrimEmptySpaceParams>({
-	threshold: field.slider({ min: 0, max: 254, step: 1, default: 0 }),
+	threshold: field.slider({
+		label: "fields.alphaThreshold",
+		min: 0,
+		max: 254,
+		step: 1,
+		default: 0,
+	}),
 });
 
 const trimEmptySpaceTool: ToolEntry<TrimEmptySpaceParams> = {
@@ -509,6 +617,7 @@ interface ChangeAspectRatioParams {
 
 export const changeAspectRatioSchema = toolSchema<ChangeAspectRatioParams>({
 	ratio: field.select({
+		label: "fields.ratio",
 		default: "1:1",
 		options: [
 			{ value: "1:1", label: "1:1" },
@@ -521,6 +630,7 @@ export const changeAspectRatioSchema = toolSchema<ChangeAspectRatioParams>({
 		],
 	}),
 	mode: field.select({
+		label: "fields.fitMode",
 		default: "crop",
 		options: [
 			{ value: "crop", label: "Crop to fill" },
@@ -550,6 +660,7 @@ interface SwapOrientationParams {
 
 export const swapOrientationSchema = toolSchema<SwapOrientationParams>({
 	target: field.select({
+		label: "fields.orientation",
 		default: "portrait",
 		options: [
 			{ value: "portrait", label: "Portrait" },
@@ -579,6 +690,7 @@ interface SymmetricCopyParams {
 
 export const symmetricCopySchema = toolSchema<SymmetricCopyParams>({
 	axis: field.select({
+		label: "fields.axis",
 		default: "vertical",
 		options: [
 			{ value: "vertical", label: "Vertical (double width)" },
@@ -586,6 +698,7 @@ export const symmetricCopySchema = toolSchema<SymmetricCopyParams>({
 		],
 	}),
 	keepSide: field.select({
+		label: "fields.keepSide",
 		default: "left",
 		options: [
 			{ value: "left", label: "Left" },
@@ -614,9 +727,21 @@ interface ShiftParams {
 }
 
 export const shiftSchema = toolSchema<ShiftParams>({
-	offsetX: field.number({ min: -5000, max: 5000, step: 1, default: 0 }),
-	offsetY: field.number({ min: -5000, max: 5000, step: 1, default: 0 }),
-	color: field.color({ default: "#ffffff" }),
+	offsetX: field.number({
+		label: "fields.offsetX",
+		min: -5000,
+		max: 5000,
+		step: 1,
+		default: 0,
+	}),
+	offsetY: field.number({
+		label: "fields.offsetY",
+		min: -5000,
+		max: 5000,
+		step: 1,
+		default: 0,
+	}),
+	color: field.color({ label: "fields.fillColor", default: "#ffffff" }),
 });
 
 const shiftTool: ToolEntry<ShiftParams> = {

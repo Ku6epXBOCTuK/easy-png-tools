@@ -204,24 +204,107 @@ export const en: Dict = {
 		toolUnknown: 'No tool is registered under "{id}".',
 	},
 	fields: {
+		alphaThreshold: "Alpha threshold",
 		amount: "Amount",
+		amplitude: "Amplitude",
+		anchor: "Anchor",
+		angle: "Angle",
+		axis: "Axis",
 		background: "Background",
+		backgroundColor: "Background color",
+		baseColor: "Base color",
 		blockSize: "Block size",
+		borderColor: "Border color",
+		brightness: "Brightness",
+		canvasSize: "Canvas size",
+		channel: "Channel",
+		channelPair: "Channel pair",
 		channelTolerance: "Channel tolerance",
 		color: "Color",
+		colorCount: "Color count",
+		colorList: "Color list",
+		colorPair: "Color pair",
 		colorTolerance: "Color tolerance",
+		cols: "Cols",
+		columns: "Columns",
+		component: "Component",
+		contrast: "Contrast",
+		count: "Count",
+		cropAreaSize: "Crop area size",
+		dateFormat: "Date format",
+		degrees: "Degrees",
+		depth: "Darken depth",
+		direction: "Direction",
+		display: "Display",
+		emoji: "Emoji",
 		fillColor: "Fill color",
+		fitMode: "Fit mode",
+		gamma: "Gamma",
+		gradient: "Gradient",
+		hexList: "Hex list",
 		highlightColor: "Highlight color",
+		imageSize: "Image size",
+		innerRadius: "Inner radius",
+		keepAspect: "Keep aspect",
+		keepSide: "Kept side",
+		layout: "Layout",
+		levels: "Levels",
+		lightness: "Lightness",
+		lineColor: "Line color",
+		lineWidth: "Line width",
 		lumaThreshold: "Luminance threshold",
+		margin: "Margin",
+		maxColors: "Max colors",
 		mode: "Mode",
+		offset: "Offset",
+		offsetX: "Offset X",
+		offsetY: "Offset Y",
 		opacity: "Opacity",
+		order: "Order",
+		orientation: "Orientation",
+		outerOnly: "Outer only",
+		padding: "Padding",
+		pattern: "Pattern",
+		percent: "Percent",
+		phase: "Phase",
+		plate: "Plate",
+		points: "Points",
+		position: "Position",
 		quality: "Quality",
 		radius: "Radius",
+		range: "Lightness range",
 		rarity: "Rarity",
+		ratio: "Aspect ratio",
+		rotation: "Rotation",
+		rows: "Rows",
+		saturation: "Saturation",
+		scalePct: "Zoom, %",
 		seed: "Seed",
+		shapeHeightPct: "Height, %",
+		shapeSize: "Shape size",
+		shapeWidthPct: "Width, %",
+		showText: "Show text",
+		skewX: "Skew X",
+		skewY: "Skew Y",
+		smooth: "Smooth",
+		spread: "Spread",
+		steps: "Steps",
+		stepX: "Step X",
+		stepY: "Step Y",
 		strength: "Strength",
+		strokeColor: "Stroke color",
+		targetColor: "Target color",
+		text: "Text",
+		textColor: "Text color",
+		textStyle: "Text style",
+		thickness: "Thickness",
 		threshold: "Threshold",
+		transparent: "Transparent",
+		transparentBg: "Transparent bg",
+		waves: "Waves",
 		width: "Width",
+		x: "X",
+		y: "Y",
 	},
 	groups: {
 		adjust: "Adjust",
@@ -316,6 +399,183 @@ export const en: Dict = {
 		"add-noise-png": {
 			options: {
 				mode: { mono: "Monochrome grain", color: "Color noise" },
+			},
+		},
+		"dithering-png": {
+			options: {
+				pattern: { "floyd-steinberg": "Floyd–Steinberg", bayer: "Bayer 4x4" },
+			},
+		},
+		"extract-channel-png": {
+			options: {
+				channel: { red: "Red", green: "Green", blue: "Blue" },
+			},
+		},
+		"swap-channels-png": {
+			options: {
+				pair: {
+					"r-g": "Red ↔ Green",
+					"r-b": "Red ↔ Blue",
+					"g-b": "Green ↔ Blue",
+				},
+			},
+		},
+		"decrease-color-count-png": {
+			options: {
+				maxColors: {
+					"2": "2",
+					"4": "4",
+					"8": "8",
+					"16": "16 (extreme)",
+					"32": "32",
+					"44": "44 (strong)",
+					"64": "64",
+					"96": "96 (balanced)",
+					"128": "128",
+					"192": "192 (light)",
+					"256": "256",
+				},
+			},
+		},
+		"png-to-hsl": {
+			options: {
+				display: { gray: "Grayscale", color: "Space as RGB" },
+			},
+		},
+		"png-to-hsv": {
+			options: {
+				display: { gray: "Grayscale", color: "Space as RGB" },
+			},
+		},
+		"png-to-hsi": {
+			options: {
+				display: { gray: "Grayscale", color: "Space as RGB" },
+			},
+		},
+		"png-to-cmyk": {
+			options: {
+				display: { gray: "Grayscale", color: "Space as RGB" },
+			},
+		},
+		"png-to-ycbcr": {
+			options: {
+				display: { gray: "Grayscale", color: "Space as RGB" },
+			},
+		},
+		"png-to-lab": {
+			options: {
+				display: { gray: "Grayscale", color: "Space as RGB" },
+			},
+		},
+		"rotate-png": {
+			options: {
+				angle: {
+					"90": "90° clockwise",
+					"180": "180°",
+					"270": "270° clockwise",
+				},
+			},
+		},
+		"flip-png": {
+			options: {
+				axis: {
+					horizontal: "Horizontal (left to right)",
+					vertical: "Vertical (top to bottom)",
+				},
+			},
+		},
+		"change-canvas-size-png": {
+			options: {
+				anchor: {
+					"top-left": "Top left",
+					"top-center": "Top center",
+					"top-right": "Top right",
+					"middle-left": "Middle left",
+					center: "Center",
+					"middle-right": "Middle right",
+					"bottom-left": "Bottom left",
+					"bottom-center": "Bottom center",
+					"bottom-right": "Bottom right",
+				},
+			},
+		},
+		"change-aspect-ratio-png": {
+			options: {
+				ratio: {
+					"1:1": "1:1",
+					"4:3": "4:3",
+					"3:4": "3:4",
+					"3:2": "3:2",
+					"2:3": "2:3",
+					"16:9": "16:9",
+					"9:16": "9:16",
+				},
+				mode: { crop: "Crop to fill", pad: "Pad to fit" },
+			},
+		},
+		"swap-orientation-png": {
+			options: {
+				target: { portrait: "Portrait", landscape: "Landscape" },
+			},
+		},
+		"symmetric-copy-png": {
+			options: {
+				axis: {
+					vertical: "Vertical (double width)",
+					horizontal: "Horizontal (double height)",
+				},
+				keepSide: {
+					left: "Left",
+					right: "Right",
+					top: "Top",
+					bottom: "Bottom",
+				},
+			},
+		},
+		"color-spectrum-png": {
+			options: {
+				direction: { horizontal: "Horizontal", vertical: "Vertical" },
+			},
+		},
+		"step-colors-png": {
+			options: {
+				layout: { grid: "Grid", strip: "Strip" },
+			},
+		},
+		"complementary-png": {
+			options: {
+				layout: { grid: "Grid", strip: "Strip" },
+			},
+		},
+		"triadic-png": {
+			options: {
+				layout: { grid: "Grid", strip: "Strip" },
+			},
+		},
+		"tetradic-png": {
+			options: {
+				layout: { grid: "Grid", strip: "Strip" },
+			},
+		},
+		"analogous-png": {
+			options: {
+				layout: { grid: "Grid", strip: "Strip" },
+			},
+		},
+		"monochromatic-png": {
+			options: {
+				layout: { grid: "Grid", strip: "Strip" },
+			},
+		},
+		"shades-png": {
+			options: {
+				layout: { grid: "Grid", strip: "Strip" },
+			},
+		},
+		"sort-colors-png": {
+			options: {
+				order: { hue: "Hue", luma: "Brightness", sat: "Saturation" },
+				layout: { grid: "Grid", strip: "Strip" },
 			},
 		},
 	},
