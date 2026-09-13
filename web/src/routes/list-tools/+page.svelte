@@ -4,6 +4,7 @@
 	import CatalogHeader from "$lib/components/CatalogHeader.svelte";
 	import CatalogToolbar from "$lib/components/CatalogToolbar.svelte";
 	import ToolCard from "$lib/components/ToolCard.svelte";
+	import { t } from "$lib/i18n/t";
 	import { TOOL_ICONS } from "$lib/tool-icons";
 
 	let query = $state("");
@@ -42,9 +43,7 @@
 			</CatalogGroup>
 		{/each}
 	</div>
-	<footer class="catalog-footer">
-		ALL OPERATIONS RUN LOCALLY <span>•</span> YOUR FILES NEVER LEAVE THIS DEVICE
-	</footer>
+	<footer class="catalog-footer">{t("header.footerNote")}</footer>
 </div>
 
 <style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import EmptyState from "$lib/components/EmptyState.svelte";
 	import SchemaToolView from "$lib/components/SchemaToolView.svelte";
+	import { t } from "$lib/i18n/t";
 	import { getTool } from "$lib/registry";
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";
 
@@ -13,15 +14,15 @@
 </script>
 
 <svelte:head>
-	<title>easy-png-tools / {tool?.title ?? "Tool"}</title>
+	<title>easy-png-tools / {tool?.title ?? t("toolPage.fallbackTitle")}</title>
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
 {#if !tool}
 	<div class="notfound">
 		<EmptyState
-			title="Tool not found"
-			description="No tool is registered under “{data.id}”."
+			title={t("errors.notFound")}
+			description={t("errors.toolUnknown", { id: data.id })}
 			icon={ToolIcon}
 		/>
 	</div>

@@ -3,6 +3,9 @@
 	import Footer from "$lib/components/layout/Footer.svelte";
 	import TopBar from "$lib/components/layout/TopBar.svelte";
 	import { initLocale } from "$lib/i18n/locale.svelte";
+	import { toolTitle } from "$lib/i18n/schema-tool-strings";
+	import { t } from "$lib/i18n/t";
+	import { getTool } from "$lib/registry";
 	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
 	import type { Snippet } from "svelte";
 	import { onMount } from "svelte";
@@ -27,19 +30,16 @@
 
 	let crumb = $derived(toCrumb(page.url.pathname));
 
-	const CRUMB: Record<string, string> = {
-		"/list-tools": "CATALOG",
-		"/tools/linear-gradient-png": "GRADIENT",
-		"/tools/remove-background-png": "BACKGROUND REMOVER",
-	};
-
 	function toCrumb(path: string): string {
-		return (
-			"/ " +
-			(CRUMB[path] ??
-				path.split("/").filter(Boolean).pop()?.toUpperCase() ??
-				"HOME")
-		);
+		if (path === "/") return "/ " + t("header.home");
+		if (path === "/list-tools") return "/ " + t("header.catalog");
+		if (path === "/kit") return "/ " + t("header.uiKit");
+		const match = /^\/tools\/([^/]+)$/.exec(path);
+		if (match) {
+			const tool = getTool(match[1]);
+			if (tool) return "/ " + toolTitle(tool);
+		}
+		return "/ " + t("header.home");
 	}
 </script>
 
