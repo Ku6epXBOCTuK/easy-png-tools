@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
+	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
 	import { LOCALES, type Locale } from "$lib/v1/i18n/dict";
 	import { getLocale, initLocale, setLocale } from "$lib/v1/i18n/locale.svelte";
 	import { t } from "$lib/v1/i18n/t";
-	import { getTheme, initTheme, setTheme } from "$lib/theme.svelte";
 	import { onMount } from "svelte";
 	import "../../app_v1.css";
 
@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href="/favicon.svg" />
+	<link rel="icon" href={`${resolve("/")}favicon.svg`} />
 </svelte:head>
 
 <div class="app">

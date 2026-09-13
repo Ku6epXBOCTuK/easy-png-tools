@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from "$app/paths";
 	import { page } from "$app/state";
 	import Footer from "$lib/components/layout/Footer.svelte";
 	import TopBar from "$lib/components/layout/TopBar.svelte";
@@ -44,7 +45,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href="/favicon.svg" />
+	<link rel="icon" href={`${resolve("/")}favicon.svg`} />
 </svelte:head>
 
 <main class="preview-root" data-theme={theme}>
