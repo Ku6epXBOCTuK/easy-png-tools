@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowUp, Upload } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		value: string;
@@ -11,7 +12,7 @@
 	}
 	let {
 		value,
-		placeholder = "Paste base64 / hex / bytes…",
+		placeholder = t("textSource.placeholder"),
 		disabled = false,
 		oninput,
 		onrender,
@@ -35,11 +36,13 @@
 	<div class="actions">
 		{#if onsample}
 			<button type="button" class="secondary" onclick={onsample}>
-				<Upload size={14} /> Try sample
+				<Upload size={14} />
+				{t("textSource.trySample")}
 			</button>
 		{/if}
 		<button type="button" class="render" onclick={onrender} {disabled}>
-			<ArrowUp size={14} /> Render text
+			<ArrowUp size={14} />
+			{t("textSource.render")}
 		</button>
 	</div>
 </div>

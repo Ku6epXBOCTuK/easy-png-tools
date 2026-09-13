@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
+	import { t } from "$lib/i18n/t";
 	import type { FileResult, ResultKind } from "$lib/registry";
 	import { Check } from "@lucide/svelte";
 	import SchemaTextResult from "./SchemaTextResult.svelte";
@@ -40,7 +41,12 @@
 	);
 </script>
 
-<PreviewTile label="RESULT" viewMode={resultKind} loading={running} {parts}>
+<PreviewTile
+	label={t("resultCard.result")}
+	viewMode={resultKind}
+	loading={running}
+	{parts}
+>
 	<div class="canvas" class:checker={resultKind === "image"}>
 		{#if resultKind === "text" && textResult}
 			<div class="text-result-wrap">
@@ -70,11 +76,11 @@
 				{/each}
 			</div>
 		{:else if resultKind === "image" && resultUrl}
-			<img src={resultUrl} alt="result" />
+			<img src={resultUrl} alt={t("resultCard.alt")} />
 		{:else if running}
 			<Check size={22} />
 		{:else}
-			<span class="empty">no result yet</span>
+			<span class="empty">{t("resultCard.noResult")}</span>
 		{/if}
 	</div>
 </PreviewTile>

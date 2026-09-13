@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Ellipsis, GripVertical, X } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -28,7 +29,7 @@
 				<button
 					type="button"
 					class="step-remove"
-					aria-label="Remove step"
+					aria-label={t("chain.removeStepAria")}
 					onclick={() => onremove?.()}
 				>
 					<X size={16} />

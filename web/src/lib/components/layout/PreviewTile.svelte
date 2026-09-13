@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { InputMode, ResultKind } from "$lib/registry";
 	import { RefreshCw } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -26,7 +27,7 @@
 		<span>
 			{label}
 			{#if parts !== undefined}
-				<span class="count">{parts} parts</span>
+				<span class="count">{parts} {t("resultCard.parts")}</span>
 			{/if}
 			{#if loading}
 				<RefreshCw class="rotating" size="12" />
@@ -45,6 +46,7 @@
 		gap: var(--space-m);
 		margin-bottom: var(--space-m);
 		font: var(--font-size-s) var(--font-mono);
+		text-transform: uppercase;
 		color: var(--color-text-muted);
 		& :global(.rotating) {
 			animation: rotate var(--duration-l) linear infinite;

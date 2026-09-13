@@ -58,6 +58,7 @@ export const ru: Dict = {
 		removeStepAria: "Убрать шаг",
 	},
 	sourceCard: {
+		source: "Источник",
 		replaceImage: "Заменить изображение",
 		chooseImage: "выберите изображение",
 		noSource: "нет источника — настройте параметры",
@@ -72,11 +73,14 @@ export const ru: Dict = {
 		nextTool: "⛓ Следующий инструмент",
 		breakChain: "✂ Оборвать цепочку",
 		noResult: "результата пока нет",
+		result: "Результат",
+		previewPanel: "Предпросмотр",
 		parts: "частей",
 		format: "Формат",
 		alt: "Изображение-результат",
 	},
 	paramsCard: {
+		toolSettings: "Настройки инструмента",
 		noParams: "У этого инструмента нет параметров — результат уже готов.",
 		configureOutput: "Настроить вывод",
 		noSchema: "У этого инструмента пока нет схемы.",

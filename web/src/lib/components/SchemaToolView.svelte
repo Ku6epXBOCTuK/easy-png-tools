@@ -6,6 +6,7 @@
 	import { decodeFile, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
+	import { toolDescription, toolTitle } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import type { FileResult, ToolEntry } from "$lib/registry";
 	import {
@@ -161,16 +162,16 @@
 	<div class="schema-tool">
 		<header class="header">
 			<div class="title-block">
-				<h1>{tool.title}</h1>
-				<p class="lede">{tool.description}</p>
+				<h1>{toolTitle(tool)}</h1>
+				<p class="lede">{toolDescription(tool)}</p>
 			</div>
 		</header>
 
 		<div class="workspace">
 			<section class="panel settings">
 				<div class="panel-head">
-					<span class="label">TOOL SETTINGS</span>
-					<strong>Configure output</strong>
+					<span class="label">{t("paramsCard.toolSettings")}</span>
+					<strong>{t("paramsCard.configureOutput")}</strong>
 				</div>
 				<SchemaFields {schema} {values} onchange={setValue} onreset={reset} />
 			</section>
@@ -199,7 +200,7 @@
 		</div>
 	</div>
 {:else}
-	<p class="no-schema">This tool has no schema yet.</p>
+	<p class="no-schema">{t("paramsCard.noSchema")}</p>
 {/if}
 
 <style>
@@ -223,6 +224,7 @@
 	.label {
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-l);
+		text-transform: uppercase;
 		color: var(--color-text-muted);
 	}
 	.label {

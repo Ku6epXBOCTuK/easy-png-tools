@@ -57,6 +57,7 @@ export const en: Dict = {
 		removeStepAria: "Remove step",
 	},
 	sourceCard: {
+		source: "Source",
 		replaceImage: "Replace image",
 		chooseImage: "choose an image",
 		noSource: "no source — configure the parameters",
@@ -71,11 +72,14 @@ export const en: Dict = {
 		nextTool: "⛓ Next tool",
 		breakChain: "✂ Break the chain",
 		noResult: "no result yet",
+		result: "Result",
+		previewPanel: "Preview",
 		parts: "parts",
 		format: "Format",
 		alt: "Result image",
 	},
 	paramsCard: {
+		toolSettings: "Tool settings",
 		noParams: "This tool has no parameters — the result is ready as is.",
 		configureOutput: "Configure output",
 		noSchema: "This tool has no schema yet.",

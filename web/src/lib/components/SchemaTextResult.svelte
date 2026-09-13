@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Copy, Download, FileText } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 	import IconButton from "./ui/IconButton.svelte";
 
 	interface Props {
@@ -28,10 +29,10 @@
 
 {#if kind === "verdict"}
 	<div class="verdict">
-		<span class="verdict-label">RESULT</span>
+		<span class="verdict-label">{t("resultCard.result")}</span>
 		<div class="badge badge-tone--{tone}" role="status">
 			<span class="verdict-text">{value}</span>
-			<IconButton icon={Copy} label="Copy" onclick={oncopy} />
+			<IconButton icon={Copy} label={t("textResult.copy")} onclick={oncopy} />
 		</div>
 	</div>
 {:else}
@@ -39,10 +40,10 @@
 		<div class="result-head">
 			<span class="result-label"><FileText size={14} /> {fileName}</span>
 			<div class="result-actions">
-				<IconButton icon={Copy} label="Copy" onclick={oncopy} />
+				<IconButton icon={Copy} label={t("textResult.copy")} onclick={oncopy} />
 				<IconButton
 					icon={Download}
-					label="Download .txt"
+					label={t("textResult.downloadTxt")}
 					onclick={ondownload}
 				/>
 			</div>
@@ -98,6 +99,7 @@
 		color: var(--color-text-muted);
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-l);
+		text-transform: uppercase;
 	}
 	.badge {
 		display: inline-flex;

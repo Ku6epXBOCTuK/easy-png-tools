@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Copy } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 	import IconButton from "./ui/IconButton.svelte";
 
 	interface Props {
@@ -16,7 +17,11 @@
 	<pre class="code-pre"><code>{code}</code></pre>
 	{#if copyable}
 		<div class="code-copy">
-			<IconButton icon={Copy} label="Copy" onclick={() => oncopy?.()} />
+			<IconButton
+				icon={Copy}
+				label={t("textResult.copy")}
+				onclick={() => oncopy?.()}
+			/>
 		</div>
 	{/if}
 </div>

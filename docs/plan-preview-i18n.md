@@ -156,12 +156,11 @@
   - `verdictTone(key)` — `success`|`danger`|`info` по имени ключа
     (`*Yes`/`*No`/`*Portrait`/`*Landscape`) — не по строке.
 - **0.9** Расширить тип `Dict` (только новая ветка `lib/i18n`):
-  - секция `preview` **не заводится**: оставшиеся после чистки mono-лейблов (см.
-    решение B) строки нового UI живут в собственных категориях — расширяем
-    существующие (`catalog`, `header`, `dropZone`, `sourceCard`, `resultCard`,
-    `paramsCard`, `textResult`, `ui`) и заводим две маленькие новые: `actions`
-    (Generate / Open image / Download result…) и `textSource` (placeholder, Try
-    sample…);
+  - секция `preview` **не заводится**: строки нового UI живут в собственных
+    категориях — расширяем существующие (`catalog`, `header`, `dropZone`,
+    `sourceCard`, `resultCard`, `paramsCard`, `textResult`, `ui`) и заводим две
+    маленькие новые: `actions` (Generate / Open image / Download result…) и
+    `textSource` (placeholder, Try sample…);
   - новая глобальная секция `fields: Record<string, string>` — переводы подписей
     полей по ключу из схемы (решение C);
   - новая глобальная секция `groups: Record<string, string>` — переводы
@@ -197,36 +196,29 @@
   `t("header.footerNote")`.
 - **3.3** `tools/[id]/+page.svelte`: «Tool not found», fallback title → `t()`.
 
-### Фаза 4: Компоненты — основной блок (по одному коммиту на компонент)
+### Фаза 4: Компоненты — основной блок (коммиты кучками по смыслу)
 
-Каждый коммит: удаление декоративных mono-лейблов (решение B) + замена
-оставшихся строк на `t`/хелперы + lint/check. Список mono-лейблов, которые
-**удаляем**: eyebrow'ы (`PNG PROCESSING / SINGLE TOOL`, `KIT SHOWCASE`,
-`EASY-PNG-TOOLS / CATALOG`), статусы (`LIVE PREVIEW`, `rendering ok`), панельные
-подписи (`TOOL SETTINGS`), дублирующие капшены (`SOURCE / RESULT`,
-`GENERATOR / RESULT`). Оставляем и локализуем только информативные: категории
-каталога, счётчики инструментов, подписи данных (`FORMAT`, `parts`, `px`, «ZIP
-(PNG)»), alt-тексты, а также содержательные заголовки («Configure output»).
+Все текстовые подписи в компонентах — информативные, сохраняем и переводим на
+`t`/хелперы. Каждый коммит: замена строк + lint/check.
 
-- `SchemaToolView.svelte`: убрать eyebrow/`LIVE PREVIEW`/`TOOL SETTINGS`,
-  перевести «Configure output» и «This tool has no schema yet.».
-- `SchemaSourceTile.svelte`: убрать figcaption `SOURCE`, перевести «choose an
+- `SchemaToolView.svelte`: title/description →
+  `toolTitle()`/`toolDescription()`, перевести `TOOL SETTINGS`, «Configure
+  output» и «This tool has no schema yet.».
+- `SchemaSourceTile.svelte`: перевести figcaption `SOURCE`, «choose an
   image»/«no source…» и alt.
-- `SchemaResultTile.svelte`: убрать figcaption `RESULT`, перевести «no result
-  yet»/«parts» и alt.
-- `SchemaPreview.svelte`: убрать панельные
-  `SOURCE / RESULT`/`GENERATOR / RESULT`, перевести meta-капшены (`FORMAT` и
-  т.п.).
+- `SchemaResultTile.svelte`: перевести figcaption `RESULT`, «no result yet» и
+  alt; суффикс «parts» — в `PreviewTile`.
+- `SchemaPreview.svelte`: перевести панельный лейбл `PREVIEW PANEL` и
+  meta-капшены `SOURCE / RESULT / FORMAT`; значения «parts»/«text» → `t()`.
 - `SchemaActions.svelte`: Generating…, Generate, Open image, Download result.
 - `SchemaFields.svelte`: Reset, «updates automatically», `labelOf(field.id)` →
   `fieldLabel(field)`.
 - `SchemaTextSource.svelte`: placeholder, Try sample, Render text.
-- `SchemaTextResult.svelte`: убрать лейбл `RESULT` у вердикта, перевести Copy /
+- `SchemaTextResult.svelte`: перевести лейбл `RESULT` у вердикта, Copy /
   Download .txt; tone detection → `verdictTone()`.
 - `CatalogToolbar.svelte`: фильтры → `t("categories.all")` +
   `t("categories.X")`, поисковый placeholder.
-- `CatalogHeader.svelte`: убрать eyebrow, перевести heading/lead и счётчик
-  «TOOLS AVAILABLE».
+- `CatalogHeader.svelte`: перевести heading/lead и счётчик «TOOLS AVAILABLE».
 - `CatalogGroup.svelte`: перевести суффикс счётчика «TOOLS».
 - `Dropzone.svelte`: текст зоны → `t("dropZone.pickDefault")`.
 - Schema field controls (по одному или группой): Width/Height, From/To, Backing
@@ -320,11 +312,6 @@
   (`title: "groups.canvas"`), перевод — в глобальной секции `groups` словаря
   (`Dict.groups: Record<string, string>`). В UI — `groupLabel(title)` =
   `t(title)` с фолбэком на сырой ключ.
-- **B. Mono-лейблы**: декоративные лейблы без полезной информации **удаляем**
-  (eyebrow'ы, статусы, панельные капшены, дублирующие подписи секций) — они
-  занимают место. Оставляем только там, где реально нужно, и локализуем:
-  счётчики инструментов, категории каталога, подписи данных (FORMAT, parts, px,
-  «ZIP (PNG)»), alt-тексты, содержательные headings.
 - **C. Лейблы полей**: в схеме задаём i18n-ключ
   (`field.number({ label: "fields.thickness", … })`), в UI выводится перевод —
   `fieldLabel(field)` = `t(label)`. Ключи — глобальная секция `fields` словаря,

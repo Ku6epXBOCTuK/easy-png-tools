@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
+	import { t } from "$lib/i18n/t";
 	import type { InputMode } from "$lib/registry";
 	import PreviewTile from "./layout/PreviewTile.svelte";
 	import SchemaTextSource from "./SchemaTextSource.svelte";
@@ -25,7 +26,7 @@
 	const sourceUrl = $derived(source ? toDataUrl(source) : null);
 </script>
 
-<PreviewTile label="SOURCE" viewMode={mode}>
+<PreviewTile label={t("sourceCard.source")} viewMode={mode}>
 	{#if mode === "text"}
 		<div class="text-source-wrap">
 			<SchemaTextSource
@@ -36,11 +37,11 @@
 			/>
 		</div>
 	{:else if mode === "image" && sourceUrl}
-		<img src={sourceUrl} alt="source" />
+		<img src={sourceUrl} alt={t("sourceCard.alt")} />
 	{:else if mode === "image"}
-		<span class="empty">choose an image</span>
+		<span class="empty">{t("sourceCard.chooseImage")}</span>
 	{:else}
-		<span class="empty">no source — configure the parameters</span>
+		<span class="empty">{t("sourceCard.noSource")}</span>
 	{/if}
 </PreviewTile>
 

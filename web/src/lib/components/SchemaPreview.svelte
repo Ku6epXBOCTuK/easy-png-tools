@@ -4,6 +4,7 @@
 	import SchemaResultTile from "$lib/components/SchemaResultTile.svelte";
 	import SchemaSourceTile from "$lib/components/SchemaSourceTile.svelte";
 	import type { PixelImage } from "$lib/core/types";
+	import { t } from "$lib/i18n/t";
 	import type { FileResult, InputMode, ResultKind } from "$lib/registry";
 
 	interface Props {
@@ -46,7 +47,7 @@
 			case "none":
 				return "—";
 			case "text":
-				return "text";
+				return t("textInput.heading");
 			case "image":
 				return source ? `${source.width} × ${source.height} px` : "—";
 		}
@@ -58,10 +59,10 @@
 				: "—"
 			: resultKind === "files"
 				? fileResult
-					? `${fileResult.files.length} parts`
+					? `${fileResult.files.length} ${t("resultCard.parts")}`
 					: "—"
 				: textResult
-					? "text"
+					? t("textInput.heading")
 					: "—",
 	);
 	const formatValue = $derived(resultKind === "files" ? "ZIP (PNG)" : "PNG");
@@ -75,7 +76,7 @@
 </script>
 
 <div class="panel-head">
-	<span class="label">PREVIEW PANEL</span>
+	<span class="label">{t("resultCard.previewPanel")}</span>
 	<SchemaActions
 		{inputMode}
 		canDownload={hasResult}
@@ -112,9 +113,9 @@
 <div class="meta">
 	<MetaList
 		items={[
-			{ caption: "SOURCE", value: sourceValue },
-			{ caption: "RESULT", value: resultValue },
-			{ caption: "FORMAT", value: formatValue },
+			{ caption: t("sourceCard.source"), value: sourceValue },
+			{ caption: t("resultCard.result"), value: resultValue },
+			{ caption: t("resultCard.format"), value: formatValue },
 		]}
 	/>
 </div>
@@ -132,6 +133,7 @@
 	.label {
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-l);
+		text-transform: uppercase;
 		color: var(--color-main);
 	}
 	.error {

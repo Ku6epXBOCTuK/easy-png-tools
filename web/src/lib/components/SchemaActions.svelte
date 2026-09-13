@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Upload } from "@lucide/svelte";
+	import { t } from "$lib/i18n/t";
 	import DownloadButton from "./ui/DownloadButton.svelte";
 
 	interface Props {
@@ -16,7 +17,8 @@
 <div class="actions">
 	{#if inputMode === "image"}
 		<label class="btn upload">
-			<Upload size={14} /> Open image
+			<Upload size={14} />
+			{t("actions.openImage")}
 			<input
 				type="file"
 				accept="image/*"
@@ -29,7 +31,7 @@
 	{/if}
 	{#if canDownload}
 		<DownloadButton
-			label="Download result"
+			label={t("actions.downloadResult")}
 			onclick={ondownload}
 			disabled={running}
 		/>
