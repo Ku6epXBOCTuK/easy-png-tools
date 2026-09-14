@@ -7,6 +7,7 @@ import tseslint from "typescript-eslint";
 import designTokens from "./eslint-plugins/index.js";
 import isolationPlugin from "./eslint-plugins/isolation/index.js";
 import conventionsPlugin from "./eslint-plugins/conventions/index.js";
+import i18nPlugin from "./eslint-plugins/i18n/index.js";
 
 // FIXME: надо игнорировать старые файлы, после переноса пути новых компонентов включают старые
 // Новый код редизайна: к нему применяем полные recommended-наборы уже сейчас.
@@ -82,6 +83,11 @@ export default tseslint.config(
 						"eslint-plugins/__tests__/no-string-union-alias.test.ts",
 						"eslint-plugins/__tests__/helpers.ts",
 						"eslint-plugins/__tests__/no-mixed-imports.test.ts",
+						"eslint-plugins/__tests__/dict-consistency.test.ts",
+						"eslint-plugins/__fixtures__/src/lib/i18n/dict.ts",
+						"eslint-plugins/__fixtures__/src/lib/i18n/en.ts",
+						"eslint-plugins/__fixtures__/src/lib/i18n/ru.ts",
+						"eslint-plugins/__fixtures__/src/lib/i18n/de.ts",
 						"eslint-plugins/__fixtures__/src/lib/v1/old.ts",
 						"eslint-plugins/__fixtures__/src/lib/v1/i18n/t.ts",
 						"eslint-plugins/__fixtures__/src/lib/core/errors.ts",
@@ -92,7 +98,7 @@ export default tseslint.config(
 						"eslint-plugins/__fixtures__/src/routes/+page.svelte",
 						"eslint-plugins/__fixtures__/src/routes/v1/+layout.svelte",
 					],
-					maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 32,
+					maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 40,
 				},
 				extraFileExtensions: [".svelte"],
 			},
@@ -166,6 +172,19 @@ export default tseslint.config(
 		},
 		rules: {
 			"conventions/no-string-union-alias": "error",
+		},
+	},
+	// Кросс-языковой линтер словарей (плагин i18n/dict-consistency).
+	// warn-only: пропущенный перевод не должен валить сборку. Список локалей
+	// берётся из LOCALES в lib/i18n/dict.ts — новые локали подхватываются
+	// автоматически; правило игнорирует не-локали в этой папке само.
+	{
+		files: ["**/src/lib/i18n/*.ts"],
+		plugins: {
+			i18n: i18nPlugin,
+		},
+		rules: {
+			"i18n/dict-consistency": "warn",
 		},
 	},
 	// Полные recommended-наборы — только на новый код.
