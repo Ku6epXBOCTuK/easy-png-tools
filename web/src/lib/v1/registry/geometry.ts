@@ -1,27 +1,27 @@
-import type { ToolEntry } from "../registry";
-import { ToolError } from "../../core/errors";
-import {
-	crop,
-	expandCanvas,
-	flip,
-	resize,
-	rotate90,
-	tile,
-	centerByAlpha,
-	changeCanvasSize,
-	cropToRatio,
-	forceOrientation,
-	padToRatio,
-	symmetricCopy,
-	trimToContent,
-	type Anchor9,
-} from "../../core/geometry";
 import {
 	rotateFreeImage,
 	skewImage,
 	transformImage,
 	zoomImage,
 } from "../../core/affine";
+import { ToolError } from "../../core/errors";
+import {
+	centerByAlpha,
+	changeCanvasSize,
+	crop,
+	cropToRatio,
+	expandCanvas,
+	flip,
+	forceOrientation,
+	padToRatio,
+	resize,
+	rotate90,
+	symmetricCopy,
+	tile,
+	trimToContent,
+	type Anchor9,
+} from "../../core/geometry";
+import type { ToolEntry } from "../registry";
 import { num, str } from "../registry-helpers";
 
 export function geometryEntries(): ToolEntry[] {
@@ -90,8 +90,8 @@ export function geometryEntries(): ToolEntry[] {
 					id: "x",
 					label: "X (from left)",
 					type: "number",
-					min: -100000,
-					max: 100000,
+					min: -0,
+					max: 2000,
 					step: 1,
 					default: 0,
 				},
@@ -99,8 +99,8 @@ export function geometryEntries(): ToolEntry[] {
 					id: "y",
 					label: "Y (from top)",
 					type: "number",
-					min: -100000,
-					max: 100000,
+					min: 0,
+					max: 1200,
 					step: 1,
 					default: 0,
 				},
@@ -108,8 +108,8 @@ export function geometryEntries(): ToolEntry[] {
 					id: "width",
 					label: "Area width",
 					type: "number",
-					min: -100000,
-					max: 100000,
+					min: 0,
+					max: 2000,
 					step: 1,
 					default: 0,
 				},
@@ -117,8 +117,8 @@ export function geometryEntries(): ToolEntry[] {
 					id: "height",
 					label: "Area height",
 					type: "number",
-					min: -100000,
-					max: 100000,
+					min: 0,
+					max: 1200,
 					step: 1,
 					default: 0,
 				},

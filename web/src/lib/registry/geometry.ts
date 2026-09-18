@@ -1,10 +1,10 @@
-import { ToolError } from "../core/errors";
 import {
 	rotateFreeImage,
 	skewImage,
 	transformImage,
 	zoomImage,
 } from "../core/affine";
+import { ToolError } from "../core/errors";
 import {
 	centerByAlpha,
 	changeCanvasSize,
@@ -249,22 +249,22 @@ export const cropSchema = toolSchema<CropParams>(
 	{
 		x: field.number({
 			label: "fields.x",
-			min: -100000,
-			max: 100000,
+			min: 0,
+			max: 2000,
 			step: 1,
 			default: 0,
 		}),
 		y: field.number({
 			label: "fields.y",
-			min: -100000,
-			max: 100000,
+			min: 0,
+			max: 1200,
 			step: 1,
 			default: 0,
 		}),
 		size: field.dimension({
 			label: "fields.cropAreaSize",
 			min: 0,
-			max: 100000,
+			max: 2000,
 			width: 0,
 			height: 0,
 		}),
