@@ -5,8 +5,11 @@ import {
 	expectNoErrorAlert,
 	expectNoErrors,
 	openTool,
+	resultImage,
 	trackErrors,
+	textResult,
 	uploadImage,
+	verdictStatus,
 } from "./helpers/page";
 
 type Kind = "image" | "text-out" | "verdict";
@@ -98,14 +101,14 @@ test.describe("smoke: tools produce output without errors", () => {
 		test(`tool ${id} (${kind})`, async ({ page }) => {
 			const sink = trackErrors(page);
 
-			const outputLocator = (): ReturnType<typeof page.locator> => {
+			const outputLocator = () => {
 				switch (kind) {
 					case "image":
-						return page.locator('img[alt="Result image"]');
+						return resultImage(page);
 					case "text-out":
-						return page.locator(".result-pre code");
+						return textResult(page);
 					case "verdict":
-						return page.locator(".verdict-text");
+						return verdictStatus(page);
 				}
 			};
 

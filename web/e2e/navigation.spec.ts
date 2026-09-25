@@ -1,14 +1,18 @@
 import { expect, test } from "playwright/test";
-import { expectNoErrors, trackErrors } from "./helpers/page";
+import { expectNoErrors, trackErrors, useEnglish } from "./helpers/page";
 
 const ROUTES = ["/", "/list-tools", "/kit", "/tools/flip-png"];
+
+test.beforeEach(async ({ page }) => {
+	await useEnglish(page);
+});
 
 for (const route of ROUTES) {
 	test(`page ${route} loads without errors`, async ({ page }) => {
 		const sink = trackErrors(page);
 		const resp = await page.goto(route);
 		expect(resp?.status()).toBe(200);
-		await page.waitForLoadState("networkidle");
+		await expect(page.getByRole("main")).toBeVisible();
 		expectNoErrors(sink);
 	});
 }
@@ -18,40 +22,33 @@ test("unknown tool route responds 404 on static build", async ({ page }) => {
 	expect(resp?.status()).toBe(404);
 });
 
-// FIXME:
-// Error: expect(received).toBe(expected) // Object.is equality
-
-//     Expected: "dark"
-//     Received: null
-
-//       36 |      expect(["light", "dark"]).toContain(before);
-//       37 |      expect(["light", "dark"]).toContain(after);
-//     > 38 |      expect(stored).toBe(after);
-test.fixme("theme toggle flips preview theme and persists to localStorage", async ({
-	page,
-}) => {
+test("theme toggle persists the selected theme", async ({ page }) => {
+	const sink = trackErrors(page);
 	await page.goto("/");
-	const root = page.locator("main.preview-root");
-	const before = await root.getAttribute("data-theme");
-	await expect(async () => {
-		await page.getByRole("button", { name: "Toggle theme" }).click();
-		const after = await root.getAttribute("data-theme");
-		expect(after).not.toBe(before);
-	}).toPass();
-	const after = await root.getAttribute("data-theme");
-	const stored = await page.evaluate(() =>
-		localStorage.getItem("easy-png-tools:theme"),
-	);
+	const main = page.getByRole("main");
+	const before = await main.getAttribute("data-theme");
 	expect(["light", "dark"]).toContain(before);
+
+	await page.getByRole("button", { name: "Toggle theme" }).click();
+	await expect(main).not.toHaveAttribute("data-theme", before ?? "");
+	const after = await main.getAttribute("data-theme");
+	const stored = await page.evaluate(() => localStorage.getItem("theme"));
 	expect(["light", "dark"]).toContain(after);
 	expect(stored).toBe(after);
+
+	await page.reload();
+	await expect(main).toHaveAttribute("data-theme", after ?? "");
+	expectNoErrors(sink);
 });
 
 test("language toggle marks the active button", async ({ page }) => {
 	await page.goto("/");
 	const group = page.getByRole("group", { name: "Language" });
-	await expect(async () => {
-		await group.getByRole("button", { name: "EN" }).click();
-		await expect(page.locator(".lang-btn.active")).toHaveText("EN");
-	}).toPass();
+	const en = group.getByRole("button", { name: "EN" });
+	await en.click();
+	await expect(en).toHaveAttribute("aria-pressed", "true");
+	await expect(group.getByRole("button", { name: "RU" })).toHaveAttribute(
+		"aria-pressed",
+		"false",
+	);
 });

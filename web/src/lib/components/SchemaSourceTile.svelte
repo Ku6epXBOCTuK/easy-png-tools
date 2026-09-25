@@ -37,7 +37,7 @@
 			/>
 		</div>
 	{:else if mode === "image" && sourceUrl}
-		<img src={sourceUrl} alt={t("sourceCard.alt")} />
+		<img data-testid="source-image" src={sourceUrl} alt={t("sourceCard.alt")} />
 	{:else if mode === "image"}
 		<span class="empty">{t("sourceCard.chooseImage")}</span>
 	{:else}

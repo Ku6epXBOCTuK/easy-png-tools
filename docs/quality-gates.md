@@ -27,7 +27,8 @@ pnpm verify
 ## E2E
 
 E2E не входит в `verify`, потому что Playwright поднимает build и статический
-сервер:
+сервер. Locator, fixture, i18n и `test.fixme`-политика описаны в
+`docs/testing-strategy.md`:
 
 ```text
 pnpm --dir web test:e2e

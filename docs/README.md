@@ -20,13 +20,14 @@
 | `AGENTS.md`                        | Краткий обязательный контракт для агента             | active |
 | `docs/plan-codebase-quality.md`    | План quality gates, тестов и lint-правил             | draft  |
 | `docs/agent-workflow.md`           | Подробный порядок исследования, изменения и проверки | active |
+| `docs/testing-strategy.md`         | Locator, fixture, i18n и fixme-policy для e2e        | active |
 | `docs/quality-gates.md`            | Команды проверки, warnings и CI                      | active |
 | `docs/backlog.md`                  | Продуктовые, UX- и инфраструктурные задачи           | active |
 | `docs/roadmap.md`                  | Общие направления развития                           | active |
 | `docs/plan-redesign.md`            | Новый дизайн production UI                           | active |
 | `docs/plan-seo.md`                 | SEO/GEO-план                                         | active |
 | `docs/plan-platform.md`            | PWA/API/WASM-план                                    | active |
-| `docs/checklist-manual-testing.md` | Ручная приёмка preview                               | active |
+| `docs/checklist-manual-testing.md` | Ручная приёмка production UI                         | active |
 | `docs/tools-map.md`                | Живая карта инструментов                             | active |
 | `web/eslint-plugins/README.md`     | Детали custom lint rules и token policy              | active |
 | `docs/archive/README.md`           | Правила архивирования и удаления старых документов   | active |
@@ -50,17 +51,17 @@
 только если темы нет в существующем документе; иначе обновляется источник
 истины.
 
-## Текущий baseline Q3
+## Текущий baseline Q4
 
-На момент фиксации Q3:
+На момент фиксации Q4:
 
 - production registry содержит 122 инструмента;
 - `pnpm --dir web check` проходит без ошибок и предупреждений;
-- `pnpm --dir web test` — 39 test files / 422 tests;
+- `pnpm --dir web test` — 39 test files / 425 tests;
 - `pnpm --dir web test:rules` — 4 test files / 74 tests;
 - `pnpm --dir web lint:all` — 0 errors и 0 i18n warnings; остаются 4 unused
   design tokens от token audit;
-- `pnpm verify` проходит; production E2E — 105 passed, 5 skipped.
+- `pnpm verify` проходит; production E2E — 105 passed, 4 skipped.
 
 Baseline и следующий шаг поддерживаются в `docs/plan-codebase-quality.md`.
 

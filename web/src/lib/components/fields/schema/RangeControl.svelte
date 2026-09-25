@@ -25,6 +25,7 @@
 		<output>{current}</output>
 	</span>
 	<input
+		aria-label={label}
 		type="range"
 		min={sp.min ?? 0}
 		max={sp.max ?? 100}

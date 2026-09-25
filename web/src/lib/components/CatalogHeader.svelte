@@ -12,10 +12,13 @@
 		<h1>{t("catalog.heading")}</h1>
 		<p>{t("catalog.lead")}</p>
 	</div>
-	<div class="catalog-total">
+	<output
+		class="catalog-total"
+		aria-label={`${total} ${t("catalog.toolsAvailable")}`}
+	>
 		<b>{total}</b>
 		<span>{t("catalog.toolsAvailable")}</span>
-	</div>
+	</output>
 </div>
 
 <style>

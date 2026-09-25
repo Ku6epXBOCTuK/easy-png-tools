@@ -22,6 +22,7 @@
 
 <div class="text-source">
 	<textarea
+		aria-label={t("textInput.aria")}
 		spellcheck="false"
 		{placeholder}
 		rows="6"

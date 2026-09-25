@@ -1,55 +1,50 @@
 import { expect, test } from "playwright/test";
-import { expectNoErrors, trackErrors } from "./helpers/page";
+import {
+	expectNoErrors,
+	toolLink,
+	trackErrors,
+	useEnglish,
+} from "./helpers/page";
 
-const TOTAL = 122;
-const GROUPS = 8;
+test.beforeEach(async ({ page }) => {
+	await useEnglish(page);
+});
 
-test("catalog shows total and all groups", async ({ page }) => {
+test("catalog exposes a total and category headings", async ({ page }) => {
 	const sink = trackErrors(page);
 	await page.goto("/list-tools");
-	await expect(page.locator(".catalog-total b")).toHaveText(String(TOTAL));
-	await expect(page.locator(".catalog-group")).toHaveCount(GROUPS);
+	const total = page.getByRole("status", { name: /tools available/i });
+	await expect(total).toBeVisible();
+	await expect(total).toHaveAttribute("aria-label", /^\d+ /);
+	await expect(page.getByRole("heading", { level: 2 }).first()).toBeVisible();
 	expectNoErrors(sink);
 });
 
 test("catalog search narrows results", async ({ page }) => {
 	await page.goto("/list-tools");
-	await expect(async () => {
-		await page.getByRole("textbox", { name: "Search tools" }).fill("resize");
-		await expect(page.locator(".tool-card")).toHaveCount(1);
-	}).toPass();
-	await expect(page.locator(".tool-card").first()).toContainText("Resize PNG");
+	await page.getByRole("textbox", { name: "Search tools" }).fill("resize");
+	await expect(toolLink(page, "resize-png")).toBeVisible();
+	await expect(toolLink(page, "flip-png")).toBeHidden();
 });
 
-test("category filter shows only matching group and resets on ALL", async ({
-	page,
-}) => {
+test("category filter narrows the catalog and resets", async ({ page }) => {
 	await page.goto("/list-tools");
-	const allButtons = page.locator(".tool-card");
-	const allCount = await allButtons.count();
-	expect(allCount).toBe(TOTAL);
+	const convert = page.getByRole("button", { name: /convert/i, exact: true });
+	const all = page.getByRole("button", { name: /^all$/i });
 
-	await expect(async () => {
-		await page.getByRole("button", { name: "CONVERT" }).click();
-		await expect(page.locator(".catalog-group")).toHaveCount(1);
-	}).toPass();
-	await expect(page.locator(".catalog-group")).toContainText("Convert");
-	const convertCards = await page.locator(".tool-card").count();
-	expect(convertCards).toBeGreaterThan(0);
-	expect(convertCards).toBeLessThan(allCount);
+	await convert.click();
+	await expect(convert).toHaveAttribute("aria-pressed", "true");
+	await expect(toolLink(page, "convert-png-to-jpg")).toBeVisible();
+	await expect(toolLink(page, "flip-png")).toBeHidden();
 
-	await expect(async () => {
-		await page.getByRole("button", { name: "ALL" }).click();
-		await expect(page.locator(".catalog-group")).toHaveCount(GROUPS);
-	}).toPass();
-	await expect(page.locator(".tool-card")).toHaveCount(allCount);
+	await all.click();
+	await expect(all).toHaveAttribute("aria-pressed", "true");
+	await expect(toolLink(page, "flip-png")).toBeVisible();
 });
 
 test("workspace search matches a tool by title", async ({ page }) => {
 	await page.goto("/");
-	await expect(async () => {
-		await page.getByRole("textbox", { name: "Search tools" }).fill("flip");
-		await expect(page.locator(".tool-card")).toHaveCount(1);
-	}).toPass();
-	await expect(page.locator(".tool-card").first()).toContainText("Flip PNG");
+	await page.getByRole("textbox", { name: "Search tools" }).fill("flip");
+	await expect(toolLink(page, "flip-png")).toBeVisible();
+	await expect(toolLink(page, "resize-png")).toBeHidden();
 });

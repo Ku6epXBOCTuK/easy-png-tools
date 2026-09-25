@@ -132,10 +132,7 @@
    `resizeSize: "Width and/or height must be positive"`). Проверяется на
    resize-png / crop-png. Ожидание: человекочитаемое сообщение на текущем языке.
    Fixme: `web/e2e/known-issues.spec.ts` (тест «error message localized»).
-5. **Theme storage key в e2e устарел** — production использует ключ `theme`, а
-   `web/e2e/navigation.spec.ts:30-48` проверяет `easy-png-tools:theme`.
-   Ожидание: исправить тест на фактический контракт и снять `test.fixme`.
-6. **Reset и auto-run требуют решения** — `pipeline.spec.ts:55-63` ожидает
+5. **Reset и auto-run требуют решения** — `pipeline.spec.ts:55-63` ожидает
    очистку результата, но текущий `SchemaToolView.svelte:162-173` может сразу
    перезапустить обработку. Нужно определить семантику Reset, затем исправить
    тест и снять `test.fixme`.

@@ -38,6 +38,7 @@
 			<button
 				type="button"
 				class:active={category === f.value}
+				aria-pressed={category === f.value}
 				onclick={() => (category = f.value)}
 			>
 				{f.label}

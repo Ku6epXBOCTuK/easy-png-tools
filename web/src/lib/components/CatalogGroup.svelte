@@ -12,7 +12,7 @@
 
 <section class="catalog-group">
 	<div class="group-title">
-		<span>{label}</span>
+		<h2>{label}</h2>
 		<i>{count.toString().padStart(2, "0")} <!-- --> {t("catalog.toolsCount")}</i
 		>
 	</div>
@@ -35,7 +35,8 @@
 		padding-bottom: var(--space-m);
 		border-bottom: var(--size-border) solid var(--color-border);
 	}
-	.group-title span {
+	.group-title h2 {
+		margin: 0;
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-xl);
 		text-transform: uppercase;

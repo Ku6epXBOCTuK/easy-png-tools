@@ -77,4 +77,33 @@ describe("verdictText (вердикт с vars)", () => {
 	it("без vars возвращает ключ как есть при отсутствии в словаре", () => {
 		expect(verdictText("png-file-size", "нет-такого")).toBe("нет-такого");
 	});
+
+	it.each([
+		[
+			"verify-is-png",
+			"verifyYes",
+			"Да — сигнатура настоящего PNG.",
+			"Yes — this is a valid PNG signature.",
+		],
+		[
+			"png-is-transparent",
+			"transparentNo",
+			"Нет — все пиксели полностью непрозрачны.",
+			"No — all pixels are fully opaque.",
+		],
+		[
+			"png-orientation",
+			"orientationLandscape",
+			"Ландшафт — ширина больше высоты.",
+			"Landscape — width is greater than height.",
+		],
+	])(
+		"переводит verdict %s/%s в обеих локалях",
+		(toolId, key, ruText, enText) => {
+			setLocale("ru");
+			expect(verdictText(toolId, key)).toBe(ruText);
+			setLocale("en");
+			expect(verdictText(toolId, key)).toBe(enText);
+		},
+	);
 });

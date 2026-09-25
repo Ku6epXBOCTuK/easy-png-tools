@@ -32,7 +32,11 @@
 {#if kind === "verdict"}
 	<div class="verdict">
 		<span class="verdict-label">{t("resultCard.result")}</span>
-		<div class="badge badge-tone--{tone}" role="status">
+		<div
+			data-testid="result-verdict"
+			class="badge badge-tone--{tone}"
+			role="status"
+		>
 			<span class="verdict-text">{displayValue}</span>
 			<IconButton icon={Copy} label={t("textResult.copy")} onclick={oncopy} />
 		</div>
@@ -50,7 +54,9 @@
 				/>
 			</div>
 		</div>
-		<pre class="result-pre"><code>{value}</code></pre>
+		<pre aria-label={t("textResult.outputAria")} class="result-pre"><code
+				>{value}</code
+			></pre>
 	</div>
 {/if}
 

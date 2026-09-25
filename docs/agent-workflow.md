@@ -54,6 +54,9 @@ E2E запускается отдельно от быстрых проверок
 - Поведенческий тест проверяет пользовательский контракт, а не текущую
   реализацию.
 - Сначала предпочитать `role`, `aria-*`, label, stable id или href.
+- `data-testid` ограничен source/result/verdict/empty-state; общие
+  locator-паттерны собраны в `web/e2e/helpers/page.ts`, policy — в
+  `docs/testing-strategy.md`.
 - `data-testid` использовать только там, где семантического locator нет.
 - Не фиксировать абсолютное число инструментов, если проверка не связана с этим
   инвариантом.
@@ -72,7 +75,7 @@ E2E запускается отдельно от быстрых проверок
 - обязательное поведение агента — `AGENTS.md`;
 - индекс и карта документов — `docs/README.md`;
 - качество и точные команды — `docs/quality-gates.md`;
-- тестовая архитектура — `docs/testing-strategy.md` после Q4;
+- тестовая архитектура — `docs/testing-strategy.md`;
 - lint implementation — `web/eslint-plugins/README.md`;
 - продуктовые решения — backlog и активные планы.
 

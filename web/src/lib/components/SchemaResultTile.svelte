@@ -82,11 +82,17 @@
 				{/each}
 			</div>
 		{:else if resultKind === "image" && resultUrl}
-			<img src={resultUrl} alt={t("resultCard.alt")} />
+			<img
+				data-testid="result-image"
+				src={resultUrl}
+				alt={t("resultCard.alt")}
+			/>
 		{:else if running}
 			<Check size={22} />
 		{:else}
-			<span class="empty">{t("resultCard.noResult")}</span>
+			<span data-testid="empty-state" class="empty"
+				>{t("resultCard.noResult")}</span
+			>
 		{/if}
 	</div>
 </PreviewTile>
