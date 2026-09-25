@@ -69,6 +69,11 @@ export interface DimensionSpec extends FieldSpecBase {
 	max: number;
 	width: number;
 	height: number;
+	defaultFromSource?: boolean;
+}
+
+export interface SchemaContext {
+	source?: Dimension;
 }
 
 /** Пара цветов «от → к» (градиенты, сведение к двум цветам и т.п.). */
@@ -270,6 +275,7 @@ export const field = {
 		max: number;
 		width: number;
 		height: number;
+		defaultFromSource?: boolean;
 	}): Field<Dimension> => ({
 		spec: { kind: "dimension", ...s },
 	}),
@@ -341,15 +347,27 @@ function clamp(value: number, min?: number, max?: number): number {
 	return value;
 }
 
+function resolveDimensionDefaults(
+	spec: DimensionSpec,
+	context?: SchemaContext,
+): Dimension {
+	const source = spec.defaultFromSource ? context?.source : undefined;
+	return {
+		width: clamp(source?.width ?? spec.width, spec.min, spec.max),
+		height: clamp(source?.height ?? spec.height, spec.min, spec.max),
+	};
+}
+
 /** Дефолты из схемы — единый источник значений по умолчанию для нового UI. */
 export function defaultSchemaParams<P>(
 	schema: ToolSchema<P>,
+	context?: SchemaContext,
 ): Record<keyof P, unknown> {
 	const out = {} as Record<keyof P, unknown>;
 	for (const key of Object.keys(schema.fields) as (keyof P)[]) {
 		const spec = schema.fields[key].spec;
 		if (spec.kind === "dimension") {
-			out[key] = { width: spec.width, height: spec.height };
+			out[key] = resolveDimensionDefaults(spec, context);
 		} else if (spec.kind === "color-pair") {
 			out[key] = { from: spec.from, to: spec.to };
 		} else if (spec.kind === "colors") {
@@ -382,10 +400,27 @@ export function defaultSchemaParams<P>(
 	return out;
 }
 
+export function applySourceDefaults<P>(
+	schema: ToolSchema<P>,
+	values: Record<string, unknown>,
+	context: SchemaContext,
+): Record<keyof P, unknown> {
+	const defaults = defaultSchemaParams(schema, context);
+	for (const key of Object.keys(schema.fields) as (keyof P)[]) {
+		const spec = schema.fields[key].spec;
+		if (spec.kind === "dimension" && spec.defaultFromSource) continue;
+		if (Object.prototype.hasOwnProperty.call(values, key)) {
+			defaults[key] = values[key as string];
+		}
+	}
+	return defaults;
+}
+
 /** Валидация/нормализация значений по схеме. Аналог старого `sanitizeParams`. */
 export function sanitizeSchemaParams<P>(
 	schema: ToolSchema<P>,
 	values: Record<string, unknown>,
+	context?: SchemaContext,
 ): Record<keyof P, unknown> {
 	const out = {} as Record<keyof P, unknown>;
 	for (const key of Object.keys(schema.fields) as (keyof P)[]) {
@@ -425,17 +460,22 @@ export function sanitizeSchemaParams<P>(
 					"height" in raw
 						? (raw as Record<string, unknown>)
 						: undefined;
+				const defaults = resolveDimensionDefaults(spec, context);
 				const w =
 					typeof r?.width === "number" && Number.isFinite(r.width)
 						? r.width
-						: spec.width;
+						: defaults.width;
 				const h =
 					typeof r?.height === "number" && Number.isFinite(r.height)
 						? r.height
-						: spec.height;
+						: defaults.height;
+				const sourceSize =
+					spec.defaultFromSource && context?.source && w === 0 && h === 0
+						? defaults
+						: { width: w, height: h };
 				out[key] = {
-					width: clamp(w, spec.min, spec.max),
-					height: clamp(h, spec.min, spec.max),
+					width: clamp(sourceSize.width, spec.min, spec.max),
+					height: clamp(sourceSize.height, spec.min, spec.max),
 				};
 				break;
 			}

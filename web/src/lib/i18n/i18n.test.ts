@@ -36,6 +36,17 @@ describe("t", () => {
 		expect(t("home.onlyEnKey")).toBe("Only English string");
 	});
 
+	it("переводит ошибки с vars в активной локали", () => {
+		setLocale("ru");
+		expect(t("errors.pixelCountMismatch", { count: 33, width: 32 })).toContain(
+			"33",
+		);
+		setLocale("en");
+		expect(t("errors.pixelCountMismatch", { count: 33, width: 32 })).toContain(
+			"33",
+		);
+	});
+
 	it("неизвестный путь возвращает сам путь", () => {
 		expect(t("no.such.key")).toBe("no.such.key");
 	});

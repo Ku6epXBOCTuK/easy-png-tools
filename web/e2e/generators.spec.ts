@@ -1,23 +1,29 @@
 import { expect, test } from "playwright/test";
 import {
+	expectNoErrorAlert,
 	expectNoErrors,
 	openTool,
 	resultImage,
 	trackErrors,
 } from "./helpers/page";
 
-test.describe("generators — known UI gap (#checklist, п.1)", () => {
-	// FIXME: Генераторы открываются, но в UI нет ни полей схемы, ни кнопки
-	// «Generate» — только RU/EN/Reset. Задача Q5: `docs/backlog.md`,
-	// `docs/checklist-manual-testing.md`. После фикса убрать fixme.
-	test.fixme("single-color-png renders Generate controls and produces a result", async ({
+test.describe("generators", () => {
+	test("single-color-png auto-runs and reacts to parameters", async ({
 		page,
 	}) => {
+		const sink = trackErrors(page);
 		await openTool(page, "single-color-png");
-		const generate = page.getByRole("button", { name: "Generate" });
-		await expect(generate).toBeVisible();
-		await generate.click();
 		await expect(resultImage(page)).toBeVisible();
+		await expect(page.getByRole("button", { name: "Generate" })).toHaveCount(0);
+
+		const firstSource = await resultImage(page).getAttribute("src");
+		await page.getByRole("spinbutton", { name: "Width" }).fill("32");
+		await expect(resultImage(page)).not.toHaveAttribute(
+			"src",
+			firstSource ?? "",
+		);
+		await expectNoErrorAlert(page);
+		expectNoErrors(sink);
 	});
 
 	test("create-empty-png page opens without errors", async ({ page }) => {

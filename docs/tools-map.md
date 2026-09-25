@@ -87,8 +87,9 @@
 
 ### Геометрия
 
-- resize-png — width (0=авто), height (0=авто), keepAspect
-- crop-png — x, y, width, height
+- resize-png — width/height (размеры source по умолчанию; 0=авто для одной
+  стороны), keepAspect
+- crop-png — x, y, width/height (полная область source по умолчанию)
 - rotate-png — angle (90/180/270)
 - flip-png — axis (h/v)
 - skew-png — degX, degY

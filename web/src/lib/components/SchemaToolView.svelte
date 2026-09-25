@@ -2,7 +2,7 @@
 	import SchemaFields from "$lib/components/SchemaFields.svelte";
 	import SchemaPreview from "$lib/components/SchemaPreview.svelte";
 	import { debounce } from "$lib/core/debounce";
-	import { ToolError } from "$lib/core/errors";
+	import { ToolError, type ErrorVars } from "$lib/core/errors";
 	import { decodeFile, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
@@ -14,6 +14,7 @@
 	import { t } from "$lib/i18n/t";
 	import type { FileResult, ToolEntry } from "$lib/registry";
 	import {
+		applySourceDefaults,
 		defaultSchemaParams,
 		sanitizeSchemaParams,
 		type ToolSchema,
@@ -23,6 +24,9 @@
 	interface Props {
 		tool: ToolEntry;
 	}
+	type DisplayError =
+		| { kind: "i18n"; key: string; vars?: ErrorVars }
+		| { kind: "plain"; text: string };
 	let { tool }: Props = $props();
 
 	const schema = $derived(
@@ -42,8 +46,16 @@
 		undefined,
 	);
 	let running = $state(false);
-	let error = $state("");
+	let displayError = $state<DisplayError | null>(null);
 	let started = $state(false);
+
+	const errorText = $derived.by(() => {
+		const current = displayError;
+		if (!current) return "";
+		return current.kind === "i18n"
+			? t(current.key, current.vars)
+			: current.text;
+	});
 
 	const debouncedRun = debounce(() => run(), 200);
 
@@ -58,30 +70,38 @@
 	}
 
 	function reset() {
-		values = schema ? defaultSchemaParams(schema) : {};
+		values = schema
+			? defaultSchemaParams(schema, { source: source ?? undefined })
+			: {};
 		result = null;
 		fileResult = null;
 		textResult = null;
 		verdictVars = undefined;
-		error = "";
+		displayError = null;
 	}
 
 	async function handleFile(file: File) {
-		error = "";
+		displayError = null;
 		try {
-			source = await decodeFile(file);
+			const decoded = await decodeFile(file);
+			source = decoded;
+			if (schema) {
+				values = applySourceDefaults(schema, values, { source: decoded });
+			}
 		} catch (e) {
-			error = errorText(e);
+			displayError = toDisplayError(e);
 		}
 	}
 
 	async function run() {
 		if (!schema) return;
-		error = "";
+		displayError = null;
 		running = true;
 		try {
 			const out = await execute(tool, {
-				params: sanitizeSchemaParams(schema, values),
+				params: sanitizeSchemaParams(schema, values, {
+					source: source ?? undefined,
+				}),
 				source: source ?? undefined,
 				text: textSource || undefined,
 			});
@@ -108,7 +128,7 @@
 				fileResult = null;
 			}
 		} catch (e) {
-			error = errorText(e);
+			displayError = toDisplayError(e);
 		} finally {
 			running = false;
 		}
@@ -144,7 +164,7 @@
 		try {
 			await navigator.clipboard.writeText(copyValue);
 		} catch (e) {
-			error = errorText(e);
+			displayError = toDisplayError(e);
 		}
 	}
 
@@ -164,18 +184,21 @@
 	});
 
 	$effect(() => {
-		// TODO: can any edge case start infinite loop?
 		if (!started) return;
+		if (inputMode === "image" && !source) return;
+		if (inputMode === "text" && !textSource.trim()) return;
 		void values;
 		void source;
 		debouncedRun();
 		return () => debouncedRun.cancel();
 	});
 
-	function errorText(e: unknown): string {
-		if (e instanceof ToolError) return t(e.key, e.vars);
-		if (e instanceof Error) return e.message;
-		return String(e);
+	function toDisplayError(e: unknown): DisplayError {
+		if (e instanceof ToolError) {
+			return { kind: "i18n", key: e.key, vars: e.vars };
+		}
+		if (e instanceof Error) return { kind: "plain", text: e.message };
+		return { kind: "plain", text: String(e) };
 	}
 </script>
 
@@ -215,7 +238,7 @@
 					{inputMode}
 					{resultKind}
 					{running}
-					{error}
+					error={errorText}
 					onupload={handleFile}
 					ontextsource={(textValue) => {
 						textSource = textValue;

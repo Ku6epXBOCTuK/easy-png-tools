@@ -1,6 +1,6 @@
 import { expect, test } from "playwright/test";
-import { opaquePng } from "./helpers/fixtures";
-import { openTool, toolLink, uploadImage, useEnglish } from "./helpers/page";
+import { pixelRow } from "./helpers/fixtures";
+import { openTool, toolLink, useEnglish } from "./helpers/page";
 
 test("поиск каталога находит по названию из другой локали", async ({
 	page,
@@ -31,11 +31,21 @@ test("RU/EN: переключение переводит заголовок ин
 	await expect(heading).toHaveText("Resize PNG");
 });
 
-test("ошибка run'а локализуется, не сырой i18n-ключ", async ({ page }) => {
-	await openTool(page, "resize-png");
-	await uploadImage(page, opaquePng);
+test("ошибка run'а локализуется и переводится при смене языка", async ({
+	page,
+}) => {
+	await openTool(page, "bytes-to-png");
+	await page
+		.getByRole("textbox", { name: "Text data" })
+		.fill(pixelRow(33, [255, 0, 0, 255]));
+	await page.getByRole("button", { name: "Render text" }).click();
 	const alert = page.getByRole("alert");
 	await expect(alert).toBeVisible();
 	await expect(alert).toHaveText(/\S/);
+	await expect(alert).not.toHaveText(/^errors\./);
+	const english = await alert.textContent();
+
+	await page.getByRole("button", { name: "RU", exact: true }).click();
+	await expect(alert).not.toHaveText(english ?? "");
 	await expect(alert).not.toHaveText(/^errors\./);
 });

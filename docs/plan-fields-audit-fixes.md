@@ -181,11 +181,12 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 
 ## 3. Волна C — обязательные фиксы (баги + дефолты)
 
-### C1. resize-png: дефолт 0×0 → осмысленный
+### C1. Source-aware defaults для dimension-полей
 
-`geometry.ts`: `width: 0, height: 0` → `width: 512, height: 512` (или
-`width: imgWidth, height: imgHeight` — но дефолт в схеме не может знать размер
-изображения). **Решение:** дефолт `512×512`.
+Q5 добавил общий `defaultFromSource` resolver в `registry-schema`. Для
+`resize-png` и `crop-png` дефолт после загрузки равен размерам текущего source;
+до загрузки используется положительный fallback `1×1`. Один-sided `0` у resize
+сохраняет режим auto.
 
 ### C2. symmetric-copy-png: "keep side" не работает
 
@@ -198,19 +199,17 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 значение. Пока достаточно в `run()`: если `axis === "vertical"` и `keepSide` ∈
 {top, bottom} → заменить на `left`.
 
-### C3. Механизм проброса размеров картинки в схему
+### C3. Source-aware bounds (отдельный следующий шаг)
 
-**Проблема.** Поля, значения которых зависят от размеров исходника (crop x/y,
-resize, offsets), объявлены в статической схеме (`-100000…100000`), а реальная
-картинка обычно 800–4000px. Диапазон надо считать от фактического размера
-изображения, а не от потолков.
+Q5 реализовал только defaults dimension-полей через `SchemaContext` и
+`defaultFromSource`. Динамические min/max для crop x/y, shift и resize остаются
+отдельной задачей: bounds не следует смешивать с default resolver.
 
 **Что нужно спроектировать и завести:**
 
 1. **Где берём размер.** `SchemaToolView` уже знает размер после `decodeFile()`
-   → `PixelImage` (width/height). Сейчас он никуда не пробрасывается — надо
-   прокинуть в `SchemaFields` и дальше в контролы, например через context или
-   проп `sourceSize`.
+   → `PixelImage` (width/height); для bounds понадобится передать этот context в
+   `SchemaFields` и контролы.
 
 2. **Как схеме описать зависимость.** В спеках добавить ссылку на размер
    источника вместо жёстких чисел. Кандидат:
@@ -228,15 +227,13 @@ resize, offsets), объявлены в статической схеме (`-100
 
 3. **Что делает RangeControl.** При `bound` вычисляет min/max из текущего
    размера источника; при смене картинки диапазон пересчитывается, текущее
-   значение пере-клампится. Дефолт и `sanitize` остаются на статической основе
-   (или тоже учат bound) — решить при проектировании.
+   значение пере-клампится.
 
 4. **Первые потребители:** crop (x/y → ±sourceWidth/sourceHeight), shift
    (offsetX/offsetY), resize (max → maxSide).
 
-Это отдельный шаг плана: **завести механизм**, спроектировать на ревью интерфейс
-спека (`bound` vs `range: (size) => [min, max]`), затем применить к crop и
-остальным полям размерности. Пока механизма нет — поля crop остаются как есть.
+Это отдельный refactor после Q6/Q7; source-aware defaults из Q5 не заменяют
+bounds.
 
 ### C4. verify-is-png: неверное название
 

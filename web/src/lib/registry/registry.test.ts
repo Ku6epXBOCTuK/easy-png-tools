@@ -65,6 +65,45 @@ describe("registry-new (переведённые инструменты)", () =>
 		}
 	});
 
+	it("source-aware dimension defaults применяются только к image tools", () => {
+		for (const tool of TOOLS) {
+			for (const field of Object.values(tool.schema.fields)) {
+				if (field.spec.kind === "dimension" && field.spec.defaultFromSource) {
+					expect(tool.input, tool.id).toBe("image");
+				}
+			}
+		}
+	});
+
+	it("resize и crop получают размеры текущего source", async () => {
+		const source = solid(64, 48);
+		const resize = TOOLS.find((t) => t.id === "resize-png")!;
+		const resizeDefaults = defaultSchemaParams(resize.schema, { source });
+		expect(resizeDefaults.size).toEqual({ width: 64, height: 48 });
+		const resized = asImage(
+			await resize.run({
+				source,
+				params: sanitizeSchemaParams(resize.schema, resizeDefaults, { source }),
+			}),
+		);
+		expect([resized.width, resized.height]).toEqual([64, 48]);
+
+		const crop = TOOLS.find((t) => t.id === "crop-png")!;
+		const cropDefaults = defaultSchemaParams(crop.schema, { source });
+		expect(cropDefaults).toMatchObject({
+			x: 0,
+			y: 0,
+			size: { width: 64, height: 48 },
+		});
+		const cropped = asImage(
+			await crop.run({
+				source,
+				params: sanitizeSchemaParams(crop.schema, cropDefaults, { source }),
+			}),
+		);
+		expect([cropped.width, cropped.height]).toEqual([64, 48]);
+	});
+
 	it("create-empty: dimension-дефолты корректны", () => {
 		const tool = TOOLS.find((t) => t.id === "create-empty-png")!;
 		const d = defaultSchemaParams(tool.schema);

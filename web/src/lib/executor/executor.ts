@@ -20,7 +20,9 @@ export async function execute(
 	tool: ToolEntry,
 	ctx: ExecuteContext,
 ): Promise<ToolResult> {
-	const params = sanitizeSchemaParams(tool.schema, ctx.params);
+	const params = sanitizeSchemaParams(tool.schema, ctx.params, {
+		source: ctx.source,
+	});
 	if (tool.input === "image" && !ctx.source) {
 		throw new ToolError("errors.sourceRequired");
 	}
@@ -129,13 +131,17 @@ function ensureWorker(): Worker | null {
 			} else if (payload.errorKey) {
 				entry.reject(new ToolError(payload.errorKey, payload.errorVars));
 			} else {
-				entry.reject(new Error(payload.error ?? "errors.workerFailed"));
+				entry.reject(
+					payload.error
+						? new Error(payload.error)
+						: new ToolError("errors.workerFailed"),
+				);
 			}
 		};
 		candidate.onerror = () => {
 			worker = null;
 			for (const entry of pending.values()) {
-				entry.reject(new Error("errors.workerUnavailable"));
+				entry.reject(new ToolError("errors.workerUnavailable"));
 			}
 			pending.clear();
 		};

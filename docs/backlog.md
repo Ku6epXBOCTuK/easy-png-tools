@@ -105,37 +105,17 @@
 - [ ] API: спайк серверного ядра (нативный Rust vs edge-wasm), ключи, free tier
       (после wasm-фаз 5–7)
 
-## Баги preview
+## Качество production UI
 
-Зарегистрированы при написании e2e (`web/e2e/`, `pnpm --dir web test:e2e`) и
-ручного чек-листа — см. `docs/checklist-manual-testing.md` (раздел G). Каждый
-пункт связан с соответствующим `test.fixme` или отдельным тестовым долгом. После
-фикса: убрать `test.fixme` и отметить пункт G в чек-листе как пройденный.
+Q5 закрывает известные preview-проблемы; активных `test.fixme` в e2e больше нет.
 
-1. **Генераторы без автоматического результата** — все 21 инструмент категории
-   GENERATE открываются, но в UI нет полей схемы и результата; доступны только
-   RU/EN/Reset. В `SchemaToolView.svelte` уже есть auto-run через debounce,
-   поэтому отдельная кнопка Generate не требуется. Ожидание: поля схемы,
-   автоматический запуск по дефолтам и результат-картинка. Fixme:
-   `web/e2e/generators.spec.ts`. Кнопка Generate не добавляется без отдельного
-   UX-решения.
-2. **resize-png с дефолтами падает** — схема по умолчанию `size: 0×0` +
-   `keepAspect: true` → при загрузке ЛЮБОГО PNG сразу `errors.resizeSize`
-   (alert), результата нет. `web/src/lib/registry/geometry.ts`. Ожидание:
-   осмысленный дефолт-размер (например, исходный) либо отдельный режим ввода, а
-   не авто-ошибка.
-3. **crop-png с дефолтами падает** — аналогично: `width: 0, height: 0` → сразу
-   `errors.cropSize`. `web/src/lib/registry/geometry.ts`. Ожидание: базовый кроп
-   по умолчанию либо внятное предзаполнение.
-4. **Сырые ключи ошибок в UI** — alert на tool-странице показывает сырой ключ
-   i18n (`errors.resizeSize`), а не сообщение из `en.ts` / `ru.ts` (там
-   `resizeSize: "Width and/or height must be positive"`). Проверяется на
-   resize-png / crop-png. Ожидание: человекочитаемое сообщение на текущем языке.
-   Fixme: `web/e2e/known-issues.spec.ts` (тест «error message localized»).
-5. **Reset и auto-run требуют решения** — `pipeline.spec.ts:55-63` ожидает
-   очистку результата, но текущий `SchemaToolView.svelte:162-173` может сразу
-   перезапустить обработку. Нужно определить семантику Reset, затем исправить
-   тест и снять `test.fixme`.
+- [x] Генераторы auto-run без кнопки Generate — `web/e2e/generators.spec.ts`.
+- [x] `resize-png` и `crop-png` используют размеры текущего source через общий
+      source-aware schema resolver — `web/e2e/pipeline.spec.ts`.
+- [x] Reset сохраняет source/text, восстанавливает defaults и запускает deferred
+      auto-run — `web/e2e/pipeline.spec.ts`.
+- [x] Ошибки хранят i18n key/vars и переводятся при выводе; изменение языка
+      обновляет alert — `web/e2e/i18n.spec.ts`.
 
 ## Идеи
 

@@ -8,7 +8,6 @@ import {
 } from "./helpers/fixtures";
 import {
 	downloadResult,
-	emptyState,
 	errorAlert,
 	expectNoErrorAlert,
 	expectNoErrors,
@@ -20,6 +19,36 @@ import {
 	uploadImage,
 	useEnglish,
 } from "./helpers/page";
+
+test("resize-png uses the source dimensions by default", async ({ page }) => {
+	const sink = trackErrors(page);
+	await openTool(page, "resize-png");
+	await uploadImage(page, opaquePng);
+	await expect(page.getByRole("spinbutton", { name: "Width" })).toHaveValue(
+		"64",
+	);
+	await expect(page.getByRole("spinbutton", { name: "Height" })).toHaveValue(
+		"48",
+	);
+	await expect(resultImage(page)).toBeVisible();
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
+});
+
+test("crop-png starts with the full source area", async ({ page }) => {
+	const sink = trackErrors(page);
+	await openTool(page, "crop-png");
+	await uploadImage(page, opaquePng);
+	await expect(page.getByRole("spinbutton", { name: "Width" })).toHaveValue(
+		"64",
+	);
+	await expect(page.getByRole("spinbutton", { name: "Height" })).toHaveValue(
+		"48",
+	);
+	await expect(resultImage(page)).toBeVisible();
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
+});
 
 test("flip-png: full flow - upload, result, download", async ({ page }) => {
 	const sink = trackErrors(page);
@@ -41,14 +70,23 @@ test("convert-png-to-jpg: produces a downloadable jpg", async ({ page }) => {
 	expectNoErrors(sink);
 });
 
-test.fixme("reset clears result but keeps source", async ({ page }) => {
-	await openTool(page, "flip-png");
+test("reset restores defaults and re-runs with the source", async ({
+	page,
+}) => {
+	const sink = trackErrors(page);
+	await openTool(page, "blur-png");
 	await uploadImage(page, opaquePng);
 	await expect(resultImage(page)).toBeVisible();
+	const radius = rangeInput(page, /radius/i);
+	await radius.fill("20");
+	await expect(radius).toHaveValue("20");
+
 	await page.getByRole("button", { name: "Reset" }).click();
-	await expect(resultImage(page)).toHaveCount(0);
-	await expect(emptyState(page)).toBeVisible();
+	await expect(radius).toHaveValue("4");
 	await expect(sourceImage(page)).toBeVisible();
+	await expect(resultImage(page)).toBeVisible();
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
 });
 
 test("blur: changing slider updates result image", async ({ page }) => {

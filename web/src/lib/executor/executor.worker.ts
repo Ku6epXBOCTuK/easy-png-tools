@@ -46,7 +46,7 @@ async function handle(request: WorkerRequest): Promise<void> {
 	try {
 		const tool = getTool(request.toolId);
 		if (!tool?.run) {
-			throw new Error("errors.noImageRun");
+			throw new ToolError("errors.noImageRun");
 		}
 		const source: PixelImage | undefined = request.source
 			? {
@@ -56,7 +56,7 @@ async function handle(request: WorkerRequest): Promise<void> {
 				}
 			: undefined;
 		const output = await tool.run({
-			params: sanitizeSchemaParams(tool.schema, request.params),
+			params: sanitizeSchemaParams(tool.schema, request.params, { source }),
 			source,
 			text: request.text,
 		});

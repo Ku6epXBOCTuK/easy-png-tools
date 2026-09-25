@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+	applySourceDefaults,
 	defaultSchemaParams,
 	field,
 	sanitizeSchemaParams,
 	toolSchema,
+	type Dimension,
 } from "./registry-schema";
 
 interface FrameParams {
@@ -32,6 +34,24 @@ const frameSchema = toolSchema<FrameParams>(
 	},
 );
 
+interface SourceParams {
+	size: Dimension;
+	fixed: Dimension;
+}
+
+const sourceSchema = toolSchema<SourceParams>({
+	size: field.dimension({
+		min: 1,
+		max: 100,
+		width: 1,
+		height: 1,
+		defaultFromSource: true,
+	}),
+	fixed: field.dimension({ min: 1, max: 100, width: 10, height: 20 }),
+});
+
+const source = { width: 64, height: 48 };
+
 describe("registry-schema: дефолты из схемы", () => {
 	it("собирает дефолты всех полей", () => {
 		expect(defaultSchemaParams(frameSchema)).toEqual({
@@ -40,6 +60,51 @@ describe("registry-schema: дефолты из схемы", () => {
 			enabled: true,
 			count: "two",
 		});
+	});
+});
+
+describe("registry-schema: source-aware dimension defaults", () => {
+	it("uses static fallback before a source exists", () => {
+		expect(defaultSchemaParams(sourceSchema)).toEqual({
+			size: { width: 1, height: 1 },
+			fixed: { width: 10, height: 20 },
+		});
+	});
+
+	it("uses source dimensions for opted-in fields only", () => {
+		expect(defaultSchemaParams(sourceSchema, { source })).toEqual({
+			size: source,
+			fixed: { width: 10, height: 20 },
+		});
+		expect(
+			applySourceDefaults(
+				sourceSchema,
+				{ size: { width: 2, height: 3 }, fixed: { width: 30, height: 40 } },
+				{ source },
+			),
+		).toEqual({
+			size: source,
+			fixed: { width: 30, height: 40 },
+		});
+	});
+
+	it("uses source dimensions when sanitizing missing values", () => {
+		expect(sanitizeSchemaParams(sourceSchema, {}, { source })).toEqual({
+			size: source,
+			fixed: { width: 10, height: 20 },
+		});
+		const manual = sanitizeSchemaParams(
+			sourceSchema,
+			{ size: { width: 12, height: 13 } },
+			{ source },
+		);
+		expect(manual.size).toEqual({ width: 12, height: 13 });
+		const sentinel = sanitizeSchemaParams(
+			sourceSchema,
+			{ size: { width: 0, height: 0 } },
+			{ source },
+		);
+		expect(sentinel.size).toEqual(source);
 	});
 });
 
