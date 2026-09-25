@@ -20,6 +20,7 @@
 | `AGENTS.md`                        | Краткий обязательный контракт для агента             | active |
 | `docs/plan-codebase-quality.md`    | План quality gates, тестов и lint-правил             | draft  |
 | `docs/agent-workflow.md`           | Подробный порядок исследования, изменения и проверки | active |
+| `docs/quality-gates.md`            | Команды проверки, warnings и CI                      | active |
 | `docs/backlog.md`                  | Продуктовые, UX- и инфраструктурные задачи           | active |
 | `docs/roadmap.md`                  | Общие направления развития                           | active |
 | `docs/plan-redesign.md`            | Новый дизайн и границы `/v1`                         | active |
@@ -39,7 +40,7 @@
 
 - Поведение, которое агент обязан соблюдать сразу, — кратко в `AGENTS.md`.
 - Точные команды, параметры скриптов и критерии качества — в
-  `docs/quality-gates.md` после Q1 или в README соответствующей подсистемы.
+  `docs/quality-gates.md` или в README соответствующей подсистемы.
 - Архитектура, потоки данных и границы модулей — в отдельном architecture-плане
   или документе, не дублируя существующие планы.
 - Реализация lint-правил, fixtures и технические детали ESLint — в

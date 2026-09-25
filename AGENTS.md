@@ -16,6 +16,8 @@
 - Форматирование: `pnpm format` в корне (оба прогона) или
   `pnpm --dir web format` (только код web/). Проверка: `pnpm check:docs`
   (docs) + `pnpm --dir web exec prettier --check .` (код).
+- Полный быстрый gate: `pnpm verify`; подробная матрица команд и CI —
+  `docs/quality-gates.md`.
 - Линтинг: `pnpm --dir web lint` (ESLint). Полный прогон дизайн-проверок:
   `pnpm --dir web lint:all` (ESLint + stylelint + токен-аудит). Каждый шаг
   выполняется, даже если предыдущий упал. `app_v1.css` и legacy-ветка исключены
@@ -59,8 +61,8 @@
 - Здесь держать только обязательные инварианты, команды и ссылки на подробные
   документы; не превращать `AGENTS.md` в полный справочник.
 - Индекс активных документов: `docs/README.md`; подробный workflow:
-  `docs/agent-workflow.md`; текущий план качества:
-  `docs/plan-codebase-quality.md`.
+  `docs/agent-workflow.md`; quality gates: `docs/quality-gates.md`; текущий
+  план: `docs/plan-codebase-quality.md`.
 - Новые подробные правила, процедуры и таблицы хранить в `docs/`, а детали
   конкретных lint-правил — в `web/eslint-plugins/README.md`.
 - Завершённые или устаревшие документы переносить в `docs/archive/`, указывать

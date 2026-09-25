@@ -199,8 +199,8 @@
 		--color-text-accent: hct(from var(--brand-alt) h 25 90);
 		--color-text-accent-muted: hct(from var(--brand-alt) h 22 70);
 
-		--color-main: hct(from var(--brand-main) h 60 50);
-		--color-accent: hct(from var(--brand-alt) h 60 50);
+		--color-main: hct(from var(--brand-main) h 60 56);
+		--color-accent: hct(from var(--brand-alt) h 60 56);
 		--color-success: hct(160 65 55);
 		--color-warning: hct(80 65 55);
 		--color-danger: hct(30 70 55);

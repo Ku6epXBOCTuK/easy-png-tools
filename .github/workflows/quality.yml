@@ -1,22 +1,19 @@
-name: Deploy to GitHub Pages
+name: Quality
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: quality-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   verify:
+    name: Fast quality gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -46,8 +43,10 @@ jobs:
       - name: Run quality gate
         run: pnpm verify
 
-  build:
+  e2e:
+    name: E2E (non-blocking baseline)
     needs: verify
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -65,31 +64,14 @@ jobs:
           cache: pnpm
           cache-dependency-path: web/pnpm-lock.yaml
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Install dependencies
+      - name: Install web dependencies
         working-directory: web
         run: pnpm install --frozen-lockfile
 
-      - name: Build
+      - name: Install Chromium
         working-directory: web
-        run: pnpm build
-        env:
-          BASE_PATH: /easy-png-tools
+        run: pnpm exec playwright install --with-deps chromium
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: web/build
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Run E2E
+        working-directory: web
+        run: pnpm test:e2e

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "pnpm --dir web test",
+    "verify": "pnpm --dir web check && pnpm --dir web test && pnpm --dir web test:rules && pnpm --dir web lint:all && pnpm --dir web exec prettier --check . && pnpm check:docs && pnpm --dir web build",
     "dev": "pnpm --dir web dev",
     "build": "pnpm --dir web build",
     "format": "pnpm format:docs && pnpm --dir web format",
