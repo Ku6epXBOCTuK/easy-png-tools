@@ -175,16 +175,22 @@ export default tseslint.config(
 		},
 	},
 	// Кросс-языковой линтер словарей (плагин i18n/dict-consistency).
-	// warn-only: пропущенный перевод не должен валить сборку. Список локалей
-	// берётся из LOCALES в lib/i18n/dict.ts — новые локали подхватываются
-	// автоматически; правило игнорирует не-локали в этой папке само.
+	// Правило сообщает warning, а `lint:all` превращает новые warnings в
+	// blocking через --max-warnings=0. Список локалей берётся из LOCALES в
+	// lib/i18n/dict.ts; новые локали подхватываются автоматически.
 	{
 		files: ["**/src/lib/i18n/*.ts"],
 		plugins: {
 			i18n: i18nPlugin,
 		},
 		rules: {
-			"i18n/dict-consistency": "warn",
+			"i18n/dict-consistency": [
+				"warn",
+				{
+					baseLocaleFallback: ["tools.*.title", "tools.*.description"],
+					ignoreMissingPatterns: ["tools.*.params"],
+				},
+			],
 		},
 	},
 	// Полные recommended-наборы — только на новый код.

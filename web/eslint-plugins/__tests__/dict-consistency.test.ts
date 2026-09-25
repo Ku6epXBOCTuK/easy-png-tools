@@ -58,6 +58,70 @@ describe("i18n/dict-consistency", () => {
 		expect(messageIds(lint(fixture("de.ts"), "lib/i18n/de.ts"))).toEqual([]);
 	});
 
+	const registryPolicy = {
+		baseLocaleFallback: ["tools.*.title", "tools.*.description"],
+		ignoreMissingPatterns: ["tools.*.params"],
+	};
+
+	it("allows registry metadata only in the base locale", () => {
+		const enMissing = fixture("en.ts")
+			.replace('\t\t\ttitle: "Add border",\n', "")
+			.replace('\t\t\tdescription: "Draws a {kind} frame.",\n', "");
+		expect(
+			messageIds(lint(enMissing, "lib/i18n/en.ts", registryPolicy)),
+		).toEqual([]);
+
+		const ruMissing = fixture("ru.ts").replace(
+			'\t\t\ttitle: "Добавить рамку",\n',
+			"",
+		);
+		expect(
+			messageIds(lint(ruMissing, "lib/i18n/ru.ts", registryPolicy)),
+		).toEqual(["missingKey"]);
+	});
+
+	it("does not warn for a missing tool object with only fallback metadata", () => {
+		const enMissingTool = fixture("en.ts").replace(
+			/\t\taddBorder: \{[\s\S]*?\n\t\t\},\n/,
+			"",
+		);
+		expect(
+			messageIds(
+				lint(enMissingTool, "lib/i18n/en.ts", {
+					...registryPolicy,
+					ignoreMissingPatterns: [
+						...registryPolicy.ignoreMissingPatterns,
+						"tools.*.results",
+					],
+				}),
+			),
+		).toEqual([]);
+	});
+
+	it("does not warn for configured legacy missing paths", () => {
+		const enMissingResults = fixture("en.ts").replace(
+			/\t\t\tresults: \{[\s\S]*?\n\t\t\t\},\n/,
+			"",
+		);
+		expect(
+			messageIds(
+				lint(enMissingResults, "lib/i18n/en.ts", {
+					ignoreMissingPatterns: ["tools.*.results"],
+				}),
+			),
+		).toEqual([]);
+	});
+
+	it("still reports empty fallback metadata", () => {
+		const enEmpty = fixture("en.ts").replace(
+			'title: "Add border",',
+			'title: "",',
+		);
+		expect(messageIds(lint(enEmpty, "lib/i18n/en.ts", registryPolicy))).toEqual(
+			["emptyValue"],
+		);
+	});
+
 	it("flags a leaf key missing in the current file", () => {
 		const enMissing = fixture("en.ts").replace(
 			'\t\trestoreLast: "Restore {title}",',

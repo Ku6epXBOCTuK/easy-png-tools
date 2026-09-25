@@ -724,9 +724,6 @@ export const ru: Dict = {
 				toColor: "Цвет конца",
 				direction: "Направление",
 			},
-			options: {
-				direction: { horizontal: "По горизонтали", vertical: "По вертикали" },
-			},
 		},
 		"color-wheel-png": {
 			title: "Цветовой круг PNG",
@@ -1051,13 +1048,6 @@ export const ru: Dict = {
 				backgroundColor: "Цвет фона",
 				padding: "Отступ, px",
 			},
-			options: {
-				font: {
-					sans: "Без засечек",
-					serif: "С засечками",
-					mono: "Моноширинный",
-				},
-			},
 		},
 		"emoji-to-png": {
 			title: "Эмодзи в PNG",
@@ -1135,8 +1125,11 @@ export const ru: Dict = {
 					"8": "8",
 					"16": "16",
 					"32": "32",
+					"44": "44 (сильный)",
 					"64": "64",
+					"96": "96 (сбалансированный)",
 					"128": "128",
+					"192": "192 (лёгкий)",
 					"256": "256",
 				},
 			},
@@ -1269,13 +1262,6 @@ export const ru: Dict = {
 				font: "Шрифт",
 				bold: "Жирный",
 			},
-			options: {
-				font: {
-					sans: "Без засечек",
-					serif: "С засечками",
-					mono: "Моноширинный",
-				},
-			},
 		},
 		"add-text-png": {
 			title: "Надпись на PNG",
@@ -1293,24 +1279,6 @@ export const ru: Dict = {
 				plateColor: "Цвет подложки",
 				plateOpacity: "Прозрачность плашки, %",
 			},
-			options: {
-				font: {
-					sans: "Без засечек",
-					serif: "С засечками",
-					mono: "Моноширинный",
-				},
-				position: {
-					"top-left": "Сверху слева",
-					"top-center": "Сверху по центру",
-					"top-right": "Сверху справа",
-					"middle-left": "По центру слева",
-					center: "По центру",
-					"middle-right": "По центру справа",
-					"bottom-left": "Снизу слева",
-					"bottom-center": "Снизу по центру",
-					"bottom-right": "Снизу справа",
-				},
-			},
 		},
 		"date-stamp-png": {
 			title: "Дата-штамп PNG",
@@ -1327,24 +1295,6 @@ export const ru: Dict = {
 				plate: "Подложка",
 				plateColor: "Цвет подложки",
 				plateOpacity: "Прозрачность плашки, %",
-			},
-			options: {
-				font: {
-					sans: "Без засечек",
-					serif: "С засечками",
-					mono: "Моноширинный",
-				},
-				position: {
-					"top-left": "Сверху слева",
-					"top-center": "Сверху по центру",
-					"top-right": "Сверху справа",
-					"middle-left": "По центру слева",
-					center: "По центру",
-					"middle-right": "По центру справа",
-					"bottom-left": "Снизу слева",
-					"bottom-center": "Снизу по центру",
-					"bottom-right": "Снизу справа",
-				},
 			},
 		},
 		"skew-png": {

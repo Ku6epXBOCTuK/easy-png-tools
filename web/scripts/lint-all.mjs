@@ -31,7 +31,7 @@ const bins = {
 const steps = [
 	{
 		name: "ESLint (svelte) + design-tokens rules",
-		args: [bins.eslint, ...colorFlag, "."],
+		args: [bins.eslint, ...colorFlag, "--max-warnings=0", "."],
 	},
 	{
 		name: "Stylelint (css) — design-token style",

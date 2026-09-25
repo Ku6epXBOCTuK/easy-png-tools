@@ -50,12 +50,15 @@ baseline; после закрытия известных ошибок его м�
 ## Errors и warnings
 
 - `errors` завершают соответствующий инструмент ненулевым кодом.
-- `warnings` не завершают текущий lint автоматически, пока не включён строгий
-  режим.
-- На baseline Q0 `lint:all` даёт 0 errors, 188 `i18n/dict-consistency` warnings
-  и 4 unused-token warnings. Это известные долги, а не чистый результат.
-- После Q2 parity-линтер должен перейти к zero-warning, после чего можно
-  включить `--max-warnings=0` без обходных allowlist-ов.
+- После Q2 ESLint запускается с `--max-warnings=0`: новые ESLint warnings
+  блокируют gate.
+- Token audit пока оставляет unused-token warnings отдельным неблокирующим
+  сообщением.
+- `lint:all` по-прежнему сообщает 4 unused-token warnings отдельным
+  предупреждением token audit; это следующий debt Q6.
+- `dict-consistency` использует base-locale fallback для registry metadata и
+  pattern-based policy для legacy `tools.*.params`; это не молчаливый
+  `allowPaths`-список.
 
 ## CI
 

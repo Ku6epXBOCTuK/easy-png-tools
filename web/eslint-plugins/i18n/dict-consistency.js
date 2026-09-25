@@ -13,16 +13,17 @@
  *     section is reported once, not per descendant key);
  *   - empty values:  `""` or whitespace-only values;
  *   - placeholders:  for a shared key the `{name}` set is compared against the
- *     canonical set (the one shared by most locales, ties broken by LOCALES
- *     order) — catches a variable lost in translation exactly once, even when
- *     only one locale deviates.
+ *     canonical set (the one shared by most locales, ties broken by BASE_LOCALE
+ *     then LOCALES order) — catches a variable lost in translation exactly once,
+ *     even when only one locale deviates.
  *
  * The rule self-filters: files whose basename is not one of LOCALES are
  * ignored, so it can be attached to the whole `lib/i18n/` directory.
  *
  * Options (object, all optional):
- *   - allowPaths: dot-path keys excluded from every check (conscious
- *     deviations until the dict reaches zero-warn, see Фаза 8 §8.3).
+ *   - allowPaths: dot-path keys excluded from every check.
+ *   - baseLocaleFallback: patterns whose missing keys are allowed in BASE_LOCALE.
+ *   - ignoreMissingPatterns: legacy patterns excluded from missing-key checks.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -65,6 +66,22 @@ function findDictExport(ast) {
 		const init = unwrap(d.init);
 		if (init && init.type === "ObjectExpression") {
 			return { id: d.id, object: init };
+		}
+	}
+	return null;
+}
+
+function findBaseLocale(ast) {
+	for (const node of ast.body) {
+		if (node.type !== "ExportNamedDeclaration") continue;
+		const decl = node.declaration;
+		if (!decl || decl.type !== "VariableDeclaration") continue;
+		for (const d of decl.declarations) {
+			if (d.id.type !== "Identifier" || d.id.name !== "BASE_LOCALE") {
+				continue;
+			}
+			const init = unwrap(d.init);
+			if (isStringLiteral(init)) return init.value;
 		}
 	}
 	return null;
@@ -167,6 +184,17 @@ function formatSet(set) {
 	return `{${[...set].sort().join(", ")}}`;
 }
 
+function matchesPattern(key, pattern) {
+	const keyParts = key.split(".");
+	const patternParts = pattern.split(".");
+	return (
+		keyParts.length >= patternParts.length &&
+		patternParts.every(
+			(part, index) => part === "*" || part === keyParts[index],
+		)
+	);
+}
+
 /** Ancestor paths of a dot-path (e.g. `a.b` and `a` for `a.b.c`). */
 function* ancestorPaths(key) {
 	let i = key.lastIndexOf(".");
@@ -190,6 +218,7 @@ function readDir(dir) {
 	if (!fs.existsSync(dictPath)) return null;
 	const ast = parseTs(fs.readFileSync(dictPath, "utf8"), dictPath);
 	const locales = findLocalesList(ast);
+	const baseLocale = findBaseLocale(ast);
 	if (!locales || locales.length === 0) return null;
 
 	const dicts = [];
@@ -218,31 +247,42 @@ function readDir(dir) {
 			unionPaths.add(key);
 			if (entry.kind === STRING && (entry.value ?? "").trim() !== "") {
 				if (!stringLeaves.has(key)) stringLeaves.set(key, []);
-				stringLeaves.get(key).push(placeholders(entry.value));
+				stringLeaves.get(key).push({
+					locale: d.locale,
+					set: placeholders(entry.value),
+				});
 			}
 		}
 	}
 
 	// Canonical placeholder set per key: the set shared by the most locales;
-	// on a tie the first one encountered (LOCALES order) wins.
+	// on a tie the base locale wins before LOCALES order.
 	const canonicalSets = new Map();
-	for (const [key, sets] of stringLeaves) {
+	for (const [key, entries] of stringLeaves) {
 		const counts = new Map();
-		for (const set of sets) {
+		for (const { set } of entries) {
 			const sig = [...set].sort().join("\u0000");
 			counts.set(sig, (counts.get(sig) || 0) + 1);
 		}
 		let bestCount = 0;
-		for (const set of sets) {
+		let bestLocale = null;
+		for (const { locale, set } of entries) {
 			const sig = [...set].sort().join("\u0000");
-			if (counts.get(sig) > bestCount) {
-				bestCount = counts.get(sig);
+			const count = counts.get(sig);
+			if (
+				count > bestCount ||
+				(count === bestCount &&
+					locale === baseLocale &&
+					bestLocale !== baseLocale)
+			) {
+				bestCount = count;
+				bestLocale = locale;
 				canonicalSets.set(key, set);
 			}
 		}
 	}
 
-	return { locales, dicts, unionPaths, canonicalSets };
+	return { locales, baseLocale, dicts, unionPaths, canonicalSets };
 }
 
 export default {
@@ -261,6 +301,14 @@ export default {
 						type: "array",
 						items: { type: "string" },
 					},
+					baseLocaleFallback: {
+						type: "array",
+						items: { type: "string" },
+					},
+					ignoreMissingPatterns: {
+						type: "array",
+						items: { type: "string" },
+					},
 				},
 				additionalProperties: false,
 			},
@@ -275,6 +323,8 @@ export default {
 	create(context) {
 		const options = context.options[0] || {};
 		const allowPaths = new Set(options.allowPaths || []);
+		const baseLocaleFallback = options.baseLocaleFallback || [];
+		const ignoreMissingPatterns = options.ignoreMissingPatterns || [];
 
 		const filename = path.resolve(
 			context.filename || context.physicalFilename || "",
@@ -287,16 +337,36 @@ export default {
 		if (!dictExport) return {};
 
 		const own = buildKeyMap(dictExport.object);
+		const isMissingAllowed = (key) => {
+			if (allowPaths.has(key)) return true;
+			if (
+				ignoreMissingPatterns.some((pattern) => matchesPattern(key, pattern))
+			) {
+				return true;
+			}
+			return (
+				locale === dirInfo.baseLocale &&
+				baseLocaleFallback.some((pattern) => matchesPattern(key, pattern))
+			);
+		};
 
-		// Missing keys: everything the union has but the current file lacks.
-		// Top-level gaps only — a missing ancestor already covers its subtree.
-		const missing = [...dirInfo.unionPaths].filter((k) => !own.has(k));
-		const missingSet = new Set(missing);
-		const topMissing = missing.filter(
-			(k) => ![...ancestorPaths(k)].some((a) => missingSet.has(a)),
+		const missing = [...dirInfo.unionPaths].filter((key) => !own.has(key));
+		const requiredMissing = missing.filter((key) => {
+			if (isMissingAllowed(key)) return false;
+			const descendants = missing.filter((candidate) =>
+				candidate.startsWith(`${key}.`),
+			);
+			return (
+				descendants.length === 0 ||
+				descendants.some((candidate) => !isMissingAllowed(candidate))
+			);
+		});
+		const requiredSet = new Set(requiredMissing);
+		const topMissing = requiredMissing.filter(
+			(key) =>
+				![...ancestorPaths(key)].some((ancestor) => requiredSet.has(ancestor)),
 		);
 		for (const key of topMissing) {
-			if (allowPaths.has(key)) continue;
 			context.report({
 				node: dictExport.id,
 				messageId: "missingKey",

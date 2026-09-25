@@ -15,6 +15,22 @@ function toolKeys(tool: ToolEntry): { fields: string[]; groups: string[] } {
 	return { fields, groups };
 }
 
+type SelectOption = { value: string; label: string };
+
+function selectOptions(
+	tool: ToolEntry,
+): { fieldId: string; option: SelectOption }[] {
+	const result: { fieldId: string; option: SelectOption }[] = [];
+	for (const [fieldId, field] of Object.entries(tool.schema?.fields ?? {})) {
+		const spec = (
+			field as { spec?: { kind?: string; options?: SelectOption[] } }
+		).spec;
+		if (spec?.kind !== "select") continue;
+		for (const option of spec.options ?? []) result.push({ fieldId, option });
+	}
+	return result;
+}
+
 describe("полнота словарей для нового registry", () => {
 	it("у каждого инструмента есть перевод ru с непустыми title/description", () => {
 		for (const tool of TOOLS) {
@@ -39,6 +55,22 @@ describe("полнота словарей для нового registry", () => {
 			for (const key of toolKeys(tool).groups) {
 				expect(en.groups?.[key], `${tool.id}: ${key} в en`).toBeTruthy();
 				expect(ru.groups?.[key], `${tool.id}: ${key} в ru`).toBeTruthy();
+			}
+		}
+	});
+
+	it("все active select options переведены в en и ru", () => {
+		for (const tool of TOOLS) {
+			for (const { fieldId, option } of selectOptions(tool)) {
+				if (fieldId === "component") continue;
+				const key = `${tool.id}: ${fieldId}.${option.value}`;
+				expect(en.tools[tool.id]?.options?.[fieldId]?.[option.value], key).toBe(
+					option.label,
+				);
+				expect(
+					ru.tools[tool.id]?.options?.[fieldId]?.[option.value],
+					key,
+				).toBeTruthy();
 			}
 		}
 	});

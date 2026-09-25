@@ -1,7 +1,12 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { TOOLS } from "../registry";
 import { setLocale } from "./locale.svelte";
-import { searchTools, verdictText } from "./schema-tool-strings";
+import {
+	searchTools,
+	toolDescription,
+	toolTitle,
+	verdictText,
+} from "./schema-tool-strings";
 
 afterEach(() => {
 	setLocale("ru");
@@ -42,6 +47,18 @@ describe("searchTools (кросс-языковой поиск каталога)"
 
 	it("нет совпадения — пустой список", () => {
 		expect(searchTools(TOOLS, "квантовый тостер")).toEqual([]);
+	});
+});
+
+describe("metadata fallback", () => {
+	it("uses registry title and description in the base locale", () => {
+		setLocale("en");
+		for (const tool of TOOLS) {
+			expect(toolTitle(tool), `${tool.id}: title`).toBe(tool.title);
+			expect(toolDescription(tool), `${tool.id}: description`).toBe(
+				tool.description,
+			);
+		}
 	});
 });
 

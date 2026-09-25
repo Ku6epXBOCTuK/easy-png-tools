@@ -57,10 +57,10 @@
 
 - registry нового UI содержит 122 инструмента;
 - `pnpm --dir web check` проходит без ошибок и предупреждений;
-- `pnpm --dir web lint:all` завершается с 0 errors, но с 188 warnings
-  `i18n/dict-consistency` и 4 unused design tokens;
-- unit/e2e результаты считать актуальными только после отдельного прогона;
-  исторические числа в `docs/archive/` не являются baseline.
+- `pnpm --dir web lint:all` завершается с 0 errors и 0 i18n warnings; остаются 4
+  unused design tokens от token audit;
+- `pnpm verify` проходит; unit/e2e результаты считать актуальными только после
+  отдельного прогона, исторические числа в `docs/archive/` не являются baseline.
 
 Baseline и следующий шаг поддерживаются в `docs/plan-codebase-quality.md`.
 
