@@ -105,6 +105,7 @@ const pngToBase64: ToolEntry<NoParams> = {
 	schema: emptySchema,
 	input: "image",
 	result: "text",
+	domOnly: true,
 	run: imgTool((img) => toBase64(img)),
 };
 
@@ -117,6 +118,7 @@ const pngToDataUri: ToolEntry<NoParams> = {
 	schema: emptySchema,
 	input: "image",
 	result: "text",
+	domOnly: true,
 	run: imgTool((img) => toDataUrl(img)),
 };
 
@@ -163,6 +165,7 @@ const base64ToPng: ToolEntry<NoParams> = {
 	category: "convert",
 	schema: emptySchema,
 	input: "text",
+	domOnly: true,
 	run: textGen((text) => decodeBytes(base64ToBytes(stripDataUri(text)))),
 };
 
@@ -173,6 +176,7 @@ const dataUriToPng: ToolEntry<NoParams> = {
 	category: "convert",
 	schema: emptySchema,
 	input: "text",
+	domOnly: true,
 	run: textGen((text) => decodeBytes(base64ToBytes(stripDataUri(text)))),
 };
 

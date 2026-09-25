@@ -65,6 +65,19 @@ describe("registry-new (переведённые инструменты)", () =>
 		}
 	});
 
+	it("DOM-dependent tools bypass the worker", () => {
+		for (const id of [
+			"png-to-base64",
+			"png-to-data-uri",
+			"base64-to-png",
+			"data-uri-to-png",
+			"jpeg-artifacts-png",
+			"placeholder-png",
+		]) {
+			expect(TOOLS.find((tool) => tool.id === id)?.domOnly, id).toBe(true);
+		}
+	});
+
 	it("source-aware dimension defaults применяются только к image tools", () => {
 		for (const tool of TOOLS) {
 			for (const field of Object.values(tool.schema.fields)) {

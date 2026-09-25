@@ -16,12 +16,10 @@ test.describe("generators", () => {
 		await expect(resultImage(page)).toBeVisible();
 		await expect(page.getByRole("button", { name: "Generate" })).toHaveCount(0);
 
-		const firstSource = await resultImage(page).getAttribute("src");
 		await page.getByRole("spinbutton", { name: "Width" }).fill("32");
-		await expect(resultImage(page)).not.toHaveAttribute(
-			"src",
-			firstSource ?? "",
-		);
+		await page.getByRole("spinbutton", { name: "Height" }).fill("24");
+		await expect(resultImage(page)).toHaveJSProperty("naturalWidth", 32);
+		await expect(resultImage(page)).toHaveJSProperty("naturalHeight", 24);
 		await expectNoErrorAlert(page);
 		expectNoErrors(sink);
 	});

@@ -487,6 +487,7 @@ const placeholder: ToolEntry<PlaceholderParams> = {
 	category: "generate",
 	schema: placeholderSchema,
 	input: "none",
+	domOnly: true,
 	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);

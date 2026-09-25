@@ -1,10 +1,10 @@
 # План: линтеры, тесты и качество кодовой базы
 
-> Статус: **draft — Q0–Q5 готовы к ревью; Q6 — следующий этап**.
+> Статус: **draft — Q0–Q5 и Q6a готовы к ревью; Q6b — следующий этап**.
 >
 > Источник: `docs/backlog.md`, аудит конфигурации `web/`, e2e-тестов и
-> инфраструктурных скриптов. Q0–Q5 выполнены; Q6–Q8 выполняются отдельными
-> атомарными шагами.
+> инфраструктурных скриптов. Q0–Q5 и Q6a выполнены; Q6b–Q8 выполняются
+> отдельными атомарными шагами.
 >
 > Цель: сделать качество кодовой базы воспроизводимым, убрать ложную «зелёность»
 > проверок, стабилизировать тестовые контракты и только после этого расширять
@@ -189,30 +189,41 @@ Q6.
 - `ToolError` хранится как key/vars, переводится derived-значением при выводе и
   обновляется при смене локали. E2E использует независимый invalid pixel-count
   сценарий.
-- Resize/crop, generator, Reset и localization fixme сняты; Q6 начинает
-  расширение покрытия, а не исправление этих контрактов.
+- Resize/crop, generator, Reset и localization fixme сняты; Q6a расширяет
+  покрытие, не смешиваясь с исправлением этих контрактов.
 
 **Результат:** Q5 known issues закрыты и отражены в `docs/backlog.md` и
-`docs/checklist-manual-testing.md`; следующий этап — Q6.
+`docs/checklist-manual-testing.md`; Q6a выполнен, следующий этап — Q6b.
 
 ### Q6. Расширение unit и browser-покрытия
 
 **Оценка:** M–L. **Зависимости:** Q4, Q5.
 
-Сначала:
+#### Q6a. Executor protocol, fallback и debounce
 
-- executor и worker/fallback;
-- `FileResult`, ZIP и download;
-- `debounce` и auto-run;
+**Статус:** выполнен. Unit-тесты покрывают debounce, worker image/string/
+verdict/files protocol, `ToolError` transport, constructor/postMessage/onerror/
+malformed fallback, source-aware sanitization и DOM metadata. Browser smoke
+проверяет rapid auto-run и no-worker fallback; deferred transport fallback
+покрыт unit-тестами.
+
+- `execute(tool, ctx)` сохраняет публичный API; `createExecutor` и protocol
+  handler являются внутренними test seams.
+- `ToolError` не запускает direct retry повторно; transport/protocol failures
+  отключают worker и переходят в direct fallback.
+- DOM-зависимые registry entries помечены `domOnly`, поэтому зелёный smoke не
+  скрывает нормальный worker fallback.
+- `debounce` покрыт fake timers; E2E подтверждает последние значения при быстрых
+  последовательных изменениях генератора.
+
+#### Q6b–Q6f. Оставшиеся направления
+
+- `FileResult` → ZIP → download;
 - output MIME/quality;
 - malformed и special PNG fixtures: CRC, truncated, palette, 16-bit;
-- smoke всех типов инструментов из registry.
-
-Затем отдельно:
-
+- smoke всех типов инструментов из registry;
 - component-тесты `SchemaToolView`, `SchemaPreview` и schema fields;
-- browser matrix, mobile viewport и visual snapshots;
-- coverage thresholds.
+- browser matrix, mobile viewport, visual snapshots и coverage thresholds.
 
 Не применять один одинаковый smoke-сценарий к image-, text-, generator- и
 file-result-инструментам.

@@ -51,13 +51,13 @@
 только если темы нет в существующем документе; иначе обновляется источник
 истины.
 
-## Текущий baseline Q5
+## Текущий baseline Q6a
 
-На момент фиксации Q5:
+На момент фиксации Q6a:
 
 - production registry содержит 122 инструмента;
 - `pnpm --dir web check` проходит без ошибок и предупреждений;
-- `pnpm --dir web test` — 39 test files / 431 tests;
+- `pnpm --dir web test` — 41 test files / 445 tests;
 - `pnpm --dir web test:rules` — 4 test files / 74 tests;
 - `pnpm --dir web lint:all` — 0 errors и 0 i18n warnings; остаются 4 unused
   design tokens от token audit;

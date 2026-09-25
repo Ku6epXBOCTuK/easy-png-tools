@@ -253,6 +253,7 @@ const jpegArtifacts: ToolEntry<JpegArtifactsParams> = {
 	category: "filters",
 	schema: jpegArtifactsSchema,
 	input: "image",
+	domOnly: true,
 	run: imgTool((img, p) => jpegRoundtrip(img, p.quality)),
 };
 
