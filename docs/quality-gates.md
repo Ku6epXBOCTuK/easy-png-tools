@@ -35,7 +35,9 @@ pnpm --dir web test:e2e
 ```
 
 Запускать его обязательно для изменений маршрутов, загрузки файла, результата,
-download, темы или локализации. В текущем CI это отдельный non-blocking
+download, темы или локализации. Изменения runtime fixtures/загрузки файла
+проверяются отдельным `web/e2e/png-fixtures.spec.ts`; ручные бинарники из
+`tests/fixtures/` не входят в `verify`. В текущем CI это отдельный non-blocking
 baseline; после закрытия известных ошибок его можно сделать blocking.
 
 ## Быстрые подмножества
@@ -46,6 +48,7 @@ baseline; после закрытия известных ошибок его м�
 | TypeScript/Svelte            | `pnpm --dir web check` и `pnpm --dir web test`          |
 | Lint-правило или lint-конфиг | `pnpm --dir web test:rules` и `pnpm --dir web lint:all` |
 | Пользовательский поток       | `pnpm --dir web test:e2e`                               |
+| Fixtures/загрузка файла      | `pnpm --dir web test:e2e`                               |
 | Полный локальный gate        | `pnpm verify`                                           |
 
 ## Errors и warnings

@@ -72,6 +72,40 @@ describe("hasTransparency", () => {
 	});
 });
 
+describe("special decoded pixel data", () => {
+	it("палитра после browser-декодирования сохраняет количество цветов", () => {
+		const image = makeImage(2, 2, [
+			[255, 0, 0, 255],
+			[0, 255, 0, 255],
+			[0, 0, 255, 255],
+			[255, 255, 255, 255],
+		]);
+
+		expect(imageInfo(image)).toMatchObject({
+			width: 2,
+			height: 2,
+			hasAlpha: false,
+			colorCount: 4,
+		});
+	});
+
+	it("16-bit после downscale остаётся цветным и непрозрачным", () => {
+		const image = makeImage(
+			4,
+			4,
+			Array.from({ length: 16 }, (_, index) => {
+				const value = index * 8;
+				return [value, value, 128, 255];
+			}),
+		);
+
+		expect(imageInfo(image).colorCount).toBe(16);
+		expect(hasTransparency(image)).toBe(false);
+		expect(isGrayscale(image)).toBe(false);
+		expect(orientationOf(image)).toBe("square");
+	});
+});
+
 describe("orientationOf", () => {
 	it("определяет ориентацию", () => {
 		expect(

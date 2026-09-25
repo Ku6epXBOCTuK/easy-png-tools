@@ -1,9 +1,9 @@
 # План: линтеры, тесты и качество кодовой базы
 
-> Статус: **draft — Q0–Q5 и Q6a–Q6c готовы к ревью; Q6d — следующий этап**.
+> Статус: **draft — Q0–Q5 и Q6a–Q6d готовы к ревью; Q6e — следующий этап**.
 >
 > Источник: `docs/backlog.md`, аудит конфигурации `web/`, e2e-тестов и
-> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6c выполнены; Q6d–Q8 выполняются
+> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6d выполнены; Q6e–Q8 выполняются
 > отдельными атомарными шагами.
 >
 > Цель: сделать качество кодовой базы воспроизводимым, убрать ложную «зелёность»
@@ -243,9 +243,24 @@ JPG/WebP/BMP, не превращаясь в UX-райз кнопки Download. 
 - E2E проверяет JPEG `FF D8 FF`, WebP `RIFF/WEBP`, BMP `BM` и PNG-фолбэк.
 - Ошибки кодирования и unsupported MIME используют существующие i18n-ключи.
 
-#### Q6d–Q6f. Оставшиеся направления
+#### Q6d. Malformed и special PNG fixtures
 
-- malformed и special PNG fixtures: CRC, truncated, palette, 16-bit;
+**Статус:** выполнен. Runtime-fixtures покрывают CRC, truncated, palette и
+16-bit без бинарных файлов в git. E2E фиксирует браузерный контракт: critical
+CRC/truncated отклоняются без падения, ancillary CRC и хвост после `IEND`
+допускаются, palette/16-bit декодируются. Unit фиксирует контракт анализаторов
+для RGBA-данных, которые браузер отдаёт после нормализации.
+
+- `web/e2e/helpers/fixtures.ts` собирает indexed, 16-bit, CRC-mutation,
+  truncation и tail-варианты из уже существующих `crc32`/`chunk`.
+- Проверки выполняются в Chromium; browser matrix остаётся Q6f.
+- Поведение `createImageBitmap` является частью browser-контракта, а не
+  самостоятельного PNG-парсера product-кода.
+- Сырое сообщение браузера при decode-ошибке не локализуется в Q6d; это
+  отдельная задача в backlog.
+
+#### Q6e–Q6f. Оставшиеся направления
+
 - smoke всех типов инструментов из registry;
 - component-тесты `SchemaToolView`, `SchemaPreview` и schema fields;
 - browser matrix, mobile viewport, visual snapshots и coverage thresholds.
@@ -408,7 +423,6 @@ refactor, новые i18n-правила и исправление продук�
 ## 7. Решения, которые нужно принять на ревью
 
 - Какие executor/worker/fallback сценарии войдут в первый Q6 coverage PR?
-- Какие special PNG fixtures обязательны для baseline?
 - Нужны ли browser/mobile matrix и visual snapshots до coverage thresholds?
 - Какие unused design tokens можно удалить, а какие должны остаться?
 - Какие browser/e2e проверки должны быть обязательными для PR, а какие —

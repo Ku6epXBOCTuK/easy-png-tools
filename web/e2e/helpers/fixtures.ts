@@ -23,6 +23,22 @@ function crc32(data: Uint8Array): number {
 	return (c ^ 0xffffffff) >>> 0;
 }
 
+const PNG_SIGNATURE = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+
+function makeIhdr(
+	width: number,
+	height: number,
+	bitDepth: number,
+	colorType: number,
+): Buffer {
+	const ihdr = Buffer.alloc(13);
+	ihdr.writeUInt32BE(width, 0);
+	ihdr.writeUInt32BE(height, 4);
+	ihdr[8] = bitDepth;
+	ihdr[9] = colorType;
+	return ihdr;
+}
+
 function chunk(type: string, data: Buffer): Buffer {
 	const out = Buffer.alloc(8 + data.length + 4);
 	out.writeUInt32BE(data.length, 0);
@@ -32,18 +48,23 @@ function chunk(type: string, data: Buffer): Buffer {
 	return out;
 }
 
+function findChunk(png: Buffer, type: string): number {
+	let offset = PNG_SIGNATURE.length;
+	while (offset + 12 <= png.length) {
+		const length = png.readUInt32BE(offset);
+		const chunkType = png.subarray(offset + 4, offset + 8).toString("ascii");
+		if (chunkType === type) return offset;
+		offset += 12 + length;
+	}
+	throw new Error(`PNG chunk ${type} not found`);
+}
+
 /** Строит валидный RGBA PNG в рантайме (8-bit, фильтр type 0, deflate/zlib). */
 export function makePng(
 	width: number,
 	height: number,
 	pixelAt: (x: number, y: number) => [number, number, number, number],
 ): Buffer {
-	const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-	const ihdr = Buffer.alloc(13);
-	ihdr.writeUInt32BE(width, 0);
-	ihdr.writeUInt32BE(height, 4);
-	ihdr[8] = 8;
-	ihdr[9] = 6;
 	const stride = width * 4 + 1;
 	const raw = Buffer.alloc(height * stride);
 	for (let y = 0; y < height; y++) {
@@ -57,11 +78,98 @@ export function makePng(
 		}
 	}
 	return Buffer.concat([
-		sig,
-		chunk("IHDR", ihdr),
+		PNG_SIGNATURE,
+		chunk("IHDR", makeIhdr(width, height, 8, 6)),
 		chunk("IDAT", deflateSync(raw)),
 		chunk("IEND", Buffer.alloc(0)),
 	]);
+}
+
+export function makeIndexedPng(
+	width: number,
+	height: number,
+	palette: [number, number, number][],
+	pixelAt: (x: number, y: number) => number,
+): Buffer {
+	const plte = Buffer.alloc(palette.length * 3);
+	for (const [index, color] of palette.entries()) {
+		plte[index * 3] = color[0];
+		plte[index * 3 + 1] = color[1];
+		plte[index * 3 + 2] = color[2];
+	}
+	const stride = width + 1;
+	const raw = Buffer.alloc(height * stride);
+	for (let y = 0; y < height; y++) {
+		for (let x = 0; x < width; x++) {
+			raw[y * stride + 1 + x] = pixelAt(x, y);
+		}
+	}
+	return Buffer.concat([
+		PNG_SIGNATURE,
+		chunk("IHDR", makeIhdr(width, height, 8, 3)),
+		chunk("PLTE", plte),
+		chunk("IDAT", deflateSync(raw)),
+		chunk("IEND", Buffer.alloc(0)),
+	]);
+}
+
+export function make16BitPng(
+	width: number,
+	height: number,
+	pixelAt: (x: number, y: number) => [number, number, number, number],
+): Buffer {
+	const stride = width * 8 + 1;
+	const raw = Buffer.alloc(height * stride);
+	for (let y = 0; y < height; y++) {
+		for (let x = 0; x < width; x++) {
+			const [r, g, b, a] = pixelAt(x, y);
+			const p = y * stride + 1 + x * 8;
+			raw.writeUInt16BE(r, p);
+			raw.writeUInt16BE(g, p + 2);
+			raw.writeUInt16BE(b, p + 4);
+			raw.writeUInt16BE(a, p + 6);
+		}
+	}
+	return Buffer.concat([
+		PNG_SIGNATURE,
+		chunk("IHDR", makeIhdr(width, height, 16, 6)),
+		chunk("IDAT", deflateSync(raw)),
+		chunk("IEND", Buffer.alloc(0)),
+	]);
+}
+
+export function withPngChunk(png: Buffer, type: string, data: Buffer): Buffer {
+	const iendOffset = png.length - 12;
+	return Buffer.concat([
+		png.subarray(0, iendOffset),
+		chunk(type, data),
+		png.subarray(iendOffset),
+	]);
+}
+
+export function withBadChunkCrc(png: Buffer, type: string): Buffer {
+	const copy = Buffer.from(png);
+	const offset = findChunk(copy, type);
+	const length = copy.readUInt32BE(offset);
+	copy[offset + 8 + length + 3] ^= 0xff;
+	return copy;
+}
+
+export function truncatePng(png: Buffer, length: number): Buffer {
+	return Buffer.from(png.subarray(0, length));
+}
+
+export function truncateChunkData(
+	png: Buffer,
+	type: string,
+	length: number,
+): Buffer {
+	const offset = findChunk(png, type);
+	return truncatePng(png, offset + 8 + length);
+}
+
+export function withTrailingBytes(png: Buffer, tail: Buffer): Buffer {
+	return Buffer.concat([png, Buffer.from(tail)]);
 }
 
 const checker = (x: number, y: number): [number, number, number, number] =>
@@ -101,6 +209,66 @@ export const corruptPng: SourceFile = {
 	mimeType: "image/png",
 	buffer: Buffer.from("this is definitely not a png file", "utf8"),
 };
+
+const specialPng = makePng(8, 8, checker);
+const specialWithText = withPngChunk(
+	specialPng,
+	"tEXt",
+	Buffer.from("Comment\0q6d", "ascii"),
+);
+const palette4 = [
+	[255, 0, 0],
+	[0, 255, 0],
+	[0, 0, 255],
+	[255, 255, 255],
+] as [number, number, number][];
+const palette256 = Array.from({ length: 256 }, (_, index) => [
+	index,
+	(index * 3) % 256,
+	(index * 7) % 256,
+]) as [number, number, number][];
+
+export const crcBadIdatPng = asSourceFile(
+	withBadChunkCrc(specialPng, "IDAT"),
+	"crc-bad-idat.png",
+);
+export const crcBadAncillaryPng = asSourceFile(
+	withBadChunkCrc(specialWithText, "tEXt"),
+	"crc-bad-ancillary.png",
+);
+export const truncatedHeaderPng = asSourceFile(
+	truncatePng(specialPng, PNG_SIGNATURE.length + 12 + 13),
+	"truncated-header.png",
+);
+export const truncatedNoIendPng = asSourceFile(
+	truncatePng(specialPng, specialPng.length - 12),
+	"truncated-no-iend.png",
+);
+export const idatCutPng = asSourceFile(
+	truncateChunkData(specialPng, "IDAT", 4),
+	"idat-cut.png",
+);
+export const garbageTailPng = asSourceFile(
+	withTrailingBytes(specialPng, Buffer.from("trailing-garbage", "ascii")),
+	"garbage-tail.png",
+);
+export const palette4Png = asSourceFile(
+	makeIndexedPng(
+		8,
+		8,
+		palette4,
+		(x, y) => (Math.floor(x / 2) + Math.floor(y / 2)) % palette4.length,
+	),
+	"palette-4.png",
+);
+export const palette256Png = asSourceFile(
+	makeIndexedPng(16, 16, palette256, (x, y) => (x + y * 16) % 256),
+	"palette-256.png",
+);
+export const sixteenBitPng = asSourceFile(
+	make16BitPng(8, 8, (x, y) => [x * 8000, y * 8000, 32768, 65535]),
+	"16bit.png",
+);
 
 export const tinyBase64 = makePng(8, 8, solidRed).toString("base64");
 

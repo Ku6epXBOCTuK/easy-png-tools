@@ -107,7 +107,8 @@
 
 ## Качество production UI
 
-Q5 закрывает известные preview-проблемы; активных `test.fixme` в e2e больше нет.
+Q5–Q6d закрывают известные preview-проблемы и baseline special fixtures;
+активных `test.fixme` в e2e больше нет.
 
 - [x] Генераторы auto-run без кнопки Generate — `web/e2e/generators.spec.ts`.
 - [x] `resize-png` и `crop-png` используют размеры текущего source через общий
@@ -116,6 +117,11 @@ Q5 закрывает известные preview-проблемы; активн�
       auto-run — `web/e2e/pipeline.spec.ts`.
 - [x] Ошибки хранят i18n key/vars и переводятся при выводе; изменение языка
       обновляет alert — `web/e2e/i18n.spec.ts`.
+- [x] Malformed/special PNG fixtures: CRC, truncated, palette и 16-bit проходят
+      через upload без краша — `web/e2e/png-fixtures.spec.ts`.
+- [ ] Ошибка декодирования изображения из `createImageBitmap` пока показывается
+      сырым сообщением браузера; нужен `ToolError`-маппер и i18n-ключ. Это
+      продуктовая задача, не Q6d.
 
 ## Идеи
 

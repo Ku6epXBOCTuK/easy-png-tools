@@ -63,7 +63,7 @@ export default tseslint.config(
 						"e2e/text-and-verdicts.spec.ts",
 						"e2e/tools-smoke.spec.ts",
 						"e2e/generators.spec.ts",
-						"e2e/known-issues.spec.ts",
+						"e2e/png-fixtures.spec.ts",
 						"e2e/i18n.spec.ts",
 						// Тесты и фикстуры кастомных линт-правил лежат вне src/ (не в
 						// tsconfig), поэтому для типизированного парсинга резолвятся

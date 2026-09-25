@@ -51,17 +51,17 @@
 только если темы нет в существующем документе; иначе обновляется источник
 истины.
 
-## Текущий baseline Q6c
+## Текущий baseline Q6d
 
-На момент фиксации Q6c:
+На момент фиксации Q6d:
 
 - production registry содержит 122 инструмента;
 - `pnpm --dir web check` проходит без ошибок и предупреждений;
-- `pnpm --dir web test` — 42 test files / 455 tests;
+- `pnpm --dir web test` — 42 test files / 457 tests;
 - `pnpm --dir web test:rules` — 4 test files / 74 tests;
 - `pnpm --dir web lint:all` — 0 errors и 0 i18n warnings; остаются 4 unused
   design tokens от token audit;
-- `pnpm verify` проходит; production E2E — 112 passed, 0 skipped.
+- `pnpm verify` проходит; production E2E — 121 passed, 0 skipped.
 
 Baseline и следующий шаг поддерживаются в `docs/plan-codebase-quality.md`.
 
