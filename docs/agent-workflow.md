@@ -12,12 +12,11 @@
 4. Найти существующие типы, константы, helpers и тестовые паттерны до создания
    нового определения.
 5. Определить границу изменения:
-   - новый UI — `web/src/routes/**` и `web/src/lib/components/**`;
-   - legacy — `web/src/routes/v1/**` и `web/src/lib/v1/**`;
+   - production UI — `web/src/routes/**` и `web/src/lib/components/**`;
    - shared — `web/src/lib/core/**` и `web/src/lib/theme.svelte.ts`.
 
-Изменение shared-кода требует проверки обеих веток. Смешивание old/new нельзя
-обходить относительными импортами или исключениями линтера.
+Изменение shared-кода требует проверки production-потребителей. Не добавлять
+исключения линтера ради отдельных модулей без записи в baseline.
 
 ## 2. Порядок изменения
 
@@ -73,7 +72,7 @@ E2E запускается отдельно от быстрых проверок
 - обязательное поведение агента — `AGENTS.md`;
 - индекс и карта документов — `docs/README.md`;
 - качество и точные команды — `docs/quality-gates.md`;
-- тестовая архитектура — `docs/testing-strategy.md` после Q3;
+- тестовая архитектура — `docs/testing-strategy.md` после Q4;
 - lint implementation — `web/eslint-plugins/README.md`;
 - продуктовые решения — backlog и активные планы.
 

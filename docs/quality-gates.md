@@ -55,10 +55,10 @@ baseline; после закрытия известных ошибок его м�
 - Token audit пока оставляет unused-token warnings отдельным неблокирующим
   сообщением.
 - `lint:all` по-прежнему сообщает 4 unused-token warnings отдельным
-  предупреждением token audit; это следующий debt Q6.
+  предупреждением token audit; это следующий debt Q7.
 - `dict-consistency` использует base-locale fallback для registry metadata и
-  pattern-based policy для legacy `tools.*.params`; это не молчаливый
-  `allowPaths`-список.
+  pattern-based policy для временно неиспользуемых `tools.*.params`; это не
+  молчаливый `allowPaths`-список.
 
 ## CI
 

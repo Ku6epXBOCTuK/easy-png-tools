@@ -5,16 +5,11 @@ import globals from "globals";
 import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
 import designTokens from "./eslint-plugins/index.js";
-import isolationPlugin from "./eslint-plugins/isolation/index.js";
 import conventionsPlugin from "./eslint-plugins/conventions/index.js";
 import i18nPlugin from "./eslint-plugins/i18n/index.js";
 
-// FIXME: надо игнорировать старые файлы, после переноса пути новых компонентов включают старые
 // Новый код редизайна: к нему применяем полные recommended-наборы уже сейчас.
-// Когда старый дизайн удалим (C19), этот scoped-блок убирается и recommended
-// включается на весь код (см. план-redesign §10, шаг 6).
 const newCode = ["**/src/lib/components/**", "**/src/routes/**"];
-const oldCode = ["**/src/lib/v1/**", "**/src/routes/v1/**"];
 
 // Полные recommended-наборы — только на новый код (см. ниже, блок перед prettier).
 const jsRecommended = Array.isArray(js.configs.recommended)
@@ -28,10 +23,6 @@ const svelteRecommended = Array.isArray(svelte.configs["flat/recommended"])
 const newSvelteFiles = [
 	"**/src/lib/components/**/*.svelte",
 	"**/src/routes/**/*.svelte",
-];
-const oldSvelteFiles = [
-	"**/src/lib/v1/**/*.svelte",
-	"**/src/routes/v1/**/*.svelte",
 ];
 
 // FIXME:
@@ -82,21 +73,17 @@ export default tseslint.config(
 						"eslint-plugins/__tests__/interface-props.test.ts",
 						"eslint-plugins/__tests__/no-string-union-alias.test.ts",
 						"eslint-plugins/__tests__/helpers.ts",
-						"eslint-plugins/__tests__/no-mixed-imports.test.ts",
 						"eslint-plugins/__tests__/dict-consistency.test.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/dict.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/en.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/ru.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/de.ts",
-						"eslint-plugins/__fixtures__/src/lib/v1/old.ts",
-						"eslint-plugins/__fixtures__/src/lib/v1/i18n/t.ts",
 						"eslint-plugins/__fixtures__/src/lib/core/errors.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/t.ts",
 						"eslint-plugins/__fixtures__/src/lib/theme.svelte.ts",
 						"eslint-plugins/__fixtures__/src/lib/components/CheckerCanvas.svelte",
 						"eslint-plugins/__fixtures__/src/lib/components/ui/Button.svelte",
 						"eslint-plugins/__fixtures__/src/routes/+page.svelte",
-						"eslint-plugins/__fixtures__/src/routes/v1/+layout.svelte",
 					],
 					maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 40,
 				},
@@ -134,11 +121,9 @@ export default tseslint.config(
 		},
 	},
 	// Правило дизайн-токенов: запрет хардкода цветов/размеров в style-блоках.
-	// Применяется к новому коду редизайна (см. newCode выше). Когда старый дизайн
-	// удалят, расширить glob на весь код, исключив (old)/.
+	// Применяется к новому коду редизайна.
 	{
 		files: newSvelteFiles,
-		ignores: oldSvelteFiles,
 		plugins: {
 			"design-tokens": designTokens,
 		},
@@ -151,10 +136,8 @@ export default tseslint.config(
 	},
 	// Конвенция Svelte 5: пропсы через локальный `interface Props` +
 	// `let {...}: Props = $props()` (плагин conventions/interface-props).
-	// Только Svelte-файлы нового кода (см. newSvelteFiles).
 	{
 		files: newSvelteFiles,
-		ignores: oldSvelteFiles,
 		plugins: {
 			conventions: conventionsPlugin,
 		},
@@ -166,7 +149,6 @@ export default tseslint.config(
 	// (плагин conventions/no-string-union-alias). TS и Svelte-скрипты нового кода.
 	{
 		files: newCode,
-		ignores: oldCode,
 		plugins: {
 			conventions: conventionsPlugin,
 		},
@@ -198,17 +180,14 @@ export default tseslint.config(
 		...jsRecommended.map((cfg) => ({
 			...cfg,
 			files: newCode,
-			ignores: oldCode,
 		})),
 		...tseslint.configs.recommended.map((cfg) => ({
 			...cfg,
 			files: newCode,
-			ignores: oldCode,
 		})),
 		...svelteRecommended.map((cfg) => ({
 			...cfg,
 			files: newSvelteFiles,
-			ignores: oldSvelteFiles,
 		})),
 	],
 
@@ -218,20 +197,6 @@ export default tseslint.config(
 		files: ["**/*.svelte"],
 		rules: {
 			"prefer-const": "off",
-		},
-	},
-	// ===== Изоляция старого UI (old) и нового preview =====================
-	// Полная взаимная изоляция веток (см. plan-composite-params, Фаза 5).
-	// Кастомный плагин isolation/no-mixed-imports резолвит импорты по реальному
-	// пути (и $lib, и относительные) и ругается на old→new / new→old.
-	// Общее (core/, theme) разрешено обоим.
-	{
-		files: ["**/*.{ts,svelte}"],
-		plugins: {
-			isolation: isolationPlugin,
-		},
-		rules: {
-			"isolation/no-mixed-imports": "error",
 		},
 	},
 	// prettier — последним, чтобы гасить форматирующие правила из recommended.

@@ -3,11 +3,10 @@
 // Two strategies, picked per rule in the test files:
 //   - RuleTester (eslint)  — pure string cases, no filesystem. Best fit for the
 //     design-tokens rules that only inspect the postcss AST of Svelte `<style>`.
-//   - Linter API + fixtures — needed when a rule reads real files. The isolation
-//     rule resolves imports via fs (targets must exist on disk) and
-//     no-undefined-in-svelte reads <cwd>/src/app.css for the token dictionary.
-//     `verifyInFixtures` runs a rule with cwd fixed to `__fixtures__/`, so both
-//     work without touching process.cwd() or the real src/ tree.
+//   - Linter API + fixtures — needed when a rule reads real files, such as
+//     no-undefined-in-svelte, which reads <cwd>/src/app.css for the token
+//     dictionary. `verifyInFixtures` runs a rule with cwd fixed to
+//     `__fixtures__/`, without touching process.cwd() or the real src/ tree.
 import { Linter } from "eslint";
 import type { Rule } from "eslint";
 import path from "node:path";
