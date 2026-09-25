@@ -96,10 +96,10 @@
       корректный (не «кракозябры»).
 - [ ] remove-background на сложной полупрозрачности — края не «звенят».
 
-## G. Закрытые Q5/Q6b/Q6c/Q6d-проблемы
+## G. Закрытые Q5/Q6b/Q6c/Q6d/Q6e-проблемы
 
-> Q5/Q6b/Q6c/Q6d-проблемы закрыты автоматическими тестами; для ручной проверки
-> остаются субъективные сценарии разделов A–F.
+> Q5/Q6b/Q6c/Q6d/Q6e-проблемы закрыты автоматическими тестами; для ручной
+> проверки остаются субъективные сценарии разделов A–F.
 
 - [x] **Генераторы:** auto-run по дефолтам, результат и изменение параметра без
       кнопки Generate. `web/e2e/generators.spec.ts`.
@@ -117,6 +117,9 @@
       сигнатуры, quality 10/90 меняет размер файла; `web/e2e/pipeline.spec.ts`.
 - [x] **Malformed/special PNG:** CRC, truncated, palette и 16-bit fixtures
       проходят через upload без краша; `web/e2e/png-fixtures.spec.ts`.
+- [x] **Registry smoke:** все 122 production tools имеют специализированный
+      browser smoke по input/result-типу; `web/e2e/tools-smoke.spec.ts`,
+      `generators.spec.ts`, `text-and-verdicts.spec.ts`.
 
 ## Как долго
 

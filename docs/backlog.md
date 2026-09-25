@@ -107,8 +107,8 @@
 
 ## Качество production UI
 
-Q5–Q6d закрывают известные preview-проблемы и baseline special fixtures;
-активных `test.fixme` в e2e больше нет.
+Q5–Q6e закрывают известные preview-проблемы, special fixtures и registry-wide
+smoke; активных `test.fixme` в e2e больше нет.
 
 - [x] Генераторы auto-run без кнопки Generate — `web/e2e/generators.spec.ts`.
 - [x] `resize-png` и `crop-png` используют размеры текущего source через общий
@@ -119,6 +119,9 @@ Q5–Q6d закрывают известные preview-проблемы и basel
       обновляет alert — `web/e2e/i18n.spec.ts`.
 - [x] Malformed/special PNG fixtures: CRC, truncated, palette и 16-bit проходят
       через upload без краша — `web/e2e/png-fixtures.spec.ts`.
+- [x] Registry-wide smoke покрывает все 122 инструмента по input/result-типу —
+      `web/e2e/tools-smoke.spec.ts`, `generators.spec.ts`,
+      `text-and-verdicts.spec.ts`.
 - [ ] Ошибка декодирования изображения из `createImageBitmap` пока показывается
       сырым сообщением браузера; нужен `ToolError`-маппер и i18n-ключ. Это
       продуктовая задача, не Q6d.

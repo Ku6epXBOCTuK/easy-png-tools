@@ -69,6 +69,12 @@ export function rangeInput(page: Page, name: RegExp | string): Locator {
 	return page.getByRole("slider", { name });
 }
 
+export async function renderText(page: Page, value: string): Promise<void> {
+	const input = page.getByRole("textbox", { name: "Text data" });
+	await input.fill(value);
+	await page.getByRole("button", { name: "Render text" }).click();
+}
+
 export async function uploadImage(page: Page, file: SourceFile): Promise<void> {
 	const input = page.locator('input[type="file"]');
 	await expect(input).toHaveCount(1);

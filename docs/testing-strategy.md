@@ -62,15 +62,16 @@ browser-контракт: critical CRC и truncated отклоняются, anci
 ## 5. Helpers и `test.fixme`
 
 `web/e2e/helpers/page.ts` владеет общими операциями `openTool`, `uploadImage`,
-`resultImage`, `sourceImage`, `verdictStatus`, `textResult`, `errorAlert`,
-`emptyState`, `rangeInput`, `downloadResult`, `downloadResultFile` и
-`downloadResultBytes`. Специфика должна вызывать эти helpers, а не повторять
-raw-селекторы. Инструменты с `result: "files"` проверяются отдельным
-ZIP-сценарием: общий image-smoke не применяется к ним.
+`renderText`, `resultImage`, `sourceImage`, `verdictStatus`, `textResult`,
+`errorAlert`, `emptyState`, `rangeInput`, `downloadResult`, `downloadResultFile`
+и `downloadResultBytes`. Специфика должна вызывать эти helpers, а не повторять
+raw-селекторы. Harness выбирается по контракту: image — upload + `resultImage`,
+text — `renderText` + результат, generator — auto-run без upload, verdict —
+`verdictStatus`, files — отдельный ZIP-сценарий.
 
 `test.fixme` допускается только для зарегистрированной проблемы в backlog или
 checklist. В комментарии указывается ссылка на неё. После исправления тест и
-ссылка обновляются вместе; в текущем Q6d baseline активных fixme нет.
+ссылка обновляются вместе; в текущем Q6e baseline активных fixme нет.
 
 ## 6. Проверки
 

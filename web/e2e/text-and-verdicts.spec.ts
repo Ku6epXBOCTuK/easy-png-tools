@@ -10,6 +10,7 @@ import {
 	expectNoErrorAlert,
 	expectNoErrors,
 	openTool,
+	renderText,
 	resultImage,
 	trackErrors,
 	uploadImage,
@@ -30,14 +31,14 @@ for (const [id, input] of [
 		"rgb-values-to-png",
 		Array.from({ length: 32 }, () => "rgba(255,0,0,255)").join(" "),
 	],
+	["data-uri-to-png", `data:image/png;base64,${tinyBase64}`],
 	["svg-to-png", svgMarkup],
 ] as const) {
 	test(`text input → ${id} produces result image`, async ({ page }) => {
 		const sink = trackErrors(page);
 		await openTool(page, id);
 		await expect(async () => {
-			await page.getByRole("textbox", { name: "Text data" }).fill(input);
-			await page.getByRole("button", { name: "Render text" }).click();
+			await renderText(page, input);
 			await expect(resultImage(page)).toBeVisible();
 		}).toPass({ timeout: 25_000 });
 		await expectNoErrorAlert(page);
@@ -60,17 +61,13 @@ test("verify-is-png renders different verdicts for valid and invalid input", asy
 	page,
 }) => {
 	await openTool(page, "verify-is-png");
-	const input = page.getByRole("textbox", { name: "Text data" });
-	const render = page.getByRole("button", { name: "Render text" });
 	const verdict = verdictStatus(page);
 
-	await input.fill(tinyBase64);
-	await render.click();
+	await renderText(page, tinyBase64);
 	await expect(verdict).toBeVisible();
 	const validText = await verdict.textContent();
 
-	await input.fill("aGVsbG8=");
-	await render.click();
+	await renderText(page, "aGVsbG8=");
 	await expect(verdict).toBeVisible();
 	const invalidText = await verdict.textContent();
 	expect(invalidText).not.toBe(validText);

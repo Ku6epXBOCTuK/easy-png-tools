@@ -1,9 +1,9 @@
 # План: линтеры, тесты и качество кодовой базы
 
-> Статус: **draft — Q0–Q5 и Q6a–Q6d готовы к ревью; Q6e — следующий этап**.
+> Статус: **draft — Q0–Q5 и Q6a–Q6e готовы к ревью; Q6f — следующий этап**.
 >
 > Источник: `docs/backlog.md`, аудит конфигурации `web/`, e2e-тестов и
-> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6d выполнены; Q6e–Q8 выполняются
+> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6e выполнены; Q6f–Q8 выполняются
 > отдельными атомарными шагами.
 >
 > Цель: сделать качество кодовой базы воспроизводимым, убрать ложную «зелёность»
@@ -259,10 +259,26 @@ CRC/truncated отклоняются без падения, ancillary CRC и х�
 - Сырое сообщение браузера при decode-ошибке не локализуется в Q6d; это
   отдельная задача в backlog.
 
-#### Q6e–Q6f. Оставшиеся направления
+#### Q6e. Registry-wide smoke
 
-- smoke всех типов инструментов из registry;
-- component-тесты `SchemaToolView`, `SchemaPreview` и schema fields;
+**Статус:** выполнен. Smoke расширен до всех 122 production tools из registry:
+image→image, image→text, text→image, generator input→image и verdict. FileResult
+и malformed/special PNG не дублируются — они уже покрыты Q6b/Q6d.
+
+- `tools-smoke.spec.ts` расширен image/text-output кейсами, включая все
+  незакрытые color/geometry инструменты.
+- `generators.spec.ts` использует единый data-harness для всех генераторов;
+  `single-color-png` сохраняет отдельную проверку auto-run/размеров.
+- Text-input сценарии используют общий `renderText` helper, включая
+  `data-uri-to-png`.
+- Component-тесты не добавлены: Vitest работает в node без DOM/Testing Library,
+  а текущий e2e-контракт уже покрывает поведение preview. Выбор test seam или
+  DOM-окружения перенесён в Q6f.
+
+#### Q6f. Component coverage, browser matrix и visual gates
+
+- решить, нужен ли чистый seam для `SchemaFields`/view-model или полноценное
+  DOM-окружение для `SchemaToolView`/`SchemaPreview`;
 - browser matrix, mobile viewport, visual snapshots и coverage thresholds.
 
 Не применять один одинаковый smoke-сценарий к image-, text-, generator- и
