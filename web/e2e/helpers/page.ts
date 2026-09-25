@@ -1,4 +1,9 @@
-import { expect, type Locator, type Page } from "playwright/test";
+import {
+	expect,
+	type Download,
+	type Locator,
+	type Page,
+} from "playwright/test";
 import type { SourceFile } from "./fixtures";
 
 export const TEST_IDS = {
@@ -73,14 +78,18 @@ export async function uploadImage(page: Page, file: SourceFile): Promise<void> {
 	});
 }
 
-export async function downloadResult(page: Page): Promise<string> {
+export async function downloadResultFile(page: Page): Promise<Download> {
 	const button = page.getByRole("button", { name: "Download result" });
 	await expect(button).toBeVisible();
 	const [download] = await Promise.all([
 		page.waitForEvent("download"),
 		button.click(),
 	]);
-	return download.suggestedFilename();
+	return download;
+}
+
+export async function downloadResult(page: Page): Promise<string> {
+	return (await downloadResultFile(page)).suggestedFilename();
 }
 
 export async function expectNoErrorAlert(page: Page): Promise<void> {

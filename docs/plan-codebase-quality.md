@@ -1,9 +1,9 @@
 # План: линтеры, тесты и качество кодовой базы
 
-> Статус: **draft — Q0–Q5 и Q6a готовы к ревью; Q6b — следующий этап**.
+> Статус: **draft — Q0–Q5, Q6a и Q6b готовы к ревью; Q6c — следующий этап**.
 >
 > Источник: `docs/backlog.md`, аудит конфигурации `web/`, e2e-тестов и
-> инфраструктурных скриптов. Q0–Q5 и Q6a выполнены; Q6b–Q8 выполняются
+> инфраструктурных скриптов. Q0–Q5, Q6a и Q6b выполнены; Q6c–Q8 выполняются
 > отдельными атомарными шагами.
 >
 > Цель: сделать качество кодовой базы воспроизводимым, убрать ложную «зелёность»
@@ -216,9 +216,21 @@ malformed fallback, source-aware sanitization и DOM metadata. Browser smoke
 - `debounce` покрыт fake timers; E2E подтверждает последние значения при быстрых
   последовательных изменениях генератора.
 
-#### Q6b–Q6f. Оставшиеся направления
+#### Q6b. FileResult → ZIP → download
 
-- `FileResult` → ZIP → download;
+**Статус:** выполнен. Q6a закрыл worker-транспорт; Q6b добавил проверяемый ZIP
+seam, unit round-trip для `FileResult`, защиту пустого результата и error/busy
+контракт download. Отдельный browser-сценарий скачивает архив и проверяет имена
+частей и PNG-сигнатуры.
+
+- `buildZipEntries` не зависит от DOM; `downloadZip` остаётся UI-обёрткой.
+- `SchemaToolView` переиспользует `downloadBlob`, ловит ошибки кодирования и
+  блокирует повторный download на время сборки.
+- E2E использует `downloadResultFile` и `unzipSync`, не добавляя новые
+  `data-testid`; files-инструменты не проходят через image-smoke.
+
+#### Q6c–Q6f. Оставшиеся направления
+
 - output MIME/quality;
 - malformed и special PNG fixtures: CRC, truncated, palette, 16-bit;
 - smoke всех типов инструментов из registry;

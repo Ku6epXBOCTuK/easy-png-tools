@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { unzipSync } from "fflate";
 import { expect, test } from "playwright/test";
 import {
 	corruptPng,
@@ -8,6 +10,7 @@ import {
 } from "./helpers/fixtures";
 import {
 	downloadResult,
+	downloadResultFile,
 	errorAlert,
 	expectNoErrorAlert,
 	expectNoErrors,
@@ -85,6 +88,39 @@ test("reset restores defaults and re-runs with the source", async ({
 	await expect(radius).toHaveValue("4");
 	await expect(sourceImage(page)).toBeVisible();
 	await expect(resultImage(page)).toBeVisible();
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
+});
+
+test("split-into-parts-png downloads a zip with named PNG parts", async ({
+	page,
+}) => {
+	const sink = trackErrors(page);
+	await openTool(page, "split-into-parts-png");
+	await uploadImage(page, landscapePng);
+	await rangeInput(page, "Columns").fill("3");
+	await rangeInput(page, "Rows").fill("2");
+	await expect(page.getByText("part-1-3.png")).toBeVisible();
+
+	const download = await downloadResultFile(page);
+	expect(download.suggestedFilename()).toBe("split-into-parts-png.zip");
+	const path = await download.path();
+	if (!path) throw new Error("download path is unavailable");
+	const entries = unzipSync(new Uint8Array(await readFile(path)));
+
+	expect(Object.keys(entries)).toEqual([
+		"part-1-1.png",
+		"part-1-2.png",
+		"part-1-3.png",
+		"part-2-1.png",
+		"part-2-2.png",
+		"part-2-3.png",
+	]);
+	for (const bytes of Object.values(entries)) {
+		expect(Array.from(bytes.subarray(0, 8))).toEqual([
+			137, 80, 78, 71, 13, 10, 26, 10,
+		]);
+	}
 	await expectNoErrorAlert(page);
 	expectNoErrors(sink);
 });

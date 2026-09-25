@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { ToolError } from "../core/errors";
+import type { PixelImage } from "../core/types";
 import {
 	createExecutor,
 	type ExecuteContext,
@@ -8,6 +9,7 @@ import {
 } from "./executor";
 import {
 	decodeWorkerResponse,
+	encodeWorkerResponse,
 	type WorkerRequest,
 	type WorkerResponse,
 } from "./protocol";
@@ -243,6 +245,38 @@ describe("createExecutor", () => {
 		expect(files).toMatchObject({
 			files: [{ name: "part.png", image: { width: 1, height: 1 } }],
 		});
+	});
+
+	it("round-trips FileResult through the worker protocol", () => {
+		const fileImage: PixelImage = {
+			width: 1,
+			height: 1,
+			data: new Uint8ClampedArray([1, 2, 3, 4]),
+		};
+		const fileResult = {
+			files: [{ name: "part-1-1.png", image: fileImage }],
+		};
+		const encoded = encodeWorkerResponse(4, fileResult);
+
+		expect(encoded.transfer).toHaveLength(1);
+		expect(decodeWorkerResponse(encoded.response)).toEqual(fileResult);
+	});
+
+	it("falls back when a files payload is malformed", async () => {
+		const { factory, workers } = createFactory();
+		const execute = createExecutor({ workerFactory: factory });
+		const tool = makeTool(() => "direct");
+		const promise = execute(tool, { params: {} });
+		const worker = workers[0];
+		const request = worker.requests[0];
+		worker.respond({
+			id: request.id,
+			ok: true,
+			files: [{ name: "part.png", width: 1, height: 1 }],
+		} as unknown as WorkerResponse);
+
+		await expect(promise).resolves.toBe("direct");
+		expect(worker.terminated).toBe(true);
 	});
 });
 

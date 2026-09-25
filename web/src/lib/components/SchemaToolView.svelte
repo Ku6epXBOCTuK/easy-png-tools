@@ -3,7 +3,7 @@
 	import SchemaPreview from "$lib/components/SchemaPreview.svelte";
 	import { debounce } from "$lib/core/debounce";
 	import { ToolError, type ErrorVars } from "$lib/core/errors";
-	import { decodeFile, encode } from "$lib/core/io";
+	import { decodeFile, downloadBlob, encode } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
 	import {
@@ -136,23 +136,26 @@
 
 	async function download() {
 		if (!schema) return;
-		if (resultKind === "files") {
-			if (!fileResult) return;
-			await downloadZip(fileResult.files, `${tool.id}.zip`);
-			return;
+		running = true;
+		displayError = null;
+		try {
+			if (resultKind === "files") {
+				if (!fileResult) return;
+				await downloadZip(fileResult.files, `${tool.id}.zip`);
+				return;
+			}
+			if (!result) return;
+			const out = tool.output;
+			const quality = out?.qualityParamId
+				? Number(values[out.qualityParamId]) / 100
+				: undefined;
+			const blob = await encode(result, out?.mime ?? "image/png", quality);
+			downloadBlob(blob, `${tool.id}.${out?.ext ?? "png"}`);
+		} catch (e) {
+			displayError = toDisplayError(e);
+		} finally {
+			running = false;
 		}
-		if (!result) return;
-		const out = tool.output;
-		const quality = out?.qualityParamId
-			? Number(values[out.qualityParamId]) / 100
-			: undefined;
-		const blob = await encode(result, out?.mime ?? "image/png", quality);
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement("a");
-		a.href = url;
-		a.download = `${tool.id}.${out?.ext ?? "png"}`;
-		a.click();
-		URL.revokeObjectURL(url);
 	}
 
 	async function copyText() {
@@ -170,13 +173,12 @@
 
 	async function downloadText() {
 		if (!textResult) return;
-		const blob = new Blob([textResult], { type: "text/plain" });
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement("a");
-		a.href = url;
-		a.download = `${tool.id}.txt`;
-		a.click();
-		URL.revokeObjectURL(url);
+		try {
+			const blob = new Blob([textResult], { type: "text/plain" });
+			downloadBlob(blob, `${tool.id}.txt`);
+		} catch (e) {
+			displayError = toDisplayError(e);
+		}
 	}
 
 	$effect(() => {

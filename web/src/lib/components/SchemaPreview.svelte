@@ -62,7 +62,7 @@
 				? `${result.width} × ${result.height} px`
 				: "—"
 			: resultKind === "files"
-				? fileResult
+				? fileResult && fileResult.files.length > 0
 					? `${fileResult.files.length} ${t("resultCard.parts")}`
 					: "—"
 				: textResult
@@ -74,7 +74,7 @@
 		resultKind === "image"
 			? Boolean(result)
 			: resultKind === "files"
-				? Boolean(fileResult)
+				? Boolean(fileResult && fileResult.files.length > 0)
 				: Boolean(textResult),
 	);
 </script>
