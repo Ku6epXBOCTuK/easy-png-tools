@@ -1,9 +1,9 @@
 # План: линтеры, тесты и качество кодовой базы
 
-> Статус: **draft — Q0–Q5, Q6a и Q6b готовы к ревью; Q6c — следующий этап**.
+> Статус: **draft — Q0–Q5 и Q6a–Q6c готовы к ревью; Q6d — следующий этап**.
 >
 > Источник: `docs/backlog.md`, аудит конфигурации `web/`, e2e-тестов и
-> инфраструктурных скриптов. Q0–Q5, Q6a и Q6b выполнены; Q6c–Q8 выполняются
+> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6c выполнены; Q6d–Q8 выполняются
 > отдельными атомарными шагами.
 >
 > Цель: сделать качество кодовой базы воспроизводимым, убрать ложную «зелёность»
@@ -229,9 +229,22 @@ seam, unit round-trip для `FileResult`, защиту пустого резу�
 - E2E использует `downloadResultFile` и `unzipSync`, не добавляя новые
   `data-testid`; files-инструменты не проходят через image-smoke.
 
-#### Q6c–Q6f. Оставшиеся направления
+#### Q6c. Output MIME/quality
 
-- output MIME/quality;
+**Статус:** выполнен. Q6c покрывает текущий фиксированный output-контракт
+JPG/WebP/BMP, не превращаясь в UX-райз кнопки Download. Registry проверяет
+согласованность MIME/extension/quality-поля, unit — границы quality, browser —
+реальные сигнатуры файлов и разницу размера при изменении quality.
+
+- `ToolEntry.output` остаётся декларативным описанием формата; новый селектор
+  форматов не добавляется.
+- `validateOutputQuality` отделяет проверку 0..1 от DOM-рендеринга; JPEG/WebP
+  используют quality `1..100` из schema, BMP не имеет quality-параметра.
+- E2E проверяет JPEG `FF D8 FF`, WebP `RIFF/WEBP`, BMP `BM` и PNG-фолбэк.
+- Ошибки кодирования и unsupported MIME используют существующие i18n-ключи.
+
+#### Q6d–Q6f. Оставшиеся направления
+
 - malformed и special PNG fixtures: CRC, truncated, palette, 16-bit;
 - smoke всех типов инструментов из registry;
 - component-тесты `SchemaToolView`, `SchemaPreview` и schema fields;

@@ -84,6 +84,19 @@ export async function decodeTextImage(text: string): Promise<PixelImage> {
 	return await decodeBytes(bytes);
 }
 
+export function validateOutputQuality(
+	mime: OutputMime,
+	quality?: number,
+): void {
+	if (mime !== "image/jpeg" && mime !== "image/webp") return;
+	if (
+		quality !== undefined &&
+		(!Number.isFinite(quality) || quality < 0 || quality > 1)
+	) {
+		throw new ToolError("errors.qualityRange");
+	}
+}
+
 export async function encode(
 	img: PixelImage,
 	mime: OutputMime = "image/png",
@@ -92,11 +105,7 @@ export async function encode(
 	if (mime === "image/bmp") {
 		return new Blob([encodeBmpBytes(img)], { type: mime });
 	}
-	if (mime === "image/jpeg" || mime === "image/webp") {
-		if (quality !== undefined && (quality < 0 || quality > 1)) {
-			throw new ToolError("errors.qualityRange");
-		}
-	}
+	validateOutputQuality(mime, quality);
 	const canvas = document.createElement("canvas");
 	canvas.width = img.width;
 	canvas.height = img.height;

@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import {
 	expect,
 	type Download,
@@ -86,6 +87,18 @@ export async function downloadResultFile(page: Page): Promise<Download> {
 		button.click(),
 	]);
 	return download;
+}
+
+export async function downloadResultBytes(
+	page: Page,
+): Promise<{ name: string; bytes: Uint8Array }> {
+	const download = await downloadResultFile(page);
+	const path = await download.path();
+	if (!path) throw new Error("download path is unavailable");
+	return {
+		name: download.suggestedFilename(),
+		bytes: new Uint8Array(await readFile(path)),
+	};
 }
 
 export async function downloadResult(page: Page): Promise<string> {

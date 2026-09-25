@@ -154,7 +154,9 @@ Q5 закрывает известные preview-проблемы; активн�
    механическая часть реализована в preview — `ToolEntry.output`
    (`OutputFormat`: mime/ext/qualityParamId) в `web/src/lib/registry/types.ts`;
    `SchemaToolView.download()` кодирует по `output` (jpg/webp/bmp уже настроены;
-   `png-to-bmp` переведён сюда же). **Осталось (UX-райз «Download»):**
+   `png-to-bmp` переведён сюда же). Q6c покрывает этот фиксированный контракт
+   unit/E2E-проверками; переключатель форматов и quality остаётся отдельным
+   UX-райзом. **Осталось (UX-райз «Download»):**
    - выбор формата/качества прямо в кнопке/диалоге Download для любого
      результата (не отдельными конвертерами);
    - экспорт с лимитом размера → закрывает отложенный `reduce-to-size-png`

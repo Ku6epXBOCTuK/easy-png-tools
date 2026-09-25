@@ -61,10 +61,10 @@ CSS-классы и конкретный формат временного URL �
 
 `web/e2e/helpers/page.ts` владеет общими операциями `openTool`, `uploadImage`,
 `resultImage`, `sourceImage`, `verdictStatus`, `textResult`, `errorAlert`,
-`emptyState`, `rangeInput`, `downloadResult` и `downloadResultFile`. Специфика
-должна вызывать эти helpers, а не повторять raw-селекторы. Инструменты с
-`result: "files"` проверяются отдельным ZIP-сценарием: общий image-smoke не
-применяется к ним.
+`emptyState`, `rangeInput`, `downloadResult`, `downloadResultFile` и
+`downloadResultBytes`. Специфика должна вызывать эти helpers, а не повторять
+raw-селекторы. Инструменты с `result: "files"` проверяются отдельным
+ZIP-сценарием: общий image-smoke не применяется к ним.
 
 `test.fixme` допускается только для зарегистрированной проблемы в backlog или
 checklist. В комментарии указывается ссылка на неё. После исправления тест и

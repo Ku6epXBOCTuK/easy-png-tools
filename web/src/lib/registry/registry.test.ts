@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { TOOLS } from ".";
 import { PREVIEW_GROUPS } from "../catalog";
 import type { PixelImage } from "../core/types";
+import type { OutputMime } from "../core/io";
 import { defaultSchemaParams, sanitizeSchemaParams } from "../registry-schema";
 import type { FileResult, ToolResult } from "./types";
 
@@ -75,6 +76,39 @@ describe("registry-new (переведённые инструменты)", () =>
 			"placeholder-png",
 		]) {
 			expect(TOOLS.find((tool) => tool.id === id)?.domOnly, id).toBe(true);
+		}
+	});
+
+	it("output metadata согласован с MIME и quality-схемой", () => {
+		const extensions: Record<OutputMime, string> = {
+			"image/png": "png",
+			"image/jpeg": "jpg",
+			"image/webp": "webp",
+			"image/bmp": "bmp",
+		};
+
+		for (const tool of TOOLS) {
+			const output = tool.output;
+			if (!output) continue;
+			expect(extensions[output.mime], `${tool.id}: mime`).toBe(output.ext);
+			if (output.qualityParamId) {
+				const qualityField = tool.schema.fields[output.qualityParamId];
+				expect(
+					qualityField,
+					`${tool.id}.${output.qualityParamId}`,
+				).toBeDefined();
+				expect(["number", "slider"], `${tool.id}: quality kind`).toContain(
+					qualityField?.spec.kind,
+				);
+			} else if (output.mime === "image/jpeg" || output.mime === "image/webp") {
+				expect(output.qualityParamId, `${tool.id}: quality`).toBeTruthy();
+			}
+			if (output.mime === "image/bmp") {
+				expect(
+					output.qualityParamId,
+					`${tool.id}: bmp quality`,
+				).toBeUndefined();
+			}
 		}
 	});
 

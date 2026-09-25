@@ -1,4 +1,3 @@
-import { readFile } from "node:fs/promises";
 import { unzipSync } from "fflate";
 import { expect, test } from "playwright/test";
 import {
@@ -9,8 +8,7 @@ import {
 	opaquePng,
 } from "./helpers/fixtures";
 import {
-	downloadResult,
-	downloadResultFile,
+	downloadResultBytes,
 	errorAlert,
 	expectNoErrorAlert,
 	expectNoErrors,
@@ -58,17 +56,62 @@ test("flip-png: full flow - upload, result, download", async ({ page }) => {
 	await openTool(page, "flip-png");
 	await uploadImage(page, landscapePng);
 	await expect(resultImage(page)).toBeVisible();
-	expect(await downloadResult(page)).toBe("flip-png.png");
+	const { name, bytes } = await downloadResultBytes(page);
+	expect(name).toBe("flip-png.png");
+	expect(Array.from(bytes.subarray(0, 8))).toEqual([
+		137, 80, 78, 71, 13, 10, 26, 10,
+	]);
 	await expectNoErrorAlert(page);
 	expectNoErrors(sink);
 });
 
-test("convert-png-to-jpg: produces a downloadable jpg", async ({ page }) => {
+test("convert-png-to-jpg: produces JPEG and quality affects size", async ({
+	page,
+}) => {
 	const sink = trackErrors(page);
 	await openTool(page, "convert-png-to-jpg");
+	await uploadImage(page, largePng);
+	await expect(resultImage(page)).toBeVisible();
+	const quality = rangeInput(page, "Quality");
+	await quality.fill("10");
+	const low = await downloadResultBytes(page);
+	expect(low.name).toBe("convert-png-to-jpg.jpg");
+	expect(Array.from(low.bytes.subarray(0, 3))).toEqual([255, 216, 255]);
+	await quality.fill("90");
+	const high = await downloadResultBytes(page);
+	expect(high.bytes.length).toBeGreaterThan(low.bytes.length);
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
+});
+
+test("convert-png-to-webp: produces WebP and quality affects size", async ({
+	page,
+}) => {
+	const sink = trackErrors(page);
+	await openTool(page, "convert-png-to-webp");
+	await uploadImage(page, largePng);
+	await expect(resultImage(page)).toBeVisible();
+	const quality = rangeInput(page, "Quality");
+	await quality.fill("10");
+	const low = await downloadResultBytes(page);
+	expect(low.name).toBe("convert-png-to-webp.webp");
+	expect(Array.from(low.bytes.subarray(0, 4))).toEqual([82, 73, 70, 70]);
+	expect(Array.from(low.bytes.subarray(8, 12))).toEqual([87, 69, 66, 80]);
+	await quality.fill("90");
+	const high = await downloadResultBytes(page);
+	expect(high.bytes.length).toBeGreaterThan(low.bytes.length);
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
+});
+
+test("png-to-bmp: produces a BMP download", async ({ page }) => {
+	const sink = trackErrors(page);
+	await openTool(page, "png-to-bmp");
 	await uploadImage(page, opaquePng);
 	await expect(resultImage(page)).toBeVisible();
-	expect(await downloadResult(page)).toBe("convert-png-to-jpg.jpg");
+	const { name, bytes } = await downloadResultBytes(page);
+	expect(name).toBe("png-to-bmp.bmp");
+	expect(Array.from(bytes.subarray(0, 2))).toEqual([66, 77]);
 	await expectNoErrorAlert(page);
 	expectNoErrors(sink);
 });
@@ -102,11 +145,9 @@ test("split-into-parts-png downloads a zip with named PNG parts", async ({
 	await rangeInput(page, "Rows").fill("2");
 	await expect(page.getByText("part-1-3.png")).toBeVisible();
 
-	const download = await downloadResultFile(page);
-	expect(download.suggestedFilename()).toBe("split-into-parts-png.zip");
-	const path = await download.path();
-	if (!path) throw new Error("download path is unavailable");
-	const entries = unzipSync(new Uint8Array(await readFile(path)));
+	const { name, bytes } = await downloadResultBytes(page);
+	expect(name).toBe("split-into-parts-png.zip");
+	const entries = unzipSync(bytes);
 
 	expect(Object.keys(entries)).toEqual([
 		"part-1-1.png",
