@@ -331,11 +331,33 @@ Firefox и WebKit для browser-critical спецификаций и mobile Chr
 - Локальный прогон: 276 passed, 0 skipped, 0 failed. Visual snapshots и coverage
   thresholds не добавлялись — это Q6f.4.
 
-#### Q6f.4. Оставшиеся направления
+#### Q6f.4. Coverage thresholds
 
-- visual snapshots для kit/критичных экранов;
-- coverage thresholds для `web/src/lib/`;
-- при необходимости отдельное решение по DOM-тестам `SchemaToolView`/controls.
+**Статус:** выполнен для чистой логики. Vitest считает покрытие только по
+`src/lib`, с явным списком исключений, и `pnpm verify` падает при падении ниже
+порога.
+
+- `web/vitest.config.ts`: provider `v8`, `reporter: text-summary`, пороги
+  statements 90, branches 82, functions 72, lines 91.
+- Пороги поставлены на 1.5–2.5 п.п. ниже измеренного baseline (91.77 / 83.3 /
+  74.31 / 92.53), поэтому gate ловит регрессию, а не текущий долг.
+- Scope — логика, которую node-Vitest вообще может исполнить. Исключены
+  браузерные модули `core/domText.ts` и `core/io.ts` (canvas,
+  `createImageBitmap`), data-модули `i18n/en.ts`, `i18n/ru.ts`, `tool-icons.ts`,
+  rune-файлы `*.svelte.ts`, entry worker-а и type-only `components/define.ts`.
+  Причина каждого исключения зафиксирована в конфиге и в
+  `docs/testing-strategy.md`.
+- `registry/*` (47–81% statements, 25–47% functions) в scope остаётся: это
+  обычная непокрытая логика, а не ограничение окружения. Покрывается e2e-smoke
+  Q6e, но unit-порог её не скрывает.
+- `verify` теперь выполняет `test:coverage` вместо `test`: набор тестов тот же,
+  двойного прогона нет.
+- Порог functions самый слабый (74.31% против 91.77%): добавление инструмента с
+  непокрытым `run` быстрее всего опускает именно его. Это ожидаемо, порог держит
+  запас.
+- DOM-тесты `SchemaToolView`/controls и visual snapshots не начаты: браузерные
+  модули исключены сознательно, а baselines snapshots платформенные и должны
+  рождаться на Linux.
 
 Не применять один одинаковый smoke-сценарий к image-, text-, generator- и
 file-result-инструментам.

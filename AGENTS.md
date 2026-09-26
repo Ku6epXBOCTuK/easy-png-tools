@@ -9,7 +9,8 @@
   корне: `pnpm build`, `pnpm dev` (это `pnpm --dir web ...`). Не использовать
   npm.
 - Сборка: `pnpm --dir web build`, проверка типов: `pnpm --dir web check`, тесты:
-  `pnpm --dir web test` (Vitest), тесты lint-правил:
+  `pnpm --dir web test` (Vitest), тесты с coverage-гейтом:
+  `pnpm --dir web test:coverage`, тесты lint-правил:
   `pnpm --dir web test:rules`, e2e: `pnpm --dir web test:e2e` (Playwright,
   `web/e2e/`, свой webServer на `pnpm build` + `scripts/serve-static.mjs`, порт
   4173).

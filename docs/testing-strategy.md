@@ -68,6 +68,25 @@ browser-контракт: critical CRC и truncated отклоняются дв�
 `src/**/*.test.ts`; DOM, hydration и пользовательские потоки — в Playwright.
 Component-тесты не дублируют e2e-контракт.
 
+### Что попадает в coverage
+
+Coverage-гейт считает только `src/lib` и только то, что node-Vitest способен
+исполнить. Исключения в `web/vitest.config.ts` и их причины:
+
+| Исключение                                  | Причина                                     |
+| ------------------------------------------- | ------------------------------------------- |
+| `**/*.test.ts`, `**/test-helpers.ts`        | сами тесты                                  |
+| `**/*.svelte.ts`                            | runes, не работают в node                   |
+| `executor/executor.worker.ts`               | entry worker, исполняется только в браузере |
+| `components/define.ts`                      | type-only, нет исполняемого кода            |
+| `core/domText.ts`, `core/io.ts`             | canvas, `createImageBitmap`, нужен браузер  |
+| `i18n/en.ts`, `i18n/ru.ts`, `tool-icons.ts` | данные, а не логика                         |
+
+`registry/*` в scope остаётся: низкое покрытие там — это непокрытая логика, а не
+следствие окружения. Исключение браузерных модулей означает, что переход
+браузерного кода в scope — отдельное решение, связанное с DOM-тестами или visual
+snapshots, а не молчаливое расширение списка исключений.
+
 ## 5. Helpers и `test.fixme`
 
 `web/e2e/helpers/page.ts` владеет общими операциями `openTool`, `uploadImage`,

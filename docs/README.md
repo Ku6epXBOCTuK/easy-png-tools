@@ -51,9 +51,9 @@
 только если темы нет в существующем документе; иначе обновляется источник
 истины.
 
-## Текущий baseline Q6f.3
+## Текущий baseline Q6f.4
 
-На момент фиксации Q6f.3:
+На момент фиксации Q6f.4:
 
 - production registry содержит 122 инструмента;
 - `pnpm --dir web check` проходит без ошибок и предупреждений;
@@ -61,6 +61,8 @@
 - `pnpm --dir web test:rules` — 4 test files / 74 tests;
 - `pnpm --dir web lint:all` — 0 errors и 0 i18n warnings; остаются 4 unused
   design tokens от token audit;
+- coverage `src/lib` — statements 91.77%, branches 83.3%, functions 74.31%,
+  lines 92.53% при порогах 90 / 82 / 72 / 91;
 - `pnpm verify` проходит;
 - `pnpm --dir web test:e2e` — 276 тестов в четырёх проектах: 276 passed, 0
   skipped, 0 failed. Отказ декодера битого PNG зафиксирован per-engine в

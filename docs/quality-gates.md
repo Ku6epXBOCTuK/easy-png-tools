@@ -14,7 +14,8 @@ pnpm verify
 `verify` выполняет последовательно:
 
 1. `pnpm --dir web check` — SvelteKit sync и `svelte-check`.
-2. `pnpm --dir web test` — полный Vitest-набор.
+2. `pnpm --dir web test:coverage` — полный Vitest-набор вместе с
+   coverage-гейтом.
 3. `pnpm --dir web test:rules` — отдельный быстрый прогон тестов ESLint-правил.
 4. `pnpm --dir web lint:all` — ESLint, Stylelint и token audit.
 5. `pnpm --dir web exec prettier --check .` — форматирование кода `web/`.
@@ -23,6 +24,23 @@ pnpm verify
 
 Полный `test` уже включает тесты lint-правил; отдельный `test:rules` в `verify`
 оставлен как явный быстрый диагностический этап.
+
+## Coverage
+
+`pnpm --dir web test:coverage` считает покрытие только по `src/lib` и падает
+ниже порога. Scope и список исключений — в `web/vitest.config.ts`, обоснование —
+в `docs/testing-strategy.md`.
+
+| Метрика    | Порог | Baseline |
+| ---------- | ----- | -------- |
+| statements | 90    | 91.77%   |
+| branches   | 82    | 83.3%    |
+| functions  | 72    | 74.31%   |
+| lines      | 91    | 92.53%   |
+
+Порог — нижняя граница от текущего baseline, а не оценка качества: он блокирует
+регрессию и не требует сначала закрывать весь долг. Локальный замер занимает ~30
+с, поэтому отдельного прогона в `verify` нет — `test:coverage` заменяет `test`.
 
 ## E2E
 
