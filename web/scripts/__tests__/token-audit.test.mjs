@@ -7,6 +7,7 @@ import {
 	isDerived,
 } from "../token-audit/helpers.mjs";
 import { checkParity } from "../token-audit/parity.mjs";
+import { checkUnresolvedRefs } from "../token-audit/refs.mjs";
 import { checkUnused } from "../token-audit/unused.mjs";
 
 function themes(css) {
@@ -131,6 +132,75 @@ describe("checkUnused", () => {
 		expect(checkUnused(root, new Set(["--color-text"]))).toEqual([
 			"--color-dust",
 		]);
+	});
+});
+
+describe("checkUnresolvedRefs", () => {
+	it("accepts references to tokens defined in the same file", () => {
+		const { root } = themes(
+			":root { --color-text: #111; .x { color: var(--color-text); } }",
+		);
+
+		expect(checkUnresolvedRefs(root)).toEqual([]);
+	});
+
+	it("accepts references defined in the other theme block", () => {
+		const { root } = themes(
+			[
+				":root { --color-text: #111; }",
+				'[data-theme="dark"] { --color-text: #eee; }',
+				".x { color: var(--color-text); }",
+			].join("\n"),
+		);
+
+		expect(checkUnresolvedRefs(root)).toEqual([]);
+	});
+
+	it("reports a typo in a token name with its location", () => {
+		const { root } = themes(
+			":root { --color-text: #111; .x { border-color: var(--color-bordr); } }",
+		);
+
+		expect(checkUnresolvedRefs(root)).toEqual([
+			"  --color-bordr used in .x (border-color) is not defined in app.css",
+		]);
+	});
+
+	it("exempts a reference that provides a fallback value", () => {
+		const { root } = themes(".x { color: var(--color-missing, #fff); }");
+
+		expect(checkUnresolvedRefs(root)).toEqual([]);
+	});
+
+	it("reports an undefined reference without a fallback even once", () => {
+		const { root } = themes(
+			[
+				":root { --a: 1px; --b: 1px; }",
+				".x { border-color: var(--ghost); outline-color: var(--ghost); }",
+			].join("\n"),
+		);
+
+		expect(checkUnresolvedRefs(root)).toEqual([
+			"  --ghost used in .x (border-color) is not defined in app.css",
+		]);
+	});
+
+	it("checks references inside token definitions themselves", () => {
+		const { root } = themes(
+			":root { --color-text: hct(from var(--brand-typo) h c t); }",
+		);
+
+		expect(checkUnresolvedRefs(root)).toEqual([
+			"  --brand-typo used in :root (--color-text) is not defined in app.css",
+		]);
+	});
+
+	it("ignores non-custom properties that use var()", () => {
+		const { root } = themes(
+			".x { --local: 1px; width: calc(var(--local) * 2); }",
+		);
+
+		expect(checkUnresolvedRefs(root)).toEqual([]);
 	});
 });
 

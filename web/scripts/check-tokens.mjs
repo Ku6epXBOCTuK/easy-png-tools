@@ -7,6 +7,7 @@
 import { FILE, parsePreview } from "./token-audit/helpers.mjs";
 import { checkParity } from "./token-audit/parity.mjs";
 import { checkColorAuthorship } from "./token-audit/colors.mjs";
+import { checkUnresolvedRefs } from "./token-audit/refs.mjs";
 import { checkUnused } from "./token-audit/unused.mjs";
 
 async function main() {
@@ -32,6 +33,16 @@ async function main() {
 		failed = true;
 	} else {
 		console.log("All colors are authored as hct().");
+	}
+
+	const unresolved = checkUnresolvedRefs(root);
+	if (unresolved.length > 0) {
+		console.log(
+			`Unresolved var() references in ${FILE}:\n${unresolved.join("\n")}`,
+		);
+		failed = true;
+	} else {
+		console.log("All var() references in app.css resolve.");
 	}
 
 	const unused = checkUnused(root);

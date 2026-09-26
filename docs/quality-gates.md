@@ -80,8 +80,11 @@ per-project лимит воркеров, а browser matrix упирается в
 - `errors` завершают соответствующий инструмент ненулевым кодом.
 - После Q2 ESLint запускается с `--max-warnings=0`: новые ESLint warnings
   блокируют gate.
-- Token audit оставляет unused-token сообщение неблокирующим: после Q7 пыль
-  вычищена, но решение о fail-режиме остаётся открытым.
+- Token audit оставляет unused-token сообщение неблокирующим: после Q7a пыль
+  вычищена, решение о fail-режиме зафиксировано в Q7d — новый токен появляется
+  вместе с потребителем, но стиль не блокирует деплой.
+- Резолв `var()` в `app.css` — ошибка: несуществующий токен молча роняет
+  объявление, поэтому этот check failing, в отличие от unused.
 - `lint:all` сейчас чист: 0 errors, 0 i18n warnings, 0 unused tokens.
 - `dict-consistency` использует base-locale fallback для registry metadata и
   pattern-based policy для временно неиспользуемых `tools.*.params`; это не
