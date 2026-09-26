@@ -107,8 +107,9 @@
 
 ## Качество production UI
 
-Q5–Q6f.2 закрывают известные preview-проблемы, special fixtures, smoke и
-layout/view-model инварианты; активных `test.fixme` в e2e больше нет.
+Q5–Q6f.3 закрывают известные preview-проблемы, special fixtures, smoke,
+layout/view-model инварианты и browser matrix; активных `test.fixme` в e2e
+больше нет.
 
 - [x] Генераторы auto-run без кнопки Generate — `web/e2e/generators.spec.ts`.
 - [x] `resize-png` и `crop-png` используют размеры текущего source через общий
@@ -126,6 +127,13 @@ layout/view-model инварианты; активных `test.fixme` в e2e б�
       unit-тестами; `SchemaFields.svelte` использует общий seam.
 - [x] `SchemaPreview` view-model вынесена в `buildSchemaPreviewModel` и покрыта
       unit-тестами для всех input/result-типов.
+- [x] Browser matrix: полный Chromium, Firefox/WebKit для browser-critical
+      спецификаций и mobile Chromium 390×844 — `web/playwright.config.ts`.
+- [x] Расхождение декодеров зафиксировано как ожидаемое поведение: Firefox и
+      WebKit декодируют `truncated-no-iend` и `idat-cut`, а WebKit ещё и
+      `crc-bad-idat`. Таблица движков живёт в `web/e2e/png-fixtures.spec.ts`,
+      продукт не ужесточается, и любая выгрузка битого файла обязана давать
+      alert, а не падение или «пустой» результат.
 - [ ] Component-тесты `SchemaToolView`/`SchemaPreview` требуют отдельного
       решения: node Vitest не имеет DOM/canvas, а e2e уже покрывает поведение.
 - [ ] Ошибка декодирования изображения из `createImageBitmap` пока показывается

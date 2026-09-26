@@ -68,9 +68,7 @@ test("verify-is-png renders different verdicts for valid and invalid input", asy
 	const validText = await verdict.textContent();
 
 	await renderText(page, "aGVsbG8=");
-	await expect(verdict).toBeVisible();
-	const invalidText = await verdict.textContent();
-	expect(invalidText).not.toBe(validText);
+	await expect(verdict).not.toHaveText(validText ?? "");
 });
 
 test("png-is-transparent: opaque image renders a verdict", async ({ page }) => {

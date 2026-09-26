@@ -68,9 +68,9 @@ jobs:
         working-directory: web
         run: pnpm install --frozen-lockfile
 
-      - name: Install Chromium
+      - name: Install Playwright browsers
         working-directory: web
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
 
       - name: Run E2E
         working-directory: web

@@ -96,10 +96,10 @@
       корректный (не «кракозябры»).
 - [ ] remove-background на сложной полупрозрачности — края не «звенят».
 
-## G. Закрытые Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1/Q6f.2-проблемы
+## G. Закрытые Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1/Q6f.2/Q6f.3-проблемы
 
-> Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1/Q6f.2-проблемы закрыты автоматическими тестами; для
-> ручной проверки остаются субъективные сценарии разделов A–F.
+> Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1/Q6f.2/Q6f.3-проблемы закрыты автоматическими тестами;
+> для ручной проверки остаются субъективные сценарии разделов A–F.
 
 - [x] **Генераторы:** auto-run по дефолтам, результат и изменение параметра без
       кнопки Generate. `web/e2e/generators.spec.ts`.
@@ -124,6 +124,9 @@
       группировка полей использует тот же seam.
 - [x] **Preview model:** `buildSchemaPreviewModel` покрывает source/result
       values, формат и `hasResult` для image/text/verdict/files.
+- [x] **Browser matrix:** pipeline, verdicts и PNG-fixtures проходят в Firefox и
+      WebKit, mobile viewport 390×844 — в Chromium; отказ декодера битого PNG
+      зафиксирован per-engine. См. раздел 7 `docs/testing-strategy.md`.
 
 ## Как долго
 

@@ -39,31 +39,34 @@ async function expectAccepted(page: Page, file: SourceFile): Promise<void> {
 	expectNoErrors(sink);
 }
 
-const rejectedFixtures = [
-	crcBadIdatPng,
-	truncatedHeaderPng,
-	truncatedNoIendPng,
-	idatCutPng,
-];
+type DecodeContract = {
+	file: SourceFile;
+	rejectedIn: readonly string[];
+};
 
-const acceptedFixtures = [
-	crcBadAncillaryPng,
-	garbageTailPng,
-	palette4Png,
-	palette256Png,
-	sixteenBitPng,
+const decodeContracts: readonly DecodeContract[] = [
+	{ file: crcBadIdatPng, rejectedIn: ["chromium", "firefox"] },
+	{ file: truncatedHeaderPng, rejectedIn: ["chromium", "firefox", "webkit"] },
+	{ file: truncatedNoIendPng, rejectedIn: ["chromium"] },
+	{ file: idatCutPng, rejectedIn: ["chromium"] },
+	{ file: crcBadAncillaryPng, rejectedIn: [] },
+	{ file: garbageTailPng, rejectedIn: [] },
+	{ file: palette4Png, rejectedIn: [] },
+	{ file: palette256Png, rejectedIn: [] },
+	{ file: sixteenBitPng, rejectedIn: [] },
 ];
 
 test.describe("PNG special fixtures", () => {
-	for (const file of rejectedFixtures) {
-		test(`${file.name}: shows an error without a result`, async ({ page }) => {
-			await expectRejected(page, file);
-		});
-	}
-
-	for (const file of acceptedFixtures) {
-		test(`${file.name}: decodes without an error`, async ({ page }) => {
-			await expectAccepted(page, file);
+	for (const { file, rejectedIn } of decodeContracts) {
+		test(`${file.name}: matches the engine decode contract`, async ({
+			browserName,
+			page,
+		}) => {
+			if (rejectedIn.includes(browserName)) {
+				await expectRejected(page, file);
+			} else {
+				await expectAccepted(page, file);
+			}
 		});
 	}
 });

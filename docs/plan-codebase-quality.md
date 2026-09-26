@@ -1,9 +1,9 @@
 # План: линтеры, тесты и качество кодовой базы
 
-> Статус: **draft — Q0–Q5 и Q6a–Q6f.2 готовы к ревью; Q6f.3 — следующий этап**.
+> Статус: **draft — Q0–Q5 и Q6a–Q6f.3 готовы к ревью; Q6f.4 — следующий этап**.
 >
 > Источник: `docs/backlog.md`, аудит конфигурации `web/`, e2e-тестов и
-> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6f.2 выполнены; Q6f.3–Q8 выполняются
+> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6f.3 выполнены; Q6f.4–Q8 выполняются
 > отдельными атомарными шагами.
 >
 > Цель: сделать качество кодовой базы воспроизводимым, убрать ложную «зелёность»
@@ -49,6 +49,9 @@
   resolver; активных known-issue `test.fixme` нет.
 - `ToolError` хранится как key/vars и переводится только при выводе; смена
   локали обновляет уже видимый alert.
+- E2E гоняется в четырёх Playwright-проектах: полный Chromium, Firefox и WebKit
+  для browser-critical спецификаций и mobile Chromium 390×844. Job остаётся
+  non-blocking, число воркеров ограничено из-за памяти.
 
 ## 3. Этапы выполнения
 
@@ -253,7 +256,12 @@ CRC/truncated отклоняются без падения, ancillary CRC и х�
 
 - `web/e2e/helpers/fixtures.ts` собирает indexed, 16-bit, CRC-mutation,
   truncation и tail-варианты из уже существующих `crc32`/`chunk`.
-- Проверки выполняются в Chromium; browser matrix остаётся Q6f.
+- Отклонение битых файлов — свойство декодера движка, а не единый продуктовый
+  контракт: Q6f.3 зафиксировал, что Firefox и WebKit декодируют `idat-cut` и
+  `truncated-no-iend`, а WebKit ещё и `crc-bad-idat`. Это ожидаемое поведение,
+  которое закреплено per-engine в `web/e2e/png-fixtures.spec.ts`.
+- Обязательное требование при любом исходе: файл не роняет страницу, ошибка
+  показывается alert-ом, а не «пустым» результатом.
 - Поведение `createImageBitmap` является частью browser-контракта, а не
   самостоятельного PNG-парсера product-кода.
 - Сырое сообщение браузера при decode-ошибке не локализуется в Q6d; это
@@ -298,9 +306,34 @@ image→image, image→text, text→image, generator input→image и verdict. F
 - image/text/verdict/files и пустые результаты покрыты в `pnpm verify`.
 - Новые зависимости, vitest-конфиг и browser matrix не добавлялись.
 
-#### Q6f.3–Q6f.4. Оставшиеся направления
+#### Q6f.3. Browser matrix и mobile viewport
 
-- browser matrix, mobile viewport, visual snapshots и coverage thresholds;
+**Статус:** выполнен. Playwright запускает четыре проекта: полный Chromium,
+Firefox и WebKit для browser-critical спецификаций и mobile Chromium 390×844 с
+`hasTouch` для навигации, каталога, генераторов и pipeline.
+
+- `web/playwright.config.ts`: `browserContractTests` — `pipeline.spec.ts`,
+  `png-fixtures.spec.ts`, `text-and-verdicts.spec.ts`; `mobileTests` —
+  `navigation.spec.ts`, `catalog.spec.ts`, `generators.spec.ts`,
+  `pipeline.spec.ts`.
+- `workers` — 1 локально и 2 в CI. Browser matrix ограничена памятью: при 12
+  воркерах на машине с 16 GB RAM браузеры не успевают поднять worker, и тесты
+  падают без ошибок (проверено и в Chromium). Локально matrix поэтому медленная,
+  но почти не нагружает компьютер. Per-project лимита воркеров в Playwright нет.
+- Per-project `expect.timeout` не задаётся: Firefox и WebKit отдают результат
+  так же быстро, а расхождения объясняются памятью, а не скоростью движка.
+- Декодеры движков расходятся, и это зафиксировано как ожидаемое поведение:
+  `png-fixtures.spec.ts` хранит список движков, отклоняющих каждый битый файл, и
+  не пропускает проверки. В любом браузере файл не должен ронять страницу, а
+  отказ декодера показывается alert-ом.
+- CI устанавливает `chromium firefox webkit`; job остаётся non-blocking.
+- Локальный прогон: 276 passed, 0 skipped, 0 failed. Visual snapshots и coverage
+  thresholds не добавлялись — это Q6f.4.
+
+#### Q6f.4. Оставшиеся направления
+
+- visual snapshots для kit/критичных экранов;
+- coverage thresholds для `web/src/lib/`;
 - при необходимости отдельное решение по DOM-тестам `SchemaToolView`/controls.
 
 Не применять один одинаковый smoke-сценарий к image-, text-, generator- и

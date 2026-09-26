@@ -51,9 +51,9 @@
 только если темы нет в существующем документе; иначе обновляется источник
 истины.
 
-## Текущий baseline Q6f.2
+## Текущий baseline Q6f.3
 
-На момент фиксации Q6f.2:
+На момент фиксации Q6f.3:
 
 - production registry содержит 122 инструмента;
 - `pnpm --dir web check` проходит без ошибок и предупреждений;
@@ -61,7 +61,10 @@
 - `pnpm --dir web test:rules` — 4 test files / 74 tests;
 - `pnpm --dir web lint:all` — 0 errors и 0 i18n warnings; остаются 4 unused
   design tokens от token audit;
-- `pnpm verify` проходит; production E2E — 161 passed, 0 skipped.
+- `pnpm verify` проходит;
+- `pnpm --dir web test:e2e` — 276 тестов в четырёх проектах: 276 passed, 0
+  skipped, 0 failed. Отказ декодера битого PNG зафиксирован per-engine в
+  `web/e2e/png-fixtures.spec.ts`.
 
 Baseline и следующий шаг поддерживаются в `docs/plan-codebase-quality.md`.
 
