@@ -18,12 +18,11 @@
   (docs) + `pnpm --dir web exec prettier --check .` (код).
 - Полный быстрый gate: `pnpm verify`; подробная матрица команд и CI —
   `docs/quality-gates.md`.
-- После пуша результат CI проверяется явно: смотреть и blocking `verify`, и
-  non-blocking `e2e` — если тот job вообще запускался. `Quality` workflow живёт
-  на `pull_request` и `workflow_dispatch`, поэтому при прямом пуше в `main`
-  выполняется только `Deploy to GitHub Pages` со своим `verify`, а browser
-  matrix проверяется на PR или ручным запуском. Красный `e2e` не блокирует PR,
-  но остаётся падением — сообщать его фактический статус.
+- После пуша результат CI проверяется явно: смотреть статусы отдельных job, а не
+  общий conclusion прогона. У `e2e` стоит `continue-on-error`, поэтому прогон с
+  упавшим e2e помечается как `success`. `Quality` workflow запускается на каждом
+  пуше в `main` и на `pull_request`, поэтому browser matrix проверяется сама;
+  ручной запуск нужен только для старого коммита.
 - Линтинг: `pnpm --dir web lint` (ESLint). Полный прогон дизайн-проверок:
   `pnpm --dir web lint:all` (ESLint + stylelint + токен-аудит). Каждый шаг
   выполняется, даже если предыдущий упал. Новые изменения не должны добавлять
