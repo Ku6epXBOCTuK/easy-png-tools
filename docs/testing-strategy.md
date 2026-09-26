@@ -156,5 +156,8 @@ non-blocking E2E не считается заменой локальному smo
   тесты падают без ошибок. Локальный matrix поэтому медленный, но не нагружает
   компьютер.
 - Локальный baseline: 276 тестов, 276 passed, 0 skipped, 0 failed.
-- Visual snapshots и coverage thresholds не часть matrix; они вынесены в
-  `docs/plan-codebase-quality.md` (Q6f.4).
+- Visual snapshots сознательно не используются: baseline платформенный, а
+  визуальный язык сейчас активно меняется. Причина и условие возврата — в
+  `docs/plan-codebase-quality.md` (Q6f.5).
+- Visual snapshots и coverage thresholds вынесены в
+  `docs/plan-codebase-quality.md` (Q6f.4, Q6f.5).
