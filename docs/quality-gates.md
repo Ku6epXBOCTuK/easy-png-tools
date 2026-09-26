@@ -80,10 +80,9 @@ per-project лимит воркеров, а browser matrix упирается в
 - `errors` завершают соответствующий инструмент ненулевым кодом.
 - После Q2 ESLint запускается с `--max-warnings=0`: новые ESLint warnings
   блокируют gate.
-- Token audit пока оставляет unused-token warnings отдельным неблокирующим
-  сообщением.
-- `lint:all` по-прежнему сообщает 4 unused-token warnings отдельным
-  предупреждением token audit; это следующий debt Q7.
+- Token audit оставляет unused-token сообщение неблокирующим: после Q7 пыль
+  вычищена, но решение о fail-режиме остаётся открытым.
+- `lint:all` сейчас чист: 0 errors, 0 i18n warnings, 0 unused tokens.
 - `dict-consistency` использует base-locale fallback для registry metadata и
   pattern-based policy для временно неиспользуемых `tools.*.params`; это не
   молчаливый `allowPaths`-список.

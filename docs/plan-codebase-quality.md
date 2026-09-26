@@ -43,8 +43,8 @@
 
 - `pnpm verify` объединяет typecheck, unit, rule-тесты, lint, форматирование,
   docs и production build; deploy выполняет его перед сборкой.
-- `i18n/dict-consistency` даёт 0 warnings на текущем baseline; отдельный debt —
-  4 unused design tokens от token audit.
+- `i18n/dict-consistency` даёт 0 warnings на текущем baseline; после Q7 вычищены
+  4 неиспользуемых design token, token audit тоже чист.
 - E2E-контракт использует semantic locators и общий source-aware schema
   resolver; активных known-issue `test.fixme` нет.
 - `ToolError` хранится как key/vars и переводится только при выводе; смена
@@ -133,8 +133,8 @@ pnpm --dir web test:e2e
   option-группы из `ru.ts`.
 - Исправлен tie-break placeholder parity: при равенстве голосов выбирается
   `BASE_LOCALE`.
-- `lint-all` запускает ESLint с `--max-warnings=0`; token audit пока оставляет 4
-  unused-token warnings отдельным debt.
+- `lint-all` запускает ESLint с `--max-warnings=0`; unused-token сообщение
+  оставалось неблокирующим и закрыто в Q7.
 - Plural-формы остаются отдельной задачей после Q2 и не смешиваются с этим
   этапом.
 
@@ -390,9 +390,26 @@ file-result-инструментам.
 
 **Оценка:** M. **Зависимости:** Q1, Q2, Q3.
 
-- Очистить или использовать unused design tokens; после очистки решить, должен
-  ли unused audit быть fail-режимом.
-- Добавить тесты для token audit и PostCSS HCT-плагина.
+#### Q7a. Очистка неиспользуемых design tokens
+
+**Статус:** выполнен. Token audit чист: `All app.css tokens are used somewhere`.
+
+- Удалены `--color-text-accent-muted` (light и dark, иначе ломается parity),
+  `--space-text-s: 0`, `--size-content-max: 880px` и `--duration-m: 0.3s`.
+- Проверено, что мёртвые токены — это пыль, а не признак хардкода: дублирующих
+  значений (`max-width`, `0.3s`, muted-цвет) в `src` нет. Потребители
+  `space-text-m/xl/2xl`, `size-content-max-wide` и `size-workspace-min`
+  используются, поэтому шкалы не тронуты.
+- Шкалы остались неполными намеренно (`duration-s/l` без `m`, `space-text` без
+  `s`): мёртвый элемент шкалы хуже, чем «дырявая» шкала, а вернуть его можно
+  вместе с потребителем.
+- Второй пункт («после очистки решить, должен ли unused audit быть
+  fail-режимом») остаётся открытым: сам audit пока только сообщает.
+
+#### Q7b–Q7d. Оставшиеся направления
+
+- Добавить тесты для token audit и PostCSS HCT-плагина: у них сейчас нет
+  покрытия, `test:rules` их не видит.
 - Покрыть базовым JS recommended сам код ESLint-плагинов и lint-скриптов.
 - Отдельно решить, должен ли обычный CSS проходить проверку undefined tokens и
   hardcoded colors наравне со Svelte styles.
@@ -544,7 +561,8 @@ refactor, новые i18n-правила и исправление продук�
 - Нужны ли browser/mobile matrix и visual snapshots до coverage thresholds?
   Решено: matrix — Q6f.3, coverage — Q6f.4, visual snapshots отложены с
   обоснованием в Q6f.5.
-- Какие unused design tokens можно удалить, а какие должны остаться?
+- Какие unused design tokens можно удалить, а какие должны остаться? Решено в
+  Q7a: удалены все четыре, audit чист.
 - Какие browser/e2e проверки должны быть обязательными для PR, а какие —
   отдельным ночным прогоном?
 

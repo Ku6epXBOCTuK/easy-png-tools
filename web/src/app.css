@@ -112,7 +112,6 @@
 		--color-text: hct(from var(--brand-main) h 5.9 1.7);
 		--color-text-muted: hct(from var(--brand-main) h 13.4 19.2);
 		--color-text-accent: hct(from var(--brand-alt) h 5.9 1.7);
-		--color-text-accent-muted: hct(from var(--brand-alt) h 13.4 19.2);
 
 		--color-main: hct(from var(--brand-main) h 80 48);
 		--color-accent: hct(from var(--brand-alt) h 80 48);
@@ -141,7 +140,6 @@
 		--space-page-top: 48px;
 		--space-page-bottom: 72px;
 
-		--space-text-s: 0;
 		--space-text-m: 0.04em;
 		--space-text-l: 0.08em;
 		--space-text-xl: 0.12em;
@@ -164,7 +162,6 @@
 		--size-card-min-narrow: 200px;
 		--size-parts-grid-min: 120px;
 		--size-workspace-min: 260px;
-		--size-content-max: 880px;
 		--size-content-max-wide: 1680px;
 
 		--font-size-s: 12px;
@@ -178,7 +175,6 @@
 		--radius-m: 4px;
 
 		--duration-s: 0.15s;
-		--duration-m: 0.3s;
 		--duration-l: 0.8s;
 	}
 
@@ -197,7 +193,6 @@
 		--color-text: hct(from var(--brand-main) h 25 90);
 		--color-text-muted: hct(from var(--brand-main) h 22 70);
 		--color-text-accent: hct(from var(--brand-alt) h 25 90);
-		--color-text-accent-muted: hct(from var(--brand-alt) h 22 70);
 
 		--color-main: hct(from var(--brand-main) h 60 56);
 		--color-accent: hct(from var(--brand-alt) h 60 56);
