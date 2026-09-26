@@ -114,7 +114,7 @@ checklist. В комментарии указывается ссылка на н
 pnpm --dir web check
 pnpm --dir web test:rules
 pnpm --dir web lint:all
-pnpm --dir web exec prettier --check .
+pnpm --dir web format:check
 pnpm check:docs
 pnpm --dir web test:e2e
 pnpm verify

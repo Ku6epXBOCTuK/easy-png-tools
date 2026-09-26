@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "pnpm --dir web test",
-    "verify": "pnpm --dir web check && pnpm --dir web test:coverage && pnpm --dir web test:rules && pnpm --dir web lint:all && pnpm --dir web exec prettier --check . && pnpm check:docs && pnpm --dir web build",
+    "verify": "pnpm --dir web check && pnpm --dir web test:coverage && pnpm --dir web test:rules && pnpm --dir web lint:all && pnpm --dir web format:check && pnpm check:docs && pnpm --dir web build",
     "dev": "pnpm --dir web dev",
     "build": "pnpm --dir web build",
     "format": "pnpm format:docs && pnpm --dir web format",
-    "format:docs": "prettier --write docs --log-level warn",
-    "check:docs": "prettier --check docs",
+    "format:docs": "prettier --write docs --log-level warn --cache",
+    "check:docs": "prettier --check docs --cache",
     "generate:fixtures": "node tests/fixtures/manual-edge-cases/generate.mjs"
   },
   "keywords": [],

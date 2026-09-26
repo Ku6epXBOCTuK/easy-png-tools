@@ -18,7 +18,7 @@ pnpm verify
    coverage-гейтом.
 3. `pnpm --dir web test:rules` — отдельный быстрый прогон тестов ESLint-правил.
 4. `pnpm --dir web lint:all` — ESLint, Stylelint и token audit.
-5. `pnpm --dir web exec prettier --check .` — форматирование кода `web/`.
+5. `pnpm --dir web format:check` — форматирование кода `web/`.
 6. `pnpm check:docs` — форматирование Markdown.
 7. `pnpm --dir web build` — production build.
 

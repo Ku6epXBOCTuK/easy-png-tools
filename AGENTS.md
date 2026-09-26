@@ -16,7 +16,7 @@
   4173).
 - Форматирование: `pnpm format` в корне (оба прогона) или
   `pnpm --dir web format` (только код web/). Проверка: `pnpm check:docs`
-  (docs) + `pnpm --dir web exec prettier --check .` (код).
+  (docs) + `pnpm --dir web format:check` (код).
 - Полный быстрый gate: `pnpm verify`; подробная матрица команд и CI —
   `docs/quality-gates.md`.
 - После пуша результат CI проверяется явно: смотреть статусы отдельных job, а не
