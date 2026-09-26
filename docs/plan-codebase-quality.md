@@ -1,9 +1,9 @@
 # План: линтеры, тесты и качество кодовой базы
 
-> Статус: **draft — Q0–Q5 и Q6a–Q6f.1 готовы к ревью; Q6f.2 — следующий этап**.
+> Статус: **draft — Q0–Q5 и Q6a–Q6f.2 готовы к ревью; Q6f.3 — следующий этап**.
 >
 > Источник: `docs/backlog.md`, аудит конфигурации `web/`, e2e-тестов и
-> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6f.1 выполнены; Q6f.2–Q8 выполняются
+> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6f.2 выполнены; Q6f.3–Q8 выполняются
 > отдельными атомарными шагами.
 >
 > Цель: сделать качество кодовой базы воспроизводимым, убрать ложную «зелёность»
@@ -287,11 +287,21 @@ image→image, image→text, text→image, generator input→image и verdict. F
   отдельным решением Q6f.2.
 - Новые зависимости, vitest-конфиг и browser matrix не добавлялись.
 
-#### Q6f.2–Q6f.4. Оставшиеся направления
+#### Q6f.2. SchemaPreview model seam
 
-- выбрать чистый seam для `SchemaPreview`/view-model или DOM-окружение для
-  `SchemaToolView`/`SchemaPreview`;
-- browser matrix, mobile viewport, visual snapshots и coverage thresholds.
+**Статус:** выполнен. Вычисления `sourceValue`, `resultValue`, `formatValue` и
+`hasResult` вынесены в `buildSchemaPreviewModel`; Svelte-компонент использует
+модель, а unit-тесты проверяют все input/result-ветки без DOM.
+
+- Translator передаётся в модель явно, поэтому unit-тесты не зависят от locale
+  state и проверяют только view-model.
+- image/text/verdict/files и пустые результаты покрыты в `pnpm verify`.
+- Новые зависимости, vitest-конфиг и browser matrix не добавлялись.
+
+#### Q6f.3–Q6f.4. Оставшиеся направления
+
+- browser matrix, mobile viewport, visual snapshots и coverage thresholds;
+- при необходимости отдельное решение по DOM-тестам `SchemaToolView`/controls.
 
 Не применять один одинаковый smoke-сценарий к image-, text-, generator- и
 file-result-инструментам.

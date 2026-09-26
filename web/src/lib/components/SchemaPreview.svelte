@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MetaList from "$lib/components/MetaList.svelte";
+	import { buildSchemaPreviewModel } from "$lib/components/schema-preview-model";
 	import SchemaActions from "$lib/components/SchemaActions.svelte";
 	import SchemaResultTile from "$lib/components/SchemaResultTile.svelte";
 	import SchemaSourceTile from "$lib/components/SchemaSourceTile.svelte";
@@ -46,36 +47,11 @@
 		ondownload,
 	}: Props = $props();
 
-	const sourceValue = $derived.by(() => {
-		switch (inputMode) {
-			case "none":
-				return "—";
-			case "text":
-				return t("textInput.heading");
-			case "image":
-				return source ? `${source.width} × ${source.height} px` : "—";
-		}
-	});
-	const resultValue = $derived(
-		resultKind === "image"
-			? result
-				? `${result.width} × ${result.height} px`
-				: "—"
-			: resultKind === "files"
-				? fileResult && fileResult.files.length > 0
-					? `${fileResult.files.length} ${t("resultCard.parts")}`
-					: "—"
-				: textResult
-					? t("textInput.heading")
-					: "—",
-	);
-	const formatValue = $derived(resultKind === "files" ? "ZIP (PNG)" : "PNG");
-	const hasResult = $derived(
-		resultKind === "image"
-			? Boolean(result)
-			: resultKind === "files"
-				? Boolean(fileResult && fileResult.files.length > 0)
-				: Boolean(textResult),
+	const model = $derived(
+		buildSchemaPreviewModel(
+			{ inputMode, resultKind, source, result, fileResult, textResult },
+			t,
+		),
 	);
 </script>
 
@@ -83,7 +59,7 @@
 	<span class="label">{t("resultCard.previewPanel")}</span>
 	<SchemaActions
 		{inputMode}
-		canDownload={hasResult}
+		canDownload={model.hasResult}
 		{running}
 		{onupload}
 		{ondownload}
@@ -119,9 +95,9 @@
 <div class="meta">
 	<MetaList
 		items={[
-			{ caption: t("sourceCard.source"), value: sourceValue },
-			{ caption: t("resultCard.result"), value: resultValue },
-			{ caption: t("resultCard.format"), value: formatValue },
+			{ caption: t("sourceCard.source"), value: model.sourceValue },
+			{ caption: t("resultCard.result"), value: model.resultValue },
+			{ caption: t("resultCard.format"), value: model.formatValue },
 		]}
 	/>
 </div>

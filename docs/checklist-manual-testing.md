@@ -96,10 +96,10 @@
       корректный (не «кракозябры»).
 - [ ] remove-background на сложной полупрозрачности — края не «звенят».
 
-## G. Закрытые Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1-проблемы
+## G. Закрытые Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1/Q6f.2-проблемы
 
-> Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1-проблемы закрыты автоматическими тестами; для ручной
-> проверки остаются субъективные сценарии разделов A–F.
+> Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1/Q6f.2-проблемы закрыты автоматическими тестами; для
+> ручной проверки остаются субъективные сценарии разделов A–F.
 
 - [x] **Генераторы:** auto-run по дефолтам, результат и изменение параметра без
       кнопки Generate. `web/e2e/generators.spec.ts`.
@@ -122,6 +122,8 @@
       `generators.spec.ts`, `text-and-verdicts.spec.ts`.
 - [x] **Layout resolver:** `resolveLayoutGroups` покрыт unit-тестами; UI
       группировка полей использует тот же seam.
+- [x] **Preview model:** `buildSchemaPreviewModel` покрывает source/result
+      values, формат и `hasResult` для image/text/verdict/files.
 
 ## Как долго
 
