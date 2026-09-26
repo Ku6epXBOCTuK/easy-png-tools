@@ -11,6 +11,12 @@ import i18nPlugin from "./eslint-plugins/i18n/index.js";
 // Новый код редизайна: к нему применяем полные recommended-наборы уже сейчас.
 const newCode = ["**/src/lib/components/**", "**/src/routes/**"];
 
+// Инфраструктура линтинга: сами плагины и скрипты. Это не продуктовый код, но
+// он влияет на все гейты, поэтому к нему тоже применяется базовый JS
+// recommended. Полные TS/svelte-наборы здесь не подключаются: файлы .mjs и
+// конфиги проверяются только базовым набором.
+const toolingFiles = ["**/eslint-plugins/**/*.js", "**/scripts/**/*.mjs"];
+
 // Полные recommended-наборы — только на новый код (см. ниже, блок перед prettier).
 const jsRecommended = Array.isArray(js.configs.recommended)
 	? js.configs.recommended
@@ -175,11 +181,25 @@ export default tseslint.config(
 			],
 		},
 	},
+	{
+		files: toolingFiles,
+		languageOptions: {
+			ecmaVersion: "latest",
+			sourceType: "module",
+			globals: {
+				...globals.node,
+			},
+		},
+	},
 	// Полные recommended-наборы — только на новый код.
 	...[
 		...jsRecommended.map((cfg) => ({
 			...cfg,
 			files: newCode,
+		})),
+		...jsRecommended.map((cfg) => ({
+			...cfg,
+			files: toolingFiles,
 		})),
 		...tseslint.configs.recommended.map((cfg) => ({
 			...cfg,

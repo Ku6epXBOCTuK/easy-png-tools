@@ -2,8 +2,8 @@
 // (adapter-static): /foo -> foo.html | foo/index.html, MIME по расширению.
 // Запуск: pnpm build && node scripts/serve-static.mjs --port 4173
 import { createServer } from "node:http";
-import { readFileSync, existsSync, statSync } from "node:fs";
-import { extname, join, resolve } from "node:path";
+import { readFileSync, statSync } from "node:fs";
+import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const portIndex = process.argv.indexOf("--port");

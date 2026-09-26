@@ -32,6 +32,9 @@
   `eslint-plugin-svelte`) навешаны на UI-код (`src/lib/components/**`,
   `src/routes/**`). Scoped-пути двигаются вместе с папками: не оставлять
   устаревшие пути в `eslint.config.js`.
+- Базовый `js.configs.recommended` + `globals.node` навешаны на инфраструктуру
+  линтинга: `eslint-plugins/**/*.js` и `scripts/**/*.mjs` (Q7c).
+  TS/svelte-рекомендации туда не подключаются.
 - Для `*.svelte` выключен `prefer-const` (пропсы в Svelte 5 пишутся через
   `let`).
 - `allowDefaultProject` перечисляет test-файлы и фикстуры точечно (glob'ы с `**`
