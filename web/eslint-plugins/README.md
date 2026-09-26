@@ -17,6 +17,8 @@
   - `lint-all.mjs` — оркестратор `lint:all`.
   - `check-tokens.mjs` + `token-audit/` — токен-аудит по `app.css`.
   - `postcss-hct.mjs` — постcss-плагин эммита `hct()` в sRGB-hex.
+  - `__tests__/` — тесты аудита и HCT-плагина; подхватываются обычным
+    `vitest run` через `scripts/**/*.test.mjs`, поэтому входят в `verify`.
 - `web/stylelint.config.js`, `web/postcss.config.js` — конфиги stylelint/css.
 
 ## Конфигурация ESLint (`web/eslint.config.js`)

@@ -57,7 +57,8 @@
 
 - production registry содержит 122 инструмента;
 - `pnpm --dir web check` проходит без ошибок и предупреждений;
-- `pnpm --dir web test` — 43 test files / 465 tests;
+- `pnpm --dir web test` — 45 test files / 497 tests, включая тесты token audit и
+  PostCSS HCT-плагина;
 - `pnpm --dir web test:rules` — 4 test files / 74 tests;
 - `pnpm --dir web lint:all` — 0 errors, 0 i18n warnings и 0 unused design tokens
   от token audit;
