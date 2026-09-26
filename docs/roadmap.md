@@ -2,13 +2,12 @@
 
 > **Статус:** Фаза 1 (полноценный TS-сайт) в основном выполнена — сайт живёт,
 > каталог переведён в типизированный `registry` (122 текущих инструмента), новый
-> дизайн по `plan-redesign.md` стал единственным production UI на корневых
-> маршрутах; UI-v1 удалён в Q3. Tech debt не закрыт полностью; текущий baseline
-> и следующие quality-задачи зафиксированы в `docs/plan-codebase-quality.md`.
-> Следующий этап: C20 (проверка нового дизайна, `plan-redesign.md`, §10) + SEO
-> S1-free (`plan-seo.md`) + баги. Домен нужен для SEO (`plan-seo.md`,
-> S1-domain). Фазы 2–8 — будущие. Фазы 9–10 спланированы в
-> `docs/plan-platform.md`.
+> дизайн стал единственным production UI на корневых маршрутах; UI-v1 удалён в
+> Q3. Tech debt не закрыт полностью; текущий baseline и состав quality-проверок
+> — в `docs/README.md` и `docs/quality-gates.md`. Следующий этап: SEO S1-free
+> (`plan-seo.md`) + баги и продуктовые задачи из `docs/backlog.md`. Домен нужен
+> для SEO (`plan-seo.md`, S1-domain). Фазы 2–8 — будущие. Фазы 9–10 спланированы
+> в `docs/plan-platform.md`.
 
 ## 0. Решения
 

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Check } from "@lucide/svelte";
 
-	// TODO: сделать эти типы общими для кнопок \ бейджей \ етц???
 	const ToneVariantDefine = {
 		DEFAULT: "default",
 		ACCENT: "accent",

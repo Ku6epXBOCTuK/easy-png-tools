@@ -1,7 +1,3 @@
-<script lang="ts">
-	// TODO: insert version from package.json
-</script>
-
 <footer class="preview-footer">
 	<span>easy-png-tools <b class="version">v0.1.0</b></span>
 	<span>© 2026</span>

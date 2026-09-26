@@ -19,8 +19,6 @@
 		{ value: "analyze", label: t("categories.analyze") },
 		{ value: "generate", label: t("categories.generate") },
 	];
-
-	// TODO: Button component
 </script>
 
 <div class="catalog-toolbar">

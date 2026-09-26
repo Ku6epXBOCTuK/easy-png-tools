@@ -18,8 +18,6 @@
 		loading = false,
 		parts = undefined,
 	}: Props = $props();
-
-	// TODO: make canvas aspect ratio auto, from 16:9 to 9:16 max
 </script>
 
 <figure class="tile">

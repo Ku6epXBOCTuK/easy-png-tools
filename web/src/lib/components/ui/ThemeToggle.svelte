@@ -9,8 +9,6 @@
 	}
 
 	let { theme, ontoggle }: Props = $props();
-
-	// TODO: change icon animations - custom button instead of IconButton
 </script>
 
 <IconButton

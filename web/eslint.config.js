@@ -35,11 +35,6 @@ const newSvelteFiles = [
 	"**/src/routes/**/*.svelte",
 ];
 
-// FIXME:
-// The signature '(...configs: InfiniteDepthConfigWithExtends[]): ConfigArray' of 'tseslint.config' is deprecated.ts
-// Migrate to defineConfig(...)
-// The core defineConfig(...) helper is a nearly exact clone of tseslint.config(...)
-
 export default tseslint.config(
 	{
 		ignores: [

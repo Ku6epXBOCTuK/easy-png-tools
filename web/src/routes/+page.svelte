@@ -24,8 +24,6 @@
 			),
 		})).filter((g) => g.tools.length > 0),
 	);
-
-	// TODO: make main page different from catalog - larger and simpler search, no categories
 </script>
 
 <div class="catalog-page">

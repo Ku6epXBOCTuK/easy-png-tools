@@ -7,7 +7,7 @@
 > Статус: **частично выполнен** — базовая i18n-инфраструктура нового UI,
 > локализация ошибок, `i18n/dict-consistency` и zero-warning baseline Q2
 > реализованы; plural-формы остаются отдельной задачей. Актуальные решения и
-> ограничения — в `docs/plan-codebase-quality.md`.
+> ограничения — в `docs/testing-strategy.md` и `docs/backlog.md`.
 
 ## 1. Что получается
 

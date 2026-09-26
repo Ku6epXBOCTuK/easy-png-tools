@@ -7,13 +7,14 @@
       правило `i18n/dict-consistency`, детали в `web/eslint-plugins/README.md`.
       Правило реализовано; Q2 перевёл i18n baseline к zero-warning через
       policy-aware fallback.
-- [ ] проверка дублирования кода html - div с одинаковым классом и т.д. (глянуть
-      что за `SonarLint` или написать кастомный линтер)
-- [ ] проверка текстов в svelte\ts\html - всё тексты должны быть через i18n
-      модуль
-- [ ] консистентность комментариев - если есть описание к одному инструменту -
-      оно должно быть у всех или объяснено, почему этот инструмент такой
-      особенный и заслуживает комментарий
+- [x] Проверка текстов в svelte/ts/html — реализовано правилом
+      `i18n/no-hardcoded-user-text` (warn, baseline 0): ловит текст в шаблоне и
+      в пользовательских атрибутах, исключения — бренд, форматы, имена файлов,
+      registry-строки и `/kit`. Детали в `web/eslint-plugins/README.md`.
+- [ ] `tseslint.config(...)` deprecated: сигнатура
+      `(...configs: InfiniteDepthConfigWithExtends[]): ConfigArray` помечена
+      устаревшей, нужен переход на `defineConfig` из `typescript-eslint` —
+      `web/eslint.config.js`.
 - [ ] удалить мёртвые `tools.*.params` из root i18n после проверки потребителей;
       до этого Q2 держит pattern-based policy-исключение
 
@@ -69,6 +70,23 @@
 - [ ] Слаги инструментов (`*-png`) — надо переименовть, они работают с любыми
       изображениями. Надо сделать отдельный интерфейс маппинга инструмент ->
       ссылка
+- [ ] `CatalogToolbar`: фильтры используют сырой `<button>`, а не `ui/Button` —
+      единый контрол для всей библиотеки
+      (`web/src/lib/components/CatalogToolbar.svelte`).
+- [ ] Вынести `ToneVariant`/варианты в общий модуль: `const`-объект с тонами
+      продублирован в `ui/Badge.svelte` и кнопках
+      (`web/src/lib/components/ui/Badge.svelte`).
+- [ ] `PreviewTile`: canvas должен сам выбирать соотношение сторон в диапазоне
+      16:9…9:16 вместо фиксированного
+      (`web/src/lib/components/layout/PreviewTile.svelte`).
+- [ ] `ThemeToggle`: свои анимации иконок и своя кнопка вместо `IconButton`
+      (`web/src/lib/components/ui/ThemeToggle.svelte`).
+- [ ] Радиусы бордеров не совпадают с референсом: в `refs` радиусы были 0, а мы
+      взяли ненулевой `--radius-m` для всех бордеров. Проверить токен против
+      референсов; возможно он должен быть 0, а скругления оставить только там,
+      где они реально есть в дизайне.
+- [ ] `Footer`: версию брать из `package.json`, а не писать `v0.1.0` вручную
+      (`web/src/lib/components/layout/Footer.svelte`).
 
 ## Переезд
 
@@ -107,9 +125,9 @@
 
 ## Качество production UI
 
-Q5–Q6f.3 закрывают известные preview-проблемы, special fixtures, smoke,
-layout/view-model инварианты и browser matrix; активных `test.fixme` в e2e
-больше нет.
+Q5–Q6 и Q7–Q8 закрывают известные preview-проблемы, special fixtures, smoke,
+layout/view-model инварианты, browser matrix, coverage-гейт и линтеры; активных
+`test.fixme` в e2e больше нет.
 
 - [x] Генераторы auto-run без кнопки Generate — `web/e2e/generators.spec.ts`.
 - [x] `resize-png` и `crop-png` используют размеры текущего source через общий
@@ -253,3 +271,12 @@ layout/view-model инварианты и browser matrix; активных `test
     batch-обработки архивов (п.5 идей, roadmap фаза 8 «batch-страница»). Нужна
     отдельная проработка входа (распаковка zip в браузере, порядок файлов,
     поведение в пайплайне — такие инструменты терминальны, как и 1 → many).
+
+16. **Главная должна отличаться от каталога** — оценка S. Сейчас
+    `src/routes/+page.svelte` и `src/routes/list-tools/+page.svelte` побайтово
+    идентичны (совпадают script, шаблон и стили), при этом `/list-tools` —
+    рабочий маршрут: на него ссылается крошка в `+layout.svelte` и он открыт
+    e2e-сценариями `catalog.spec.ts`, `i18n.spec.ts`, `navigation.spec.ts`.
+    Замысел: главная — крупнее и с более простым поиском, без категорий; каталог
+    остаётся группировкой с фильтрами. Найдено измерением дублирования разметки
+    по 65 `.svelte`-файлам: файлы побайтово идентичны.
