@@ -59,6 +59,10 @@ browser-контракт: critical CRC и truncated отклоняются, anci
 только для ограниченного ожидания hydration или асинхронного результата; он не
 должен превращать проверку продукта в бесконечный retry.
 
+Чистая логика схемы и layout (defaults, sanitization, `resolveLayoutGroups`)
+проверяется в `src/**/*.test.ts`; DOM, hydration и пользовательские потоки — в
+Playwright. Component-тесты не дублируют e2e-контракт.
+
 ## 5. Helpers и `test.fixme`
 
 `web/e2e/helpers/page.ts` владеет общими операциями `openTool`, `uploadImage`,

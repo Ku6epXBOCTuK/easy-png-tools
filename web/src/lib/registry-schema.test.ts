@@ -3,6 +3,7 @@ import {
 	applySourceDefaults,
 	defaultSchemaParams,
 	field,
+	resolveLayoutGroups,
 	sanitizeSchemaParams,
 	toolSchema,
 	type Dimension,
@@ -129,6 +130,82 @@ describe("registry-schema: раскладка (schema.layout)", () => {
 			}),
 		});
 		expect(plain.layout).toBeUndefined();
+	});
+
+	it("разрешает named-группы и хвост без layout", () => {
+		expect(resolveLayoutGroups(frameSchema)).toEqual([
+			{
+				key: "Frame-0",
+				title: "Frame",
+				cols: 1,
+				fields: ["thickness", "color"],
+			},
+			{ key: "__default", cols: 1, fields: ["enabled", "count"] },
+		]);
+	});
+
+	it("убирает неизвестные и повторные поля, нормализует cols", () => {
+		const schema = toolSchema<FrameParams>(
+			{
+				thickness: field.slider({ min: 1, max: 500, default: 5 }),
+				color: field.color({ default: "#000000" }),
+				enabled: field.checkbox({ default: true }),
+				count: field.select({
+					default: "two",
+					options: [
+						{ value: "one", label: "One" },
+						{ value: "two", label: "Two" },
+					],
+				}),
+			},
+			{
+				layout: {
+					groups: [
+						{
+							title: "Duplicate",
+							cols: 0,
+							fields: ["thickness", "thickness", "missing"],
+						},
+						{ title: "Empty", fields: ["missing"] },
+						{ cols: 3, fields: ["color"] },
+					],
+				},
+			},
+		);
+
+		expect(resolveLayoutGroups(schema)).toEqual([
+			{
+				key: "Duplicate-0",
+				title: "Duplicate",
+				cols: 1,
+				fields: ["thickness"],
+			},
+			{ key: "group-2", title: undefined, cols: 3, fields: ["color"] },
+			{ key: "__default", cols: 1, fields: ["enabled", "count"] },
+		]);
+	});
+
+	it("складывает все поля без layout в default-группу", () => {
+		const plain = toolSchema<FrameParams>({
+			thickness: field.slider({ min: 1, max: 500, default: 5 }),
+			color: field.color({ default: "#000000" }),
+			enabled: field.checkbox({ default: true }),
+			count: field.select({
+				default: "two",
+				options: [
+					{ value: "one", label: "One" },
+					{ value: "two", label: "Two" },
+				],
+			}),
+		});
+
+		expect(resolveLayoutGroups(plain)).toEqual([
+			{
+				key: "__default",
+				cols: 1,
+				fields: ["thickness", "color", "enabled", "count"],
+			},
+		]);
 	});
 });
 

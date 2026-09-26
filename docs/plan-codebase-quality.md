@@ -1,9 +1,9 @@
 # План: линтеры, тесты и качество кодовой базы
 
-> Статус: **draft — Q0–Q5 и Q6a–Q6e готовы к ревью; Q6f — следующий этап**.
+> Статус: **draft — Q0–Q5 и Q6a–Q6f.1 готовы к ревью; Q6f.2 — следующий этап**.
 >
 > Источник: `docs/backlog.md`, аудит конфигурации `web/`, e2e-тестов и
-> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6e выполнены; Q6f–Q8 выполняются
+> инфраструктурных скриптов. Q0–Q5 и Q6a–Q6f.1 выполнены; Q6f.2–Q8 выполняются
 > отдельными атомарными шагами.
 >
 > Цель: сделать качество кодовой базы воспроизводимым, убрать ложную «зелёность»
@@ -275,10 +275,22 @@ image→image, image→text, text→image, generator input→image и verdict. F
   а текущий e2e-контракт уже покрывает поведение preview. Выбор test seam или
   DOM-окружения перенесён в Q6f.
 
-#### Q6f. Component coverage, browser matrix и visual gates
+#### Q6f.1. Layout resolver seam
 
-- решить, нужен ли чистый seam для `SchemaFields`/view-model или полноценное
-  DOM-окружение для `SchemaToolView`/`SchemaPreview`;
+**Статус:** выполнен. Чистая логика группировки полей вынесена из
+`SchemaFields.svelte` в `resolveLayoutGroups` и покрыта unit-тестами на
+дедупликацию, неизвестные поля, пустые группы, `cols` и default-хвост.
+
+- Компонент использует общий resolver, поэтому unit-тесты блокируют изменения
+  layout-логики без DOM/Testing Library.
+- `SchemaPreview` view-model и DOM-компоненты не менялись; их seam остаётся
+  отдельным решением Q6f.2.
+- Новые зависимости, vitest-конфиг и browser matrix не добавлялись.
+
+#### Q6f.2–Q6f.4. Оставшиеся направления
+
+- выбрать чистый seam для `SchemaPreview`/view-model или DOM-окружение для
+  `SchemaToolView`/`SchemaPreview`;
 - browser matrix, mobile viewport, visual snapshots и coverage thresholds.
 
 Не применять один одинаковый smoke-сценарий к image-, text-, generator- и

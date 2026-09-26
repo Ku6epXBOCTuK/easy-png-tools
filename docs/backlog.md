@@ -107,8 +107,8 @@
 
 ## Качество production UI
 
-Q5–Q6e закрывают известные preview-проблемы, special fixtures и registry-wide
-smoke; активных `test.fixme` в e2e больше нет.
+Q5–Q6f.1 закрывают известные preview-проблемы, special fixtures, smoke и
+layout-инварианты; активных `test.fixme` в e2e больше нет.
 
 - [x] Генераторы auto-run без кнопки Generate — `web/e2e/generators.spec.ts`.
 - [x] `resize-png` и `crop-png` используют размеры текущего source через общий
@@ -122,6 +122,10 @@ smoke; активных `test.fixme` в e2e больше нет.
 - [x] Registry-wide smoke покрывает все 122 инструмента по input/result-типу —
       `web/e2e/tools-smoke.spec.ts`, `generators.spec.ts`,
       `text-and-verdicts.spec.ts`.
+- [x] Layout-группировка вынесена в `resolveLayoutGroups` и покрыта
+      unit-тестами; `SchemaFields.svelte` использует общий seam.
+- [ ] Component-тесты `SchemaToolView`/`SchemaPreview` требуют отдельного
+      решения: node Vitest не имеет DOM/canvas, а e2e уже покрывает поведение.
 - [ ] Ошибка декодирования изображения из `createImageBitmap` пока показывается
       сырым сообщением браузера; нужен `ToolError`-маппер и i18n-ключ. Это
       продуктовая задача, не Q6d.

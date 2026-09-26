@@ -4,6 +4,7 @@
 		FieldSpecKind,
 		ToolSchema,
 	} from "$lib/registry-schema";
+	import { resolveLayoutGroups } from "$lib/registry-schema";
 	import { fieldLabel, groupLabel } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import { RotateCcw } from "@lucide/svelte";
@@ -57,38 +58,7 @@
 	}
 	let { schema, values, toolId, onchange, onreset }: Props = $props();
 
-	interface LayoutGroup {
-		key: string;
-		title?: string;
-		cols: number;
-		fields: string[];
-	}
-
-	const layoutGroups = $derived.by((): LayoutGroup[] => {
-		const all = Object.keys(schema.fields);
-		const groups = schema.layout?.groups ?? [];
-		const used: Record<string, true> = {};
-		const named = groups
-			.map((g, gi) => {
-				const fields = g.fields.filter((f) => {
-					if (used[f] || !(f in schema.fields)) return false;
-					used[f] = true;
-					return true;
-				});
-				return {
-					key: `${g.title ?? "group"}-${gi}`,
-					title: g.title,
-					cols: Math.max(1, Math.trunc(g.cols ?? 1)),
-					fields,
-				} satisfies LayoutGroup;
-			})
-			.filter((g) => g.fields.length > 0);
-		const rest = all.filter((f) => !used[f]);
-		if (rest.length > 0) {
-			named.push({ key: "__default", title: undefined, cols: 1, fields: rest });
-		}
-		return named;
-	});
+	const layoutGroups = $derived(resolveLayoutGroups(schema));
 </script>
 
 {#each layoutGroups as group (group.key)}
