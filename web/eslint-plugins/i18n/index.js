@@ -8,6 +8,7 @@
  * new locales are picked up automatically.
  */
 import dictConsistency from "./dict-consistency.js";
+import noHardcodedUserText from "./no-hardcoded-user-text.js";
 
 export default {
 	meta: {
@@ -16,5 +17,6 @@ export default {
 	},
 	rules: {
 		"dict-consistency": dictConsistency,
+		"no-hardcoded-user-text": noHardcodedUserText,
 	},
 };

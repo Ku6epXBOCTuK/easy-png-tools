@@ -83,6 +83,7 @@ export default tseslint.config(
 						"eslint-plugins/__tests__/no-string-union-alias.test.ts",
 						"eslint-plugins/__tests__/helpers.ts",
 						"eslint-plugins/__tests__/dict-consistency.test.ts",
+						"eslint-plugins/__tests__/no-hardcoded-user-text.test.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/dict.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/en.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/ru.ts",
@@ -165,8 +166,9 @@ export default tseslint.config(
 			"conventions/no-string-union-alias": "error",
 		},
 	},
-	// Кросс-языковой линтер словарей (плагин i18n/dict-consistency).
-	// Правило сообщает warning, а `lint:all` превращает новые warnings в
+	// Кросс-языковой линтер словарей (плагин i18n/dict-consistency) и запрет
+	// захардкоженного пользовательского текста (i18n/no-hardcoded-user-text).
+	// Правила сообщают warning, а `lint:all` превращает новые warnings в
 	// blocking через --max-warnings=0. Список локалей берётся из LOCALES в
 	// lib/i18n/dict.ts; новые локали подхватываются автоматически.
 	{
@@ -180,6 +182,22 @@ export default tseslint.config(
 				{
 					baseLocaleFallback: ["tools.*.title", "tools.*.description"],
 					ignoreMissingPatterns: ["tools.*.params"],
+				},
+			],
+		},
+	},
+	{
+		// /kit — витрина компонентов с намеренно захардкоженными подписями.
+		files: newSvelteFiles.filter((pattern) => !pattern.includes("routes")),
+		plugins: {
+			i18n: i18nPlugin,
+		},
+		rules: {
+			"i18n/no-hardcoded-user-text": [
+				"warn",
+				{
+					// Название продукта — бренд, а не переводимый текст.
+					allowWords: ["easy-png-tools"],
 				},
 			],
 		},

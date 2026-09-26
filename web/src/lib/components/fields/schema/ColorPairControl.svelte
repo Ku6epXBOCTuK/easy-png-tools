@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/t";
 	import type {
 		ColorPair,
 		ColorPairSpec,
@@ -37,7 +38,7 @@
 				value={current.from}
 				oninput={(e) => setColor("from", (e.target as HTMLInputElement).value)}
 			/>
-			<span class="axis-label">From</span>
+			<span class="axis-label">{t("ui.from")}</span>
 		</label>
 		<label class="pair-axis">
 			<span class="swatch" style="background:{current.to}"></span>
@@ -46,7 +47,7 @@
 				value={current.to}
 				oninput={(e) => setColor("to", (e.target as HTMLInputElement).value)}
 			/>
-			<span class="axis-label">To</span>
+			<span class="axis-label">{t("ui.to")}</span>
 		</label>
 	</div>
 </div>
