@@ -6,11 +6,11 @@
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";
 
 	interface Props {
-		data: { id: string };
+		data: { slug: string };
 	}
 	let { data }: Props = $props();
 
-	const page = $derived(getPageBySlug(data.id));
+	const page = $derived(getPageBySlug(data.slug));
 	const tool = $derived(page ? getTool(page.steps[0].id) : undefined);
 </script>
 
@@ -23,7 +23,7 @@
 	<div class="notfound">
 		<EmptyState
 			title={t("errors.notFound")}
-			description={t("errors.toolUnknown", { id: data.id })}
+			description={t("errors.pageUnknown", { slug: data.slug })}
 			icon={ToolIcon}
 		/>
 	</div>

@@ -167,7 +167,7 @@ export const ru: Dict = {
 		textRequired: "Сначала введите текст",
 		workerFailed: "Ошибка исполнения в воркере",
 		workerUnavailable: "Воркер недоступен",
-		notFound: "Инструмент не найден",
+		notFound: "Страница не найдена",
 		noWatermark: "Сначала выберите картинку-знак",
 		badTransform: "Вырожденная матрица трансформации",
 		skewAngle: "Углы наклона не могут быть 90° или -90°",
@@ -190,7 +190,6 @@ export const ru: Dict = {
 			"Каждый пиксель — 8 hex-символов RRGGBBAA, значения через пробел",
 		pixelCountMismatch:
 			"Число пикселей ({count}) не делится на ширину {width} без остатка",
-		toolNotFound: 'Инструмент "{id}" не найден',
 		badJson: "Файл не является корректным JSON",
 		badPipelineShape: "Структура файла не похожа на цепочку шагов",
 		pipelineVersion: "Неподдерживаемая версия цепочки: {version}",
@@ -202,7 +201,7 @@ export const ru: Dict = {
 		cropSize: "Ширина и высота области обрезки должны быть положительными",
 		sizePositive: "Размеры должны быть положительными и конечными",
 		tooManyParts: "Слишком много частей ({count}). Ограничение — 1000.",
-		toolUnknown: "Инструмента с id «{id}» нет в реестре.",
+		pageUnknown: "Страницы «{slug}» нет в каталоге.",
 	},
 	fields: {
 		alphaThreshold: "Порог альфы",

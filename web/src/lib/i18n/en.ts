@@ -166,7 +166,7 @@ export const en: Dict = {
 		textRequired: "Enter text first",
 		workerFailed: "Worker execution failed",
 		workerUnavailable: "Worker is unavailable",
-		notFound: "Tool not found",
+		notFound: "Page not found",
 		noWatermark: "Pick a watermark image first",
 		badTransform: "Degenerate transformation matrix",
 		skewAngle: "Skew angles cannot be 90° or -90°",
@@ -189,7 +189,6 @@ export const en: Dict = {
 			"Each pixel must be 8 hex characters RRGGBBAA, separated by spaces",
 		pixelCountMismatch:
 			"Pixel count ({count}) is not divisible by width {width} without a remainder",
-		toolNotFound: 'Tool "{id}" not found',
 		badJson: "The file is not valid JSON",
 		badPipelineShape: "The file structure does not look like a chain of steps",
 		pipelineVersion: "Unsupported chain version: {version}",
@@ -201,7 +200,7 @@ export const en: Dict = {
 		cropSize: "Crop width and height must be positive",
 		sizePositive: "Dimensions must be positive and finite",
 		tooManyParts: "Too many parts ({count}). Maximum is 1000.",
-		toolUnknown: 'No tool is registered under "{id}".',
+		pageUnknown: 'No page is registered under "{slug}".',
 	},
 	fields: {
 		alphaThreshold: "Alpha threshold",

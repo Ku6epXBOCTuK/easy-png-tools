@@ -31,14 +31,14 @@ export async function useEnglish(page: Page): Promise<void> {
 	});
 }
 
-export async function openTool(page: Page, id: string): Promise<void> {
+export async function openTool(page: Page, slug: string): Promise<void> {
 	await useEnglish(page);
-	await page.goto(`/tools/${id}`);
+	await page.goto(`/tools/${slug}`);
 	await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 }
 
-export function toolLink(page: Page, id: string): Locator {
-	return page.locator(`a[href="/tools/${id}"]`);
+export function toolLink(page: Page, slug: string): Locator {
+	return page.locator(`a[href="/tools/${slug}"]`);
 }
 
 export function resultImage(page: Page): Locator {

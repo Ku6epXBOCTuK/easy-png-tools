@@ -64,11 +64,12 @@ describe("Смоук §6 i18n (новый UI)", () => {
 		expect(t("errors.badHex", { value: "#zz" })).toBe(
 			'Некорректный HEX-цвет: "#zz"',
 		);
-		expect(t("errors.toolNotFound", { id: "x" })).toContain("не найден");
+		expect(t("errors.pageUnknown", { slug: "x" })).toContain("каталоге");
 		setLocale("en");
 		expect(t("errors.badHex", { value: "#zz" })).toBe(
 			'Invalid HEX color: "#zz"',
 		);
+		expect(t("errors.pageUnknown", { slug: "x" })).toContain("No page");
 	});
 
 	it("6. Ё не мешает нормализации поискового запроса", () => {

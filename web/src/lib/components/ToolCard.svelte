@@ -14,7 +14,7 @@
 	let { title, slug, description, index, icon }: Props = $props();
 </script>
 
-<a class="tool-card" href={resolve("/tools/[id]", { id: slug })}>
+<a class="tool-card" href={resolve("/tools/[slug]", { slug })}>
 	{#if icon}<span class="tool-icon"><Icon {icon} size={19} /></span>{/if}
 	<span class="tool-copy">
 		<strong>{title}</strong>
