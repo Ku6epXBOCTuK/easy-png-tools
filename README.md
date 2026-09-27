@@ -70,11 +70,12 @@ pnpm build      # static production export → web/build/
 
 ## Architecture
 
-Everything is built around the **tool registry** (`web/src/lib/registry/`): each
-tool is a self-contained entry
-`{id, title, description, category, schema, run}`. Pages, forms, and pipelines
-are generated from it, and all execution goes through a single
-`executor.execute` entry point.
+Everything is built around the **two-layer registry** (`web/src/lib/registry/`):
+a tool is a self-contained implementation `{id, schema, input, result, run}`
+(`registry/tools/`), and a page is `{slug, title, description, category, steps}`
+(`registry/pages/`) that names the address and the tools to run — one tool can
+back several pages. Pages, forms, and pipelines are generated from it, and all
+execution goes through a single `executor.execute` entry point.
 
 Core image processing lives in `web/src/lib/core/` and operates directly on
 `ImageData`, with no browser API dependencies.

@@ -16,10 +16,13 @@
 > которые в бэклоге, здесь не дублируются: этот документ задаёт **порядок**,
 > backlog — **учёт** (`docs/backlog.md`).
 >
-> **Ids инструментов сверены с реестром** (`web/src/lib/registry/`) для шагов
-> FA-B и волн C–E. Названия из `docs/tools-audit.md` вида `png-to-hsl`,
-> `color-wheel-generator`, `webp-to-png` в реестре отсутствуют (реальные —
-> `hsl`, `color-wheel-png`): при переносе пункта аудита в шаг id сверять.
+> **Инструменты в этом документе названы по адресам страниц (slug).** В коде у
+> страницы `slug` (`registry/pages/`), у вызываемого инструмента — `id` без
+> png-интента (`crop-png` → `id: "crop"`, `png-to-hsl` → `to-hsl`), модель —
+> `docs/architecture.md`, раздел 3. Названия из `docs/tools-audit.md` вида
+> `color-wheel-generator`, `webp-to-png` в реестре отсутствуют (реальная
+> страница — `color-wheel-png`): при переносе пункта аудита в шаг сверять с
+> `PAGES`.
 
 ## 0. Ключевое решение: select → buttons
 
