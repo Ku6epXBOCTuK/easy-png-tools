@@ -40,6 +40,7 @@ export const convertToJpgSchema = toolSchema<ConvertToJpgParams>({
 
 const convertToJpg: ToolEntry<ConvertToJpgParams> = {
 	id: "convert-png-to-jpg",
+	slug: "convert-png-to-jpg",
 	title: "Convert PNG to JPG",
 	description:
 		"Transparency is composited over the chosen backdrop color (white by default) and saved as JPEG.",
@@ -66,6 +67,7 @@ export const convertToWebpSchema = toolSchema<ConvertToWebpParams>({
 
 const convertToWebp: ToolEntry<ConvertToWebpParams> = {
 	id: "convert-png-to-webp",
+	slug: "convert-png-to-webp",
 	title: "Convert PNG to WebP",
 	description:
 		"Re-encodes the image into WebP with adjustable quality. Transparency is preserved.",
@@ -82,6 +84,7 @@ export const convertToBmpSchema = toolSchema<ConvertToBmpParams>({});
 
 const convertToBmp: ToolEntry<ConvertToBmpParams> = {
 	id: "png-to-bmp",
+	slug: "png-to-bmp",
 	title: "Convert PNG to BMP",
 	description:
 		"Saves the image as 24-bit BMP without an alpha channel: transparency is replaced with a black background.",
@@ -98,6 +101,7 @@ const emptySchema = toolSchema<NoParams>({});
 
 const pngToBase64: ToolEntry<NoParams> = {
 	id: "png-to-base64",
+	slug: "png-to-base64",
 	title: "PNG to Base64",
 	description:
 		"Encodes the image into a base64 string for embedding in code or styles.",
@@ -111,6 +115,7 @@ const pngToBase64: ToolEntry<NoParams> = {
 
 const pngToDataUri: ToolEntry<NoParams> = {
 	id: "png-to-data-uri",
+	slug: "png-to-data-uri",
 	title: "PNG to Data URI",
 	description:
 		"Builds a full data-uri (data:image/png;base64,…) for embedding in HTML/CSS.",
@@ -124,6 +129,7 @@ const pngToDataUri: ToolEntry<NoParams> = {
 
 const pngToHex: ToolEntry<NoParams> = {
 	id: "png-to-hex",
+	slug: "png-to-hex",
 	title: "PNG to HEX pixels",
 	description:
 		"Shows all pixels as rrggbbaa hex values — row by row, space separated.",
@@ -136,6 +142,7 @@ const pngToHex: ToolEntry<NoParams> = {
 
 const pngToBytes: ToolEntry<NoParams> = {
 	id: "png-to-bytes",
+	slug: "png-to-bytes",
 	title: "PNG to Bytes",
 	description:
 		"Lists every pixel as four decimal bytes (R G B A), one image row per line.",
@@ -148,6 +155,7 @@ const pngToBytes: ToolEntry<NoParams> = {
 
 const pngToRgbValues: ToolEntry<NoParams> = {
 	id: "png-to-rgb-values",
+	slug: "png-to-rgb-values",
 	title: "PNG to RGB Values",
 	description: "Lists every pixel as rgba(r, g, b, a), one image row per line.",
 	category: "convert",
@@ -159,6 +167,7 @@ const pngToRgbValues: ToolEntry<NoParams> = {
 
 const base64ToPng: ToolEntry<NoParams> = {
 	id: "base64-to-png",
+	slug: "base64-to-png",
 	title: "Base64 to PNG",
 	description:
 		"Decodes a base64 string or data-uri back into an image. Paste the string on the left.",
@@ -171,6 +180,7 @@ const base64ToPng: ToolEntry<NoParams> = {
 
 const dataUriToPng: ToolEntry<NoParams> = {
 	id: "data-uri-to-png",
+	slug: "data-uri-to-png",
 	title: "Data URI to PNG",
 	description: "Decodes data:image/…;base64,… back into an image file.",
 	category: "convert",
@@ -190,6 +200,7 @@ export const hexToPngSchema = toolSchema<HexToPngParams>({
 
 const hexToPng: ToolEntry<HexToPngParams> = {
 	id: "hex-to-png",
+	slug: "hex-to-png",
 	title: "HEX pixels to PNG",
 	description:
 		"Assembles an image from rrggbbaa hex values (space separated). Set the width — the height is computed automatically.",
@@ -209,6 +220,7 @@ export const bytesToPngSchema = toolSchema<BytesToPngParams>({
 
 const bytesToPng: ToolEntry<BytesToPngParams> = {
 	id: "bytes-to-png",
+	slug: "bytes-to-png",
 	title: "Bytes to PNG",
 	description:
 		"Assembles an image from decimal RGBA byte numbers (any separators). Set the width — height is computed automatically.",
@@ -228,6 +240,7 @@ export const rgbValuesToPngSchema = toolSchema<RgbValuesToPngParams>({
 
 const rgbValuesToPng: ToolEntry<RgbValuesToPngParams> = {
 	id: "rgb-values-to-png",
+	slug: "rgb-values-to-png",
 	title: "RGB Values to PNG",
 	description:
 		"Assembles an image from rgba(r, g, b, a) numbers. Set the width — height is computed automatically.",
@@ -247,6 +260,7 @@ export const svgToPngSchema = toolSchema<SvgToPngParams>({
 
 const svgToPng: ToolEntry<SvgToPngParams> = {
 	id: "svg-to-png",
+	slug: "svg-to-png",
 	title: "SVG to PNG",
 	description:
 		"Decodes SVG markup into a raster image. Paste the SVG code on the left.",

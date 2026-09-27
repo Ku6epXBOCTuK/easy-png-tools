@@ -19,6 +19,21 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(new Set(ids).size).toBe(ids.length);
 	});
 
+	it("slug уникальны", () => {
+		const slugs = TOOLS.map((t) => t.slug);
+		expect(new Set(slugs).size).toBe(slugs.length);
+	});
+
+	it("id и slug пригодны для адреса и для кода", () => {
+		// Тот же формат, что разбирает `tools-map-doc.test.ts`: латиница в
+		// нижнем регистре, слова через дефис.
+		const shape = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
+		for (const tool of TOOLS) {
+			expect(shape.test(tool.id), `id: ${tool.id}`).toBe(true);
+			expect(shape.test(tool.slug), `slug: ${tool.slug}`).toBe(true);
+		}
+	});
+
 	it("PREVIEW_GROUPS строится без ошибок", () => {
 		expect(PREVIEW_GROUPS.length).toBeGreaterThan(0);
 		expect(PREVIEW_GROUPS.reduce((n, g) => n + g.tools.length, 0)).toBe(

@@ -49,6 +49,7 @@ export const addBorderSchema = toolSchema<AddBorderParams>({
 
 const addBorder: ToolEntry<AddBorderParams> = {
 	id: "add-border-png",
+	slug: "add-border-png",
 	title: "Add border to PNG",
 	description:
 		"Draws a colored frame of the chosen thickness around the image.",
@@ -100,6 +101,7 @@ export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>(
 
 const fitOnBackground: ToolEntry<FitOnBackgroundParams> = {
 	id: "fit-on-background-png",
+	slug: "fit-on-background-png",
 	title: "Fit PNG onto background",
 	description:
 		"Places the image centered on a canvas of the given size with a transparent or colored background.",
@@ -167,6 +169,7 @@ export const changeCanvasSizeSchema = toolSchema<ChangeCanvasSizeParams>(
 
 const changeCanvasSizeTool: ToolEntry<ChangeCanvasSizeParams> = {
 	id: "change-canvas-size-png",
+	slug: "change-canvas-size-png",
 	title: "Change Canvas Size PNG",
 	description:
 		"Sets the exact canvas size: overflow is cropped, missing space is filled with transparency. Anchor picks which part of the image stays.",
@@ -212,6 +215,7 @@ export const resizeSchema = toolSchema<ResizeParams>(
 
 const resizeTool: ToolEntry<ResizeParams> = {
 	id: "resize-png",
+	slug: "resize-png",
 	title: "Resize PNG",
 	description:
 		"Scales the image with bilinear interpolation. With aspect kept, one side defines the scale; if both are set, the image fits inside them.",
@@ -283,6 +287,7 @@ export const cropSchema = toolSchema<CropParams>(
 
 const cropTool: ToolEntry<CropParams> = {
 	id: "crop-png",
+	slug: "crop-png",
 	title: "Crop PNG",
 	description:
 		"Cuts out a rectangular area. Coordinates and sizes may go beyond the image — the area is clipped to the intersection.",
@@ -317,6 +322,7 @@ export const rotateSchema = toolSchema<RotateParams>({
 
 const rotateTool: ToolEntry<RotateParams> = {
 	id: "rotate-png",
+	slug: "rotate-png",
 	title: "Rotate PNG",
 	description: "Rotates by 90°, 180° or 270° clockwise without quality loss.",
 	category: "geometry",
@@ -342,6 +348,7 @@ export const flipSchema = toolSchema<FlipParams>({
 
 const flipTool: ToolEntry<FlipParams> = {
 	id: "flip-png",
+	slug: "flip-png",
 	title: "Flip PNG",
 	description: "Mirrors horizontally or vertically without quality loss.",
 	category: "geometry",
@@ -380,6 +387,7 @@ export const addPaddingSchema = toolSchema<AddPaddingParams>(
 
 const addPaddingTool: ToolEntry<AddPaddingParams> = {
 	id: "add-padding-png",
+	slug: "add-padding-png",
 	title: "Add padding to PNG",
 	description:
 		"Expands the canvas on all sides by the chosen number of pixels.",
@@ -422,6 +430,7 @@ export const tileSchema = toolSchema<TileParams>({
 
 const tileTool: ToolEntry<TileParams> = {
 	id: "tile-png",
+	slug: "tile-png",
 	title: "Tile PNG",
 	description: "Repeats the image in a grid of the chosen columns and rows.",
 	category: "geometry",
@@ -456,6 +465,7 @@ export const splitPartsSchema = toolSchema<SplitPartsParams>({
 
 const splitPartsTool: ToolEntry<SplitPartsParams> = {
 	id: "split-into-parts-png",
+	slug: "split-into-parts-png",
 	title: "Split PNG into parts",
 	description:
 		"Divides the image into a grid of equal-sized parts. The canvas is padded with transparency to keep every part the same size.",
@@ -493,6 +503,7 @@ export const centerByAlphaSchema = toolSchema<EmptyParams>({});
 
 const centerByAlphaTool: ToolEntry<EmptyParams> = {
 	id: "center-by-alpha-png",
+	slug: "center-by-alpha-png",
 	title: "Center PNG by content",
 	description:
 		"Finds the opaque part of the image and centers it on the original canvas.",
@@ -526,6 +537,7 @@ export const skewSchema = toolSchema<SkewParams>({
 
 const skewTool: ToolEntry<SkewParams> = {
 	id: "skew-png",
+	slug: "skew-png",
 	title: "Skew PNG",
 	description:
 		"Shifts content horizontally and vertically — a perspective effect.",
@@ -551,6 +563,7 @@ export const rotateFreeSchema = toolSchema<RotateFreeParams>({
 
 const rotateFreeTool: ToolEntry<RotateFreeParams> = {
 	id: "rotate-free-png",
+	slug: "rotate-free-png",
 	title: "Rotate by custom angle",
 	description:
 		"Rotation by any angle. The canvas grows to fit the new bounds; corners stay transparent.",
@@ -576,6 +589,7 @@ export const zoomSchema = toolSchema<ZoomParams>({
 
 const zoomTool: ToolEntry<ZoomParams> = {
 	id: "zoom-png",
+	slug: "zoom-png",
 	title: "Zoom PNG",
 	description:
 		"Magnifies content toward the center. The canvas keeps its size — edges are cropped.",
@@ -601,6 +615,7 @@ export const trimEmptySpaceSchema = toolSchema<TrimEmptySpaceParams>({
 
 const trimEmptySpaceTool: ToolEntry<TrimEmptySpaceParams> = {
 	id: "trim-empty-space-png",
+	slug: "trim-empty-space-png",
 	title: "Trim Empty Space PNG",
 	description:
 		"Crops transparent borders around the content. Pixels with alpha above the threshold count as content.",
@@ -643,6 +658,7 @@ export const changeAspectRatioSchema = toolSchema<ChangeAspectRatioParams>({
 
 const changeAspectRatioTool: ToolEntry<ChangeAspectRatioParams> = {
 	id: "change-aspect-ratio-png",
+	slug: "change-aspect-ratio-png",
 	title: "Change Aspect Ratio PNG",
 	description:
 		"Fits the image into a target aspect ratio: crop the center to fill, or pad with transparency.",
@@ -673,6 +689,7 @@ export const swapOrientationSchema = toolSchema<SwapOrientationParams>({
 
 const swapOrientationTool: ToolEntry<SwapOrientationParams> = {
 	id: "swap-orientation-png",
+	slug: "swap-orientation-png",
 	title: "Swap Orientation PNG",
 	description:
 		"Rotates the image by 90° when its orientation differs from the target — landscape becomes portrait and back. Square images are untouched.",
@@ -713,6 +730,7 @@ export const symmetricCopySchema = toolSchema<SymmetricCopyParams>({
 
 const symmetricCopyTool: ToolEntry<SymmetricCopyParams> = {
 	id: "symmetric-copy-png",
+	slug: "symmetric-copy-png",
 	title: "Symmetric Copy PNG",
 	description:
 		"Doubles the canvas by mirroring the kept side onto the empty half — instant symmetric pattern.",
@@ -748,6 +766,7 @@ export const shiftSchema = toolSchema<ShiftParams>({
 
 const shiftTool: ToolEntry<ShiftParams> = {
 	id: "shift-png",
+	slug: "shift-png",
 	title: "Shift PNG",
 	description: "Moves content by the given X and Y offset.",
 	category: "geometry",

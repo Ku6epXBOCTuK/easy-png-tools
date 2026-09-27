@@ -70,7 +70,13 @@ export type ToolResult = PixelImage | string | FileResult | VerdictResult;
  * `generate`/`runFromText`/`toText`/`textToText` нет.
  */
 export type ToolEntry<P = Record<string, unknown>> = {
+	/** Внутреннее имя: ключ i18n `tools.<id>.*`, `toolId` worker-протокола, запись пайплайна. */
 	id: string;
+	/**
+	 * Адрес страницы `/tools/<slug>` и база имени скачиваемого файла. Инструмент
+	 * работает с любым форматом, поэтому png-интент держит slug, а не id.
+	 */
+	slug: string;
 	title: string;
 	description: string;
 	category: CategoryId;

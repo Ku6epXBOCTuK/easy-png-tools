@@ -29,6 +29,7 @@ export const extractColorSchema = toolSchema<ExtractColorParams>({
 
 const extractColor: ToolEntry<ExtractColorParams> = {
 	id: "extract-color-from-png",
+	slug: "extract-color-from-png",
 	title: "Extract Color from PNG",
 	description:
 		"Keeps only pixels close to the chosen color and makes everything else transparent — the inverse of Remove Color.",
@@ -89,6 +90,7 @@ export const showTransparentSchema = toolSchema<MaskParams>({
 
 const showTransparent: ToolEntry<MaskParams> = {
 	id: "show-transparent-png",
+	slug: "show-transparent-png",
 	title: "Show Transparent Areas PNG",
 	description:
 		"Highlights every transparent or semi-transparent pixel with the chosen color so gaps become obvious.",
@@ -115,6 +117,7 @@ export const showGrayscalePixelsSchema = toolSchema<GrayscalePixelsParams>({
 
 const showGrayscalePixels: ToolEntry<GrayscalePixelsParams> = {
 	id: "show-grayscale-pixels-png",
+	slug: "show-grayscale-pixels-png",
 	title: "Show Grayscale Pixels PNG",
 	description:
 		"Finds pixels whose channels are nearly equal and renders them as a mask. Tolerance is in channel units.",
@@ -143,6 +146,7 @@ export const showColorPixelsSchema = toolSchema<ColorPixelsParams>({
 
 const showColorPixels: ToolEntry<ColorPixelsParams> = {
 	id: "show-color-pixels-png",
+	slug: "show-color-pixels-png",
 	title: "Show Color Pixels PNG",
 	description:
 		"Finds colored (non-gray) pixels beyond the channel tolerance and renders them as a mask.",
@@ -171,6 +175,7 @@ export const lightPixelMaskSchema = toolSchema<LightPixelParams>({
 
 const lightPixelMask: ToolEntry<LightPixelParams> = {
 	id: "light-pixel-mask-png",
+	slug: "light-pixel-mask-png",
 	title: "Light Pixel Mask PNG",
 	description: "Selects pixels brighter than the luminance threshold.",
 	category: "analyze",
@@ -198,6 +203,7 @@ export const darkPixelMaskSchema = toolSchema<DarkPixelParams>({
 
 const darkPixelMask: ToolEntry<DarkPixelParams> = {
 	id: "dark-pixel-mask-png",
+	slug: "dark-pixel-mask-png",
 	title: "Dark Pixel Mask PNG",
 	description: "Selects pixels darker than the luminance threshold.",
 	category: "analyze",
@@ -225,6 +231,7 @@ export const uniqueColorMaskSchema = toolSchema<UniqueColorParams>({
 
 const uniqueColorMask: ToolEntry<UniqueColorParams> = {
 	id: "unique-color-mask-png",
+	slug: "unique-color-mask-png",
 	title: "Unique Color Mask PNG",
 	description:
 		"Selects colors that occur no more than the given number of times — rare and one-off pixels.",
@@ -240,6 +247,7 @@ const emptySchema = toolSchema<NoParams>({});
 
 const verifyIsPng: ToolEntry<NoParams> = {
 	id: "verify-is-png",
+	slug: "verify-is-png",
 	title: "Verify If Image Is a PNG",
 	description:
 		"Checks the signature of pasted base64 / data-uri content and reports whether it is a real PNG.",
@@ -254,6 +262,7 @@ const verifyIsPng: ToolEntry<NoParams> = {
 
 const pngIsGrayscale: ToolEntry<NoParams> = {
 	id: "png-is-grayscale",
+	slug: "png-is-grayscale",
 	title: "Check: is PNG grayscale?",
 	description: "Reports whether the image consists only of shades of gray.",
 	category: "analyze",
@@ -265,6 +274,7 @@ const pngIsGrayscale: ToolEntry<NoParams> = {
 
 const pngFileSize: ToolEntry<NoParams> = {
 	id: "png-file-size",
+	slug: "png-file-size",
 	title: "PNG File Size",
 	description: "Encodes the image as PNG and reports the resulting file size.",
 	category: "analyze",
@@ -282,6 +292,7 @@ const pngFileSize: ToolEntry<NoParams> = {
 
 const pngIsTransparent: ToolEntry<NoParams> = {
 	id: "png-is-transparent",
+	slug: "png-is-transparent",
 	title: "Check: is PNG transparent?",
 	description:
 		"Reports whether the image contains transparent or semi-transparent pixels.",
@@ -296,6 +307,7 @@ const pngIsTransparent: ToolEntry<NoParams> = {
 
 const pngOrientation: ToolEntry<NoParams> = {
 	id: "png-orientation",
+	slug: "png-orientation",
 	title: "PNG orientation",
 	description: "Reports whether it is portrait, landscape or square.",
 	category: "analyze",

@@ -60,6 +60,7 @@ const addTextSchema = toolSchema<AddTextParams>(
 
 const addText: ToolEntry<AddTextParams> = {
 	id: "add-text-png",
+	slug: "add-text-png",
 	title: "Add text to PNG",
 	description:
 		"Draws a text label on the image: font, size, color, bold, position on a 3×3 grid and an optional backing plate.",
@@ -138,6 +139,7 @@ const dateStampSchema = toolSchema<DateStampParams>(
 
 const dateStamp: ToolEntry<DateStampParams> = {
 	id: "date-stamp-png",
+	slug: "date-stamp-png",
 	title: "Date stamp PNG",
 	description:
 		"Stamps the current date and time using a format string (YYYY MM DD hh mm ss tokens). Same styling options as Add text.",
@@ -231,6 +233,7 @@ const watermarkTileSchema = toolSchema<WatermarkTileParams>(
 
 const watermarkTile: ToolEntry<WatermarkTileParams> = {
 	id: "watermark-tile-png",
+	slug: "watermark-tile-png",
 	title: "Watermark Tile PNG",
 	description:
 		"Covers the image with a repeating diagonal semi-transparent text tile — a protection watermark.",

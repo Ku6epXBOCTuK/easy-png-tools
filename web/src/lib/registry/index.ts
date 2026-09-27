@@ -42,3 +42,8 @@ export const TOOLS: ToolEntry[] = [
 export function getTool(id: string): ToolEntry | undefined {
 	return TOOLS.find((tool) => tool.id === id);
 }
+
+/** Поиск по адресу страницы; `getTool` остаётся поиском по внутреннему имени. */
+export function getToolBySlug(slug: string): ToolEntry | undefined {
+	return TOOLS.find((tool) => tool.slug === slug);
+}

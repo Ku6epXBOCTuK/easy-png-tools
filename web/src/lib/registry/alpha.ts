@@ -46,6 +46,7 @@ export const addStrokeSchema = toolSchema<AddStrokeParams>({
 
 const addStroke: ToolEntry<AddStrokeParams> = {
 	id: "add-stroke-png",
+	slug: "add-stroke-png",
 	title: "Outline PNG",
 	description:
 		"Adds a colored ring outline around the opaque content with the chosen thickness.",
@@ -73,6 +74,7 @@ export const findContourSchema = toolSchema<FindContourParams>({
 
 const findContour: ToolEntry<FindContourParams> = {
 	id: "find-contour-png",
+	slug: "find-contour-png",
 	title: "Find contour PNG",
 	description:
 		"Leaves only a line along the boundary of opaque regions in the chosen color and thickness.",
@@ -100,6 +102,7 @@ export const removeColorSchema = toolSchema<RemoveColorParams>({
 
 const removeColor: ToolEntry<RemoveColorParams> = {
 	id: "remove-color-from-png",
+	slug: "remove-color-from-png",
 	title: "Remove color from PNG (make transparent)",
 	description:
 		"Makes all pixels close to the chosen color transparent. The tolerance sets the allowed deviation as a percentage of the maximum color distance.",
@@ -143,6 +146,7 @@ const circleMaskSchema = toolSchema<CircleMaskParams>(
 
 const circleMask: ToolEntry<CircleMaskParams> = {
 	id: "circle-mask-png",
+	slug: "circle-mask-png",
 	title: "Circle Mask PNG",
 	description:
 		"Cuts the image into a circle. Diameter is set as a share of the smaller side.",
@@ -205,6 +209,7 @@ const squareMaskSchema = toolSchema<SquareMaskParams>(
 
 const squareMask: ToolEntry<SquareMaskParams> = {
 	id: "square-mask-png",
+	slug: "square-mask-png",
 	title: "Square Mask PNG",
 	description:
 		"Cuts the image into a rectangle with sides as a share of the smaller side.",
@@ -283,6 +288,7 @@ const starMaskSchema = toolSchema<StarMaskParams>(
 
 const starMask: ToolEntry<StarMaskParams> = {
 	id: "star-mask-png",
+	slug: "star-mask-png",
 	title: "Star Mask PNG",
 	description:
 		"Cuts the image into an n-pointed star with adjustable inner radius and rotation.",
@@ -361,6 +367,7 @@ const wavyMaskSchema = toolSchema<WavyMaskParams>(
 
 const wavyMask: ToolEntry<WavyMaskParams> = {
 	id: "wavy-mask-png",
+	slug: "wavy-mask-png",
 	title: "Wavy Mask PNG",
 	description:
 		"Cuts the image into a wavy-edged circle: radius is modulated by a sine with chosen amplitude and frequency.",
@@ -383,6 +390,7 @@ export const removeAlphaChannelSchema = toolSchema<EmptyParams>({});
 
 const removeAlphaChannel: ToolEntry<EmptyParams> = {
 	id: "remove-alpha-channel-png",
+	slug: "remove-alpha-channel-png",
 	title: "Remove alpha channel PNG",
 	description:
 		"Composites the image over a white background and saves without transparency.",
@@ -408,6 +416,7 @@ export const setAlphaChannelSchema = toolSchema<SetAlphaChannelParams>({
 
 const setAlphaChannelTool: ToolEntry<SetAlphaChannelParams> = {
 	id: "set-alpha-channel-png",
+	slug: "set-alpha-channel-png",
 	title: "Set alpha channel PNG",
 	description: "Assigns the same opacity to all pixels; colors stay unchanged.",
 	category: "alpha",
@@ -420,6 +429,7 @@ export const extractAlphaMaskSchema = toolSchema<EmptyParams>({});
 
 const extractAlphaMaskTool: ToolEntry<EmptyParams> = {
 	id: "extract-alpha-mask-png",
+	slug: "extract-alpha-mask-png",
 	title: "Extract alpha mask PNG",
 	description: "Turns transparency into a black-and-white opaque mask.",
 	category: "alpha",
@@ -444,6 +454,7 @@ export const roundCornersSchema = toolSchema<RoundCornersParams>({
 
 const roundCornersTool: ToolEntry<RoundCornersParams> = {
 	id: "round-corners-png",
+	slug: "round-corners-png",
 	title: "Round corners PNG",
 	description:
 		"Clips corners by a radius set as a percentage of half the smaller side.",
@@ -457,6 +468,7 @@ export const invertAlphaSchema = toolSchema<EmptyParams>({});
 
 const invertAlphaTool: ToolEntry<EmptyParams> = {
 	id: "invert-alpha-png",
+	slug: "invert-alpha-png",
 	title: "Invert alpha PNG",
 	description: "Opaque areas become transparent and vice versa.",
 	category: "alpha",
@@ -507,6 +519,7 @@ export const removeBackgroundSchema = toolSchema<RemoveBackgroundParams>(
 
 const removeBackgroundTool: ToolEntry<RemoveBackgroundParams> = {
 	id: "remove-background-png",
+	slug: "remove-background-png",
 	title: "Remove background PNG (smart)",
 	description:
 		"Removes a solid background: by color with tolerance, outer regions from the edges only, or every matching pixel. Can smooth the boundary.",
@@ -539,6 +552,7 @@ export const makeThickerSchema = toolSchema<MakeThickerParams>({
 
 const makeThickerTool: ToolEntry<MakeThickerParams> = {
 	id: "make-thicker-png",
+	slug: "make-thicker-png",
 	title: "Thicken PNG",
 	description: "Expands opaque areas by the given number of pixels.",
 	category: "alpha",
@@ -563,6 +577,7 @@ export const makeThinnerSchema = toolSchema<MakeThinnerParams>({
 
 const makeThinnerTool: ToolEntry<MakeThinnerParams> = {
 	id: "make-thinner-png",
+	slug: "make-thinner-png",
 	title: "Thin PNG",
 	description: "Shrinks opaque areas — thins the strokes of text and details.",
 	category: "alpha",
@@ -587,6 +602,7 @@ export const featherEdgesSchema = toolSchema<FeatherEdgesParams>({
 
 const featherEdgesTool: ToolEntry<FeatherEdgesParams> = {
 	id: "feather-edges-png",
+	slug: "feather-edges-png",
 	title: "Feather Edges PNG",
 	description:
 		"Blurs only the alpha channel: hard cutout edges become soft and gradual, colors stay untouched.",
@@ -612,6 +628,7 @@ export const cleanEdgesSchema = toolSchema<CleanEdgesParams>({
 
 const cleanEdgesTool: ToolEntry<CleanEdgesParams> = {
 	id: "clean-edges-png",
+	slug: "clean-edges-png",
 	title: "Clean Edges PNG (defringe)",
 	description:
 		"Replaces edge-halo colors of semi-transparent pixels with the nearest fully opaque color. Alpha stays as is.",
@@ -637,6 +654,7 @@ export const hardenAlphaSchema = toolSchema<HardenAlphaParams>({
 
 const hardenAlphaTool: ToolEntry<HardenAlphaParams> = {
 	id: "harden-alpha-png",
+	slug: "harden-alpha-png",
 	title: "Harden edges PNG",
 	description:
 		"Binarizes the alpha channel by threshold: semi-transparent pixels become either fully transparent or fully opaque.",
@@ -662,6 +680,7 @@ export const despeckleAlphaSchema = toolSchema<DespeckleAlphaParams>({
 
 const despeckleAlphaTool: ToolEntry<DespeckleAlphaParams> = {
 	id: "despeckle-alpha-png",
+	slug: "despeckle-alpha-png",
 	title: "Despeckle PNG",
 	description:
 		"Opening: removes lone semi-transparent pixels and small specks.",
@@ -687,6 +706,7 @@ export const closeHolesSchema = toolSchema<CloseHolesParams>({
 
 const closeHolesTool: ToolEntry<CloseHolesParams> = {
 	id: "close-holes-png",
+	slug: "close-holes-png",
 	title: "Close holes PNG",
 	description: "Closing: fills lone transparent dots inside the object.",
 	category: "alpha",

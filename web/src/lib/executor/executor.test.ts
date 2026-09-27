@@ -66,6 +66,7 @@ function makeTool(
 ): ToolEntry {
 	return {
 		id: "test-tool",
+		slug: "test-tool",
 		title: "Test tool",
 		description: "Test tool",
 		category: "analyze",

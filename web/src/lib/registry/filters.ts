@@ -26,6 +26,7 @@ export const blurSchema = toolSchema<BlurParams>({
 
 const blurTool: ToolEntry<BlurParams> = {
 	id: "blur-png",
+	slug: "blur-png",
 	title: "Blur PNG",
 	description:
 		"Gaussian blur: three passes of separable box blur — fast at any radius. Transparent edges do not darken.",
@@ -51,6 +52,7 @@ export const sharpenSchema = toolSchema<SharpenParams>({
 
 const sharpenTool: ToolEntry<SharpenParams> = {
 	id: "sharpen-png",
+	slug: "sharpen-png",
 	title: "Sharpen PNG",
 	description:
 		"Emphasizes edges with a sharpening kernel; strength sets the blend with the original. 0% means no change.",
@@ -78,6 +80,7 @@ export const silhouetteSchema = toolSchema<SilhouetteParams>({
 
 const silhouetteTool: ToolEntry<SilhouetteParams> = {
 	id: "silhouette-png",
+	slug: "silhouette-png",
 	title: "Silhouette PNG",
 	description:
 		"Turns all visible pixels into a single solid color while keeping their transparency — instant silhouette.",
@@ -103,6 +106,7 @@ export const vignetteSchema = toolSchema<VignetteParams>({
 
 const vignetteTool: ToolEntry<VignetteParams> = {
 	id: "vignette-png",
+	slug: "vignette-png",
 	title: "Vignette PNG",
 	description:
 		"Smoothly darkens the edges of the image, leaving the center untouched.",
@@ -128,6 +132,7 @@ export const pixelateSchema = toolSchema<PixelateParams>({
 
 const pixelateTool: ToolEntry<PixelateParams> = {
 	id: "pixelate-png",
+	slug: "pixelate-png",
 	title: "Pixelate PNG",
 	description:
 		"Averages every blockSize×blockSize area into one color — classic mosaic.",
@@ -170,6 +175,7 @@ export const randomizePixelsSchema = toolSchema<RandomizePixelsParams>(
 
 const randomizePixels: ToolEntry<RandomizePixelsParams> = {
 	id: "randomize-pixels-png",
+	slug: "randomize-pixels-png",
 	title: "Randomize Pixels PNG",
 	description:
 		"Shuffles blocks of the image between positions. Same seed gives the same arrangement.",
@@ -222,6 +228,7 @@ export const addNoiseSchema = toolSchema<AddNoiseParams>(
 
 const addNoiseTool: ToolEntry<AddNoiseParams> = {
 	id: "add-noise-png",
+	slug: "add-noise-png",
 	title: "Add Noise to PNG",
 	description:
 		"Adds film-grain style noise. Deterministic by seed; monochrome keeps original hue balance.",
@@ -247,6 +254,7 @@ export const jpegArtifactsSchema = toolSchema<JpegArtifactsParams>({
 
 const jpegArtifacts: ToolEntry<JpegArtifactsParams> = {
 	id: "jpeg-artifacts-png",
+	slug: "jpeg-artifacts-png",
 	title: "JPEG artifacts",
 	description:
 		"Simulates low-quality JPEG re-compression — visible blocks and smeared colors.",
