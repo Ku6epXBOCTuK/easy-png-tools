@@ -9,8 +9,8 @@
     "dev": "pnpm --dir web dev",
     "build": "pnpm --dir web build",
     "format": "pnpm format:docs && pnpm --dir web format",
-    "format:docs": "prettier --write docs --log-level warn --cache",
-    "check:docs": "prettier --check docs --cache",
+    "format:docs": "prettier --write AGENTS.md README.md docs --log-level warn --cache",
+    "check:docs": "prettier --check AGENTS.md README.md docs --cache",
     "generate:fixtures": "node tests/fixtures/manual-edge-cases/generate.mjs"
   },
   "keywords": [],

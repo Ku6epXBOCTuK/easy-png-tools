@@ -2,14 +2,24 @@
 
 > Статус: **draft** — на ревью.
 >
-> Источник: `docs/tools-audit.md`. Этот документ разбивает аудит на конкретные
-> шаги, группирует по типу работы и фиксирует решения. Порядок и правила
-> проверки — `docs/quality-gates.md`; точки касания при добавлении вида поля —
-> `docs/architecture.md`, раздел 4.
+> Находки — `docs/tools-audit.md` (что плохо, с датой прохода). Этот документ
+> задаёт **порядок правок** полей и раскладки волнами; сами задачи — в
+> `docs/backlog.md`. Проверки и гейты — `docs/quality-gates.md`; точки касания
+> при добавлении вида поля — `docs/architecture.md`, раздел 4.
 >
-> **Ids инструментов в таблицах волны B сверены с реестром.** Названия из
-> `tools-audit.md` вида `png-to-hsl` или `color-wheel-generator` в реестре нет
-> (`hsl`, `color-wheel-png`).
+> **Идентификаторы шагов — `FA-*` (fields-audit).** Буквы `C*`/`Q*` в других
+> документах относятся к архивным волнам редизайна и здесь не используются.
+>
+> **Как читать волны.** Шаг с пометкой «реализовано» — закрытый, его правку
+> можно не повторять; шаг без пометки — работа. Пометка стоит в первом абзаце
+> шага, а не в заголовке, чтобы не потерять её при чтении оглавления. Задачи,
+> которые в бэклоге, здесь не дублируются: этот документ задаёт **порядок**,
+> backlog — **учёт** (`docs/backlog.md`).
+>
+> **Ids инструментов сверены с реестром** (`web/src/lib/registry/`) для шагов
+> FA-B и волн C–E. Названия из `docs/tools-audit.md` вида `png-to-hsl`,
+> `color-wheel-generator`, `webp-to-png` в реестре отсутствуют (реальные —
+> `hsl`, `color-wheel-png`): при переносе пункта аудита в шаг id сверять.
 
 ## 0. Ключевое решение: select → buttons
 
@@ -87,7 +97,7 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 
 ## 1. Волна A — инфраструктура (1 коммит)
 
-### Шаг A1. Новый тип `buttons` в схеме
+### FA-A1. Новый тип `buttons` в схеме
 
 Файлы:
 
@@ -96,7 +106,7 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 - `web/src/lib/components/fields/schema/ButtonsControl.svelte` — новый компонент
 - `web/src/lib/components/SchemaFields.svelte` — импорт + запись в `FIELDS`
 
-### Шаг A2. Seed → input + randomize
+### FA-A2. Seed → input + randomize
 
 Для `field.number()` с `kind: "seed"` (или новый подтип `field.seed()`) —
 рендерить поле ввода + кнопку «Random» вместо range slider.
@@ -122,7 +132,7 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 Каждый шаг — один коммит, < 500 строк. Меняем `field.select()` →
 `field.buttons()` в перечисленных ниже схемах.
 
-### B1. geometry.ts
+### FA-B1. geometry.ts
 
 | Инструмент              | Поле     | Опции                                     |
 | ----------------------- | -------- | ----------------------------------------- |
@@ -138,7 +148,7 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 `field.select()`, т.к. 9 кнопок в ряд не поместятся. Аналогично `position9` (уже
 отдельный компонент `PositionControl`).
 
-### B2. color.ts
+### FA-B2. color.ts
 
 | Инструмент               | Поле      | Опции                                |
 | ------------------------ | --------- | ------------------------------------ |
@@ -150,7 +160,7 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 **Исключение:** channel spaces (hsl/hsv/... component) — 3-6 опций, но это
 динамические инструменты, оставить `select`.
 
-### B3. analyze.ts
+### FA-B3. analyze.ts
 
 | Инструмент                | Поле | Опции              |
 | ------------------------- | ---- | ------------------ |
@@ -162,13 +172,13 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 
 Все используют общий `maskBaseFields` — правка в одном месте.
 
-### B4. filters.ts
+### FA-B4. filters.ts
 
 | Инструмент    | Поле | Опции        |
 | ------------- | ---- | ------------ |
 | add-noise-png | mode | mono / color |
 
-### B5. generate.ts
+### FA-B5. generate.ts
 
 | Инструмент         | Поле         | Опции                 |
 | ------------------ | ------------ | --------------------- |
@@ -187,14 +197,15 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 
 ## 3. Волна C — обязательные фиксы (баги + дефолты)
 
-### C1. Source-aware defaults для dimension-полей
+### FA-C1. Source-aware defaults для dimension-полей — реализовано
 
 Source-aware defaults реализованы: общий resolver в `registry-schema`
 (`applySourceDefaults`). Для `resize-png` и `crop-png` дефолт после загрузки
 равен размерам текущего source; до загрузки используется положительный fallback
-`1×1`. Один-sided `0` у resize сохраняет режим auto.
+`1×1`. Один-sided `0` у resize сохраняет режим auto. Проверено тестом
+`registry.test.ts` («resize и crop получают размеры текущего source»).
 
-### C2. symmetric-copy-png: "keep side" не работает
+### FA-C2. symmetric-copy-png: "keep side" не работает
 
 Баг в `run()`: `keepSide` не учитывает `axis`. При `axis: "vertical"` (удвоение
 ширины) работают только `left`/`right`, `top`/`bottom` не имеют смысла. Нужно:
@@ -205,11 +216,12 @@ Source-aware defaults реализованы: общий resolver в `registry-s
 значение. Пока достаточно в `run()`: если `axis === "vertical"` и `keepSide` ∈
 {top, bottom} → заменить на `left`.
 
-### C3. Source-aware bounds (отдельный следующий шаг)
+### FA-C3. Source-aware bounds (отдельный следующий шаг) — не начат
 
-Реализованы только defaults dimension-полей через `SchemaContext` и
-`applySourceDefaults`. Динамические min/max для crop x/y, shift и resize
-остаются отдельной задачей: bounds не следует смешивать с default resolver.
+Source-aware **defaults** реализованы через `SchemaContext` и
+`applySourceDefaults`. Динамические min/max для crop x/y, shift и resize не
+реализованы и остаются отдельной задачей: bounds не следует смешивать с default
+resolver.
 
 **Что нужно спроектировать и завести:**
 
@@ -240,40 +252,43 @@ Source-aware defaults реализованы: общий resolver в `registry-s
 
 Это отдельный рефакторинг; source-aware defaults не заменяют bounds.
 
-### C4. verify-is-png: неверное название
+### FA-C4. verify-is-png: неверное название — решение принято, шаг не выполнен
 
-Проверяет текст, не PNG-файл. Переименовать:
+Проверяет текст, не PNG-файл. Варианты:
 
-- `id` → `verify-is-png-data` (или оставить для обратной совместимости)
-- `title` → "Verify PNG data"
-- `description` → уточнить
+- `title` → "Verify PNG data", `description` → уточнить; `id` оставить — он же
+  адрес страницы, переименование ломает ссылку
+- либо полное переименование `id` → `verify-is-png-data` с редиректом со старого
+  URL (нужен вордстат, иначе страница выпадает из индекса)
 
-**Решение:** поменять title и description, id не трогать (url-dependent).
+**Решение:** поменять title и description, id не трогать. Переименование `id`
+затрагивает адрес — с ним связана задача разведения `id`/`slug`
+(`docs/backlog.md`), поэтому в одиночку не делается.
 
 ---
 
 ## 4. Волна D — обязательные фиксы (новые параметры)
 
-### D1. remove-alpha-channel-png: выбор цвета фона
+### FA-D1. remove-alpha-channel-png: выбор цвета фона
 
 Сейчас захардкожен `#ffffff`. Добавить `field.color({ default: "#ffffff" })`.
 
 Файл: `alpha.ts`, схема `removeAlphaChannelSchema`.
 
-### D2. extract-alpha-mask-png: галочка «инвертировать»
+### FA-D2. extract-alpha-mask-png: галочка «инвертировать»
 
 Добавить `field.checkbox({ label: "fields.invertMask", default: false })`. В
 `run()`: если `invert`, вызвать `invertAlpha()` после `extractAlphaMask()`.
 
 Файл: `alpha.ts`.
 
-### D3. change-canvas-size-png: position9 вместо select
+### FA-D3. change-canvas-size-png: position9 вместо select
 
 `anchor` сейчас `field.select()` с 9 опциями → `field.position9()`.
 
 Файл: `geometry.ts`. Уже есть `PositionControl`.
 
-### D4. Generators: добавить height
+### FA-D4. Generators: добавить height
 
 Инструменты без `size`/`height`:
 
@@ -287,7 +302,7 @@ Source-aware defaults реализованы: общий resolver в `registry-s
 
 Файл: `generate.ts`.
 
-### D5. add-border-png: прозрачность цвета
+### FA-D5. add-border-png: прозрачность цвета
 
 Текущий `field.color()` не поддерживает alpha. Пока что: оставить как есть
 (прозрачность не поддерживается нативным color picker). Отметить в аудите как
@@ -297,29 +312,29 @@ blocked.
 
 ## 5. Волна E — полировка (некритично)
 
-### E1. Плейсхолдер "нет параметров"
+### FA-E1. Плейсхолдер "нет параметров"
 
 Инструменты с пустой схемой (`EmptyParams`) выглядят странно. Добавить
 `EmptyState` или подсказку "No parameters — click Run".
 
 Файл: `SchemaToolView.svelte` — показать подсказку если `schema.fields` пуст.
 
-### E2. quantize-png: пресеты
+### FA-E2. quantize-png: пресеты
 
 `field.slider` с max 64 → добавить пресеты (8, 16, 32, 64) как кнопки под
 слайдером. Либо `field.buttons()` с 4 опциями вместо слайдера.
 
-### E3. trim-empty-space-png: 0-254 → проценты
+### FA-E3. trim-empty-space-png: 0-254 → проценты
 
 Текущий `min: 0, max: 254` — нестандартно. Добавить переключатель px/% (аналог
-шага A1 — `variant: "alpha-threshold"` в NumberSpec).
+шага FA-A1 — `variant: "alpha-threshold"` в NumberSpec).
 
-### E4. add-text-png: plate offset
+### FA-E4. add-text-png: plate offset
 
 Plate снизу имеет большой отступ — добавить галочку "compact plate" или
 уменьшить дефолтный padding.
 
-### E5. emoji-to-png: выбор эмодзи
+### FA-E5. emoji-to-png: выбор эмодзи
 
 Поле `text` → добавить группу часто используемых эмодзи как кнопки- пресеты над
 полем ввода.
@@ -328,12 +343,11 @@ Plate снизу имеет большой отступ — добавить г�
 
 ## 6. Верификация
 
-После каждой волны:
-
-1. `pnpm --dir web build` — без ошибок
-2. `pnpm --dir web exec svelte-check --tsconfig ./tsconfig.json` — без ошибок
-3. `pnpm --dir web lint` — без ошибок (кроме ожидаемых долгов)
-4. Ручная проверка в браузере: параметры рендерятся, инструменты работают
+Проверки и их минимальный набор — `docs/quality-gates.md`, раздел «Быстрые
+подмножества»; правила e2e — `docs/testing-strategy.md`. Для волн с изменением
+пользовательского потока (новый контрол, новая раскладка) обязателен ручной
+смоук в браузере: часть находок — про воспринимаемость, которую не ловит ни один
+гейт. `pnpm verify` — перед ревью волны.
 
 ---
 
@@ -346,7 +360,8 @@ Plate снизу имеет большой отступ — добавить г�
 
 - **Pixel ↔ Percent** (circle-mask, square-mask, star-mask, wavy-mask — %→px,
   round-corners — px→%): нужен компонент переключателя единиц в слайдере.
-  Отложен до волны E, т.к. требует правки `RangeControl` + всех схем.
+  Требует правки `RangeControl` + всех схем — в волны A–E не входит, нужен
+  отдельный этап.
 - **Smoothing checkbox** для масок (circle, square, star, wavy, round-corners,
   invert-alpha): нужен `field.checkbox("smoothing")` + правка core (shapes.ts,
   alpha). Отложен — требует визуального тестирования.

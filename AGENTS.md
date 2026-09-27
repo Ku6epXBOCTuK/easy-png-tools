@@ -17,6 +17,7 @@
 | Юнит-тесты              | `pnpm --dir web test`                             |
 | Тесты lint-правил       | `pnpm --dir web test:rules`                       |
 | Линтинг                 | `pnpm --dir web lint:all`                         |
+| Только токены           | `pnpm --dir web lint:tokens`                      |
 | E2E                     | `pnpm --dir web test:e2e`                         |
 | Форматирование          | `pnpm format` (код + docs)                        |
 | Проверка форматирования | `pnpm check:docs` + `pnpm --dir web format:check` |
@@ -35,6 +36,7 @@
 | Детали lint-правил и токенов                  | `web/eslint-plugins/README.md`     |
 | Задачи и идеи                                 | `docs/backlog.md`                  |
 | Актуальный список инструментов                | `docs/tools-map.md`                |
+| Правка полей и раскладки по волнам            | `docs/plan-fields-audit-fixes.md`  |
 | Ручная приёмка UI                             | `docs/checklist-manual-testing.md` |
 | Индекс остальных документов                   | `docs/README.md`                   |
 

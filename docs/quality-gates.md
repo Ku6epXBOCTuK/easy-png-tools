@@ -19,7 +19,8 @@ pnpm verify
 3. `pnpm --dir web test:rules` — отдельный быстрый прогон тестов ESLint-правил.
 4. `pnpm --dir web lint:all` — ESLint, Stylelint и token audit.
 5. `pnpm --dir web format:check` — форматирование кода `web/`.
-6. `pnpm check:docs` — форматирование Markdown.
+6. `pnpm check:docs` — форматирование Markdown (`AGENTS.md`, `README.md`,
+   `docs/`).
 7. `pnpm --dir web build` — production build.
 
 Полный `test` уже включает тесты lint-правил; отдельный `test:rules` в `verify`
@@ -28,19 +29,13 @@ pnpm verify
 ## Coverage
 
 `pnpm --dir web test:coverage` считает покрытие только по `src/lib` и падает
-ниже порога. Scope и список исключений — в `web/vitest.config.ts`.
-
-| Метрика    | Порог |
-| ---------- | ----- |
-| statements | 90    |
-| branches   | 82    |
-| functions  | 72    |
-| lines      | 91    |
+ниже порога. Пороги и список исключений из scope — в `web/vitest.config.ts`
+(`coverage.thresholds`, `coverage.exclude`); здесь они не дублируются, чтобы
+числа не устарели молча (`AGENTS.md`).
 
 Порог — нижняя граница, а не оценка качества: он блокирует регрессию и не
 требует сначала закрывать весь долг. Актуальные проценты даёт
-`pnpm --dir web test:coverage`; здесь они не дублируются, чтобы число не
-устарело молча (`AGENTS.md`). Локальный замер занимает единицы секунд, поэтому
+`pnpm --dir web test:coverage`. Локальный замер занимает единицы секунд, поэтому
 отдельного прогона в `verify` нет — `test:coverage` заменяет `test`.
 
 Исключения из scope и их причины:
