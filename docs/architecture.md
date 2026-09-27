@@ -16,9 +16,9 @@ web/src/lib/
   catalog.ts           # группировка страниц и счётчики для /list-tools
   categories.ts        # id/названия категорий
   tool-icons.ts        # slug страницы → иконка
-  core/                # чистый TS: операции над ImageData, без DOM
+  core/                # операции над ImageData; без DOM, кроме io.ts/domText.ts
   executor/            # единственная точка исполнения инструментов
-  i18n/                # словари ru/en, t(), списки для i18n-правил линтера
+  i18n/                # словари ru/en, t(), состояние локали
   components/          # UI (fields/, layout/, ui/, schema-компоненты)
   zip.ts               # сборка мультифайлового результата (1 → many)
   theme.svelte.ts      # light/dark + localStorage
@@ -30,9 +30,15 @@ web/src/routes/
 ```
 
 Правило зависимостей: `components/**` и `routes/**` знают про `registry/**`,
-`executor/**` и `core/**`; `core/**` не знает ни о ком и не зависит от DOM;
-`registry/**` описывает данные и знает только `core/**` и `registry-schema.ts`.
-Нарушение этого порядка — повод не заводить импорт, а инвертировать зависимость.
+`executor/**` и `core/**`; `core/**` не знает ни о ком; `registry/**` описывает
+данные и знает только `core/**` и `registry-schema.ts`. Нарушение этого порядка
+— повод не заводить импорт, а инвертировать зависимость.
+
+Исключение из «core без DOM» — `core/io.ts` (декодирование файла, кодирование,
+скачивание) и `core/domText.ts` (canvas-рендер текста и эмодзи). Они трогают
+`document`, `createImageBitmap` и `HTMLCanvasElement`, поэтому не работают в
+node-Vitest и исключены из coverage-гейта (`docs/quality-gates.md`, раздел
+Coverage). Всё остальное в `core/**` — чистые функции над `ImageData`.
 
 ### Чего в коде нет
 
@@ -45,9 +51,11 @@ web/src/routes/
   полей двух инструментов — отдельная работа, описанная как фаза 11
   `docs/roadmap.md`. Под неё зарезервированы `components/StepCard.svelte`
   (сейчас импортируется только витриной `/kit`) и ключи `chain.*`,
-  `errors.badPipelineShape`, `errors.noSteps`.
-- **Разделения страниц, которые делят один инструмент** — сводит 14
-  convert-страниц на один инструмент; задача в `docs/backlog.md`.
+  `errors.badPipelineShape`, `errors.pipelineVersion`, `errors.noSteps`.
+- **Разделения страниц, которые делят один инструмент** — сводит все
+  convert-страницы на один инструмент; задача в `docs/backlog.md`. Пока
+  `registry.test.ts` не требует, чтобы на инструмент ссылались две страницы, а
+  на практике не ссылается ни одна.
 
 Задачи по обоим пунктам — в `docs/backlog.md`; архитектурные решения по
 пайплайну — `docs/roadmap.md`.
@@ -67,7 +75,7 @@ registry/{tools,pages}/*.ts
                  ├─► SchemaFields.svelte     поля из schema.fields (FIELDS: kind → контрол)
                  ├─► SchemaSourceTile/SchemaTextSource.svelte   вход
                  └─► SchemaPreview + schema-preview-model.ts    вид превью
-                 │  buildSchemaPreviewModel(inputMode, resultKind, …) → source/result/hasResult
+                 │  buildSchemaPreviewModel(input) → { sourceValue, resultValue, formatValue, hasResult }
                  ▼
              executor.execute(ctx)          единственная точка исполнения
                  │  сериализация параметров → worker → worker-handler → tool.run(ctx)
@@ -104,9 +112,9 @@ registry/{tools,pages}/*.ts
 | `id`       | внутреннее имя инструмента, уникально; ключ `tools.<id>.*` и `toolId` в worker |
 | `schema`   | `toolSchema({ fields, layout?, meta? })`                                       |
 | `input`    | `"image" \| "text" \| "none"` — что ждёт инструмент на входе                   |
-| `result`   | `"image" \| "text" \| "verdict" \| "files"` — что отдаёт                       |
-| `domOnly`  | инструмент требует DOM (canvas); превью-executor запускает его напрямую        |
-| `output`   | mime/ext/quality для скачивания (не у всех)                                    |
+| `result`?  | `"image" \| "text" \| "verdict" \| "files"` — что отдаёт                       |
+| `domOnly`? | инструмент требует DOM (canvas); превью-executor запускает его напрямую        |
+| `output`?  | mime/ext/quality для скачивания (не у всех)                                    |
 | `run(ctx)` | единственный метод: `ctx` → `ToolResult`                                       |
 
 `Page` (записи в `registry/pages/<group>.ts`):
@@ -121,15 +129,22 @@ registry/{tools,pages}/*.ts
 
 Кто по чему адресуется: `slug` — маршрут, имя файла, `TOOL_ICONS`, поиск по
 каталогу; `id` — ключ `tools.<id>.*` (подписи полей, `options`, `results`),
-`toolId` worker-протокола и запись пайплайна. Один инструмент может обслуживать
-несколько страниц, одна страница — состоять из нескольких инструментов.
+`toolId` worker-протокола и запись пайплайна. Модель допускает, что один
+инструмент обслуживает несколько страниц, а страница состоит из нескольких
+инструментов; на практике пока каждая страница ссылается на свой инструмент, а
+исполняется первый (и единственный) шаг.
 
 Инструмент работает с любым поддержанным форматом, поэтому png-интент живёт
 только в `slug`: `id: "crop"` → страница `slug: "crop-png"` → `crop-png.png`.
-Правило имени: снять суффикс `-png` и в середине имени (`png-to-base64` →
-`to-base64`, `X-to-png` → `from-X`, `verify-is-png` → `verify-png`); следствие —
+Правило имени `id`: снять суффикс `-png` и в середине имени (`png-to-base64` →
+`to-base64`, `X-to-png` → `from-X`, `verify-is-png` → `verify-png`). Правило
+относится только к `id`: у `slug` своя история и SEO-значение, поэтому
 переименование `id` не трогает адреса, а переименование `slug` меняет адрес, имя
-файла, ключ `pages.*`, иконку и запись в `docs/tools-map.md`.
+файла, ключ `pages.*`, иконку и запись в `docs/tools-map.md`. Слаги, сложившиеся
+до разделения реестра, правилу не соответствуют (`convert-png-to-jpg`,
+`change-png-opacity`, `png-is-grayscale`, `verify-is-png` и другие) — это не
+ошибка, менять их без SEO-решения нельзя. Форму slug проверяет
+`registry.test.ts` (только форма, не смысл).
 
 Хелперы `genTool` / `imgTool` / `textGen` из `types.ts` задают `run` для типовых
 случаев (приведение типа результата), чтобы запись не повторяла обвязку. `TOOLS`
@@ -154,15 +169,18 @@ registry/{tools,pages}/*.ts
   допустимому виду. Правка поведения полей идёт здесь, а не в компоненте.
 
 Новый вид поля требует: спека + фабрика `field.*` → запись в `fieldSpecs` →
-контрол в `components/fields/schema/` → ключ в `FIELDS` → дефолт и санитизация →
+контрол (`components/fields/schema/`, а для `dimension` —
+`fields/DimensionField.svelte`) → ключ в `FIELDS` → дефолт и санитизация →
 i18n-подписи → тест в `registry-schema.test.ts`.
 
 ## 5. Исполнение
 
-`executor/executor.ts` — фабрика `createExecutor(factories?)` плюс готовый
-экспорт `execute`. Контракт асинхронный (`Promise`), параметры сериализуются,
-исполнение уходит в `executor.worker.ts`; `worker-handler.ts` разбирает
-сообщение и зовёт `run`. Если worker недоступен — прямой вызов.
+`executor/executor.ts` — фабрика `createExecutor({ workerFactory? })` плюс
+готовый экспорт `execute`. Контракт асинхронный (`Promise`), параметры
+сериализуются по `executor/protocol.ts`, исполнение уходит в
+`executor.worker.ts`; `worker-handler.ts` разбирает сообщение и зовёт `run`.
+Если worker недоступен — прямой вызов. UI импортирует `execute` из
+`executor/index.ts`.
 
 Отсюда следует: подключение wasm позже означает замену реализации **внутри**
 исполнителя, а не правку компонентов.
@@ -170,13 +188,16 @@ i18n-подписи → тест в `registry-schema.test.ts`.
 ## 6. i18n
 
 Словари — `web/src/lib/i18n/` (`en.ts`, `ru.ts`, общий `dict.ts` с
-`LOCALES`/`BASE_LOCALE`). Пользовательский текст живёт только в словарях и
-читается через `t()`. Секции разделены по слоям: `pages.<slug>.title` и
-`pages.<slug>.description` — тексты страницы (в базовой локали секция пустая, EN
-берётся из реестра), `tools.<id>.options/params/results` — подписи полей и
-тексты вердиктов инструмента, `fields.*`/`groups.*` — общие подписи схемы.
-Инварианты паритета ключей, плейсхолдеров и запрет хардкода проверяются
-линтером, детали — `web/eslint-plugins/README.md`.
+`LOCALES`/`BASE_LOCALE`, `t.ts` с `t()`, `locale.svelte.ts` с состоянием
+локали). Пользовательский текст живёт только в словарях и читается через `t()`.
+Списки ключей и допустимых атрибутов для i18n-правил линтера лежат не здесь, а в
+`web/eslint-plugins/i18n/lists.js`. Секции разделены по слоям:
+`pages.<slug>.title` и `pages.<slug>.description` — тексты страницы (в базовой
+локали секция пустая, EN берётся из реестра),
+`tools.<id>.options/params/results` — подписи полей и тексты вердиктов
+инструмента, `fields.*`/`groups.*` — общие подписи схемы. Инварианты паритета
+ключей, плейсхолдеров и запрет хардкода проверяются линтером, детали —
+`web/eslint-plugins/README.md`.
 
 ## 7. Точки расширения
 
@@ -204,7 +225,7 @@ i18n-подписи → тест в `registry-schema.test.ts`.
    `from-base64`, `is-grayscale`).
 4. **Описать схему** через `field.*`, задать `layout`, если поля нужно
    сгруппировать. Качество кодирования (`quality`) — не поле страницы, а
-   настройка скачивания (`docs/plan-seo.md` §1, S1f).
+   настройка скачивания (`docs/plan-seo.md` §4, S1f).
 5. **Написать `run`** поверх `core/*`; пиксельные операции — чистые функции в
    `core/`, без DOM.
 6. **Добавить страницу** в `registry/pages/<group>.ts`: `slug` с адресным
@@ -221,8 +242,10 @@ i18n-подписи → тест в `registry-schema.test.ts`.
     «Реализовано», формат строки — в шапке раздела. Карта перечисляет **`slug`
     страниц** из `registry/pages/`, то есть адреса. Проверяет
     `web/src/lib/registry/tools-map-doc.test.ts`: slug без страницы и страница
-    без записи в карте роняют тест. Обоснование и границы автоматизации —
-    `docs/decisions.md`, раздел 4.
+    без записи в карте роняют тест; разделы «Можно добавить» и «Идеи»
+    проверяются в обратную сторону — реализованный slug в плане тоже роняет
+    тест, поэтому при переезде инструмента из плана в реестр его вынимают
+    оттуда. Обоснование и границы автоматизации — `docs/decisions.md`, раздел 4.
 
 Ожидаемый минимум проверок: `pnpm --dir web check` и `pnpm --dir web test`; для
 инструмента, меняющего пользовательский поток, — e2e (см. раздел 3

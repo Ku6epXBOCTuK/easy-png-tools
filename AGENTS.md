@@ -26,19 +26,28 @@
 
 Читать только нужную строку, а не все документы подряд.
 
-| Задача                                        | Документ                           |
-| --------------------------------------------- | ---------------------------------- |
-| Слои, поток данных, новый инструмент/поле     | `docs/architecture.md`             |
-| Какие проверки запускать, пороги, CI          | `docs/quality-gates.md`            |
-| Правка самих гейтов: «почему так, а не иначе» | `docs/decisions.md`                |
-| Порядок работы, нагрузка на машину            | `docs/agent-workflow.md`           |
-| Locator-ы, fixtures, browser matrix           | `docs/testing-strategy.md`         |
-| Детали lint-правил и токенов                  | `web/eslint-plugins/README.md`     |
-| Задачи и идеи                                 | `docs/backlog.md`                  |
-| Актуальный список инструментов                | `docs/tools-map.md`                |
-| Правка полей и раскладки по волнам            | `docs/plan-fields-audit-fixes.md`  |
-| Ручная приёмка UI                             | `docs/checklist-manual-testing.md` |
-| Индекс остальных документов                   | `docs/README.md`                   |
+| Задача                                         | Документ                           |
+| ---------------------------------------------- | ---------------------------------- |
+| Слои, поток данных, новый инструмент/поле      | `docs/architecture.md`             |
+| Какие проверки запускать, пороги, CI           | `docs/quality-gates.md`            |
+| Правка самих гейтов: «почему так, а не иначе»  | `docs/decisions.md`                |
+| Порядок работы, нагрузка на машину             | `docs/agent-workflow.md`           |
+| Locator-ы, fixtures, browser matrix            | `docs/testing-strategy.md`         |
+| Детали lint-правил и токенов                   | `web/eslint-plugins/README.md`     |
+| Задачи и идеи                                  | `docs/backlog.md`                  |
+| Актуальный список инструментов                 | `docs/tools-map.md`                |
+| Правка полей и раскладки по волнам             | `docs/plan-fields-audit-fixes.md`  |
+| Ручная приёмка UI                              | `docs/checklist-manual-testing.md` |
+| Направления развития, фазы 1–11                | `docs/roadmap.md`                  |
+| SEO/GEO-план (адреса, `noindex`, sitemap)      | `docs/plan-seo.md`                 |
+| API/PWA/шрифты                                 | `docs/plan-platform.md`            |
+| Переименование бренда и покупка домена         | `docs/plan-domain.local.md` †      |
+| Сырые UX-находки по инструментам (вход аудита) | `docs/tools-audit.md`              |
+| Архивирование и удаление старых документов     | `docs/archive/README.md`           |
+| Индекс остальных документов                    | `docs/README.md`                   |
+
+† `docs/plan-domain.local.md` вне git, в клоне отсутствует — в этом случае
+задачу ищут по `docs/plan-seo.md` §6.
 
 ## Инварианты, которые линтер не проверяет
 

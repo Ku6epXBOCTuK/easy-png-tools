@@ -105,13 +105,25 @@ non-blocking E2E не считается заменой локальному smo
 
 `web/playwright.config.ts` запускает четыре проекта:
 
-| Проект            | Движок   | Спецификации                                                           |
-| ----------------- | -------- | ---------------------------------------------------------------------- |
-| `chromium`        | Chromium | все e2e                                                                |
-| `firefox`         | Firefox  | `pipeline`, `png-fixtures`, `text-and-verdicts`                        |
-| `webkit`          | WebKit   | `pipeline`, `png-fixtures`, `text-and-verdicts`                        |
-| `mobile-chromium` | Chromium | `navigation`, `catalog`, `generators`, `pipeline`, 390×844, `hasTouch` |
+| Проект            | Движок   | Спецификации                                                             |
+| ----------------- | -------- | ------------------------------------------------------------------------ |
+| `chromium`        | Chromium | все e2e                                                                  |
+| `firefox`         | Firefox  | `tool-flows`, `png-fixtures`, `text-and-verdicts`                        |
+| `webkit`          | WebKit   | `tool-flows`, `png-fixtures`, `text-and-verdicts`                        |
+| `mobile-chromium` | Chromium | `navigation`, `catalog`, `generators`, `tool-flows`, 390×844, `hasTouch` |
 
+- Название `tool-flows.spec.ts` описывает содержание: сквозной поток одного
+  инструмента (загрузка → правка параметра → результат → download) на наборе
+  представительных страниц. Пайплайна в коде нет (`docs/architecture.md`, раздел
+  1), поэтому спеку нельзя называть `pipeline` — при её переименовании поправить
+  `browserContractTests` и `mobileTests` в `web/playwright.config.ts` и
+  `allowDefaultProject` в `web/eslint.config.js`.
+- Рядом живёт `tools-smoke.spec.ts` — дешёвый проход по выборке страниц («выдал
+  результат без ошибок»): по одной-двум на категорию, а не по каждому
+  инструменту. Остальные страницы закрыты точечными спеками (`generators`,
+  `text-and-verdicts`, `tool-flows`). `tool-flows` отвечает за более глубокие
+  проверки, `tools-smoke` — за дешёвый прогон подряд; дублировать их цели не
+  стоит.
 - Новые engine-специфичные фичи сначала добавляются в `chromium`, потом
   решается, попадает ли spec в `browserContractTests`.
 - Расхождения декодеров не ужесточаются и не скрываются skip-ом: они описаны в

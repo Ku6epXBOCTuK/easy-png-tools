@@ -16,13 +16,20 @@
 > которые в бэклоге, здесь не дублируются: этот документ задаёт **порядок**,
 > backlog — **учёт** (`docs/backlog.md`).
 >
-> **Инструменты в этом документе названы по адресам страниц (slug).** В коде у
-> страницы `slug` (`registry/pages/`), у вызываемого инструмента — `id` без
-> png-интента (`crop-png` → `id: "crop"`, `png-to-hsl` → `to-hsl`), модель —
-> `docs/architecture.md`, раздел 3. Названия из `docs/tools-audit.md` вида
-> `color-wheel-generator`, `webp-to-png` в реестре отсутствуют (реальная
-> страница — `color-wheel-png`): при переносе пункта аудита в шаг сверять с
-> `PAGES`.
+> **В этом документе инструменты названы по `id`** (`registry/tools/`), а не по
+> адресу страницы: поля и раскладка принадлежат схеме инструмента, а страница
+> только ссылается на список шагов (`Page.steps`), где сейчас ровно один
+> инструмент, а в будущем может быть несколько. Поэтому «у страницы `crop-png`
+> есть поля x/y» неверно — поля есть у инструмента `crop`, а страница лишь
+> показывает его. `id` не несёт png-интента: страница `crop-png` вызывает
+> `id: "crop"`, страница `png-to-hsl` — `id: "to-hsl"` (модель —
+> `docs/architecture.md`, раздел 3).
+>
+> **Как переносить пункты аудита.** `docs/tools-audit.md` назван по страницам,
+> потому что это то, что видит пользователь. При переносе пункта в шаг мапить
+> slug → `id` через `page.steps[0].id` в `registry/pages/`. Названия аудита вида
+> `color-wheel-generator` и `webp-to-png` в реестре отсутствуют (реальная
+> страница — `color-wheel-png`, инструмент — `color-wheel`).
 
 ## 0. Ключевое решение: select → buttons
 
@@ -124,9 +131,9 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 
 - `web/src/lib/registry-schema.ts` — `NumberSpec.variant?: "seed"`
 - `web/src/lib/components/fields/schema/RangeControl.svelte` — условный рендер
-- `web/src/lib/registry/filters.ts` — `randomizePixels`, `addNoise`: поле seed →
-  `{ ...field.number(...), spec: { ...spec, variant: "seed" } }` (или
-  пересоздать через `field.seed()`)
+- `web/src/lib/registry/tools/filters.ts` — `randomizePixels`, `addNoiseTool`:
+  поле seed → `{ ...field.number(...), spec: { ...spec, variant: "seed" } }`
+  (или пересоздать через `field.seed()`)
 
 ---
 
@@ -137,64 +144,68 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 
 ### FA-B1. geometry.ts
 
-| Инструмент              | Поле     | Опции                                     |
-| ----------------------- | -------- | ----------------------------------------- |
-| rotate-png              | angle    | 90° / 180° / 270°                         |
-| flip-png                | axis     | horizontal / vertical                     |
-| swap-orientation-png    | target   | portrait / landscape                      |
-| symmetric-copy-png      | axis     | vertical / horizontal                     |
-| symmetric-copy-png      | keepSide | left / right / top / bottom               |
-| change-aspect-ratio-png | ratio    | 1:1 / 4:3 / 3:4 / 3:2 / 2:3 / 16:9 / 9:16 |
-| change-aspect-ratio-png | mode     | crop / pad                                |
+| Инструмент          | Поле     | Опции                                     |
+| ------------------- | -------- | ----------------------------------------- |
+| rotate              | angle    | 90° / 180° / 270°                         |
+| flip                | axis     | horizontal / vertical                     |
+| swap-orientation    | target   | portrait / landscape                      |
+| symmetric-copy      | axis     | vertical / horizontal                     |
+| symmetric-copy      | keepSide | left / right / top / bottom               |
+| change-aspect-ratio | ratio    | 1:1 / 4:3 / 3:4 / 3:2 / 2:3 / 16:9 / 9:16 |
+| change-aspect-ratio | mode     | crop / pad                                |
 
-**Исключение:** `change-canvas-size-png` (anchor, 9 опций) — оставить
+**Исключение:** `change-canvas-size` (anchor, 9 опций) — оставить
 `field.select()`, т.к. 9 кнопок в ряд не поместятся. Аналогично `position9` (уже
 отдельный компонент `PositionControl`).
 
 ### FA-B2. color.ts
 
-| Инструмент               | Поле      | Опции                                |
-| ------------------------ | --------- | ------------------------------------ |
-| dithering-png            | pattern   | floyd-steinberg / bayer              |
-| extract-channel-png      | channel   | red / green / blue                   |
-| swap-channels-png        | pair      | r-g / r-b / g-b                      |
-| decrease-color-count-png | maxColors | 2 / 4 / 8 / 16 / 32 / 64 / 128 / 256 |
+| Инструмент           | Поле      | Опции                                                |
+| -------------------- | --------- | ---------------------------------------------------- |
+| dithering            | pattern   | floyd-steinberg / bayer                              |
+| extract-channel      | channel   | red / green / blue                                   |
+| swap-channels        | pair      | r-g / r-b / g-b                                      |
+| decrease-color-count | maxColors | 2 / 4 / 8 / 16 / 32 / 44 / 64 / 96 / 128 / 192 / 256 |
 
-**Исключение:** channel spaces (hsl/hsv/... component) — 3-6 опций, но это
+**Исключение:** инструменты разложения каналов (`to-hsl`, `to-hsv`, `to-hsi`,
+`to-cmyk`, `to-ycbcr`, `to-lab`, поле `component`) — 3-6 опций, но это
 динамические инструменты, оставить `select`.
 
 ### FA-B3. analyze.ts
 
-| Инструмент                | Поле | Опции              |
-| ------------------------- | ---- | ------------------ |
-| show-transparent-png      | mode | binary / highlight |
-| show-grayscale-pixels-png | mode | (тот же)           |
-| show-color-pixels-png     | mode | (тот же)           |
-| light-pixel-mask-png      | mode | (тот же)           |
-| dark-pixel-mask-png       | mode | (тот же)           |
+| Инструмент            | Поле | Опции              |
+| --------------------- | ---- | ------------------ |
+| show-transparent      | mode | binary / highlight |
+| show-grayscale-pixels | mode | (тот же)           |
+| show-color-pixels     | mode | (тот же)           |
+| light-pixel-mask      | mode | (тот же)           |
+| dark-pixel-mask       | mode | (тот же)           |
+| unique-color-mask     | mode | (тот же)           |
 
-Все используют общий `maskBaseFields` — правка в одном месте.
+Пять инструментов из шести берут `mode` из общего `maskBaseFields` — правка в
+одном месте. Исключение — `show-transparent`: он переопределяет `mode` своими
+опциями и дефолтом `highlight`, поэтому его `mode` правится отдельно.
 
 ### FA-B4. filters.ts
 
-| Инструмент    | Поле | Опции        |
-| ------------- | ---- | ------------ |
-| add-noise-png | mode | mono / color |
+| Инструмент | Поле | Опции        |
+| ---------- | ---- | ------------ |
+| add-noise  | mode | mono / color |
 
 ### FA-B5. generate.ts
 
-| Инструмент         | Поле         | Опции                 |
-| ------------------ | ------------ | --------------------- |
-| color-spectrum-png | direction    | horizontal / vertical |
-| step-colors-png    | layout       | grid / strip          |
-| complementary-png  | layout       | grid / strip          |
-| triadic-png        | layout       | grid / strip          |
-| tetradic-png       | layout       | grid / strip          |
-| analogous-png      | layout       | grid / strip          |
-| monochromatic-png  | layout       | grid / strip          |
-| shades-png         | layout       | grid / strip          |
-| sort-colors-png    | layout       | grid / strip          |
-| mix-colors-png     | (нет select) | —                     |
+| Инструмент     | Поле         | Опции                 |
+| -------------- | ------------ | --------------------- |
+| color-spectrum | direction    | horizontal / vertical |
+| step-colors    | layout       | grid / strip          |
+| complementary  | layout       | grid / strip          |
+| triadic        | layout       | grid / strip          |
+| tetradic       | layout       | grid / strip          |
+| analogous      | layout       | grid / strip          |
+| monochromatic  | layout       | grid / strip          |
+| shades         | layout       | grid / strip          |
+| sort-colors    | layout       | grid / strip          |
+| mix-colors     | (нет select) | —                     |
 
 ---
 
@@ -203,12 +214,12 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 ### FA-C1. Source-aware defaults для dimension-полей — реализовано
 
 Source-aware defaults реализованы: общий resolver в `registry-schema`
-(`applySourceDefaults`). Для `resize-png` и `crop-png` дефолт после загрузки
-равен размерам текущего source; до загрузки используется положительный fallback
-`1×1`. Один-sided `0` у resize сохраняет режим auto. Проверено тестом
+(`applySourceDefaults`). Для `resize` и `crop` дефолт после загрузки равен
+размерам текущего source; до загрузки используется положительный fallback `1×1`.
+Один-sided `0` у resize сохраняет режим auto. Проверено тестом
 `registry.test.ts` («resize и crop получают размеры текущего source»).
 
-### FA-C2. symmetric-copy-png: "keep side" не работает
+### FA-C2. symmetric-copy: "keep side" не работает
 
 Баг в `run()`: `keepSide` не учитывает `axis`. При `axis: "vertical"` (удвоение
 ширины) работают только `left`/`right`, `top`/`bottom` не имеют смысла. Нужно:
@@ -257,55 +268,63 @@ resolver.
 
 ### FA-C4. verify-is-png: неверное название — решение принято, шаг не выполнен
 
-Проверяет текст, не PNG-файл. Варианты:
+Находка про **страницу**, а не про инструмент: страница `verify-is-png` обещает
+проверку PNG-файла, а проверяет текст (base64 / data-uri). Сам инструмент назван
+честно — `id: "verify-png"`, png-интент в нём означает входные данные. Адрес
+страницы — `slug` `verify-is-png` (`docs/architecture.md`, раздел 3), поэтому
+«неверное название» относится к `slug`, а не к `id`.
 
-- `title` → "Verify PNG data", `description` → уточнить; `id` оставить — он же
-  адрес страницы, переименование ломает ссылку
-- либо полное переименование `id` → `verify-is-png-data` с редиректом со старого
-  URL (нужен вордстат, иначе страница выпадает из индекса)
+Варианты:
 
-**Решение:** поменять title и description, id не трогать. Переименование `id`
-затрагивает адрес — с ним связана задача разведения `id`/`slug`
-(`docs/backlog.md`), поэтому в одиночку не делается.
+- `title` → «Verify PNG data», `description` → уточнить; `slug` и `id` не
+  трогать
+- либо переименовать `slug` → `verify-png-data` с редиректом со старого URL
+  (нужен вордстат, иначе страница выпадает из индекса)
+
+**Решение:** поменять title и description, имя страницы не трогать.
+Переименование `slug` меняет адрес, имя файла, ключи `pages.*` и иконку, то есть
+это операция с SEO-последствиями, а не строчка в реестре — она не делается в
+одиночку, вместе с решением по `docs/plan-seo.md` §5.
 
 ---
 
 ## 4. Волна D — обязательные фиксы (новые параметры)
 
-### FA-D1. remove-alpha-channel-png: выбор цвета фона
+### FA-D1. remove-alpha-channel: выбор цвета фона
 
 Сейчас захардкожен `#ffffff`. Добавить `field.color({ default: "#ffffff" })`.
 
 Файл: `alpha.ts`, схема `removeAlphaChannelSchema`.
 
-### FA-D2. extract-alpha-mask-png: галочка «инвертировать»
+### FA-D2. extract-alpha-mask: галочка «инвертировать»
 
 Добавить `field.checkbox({ label: "fields.invertMask", default: false })`. В
 `run()`: если `invert`, вызвать `invertAlpha()` после `extractAlphaMask()`.
 
 Файл: `alpha.ts`.
 
-### FA-D3. change-canvas-size-png: position9 вместо select
+### FA-D3. change-canvas-size: position9 вместо select
 
 `anchor` сейчас `field.select()` с 9 опциями → `field.position9()`.
 
 Файл: `geometry.ts`. Уже есть `PositionControl`.
 
-### FA-D4. Generators: добавить height
+### FA-D4. Generate: добавить height
 
 Инструменты без `size`/`height`:
 
-- blend-two-png — добавить
+- blend-two — добавить
   `height: field.slider({ min: 1, max: 1024, default: 512 })`
-- step-colors-png — аналогично
-- complementary, triadic, tetradic, analogous, monochromatic, shades,
-  sort-colors — все используют `paletteBaseSchema` (общий объект), добавить
-  `height` туда
-- mix-colors-png — добавить height
+- step-colors — аналогично
+- complementary, triadic, tetradic, analogous, monochromatic, shades — все
+  используют `paletteBaseSchema` (общий объект), добавить `height` туда
+- `sort-colors` — своя схема, `paletteBaseSchema` не использует, `height`
+  добавлять вручную
+- mix-colors — добавить height
 
 Файл: `generate.ts`.
 
-### FA-D5. add-border-png: прозрачность цвета
+### FA-D5. add-border: прозрачность цвета
 
 Текущий `field.color()` не поддерживает alpha. Пока что: оставить как есть
 (прозрачность не поддерживается нативным color picker). Отметить в аудите как
@@ -322,24 +341,24 @@ blocked.
 
 Файл: `SchemaToolView.svelte` — показать подсказку если `schema.fields` пуст.
 
-### FA-E2. quantize-png: пресеты
+### FA-E2. quantize: пресеты
 
 `field.slider` с max 64 → добавить пресеты (8, 16, 32, 64) как кнопки под
 слайдером. Либо `field.buttons()` с 4 опциями вместо слайдера.
 
-### FA-E3. trim-empty-space-png: 0-254 → проценты
+### FA-E3. trim-empty-space: 0-254 → проценты
 
 Текущий `min: 0, max: 254` — нестандартно. Добавить переключатель px/% (аналог
 шага FA-A1 — `variant: "alpha-threshold"` в NumberSpec).
 
-### FA-E4. add-text-png: plate offset
+### FA-E4. add-text: plate offset
 
 Plate снизу имеет большой отступ — добавить галочку "compact plate" или
 уменьшить дефолтный padding.
 
-### FA-E5. emoji-to-png: выбор эмодзи
+### FA-E5. from-emoji: выбор эмодзи
 
-Поле `text` → добавить группу часто используемых эмодзи как кнопки- пресеты над
+Поле `emoji` → добавить группу часто используемых эмодзи как кнопки-пресеты над
 полем ввода.
 
 ---
@@ -365,44 +384,46 @@ Plate снизу имеет большой отступ — добавить г�
   round-corners — px→%): нужен компонент переключателя единиц в слайдере.
   Требует правки `RangeControl` + всех схем — в волны A–E не входит, нужен
   отдельный этап.
-- **Smoothing checkbox** для масок (circle, square, star, wavy, round-corners,
-  invert-alpha): нужен `field.checkbox("smoothing")` + правка core (shapes.ts,
-  alpha). Отложен — требует визуального тестирования.
+- **Smoothing checkbox** для масок (circle-mask, square-mask, star-mask,
+  wavy-mask, round-corners, invert-alpha): нужен `field.checkbox("smoothing")` +
+  правка core (shapes.ts, alpha). Отложен — требует визуального тестирования.
 - **Vignette**: выбор центра + цвет + feather — 3 новых параметра. Требует
   normative решения по UI.
 - **Remove-background**: выбор точки удаления — либо параметр, либо отдельный
   инструмент.
-- **Precision/quality**: select в resize (bilinear/bicubic/nearest) — нужен ли
-  выбор алгоритма?
+- **Метод масштабирования в `resize`**: поля в схеме нет (только `size` и
+  `keepAspect`), поэтому это уже не правка селекта, а новое поле — нужен ли
+  выбор алгоритма (bilinear/bicubic/nearest)?
 - **Placeholders**: "нет параметров" — какой текст/компонент показывать.
 
 ### 7.2 Операционные (тест-кейсы, описания)
 
-- find-contour-png: расширять на толщину линии (требует правки core)
-- make-thicker-png: расширять картинку на толщину линии
-- make-thinner-png: уменьшать от краев, fix выступа
-- feather-edges-png: расширять картинку на толщину линии
-- clean-edges-png: найти тест-кейс, возможно увеличить максимум
-- despeckle-alpha-png: найти более заметный тест-кейс
-- close-holes-png: проверить поведение на больших полупрозрачных областях
-- auto-contrast-png: найти тестовый кейс
-- sharpen-png: добавить тест-кейс
-- center-by-alpha-png: найти тест-кейс
-- png-is-grayscale: улучшить видимость результата
+- find-contour: расширять на толщину линии (требует правки core)
+- make-thicker: расширять картинку на толщину линии
+- make-thinner: уменьшать от краев, fix выступа
+- feather-edges: расширять картинку на толщину линии
+- clean-edges: найти тест-кейс, возможно увеличить максимум
+- despeckle-alpha: найти более заметный тест-кейс
+- close-holes: проверить поведение на больших полупрозрачных областях
+- auto-contrast: найти тестовый кейс
+- sharpen: добавить тест-кейс
+- center-by-alpha: найти тест-кейс
+- is-grayscale: улучшить видимость результата
 
 ### 7.3 Дизайн-вопросы
 
-- add-padding-png vs add-border-png: разница неочевидна, нужен review
-- change-aspect-ratio-png: не видно что меняется — рамка результата
-- watermark-tile-png: заполняет не полностью
-- sepia-png: нужна ли настройка силы эффекта?
-- posterize-png: настройка для каждого канала отдельно?
-- pixelate-png: разные алгоритмы?
-- swap-channels-png: обдумать flow через более простые инструменты
+- add-padding vs add-border: разница неочевидна, нужен review
+- change-aspect-ratio: не видно что меняется — рамка результата
+- watermark-tile: заполняет не полностью
+- sepia: нужна ли настройка силы эффекта?
+- posterize: настройка для каждого канала отдельно?
+- pixelate: разные алгоритмы?
+- swap-channels: обдумать flow через более простые инструменты
 
 ### 7.4 Аудит полей (компоненты)
 
 - Range slider: поле ввода + кнопки +/- + кнопка сброса
 - Color picker: пипетка с картинки, прозрачность
 - Width/height с keep-aspect-ratio: единый компонент
-- Position offset: отдельные слайдеры x/y (уже сделано в `OffsetControl`)
+- Position offset: отдельные числовые поля X/Y (уже сделано в
+  `fields/schema/OffsetControl.svelte`)

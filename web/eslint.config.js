@@ -63,7 +63,7 @@ export default tseslint.config(
 						"e2e/helpers/page.ts",
 						"e2e/navigation.spec.ts",
 						"e2e/catalog.spec.ts",
-						"e2e/pipeline.spec.ts",
+						"e2e/tool-flows.spec.ts",
 						"e2e/text-and-verdicts.spec.ts",
 						"e2e/tools-smoke.spec.ts",
 						"e2e/generators.spec.ts",

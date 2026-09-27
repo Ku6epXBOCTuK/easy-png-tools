@@ -1,187 +1,190 @@
 ﻿# Карта инструментов: реализовано · добавить · идеи
 
-> Статус: **active**. Живой документ для сверки с каталогом.
->
-> **Карта перечисляет `slug` страниц (`web/src/lib/registry/pages/`) — то есть
-> адреса вида `/tools/crop-png`:** это `slug: "crop-png"` у страницы, которая
-> вызывает инструмент `id: "crop"`. Внутренние имена инструментов png-интента не
-> держат, поэтому они от карты отделены; модель — `docs/architecture.md`,
-> раздел 3. Источник правды — реестр. Этот список навигационный: сверять перед
-> использованием. Формат записи: `slug — параметры через запятую`. Сравнение с
-> каталогом источника (объём, нишевые клоны серий Logo*/Icon*/Stamp*Signature*)
-> — замер в `docs/plan-seo.md`, §2; здесь он не дублируется.
->
+> Статус: **active**. Навигационный список: что уже есть по адресам
+> `/tools/<slug>`, что можно добавить, что отложено. Источник правды — реестр
+> (`web/src/lib/registry/`), модель страницы и инструмента —
+> `docs/architecture.md`, раздел 3; сверяться с реестром перед использованием.
 > Количество инструментов здесь не фиксируется — оно выводится из раздела 1 и из
-> `TOOLS` в `registry/index.ts`, и дублировать его цифрой значит заставлять себя
-> обновлять документ при каждом добавлении (`AGENTS.md`).
+> `PAGES` (`AGENTS.md`).
+>
+> **Как читать строку.** `slug` — адрес страницы и имя скачиваемого файла;
+> страница вызывает инструмент через `steps[0].id`, и у `id` нет png-интента
+> (`crop-png` → `id: "crop"`, `png-to-hsl` → `id: "to-hsl"`). Имена полей — это
+> id полей из `schema.fields` инструмента; составные поля (`size`, `pair`,
+> `offset`, `style`, `plate`, `gradient`) в скобках раскрыты, но не выдуманы как
+> отдельные поля. Сравнение с каталогом источника (объём, нишевые клоны серий
+> Logo\*/Icon\*/Stamp\*) — замер в `docs/plan-seo.md` §2; здесь он не
+> дублируется.
+>
+> **Формат строки (проверяется `web/src/lib/registry/tools-map-doc.test.ts`):**
+> всё **до первого тире** `—` — это slug страниц через `/` или `,`; всё после
+> тире — свободное описание параметров и не разбирается. Второй slug нельзя
+> оставлять после тире, иначе он не попадёт в разбор и страница будет считаться
+> неописанной.
 
 ---
 
 ## 1. Реализовано
 
-Ids приведены к фактическим в `web/src/lib/registry/pages/`.
+Slugs приведены к фактическим в `web/src/lib/registry/pages/`. Разделы идут по
+файлу реестра; поля — по схеме инструмента, который страница вызывает.
 
-**Формат строки (проверяется тестом
-`web/src/lib/registry/tools-map-doc.test.ts`):** в буллите всё **до первого
-тире** `—` — это slug страниц через `/` или `,`; всё после тире — свободное
-описание параметров и не разбирается. Второй slug нельзя оставлять после тире,
-иначе он не попадёт в разбор и страница будет считаться неописанной.
-
-### Конвертация (`convert.ts`)
+### Конвертация (`convert`)
 
 Отдельных «из формата в PNG» инструментов **нет**: входной формат выбирается
 загрузкой файла, любой инструмент принимает PNG/JPG/WebP/GIF/BMP. Все конвертеры
 исходят из PNG.
 
-- svg-to-png — width результата (текстовый вход: SVG-код)
-- png-to-bmp — 24-бит, фон вместо альфы
-- convert-png-to-jpg — background, quality
-- convert-png-to-webp — quality
-- png-to-base64 / base64-to-png — строка
-- png-to-data-uri / data-uri-to-png — строка
-- png-to-hex / hex-to-png — rrggbbaa по строкам / tokens + width
-- png-to-bytes / bytes-to-png — десятичные RGBA-байты по строкам / tokens +
-  width
-- png-to-rgb-values / rgb-values-to-png — rgba(r,g,b,a) по пикселям / числа +
-  width
+- `convert-png-to-jpg` — background, quality
+- `convert-png-to-webp` — quality
+- `png-to-bmp` — без параметров (24-бит, фон вместо альфы)
+- `svg-to-png` — width (ширина результата; вход — SVG-код)
+- `png-to-base64`, `base64-to-png` — без параметров (строка)
+- `png-to-data-uri`, `data-uri-to-png` — без параметров (строка)
+- `png-to-hex`, `hex-to-png` — вход `width`; rrggbbaa по строкам / tokens
+- `png-to-bytes`, `bytes-to-png` — вход `width`; десятичные RGBA-байты по
+  строкам / tokens
+- `png-to-rgb-values`, `rgb-values-to-png` — вход `width`; rgba(r,g,b,a) по
+  пикселям / числа
 
-### Прозрачность (`alpha.ts`)
+### Прозрачность (`alpha`)
 
-- change-png-opacity — percent
-- set-alpha-channel-png — percent
-- remove-alpha-channel-png — без параметров (фон `#ffffff` захардкожен, см.
-  `docs/plan-fields-audit-fixes.md` D1)
-- extract-alpha-mask-png — без параметров
-- invert-alpha-png — без параметров
-- remove-background-png — color, tolerance, outerOnly, smooth
-- remove-color-from-png — targetColor, tolerance
-- add-stroke-png — color, thickness
-- find-contour-png — color, thickness
-- make-thicker-png / make-thinner-png — radius
-- harden-alpha-png — threshold
-- feather-edges-png — radius (размытие только альфы)
-- clean-edges-png — radius (defringe: RGB от ближайшего непрозрачного)
-- despeckle-alpha-png / close-holes-png — radius
-- center-by-alpha-png — без параметров
-- round-corners-png — radius
-- circle-mask-png — size (диаметр, % меньшей стороны), offsetX, offsetY
-- square-mask-png — widthPct, heightPct, offsetX, offsetY
-- star-mask-png — points, innerRadius, size, rotation, offsetX, offsetY
-- wavy-mask-png — size, amplitude, waves, phase, offsetX, offsetY
+- `add-stroke-png` — color, thickness
+- `find-contour-png` — color, thickness
+- `remove-color-from-png` — targetColor, tolerance
+- `remove-background-png` — color, tolerance, outerOnly, smooth
+- `make-thicker-png`, `make-thinner-png` — radius
+- `harden-alpha-png` — threshold
+- `feather-edges-png` — radius (размытие только альфы)
+- `clean-edges-png` — radius (defringe: RGB от ближайшего непрозрачного)
+- `despeckle-alpha-png`, `close-holes-png` — radius
+- `round-corners-png` — radius (% от половины меньшей стороны)
+- `invert-alpha-png` — без параметров
+- `extract-alpha-mask-png` — без параметров
+- `set-alpha-channel-png` — percent
+- `remove-alpha-channel-png` — без параметров (фон `#ffffff` захардкожен,
+  `docs/plan-fields-audit-fixes.md` FA-D1)
+- `circle-mask-png` — size (диаметр, % меньшей стороны), offset (x/y)
+- `square-mask-png` — widthPct, heightPct, offset (x/y)
+- `star-mask-png` — points, innerRadius, size, rotation, offset (x/y)
+- `wavy-mask-png` — size, amplitude, waves, phase, offset (x/y)
 
-### Цвет (`color.ts`)
+### Цвет (`color`)
 
-- grayscale-png / invert-colors-png / sepia-png / auto-contrast-png — без
+- `grayscale-png`, `invert-colors-png`, `sepia-png`, `auto-contrast-png` — без
   параметров
-- adjust-brightness-contrast-png — brightness, contrast
-- change-png-hue — degrees
-- extract-channel-png — channel (r/g/b)
-- swap-channels-png — pair (r-g/r-b/g-b)
-- black-and-white-png — threshold
-- posterize-png — levels
-- two-colors-png — lightColor, darkColor, threshold
-- temperature-png — percent
-- gamma-png — value
-- tint-png — color, strength
-- quantize-png — colors (k, median-cut)
-- decrease-color-count-png — maxColors (пресеты 2…256)
-- custom-palette-png — colors (hex через запятую, ближайший цвет)
-- dithering-png — colors (k), pattern (Floyd–Steinberg / Bayer 4×4)
+- `adjust-brightness-contrast-png` — brightness, contrast
+- `change-png-opacity` — percent
+- `change-png-hue` — degrees
+- `temperature-png` — percent
+- `gamma-png` — value
+- `tint-png` — color, strength
+- `two-colors-png` — pair (светлый/тёмный), threshold
+- `black-and-white-png` — threshold
+- `posterize-png` — levels
+- `quantize-png` — colors (k, median-cut)
+- `decrease-color-count-png` — maxColors (2…256)
+- `custom-palette-png` — colors (hex через запятую, ближайший цвет)
+- `dithering-png` — colors (k), pattern (Floyd–Steinberg / Bayer 4×4)
+- `extract-channel-png` — channel (r/g/b)
+- `swap-channels-png` — pair (r-g/r-b/g-b)
 
-### Разложение каналов (`color.ts`)
+### Разложение каналов (`color`)
 
-- png-to-hsl, png-to-hsv, png-to-hsi, png-to-cmyk, png-to-ycbcr, png-to-lab —
-  component (h/s/l и т.п.), display (`gray` | `space-as-rgb`)
+- `png-to-hsl`, `png-to-hsv`, `png-to-hsi`, `png-to-cmyk`, `png-to-ycbcr`,
+  `png-to-lab` — component (h/s/l и т.п.), display (`gray` | `space-as-rgb`)
 
-### Геометрия (`geometry.ts`)
+### Геометрия (`geometry`)
 
-- resize-png — width/height (размеры source по умолчанию; 0=авто для одной
-  стороны), keepAspect
-- crop-png — x, y, width/height (полная область source по умолчанию)
-- rotate-png — angle (90/180/270)
-- flip-png — axis (h/v)
-- skew-png — degX, degY
-- rotate-free-png — angle
-- zoom-png — scale
-- shift-png — offsetX, offsetY, color фона
-- add-padding-png — padding, transparent, color
-- add-border-png — thickness, color
-- fit-on-background-png — width, height, transparent, color
-- tile-png — columns, rows
-- split-into-parts-png — columns, rows (мультифайловый вывод, zip)
-- trim-empty-space-png — threshold (альфа)
-- change-canvas-size-png — width, height, anchor (3×3)
-- change-aspect-ratio-png — ratio (пресеты), mode (crop/pad)
-- swap-orientation-png — target (portrait/landscape)
-- symmetric-copy-png — axis, keepSide
+- `resize-png` — size (по умолчанию размер source, 0 по одной стороне = авто),
+  keepAspect
+- `crop-png` — x, y, size (по умолчанию вся область source)
+- `rotate-png` — angle (90/180/270)
+- `rotate-free-png` — angle
+- `flip-png` — axis (h/v)
+- `skew-png` — degX, degY
+- `zoom-png` — scale
+- `shift-png` — offsetX, offsetY, color
+- `add-padding-png` — padding, transparent, color
+- `add-border-png` — thickness, color
+- `fit-on-background-png` — size, transparent, color
+- `tile-png` — columns, rows
+- `split-into-parts-png` — columns, rows (мультифайловый вывод, zip)
+- `trim-empty-space-png` — threshold (по альфе)
+- `change-canvas-size-png` — size, anchor (3×3)
+- `change-aspect-ratio-png` — ratio (пресеты), mode (crop/pad)
+- `swap-orientation-png` — target (portrait/landscape)
+- `symmetric-copy-png` — axis, keepSide
+- `center-by-alpha-png` — без параметров
 
-### Фильтры (`filters.ts`)
+### Фильтры (`filters`)
 
-- blur-png — radius
-- sharpen-png — strength
-- vignette-png — strength
-- jpeg-artifacts-png — quality (имитация пережатия jpg/webp)
-- pixelate-png — blockSize (закрывает и их Color Blocks)
-- randomize-pixels-png — blockSize, seed
-- add-noise-png — amount, mode (mono/color), seed
-- silhouette-png — color, threshold
+- `blur-png` — radius
+- `sharpen-png` — strength
+- `vignette-png` — strength
+- `jpeg-artifacts-png` — quality (имитация пережатия jpg/webp; поле
+  функциональное, у инструмента нет `output` — `docs/plan-seo.md` S1f)
+- `pixelate-png` — blockSize
+- `randomize-pixels-png` — blockSize, seed
+- `add-noise-png` — amount, mode (mono/color), seed
+- `silhouette-png` — color, threshold
 
-### Анализ и вердикты (`analyze.ts`)
+### Анализ и вердикты (`analyze`)
 
-- png-file-size — без параметров (DOM-инструмент: кодирует в PNG и отдаёт
+- `png-file-size` — без параметров (DOM-инструмент: кодирует в PNG и отдаёт
   размер)
-- png-is-transparent / png-is-grayscale / png-orientation — текстовый вердикт
-- verify-is-png — текстовый источник (base64/data-uri), вердикт по сигнатуре
+- `png-is-transparent`, `png-is-grayscale`, `png-orientation` — без параметров,
+  текстовый вердикт
+- `verify-is-png` — без параметров (вход — текст: base64/data-uri), вердикт по
+  сигнатуре
 
-### Маски по свойствам пикселей (`analyze.ts`)
+### Маски по свойствам пикселей (`analyze`)
 
-- show-transparent-png — color, opacity (подсветка прозрачных/полупрозрачных)
-- show-grayscale-pixels-png — tolerance, mode (binary/highlight),
-  highlightColor, highlightOpacity
-- show-color-pixels-png — tolerance, mode, highlightColor, highlightOpacity
-- light-pixel-mask-png — threshold, mode, highlightColor, highlightOpacity
-- dark-pixel-mask-png — threshold, mode, highlightColor, highlightOpacity
-- unique-color-mask-png — rarity (макс. повторов), mode, highlightColor,
-  highlightOpacity
-- extract-color-from-png — color, tolerance (оставить близкие, остальное
-  прозрачным)
+- `show-transparent-png` — mode, color, opacity
+- `show-grayscale-pixels-png` — mode, tolerance, color, opacity
+- `show-color-pixels-png` — mode, tolerance, color, opacity
+- `light-pixel-mask-png` — mode, threshold, color, opacity
+- `dark-pixel-mask-png` — mode, threshold, color, opacity
+- `unique-color-mask-png` — mode, rarity (макс. повторов), color, opacity
+- `extract-color-from-png` — color, tolerance
 
-### Генерация (`generate.ts`)
+### Генерация (`generate`)
 
-- create-empty-png — width, height, transparent, color
-- single-color-png — width, height, color
-- random-noise-png — width, height, seed
-- linear-gradient-png — width, height, fromColor, toColor, direction
-- color-spectrum-png — width, height, direction, saturation, lightness
-- random-colors-png — width, height, blockSize, seed
-- draw-grid-png — width, height, cols, rows, lineWidth, color, transparentBg
-- placeholder-png — width, height, backgroundColor, color, showText
-- blend-two-png — pair (from/to), width
-- step-colors-png — pair (from/to), steps, width
-- emoji-to-png — emoji, size
-- text-to-png — text, fontSize, font, bold, color, transparentBg,
+- `create-empty-png` — size, transparent, color
+- `single-color-png` — size, color
+- `random-noise-png` — size, seed
+- `linear-gradient-png` — size, gradient (от/к, направление)
+- `color-spectrum-png` — size, direction, saturation, lightness
+- `random-colors-png` — size, blockSize, seed
+- `draw-grid-png` — size, cols, rows, lineWidth, color, transparentBg
+- `placeholder-png` — size, backgroundColor, color, showText
+- `blend-two-png` — pair (от/к), width
+- `step-colors-png` — pair (от/к), steps, width, layout (grid/strip)
+- `color-wheel-png` — size, lightness
+- `mix-colors-png` — colors, width
+- `sort-colors-png` — colors, order (hue/brightness/saturation), width, layout
+- `emoji-to-png` — emoji, size
+- `text-to-png` — text, style (шрифт/размер/цвет/жирность), transparentBg,
   backgroundColor, padding
-- color-wheel-png — size, lightness
-- complementary-png / triadic-png / tetradic-png / analogous-png /
-  monochromatic-png / shades-png — общая база палитры: baseColor, width, layout;
-  `shades-png` дополнительно count, depth
-- mix-colors-png — colors, width
-- sort-colors-png — colors, порядок (hue/brightness/saturation), width
+- `complementary-png`, `triadic-png`, `tetradic-png`, `analogous-png`,
+  `monochromatic-png`, `shades-png` — baseColor, width, layout; у `analogous`
+  ещё spread и count, у `monochromatic` — count и range, у `shades` — count и
+  depth
 
-### Текст (`text.ts`)
+### Текст (`text`)
 
-- add-text-png — text, fontSize, color, font, bold, position (3×3), margin,
-  plate, plateColor, plateOpacity
-- date-stamp-png — format, fontSize, color, font, bold, position, margin, plate,
-  plateColor, plateOpacity
-- watermark-tile-png — text, fontSize, color, opacity, angle, stepX, stepY,
-  font, bold
+- `add-text-png` — text, style (шрифт/размер/цвет/жирность), position (3×3),
+  margin, plate (плашка, её цвет и прозрачность)
+- `date-stamp-png` — format, style, position, margin, plate
+- `watermark-tile-png` — text, style, opacity, angle, stepX, stepY
 
 ---
 
 ## 2. Можно добавить — из onlinepngtools
 
-Всё из этого списка **в реестре отсутствует**.
+Всё из этого списка **в реестре отсутствует** — это план, а не факт. Список
+проверяется `web/src/lib/registry/tools-map-doc.test.ts` в обратную сторону:
+реализованный slug, оставшийся здесь, роняет тест.
 
 ### Разложение каналов — остаток
 
@@ -216,8 +219,11 @@ Ids приведены к фактическим в `web/src/lib/registry/pages/
 ### Сжатие и качество
 
 - compress, reduce-to-size, pick-a-color, extract-barcode — **не реализованы**;
-  заведены в `docs/backlog.md` (reduce-to-size зависит от UX-райза «Download»).
-  Пипетка для выбора цвета уже есть в превью, отдельная страница не планируется.
+  заведены в `docs/backlog.md`. Сжатие до целевого размера — прежде всего
+  селектор формата в Download (S1f, `docs/plan-seo.md` §4): для lossy это
+  quality-ручка, а для PNG — квантование палитры. Нужен ли отдельный инструмент
+  под этот интент, решается по вордстату, имя страницы пока не выбрано. Пипетка
+  для выбора цвета уже есть в превью, отдельная страница не планируется.
   Извлечение штрихкодов — HARD, вне планов.
 
 ---
@@ -227,12 +233,21 @@ Ids приведены к фактическим в `web/src/lib/registry/pages/
 Развёрнутые описания этих идей живут в `docs/backlog.md`, раздел «Идеи»; здесь
 только список.
 
+Буллиты этого раздела, как и раздела 2, перечисляют **несуществующие** страницы:
+уже реализованные в них не называются, иначе тест решит, что slug пора
+переносить в раздел 1. Реализованные примеры пишутся прозой между буллитами, как
+ниже.
+
 - **Region-инструменты** — нужен selection-компонент на превью: censor-region,
   erase-region, pixelate-area, blur-area, sharpen-area, reverse-colors-area.
   Один раз делаем selection — получаем шесть инструментов.
-- **Мультифайловый выход** — механизм «результат = набор файлов» (zip)
-  реализован на `split-into-parts-png`. Остальные 1→many: gif-to-frames,
-  separate-colors, multiply-grid-as-files — подключаются по мере нужды.
+- **Мультифайловый выход** — остальные потребители механизма «результат = набор
+  файлов»: gif-to-frames, separate-colors, multiply-grid-as-files — подключаются
+  по мере нужды.
+
+Механизм уже реализован на `split-into-parts-png` (`docs/architecture.md`,
+раздел 7), он в разделе 1.
+
 - **Анимационные эффекты** — slow-reveal, fade-in/out, disappearing, scrolling:
   это видео/GIF на выходе, а не PNG. Отдельное решение о формате результата.
 - **HARD-хвост** — glitch-art, extract-signature, handwritten→digital,
@@ -240,6 +255,6 @@ Ids приведены к фактическим в `web/src/lib/registry/pages/
 - **Нишевые серии** (logo/icon/stamp/signature — замер в шапке документа) —
   сознательно не копируем: это обычные операции над конкретным контентом, у нас
   они доступны через базовые инструменты + цепочки.
-- **Входные «из формата в PNG»** (jpg-to-png, webp-to-png) — решение и его SEO-
-  последствия описаны в разделе 1 выше; отдельные страницы под эти интенты —
-  предмет решения в `docs/plan-seo.md` §5.
+- **Входные «из формата в PNG»** (jpg-to-png, webp-to-png) — решение и его
+  SEO-последствия описаны в `docs/plan-seo.md` §5; отдельные страницы под эти
+  интенты — предмет решения там же.

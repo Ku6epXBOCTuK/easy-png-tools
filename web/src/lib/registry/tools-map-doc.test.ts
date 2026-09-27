@@ -8,30 +8,35 @@ const MAP_PATH = fileURLToPath(
 );
 
 const SECTION_START = /^## 1\.\s/;
-const SECTION_END = /^## 2\.\s/;
+const SECTION_PLANNED = /^## 2\.\s/;
 
 // Все slug страниц содержат дефис, поэтому формат строгий: это отсекает слова
 // описания вроде `median-cut` из «colors (k, median-cut)».
 const ID_SHAPE = /^[a-z][a-z0-9]*(-[a-z0-9]+)+$/;
+const ID_TOKEN = /[a-z][a-z0-9]*(?:-[a-z0-9]+)+/g;
 
 type Mention = { id: string; line: number };
 
 /**
- * Буллиты раздела «1. Реализовано» вместе с номером первой строки.
- * Перенесённые строки приклеиваются к буллету: иначе slug, оказавшийся на
- * следующей строке, молча выпадал бы из разбора и страница считалась бы
- * неописанной.
+ * Буллиты раздела вместе с номером первой строки. Перенесённые строки
+ * приклеиваются к буллету: иначе slug, оказавшийся на следующей строке, молча
+ * выпадал бы из разбора и страница считалась бы неописанной.
  */
-function implementedBullets(
+function sectionBullets(
 	markdown: string,
+	startPattern: RegExp,
+	endPattern: RegExp | null,
 ): { text: string; line: number }[] {
 	const lines = markdown.split("\n");
-	const start = lines.findIndex((l) => SECTION_START.test(l));
-	const end = lines.findIndex((l) => SECTION_END.test(l));
+	const start = lines.findIndex((l) => startPattern.test(l));
+	const end =
+		endPattern === null
+			? lines.length
+			: lines.findIndex((l) => endPattern.test(l));
 	if (start === -1 || end === -1 || end <= start) {
 		throw new Error(
-			"docs/tools-map.md: не найден раздел «1. Реализовано» или «2.» — " +
-				"тест разбирает только реализованные инструменты",
+			`docs/tools-map.md: не найден раздел по ${startPattern} — тест не может ` +
+				"определить границы разделов карты",
 		);
 	}
 
@@ -47,7 +52,7 @@ function implementedBullets(
 			!/^#{1,6}\s/.test(text) &&
 			!/^[-*]\s/.test(text);
 		if (isBullet) {
-			bullets.push({ text: text.slice(2), line: start + i + 1 });
+			bullets.push({ text: text.slice(2), line: i + 1 });
 		} else if (isContinuation) {
 			previous.text += ` ${text}`;
 		}
@@ -61,7 +66,11 @@ function implementedBullets(
  */
 function mentionedIds(markdown: string): Mention[] {
 	const found: Mention[] = [];
-	for (const { text, line } of implementedBullets(markdown)) {
+	for (const { text, line } of sectionBullets(
+		markdown,
+		SECTION_START,
+		SECTION_PLANNED,
+	)) {
 		const head = text.split("—")[0];
 		for (const raw of head.split(/[/,]/)) {
 			const id = raw.trim().replace(/`/g, "");
@@ -71,14 +80,35 @@ function mentionedIds(markdown: string): Mention[] {
 	return found;
 }
 
+/**
+ * Плановые разделы «2. Можно добавить» и «3. Идеи» устроены прозой: slug стоит
+ * где угодно в буллите, после тире и в скобках. Поэтому берём все токены
+ * нужной формы из всего текста буллита, а не из «головы» до тире.
+ */
+function plannedIds(markdown: string): Mention[] {
+	const found: Mention[] = [];
+	for (const { text, line } of sectionBullets(
+		markdown,
+		SECTION_PLANNED,
+		null,
+	)) {
+		for (const id of text.replace(/`/g, "").match(ID_TOKEN) ?? []) {
+			found.push({ id, line });
+		}
+	}
+	return found;
+}
+
 describe("docs/tools-map.md ↔ страницы реестра", () => {
 	const markdown = readFileSync(MAP_PATH, "utf8");
 	const mentioned = mentionedIds(markdown);
+	const planned = plannedIds(markdown);
 	const registrySlugs = new Set(PAGES.map((page) => page.slug));
 
 	it("разбирает непустой список slug (парсер не сломался молча)", () => {
-		expect(implementedBullets(markdown).length).toBeGreaterThan(0);
+		expect(mentioned.length).toBeGreaterThan(0);
 		expect(new Set(mentioned.map((m) => m.id)).size).toBeGreaterThan(50);
+		expect(new Set(planned.map((m) => m.id)).size).toBeGreaterThan(10);
 	});
 
 	it("в карте нет slug, которых нет в реестре", () => {
@@ -115,5 +145,19 @@ describe("docs/tools-map.md ↔ страницы реестра", () => {
 			}
 		}
 		expect(dupes, `повторяющиеся slug:\n${dupes.join("\n")}`).toEqual([]);
+	});
+
+	it("плановый slug уже не реализован (перенос из «2./3.» в «1.»)", () => {
+		const stale = planned.filter((m) => registrySlugs.has(m.id));
+		expect(
+			stale,
+			stale
+				.map(
+					(m) =>
+						`${m.id} (docs/tools-map.md:${m.line}) — страница уже есть в реестре, ` +
+						"перенеси её из планового раздела в «1. Реализовано»",
+				)
+				.join("\n"),
+		).toEqual([]);
 	});
 });

@@ -175,8 +175,9 @@ report-only (`warn`), baseline — 0 срабатываний.
 - **Неиспользуемые токены**: выводится **варнинг** (определены, но нигде не
   используются) — выход он не меняет. Проверка видит только ссылки `var(--x)`,
   поэтому чтение токена из JS (`getPropertyValue`) она не учтёт; решение
-  оставить проверку неблокирующей зафиксировано в `docs/quality-gates.md`.
-  Провалами (exit 1) считаются parity, hct-авторство и резолв `var()`.
+  оставить проверку неблокирующей — `docs/decisions.md`, раздел 6 (как оно
+  выглядит в гейте — `docs/quality-gates.md`). Провалами (exit 1) считаются
+  parity, hct-авторство и резолв `var()`.
 
 ## Тесты кастомных линт-правил
 
@@ -187,6 +188,9 @@ report-only (`warn`), baseline — 0 срабатываний.
   `no-token-definition-in-svelte`) через `RuleTester` со строковыми кейсами;
   `no-undefined-in-svelte` — через `Linter` API, т.к. читает словарь токенов из
   `__fixtures__/src/app.css` (не из реального `src/app.css`).
+- `__tests__/interface-props.test.ts` и
+  `__tests__/no-string-union-alias.test.ts` — конвенции плагина `conventions`
+  (интерфейс пропсов, запрет union-алиасов).
 - Хелпер `__tests__/helpers.ts` собирает `Linter` с `cwd = __fixtures__` —
   `process.cwd()` не трогается, реальные `src/` не читаются.
 

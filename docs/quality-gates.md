@@ -98,8 +98,10 @@ download, темы или локализации. Изменения runtime fix
   pattern-based policy для временно неиспользуемых `tools.*.params`; это не
   молчаливый `allowPaths`-список.
 
-`lint:all` может завершиться успешно при warnings — это не означает чистый
-baseline. Агент показывает число errors, warnings и token warnings отдельно.
+`lint:all` может завершиться успешно, напечатав unused-token сообщения: это
+единственный неблокирующий сигнал в нём. ESLint warnings, наоборот, роняют gate,
+поэтому «прошёл» ≠ «нечего чинить». Агент показывает число errors, warnings и
+token warnings раздельно.
 
 ## CI
 

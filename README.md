@@ -12,16 +12,16 @@ and open source.
   transparency/alpha, color, channel decomposition, geometry, filters,
   pixel-property masks, generation, text/watermarks, analysis & verdicts — the
   current list lives in [`docs/tools-map.md`](docs/tools-map.md)
-- **Pipeline system (workspace)** — load image → chain multiple tool steps →
-  sequential application → download result; pipelines saved to localStorage,
-  exportable as JSON
 - **Web Worker execution** — heavy operations run off the main thread with
   automatic fallback to direct calls
 - **i18n** — full Russian and English localization
 - **Dark/Light themes** — persisted to localStorage
 - **Pure TypeScript core** — `lib/core/` operates on
   `ImageData`/`Uint8ClampedArray` with no DOM dependency
-- **Fully static** — no backend, no analytics, no tracking
+- **Fully static** — no backend; the image never leaves your browser. The only
+  third-party request is a Google Analytics page-view counter — it never sees
+  the file or its contents; the boundary and its limits are in
+  `docs/plan-seo.md` §0
 
 ## Tech Stack
 
@@ -65,8 +65,9 @@ pnpm verify     # full fast quality gate — the pre-review gate
 pnpm build      # static production export → web/build/
 ```
 
-Полный список команд и матрица «какие проверки запускать при каком изменении» —
-в `AGENTS.md` и `docs/quality-gates.md`.
+For the full command list and the "which checks to run for which change" matrix,
+see [`AGENTS.md`](AGENTS.md) and
+[`docs/quality-gates.md`](docs/quality-gates.md).
 
 ## Architecture
 
@@ -74,8 +75,8 @@ Everything is built around the **two-layer registry** (`web/src/lib/registry/`):
 a tool is a self-contained implementation `{id, schema, input, result, run}`
 (`registry/tools/`), and a page is `{slug, title, description, category, steps}`
 (`registry/pages/`) that names the address and the tools to run — one tool can
-back several pages. Pages, forms, and pipelines are generated from it, and all
-execution goes through a single `executor.execute` entry point.
+back several pages. Pages and forms are generated from it, and all execution
+goes through a single `executor.execute` entry point.
 
 Core image processing lives in `web/src/lib/core/` and operates directly on
 `ImageData`, with no browser API dependencies.

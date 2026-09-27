@@ -1,7 +1,7 @@
 import { defineConfig } from "playwright/test";
 
 const browserContractTests = [
-	"**/pipeline.spec.ts",
+	"**/tool-flows.spec.ts",
 	"**/png-fixtures.spec.ts",
 	"**/text-and-verdicts.spec.ts",
 ];
@@ -10,7 +10,7 @@ const mobileTests = [
 	"**/navigation.spec.ts",
 	"**/catalog.spec.ts",
 	"**/generators.spec.ts",
-	"**/pipeline.spec.ts",
+	"**/tool-flows.spec.ts",
 ];
 
 export default defineConfig({
