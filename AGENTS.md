@@ -61,8 +61,7 @@
 
 ## Границы изменений
 
-- Production-UI — `web/src/routes/**` и `web/src/lib/components/**`. Старый UI
-  (`/v1/**`) удалён и не возвращается.
+- Production-UI — `web/src/routes/**` и `web/src/lib/components/**`.
 - `web/src/lib/core/**` и `web/src/lib/theme.svelte.ts` — общие модули: их
   правка проверяется unit-тестами и smoke-сценариями production-потребителей.
 - Направление зависимостей, точки расширения и рецепт правки (инструмент, вид

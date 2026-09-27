@@ -14,10 +14,6 @@
 
 ## lint и прочие правила
 
-- [ ] расширить `i18n/no-hardcoded-user-text` на `web/src/routes/**`: сейчас
-      правило навешено только на `components/**` (без `/kit`), поэтому
-      захардкоженный текст в `routes/**` проходит молча (`web/eslint.config.js`,
-      `web/eslint-plugins/README.md`)
 - [ ] `tseslint.config(...)` deprecated: сигнатура
       `(...configs: InfiniteDepthConfigWithExtends[]): ConfigArray` помечена
       устаревшей, нужен переход на `defineConfig` из `typescript-eslint` —
@@ -103,8 +99,8 @@
 
 ## SEO/GEO
 
-Общий план: `docs/plan-seo.md` (S0–S4). Переезд preview на реальные маршруты
-выполнен; старт возможен — пока только domain-free часть S1.
+Общий план: `docs/plan-seo.md` (S0–S4). Старт возможен — пока только domain-free
+часть S1.
 
 - [ ] переименование бренда + домен: чек-лист в локальном плане
       `docs/plan-domain.local.md` (вне git, имя домена в репо не публикуется;

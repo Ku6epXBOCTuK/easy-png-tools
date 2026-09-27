@@ -8,8 +8,8 @@ import designTokens from "./eslint-plugins/index.js";
 import conventionsPlugin from "./eslint-plugins/conventions/index.js";
 import i18nPlugin from "./eslint-plugins/i18n/index.js";
 
-// Новый код редизайна: к нему применяем полные recommended-наборы уже сейчас.
-const newCode = ["**/src/lib/components/**", "**/src/routes/**"];
+// Production-UI: к нему применяются полные recommended-наборы.
+const productionCode = ["**/src/lib/components/**", "**/src/routes/**"];
 
 // Инфраструктура линтинга: сами плагины, скрипты и конфиги. Это не
 // продуктовый код, но всё это влияет на гейты, поэтому к нему тоже
@@ -21,16 +21,16 @@ const toolingFiles = [
 	"*.config.js",
 ];
 
-// Полные recommended-наборы — только на новый код (см. ниже, блок перед prettier).
+// Полные recommended-наборы — только на production-код (см. ниже, блок перед prettier).
 const jsRecommended = Array.isArray(js.configs.recommended)
 	? js.configs.recommended
 	: [js.configs.recommended];
 const svelteRecommended = Array.isArray(svelte.configs["flat/recommended"])
 	? svelte.configs["flat/recommended"]
 	: [svelte.configs["flat/recommended"]];
-// Svelte-рекомендации применяем только к .svelte-файлам нового кода, иначе
+// Svelte-рекомендации применяем только к .svelte-файлам production-кода, иначе
 // svelte-eslint-parser "съедает" обычные .ts в тех же папках (напр. +page.ts).
-const newSvelteFiles = [
+const productionSvelte = [
 	"**/src/lib/components/**/*.svelte",
 	"**/src/routes/**/*.svelte",
 ];
@@ -128,7 +128,7 @@ export default tseslint.config(
 	// Правило дизайн-токенов: запрет хардкода цветов/размеров в style-блоках.
 	// Применяется к новому коду редизайна.
 	{
-		files: newSvelteFiles,
+		files: productionSvelte,
 		plugins: {
 			"design-tokens": designTokens,
 		},
@@ -142,7 +142,7 @@ export default tseslint.config(
 	// Конвенция Svelte 5: пропсы через локальный `interface Props` +
 	// `let {...}: Props = $props()` (плагин conventions/interface-props).
 	{
-		files: newSvelteFiles,
+		files: productionSvelte,
 		plugins: {
 			conventions: conventionsPlugin,
 		},
@@ -151,9 +151,9 @@ export default tseslint.config(
 		},
 	},
 	// Запрет строковых union-алиасов в пользу `as const` объектов
-	// (плагин conventions/no-string-union-alias). TS и Svelte-скрипты нового кода.
+	// (плагин conventions/no-string-union-alias). TS и Svelte-скрипты production-кода.
 	{
-		files: newCode,
+		files: productionCode,
 		plugins: {
 			conventions: conventionsPlugin,
 		},
@@ -182,8 +182,10 @@ export default tseslint.config(
 		},
 	},
 	{
-		// /kit — витрина компонентов с намеренно захардкоженными подписями.
-		files: newSvelteFiles.filter((pattern) => !pattern.includes("routes")),
+		// Хардкод пользовательского текста ловим и в components, и в routes:
+		// `+page.svelte`/`+layout.svelte` — такой же production-UI, иначе
+		// захардкоженная строка молча уедет в RU-локаль.
+		files: productionSvelte,
 		plugins: {
 			i18n: i18nPlugin,
 		},
@@ -198,6 +200,15 @@ export default tseslint.config(
 		},
 	},
 	{
+		// Исключение для /kit — витрина компонентов с намеренно латинскими
+		// подписями. Отдельный объект, а не негативный glob в `files` выше:
+		// негативные паттерны не сужают область действия правила.
+		files: ["**/src/routes/kit/**/*.svelte"],
+		rules: {
+			"i18n/no-hardcoded-user-text": "off",
+		},
+	},
+	{
 		files: toolingFiles,
 		languageOptions: {
 			ecmaVersion: "latest",
@@ -207,11 +218,11 @@ export default tseslint.config(
 			},
 		},
 	},
-	// Полные recommended-наборы — только на новый код.
+	// Полные recommended-наборы — только на production-код.
 	...[
 		...jsRecommended.map((cfg) => ({
 			...cfg,
-			files: newCode,
+			files: productionCode,
 		})),
 		...jsRecommended.map((cfg) => ({
 			...cfg,
@@ -219,11 +230,11 @@ export default tseslint.config(
 		})),
 		...tseslint.configs.recommended.map((cfg) => ({
 			...cfg,
-			files: newCode,
+			files: productionCode,
 		})),
 		...svelteRecommended.map((cfg) => ({
 			...cfg,
-			files: newSvelteFiles,
+			files: productionSvelte,
 		})),
 	],
 

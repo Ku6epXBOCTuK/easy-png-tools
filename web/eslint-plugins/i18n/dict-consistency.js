@@ -23,7 +23,8 @@
  * Options (object, all optional):
  *   - allowPaths: dot-path keys excluded from every check.
  *   - baseLocaleFallback: patterns whose missing keys are allowed in BASE_LOCALE.
- *   - ignoreMissingPatterns: legacy patterns excluded from missing-key checks.
+ *   - ignoreMissingPatterns: patterns temporarily excluded from missing-key
+ *     checks.
  */
 import fs from "node:fs";
 import path from "node:path";
