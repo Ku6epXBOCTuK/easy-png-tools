@@ -1,4 +1,4 @@
-import type { ToolEntry } from "$lib/registry";
+import type { Page } from "$lib/registry";
 import type { Field } from "$lib/registry-schema";
 import { getMergedDict } from "./locale.svelte";
 import { normalizeForSearch, scoreDoc, type SearchDoc } from "./matching";
@@ -12,12 +12,12 @@ function labelOf(id: string): string {
 		.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-export function toolTitle(tool: ToolEntry): string {
-	return getMergedDict().tools[tool.id]?.title ?? tool.title;
+export function pageTitle(page: Page): string {
+	return getMergedDict().tools[page.slug]?.title ?? page.title;
 }
 
-export function toolDescription(tool: ToolEntry): string {
-	return getMergedDict().tools[tool.id]?.description ?? tool.description;
+export function pageDescription(page: Page): string {
+	return getMergedDict().tools[page.slug]?.description ?? page.description;
 }
 
 export function fieldLabel(field: Field<unknown>, id: string): string {
@@ -64,33 +64,30 @@ function dedupe(values: string[]): string[] {
 	return [...new Set(values.filter((v) => v.length > 0))];
 }
 
-export function toolSearchDoc(tool: ToolEntry): SearchDoc {
-	const active = getMergedDict().tools[tool.id];
+export function pageSearchDoc(page: Page): SearchDoc {
+	const active = getMergedDict().tools[page.slug];
 	return {
-		id: tool.id,
+		id: page.slug,
 		titles: dedupe([
 			active?.title ?? "",
-			ru.tools[tool.id]?.title ?? "",
-			tool.title,
+			ru.tools[page.slug]?.title ?? "",
+			page.title,
 		]),
 		descriptions: dedupe([
 			active?.description ?? "",
-			ru.tools[tool.id]?.description ?? "",
-			tool.description,
+			ru.tools[page.slug]?.description ?? "",
+			page.description,
 		]),
 	};
 }
 
 /**
  * Кросс-языковой поиск по каталогу: скор через `scoreDoc` на
- * `toolSearchDoc` (заголовки/описания всех локалей). Порядок каталога
+ * `pageSearchDoc` (заголовки/описания всех локалей). Порядок каталога
  * сохраняется, элементы без совпадения отбрасываются.
  */
-export function searchTools(
-	tools: readonly ToolEntry[],
-	query: string,
-): ToolEntry[] {
+export function searchPages(pages: readonly Page[], query: string): Page[] {
 	const q = normalizeForSearch(query.trim());
-	if (q.length === 0) return [...tools];
-	return tools.filter((tool) => scoreDoc(toolSearchDoc(tool), q) !== null);
+	if (q.length === 0) return [...pages];
+	return pages.filter((page) => scoreDoc(pageSearchDoc(page), q) !== null);
 }

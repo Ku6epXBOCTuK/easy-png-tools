@@ -16,12 +16,12 @@ import {
 	twoColors,
 	type ChannelSwapPair,
 	type RgbChannel,
-} from "../core/color";
-import { renderSpace, SPACES, type SpaceId } from "../core/channels";
-import { parseHexList } from "../core/palette";
-import { ditherImage, mapToNearest, quantizeImage } from "../core/quantize";
-import { field, toolSchema, type ColorPair } from "../registry-schema";
-import { imgTool, type ToolEntry } from "./types";
+} from "../../core/color";
+import { renderSpace, SPACES, type SpaceId } from "../../core/channels";
+import { parseHexList } from "../../core/palette";
+import { ditherImage, mapToNearest, quantizeImage } from "../../core/quantize";
+import { field, toolSchema, type ColorPair } from "../../registry-schema";
+import { imgTool, type Tool } from "../types";
 
 interface TwoColorsParams {
 	pair: ColorPair;
@@ -43,13 +43,8 @@ export const twoColorsSchema = toolSchema<TwoColorsParams>({
 	}),
 });
 
-const twoColorsTool: ToolEntry<TwoColorsParams> = {
+const twoColorsTool: Tool<TwoColorsParams> = {
 	id: "two-colors-png",
-	slug: "two-colors-png",
-	title: "Two colors PNG",
-	description:
-		"Recolors the image into two chosen colors by luminance threshold.",
-	category: "color",
 	schema: twoColorsSchema,
 	input: "image",
 	run: imgTool((img, p) => twoColors(img, p.pair.from, p.pair.to, p.threshold)),
@@ -69,13 +64,8 @@ export const gammaSchema = toolSchema<GammaParams>({
 	}),
 });
 
-const gammaTool: ToolEntry<GammaParams> = {
+const gammaTool: Tool<GammaParams> = {
 	id: "gamma-png",
-	slug: "gamma-png",
-	title: "Gamma correction PNG",
-	description:
-		"Corrects midtone brightness. <1 darker, >1 lighter, 1 — unchanged.",
-	category: "color",
 	schema: gammaSchema,
 	input: "image",
 	run: imgTool((img, p) => gammaCorrection(img, p.value)),
@@ -95,13 +85,8 @@ export const temperatureSchema = toolSchema<TemperatureParams>({
 	}),
 });
 
-const temperatureTool: ToolEntry<TemperatureParams> = {
+const temperatureTool: Tool<TemperatureParams> = {
 	id: "temperature-png",
-	slug: "temperature-png",
-	title: "Temperature PNG",
-	description:
-		"Positive values make the image warmer (more orange), negative ones cooler (more blue).",
-	category: "color",
 	schema: temperatureSchema,
 	input: "image",
 	run: imgTool((img, p) => temperature(img, p.percent)),
@@ -123,13 +108,8 @@ export const tintSchema = toolSchema<TintParams>({
 	}),
 });
 
-const tintTool: ToolEntry<TintParams> = {
+const tintTool: Tool<TintParams> = {
 	id: "tint-png",
-	slug: "tint-png",
-	title: "Tint PNG",
-	description:
-		"Multiplies color channels by the chosen tint with the given strength.",
-	category: "color",
 	schema: tintSchema,
 	input: "image",
 	run: imgTool((img, p) => tint(img, p.color, p.strength)),
@@ -149,13 +129,8 @@ export const quantizeSchema = toolSchema<QuantizeParams>({
 	}),
 });
 
-const quantizeTool: ToolEntry<QuantizeParams> = {
+const quantizeTool: Tool<QuantizeParams> = {
 	id: "quantize-png",
-	slug: "quantize-png",
-	title: "Quantize PNG",
-	description:
-		"Reduces the image to k colors via median-cut palette. Transparent pixels are preserved.",
-	category: "color",
 	schema: quantizeSchema,
 	input: "image",
 	run: imgTool((img, p) => quantizeImage(img, p.colors).image),
@@ -169,13 +144,8 @@ export const customPaletteSchema = toolSchema<CustomPaletteParams>({
 	colors: field.text({ label: "fields.hexList", default: "#000000,#ffffff" }),
 });
 
-const customPalette: ToolEntry<CustomPaletteParams> = {
+const customPalette: Tool<CustomPaletteParams> = {
 	id: "custom-palette-png",
-	slug: "custom-palette-png",
-	title: "Custom Palette PNG",
-	description:
-		"Maps every pixel to the nearest color from your comma-separated hex list.",
-	category: "color",
 	schema: customPaletteSchema,
 	input: "image",
 	run: imgTool((img, p) => mapToNearest(img, parseHexList(p.colors))),
@@ -204,13 +174,8 @@ export const ditheringSchema = toolSchema<DitheringParams>({
 	}),
 });
 
-const ditheringTool: ToolEntry<DitheringParams> = {
+const ditheringTool: Tool<DitheringParams> = {
 	id: "dithering-png",
-	slug: "dithering-png",
-	title: "Dithering PNG",
-	description:
-		"Applies Floyd–Steinberg error diffusion or ordered Bayer dithering while reducing to k colors.",
-	category: "color",
 	schema: ditheringSchema,
 	input: "image",
 	run: imgTool((img, p) => ditherImage(img, p.colors, p.pattern)),
@@ -220,13 +185,8 @@ interface EmptyParams {}
 
 export const grayscaleSchema = toolSchema<EmptyParams>({});
 
-const grayscaleTool: ToolEntry<EmptyParams> = {
+const grayscaleTool: Tool<EmptyParams> = {
 	id: "grayscale-png",
-	slug: "grayscale-png",
-	title: "Grayscale PNG",
-	description:
-		"Converts the image to shades of gray using the BT.601 luminance formula. Alpha is preserved.",
-	category: "color",
 	schema: grayscaleSchema,
 	input: "image",
 	run: imgTool((img) => grayscale(img)),
@@ -234,12 +194,8 @@ const grayscaleTool: ToolEntry<EmptyParams> = {
 
 export const invertColorsSchema = toolSchema<EmptyParams>({});
 
-const invertColorsTool: ToolEntry<EmptyParams> = {
+const invertColorsTool: Tool<EmptyParams> = {
 	id: "invert-colors-png",
-	slug: "invert-colors-png",
-	title: "Invert colors PNG",
-	description: "Inverts each color channel (255 − value). Alpha is unchanged.",
-	category: "color",
 	schema: invertColorsSchema,
 	input: "image",
 	run: imgTool((img) => invert(img)),
@@ -276,13 +232,8 @@ export const brightnessContrastSchema = toolSchema<BrightnessContrastParams>(
 	},
 );
 
-const brightnessContrastTool: ToolEntry<BrightnessContrastParams> = {
+const brightnessContrastTool: Tool<BrightnessContrastParams> = {
 	id: "adjust-brightness-contrast-png",
-	slug: "adjust-brightness-contrast-png",
-	title: "Brightness & contrast PNG",
-	description:
-		"Adjusts brightness and contrast in the range from −100 to +100. Zero means no change.",
-	category: "color",
 	schema: brightnessContrastSchema,
 	input: "image",
 	run: imgTool((img, p) => brightnessContrast(img, p.brightness, p.contrast)),
@@ -302,13 +253,8 @@ export const opacitySchema = toolSchema<OpacityParams>({
 	}),
 });
 
-const opacityTool: ToolEntry<OpacityParams> = {
+const opacityTool: Tool<OpacityParams> = {
 	id: "change-png-opacity",
-	slug: "change-png-opacity",
-	title: "Change PNG opacity",
-	description:
-		"Multiplies the alpha channel by a percentage: 0% — fully transparent, 100% — unchanged.",
-	category: "color",
 	schema: opacitySchema,
 	input: "image",
 	run: imgTool((img, p) => setOpacity(img, p.percent)),
@@ -316,12 +262,8 @@ const opacityTool: ToolEntry<OpacityParams> = {
 
 export const sepiaSchema = toolSchema<EmptyParams>({});
 
-const sepiaTool: ToolEntry<EmptyParams> = {
+const sepiaTool: Tool<EmptyParams> = {
 	id: "sepia-png",
-	slug: "sepia-png",
-	title: "Sepia effect",
-	description: "Tints the image into the warm brown tones of classic sepia.",
-	category: "color",
 	schema: sepiaSchema,
 	input: "image",
 	run: imgTool((img) => sepia(img)),
@@ -341,13 +283,8 @@ export const hueShiftSchema = toolSchema<HueShiftParams>({
 	}),
 });
 
-const hueShiftTool: ToolEntry<HueShiftParams> = {
+const hueShiftTool: Tool<HueShiftParams> = {
 	id: "change-png-hue",
-	slug: "change-png-hue",
-	title: "Change hue PNG",
-	description:
-		"Shifts the hue around the circle. Saturation and lightness are preserved.",
-	category: "color",
 	schema: hueShiftSchema,
 	input: "image",
 	run: imgTool((img, p) => changeHue(img, p.degrees)),
@@ -369,13 +306,8 @@ export const extractChannelSchema = toolSchema<ExtractChannelParams>({
 	}),
 });
 
-const extractChannelTool: ToolEntry<ExtractChannelParams> = {
+const extractChannelTool: Tool<ExtractChannelParams> = {
 	id: "extract-channel-png",
-	slug: "extract-channel-png",
-	title: "Extract channel PNG",
-	description:
-		"Keeps only the chosen channel — red, green or blue — as shades of gray.",
-	category: "color",
 	schema: extractChannelSchema,
 	input: "image",
 	run: imgTool((img, p) => extractChannel(img, p.channel)),
@@ -397,13 +329,8 @@ export const swapChannelsSchema = toolSchema<SwapChannelsParams>({
 	}),
 });
 
-const swapChannelsTool: ToolEntry<SwapChannelsParams> = {
+const swapChannelsTool: Tool<SwapChannelsParams> = {
 	id: "swap-channels-png",
-	slug: "swap-channels-png",
-	title: "Swap channels PNG",
-	description:
-		"Swaps two color channels — a quick way to get unusual coloring.",
-	category: "color",
 	schema: swapChannelsSchema,
 	input: "image",
 	run: imgTool((img, p) => swapChannels(img, p.pair)),
@@ -423,13 +350,8 @@ export const blackAndWhiteSchema = toolSchema<BlackAndWhiteParams>({
 	}),
 });
 
-const blackAndWhiteTool: ToolEntry<BlackAndWhiteParams> = {
+const blackAndWhiteTool: Tool<BlackAndWhiteParams> = {
 	id: "black-and-white-png",
-	slug: "black-and-white-png",
-	title: "Black & white threshold PNG",
-	description:
-		"Hard binarization by luminance: every pixel becomes black or white.",
-	category: "color",
 	schema: blackAndWhiteSchema,
 	input: "image",
 	run: imgTool((img, p) => thresholdBlackWhite(img, p.threshold)),
@@ -449,12 +371,8 @@ export const posterizeSchema = toolSchema<PosterizeParams>({
 	}),
 });
 
-const posterizeTool: ToolEntry<PosterizeParams> = {
+const posterizeTool: Tool<PosterizeParams> = {
 	id: "posterize-png",
-	slug: "posterize-png",
-	title: "Posterize PNG",
-	description: "Reduces the number of levels per channel — a poster effect.",
-	category: "color",
 	schema: posterizeSchema,
 	input: "image",
 	run: imgTool((img, p) => posterize(img, p.levels)),
@@ -462,13 +380,8 @@ const posterizeTool: ToolEntry<PosterizeParams> = {
 
 export const autoContrastSchema = toolSchema<EmptyParams>({});
 
-const autoContrastTool: ToolEntry<EmptyParams> = {
+const autoContrastTool: Tool<EmptyParams> = {
 	id: "auto-contrast-png",
-	slug: "auto-contrast-png",
-	title: "Auto contrast PNG",
-	description:
-		"Stretches each channel's range across the full available brightness range.",
-	category: "color",
 	schema: autoContrastSchema,
 	input: "image",
 	run: imgTool((img) => autoContrast(img)),
@@ -499,13 +412,8 @@ export const decreaseColorCountSchema = toolSchema<DecreaseColorCountParams>({
 	}),
 });
 
-const decreaseColorCountTool: ToolEntry<DecreaseColorCountParams> = {
+const decreaseColorCountTool: Tool<DecreaseColorCountParams> = {
 	id: "decrease-color-count-png",
-	slug: "decrease-color-count-png",
-	title: "Decrease Color Count PNG",
-	description:
-		"Median-cut engine as a quick way to drop to 2–256 colors. Presets marked (extreme/strong/balanced/light) match the classic compression levels.",
-	category: "color",
 	schema: decreaseColorCountSchema,
 	input: "image",
 	run: imgTool((img, p) => quantizeImage(img, Number(p.maxColors)).image),
@@ -516,60 +424,15 @@ interface ChannelParams {
 	display: "gray" | "color";
 }
 
-type SpaceEntry = {
-	id: SpaceId;
-	title: string;
-	description: string;
-};
+// Пространства, для которых есть инструмент и страница; тексты страницы живут
+// в `registry/pages/color.ts`, поэтому здесь только идентификаторы.
+const CHANNEL_SPACES: SpaceId[] = ["hsl", "hsv", "hsi", "cmyk", "ycbcr", "lab"];
 
-const CHANNEL_SPACES: SpaceEntry[] = [
-	{
-		id: "hsl",
-		title: "Split PNG into HSL",
-		description:
-			"Decomposes the image into Hue, Saturation and Lightness components.",
-	},
-	{
-		id: "hsv",
-		title: "Split PNG into HSV",
-		description:
-			"Decomposes the image into Hue, Saturation and Value (brightness) components.",
-	},
-	{
-		id: "hsi",
-		title: "Split PNG into HSI",
-		description:
-			"Decomposes the image into Hue, Saturation and Intensity components.",
-	},
-	{
-		id: "cmyk",
-		title: "Convert PNG to CMYK Colors",
-		description:
-			"Decomposes the image into print-style Cyan, Magenta, Yellow and Key (black) components.",
-	},
-	{
-		id: "ycbcr",
-		title: "Convert PNG to YCbCr Colors",
-		description:
-			"Decomposes the image into Luma (Y) and Blue-difference / Red-difference chroma components.",
-	},
-	{
-		id: "lab",
-		title: "Convert PNG to LAB Colors",
-		description:
-			"Decomposes the image into perceptual Lightness and green–magenta / blue–yellow opponents.",
-	},
-];
-
-function channelEntries(): ToolEntry<ChannelParams>[] {
+function channelEntries(): Tool<ChannelParams>[] {
 	return CHANNEL_SPACES.map((space) => {
-		const components = SPACES[space.id].components;
+		const components = SPACES[space].components;
 		return {
-			id: `png-to-${space.id}`,
-			slug: `png-to-${space.id}`,
-			title: space.title,
-			description: space.description,
-			category: "color",
+			id: `png-to-${space}`,
 			schema: toolSchema<ChannelParams>({
 				component: field.select({
 					label: "fields.component",
@@ -589,14 +452,12 @@ function channelEntries(): ToolEntry<ChannelParams>[] {
 				}),
 			}),
 			input: "image",
-			run: imgTool((img, p) =>
-				renderSpace(img, space.id, p.component, p.display),
-			),
-		} satisfies ToolEntry<ChannelParams>;
+			run: imgTool((img, p) => renderSpace(img, space, p.component, p.display)),
+		} satisfies Tool<ChannelParams>;
 	});
 }
 
-export const colorEntries = [
+export const colorTools = [
 	twoColorsTool,
 	gammaTool,
 	temperatureTool,

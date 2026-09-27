@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { TOOLS } from ".";
+import { PAGES } from ".";
 
 const MAP_PATH = fileURLToPath(
 	new URL("../../../../docs/tools-map.md", import.meta.url),
@@ -10,7 +10,7 @@ const MAP_PATH = fileURLToPath(
 const SECTION_START = /^## 1\.\s/;
 const SECTION_END = /^## 2\.\s/;
 
-// Все id в реестре содержат дефис, поэтому формат строгий: это отсекает слова
+// Все slug страниц содержат дефис, поэтому формат строгий: это отсекает слова
 // описания вроде `median-cut` из «colors (k, median-cut)».
 const ID_SHAPE = /^[a-z][a-z0-9]*(-[a-z0-9]+)+$/;
 
@@ -18,9 +18,9 @@ type Mention = { id: string; line: number };
 
 /**
  * Буллиты раздела «1. Реализовано» вместе с номером первой строки.
- * Перенесённые строки приклеиваются к буллету: иначе id, оказавшийся на
- * следующей строке, молча выпадал бы из разбора и инструмент считался бы
- * неописанным.
+ * Перенесённые строки приклеиваются к буллету: иначе slug, оказавшийся на
+ * следующей строке, молча выпадал бы из разбора и страница считалась бы
+ * неописанной.
  */
 function implementedBullets(
 	markdown: string,
@@ -56,7 +56,7 @@ function implementedBullets(
 }
 
 /**
- * Всё до первого тире `—` — id через `/` или `,`; после тире свободное
+ * Всё до первого тире `—` — slug через `/` или `,`; после тире свободное
  * описание параметров, оно не разбирается. Формат закреплён в самой карте.
  */
 function mentionedIds(markdown: string): Mention[] {
@@ -71,39 +71,39 @@ function mentionedIds(markdown: string): Mention[] {
 	return found;
 }
 
-describe("docs/tools-map.md ↔ реестр", () => {
+describe("docs/tools-map.md ↔ страницы реестра", () => {
 	const markdown = readFileSync(MAP_PATH, "utf8");
 	const mentioned = mentionedIds(markdown);
-	const registryIds = new Set(TOOLS.map((t) => t.id));
+	const registrySlugs = new Set(PAGES.map((page) => page.slug));
 
-	it("разбирает непустой список id (парсер не сломался молча)", () => {
+	it("разбирает непустой список slug (парсер не сломался молча)", () => {
 		expect(implementedBullets(markdown).length).toBeGreaterThan(0);
 		expect(new Set(mentioned.map((m) => m.id)).size).toBeGreaterThan(50);
 	});
 
-	it("в карте нет id, которых нет в реестре", () => {
-		const bogus = mentioned.filter((m) => !registryIds.has(m.id));
+	it("в карте нет slug, которых нет в реестре", () => {
+		const bogus = mentioned.filter((m) => !registrySlugs.has(m.id));
 		expect(
 			bogus,
 			bogus
 				.map(
 					(m) =>
-						`${m.id} (docs/tools-map.md:${m.line}) — такого инструмента нет в web/src/lib/registry/`,
+						`${m.id} (docs/tools-map.md:${m.line}) — такой страницы нет в web/src/lib/registry/pages/`,
 				)
 				.join("\n"),
 		).toEqual([]);
 	});
 
-	it("каждый инструмент реестра описан в карте", () => {
+	it("каждая страница реестра описана в карте", () => {
 		const mentionedSet = new Set(mentioned.map((m) => m.id));
-		const missing = [...registryIds].filter((id) => !mentionedSet.has(id));
+		const missing = [...registrySlugs].filter((id) => !mentionedSet.has(id));
 		expect(
 			missing,
 			`не описаны в разделе «Реализовано»:\n${missing.join("\n")}`,
 		).toEqual([]);
 	});
 
-	it("id не продублированы между буллетами", () => {
+	it("slug не продублированы между буллетами", () => {
 		const seen = new Map<string, number>();
 		const dupes: string[] = [];
 		for (const { id, line } of mentioned) {
@@ -114,6 +114,6 @@ describe("docs/tools-map.md ↔ реестр", () => {
 				seen.set(id, line);
 			}
 		}
-		expect(dupes, `повторяющиеся id:\n${dupes.join("\n")}`).toEqual([]);
+		expect(dupes, `повторяющиеся slug:\n${dupes.join("\n")}`).toEqual([]);
 	});
 });

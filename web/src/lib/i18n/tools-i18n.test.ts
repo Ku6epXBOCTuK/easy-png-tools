@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { TOOLS, type ToolEntry } from "../registry";
+import { PAGES, TOOLS, type Tool } from "../registry";
 import { en } from "./en";
 import { ru } from "./ru";
 
-function toolKeys(tool: ToolEntry): { fields: string[]; groups: string[] } {
+function toolKeys(tool: Tool): { fields: string[]; groups: string[] } {
 	const fields: string[] = [];
 	for (const field of Object.values(tool.schema?.fields ?? {})) {
 		const label = (field as { spec?: { label?: string } }).spec?.label;
@@ -18,7 +18,7 @@ function toolKeys(tool: ToolEntry): { fields: string[]; groups: string[] } {
 type SelectOption = { value: string; label: string };
 
 function selectOptions(
-	tool: ToolEntry,
+	tool: Tool,
 ): { fieldId: string; option: SelectOption }[] {
 	const result: { fieldId: string; option: SelectOption }[] = [];
 	for (const [fieldId, field] of Object.entries(tool.schema?.fields ?? {})) {
@@ -32,12 +32,12 @@ function selectOptions(
 }
 
 describe("полнота словарей для нового registry", () => {
-	it("у каждого инструмента есть перевод ru с непустыми title/description", () => {
-		for (const tool of TOOLS) {
-			const strings = ru.tools[tool.id];
-			expect(strings, `нет перевода ru для ${tool.id}`).toBeDefined();
-			expect(strings?.title, `${tool.id}: title`).toBeTruthy();
-			expect(strings?.description, `${tool.id}: description`).toBeTruthy();
+	it("у каждой страницы есть перевод ru с непустыми title/description", () => {
+		for (const page of PAGES) {
+			const strings = ru.tools[page.slug];
+			expect(strings, `нет перевода ru для ${page.slug}`).toBeDefined();
+			expect(strings?.title, `${page.slug}: title`).toBeTruthy();
+			expect(strings?.description, `${page.slug}: description`).toBeTruthy();
 		}
 	});
 
@@ -75,11 +75,14 @@ describe("полнота словарей для нового registry", () => {
 		}
 	});
 
-	it("в словарях нет лишних инструментов", () => {
-		const ids = new Set(TOOLS.map((tool) => tool.id));
+	it("в словарях нет ключей без записи в реестре", () => {
+		const known = new Set([
+			...TOOLS.map((tool) => tool.id),
+			...PAGES.map((page) => page.slug),
+		]);
 		for (const dict of [ru.tools, en.tools]) {
-			for (const id of Object.keys(dict)) {
-				expect(ids.has(id), `лишний инструмент в словаре: ${id}`).toBe(true);
+			for (const key of Object.keys(dict)) {
+				expect(known.has(key), `лишний ключ в словаре: ${key}`).toBe(true);
 			}
 		}
 	});

@@ -3,8 +3,8 @@ import { getLocale, setLocale } from "./locale.svelte";
 import { LOCALE_TAGS } from "./dict";
 import { normalizeForSearch } from "./matching";
 import { t } from "./t";
-import { getTool, TOOLS } from "../registry";
-import { toolTitle } from "./schema-tool-strings";
+import { getPageBySlug, PAGES } from "../registry";
+import { pageTitle } from "./schema-tool-strings";
 
 afterEach(() => {
 	setLocale("ru");
@@ -52,11 +52,11 @@ describe("Смоук §6 i18n (новый UI)", () => {
 	});
 
 	it("4. Заголовок инструмента переключается локалями (schema-tool-strings)", () => {
-		const tool = getTool("crop-png") ?? TOOLS[0];
+		const page = getPageBySlug("crop-png") ?? PAGES[0];
 		setLocale("ru");
-		expect(toolTitle(tool)).toContain("Обрезать");
+		expect(pageTitle(page)).toContain("Обрезать");
 		setLocale("en");
-		expect(toolTitle(tool)).toBe(tool.title);
+		expect(pageTitle(page)).toBe(page.title);
 	});
 
 	it("5. Ошибки с vars локализуются на оба языка", () => {

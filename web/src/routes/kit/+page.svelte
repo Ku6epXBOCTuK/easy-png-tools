@@ -23,7 +23,7 @@
 	import Toggle from "$lib/components/ui/Toggle.svelte";
 	import { Download, ImageOff, Plus, Trash2 } from "@lucide/svelte";
 
-	import { TOOLS } from "$lib/registry";
+	import { PAGES } from "$lib/registry";
 	import { TOOL_ICONS } from "$lib/tool-icons";
 
 	let mode = $state("preview");
@@ -34,8 +34,8 @@
 	let lossless = $state(true);
 	let animated = $state(false);
 
-	const showcaseTools = TOOLS.filter((tool) =>
-		["linear-gradient-png", "resize-png", "quantize-png"].includes(tool.id),
+	const showcasePages = PAGES.filter((page) =>
+		["linear-gradient-png", "resize-png", "quantize-png"].includes(page.slug),
 	);
 </script>
 
@@ -140,13 +140,13 @@
 
 	<Panel title="Tools" eyebrow="catalog">
 		<div class="tool-grid">
-			{#each showcaseTools as tool, i (tool.id)}
+			{#each showcasePages as page, i (page.slug)}
 				<ToolCard
-					title={tool.title}
-					id={tool.id}
-					description={tool.description}
+					title={page.title}
+					slug={page.slug}
+					description={page.description}
 					index={i + 1}
-					icon={TOOL_ICONS[tool.id]}
+					icon={TOOL_ICONS[page.slug]}
 				/>
 			{/each}
 		</div>

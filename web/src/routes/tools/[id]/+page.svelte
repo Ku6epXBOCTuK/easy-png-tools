@@ -2,7 +2,7 @@
 	import EmptyState from "$lib/components/EmptyState.svelte";
 	import SchemaToolView from "$lib/components/SchemaToolView.svelte";
 	import { t } from "$lib/i18n/t";
-	import { getTool } from "$lib/registry";
+	import { getPageBySlug, getTool } from "$lib/registry";
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";
 
 	interface Props {
@@ -10,15 +10,16 @@
 	}
 	let { data }: Props = $props();
 
-	const tool = $derived(getTool(data.id));
+	const page = $derived(getPageBySlug(data.id));
+	const tool = $derived(page ? getTool(page.steps[0].id) : undefined);
 </script>
 
 <svelte:head>
-	<title>easy-png-tools / {tool?.title ?? t("toolPage.fallbackTitle")}</title>
+	<title>easy-png-tools / {page?.title ?? t("toolPage.fallbackTitle")}</title>
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-{#if !tool}
+{#if !page || !tool}
 	<div class="notfound">
 		<EmptyState
 			title={t("errors.notFound")}
@@ -27,7 +28,7 @@
 		/>
 	</div>
 {:else}
-	<SchemaToolView {tool} />
+	<SchemaToolView {page} {tool} />
 {/if}
 
 <style>

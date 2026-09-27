@@ -1,15 +1,19 @@
-import { hasTransparency, isGrayscale, orientationOf } from "../core/analyze";
-import { encode } from "../core/io";
+import {
+	hasTransparency,
+	isGrayscale,
+	orientationOf,
+} from "../../core/analyze";
+import { encode } from "../../core/io";
 import {
 	extractByColor,
 	isGrayscaleish,
 	luma01,
 	rarityPredicate,
 	renderPredicateMask,
-} from "../core/masks";
-import { base64ToBytes, looksLikePng, stripDataUri } from "../core/textio";
-import { field, toolSchema } from "../registry-schema";
-import { imgTool, textGen, type ToolEntry } from "./types";
+} from "../../core/masks";
+import { base64ToBytes, looksLikePng, stripDataUri } from "../../core/textio";
+import { field, toolSchema } from "../../registry-schema";
+import { imgTool, textGen, type Tool } from "../types";
 
 interface ExtractColorParams {
 	color: string;
@@ -27,13 +31,8 @@ export const extractColorSchema = toolSchema<ExtractColorParams>({
 	}),
 });
 
-const extractColor: ToolEntry<ExtractColorParams> = {
+const extractColor: Tool<ExtractColorParams> = {
 	id: "extract-color-from-png",
-	slug: "extract-color-from-png",
-	title: "Extract Color from PNG",
-	description:
-		"Keeps only pixels close to the chosen color and makes everything else transparent — the inverse of Remove Color.",
-	category: "analyze",
 	schema: extractColorSchema,
 	input: "image",
 	run: imgTool((img, p) => extractByColor(img, p.color, p.tolerance)),
@@ -88,13 +87,8 @@ export const showTransparentSchema = toolSchema<MaskParams>({
 	}),
 });
 
-const showTransparent: ToolEntry<MaskParams> = {
+const showTransparent: Tool<MaskParams> = {
 	id: "show-transparent-png",
-	slug: "show-transparent-png",
-	title: "Show Transparent Areas PNG",
-	description:
-		"Highlights every transparent or semi-transparent pixel with the chosen color so gaps become obvious.",
-	category: "analyze",
 	schema: showTransparentSchema,
 	input: "image",
 	run: imgTool((img, p) => renderMask(img, p, (_r, _g, _b, a) => a < 255)),
@@ -115,13 +109,8 @@ export const showGrayscalePixelsSchema = toolSchema<GrayscalePixelsParams>({
 	}),
 });
 
-const showGrayscalePixels: ToolEntry<GrayscalePixelsParams> = {
+const showGrayscalePixels: Tool<GrayscalePixelsParams> = {
 	id: "show-grayscale-pixels-png",
-	slug: "show-grayscale-pixels-png",
-	title: "Show Grayscale Pixels PNG",
-	description:
-		"Finds pixels whose channels are nearly equal and renders them as a mask. Tolerance is in channel units.",
-	category: "analyze",
 	schema: showGrayscalePixelsSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -144,13 +133,8 @@ export const showColorPixelsSchema = toolSchema<ColorPixelsParams>({
 	}),
 });
 
-const showColorPixels: ToolEntry<ColorPixelsParams> = {
+const showColorPixels: Tool<ColorPixelsParams> = {
 	id: "show-color-pixels-png",
-	slug: "show-color-pixels-png",
-	title: "Show Color Pixels PNG",
-	description:
-		"Finds colored (non-gray) pixels beyond the channel tolerance and renders them as a mask.",
-	category: "analyze",
 	schema: showColorPixelsSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -173,12 +157,8 @@ export const lightPixelMaskSchema = toolSchema<LightPixelParams>({
 	}),
 });
 
-const lightPixelMask: ToolEntry<LightPixelParams> = {
+const lightPixelMask: Tool<LightPixelParams> = {
 	id: "light-pixel-mask-png",
-	slug: "light-pixel-mask-png",
-	title: "Light Pixel Mask PNG",
-	description: "Selects pixels brighter than the luminance threshold.",
-	category: "analyze",
 	schema: lightPixelMaskSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -201,12 +181,8 @@ export const darkPixelMaskSchema = toolSchema<DarkPixelParams>({
 	}),
 });
 
-const darkPixelMask: ToolEntry<DarkPixelParams> = {
+const darkPixelMask: Tool<DarkPixelParams> = {
 	id: "dark-pixel-mask-png",
-	slug: "dark-pixel-mask-png",
-	title: "Dark Pixel Mask PNG",
-	description: "Selects pixels darker than the luminance threshold.",
-	category: "analyze",
 	schema: darkPixelMaskSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -229,13 +205,8 @@ export const uniqueColorMaskSchema = toolSchema<UniqueColorParams>({
 	}),
 });
 
-const uniqueColorMask: ToolEntry<UniqueColorParams> = {
+const uniqueColorMask: Tool<UniqueColorParams> = {
 	id: "unique-color-mask-png",
-	slug: "unique-color-mask-png",
-	title: "Unique Color Mask PNG",
-	description:
-		"Selects colors that occur no more than the given number of times — rare and one-off pixels.",
-	category: "analyze",
 	schema: uniqueColorMaskSchema,
 	input: "image",
 	run: imgTool((img, p) => renderMask(img, p, rarityPredicate(img, p.rarity))),
@@ -245,13 +216,8 @@ interface NoParams {}
 
 const emptySchema = toolSchema<NoParams>({});
 
-const verifyIsPng: ToolEntry<NoParams> = {
+const verifyIsPng: Tool<NoParams> = {
 	id: "verify-is-png",
-	slug: "verify-is-png",
-	title: "Verify If Image Is a PNG",
-	description:
-		"Checks the signature of pasted base64 / data-uri content and reports whether it is a real PNG.",
-	category: "analyze",
 	schema: emptySchema,
 	input: "text",
 	result: "verdict",
@@ -260,24 +226,16 @@ const verifyIsPng: ToolEntry<NoParams> = {
 	),
 };
 
-const pngIsGrayscale: ToolEntry<NoParams> = {
+const pngIsGrayscale: Tool<NoParams> = {
 	id: "png-is-grayscale",
-	slug: "png-is-grayscale",
-	title: "Check: is PNG grayscale?",
-	description: "Reports whether the image consists only of shades of gray.",
-	category: "analyze",
 	schema: emptySchema,
 	input: "image",
 	result: "verdict",
 	run: imgTool((img) => (isGrayscale(img) ? "grayscaleYes" : "grayscaleNo")),
 };
 
-const pngFileSize: ToolEntry<NoParams> = {
+const pngFileSize: Tool<NoParams> = {
 	id: "png-file-size",
-	slug: "png-file-size",
-	title: "PNG File Size",
-	description: "Encodes the image as PNG and reports the resulting file size.",
-	category: "analyze",
 	schema: emptySchema,
 	domOnly: true,
 	input: "image",
@@ -290,13 +248,8 @@ const pngFileSize: ToolEntry<NoParams> = {
 	}),
 };
 
-const pngIsTransparent: ToolEntry<NoParams> = {
+const pngIsTransparent: Tool<NoParams> = {
 	id: "png-is-transparent",
-	slug: "png-is-transparent",
-	title: "Check: is PNG transparent?",
-	description:
-		"Reports whether the image contains transparent or semi-transparent pixels.",
-	category: "analyze",
 	schema: emptySchema,
 	input: "image",
 	result: "verdict",
@@ -305,12 +258,8 @@ const pngIsTransparent: ToolEntry<NoParams> = {
 	),
 };
 
-const pngOrientation: ToolEntry<NoParams> = {
+const pngOrientation: Tool<NoParams> = {
 	id: "png-orientation",
-	slug: "png-orientation",
-	title: "PNG orientation",
-	description: "Reports whether it is portrait, landscape or square.",
-	category: "analyze",
 	schema: emptySchema,
 	input: "image",
 	result: "verdict",
@@ -326,7 +275,7 @@ const pngOrientation: ToolEntry<NoParams> = {
 	}),
 };
 
-export const analyzeEntries = [
+export const analyzeTools = [
 	extractColor,
 	showTransparent,
 	showGrayscalePixels,

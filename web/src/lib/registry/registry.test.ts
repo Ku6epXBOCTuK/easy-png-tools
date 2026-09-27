@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { TOOLS } from ".";
+import { PAGES, TOOLS } from ".";
 import { PREVIEW_GROUPS } from "../catalog";
 import type { PixelImage } from "../core/types";
 import type { OutputMime } from "../core/io";
@@ -14,13 +14,13 @@ function asImage(result: ToolResult): PixelImage {
 }
 
 describe("registry-new (переведённые инструменты)", () => {
-	it("id уникальны", () => {
+	it("id инструментов уникальны", () => {
 		const ids = TOOLS.map((t) => t.id);
 		expect(new Set(ids).size).toBe(ids.length);
 	});
 
-	it("slug уникальны", () => {
-		const slugs = TOOLS.map((t) => t.slug);
+	it("slug страниц уникальны", () => {
+		const slugs = PAGES.map((page) => page.slug);
 		expect(new Set(slugs).size).toBe(slugs.length);
 	});
 
@@ -30,14 +30,43 @@ describe("registry-new (переведённые инструменты)", () =>
 		const shape = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
 		for (const tool of TOOLS) {
 			expect(shape.test(tool.id), `id: ${tool.id}`).toBe(true);
-			expect(shape.test(tool.slug), `slug: ${tool.slug}`).toBe(true);
+		}
+		for (const page of PAGES) {
+			expect(shape.test(page.slug), `slug: ${page.slug}`).toBe(true);
+		}
+	});
+
+	it("каждый шаг страницы ссылается на существующий инструмент", () => {
+		const ids = new Set(TOOLS.map((tool) => tool.id));
+		for (const page of PAGES) {
+			expect(page.steps.length, `${page.slug}: шагов`).toBeGreaterThan(0);
+			for (const step of page.steps) {
+				expect(ids.has(step.id), `${page.slug} → ${step.id}`).toBe(true);
+			}
+		}
+	});
+
+	it("каждый инструмент используется хотя бы одной страницей", () => {
+		const used = new Set(PAGES.flatMap((page) => page.steps.map((s) => s.id)));
+		const orphans = TOOLS.map((tool) => tool.id).filter((id) => !used.has(id));
+		expect(orphans, `инструменты без страниц:\n${orphans.join("\n")}`).toEqual(
+			[],
+		);
+	});
+
+	it("guard: у страницы ровно один шаг", () => {
+		// Модель допускает цепочку, но `SchemaToolView` исполняет первый шаг и
+		// форма параметров одна на страницу. Исполнение цепочек и общая форма
+		// из полей двух инструментов — фаза 11 `docs/roadmap.md`.
+		for (const page of PAGES) {
+			expect(page.steps.length, `${page.slug}: шагов`).toBe(1);
 		}
 	});
 
 	it("PREVIEW_GROUPS строится без ошибок", () => {
 		expect(PREVIEW_GROUPS.length).toBeGreaterThan(0);
-		expect(PREVIEW_GROUPS.reduce((n, g) => n + g.tools.length, 0)).toBe(
-			TOOLS.length,
+		expect(PREVIEW_GROUPS.reduce((n, g) => n + g.pages.length, 0)).toBe(
+			PAGES.length,
 		);
 	});
 

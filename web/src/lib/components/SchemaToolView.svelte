@@ -7,12 +7,12 @@
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
 	import {
-		toolDescription,
-		toolTitle,
+		pageDescription,
+		pageTitle,
 		verdictText,
 	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
-	import type { FileResult, ToolEntry } from "$lib/registry";
+	import type { FileResult, Page, Tool } from "$lib/registry";
 	import {
 		applySourceDefaults,
 		defaultSchemaParams,
@@ -22,12 +22,13 @@
 	import { downloadZip } from "$lib/zip";
 
 	interface Props {
-		tool: ToolEntry;
+		page: Page;
+		tool: Tool;
 	}
 	type DisplayError =
 		| { kind: "i18n"; key: string; vars?: ErrorVars }
 		| { kind: "plain"; text: string };
-	let { tool }: Props = $props();
+	let { page, tool }: Props = $props();
 
 	const schema = $derived(
 		tool.schema as ToolSchema<Record<string, unknown>> | undefined,
@@ -141,7 +142,7 @@
 		try {
 			if (resultKind === "files") {
 				if (!fileResult) return;
-				await downloadZip(fileResult.files, `${tool.id}.zip`);
+				await downloadZip(fileResult.files, `${page.slug}.zip`);
 				return;
 			}
 			if (!result) return;
@@ -150,7 +151,7 @@
 				? Number(values[out.qualityParamId]) / 100
 				: undefined;
 			const blob = await encode(result, out?.mime ?? "image/png", quality);
-			downloadBlob(blob, `${tool.id}.${out?.ext ?? "png"}`);
+			downloadBlob(blob, `${page.slug}.${out?.ext ?? "png"}`);
 		} catch (e) {
 			displayError = toDisplayError(e);
 		} finally {
@@ -175,7 +176,7 @@
 		if (!textResult) return;
 		try {
 			const blob = new Blob([textResult], { type: "text/plain" });
-			downloadBlob(blob, `${tool.id}.txt`);
+			downloadBlob(blob, `${page.slug}.txt`);
 		} catch (e) {
 			displayError = toDisplayError(e);
 		}
@@ -208,8 +209,8 @@
 	<div class="schema-tool">
 		<header class="header">
 			<div class="title-block">
-				<h1>{toolTitle(tool)}</h1>
-				<p class="lede">{toolDescription(tool)}</p>
+				<h1>{pageTitle(page)}</h1>
+				<p class="lede">{pageDescription(page)}</p>
 			</div>
 		</header>
 

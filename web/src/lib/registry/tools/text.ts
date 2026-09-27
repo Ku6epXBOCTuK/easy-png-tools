@@ -1,9 +1,9 @@
-import { formatStamp } from "../core/datefmt";
-import { drawTextBlock, drawTextTile } from "../core/domText";
-import type { Position9 } from "../core/textdraw";
-import type { FontStyle, Plate } from "../registry-schema";
-import { field, toolSchema } from "../registry-schema";
-import { imgTool, type ToolEntry } from "./types";
+import { formatStamp } from "../../core/datefmt";
+import { drawTextBlock, drawTextTile } from "../../core/domText";
+import type { Position9 } from "../../core/textdraw";
+import type { FontStyle, Plate } from "../../registry-schema";
+import { field, toolSchema } from "../../registry-schema";
+import { imgTool, type Tool } from "../types";
 
 interface AddTextParams {
 	text: string;
@@ -58,13 +58,8 @@ const addTextSchema = toolSchema<AddTextParams>(
 	},
 );
 
-const addText: ToolEntry<AddTextParams> = {
+const addText: Tool<AddTextParams> = {
 	id: "add-text-png",
-	slug: "add-text-png",
-	title: "Add text to PNG",
-	description:
-		"Draws a text label on the image: font, size, color, bold, position on a 3×3 grid and an optional backing plate.",
-	category: "text",
 	domOnly: true,
 	schema: addTextSchema,
 	input: "image",
@@ -137,13 +132,8 @@ const dateStampSchema = toolSchema<DateStampParams>(
 	},
 );
 
-const dateStamp: ToolEntry<DateStampParams> = {
+const dateStamp: Tool<DateStampParams> = {
 	id: "date-stamp-png",
-	slug: "date-stamp-png",
-	title: "Date stamp PNG",
-	description:
-		"Stamps the current date and time using a format string (YYYY MM DD hh mm ss tokens). Same styling options as Add text.",
-	category: "text",
 	domOnly: true,
 	schema: dateStampSchema,
 	input: "image",
@@ -231,13 +221,8 @@ const watermarkTileSchema = toolSchema<WatermarkTileParams>(
 	},
 );
 
-const watermarkTile: ToolEntry<WatermarkTileParams> = {
+const watermarkTile: Tool<WatermarkTileParams> = {
 	id: "watermark-tile-png",
-	slug: "watermark-tile-png",
-	title: "Watermark Tile PNG",
-	description:
-		"Covers the image with a repeating diagonal semi-transparent text tile — a protection watermark.",
-	category: "text",
 	domOnly: true,
 	schema: watermarkTileSchema,
 	input: "image",
@@ -256,4 +241,4 @@ const watermarkTile: ToolEntry<WatermarkTileParams> = {
 	),
 };
 
-export const textEntries = [addText, dateStamp, watermarkTile];
+export const textTools = [addText, dateStamp, watermarkTile];

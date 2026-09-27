@@ -1,17 +1,17 @@
 import { CATEGORY_IDS } from "./categories";
-import { TOOLS, type ToolEntry } from "./registry";
+import { PAGES, type Page } from "./registry";
 
 export type PreviewGroup = {
 	id: string;
-	tools: ToolEntry[];
+	pages: Page[];
 };
 
 /**
- * Preview-каталог: полный реестр инструментов, сгруппированный по категориям.
+ * Preview-каталог: все страницы, сгруппированные по категориям.
  */
 export const PREVIEW_GROUPS: PreviewGroup[] = CATEGORY_IDS.map((category) => ({
 	id: category,
-	tools: TOOLS.filter((tool) => tool.category === category),
-})).filter((group) => group.tools.length > 0);
+	pages: PAGES.filter((page) => page.category === category),
+})).filter((group) => group.pages.length > 0);
 
-export const PREVIEW_TOTAL = TOOLS.length;
+export const PREVIEW_TOTAL = PAGES.length;

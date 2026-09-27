@@ -1,14 +1,14 @@
-import { gaussianBlur, sharpen as sharpenImage } from "../core/convolution";
-import { vignette } from "../core/effects";
-import { jpegRoundtrip } from "../core/io";
+import { gaussianBlur, sharpen as sharpenImage } from "../../core/convolution";
+import { vignette } from "../../core/effects";
+import { jpegRoundtrip } from "../../core/io";
 import {
 	addNoise,
 	pixelate,
 	shuffleBlocks,
 	silhouette,
-} from "../core/pixel-fx";
-import { field, toolSchema } from "../registry-schema";
-import { imgTool, type ToolEntry } from "./types";
+} from "../../core/pixel-fx";
+import { field, toolSchema } from "../../registry-schema";
+import { imgTool, type Tool } from "../types";
 
 interface BlurParams {
 	radius: number;
@@ -24,13 +24,8 @@ export const blurSchema = toolSchema<BlurParams>({
 	}),
 });
 
-const blurTool: ToolEntry<BlurParams> = {
+const blurTool: Tool<BlurParams> = {
 	id: "blur-png",
-	slug: "blur-png",
-	title: "Blur PNG",
-	description:
-		"Gaussian blur: three passes of separable box blur — fast at any radius. Transparent edges do not darken.",
-	category: "filters",
 	schema: blurSchema,
 	input: "image",
 	run: imgTool((img, p) => gaussianBlur(img, p.radius)),
@@ -50,13 +45,8 @@ export const sharpenSchema = toolSchema<SharpenParams>({
 	}),
 });
 
-const sharpenTool: ToolEntry<SharpenParams> = {
+const sharpenTool: Tool<SharpenParams> = {
 	id: "sharpen-png",
-	slug: "sharpen-png",
-	title: "Sharpen PNG",
-	description:
-		"Emphasizes edges with a sharpening kernel; strength sets the blend with the original. 0% means no change.",
-	category: "filters",
 	schema: sharpenSchema,
 	input: "image",
 	run: imgTool((img, p) => sharpenImage(img, p.strength)),
@@ -78,13 +68,8 @@ export const silhouetteSchema = toolSchema<SilhouetteParams>({
 	}),
 });
 
-const silhouetteTool: ToolEntry<SilhouetteParams> = {
+const silhouetteTool: Tool<SilhouetteParams> = {
 	id: "silhouette-png",
-	slug: "silhouette-png",
-	title: "Silhouette PNG",
-	description:
-		"Turns all visible pixels into a single solid color while keeping their transparency — instant silhouette.",
-	category: "filters",
 	schema: silhouetteSchema,
 	input: "image",
 	run: imgTool((img, p) => silhouette(img, p.color, p.threshold * 2.55)),
@@ -104,13 +89,8 @@ export const vignetteSchema = toolSchema<VignetteParams>({
 	}),
 });
 
-const vignetteTool: ToolEntry<VignetteParams> = {
+const vignetteTool: Tool<VignetteParams> = {
 	id: "vignette-png",
-	slug: "vignette-png",
-	title: "Vignette PNG",
-	description:
-		"Smoothly darkens the edges of the image, leaving the center untouched.",
-	category: "filters",
 	schema: vignetteSchema,
 	input: "image",
 	run: imgTool((img, p) => vignette(img, p.strength)),
@@ -130,13 +110,8 @@ export const pixelateSchema = toolSchema<PixelateParams>({
 	}),
 });
 
-const pixelateTool: ToolEntry<PixelateParams> = {
+const pixelateTool: Tool<PixelateParams> = {
 	id: "pixelate-png",
-	slug: "pixelate-png",
-	title: "Pixelate PNG",
-	description:
-		"Averages every blockSize×blockSize area into one color — classic mosaic.",
-	category: "filters",
 	schema: pixelateSchema,
 	input: "image",
 	run: imgTool((img, p) => pixelate(img, p.blockSize)),
@@ -173,13 +148,8 @@ export const randomizePixelsSchema = toolSchema<RandomizePixelsParams>(
 	},
 );
 
-const randomizePixels: ToolEntry<RandomizePixelsParams> = {
+const randomizePixels: Tool<RandomizePixelsParams> = {
 	id: "randomize-pixels-png",
-	slug: "randomize-pixels-png",
-	title: "Randomize Pixels PNG",
-	description:
-		"Shuffles blocks of the image between positions. Same seed gives the same arrangement.",
-	category: "filters",
 	schema: randomizePixelsSchema,
 	input: "image",
 	run: imgTool((img, p) => shuffleBlocks(img, p.blockSize, p.seed)),
@@ -226,13 +196,8 @@ export const addNoiseSchema = toolSchema<AddNoiseParams>(
 	},
 );
 
-const addNoiseTool: ToolEntry<AddNoiseParams> = {
+const addNoiseTool: Tool<AddNoiseParams> = {
 	id: "add-noise-png",
-	slug: "add-noise-png",
-	title: "Add Noise to PNG",
-	description:
-		"Adds film-grain style noise. Deterministic by seed; monochrome keeps original hue balance.",
-	category: "filters",
 	schema: addNoiseSchema,
 	input: "image",
 	run: imgTool((img, p) => addNoise(img, p.amount, p.mode, p.seed)),
@@ -252,20 +217,15 @@ export const jpegArtifactsSchema = toolSchema<JpegArtifactsParams>({
 	}),
 });
 
-const jpegArtifacts: ToolEntry<JpegArtifactsParams> = {
+const jpegArtifacts: Tool<JpegArtifactsParams> = {
 	id: "jpeg-artifacts-png",
-	slug: "jpeg-artifacts-png",
-	title: "JPEG artifacts",
-	description:
-		"Simulates low-quality JPEG re-compression — visible blocks and smeared colors.",
-	category: "filters",
 	schema: jpegArtifactsSchema,
 	input: "image",
 	domOnly: true,
 	run: imgTool((img, p) => jpegRoundtrip(img, p.quality)),
 };
 
-export const filtersEntries = [
+export const filtersTools = [
 	vignetteTool,
 	pixelateTool,
 	randomizePixels,

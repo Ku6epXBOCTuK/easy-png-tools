@@ -1,12 +1,20 @@
-import { alphaEntries } from "./alpha";
-import { analyzeEntries } from "./analyze";
-import { colorEntries } from "./color";
-import { convertEntries } from "./convert";
-import { filtersEntries } from "./filters";
-import { generateEntries } from "./generate";
-import { geometryEntries } from "./geometry";
-import { textEntries } from "./text";
-import type { ToolEntry } from "./types";
+import { alphaTools } from "./tools/alpha";
+import { analyzeTools } from "./tools/analyze";
+import { colorTools } from "./tools/color";
+import { convertTools } from "./tools/convert";
+import { filtersTools } from "./tools/filters";
+import { generateTools } from "./tools/generate";
+import { geometryTools } from "./tools/geometry";
+import { textTools } from "./tools/text";
+import { alphaPages } from "./pages/alpha";
+import { analyzePages } from "./pages/analyze";
+import { colorPages } from "./pages/color";
+import { convertPages } from "./pages/convert";
+import { filtersPages } from "./pages/filters";
+import { generatePages } from "./pages/generate";
+import { geometryPages } from "./pages/geometry";
+import { textPages } from "./pages/text";
+import type { Page, Tool } from "./types";
 
 export {
 	genTool,
@@ -20,30 +28,43 @@ export {
 export type {
 	FileResult,
 	InputMode,
+	Page,
+	PageStep,
 	ResultKind,
+	Tool,
 	ToolContext,
-	ToolEntry,
 	ToolImageFile,
 	ToolResult,
 	VerdictResult,
 } from "./types";
 
-export const TOOLS: ToolEntry[] = [
-	...geometryEntries,
-	...alphaEntries,
-	...convertEntries,
-	...analyzeEntries,
-	...filtersEntries,
-	...colorEntries,
-	...generateEntries,
-	...textEntries,
-] as unknown as ToolEntry[];
+export const TOOLS: Tool[] = [
+	...geometryTools,
+	...alphaTools,
+	...convertTools,
+	...analyzeTools,
+	...filtersTools,
+	...colorTools,
+	...generateTools,
+	...textTools,
+] as unknown as Tool[];
 
-export function getTool(id: string): ToolEntry | undefined {
+export const PAGES: Page[] = [
+	...geometryPages,
+	...alphaPages,
+	...convertPages,
+	...analyzePages,
+	...filtersPages,
+	...colorPages,
+	...generatePages,
+	...textPages,
+] as unknown as Page[];
+
+export function getTool(id: string): Tool | undefined {
 	return TOOLS.find((tool) => tool.id === id);
 }
 
-/** Поиск по адресу страницы; `getTool` остаётся поиском по внутреннему имени. */
-export function getToolBySlug(slug: string): ToolEntry | undefined {
-	return TOOLS.find((tool) => tool.slug === slug);
+/** Единственный способ достать страницу: маршрут, крошка и имя файла идут от slug. */
+export function getPageBySlug(slug: string): Page | undefined {
+	return PAGES.find((page) => page.slug === slug);
 }

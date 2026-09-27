@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { TOOLS } from "../registry";
+import { PAGES } from "../registry";
 import { setLocale } from "./locale.svelte";
 import {
-	searchTools,
-	toolDescription,
-	toolTitle,
+	pageDescription,
+	pageTitle,
+	searchPages,
 	verdictText,
 } from "./schema-tool-strings";
 
@@ -12,53 +12,41 @@ afterEach(() => {
 	setLocale("ru");
 });
 
-const ids = (tools: { id: string }[]) => tools.map((t) => t.id);
+const slugs = (pages: { slug: string }[]) => pages.map((page) => page.slug);
 
-describe("searchTools (кросс-языковой поиск каталога)", () => {
+describe("searchPages (кросс-языковой поиск каталога)", () => {
 	it("пустой запрос возвращает весь каталог", () => {
-		expect(searchTools(TOOLS, "")).toHaveLength(TOOLS.length);
-		expect(searchTools(TOOLS, "   ")).toHaveLength(TOOLS.length);
+		expect(searchPages(PAGES, "")).toHaveLength(PAGES.length);
+		expect(searchPages(PAGES, "   ")).toHaveLength(PAGES.length);
 	});
 
 	it("находит ru-название, даже когда локаль en", () => {
 		setLocale("en");
-		expect(ids(searchTools(TOOLS, "обрез"))).toContain("crop-png");
-		expect(ids(searchTools(TOOLS, "пустые поля"))).toContain(
+		expect(slugs(searchPages(PAGES, "обрез"))).toContain("crop-png");
+		expect(slugs(searchPages(PAGES, "пустые поля"))).toContain(
 			"trim-empty-space-png",
 		);
 	});
 
 	it("находит en-название, даже когда локаль ru", () => {
-		expect(ids(searchTools(TOOLS, "resize"))).toContain("resize-png");
-		expect(ids(searchTools(TOOLS, "round corners"))).toContain(
+		expect(slugs(searchPages(PAGES, "resize"))).toContain("resize-png");
+		expect(slugs(searchPages(PAGES, "round corners"))).toContain(
 			"round-corners-png",
 		);
 	});
 
-	it("находит по id", () => {
-		expect(ids(searchTools(TOOLS, "crop png"))).toContain("crop-png");
+	it("находит по slug (тексту адреса)", () => {
+		expect(slugs(searchPages(PAGES, "crop png"))).toContain("crop-png");
 	});
 
 	it("ё и е — один запрос", () => {
-		const byYo = searchTools(TOOLS, "чёрно");
-		const byYe = searchTools(TOOLS, "черно");
-		expect(ids(byYo)).toEqual(ids(byYe));
+		const byYo = searchPages(PAGES, "чёрно");
+		const byYe = searchPages(PAGES, "черно");
+		expect(slugs(byYo)).toEqual(slugs(byYe));
 	});
 
 	it("нет совпадения — пустой список", () => {
-		expect(searchTools(TOOLS, "квантовый тостер")).toEqual([]);
-	});
-});
-
-describe("metadata fallback", () => {
-	it("uses registry title and description in the base locale", () => {
-		setLocale("en");
-		for (const tool of TOOLS) {
-			expect(toolTitle(tool), `${tool.id}: title`).toBe(tool.title);
-			expect(toolDescription(tool), `${tool.id}: description`).toBe(
-				tool.description,
-			);
-		}
+		expect(searchPages(PAGES, "квантовый тостер")).toEqual([]);
 	});
 });
 

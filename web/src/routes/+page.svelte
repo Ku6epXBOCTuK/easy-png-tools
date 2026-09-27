@@ -5,9 +5,9 @@
 	import CatalogToolbar from "$lib/components/CatalogToolbar.svelte";
 	import ToolCard from "$lib/components/ToolCard.svelte";
 	import {
-		searchTools,
-		toolDescription,
-		toolTitle,
+		pageDescription,
+		pageTitle,
+		searchPages,
 	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import { TOOL_ICONS } from "$lib/tool-icons";
@@ -19,10 +19,10 @@
 		PREVIEW_GROUPS.map((g) => ({
 			id: g.id,
 			label: t(`categories.${g.id}`),
-			tools: searchTools(g.tools, query).filter(
+			pages: searchPages(g.pages, query).filter(
 				() => category === "all" || category === g.id,
 			),
-		})).filter((g) => g.tools.length > 0),
+		})).filter((g) => g.pages.length > 0),
 	);
 </script>
 
@@ -31,14 +31,14 @@
 	<CatalogToolbar bind:query bind:category />
 	<div class="catalog-groups">
 		{#each groups as group (group.id)}
-			<CatalogGroup label={group.label} count={group.tools.length}>
-				{#each group.tools as tool, i (tool.id)}
+			<CatalogGroup label={group.label} count={group.pages.length}>
+				{#each group.pages as page, i (page.slug)}
 					<ToolCard
-						title={toolTitle(tool)}
-						id={tool.id}
-						description={toolDescription(tool)}
+						title={pageTitle(page)}
+						slug={page.slug}
+						description={pageDescription(page)}
 						index={i + 1}
-						icon={TOOL_ICONS[tool.id]}
+						icon={TOOL_ICONS[page.slug]}
 					/>
 				{/each}
 			</CatalogGroup>

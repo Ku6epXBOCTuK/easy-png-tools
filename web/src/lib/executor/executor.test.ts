@@ -15,7 +15,7 @@ import {
 } from "./protocol";
 import { handleWorkerRequest } from "./worker-handler";
 import { field, toolSchema, type Dimension } from "../registry-schema";
-import type { ToolEntry } from "../registry";
+import type { Tool } from "../registry";
 
 class FakeWorker implements WorkerLike {
 	onmessage: ((event: MessageEvent<WorkerResponse>) => void) | null = null;
@@ -61,15 +61,11 @@ function createFactory(throwOnPost = false): {
 const emptySchema = toolSchema<Record<string, never>>({});
 
 function makeTool(
-	run: ToolEntry["run"] = () => "direct",
-	overrides: Partial<ToolEntry> = {},
-): ToolEntry {
+	run: Tool["run"] = () => "direct",
+	overrides: Partial<Tool> = {},
+): Tool {
 	return {
 		id: "test-tool",
-		slug: "test-tool",
-		title: "Test tool",
-		description: "Test tool",
-		category: "analyze",
 		schema: emptySchema,
 		input: "none",
 		run,

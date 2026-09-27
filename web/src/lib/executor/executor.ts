@@ -1,6 +1,6 @@
 import { ToolError } from "../core/errors";
 import type { PixelImage } from "../core/types";
-import type { ToolContext, ToolEntry, ToolResult } from "../registry";
+import type { ToolContext, Tool, ToolResult } from "../registry";
 import { sanitizeSchemaParams } from "../registry-schema";
 import {
 	decodeWorkerResponse,
@@ -37,7 +37,7 @@ function defaultWorkerFactory(): WorkerLike {
 
 export function createExecutor(
 	options: { workerFactory?: WorkerFactory } = {},
-): (tool: ToolEntry, ctx: ExecuteContext) => Promise<ToolResult> {
+): (tool: Tool, ctx: ExecuteContext) => Promise<ToolResult> {
 	const workerFactory = options.workerFactory ?? defaultWorkerFactory;
 	let worker: WorkerLike | null = null;
 	let workerTried = false;
@@ -102,7 +102,7 @@ export function createExecutor(
 	}
 
 	async function runDirect(
-		tool: ToolEntry,
+		tool: Tool,
 		ctx: ExecuteContext,
 	): Promise<ToolResult> {
 		return await tool.run(ctx as ToolContext<Record<string, unknown>>);
@@ -110,7 +110,7 @@ export function createExecutor(
 
 	function runInWorker(
 		candidate: WorkerLike,
-		tool: ToolEntry,
+		tool: Tool,
 		ctx: ExecuteContext,
 	): Promise<ToolResult> {
 		return new Promise((resolve, reject) => {
@@ -136,10 +136,7 @@ export function createExecutor(
 		});
 	}
 
-	async function route(
-		tool: ToolEntry,
-		ctx: ExecuteContext,
-	): Promise<ToolResult> {
+	async function route(tool: Tool, ctx: ExecuteContext): Promise<ToolResult> {
 		if (tool.domOnly) return await runDirect(tool, ctx);
 		const candidate = ensureWorker();
 		if (candidate === null) return await runDirect(tool, ctx);

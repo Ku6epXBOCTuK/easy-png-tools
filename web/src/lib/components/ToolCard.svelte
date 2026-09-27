@@ -6,15 +6,15 @@
 
 	interface Props {
 		title: string;
-		id: string;
+		slug: string;
 		description?: string;
 		index?: number;
 		icon?: Component<{ size?: number; class?: string }>;
 	}
-	let { title, id, description, index, icon }: Props = $props();
+	let { title, slug, description, index, icon }: Props = $props();
 </script>
 
-<a class="tool-card" href={resolve("/tools/[id]", { id })}>
+<a class="tool-card" href={resolve("/tools/[id]", { id: slug })}>
 	{#if icon}<span class="tool-icon"><Icon {icon} size={19} /></span>{/if}
 	<span class="tool-copy">
 		<strong>{title}</strong>

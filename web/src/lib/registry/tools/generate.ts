@@ -1,7 +1,11 @@
-import { renderEmoji, renderTextToImage } from "../core/domText";
-import { colorSpectrum, drawGrid, randomColorBlocks } from "../core/gen-tools";
-import { noiseImage, solidImage } from "../core/generate";
-import { changeCanvasSize } from "../core/geometry";
+import { renderEmoji, renderTextToImage } from "../../core/domText";
+import {
+	colorSpectrum,
+	drawGrid,
+	randomColorBlocks,
+} from "../../core/gen-tools";
+import { noiseImage, solidImage } from "../../core/generate";
+import { changeCanvasSize } from "../../core/geometry";
 import {
 	analogousSet,
 	complementarySet,
@@ -16,8 +20,8 @@ import {
 	stepColors,
 	tetradicSet,
 	triadicSet,
-} from "../core/palette";
-import type { PixelImage } from "../core/types";
+} from "../../core/palette";
+import type { PixelImage } from "../../core/types";
 import {
 	field,
 	toolSchema,
@@ -25,8 +29,8 @@ import {
 	type Dimension,
 	type FontStyle,
 	type Gradient,
-} from "../registry-schema";
-import { genTool, type ToolEntry } from "./types";
+} from "../../registry-schema";
+import { genTool, type Tool } from "../types";
 
 function rgba(hex: string): [number, number, number, number] {
 	const { r, g, b } = hexToRgb(hex);
@@ -100,13 +104,8 @@ export const createEmptySchema = toolSchema<CreateEmptyParams>(
 	},
 );
 
-const createEmpty: ToolEntry<CreateEmptyParams> = {
+const createEmpty: Tool<CreateEmptyParams> = {
 	id: "create-empty-png",
-	slug: "create-empty-png",
-	title: "Create empty PNG",
-	description:
-		"Creates a blank canvas of the chosen dimensions, either transparent or filled with a solid color.",
-	category: "generate",
 	schema: createEmptySchema,
 	input: "none",
 	run: genTool((p) => {
@@ -135,12 +134,8 @@ export const singleColorSchema = toolSchema<SingleColorParams>({
 	color: field.color({ label: "fields.color", default: "#ff0000" }),
 });
 
-const singleColor: ToolEntry<SingleColorParams> = {
+const singleColor: Tool<SingleColorParams> = {
 	id: "single-color-png",
-	slug: "single-color-png",
-	title: "Create solid color PNG",
-	description: "Generates a rectangle of the given size and color.",
-	category: "generate",
 	schema: singleColorSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -172,13 +167,8 @@ export const randomNoiseSchema = toolSchema<RandomNoiseParams>({
 	}),
 });
 
-const randomNoise: ToolEntry<RandomNoiseParams> = {
+const randomNoise: Tool<RandomNoiseParams> = {
 	id: "random-noise-png",
-	slug: "random-noise-png",
-	title: "Create random noise PNG",
-	description:
-		"Generates an image with random pixels. The seed fixes the result: one seed — one image.",
-	category: "generate",
 	schema: randomNoiseSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -219,13 +209,8 @@ export const linearGradientSchema = toolSchema<LinearGradientParams>(
 	},
 );
 
-const linearGradient: ToolEntry<LinearGradientParams> = {
+const linearGradient: Tool<LinearGradientParams> = {
 	id: "linear-gradient-png",
-	slug: "linear-gradient-png",
-	title: "Create gradient PNG",
-	description:
-		"Generates a smooth transition between two colors along a chosen angle.",
-	category: "generate",
 	schema: linearGradientSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -293,13 +278,8 @@ export const colorSpectrumSchema = toolSchema<ColorSpectrumParams>(
 	},
 );
 
-const colorSpectrumTool: ToolEntry<ColorSpectrumParams> = {
+const colorSpectrumTool: Tool<ColorSpectrumParams> = {
 	id: "color-spectrum-png",
-	slug: "color-spectrum-png",
-	title: "Color Spectrum PNG",
-	description:
-		"Full hue rainbow 0–360° along the chosen axis with adjustable saturation and lightness.",
-	category: "generate",
 	schema: colorSpectrumSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -349,13 +329,8 @@ export const randomColorsSchema = toolSchema<RandomColorsParams>(
 	},
 );
 
-const randomColors: ToolEntry<RandomColorsParams> = {
+const randomColors: Tool<RandomColorsParams> = {
 	id: "random-colors-png",
-	slug: "random-colors-png",
-	title: "Random Color Blocks PNG",
-	description:
-		"Fills the canvas with random vivid color blocks. Deterministic by seed.",
-	category: "generate",
 	schema: randomColorsSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -424,13 +399,8 @@ export const drawGridSchema = toolSchema<DrawGridParams>(
 	},
 );
 
-const drawGridTool: ToolEntry<DrawGridParams> = {
+const drawGridTool: Tool<DrawGridParams> = {
 	id: "draw-grid-png",
-	slug: "draw-grid-png",
-	title: "Draw Grid PNG",
-	description:
-		"Draws a grid with custom columns, rows and line width on a transparent or white background.",
-	category: "generate",
 	schema: drawGridSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -486,13 +456,8 @@ export const placeholderSchema = toolSchema<PlaceholderParams>(
 	},
 );
 
-const placeholder: ToolEntry<PlaceholderParams> = {
+const placeholder: Tool<PlaceholderParams> = {
 	id: "placeholder-png",
-	slug: "placeholder-png",
-	title: "Create Placeholder PNG",
-	description:
-		"Generates a placeholder rectangle with its dimensions printed in the center.",
-	category: "generate",
 	schema: placeholderSchema,
 	input: "none",
 	domOnly: true,
@@ -537,12 +502,8 @@ export const blendTwoSchema = toolSchema<BlendTwoParams>({
 	}),
 });
 
-const blendTwo: ToolEntry<BlendTwoParams> = {
+const blendTwo: Tool<BlendTwoParams> = {
 	id: "blend-two-png",
-	slug: "blend-two-png",
-	title: "Blend Two Colors PNG",
-	description: "A continuous horizontal gradient between two colors.",
-	category: "generate",
 	schema: blendTwoSchema,
 	input: "none",
 	run: genTool((p) => renderBlend(p.pair.from, p.pair.to, p.width)),
@@ -599,12 +560,8 @@ export const stepColorsSchema = toolSchema<StepColorsParams>(
 	},
 );
 
-const stepColorsTool: ToolEntry<StepColorsParams> = {
+const stepColorsTool: Tool<StepColorsParams> = {
 	id: "step-colors-png",
-	slug: "step-colors-png",
-	title: "Color Steps PNG",
-	description: "A discrete set of evenly spaced steps between two colors.",
-	category: "generate",
 	schema: stepColorsSchema,
 	input: "none",
 	run: genTool((p) =>
@@ -632,13 +589,8 @@ export const emojiToPngSchema = toolSchema<EmojiToPngParams>({
 	}),
 });
 
-const emojiToPng: ToolEntry<EmojiToPngParams> = {
+const emojiToPng: Tool<EmojiToPngParams> = {
 	id: "emoji-to-png",
-	slug: "emoji-to-png",
-	title: "Emoji to PNG",
-	description:
-		"Renders an emoji or any Unicode symbol as a transparent PNG of the chosen size.",
-	category: "generate",
 	domOnly: true,
 	schema: emojiToPngSchema,
 	input: "none",
@@ -667,13 +619,8 @@ export const colorWheelSchema = toolSchema<ColorWheelParams>({
 	}),
 });
 
-const colorWheelTool: ToolEntry<ColorWheelParams> = {
+const colorWheelTool: Tool<ColorWheelParams> = {
 	id: "color-wheel-png",
-	slug: "color-wheel-png",
-	title: "Color Wheel PNG",
-	description:
-		"Generates an HSL color wheel: hue around the circle, saturation from center to edge, chosen lightness.",
-	category: "generate",
 	schema: colorWheelSchema,
 	input: "none",
 	run: genTool((p) => renderWheel(p.size, p.lightness)),
@@ -717,13 +664,8 @@ const paletteLayoutGroup = {
 	},
 };
 
-const complementaryTool: ToolEntry<PaletteBaseParams> = {
+const complementaryTool: Tool<PaletteBaseParams> = {
 	id: "complementary-png",
-	slug: "complementary-png",
-	title: "Complementary Palette PNG",
-	description:
-		"Two opposite colors on the color wheel — the base and its complement.",
-	category: "generate",
 	schema: toolSchema<PaletteBaseParams>(
 		{ ...paletteBaseSchema },
 		{ ...paletteLayoutGroup },
@@ -734,12 +676,8 @@ const complementaryTool: ToolEntry<PaletteBaseParams> = {
 	),
 };
 
-const triadicTool: ToolEntry<PaletteBaseParams> = {
+const triadicTool: Tool<PaletteBaseParams> = {
 	id: "triadic-png",
-	slug: "triadic-png",
-	title: "Triadic Palette PNG",
-	description: "Three colors evenly spaced 120° apart on the color wheel.",
-	category: "generate",
 	schema: toolSchema<PaletteBaseParams>(
 		{
 			...paletteBaseSchema,
@@ -753,13 +691,8 @@ const triadicTool: ToolEntry<PaletteBaseParams> = {
 	),
 };
 
-const tetradicTool: ToolEntry<PaletteBaseParams> = {
+const tetradicTool: Tool<PaletteBaseParams> = {
 	id: "tetradic-png",
-	slug: "tetradic-png",
-	title: "Tetradic Palette PNG",
-	description:
-		"Four colors in two complementary pairs, 90° apart on the wheel.",
-	category: "generate",
 	schema: toolSchema<PaletteBaseParams>(
 		{
 			...paletteBaseSchema,
@@ -778,13 +711,8 @@ interface AnalogousParams extends PaletteBaseParams {
 	count: number;
 }
 
-const analogousTool: ToolEntry<AnalogousParams> = {
+const analogousTool: Tool<AnalogousParams> = {
 	id: "analogous-png",
-	slug: "analogous-png",
-	title: "Analogous Palette PNG",
-	description:
-		"Neighboring hues around the base color — calm, related color scheme.",
-	category: "generate",
 	schema: toolSchema<AnalogousParams>(
 		{
 			...paletteBaseSchema,
@@ -821,13 +749,8 @@ interface MonochromaticParams extends PaletteBaseParams {
 	range: number;
 }
 
-const monochromaticTool: ToolEntry<MonochromaticParams> = {
+const monochromaticTool: Tool<MonochromaticParams> = {
 	id: "monochromatic-png",
-	slug: "monochromatic-png",
-	title: "Monochromatic Palette PNG",
-	description:
-		"Tones of a single hue: lightness varies within the chosen range, hue and saturation stay fixed.",
-	category: "generate",
 	schema: toolSchema<MonochromaticParams>(
 		{
 			...paletteBaseSchema,
@@ -864,12 +787,8 @@ interface ShadesParams extends PaletteBaseParams {
 	depth: number;
 }
 
-const shadesTool: ToolEntry<ShadesParams> = {
+const shadesTool: Tool<ShadesParams> = {
 	id: "shades-png",
-	slug: "shades-png",
-	title: "Shade Ramp PNG",
-	description: "A ramp of the base color getting darker step by step.",
-	category: "generate",
 	schema: toolSchema<ShadesParams>(
 		{
 			...paletteBaseSchema,
@@ -926,13 +845,8 @@ export const mixColorsSchema = toolSchema<MixColorsParams>(
 	},
 );
 
-const mixColorsTool: ToolEntry<MixColorsParams> = {
+const mixColorsTool: Tool<MixColorsParams> = {
 	id: "mix-colors-png",
-	slug: "mix-colors-png",
-	title: "Mix Colors PNG",
-	description:
-		"Averages the selected colors into one swatch. Colors become one uniform fill.",
-	category: "generate",
 	schema: mixColorsSchema,
 	input: "none",
 	run: genTool((p) => renderSwatches([mixColors(p.colors)], p.width, "strip")),
@@ -997,13 +911,8 @@ export const sortColorsSchema = toolSchema<SortColorsParams>(
 	},
 );
 
-const sortColorsTool: ToolEntry<SortColorsParams> = {
+const sortColorsTool: Tool<SortColorsParams> = {
 	id: "sort-colors-png",
-	slug: "sort-colors-png",
-	title: "Sort Colors PNG",
-	description:
-		"Renders the chosen colors as swatches sorted by hue, brightness or saturation.",
-	category: "generate",
 	schema: sortColorsSchema,
 	input: "none",
 	run: genTool((p) =>
@@ -1065,13 +974,8 @@ export const textToPngSchema = toolSchema<TextToPngParams>(
 	},
 );
 
-const textToPng: ToolEntry<TextToPngParams> = {
+const textToPng: Tool<TextToPngParams> = {
 	id: "text-to-png",
-	slug: "text-to-png",
-	title: "Text to PNG",
-	description:
-		"Creates a PNG image from text: the canvas is sized to fit the label plus padding.",
-	category: "generate",
 	domOnly: true,
 	schema: textToPngSchema,
 	input: "none",
@@ -1089,7 +993,7 @@ const textToPng: ToolEntry<TextToPngParams> = {
 	),
 };
 
-export const generateEntries = [
+export const generateTools = [
 	createEmpty,
 	singleColor,
 	randomNoise,
