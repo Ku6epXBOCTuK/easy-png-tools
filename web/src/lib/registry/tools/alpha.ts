@@ -45,7 +45,7 @@ export const addStrokeSchema = toolSchema<AddStrokeParams>({
 });
 
 const addStroke: Tool<AddStrokeParams> = {
-	id: "add-stroke-png",
+	id: "add-stroke",
 	schema: addStrokeSchema,
 	input: "image",
 	run: imgTool((img, p) => strokeImage(img, p.thickness, p.color)),
@@ -68,7 +68,7 @@ export const findContourSchema = toolSchema<FindContourParams>({
 });
 
 const findContour: Tool<FindContourParams> = {
-	id: "find-contour-png",
+	id: "find-contour",
 	schema: findContourSchema,
 	input: "image",
 	run: imgTool((img, p) => contourImage(img, p.thickness, p.color)),
@@ -91,7 +91,7 @@ export const removeColorSchema = toolSchema<RemoveColorParams>({
 });
 
 const removeColor: Tool<RemoveColorParams> = {
-	id: "remove-color-from-png",
+	id: "remove-color-from",
 	schema: removeColorSchema,
 	input: "image",
 	run: imgTool((img, p) => removeColorToAlpha(img, p.targetColor, p.tolerance)),
@@ -130,7 +130,7 @@ const circleMaskSchema = toolSchema<CircleMaskParams>(
 );
 
 const circleMask: Tool<CircleMaskParams> = {
-	id: "circle-mask-png",
+	id: "circle-mask",
 	schema: circleMaskSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -188,7 +188,7 @@ const squareMaskSchema = toolSchema<SquareMaskParams>(
 );
 
 const squareMask: Tool<SquareMaskParams> = {
-	id: "square-mask-png",
+	id: "square-mask",
 	schema: squareMaskSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -262,7 +262,7 @@ const starMaskSchema = toolSchema<StarMaskParams>(
 );
 
 const starMask: Tool<StarMaskParams> = {
-	id: "star-mask-png",
+	id: "star-mask",
 	schema: starMaskSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -336,7 +336,7 @@ const wavyMaskSchema = toolSchema<WavyMaskParams>(
 );
 
 const wavyMask: Tool<WavyMaskParams> = {
-	id: "wavy-mask-png",
+	id: "wavy-mask",
 	schema: wavyMaskSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -354,7 +354,7 @@ interface EmptyParams {}
 export const removeAlphaChannelSchema = toolSchema<EmptyParams>({});
 
 const removeAlphaChannel: Tool<EmptyParams> = {
-	id: "remove-alpha-channel-png",
+	id: "remove-alpha-channel",
 	schema: removeAlphaChannelSchema,
 	input: "image",
 	run: imgTool((img) => flattenOntoColor(img, "#ffffff")),
@@ -375,7 +375,7 @@ export const setAlphaChannelSchema = toolSchema<SetAlphaChannelParams>({
 });
 
 const setAlphaChannelTool: Tool<SetAlphaChannelParams> = {
-	id: "set-alpha-channel-png",
+	id: "set-alpha-channel",
 	schema: setAlphaChannelSchema,
 	input: "image",
 	run: imgTool((img, p) => setAlphaChannel(img, p.percent)),
@@ -384,7 +384,7 @@ const setAlphaChannelTool: Tool<SetAlphaChannelParams> = {
 export const extractAlphaMaskSchema = toolSchema<EmptyParams>({});
 
 const extractAlphaMaskTool: Tool<EmptyParams> = {
-	id: "extract-alpha-mask-png",
+	id: "extract-alpha-mask",
 	schema: extractAlphaMaskSchema,
 	input: "image",
 	run: imgTool((img) => extractAlphaMask(img)),
@@ -405,7 +405,7 @@ export const roundCornersSchema = toolSchema<RoundCornersParams>({
 });
 
 const roundCornersTool: Tool<RoundCornersParams> = {
-	id: "round-corners-png",
+	id: "round-corners",
 	schema: roundCornersSchema,
 	input: "image",
 	run: imgTool((img, p) => roundCorners(img, p.radius)),
@@ -414,7 +414,7 @@ const roundCornersTool: Tool<RoundCornersParams> = {
 export const invertAlphaSchema = toolSchema<EmptyParams>({});
 
 const invertAlphaTool: Tool<EmptyParams> = {
-	id: "invert-alpha-png",
+	id: "invert-alpha",
 	schema: invertAlphaSchema,
 	input: "image",
 	run: imgTool((img) => invertAlpha(img)),
@@ -461,7 +461,7 @@ export const removeBackgroundSchema = toolSchema<RemoveBackgroundParams>(
 );
 
 const removeBackgroundTool: Tool<RemoveBackgroundParams> = {
-	id: "remove-background-png",
+	id: "remove-background",
 	schema: removeBackgroundSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -489,7 +489,7 @@ export const makeThickerSchema = toolSchema<MakeThickerParams>({
 });
 
 const makeThickerTool: Tool<MakeThickerParams> = {
-	id: "make-thicker-png",
+	id: "make-thicker",
 	schema: makeThickerSchema,
 	input: "image",
 	run: imgTool((img, p) => dilateImage(img, p.radius)),
@@ -510,7 +510,7 @@ export const makeThinnerSchema = toolSchema<MakeThinnerParams>({
 });
 
 const makeThinnerTool: Tool<MakeThinnerParams> = {
-	id: "make-thinner-png",
+	id: "make-thinner",
 	schema: makeThinnerSchema,
 	input: "image",
 	run: imgTool((img, p) => erodeImage(img, p.radius)),
@@ -531,7 +531,7 @@ export const featherEdgesSchema = toolSchema<FeatherEdgesParams>({
 });
 
 const featherEdgesTool: Tool<FeatherEdgesParams> = {
-	id: "feather-edges-png",
+	id: "feather-edges",
 	schema: featherEdgesSchema,
 	input: "image",
 	run: imgTool((img, p) => featherAlpha(img, p.radius)),
@@ -552,7 +552,7 @@ export const cleanEdgesSchema = toolSchema<CleanEdgesParams>({
 });
 
 const cleanEdgesTool: Tool<CleanEdgesParams> = {
-	id: "clean-edges-png",
+	id: "clean-edges",
 	schema: cleanEdgesSchema,
 	input: "image",
 	run: imgTool((img, p) => defringe(img, p.radius)),
@@ -573,7 +573,7 @@ export const hardenAlphaSchema = toolSchema<HardenAlphaParams>({
 });
 
 const hardenAlphaTool: Tool<HardenAlphaParams> = {
-	id: "harden-alpha-png",
+	id: "harden-alpha",
 	schema: hardenAlphaSchema,
 	input: "image",
 	run: imgTool((img, p) => hardenAlpha(img, p.threshold)),
@@ -594,7 +594,7 @@ export const despeckleAlphaSchema = toolSchema<DespeckleAlphaParams>({
 });
 
 const despeckleAlphaTool: Tool<DespeckleAlphaParams> = {
-	id: "despeckle-alpha-png",
+	id: "despeckle-alpha",
 	schema: despeckleAlphaSchema,
 	input: "image",
 	run: imgTool((img, p) => openingImage(img, p.radius)),
@@ -615,7 +615,7 @@ export const closeHolesSchema = toolSchema<CloseHolesParams>({
 });
 
 const closeHolesTool: Tool<CloseHolesParams> = {
-	id: "close-holes-png",
+	id: "close-holes",
 	schema: closeHolesSchema,
 	input: "image",
 	run: imgTool((img, p) => closingImage(img, p.radius)),

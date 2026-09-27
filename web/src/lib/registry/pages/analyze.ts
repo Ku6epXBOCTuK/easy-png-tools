@@ -7,7 +7,7 @@ export const analyzePages: Page[] = [
 		description:
 			"Keeps only pixels close to the chosen color and makes everything else transparent — the inverse of Remove Color.",
 		category: "analyze",
-		steps: [{ id: "extract-color-from-png" }],
+		steps: [{ id: "extract-color-from" }],
 	},
 	{
 		slug: "show-transparent-png",
@@ -15,7 +15,7 @@ export const analyzePages: Page[] = [
 		description:
 			"Highlights every transparent or semi-transparent pixel with the chosen color so gaps become obvious.",
 		category: "analyze",
-		steps: [{ id: "show-transparent-png" }],
+		steps: [{ id: "show-transparent" }],
 	},
 	{
 		slug: "show-grayscale-pixels-png",
@@ -23,7 +23,7 @@ export const analyzePages: Page[] = [
 		description:
 			"Finds pixels whose channels are nearly equal and renders them as a mask. Tolerance is in channel units.",
 		category: "analyze",
-		steps: [{ id: "show-grayscale-pixels-png" }],
+		steps: [{ id: "show-grayscale-pixels" }],
 	},
 	{
 		slug: "show-color-pixels-png",
@@ -31,21 +31,21 @@ export const analyzePages: Page[] = [
 		description:
 			"Finds colored (non-gray) pixels beyond the channel tolerance and renders them as a mask.",
 		category: "analyze",
-		steps: [{ id: "show-color-pixels-png" }],
+		steps: [{ id: "show-color-pixels" }],
 	},
 	{
 		slug: "light-pixel-mask-png",
 		title: "Light Pixel Mask PNG",
 		description: "Selects pixels brighter than the luminance threshold.",
 		category: "analyze",
-		steps: [{ id: "light-pixel-mask-png" }],
+		steps: [{ id: "light-pixel-mask" }],
 	},
 	{
 		slug: "dark-pixel-mask-png",
 		title: "Dark Pixel Mask PNG",
 		description: "Selects pixels darker than the luminance threshold.",
 		category: "analyze",
-		steps: [{ id: "dark-pixel-mask-png" }],
+		steps: [{ id: "dark-pixel-mask" }],
 	},
 	{
 		slug: "unique-color-mask-png",
@@ -53,7 +53,7 @@ export const analyzePages: Page[] = [
 		description:
 			"Selects colors that occur no more than the given number of times — rare and one-off pixels.",
 		category: "analyze",
-		steps: [{ id: "unique-color-mask-png" }],
+		steps: [{ id: "unique-color-mask" }],
 	},
 	{
 		slug: "verify-is-png",
@@ -61,14 +61,14 @@ export const analyzePages: Page[] = [
 		description:
 			"Checks the signature of pasted base64 / data-uri content and reports whether it is a real PNG.",
 		category: "analyze",
-		steps: [{ id: "verify-is-png" }],
+		steps: [{ id: "verify-png" }],
 	},
 	{
 		slug: "png-is-grayscale",
 		title: "Check: is PNG grayscale?",
 		description: "Reports whether the image consists only of shades of gray.",
 		category: "analyze",
-		steps: [{ id: "png-is-grayscale" }],
+		steps: [{ id: "is-grayscale" }],
 	},
 	{
 		slug: "png-file-size",
@@ -76,7 +76,7 @@ export const analyzePages: Page[] = [
 		description:
 			"Encodes the image as PNG and reports the resulting file size.",
 		category: "analyze",
-		steps: [{ id: "png-file-size" }],
+		steps: [{ id: "file-size" }],
 	},
 	{
 		slug: "png-is-transparent",
@@ -84,13 +84,13 @@ export const analyzePages: Page[] = [
 		description:
 			"Reports whether the image contains transparent or semi-transparent pixels.",
 		category: "analyze",
-		steps: [{ id: "png-is-transparent" }],
+		steps: [{ id: "is-transparent" }],
 	},
 	{
 		slug: "png-orientation",
 		title: "PNG orientation",
 		description: "Reports whether it is portrait, landscape or square.",
 		category: "analyze",
-		steps: [{ id: "png-orientation" }],
+		steps: [{ id: "orientation" }],
 	},
 ];

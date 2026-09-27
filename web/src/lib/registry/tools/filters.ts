@@ -25,7 +25,7 @@ export const blurSchema = toolSchema<BlurParams>({
 });
 
 const blurTool: Tool<BlurParams> = {
-	id: "blur-png",
+	id: "blur",
 	schema: blurSchema,
 	input: "image",
 	run: imgTool((img, p) => gaussianBlur(img, p.radius)),
@@ -46,7 +46,7 @@ export const sharpenSchema = toolSchema<SharpenParams>({
 });
 
 const sharpenTool: Tool<SharpenParams> = {
-	id: "sharpen-png",
+	id: "sharpen",
 	schema: sharpenSchema,
 	input: "image",
 	run: imgTool((img, p) => sharpenImage(img, p.strength)),
@@ -69,7 +69,7 @@ export const silhouetteSchema = toolSchema<SilhouetteParams>({
 });
 
 const silhouetteTool: Tool<SilhouetteParams> = {
-	id: "silhouette-png",
+	id: "silhouette",
 	schema: silhouetteSchema,
 	input: "image",
 	run: imgTool((img, p) => silhouette(img, p.color, p.threshold * 2.55)),
@@ -90,7 +90,7 @@ export const vignetteSchema = toolSchema<VignetteParams>({
 });
 
 const vignetteTool: Tool<VignetteParams> = {
-	id: "vignette-png",
+	id: "vignette",
 	schema: vignetteSchema,
 	input: "image",
 	run: imgTool((img, p) => vignette(img, p.strength)),
@@ -111,7 +111,7 @@ export const pixelateSchema = toolSchema<PixelateParams>({
 });
 
 const pixelateTool: Tool<PixelateParams> = {
-	id: "pixelate-png",
+	id: "pixelate",
 	schema: pixelateSchema,
 	input: "image",
 	run: imgTool((img, p) => pixelate(img, p.blockSize)),
@@ -149,7 +149,7 @@ export const randomizePixelsSchema = toolSchema<RandomizePixelsParams>(
 );
 
 const randomizePixels: Tool<RandomizePixelsParams> = {
-	id: "randomize-pixels-png",
+	id: "randomize-pixels",
 	schema: randomizePixelsSchema,
 	input: "image",
 	run: imgTool((img, p) => shuffleBlocks(img, p.blockSize, p.seed)),
@@ -197,7 +197,7 @@ export const addNoiseSchema = toolSchema<AddNoiseParams>(
 );
 
 const addNoiseTool: Tool<AddNoiseParams> = {
-	id: "add-noise-png",
+	id: "add-noise",
 	schema: addNoiseSchema,
 	input: "image",
 	run: imgTool((img, p) => addNoise(img, p.amount, p.mode, p.seed)),
@@ -218,7 +218,7 @@ export const jpegArtifactsSchema = toolSchema<JpegArtifactsParams>({
 });
 
 const jpegArtifacts: Tool<JpegArtifactsParams> = {
-	id: "jpeg-artifacts-png",
+	id: "jpeg-artifacts",
 	schema: jpegArtifactsSchema,
 	input: "image",
 	domOnly: true,

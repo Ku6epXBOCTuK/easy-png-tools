@@ -105,7 +105,7 @@ export const createEmptySchema = toolSchema<CreateEmptyParams>(
 );
 
 const createEmpty: Tool<CreateEmptyParams> = {
-	id: "create-empty-png",
+	id: "create-empty",
 	schema: createEmptySchema,
 	input: "none",
 	run: genTool((p) => {
@@ -135,7 +135,7 @@ export const singleColorSchema = toolSchema<SingleColorParams>({
 });
 
 const singleColor: Tool<SingleColorParams> = {
-	id: "single-color-png",
+	id: "single-color",
 	schema: singleColorSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -168,7 +168,7 @@ export const randomNoiseSchema = toolSchema<RandomNoiseParams>({
 });
 
 const randomNoise: Tool<RandomNoiseParams> = {
-	id: "random-noise-png",
+	id: "random-noise",
 	schema: randomNoiseSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -210,7 +210,7 @@ export const linearGradientSchema = toolSchema<LinearGradientParams>(
 );
 
 const linearGradient: Tool<LinearGradientParams> = {
-	id: "linear-gradient-png",
+	id: "linear-gradient",
 	schema: linearGradientSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -279,7 +279,7 @@ export const colorSpectrumSchema = toolSchema<ColorSpectrumParams>(
 );
 
 const colorSpectrumTool: Tool<ColorSpectrumParams> = {
-	id: "color-spectrum-png",
+	id: "color-spectrum",
 	schema: colorSpectrumSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -330,7 +330,7 @@ export const randomColorsSchema = toolSchema<RandomColorsParams>(
 );
 
 const randomColors: Tool<RandomColorsParams> = {
-	id: "random-colors-png",
+	id: "random-colors",
 	schema: randomColorsSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -400,7 +400,7 @@ export const drawGridSchema = toolSchema<DrawGridParams>(
 );
 
 const drawGridTool: Tool<DrawGridParams> = {
-	id: "draw-grid-png",
+	id: "draw-grid",
 	schema: drawGridSchema,
 	input: "none",
 	run: genTool((p) => {
@@ -457,7 +457,7 @@ export const placeholderSchema = toolSchema<PlaceholderParams>(
 );
 
 const placeholder: Tool<PlaceholderParams> = {
-	id: "placeholder-png",
+	id: "placeholder",
 	schema: placeholderSchema,
 	input: "none",
 	domOnly: true,
@@ -503,7 +503,7 @@ export const blendTwoSchema = toolSchema<BlendTwoParams>({
 });
 
 const blendTwo: Tool<BlendTwoParams> = {
-	id: "blend-two-png",
+	id: "blend-two",
 	schema: blendTwoSchema,
 	input: "none",
 	run: genTool((p) => renderBlend(p.pair.from, p.pair.to, p.width)),
@@ -561,7 +561,7 @@ export const stepColorsSchema = toolSchema<StepColorsParams>(
 );
 
 const stepColorsTool: Tool<StepColorsParams> = {
-	id: "step-colors-png",
+	id: "step-colors",
 	schema: stepColorsSchema,
 	input: "none",
 	run: genTool((p) =>
@@ -590,7 +590,7 @@ export const emojiToPngSchema = toolSchema<EmojiToPngParams>({
 });
 
 const emojiToPng: Tool<EmojiToPngParams> = {
-	id: "emoji-to-png",
+	id: "from-emoji",
 	domOnly: true,
 	schema: emojiToPngSchema,
 	input: "none",
@@ -620,7 +620,7 @@ export const colorWheelSchema = toolSchema<ColorWheelParams>({
 });
 
 const colorWheelTool: Tool<ColorWheelParams> = {
-	id: "color-wheel-png",
+	id: "color-wheel",
 	schema: colorWheelSchema,
 	input: "none",
 	run: genTool((p) => renderWheel(p.size, p.lightness)),
@@ -665,7 +665,7 @@ const paletteLayoutGroup = {
 };
 
 const complementaryTool: Tool<PaletteBaseParams> = {
-	id: "complementary-png",
+	id: "complementary",
 	schema: toolSchema<PaletteBaseParams>(
 		{ ...paletteBaseSchema },
 		{ ...paletteLayoutGroup },
@@ -677,7 +677,7 @@ const complementaryTool: Tool<PaletteBaseParams> = {
 };
 
 const triadicTool: Tool<PaletteBaseParams> = {
-	id: "triadic-png",
+	id: "triadic",
 	schema: toolSchema<PaletteBaseParams>(
 		{
 			...paletteBaseSchema,
@@ -692,7 +692,7 @@ const triadicTool: Tool<PaletteBaseParams> = {
 };
 
 const tetradicTool: Tool<PaletteBaseParams> = {
-	id: "tetradic-png",
+	id: "tetradic",
 	schema: toolSchema<PaletteBaseParams>(
 		{
 			...paletteBaseSchema,
@@ -712,7 +712,7 @@ interface AnalogousParams extends PaletteBaseParams {
 }
 
 const analogousTool: Tool<AnalogousParams> = {
-	id: "analogous-png",
+	id: "analogous",
 	schema: toolSchema<AnalogousParams>(
 		{
 			...paletteBaseSchema,
@@ -750,7 +750,7 @@ interface MonochromaticParams extends PaletteBaseParams {
 }
 
 const monochromaticTool: Tool<MonochromaticParams> = {
-	id: "monochromatic-png",
+	id: "monochromatic",
 	schema: toolSchema<MonochromaticParams>(
 		{
 			...paletteBaseSchema,
@@ -788,7 +788,7 @@ interface ShadesParams extends PaletteBaseParams {
 }
 
 const shadesTool: Tool<ShadesParams> = {
-	id: "shades-png",
+	id: "shades",
 	schema: toolSchema<ShadesParams>(
 		{
 			...paletteBaseSchema,
@@ -846,7 +846,7 @@ export const mixColorsSchema = toolSchema<MixColorsParams>(
 );
 
 const mixColorsTool: Tool<MixColorsParams> = {
-	id: "mix-colors-png",
+	id: "mix-colors",
 	schema: mixColorsSchema,
 	input: "none",
 	run: genTool((p) => renderSwatches([mixColors(p.colors)], p.width, "strip")),
@@ -912,7 +912,7 @@ export const sortColorsSchema = toolSchema<SortColorsParams>(
 );
 
 const sortColorsTool: Tool<SortColorsParams> = {
-	id: "sort-colors-png",
+	id: "sort-colors",
 	schema: sortColorsSchema,
 	input: "none",
 	run: genTool((p) =>
@@ -975,7 +975,7 @@ export const textToPngSchema = toolSchema<TextToPngParams>(
 );
 
 const textToPng: Tool<TextToPngParams> = {
-	id: "text-to-png",
+	id: "from-text",
 	domOnly: true,
 	schema: textToPngSchema,
 	input: "none",

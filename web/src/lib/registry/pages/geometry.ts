@@ -7,7 +7,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Draws a colored frame of the chosen thickness around the image.",
 		category: "geometry",
-		steps: [{ id: "add-border-png" }],
+		steps: [{ id: "add-border" }],
 	},
 	{
 		slug: "fit-on-background-png",
@@ -15,7 +15,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Places the image centered on a canvas of the given size with a transparent or colored background.",
 		category: "geometry",
-		steps: [{ id: "fit-on-background-png" }],
+		steps: [{ id: "fit-on-background" }],
 	},
 	{
 		slug: "change-canvas-size-png",
@@ -23,7 +23,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Sets the exact canvas size: overflow is cropped, missing space is filled with transparency. Anchor picks which part of the image stays.",
 		category: "geometry",
-		steps: [{ id: "change-canvas-size-png" }],
+		steps: [{ id: "change-canvas-size" }],
 	},
 	{
 		slug: "resize-png",
@@ -31,7 +31,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Scales the image with bilinear interpolation. With aspect kept, one side defines the scale; if both are set, the image fits inside them.",
 		category: "geometry",
-		steps: [{ id: "resize-png" }],
+		steps: [{ id: "resize" }],
 	},
 	{
 		slug: "crop-png",
@@ -39,21 +39,21 @@ export const geometryPages: Page[] = [
 		description:
 			"Cuts out a rectangular area. Coordinates and sizes may go beyond the image — the area is clipped to the intersection.",
 		category: "geometry",
-		steps: [{ id: "crop-png" }],
+		steps: [{ id: "crop" }],
 	},
 	{
 		slug: "rotate-png",
 		title: "Rotate PNG",
 		description: "Rotates by 90°, 180° or 270° clockwise without quality loss.",
 		category: "geometry",
-		steps: [{ id: "rotate-png" }],
+		steps: [{ id: "rotate" }],
 	},
 	{
 		slug: "flip-png",
 		title: "Flip PNG",
 		description: "Mirrors horizontally or vertically without quality loss.",
 		category: "geometry",
-		steps: [{ id: "flip-png" }],
+		steps: [{ id: "flip" }],
 	},
 	{
 		slug: "add-padding-png",
@@ -61,14 +61,14 @@ export const geometryPages: Page[] = [
 		description:
 			"Expands the canvas on all sides by the chosen number of pixels.",
 		category: "geometry",
-		steps: [{ id: "add-padding-png" }],
+		steps: [{ id: "add-padding" }],
 	},
 	{
 		slug: "tile-png",
 		title: "Tile PNG",
 		description: "Repeats the image in a grid of the chosen columns and rows.",
 		category: "geometry",
-		steps: [{ id: "tile-png" }],
+		steps: [{ id: "tile" }],
 	},
 	{
 		slug: "split-into-parts-png",
@@ -76,7 +76,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Divides the image into a grid of equal-sized parts. The canvas is padded with transparency to keep every part the same size.",
 		category: "geometry",
-		steps: [{ id: "split-into-parts-png" }],
+		steps: [{ id: "split-into-parts" }],
 	},
 	{
 		slug: "center-by-alpha-png",
@@ -84,7 +84,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Finds the opaque part of the image and centers it on the original canvas.",
 		category: "geometry",
-		steps: [{ id: "center-by-alpha-png" }],
+		steps: [{ id: "center-by-alpha" }],
 	},
 	{
 		slug: "skew-png",
@@ -92,7 +92,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Shifts content horizontally and vertically — a perspective effect.",
 		category: "geometry",
-		steps: [{ id: "skew-png" }],
+		steps: [{ id: "skew" }],
 	},
 	{
 		slug: "rotate-free-png",
@@ -100,7 +100,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Rotation by any angle. The canvas grows to fit the new bounds; corners stay transparent.",
 		category: "geometry",
-		steps: [{ id: "rotate-free-png" }],
+		steps: [{ id: "rotate-free" }],
 	},
 	{
 		slug: "zoom-png",
@@ -108,7 +108,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Magnifies content toward the center. The canvas keeps its size — edges are cropped.",
 		category: "geometry",
-		steps: [{ id: "zoom-png" }],
+		steps: [{ id: "zoom" }],
 	},
 	{
 		slug: "trim-empty-space-png",
@@ -116,7 +116,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Crops transparent borders around the content. Pixels with alpha above the threshold count as content.",
 		category: "geometry",
-		steps: [{ id: "trim-empty-space-png" }],
+		steps: [{ id: "trim-empty-space" }],
 	},
 	{
 		slug: "change-aspect-ratio-png",
@@ -124,7 +124,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Fits the image into a target aspect ratio: crop the center to fill, or pad with transparency.",
 		category: "geometry",
-		steps: [{ id: "change-aspect-ratio-png" }],
+		steps: [{ id: "change-aspect-ratio" }],
 	},
 	{
 		slug: "swap-orientation-png",
@@ -132,7 +132,7 @@ export const geometryPages: Page[] = [
 		description:
 			"Rotates the image by 90° when its orientation differs from the target — landscape becomes portrait and back. Square images are untouched.",
 		category: "geometry",
-		steps: [{ id: "swap-orientation-png" }],
+		steps: [{ id: "swap-orientation" }],
 	},
 	{
 		slug: "symmetric-copy-png",
@@ -140,13 +140,13 @@ export const geometryPages: Page[] = [
 		description:
 			"Doubles the canvas by mirroring the kept side onto the empty half — instant symmetric pattern.",
 		category: "geometry",
-		steps: [{ id: "symmetric-copy-png" }],
+		steps: [{ id: "symmetric-copy" }],
 	},
 	{
 		slug: "shift-png",
 		title: "Shift PNG",
 		description: "Moves content by the given X and Y offset.",
 		category: "geometry",
-		steps: [{ id: "shift-png" }],
+		steps: [{ id: "shift" }],
 	},
 ];

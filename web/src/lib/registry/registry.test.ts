@@ -92,7 +92,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("guard: input=none работает без источника", async () => {
-		const tool = TOOLS.find((t) => t.id === "create-empty-png")!;
+		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const img = asImage(
 			await tool.run({ params: sanitizeSchemaParams(tool.schema, {}) }),
 		);
@@ -112,12 +112,12 @@ describe("registry-new (переведённые инструменты)", () =>
 
 	it("DOM-dependent tools bypass the worker", () => {
 		for (const id of [
-			"png-to-base64",
-			"png-to-data-uri",
-			"base64-to-png",
-			"data-uri-to-png",
-			"jpeg-artifacts-png",
-			"placeholder-png",
+			"to-base64",
+			"to-data-uri",
+			"from-base64",
+			"from-data-uri",
+			"jpeg-artifacts",
+			"placeholder",
 		]) {
 			expect(TOOLS.find((tool) => tool.id === id)?.domOnly, id).toBe(true);
 		}
@@ -168,7 +168,7 @@ describe("registry-new (переведённые инструменты)", () =>
 
 	it("resize и crop получают размеры текущего source", async () => {
 		const source = solid(64, 48);
-		const resize = TOOLS.find((t) => t.id === "resize-png")!;
+		const resize = TOOLS.find((t) => t.id === "resize")!;
 		const resizeDefaults = defaultSchemaParams(resize.schema, { source });
 		expect(resizeDefaults.size).toEqual({ width: 64, height: 48 });
 		const resized = asImage(
@@ -179,7 +179,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		);
 		expect([resized.width, resized.height]).toEqual([64, 48]);
 
-		const crop = TOOLS.find((t) => t.id === "crop-png")!;
+		const crop = TOOLS.find((t) => t.id === "crop")!;
 		const cropDefaults = defaultSchemaParams(crop.schema, { source });
 		expect(cropDefaults).toMatchObject({
 			x: 0,
@@ -196,14 +196,14 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("create-empty: dimension-дефолты корректны", () => {
-		const tool = TOOLS.find((t) => t.id === "create-empty-png")!;
+		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.size).toEqual({ width: 800, height: 600 });
 		expect(d.transparent).toBe(true);
 	});
 
 	it("sanitize клампит dimension к min/max и чинит мусор", () => {
-		const tool = TOOLS.find((t) => t.id === "create-empty-png")!;
+		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			size: { width: 999999, height: -5 },
 			transparent: false,
@@ -215,7 +215,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("executeGenerate для create-empty даёт картинку нужного размера", async () => {
-		const tool = TOOLS.find((t) => t.id === "create-empty-png")!;
+		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const params = sanitizeSchemaParams(tool.schema, {
 			size: { width: 320, height: 200 },
 			transparent: true,
@@ -228,10 +228,10 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it.each([
-		["single-color-png", { size: { width: 40, height: 30 }, color: "#00ff00" }],
-		["random-noise-png", { size: { width: 40, height: 30 }, seed: 5 }],
+		["single-color", { size: { width: 40, height: 30 }, color: "#00ff00" }],
+		["random-noise", { size: { width: 40, height: 30 }, seed: 5 }],
 		[
-			"linear-gradient-png",
+			"linear-gradient",
 			{
 				size: { width: 40, height: 30 },
 				gradient: {
@@ -242,7 +242,7 @@ describe("registry-new (переведённые инструменты)", () =>
 			},
 		],
 		[
-			"color-spectrum-png",
+			"color-spectrum",
 			{
 				size: { width: 40, height: 30 },
 				direction: "horizontal",
@@ -251,11 +251,11 @@ describe("registry-new (переведённые инструменты)", () =>
 			},
 		],
 		[
-			"random-colors-png",
+			"random-colors",
 			{ size: { width: 40, height: 30 }, blockSize: 16, seed: 7 },
 		],
 		[
-			"draw-grid-png",
+			"draw-grid",
 			{
 				size: { width: 40, height: 30 },
 				cols: 4,
@@ -275,7 +275,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("random-noisе детерминирован по seed", async () => {
-		const tool = TOOLS.find((t) => t.id === "random-noise-png")!;
+		const tool = TOOLS.find((t) => t.id === "random-noise")!;
 		const a = asImage(
 			await tool.run({
 				params: sanitizeSchemaParams(tool.schema, {
@@ -296,7 +296,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("resize: keepAspect с одной стороной сохраняет пропорции", async () => {
-		const tool = TOOLS.find((t) => t.id === "resize-png")!;
+		const tool = TOOLS.find((t) => t.id === "resize")!;
 		const img = solid(100, 50);
 		const out = asImage(
 			await tool.run({
@@ -312,7 +312,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("crop вырезает область по x/y", async () => {
-		const tool = TOOLS.find((t) => t.id === "crop-png")!;
+		const tool = TOOLS.find((t) => t.id === "crop")!;
 		const img = solid(100, 100);
 		const out = asImage(
 			await tool.run({
@@ -329,7 +329,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("fit-on-background центрирует картинку на канвасе", async () => {
-		const tool = TOOLS.find((t) => t.id === "fit-on-background-png")!;
+		const tool = TOOLS.find((t) => t.id === "fit-on-background")!;
 		const img = solid(20, 10);
 		const out = asImage(
 			await tool.run({
@@ -347,7 +347,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("change-canvas-size использует anchor для позиции", async () => {
-		const tool = TOOLS.find((t) => t.id === "change-canvas-size-png")!;
+		const tool = TOOLS.find((t) => t.id === "change-canvas-size")!;
 		const img = solid(10, 10);
 		const out = asImage(
 			await tool.run({
@@ -367,7 +367,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("blend-two: дефолты пары и работа генератора", async () => {
-		const tool = TOOLS.find((t) => t.id === "blend-two-png")!;
+		const tool = TOOLS.find((t) => t.id === "blend-two")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.pair).toEqual({ from: "#000000", to: "#ffffff" });
 		const img = asImage(
@@ -382,7 +382,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("step-colors: рендерит steps полос по паре", async () => {
-		const tool = TOOLS.find((t) => t.id === "step-colors-png")!;
+		const tool = TOOLS.find((t) => t.id === "step-colors")!;
 		const img = asImage(
 			await tool.run({
 				params: sanitizeSchemaParams(tool.schema, {
@@ -397,7 +397,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("two-colors: перекрашивает светлые/тёмные пиксели по паре", async () => {
-		const tool = TOOLS.find((t) => t.id === "two-colors-png")!;
+		const tool = TOOLS.find((t) => t.id === "two-colors")!;
 		// 50×1, левая половина тёмная, правая светлая
 		const data = new Uint8ClampedArray(50 * 4).fill(255);
 		const img = { width: 50, height: 1, data };
@@ -426,7 +426,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("linear-gradient: дефолты gradient и направление по углу", async () => {
-		const tool = TOOLS.find((t) => t.id === "linear-gradient-png")!;
+		const tool = TOOLS.find((t) => t.id === "linear-gradient")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.gradient).toEqual({
 			from: "#000000",
@@ -469,7 +469,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("sanitize чинит мусор в gradient и клампит angle в 0..360", () => {
-		const tool = TOOLS.find((t) => t.id === "linear-gradient-png")!;
+		const tool = TOOLS.find((t) => t.id === "linear-gradient")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			size: { width: 10, height: 10 },
 			gradient: {
@@ -487,7 +487,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("sanitize чинит мусор в паре и клампит threshold", () => {
-		const tool = TOOLS.find((t) => t.id === "two-colors-png")!;
+		const tool = TOOLS.find((t) => t.id === "two-colors")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			pair: { from: "not-a-color", to: "#00ff00", extra: 1 },
 			threshold: 999,
@@ -497,7 +497,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("circle-mask: срезает углы и сохраняет центр", async () => {
-		const tool = TOOLS.find((t) => t.id === "circle-mask-png")!;
+		const tool = TOOLS.find((t) => t.id === "circle-mask")!;
 		const img = asImage(
 			await tool.run({
 				source: solid(100, 100),
@@ -514,7 +514,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("circle-mask: offset сдвигает фигуру", async () => {
-		const tool = TOOLS.find((t) => t.id === "circle-mask-png")!;
+		const tool = TOOLS.find((t) => t.id === "circle-mask")!;
 		const img = asImage(
 			await tool.run({
 				source: solid(100, 100),
@@ -530,7 +530,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("star-mask: сохраняет центр, режет углы", async () => {
-		const tool = TOOLS.find((t) => t.id === "star-mask-png")!;
+		const tool = TOOLS.find((t) => t.id === "star-mask")!;
 		const img = asImage(
 			await tool.run({
 				source: solid(100, 100),
@@ -548,7 +548,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("sanitize клампит offset к min/max и чинит мусор", () => {
-		const tool = TOOLS.find((t) => t.id === "wavy-mask-png")!;
+		const tool = TOOLS.find((t) => t.id === "wavy-mask")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			size: 90,
 			amplitude: 8,
@@ -563,7 +563,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("add-text: дефолты position9, font-style, plate и текстовых полей", () => {
-		const tool = TOOLS.find((t) => t.id === "add-text-png")!;
+		const tool = TOOLS.find((t) => t.id === "add-text")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.position).toBe("bottom-right");
 		expect(d.text).toBe("Hello!");
@@ -581,7 +581,7 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 
 	it("sanitize чинит мусор в position9, font-style, plate и оставляет валидные значения", () => {
-		const tool = TOOLS.find((t) => t.id === "date-stamp-png")!;
+		const tool = TOOLS.find((t) => t.id === "date-stamp")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			format: "YYYY-MM-DD",
 			style: {
@@ -624,8 +624,8 @@ describe("registry-new (переведённые инструменты)", () =>
 		});
 	});
 
-	it("text-to-png: дефолты font-style и sanitize", () => {
-		const tool = TOOLS.find((t) => t.id === "text-to-png")!;
+	it("from-text: дефолты font-style и sanitize", () => {
+		const tool = TOOLS.find((t) => t.id === "from-text")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.style).toEqual({
 			font: "sans",
@@ -647,9 +647,9 @@ describe("registry-new (переведённые инструменты)", () =>
 	});
 });
 
-describe("split-into-parts-png", () => {
+describe("split-into-parts", () => {
 	it("объявлен с result=files и дефолтом 2x2", () => {
-		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		expect(tool).toBeDefined();
 		expect(tool.result).toBe("files");
 		const defaults = sanitizeSchemaParams(tool.schema, {});
@@ -658,7 +658,7 @@ describe("split-into-parts-png", () => {
 	});
 
 	it("на ровном размере даёт cols*rows частей одинакового размера", async () => {
-		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		const files = asFiles(
 			await tool.run({
 				source: solid(100, 100),
@@ -682,7 +682,7 @@ describe("split-into-parts-png", () => {
 	});
 
 	it("на неделимом размере части строго равные (канвас дополняется)", async () => {
-		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		const files = asFiles(
 			await tool.run({
 				source: solid(101, 77),
@@ -700,7 +700,7 @@ describe("split-into-parts-png", () => {
 	});
 
 	it("работает максимум 6x6 = 36 частей", async () => {
-		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		const files = asFiles(
 			await tool.run({
 				source: solid(120, 120),
@@ -714,7 +714,7 @@ describe("split-into-parts-png", () => {
 	});
 
 	it("выбрасывает errors.tooManyParts при переполнении", () => {
-		const tool = TOOLS.find((t) => t.id === "split-into-parts-png")!;
+		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		expect(() =>
 			tool.run({
 				source: solid(120, 120),

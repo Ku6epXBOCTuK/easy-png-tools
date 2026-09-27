@@ -7,7 +7,7 @@ export const convertPages: Page[] = [
 		description:
 			"Transparency is composited over the chosen backdrop color (white by default) and saved as JPEG.",
 		category: "convert",
-		steps: [{ id: "convert-png-to-jpg" }],
+		steps: [{ id: "to-jpg" }],
 	},
 	{
 		slug: "convert-png-to-webp",
@@ -15,7 +15,7 @@ export const convertPages: Page[] = [
 		description:
 			"Re-encodes the image into WebP with adjustable quality. Transparency is preserved.",
 		category: "convert",
-		steps: [{ id: "convert-png-to-webp" }],
+		steps: [{ id: "to-webp" }],
 	},
 	{
 		slug: "png-to-bmp",
@@ -23,7 +23,7 @@ export const convertPages: Page[] = [
 		description:
 			"Saves the image as 24-bit BMP without an alpha channel: transparency is replaced with a black background.",
 		category: "convert",
-		steps: [{ id: "png-to-bmp" }],
+		steps: [{ id: "to-bmp" }],
 	},
 	{
 		slug: "png-to-base64",
@@ -31,7 +31,7 @@ export const convertPages: Page[] = [
 		description:
 			"Encodes the image into a base64 string for embedding in code or styles.",
 		category: "convert",
-		steps: [{ id: "png-to-base64" }],
+		steps: [{ id: "to-base64" }],
 	},
 	{
 		slug: "png-to-data-uri",
@@ -39,7 +39,7 @@ export const convertPages: Page[] = [
 		description:
 			"Builds a full data-uri (data:image/png;base64,…) for embedding in HTML/CSS.",
 		category: "convert",
-		steps: [{ id: "png-to-data-uri" }],
+		steps: [{ id: "to-data-uri" }],
 	},
 	{
 		slug: "png-to-hex",
@@ -47,7 +47,7 @@ export const convertPages: Page[] = [
 		description:
 			"Shows all pixels as rrggbbaa hex values — row by row, space separated.",
 		category: "convert",
-		steps: [{ id: "png-to-hex" }],
+		steps: [{ id: "to-hex" }],
 	},
 	{
 		slug: "png-to-bytes",
@@ -55,7 +55,7 @@ export const convertPages: Page[] = [
 		description:
 			"Lists every pixel as four decimal bytes (R G B A), one image row per line.",
 		category: "convert",
-		steps: [{ id: "png-to-bytes" }],
+		steps: [{ id: "to-bytes" }],
 	},
 	{
 		slug: "png-to-rgb-values",
@@ -63,7 +63,7 @@ export const convertPages: Page[] = [
 		description:
 			"Lists every pixel as rgba(r, g, b, a), one image row per line.",
 		category: "convert",
-		steps: [{ id: "png-to-rgb-values" }],
+		steps: [{ id: "to-rgb-values" }],
 	},
 	{
 		slug: "base64-to-png",
@@ -71,14 +71,14 @@ export const convertPages: Page[] = [
 		description:
 			"Decodes a base64 string or data-uri back into an image. Paste the string on the left.",
 		category: "convert",
-		steps: [{ id: "base64-to-png" }],
+		steps: [{ id: "from-base64" }],
 	},
 	{
 		slug: "data-uri-to-png",
 		title: "Data URI to PNG",
 		description: "Decodes data:image/…;base64,… back into an image file.",
 		category: "convert",
-		steps: [{ id: "data-uri-to-png" }],
+		steps: [{ id: "from-data-uri" }],
 	},
 	{
 		slug: "hex-to-png",
@@ -86,7 +86,7 @@ export const convertPages: Page[] = [
 		description:
 			"Assembles an image from rrggbbaa hex values (space separated). Set the width — the height is computed automatically.",
 		category: "convert",
-		steps: [{ id: "hex-to-png" }],
+		steps: [{ id: "from-hex" }],
 	},
 	{
 		slug: "bytes-to-png",
@@ -94,7 +94,7 @@ export const convertPages: Page[] = [
 		description:
 			"Assembles an image from decimal RGBA byte numbers (any separators). Set the width — height is computed automatically.",
 		category: "convert",
-		steps: [{ id: "bytes-to-png" }],
+		steps: [{ id: "from-bytes" }],
 	},
 	{
 		slug: "rgb-values-to-png",
@@ -102,7 +102,7 @@ export const convertPages: Page[] = [
 		description:
 			"Assembles an image from rgba(r, g, b, a) numbers. Set the width — height is computed automatically.",
 		category: "convert",
-		steps: [{ id: "rgb-values-to-png" }],
+		steps: [{ id: "from-rgb-values" }],
 	},
 	{
 		slug: "svg-to-png",
@@ -110,6 +110,6 @@ export const convertPages: Page[] = [
 		description:
 			"Decodes SVG markup into a raster image. Paste the SVG code on the left.",
 		category: "convert",
-		steps: [{ id: "svg-to-png" }],
+		steps: [{ id: "from-svg" }],
 	},
 ];

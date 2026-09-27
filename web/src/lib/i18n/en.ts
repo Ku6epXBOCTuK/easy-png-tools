@@ -337,83 +337,83 @@ export const en: Dict = {
 	// EN-строка из реестра страниц (`web/src/lib/registry/pages/`).
 	pages: {},
 	tools: {
-		"png-file-size": {
+		"file-size": {
 			results: {
 				line: "PNG size: {kb} KB",
 			},
 		},
-		"verify-is-png": {
+		"verify-png": {
 			results: {
 				verifyYes: "Yes — this is a valid PNG signature.",
 				verifyNo: "No — the signature does not match a PNG file.",
 			},
 		},
-		"png-is-grayscale": {
+		"is-grayscale": {
 			results: {
 				grayscaleYes: "Yes — all pixels are shades of gray.",
 				grayscaleNo: "No — colored pixels were found.",
 			},
 		},
-		"png-is-transparent": {
+		"is-transparent": {
 			results: {
 				transparentYes:
 					"Yes — there are transparent or semi-transparent pixels.",
 				transparentNo: "No — all pixels are fully opaque.",
 			},
 		},
-		"png-orientation": {
+		orientation: {
 			results: {
 				orientationPortrait: "Portrait — height is greater than width.",
 				orientationLandscape: "Landscape — width is greater than height.",
 				orientationSquare: "Square — the sides are equal.",
 			},
 		},
-		"show-transparent-png": {
+		"show-transparent": {
 			options: {
 				mode: { binary: "Black & white mask", highlight: "Color highlight" },
 			},
 		},
-		"show-grayscale-pixels-png": {
+		"show-grayscale-pixels": {
 			options: {
 				mode: { binary: "Black & white mask", highlight: "Color highlight" },
 			},
 		},
-		"show-color-pixels-png": {
+		"show-color-pixels": {
 			options: {
 				mode: { binary: "Black & white mask", highlight: "Color highlight" },
 			},
 		},
-		"light-pixel-mask-png": {
+		"light-pixel-mask": {
 			options: {
 				mode: { binary: "Black & white mask", highlight: "Color highlight" },
 			},
 		},
-		"dark-pixel-mask-png": {
+		"dark-pixel-mask": {
 			options: {
 				mode: { binary: "Black & white mask", highlight: "Color highlight" },
 			},
 		},
-		"unique-color-mask-png": {
+		"unique-color-mask": {
 			options: {
 				mode: { binary: "Black & white mask", highlight: "Color highlight" },
 			},
 		},
-		"add-noise-png": {
+		"add-noise": {
 			options: {
 				mode: { mono: "Monochrome grain", color: "Color noise" },
 			},
 		},
-		"dithering-png": {
+		dithering: {
 			options: {
 				pattern: { "floyd-steinberg": "Floyd–Steinberg", bayer: "Bayer 4x4" },
 			},
 		},
-		"extract-channel-png": {
+		"extract-channel": {
 			options: {
 				channel: { red: "Red", green: "Green", blue: "Blue" },
 			},
 		},
-		"swap-channels-png": {
+		"swap-channels": {
 			options: {
 				pair: {
 					"r-g": "Red ↔ Green",
@@ -422,7 +422,7 @@ export const en: Dict = {
 				},
 			},
 		},
-		"decrease-color-count-png": {
+		"decrease-color-count": {
 			options: {
 				maxColors: {
 					"2": "2",
@@ -439,37 +439,37 @@ export const en: Dict = {
 				},
 			},
 		},
-		"png-to-hsl": {
+		"to-hsl": {
 			options: {
 				display: { gray: "Grayscale", color: "Space as RGB" },
 			},
 		},
-		"png-to-hsv": {
+		"to-hsv": {
 			options: {
 				display: { gray: "Grayscale", color: "Space as RGB" },
 			},
 		},
-		"png-to-hsi": {
+		"to-hsi": {
 			options: {
 				display: { gray: "Grayscale", color: "Space as RGB" },
 			},
 		},
-		"png-to-cmyk": {
+		"to-cmyk": {
 			options: {
 				display: { gray: "Grayscale", color: "Space as RGB" },
 			},
 		},
-		"png-to-ycbcr": {
+		"to-ycbcr": {
 			options: {
 				display: { gray: "Grayscale", color: "Space as RGB" },
 			},
 		},
-		"png-to-lab": {
+		"to-lab": {
 			options: {
 				display: { gray: "Grayscale", color: "Space as RGB" },
 			},
 		},
-		"rotate-png": {
+		rotate: {
 			options: {
 				angle: {
 					"90": "90° clockwise",
@@ -478,7 +478,7 @@ export const en: Dict = {
 				},
 			},
 		},
-		"flip-png": {
+		flip: {
 			options: {
 				axis: {
 					horizontal: "Horizontal (left to right)",
@@ -486,7 +486,7 @@ export const en: Dict = {
 				},
 			},
 		},
-		"change-canvas-size-png": {
+		"change-canvas-size": {
 			options: {
 				anchor: {
 					"top-left": "Top left",
@@ -501,7 +501,7 @@ export const en: Dict = {
 				},
 			},
 		},
-		"change-aspect-ratio-png": {
+		"change-aspect-ratio": {
 			options: {
 				ratio: {
 					"1:1": "1:1",
@@ -515,12 +515,12 @@ export const en: Dict = {
 				mode: { crop: "Crop to fill", pad: "Pad to fit" },
 			},
 		},
-		"swap-orientation-png": {
+		"swap-orientation": {
 			options: {
 				target: { portrait: "Portrait", landscape: "Landscape" },
 			},
 		},
-		"symmetric-copy-png": {
+		"symmetric-copy": {
 			options: {
 				axis: {
 					vertical: "Vertical (double width)",
@@ -534,47 +534,47 @@ export const en: Dict = {
 				},
 			},
 		},
-		"color-spectrum-png": {
+		"color-spectrum": {
 			options: {
 				direction: { horizontal: "Horizontal", vertical: "Vertical" },
 			},
 		},
-		"step-colors-png": {
+		"step-colors": {
 			options: {
 				layout: { grid: "Grid", strip: "Strip" },
 			},
 		},
-		"complementary-png": {
+		complementary: {
 			options: {
 				layout: { grid: "Grid", strip: "Strip" },
 			},
 		},
-		"triadic-png": {
+		triadic: {
 			options: {
 				layout: { grid: "Grid", strip: "Strip" },
 			},
 		},
-		"tetradic-png": {
+		tetradic: {
 			options: {
 				layout: { grid: "Grid", strip: "Strip" },
 			},
 		},
-		"analogous-png": {
+		analogous: {
 			options: {
 				layout: { grid: "Grid", strip: "Strip" },
 			},
 		},
-		"monochromatic-png": {
+		monochromatic: {
 			options: {
 				layout: { grid: "Grid", strip: "Strip" },
 			},
 		},
-		"shades-png": {
+		shades: {
 			options: {
 				layout: { grid: "Grid", strip: "Strip" },
 			},
 		},
-		"sort-colors-png": {
+		"sort-colors": {
 			options: {
 				order: { hue: "Hue", luma: "Brightness", sat: "Saturation" },
 				layout: { grid: "Grid", strip: "Strip" },

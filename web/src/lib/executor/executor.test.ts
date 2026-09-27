@@ -281,7 +281,7 @@ describe("handleWorkerRequest", () => {
 	it("serializes image results and preserves ToolError keys", async () => {
 		const imageResult = await handleWorkerRequest({
 			id: 1,
-			toolId: "flip-png",
+			toolId: "flip",
 			params: {},
 			source: image(),
 		});
@@ -295,7 +295,7 @@ describe("handleWorkerRequest", () => {
 
 		const errorResult = await handleWorkerRequest({
 			id: 2,
-			toolId: "bytes-to-png",
+			toolId: "from-bytes",
 			params: { width: 32 },
 			text: Array.from({ length: 132 }, () => "1").join(" "),
 		});
@@ -310,7 +310,7 @@ describe("handleWorkerRequest", () => {
 	it("serializes FileResult transfers", async () => {
 		const result = await handleWorkerRequest({
 			id: 3,
-			toolId: "split-into-parts-png",
+			toolId: "split-into-parts",
 			params: { columns: 2, rows: 2 },
 			source: image(),
 		});

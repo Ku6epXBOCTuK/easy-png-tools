@@ -7,7 +7,7 @@ export const colorPages: Page[] = [
 		description:
 			"Recolors the image into two chosen colors by luminance threshold.",
 		category: "color",
-		steps: [{ id: "two-colors-png" }],
+		steps: [{ id: "two-colors" }],
 	},
 	{
 		slug: "gamma-png",
@@ -15,7 +15,7 @@ export const colorPages: Page[] = [
 		description:
 			"Corrects midtone brightness. <1 darker, >1 lighter, 1 — unchanged.",
 		category: "color",
-		steps: [{ id: "gamma-png" }],
+		steps: [{ id: "gamma" }],
 	},
 	{
 		slug: "temperature-png",
@@ -23,7 +23,7 @@ export const colorPages: Page[] = [
 		description:
 			"Positive values make the image warmer (more orange), negative ones cooler (more blue).",
 		category: "color",
-		steps: [{ id: "temperature-png" }],
+		steps: [{ id: "temperature" }],
 	},
 	{
 		slug: "tint-png",
@@ -31,7 +31,7 @@ export const colorPages: Page[] = [
 		description:
 			"Multiplies color channels by the chosen tint with the given strength.",
 		category: "color",
-		steps: [{ id: "tint-png" }],
+		steps: [{ id: "tint" }],
 	},
 	{
 		slug: "quantize-png",
@@ -39,7 +39,7 @@ export const colorPages: Page[] = [
 		description:
 			"Reduces the image to k colors via median-cut palette. Transparent pixels are preserved.",
 		category: "color",
-		steps: [{ id: "quantize-png" }],
+		steps: [{ id: "quantize" }],
 	},
 	{
 		slug: "custom-palette-png",
@@ -47,7 +47,7 @@ export const colorPages: Page[] = [
 		description:
 			"Maps every pixel to the nearest color from your comma-separated hex list.",
 		category: "color",
-		steps: [{ id: "custom-palette-png" }],
+		steps: [{ id: "custom-palette" }],
 	},
 	{
 		slug: "dithering-png",
@@ -55,7 +55,7 @@ export const colorPages: Page[] = [
 		description:
 			"Applies Floyd–Steinberg error diffusion or ordered Bayer dithering while reducing to k colors.",
 		category: "color",
-		steps: [{ id: "dithering-png" }],
+		steps: [{ id: "dithering" }],
 	},
 	{
 		slug: "grayscale-png",
@@ -63,7 +63,7 @@ export const colorPages: Page[] = [
 		description:
 			"Converts the image to shades of gray using the BT.601 luminance formula. Alpha is preserved.",
 		category: "color",
-		steps: [{ id: "grayscale-png" }],
+		steps: [{ id: "grayscale" }],
 	},
 	{
 		slug: "invert-colors-png",
@@ -71,7 +71,7 @@ export const colorPages: Page[] = [
 		description:
 			"Inverts each color channel (255 − value). Alpha is unchanged.",
 		category: "color",
-		steps: [{ id: "invert-colors-png" }],
+		steps: [{ id: "invert-colors" }],
 	},
 	{
 		slug: "adjust-brightness-contrast-png",
@@ -79,7 +79,7 @@ export const colorPages: Page[] = [
 		description:
 			"Adjusts brightness and contrast in the range from −100 to +100. Zero means no change.",
 		category: "color",
-		steps: [{ id: "adjust-brightness-contrast-png" }],
+		steps: [{ id: "adjust-brightness-contrast" }],
 	},
 	{
 		slug: "change-png-opacity",
@@ -87,14 +87,14 @@ export const colorPages: Page[] = [
 		description:
 			"Multiplies the alpha channel by a percentage: 0% — fully transparent, 100% — unchanged.",
 		category: "color",
-		steps: [{ id: "change-png-opacity" }],
+		steps: [{ id: "change-opacity" }],
 	},
 	{
 		slug: "sepia-png",
 		title: "Sepia effect",
 		description: "Tints the image into the warm brown tones of classic sepia.",
 		category: "color",
-		steps: [{ id: "sepia-png" }],
+		steps: [{ id: "sepia" }],
 	},
 	{
 		slug: "change-png-hue",
@@ -102,7 +102,7 @@ export const colorPages: Page[] = [
 		description:
 			"Shifts the hue around the circle. Saturation and lightness are preserved.",
 		category: "color",
-		steps: [{ id: "change-png-hue" }],
+		steps: [{ id: "change-hue" }],
 	},
 	{
 		slug: "extract-channel-png",
@@ -110,7 +110,7 @@ export const colorPages: Page[] = [
 		description:
 			"Keeps only the chosen channel — red, green or blue — as shades of gray.",
 		category: "color",
-		steps: [{ id: "extract-channel-png" }],
+		steps: [{ id: "extract-channel" }],
 	},
 	{
 		slug: "swap-channels-png",
@@ -118,7 +118,7 @@ export const colorPages: Page[] = [
 		description:
 			"Swaps two color channels — a quick way to get unusual coloring.",
 		category: "color",
-		steps: [{ id: "swap-channels-png" }],
+		steps: [{ id: "swap-channels" }],
 	},
 	{
 		slug: "black-and-white-png",
@@ -126,14 +126,14 @@ export const colorPages: Page[] = [
 		description:
 			"Hard binarization by luminance: every pixel becomes black or white.",
 		category: "color",
-		steps: [{ id: "black-and-white-png" }],
+		steps: [{ id: "black-and-white" }],
 	},
 	{
 		slug: "posterize-png",
 		title: "Posterize PNG",
 		description: "Reduces the number of levels per channel — a poster effect.",
 		category: "color",
-		steps: [{ id: "posterize-png" }],
+		steps: [{ id: "posterize" }],
 	},
 	{
 		slug: "auto-contrast-png",
@@ -141,7 +141,7 @@ export const colorPages: Page[] = [
 		description:
 			"Stretches each channel's range across the full available brightness range.",
 		category: "color",
-		steps: [{ id: "auto-contrast-png" }],
+		steps: [{ id: "auto-contrast" }],
 	},
 	{
 		slug: "decrease-color-count-png",
@@ -149,7 +149,7 @@ export const colorPages: Page[] = [
 		description:
 			"Median-cut engine as a quick way to drop to 2–256 colors. Presets marked (extreme/strong/balanced/light) match the classic compression levels.",
 		category: "color",
-		steps: [{ id: "decrease-color-count-png" }],
+		steps: [{ id: "decrease-color-count" }],
 	},
 	{
 		slug: "png-to-hsl",
@@ -157,7 +157,7 @@ export const colorPages: Page[] = [
 		description:
 			"Decomposes the image into Hue, Saturation and Lightness components.",
 		category: "color",
-		steps: [{ id: "png-to-hsl" }],
+		steps: [{ id: "to-hsl" }],
 	},
 	{
 		slug: "png-to-hsv",
@@ -165,7 +165,7 @@ export const colorPages: Page[] = [
 		description:
 			"Decomposes the image into Hue, Saturation and Value (brightness) components.",
 		category: "color",
-		steps: [{ id: "png-to-hsv" }],
+		steps: [{ id: "to-hsv" }],
 	},
 	{
 		slug: "png-to-hsi",
@@ -173,7 +173,7 @@ export const colorPages: Page[] = [
 		description:
 			"Decomposes the image into Hue, Saturation and Intensity components.",
 		category: "color",
-		steps: [{ id: "png-to-hsi" }],
+		steps: [{ id: "to-hsi" }],
 	},
 	{
 		slug: "png-to-cmyk",
@@ -181,7 +181,7 @@ export const colorPages: Page[] = [
 		description:
 			"Decomposes the image into print-style Cyan, Magenta, Yellow and Key (black) components.",
 		category: "color",
-		steps: [{ id: "png-to-cmyk" }],
+		steps: [{ id: "to-cmyk" }],
 	},
 	{
 		slug: "png-to-ycbcr",
@@ -189,7 +189,7 @@ export const colorPages: Page[] = [
 		description:
 			"Decomposes the image into Luma (Y) and Blue-difference / Red-difference chroma components.",
 		category: "color",
-		steps: [{ id: "png-to-ycbcr" }],
+		steps: [{ id: "to-ycbcr" }],
 	},
 	{
 		slug: "png-to-lab",
@@ -197,6 +197,6 @@ export const colorPages: Page[] = [
 		description:
 			"Decomposes the image into perceptual Lightness and green–magenta / blue–yellow opponents.",
 		category: "color",
-		steps: [{ id: "png-to-lab" }],
+		steps: [{ id: "to-lab" }],
 	},
 ];

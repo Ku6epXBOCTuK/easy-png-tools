@@ -39,7 +39,7 @@ export const convertToJpgSchema = toolSchema<ConvertToJpgParams>({
 });
 
 const convertToJpg: Tool<ConvertToJpgParams> = {
-	id: "convert-png-to-jpg",
+	id: "to-jpg",
 	schema: convertToJpgSchema,
 	input: "image",
 	run: imgTool((img, p) => flattenOntoColor(img, p.background)),
@@ -61,7 +61,7 @@ export const convertToWebpSchema = toolSchema<ConvertToWebpParams>({
 });
 
 const convertToWebp: Tool<ConvertToWebpParams> = {
-	id: "convert-png-to-webp",
+	id: "to-webp",
 	schema: convertToWebpSchema,
 	input: "image",
 	run: imgTool((img) => clonePixelImage(img)),
@@ -73,7 +73,7 @@ interface ConvertToBmpParams {}
 export const convertToBmpSchema = toolSchema<ConvertToBmpParams>({});
 
 const convertToBmp: Tool<ConvertToBmpParams> = {
-	id: "png-to-bmp",
+	id: "to-bmp",
 	schema: convertToBmpSchema,
 	input: "image",
 	run: imgTool((img) => flattenOntoColor(img, "#000000")),
@@ -85,7 +85,7 @@ interface NoParams {}
 const emptySchema = toolSchema<NoParams>({});
 
 const pngToBase64: Tool<NoParams> = {
-	id: "png-to-base64",
+	id: "to-base64",
 	schema: emptySchema,
 	input: "image",
 	result: "text",
@@ -94,7 +94,7 @@ const pngToBase64: Tool<NoParams> = {
 };
 
 const pngToDataUri: Tool<NoParams> = {
-	id: "png-to-data-uri",
+	id: "to-data-uri",
 	schema: emptySchema,
 	input: "image",
 	result: "text",
@@ -103,7 +103,7 @@ const pngToDataUri: Tool<NoParams> = {
 };
 
 const pngToHex: Tool<NoParams> = {
-	id: "png-to-hex",
+	id: "to-hex",
 	schema: emptySchema,
 	input: "image",
 	result: "text",
@@ -111,7 +111,7 @@ const pngToHex: Tool<NoParams> = {
 };
 
 const pngToBytes: Tool<NoParams> = {
-	id: "png-to-bytes",
+	id: "to-bytes",
 	schema: emptySchema,
 	input: "image",
 	result: "text",
@@ -119,7 +119,7 @@ const pngToBytes: Tool<NoParams> = {
 };
 
 const pngToRgbValues: Tool<NoParams> = {
-	id: "png-to-rgb-values",
+	id: "to-rgb-values",
 	schema: emptySchema,
 	input: "image",
 	result: "text",
@@ -127,7 +127,7 @@ const pngToRgbValues: Tool<NoParams> = {
 };
 
 const base64ToPng: Tool<NoParams> = {
-	id: "base64-to-png",
+	id: "from-base64",
 	schema: emptySchema,
 	input: "text",
 	domOnly: true,
@@ -135,7 +135,7 @@ const base64ToPng: Tool<NoParams> = {
 };
 
 const dataUriToPng: Tool<NoParams> = {
-	id: "data-uri-to-png",
+	id: "from-data-uri",
 	schema: emptySchema,
 	input: "text",
 	domOnly: true,
@@ -151,7 +151,7 @@ export const hexToPngSchema = toolSchema<HexToPngParams>({
 });
 
 const hexToPng: Tool<HexToPngParams> = {
-	id: "hex-to-png",
+	id: "from-hex",
 	schema: hexToPngSchema,
 	input: "text",
 	run: textGen((text, p) => hexToPixels(text, Math.trunc(p.width))),
@@ -166,7 +166,7 @@ export const bytesToPngSchema = toolSchema<BytesToPngParams>({
 });
 
 const bytesToPng: Tool<BytesToPngParams> = {
-	id: "bytes-to-png",
+	id: "from-bytes",
 	schema: bytesToPngSchema,
 	input: "text",
 	run: textGen((text, p) => bytesToImage(text, Math.trunc(p.width))),
@@ -181,7 +181,7 @@ export const rgbValuesToPngSchema = toolSchema<RgbValuesToPngParams>({
 });
 
 const rgbValuesToPng: Tool<RgbValuesToPngParams> = {
-	id: "rgb-values-to-png",
+	id: "from-rgb-values",
 	schema: rgbValuesToPngSchema,
 	input: "text",
 	run: textGen((text, p) => rgbValuesToImage(text, Math.trunc(p.width))),
@@ -196,7 +196,7 @@ export const svgToPngSchema = toolSchema<SvgToPngParams>({
 });
 
 const svgToPng: Tool<SvgToPngParams> = {
-	id: "svg-to-png",
+	id: "from-svg",
 	schema: svgToPngSchema,
 	input: "text",
 	domOnly: true,

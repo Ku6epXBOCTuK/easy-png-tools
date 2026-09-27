@@ -53,34 +53,34 @@ describe("searchPages (кросс-языковой поиск каталога)"
 describe("verdictText (вердикт с vars)", () => {
 	it("интерполирует {vars} в обоих локалях", () => {
 		setLocale("ru");
-		expect(verdictText("png-file-size", "line", { kb: "12.3" })).toBe(
+		expect(verdictText("file-size", "line", { kb: "12.3" })).toBe(
 			"Размер PNG: 12.3 КБ",
 		);
 		setLocale("en");
-		expect(verdictText("png-file-size", "line", { kb: "12.3" })).toBe(
+		expect(verdictText("file-size", "line", { kb: "12.3" })).toBe(
 			"PNG size: 12.3 KB",
 		);
 	});
 
 	it("без vars возвращает ключ как есть при отсутствии в словаре", () => {
-		expect(verdictText("png-file-size", "нет-такого")).toBe("нет-такого");
+		expect(verdictText("file-size", "нет-такого")).toBe("нет-такого");
 	});
 
 	it.each([
 		[
-			"verify-is-png",
+			"verify-png",
 			"verifyYes",
 			"Да — сигнатура настоящего PNG.",
 			"Yes — this is a valid PNG signature.",
 		],
 		[
-			"png-is-transparent",
+			"is-transparent",
 			"transparentNo",
 			"Нет — все пиксели полностью непрозрачны.",
 			"No — all pixels are fully opaque.",
 		],
 		[
-			"png-orientation",
+			"orientation",
 			"orientationLandscape",
 			"Ландшафт — ширина больше высоты.",
 			"Landscape — width is greater than height.",

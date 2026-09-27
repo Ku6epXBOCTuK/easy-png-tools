@@ -32,7 +32,7 @@ export const extractColorSchema = toolSchema<ExtractColorParams>({
 });
 
 const extractColor: Tool<ExtractColorParams> = {
-	id: "extract-color-from-png",
+	id: "extract-color-from",
 	schema: extractColorSchema,
 	input: "image",
 	run: imgTool((img, p) => extractByColor(img, p.color, p.tolerance)),
@@ -88,7 +88,7 @@ export const showTransparentSchema = toolSchema<MaskParams>({
 });
 
 const showTransparent: Tool<MaskParams> = {
-	id: "show-transparent-png",
+	id: "show-transparent",
 	schema: showTransparentSchema,
 	input: "image",
 	run: imgTool((img, p) => renderMask(img, p, (_r, _g, _b, a) => a < 255)),
@@ -110,7 +110,7 @@ export const showGrayscalePixelsSchema = toolSchema<GrayscalePixelsParams>({
 });
 
 const showGrayscalePixels: Tool<GrayscalePixelsParams> = {
-	id: "show-grayscale-pixels-png",
+	id: "show-grayscale-pixels",
 	schema: showGrayscalePixelsSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -134,7 +134,7 @@ export const showColorPixelsSchema = toolSchema<ColorPixelsParams>({
 });
 
 const showColorPixels: Tool<ColorPixelsParams> = {
-	id: "show-color-pixels-png",
+	id: "show-color-pixels",
 	schema: showColorPixelsSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -158,7 +158,7 @@ export const lightPixelMaskSchema = toolSchema<LightPixelParams>({
 });
 
 const lightPixelMask: Tool<LightPixelParams> = {
-	id: "light-pixel-mask-png",
+	id: "light-pixel-mask",
 	schema: lightPixelMaskSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -182,7 +182,7 @@ export const darkPixelMaskSchema = toolSchema<DarkPixelParams>({
 });
 
 const darkPixelMask: Tool<DarkPixelParams> = {
-	id: "dark-pixel-mask-png",
+	id: "dark-pixel-mask",
 	schema: darkPixelMaskSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -206,7 +206,7 @@ export const uniqueColorMaskSchema = toolSchema<UniqueColorParams>({
 });
 
 const uniqueColorMask: Tool<UniqueColorParams> = {
-	id: "unique-color-mask-png",
+	id: "unique-color-mask",
 	schema: uniqueColorMaskSchema,
 	input: "image",
 	run: imgTool((img, p) => renderMask(img, p, rarityPredicate(img, p.rarity))),
@@ -217,7 +217,7 @@ interface NoParams {}
 const emptySchema = toolSchema<NoParams>({});
 
 const verifyIsPng: Tool<NoParams> = {
-	id: "verify-is-png",
+	id: "verify-png",
 	schema: emptySchema,
 	input: "text",
 	result: "verdict",
@@ -227,7 +227,7 @@ const verifyIsPng: Tool<NoParams> = {
 };
 
 const pngIsGrayscale: Tool<NoParams> = {
-	id: "png-is-grayscale",
+	id: "is-grayscale",
 	schema: emptySchema,
 	input: "image",
 	result: "verdict",
@@ -235,7 +235,7 @@ const pngIsGrayscale: Tool<NoParams> = {
 };
 
 const pngFileSize: Tool<NoParams> = {
-	id: "png-file-size",
+	id: "file-size",
 	schema: emptySchema,
 	domOnly: true,
 	input: "image",
@@ -249,7 +249,7 @@ const pngFileSize: Tool<NoParams> = {
 };
 
 const pngIsTransparent: Tool<NoParams> = {
-	id: "png-is-transparent",
+	id: "is-transparent",
 	schema: emptySchema,
 	input: "image",
 	result: "verdict",
@@ -259,7 +259,7 @@ const pngIsTransparent: Tool<NoParams> = {
 };
 
 const pngOrientation: Tool<NoParams> = {
-	id: "png-orientation",
+	id: "orientation",
 	schema: emptySchema,
 	input: "image",
 	result: "verdict",

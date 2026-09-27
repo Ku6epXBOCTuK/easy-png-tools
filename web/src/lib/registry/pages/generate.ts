@@ -7,14 +7,14 @@ export const generatePages: Page[] = [
 		description:
 			"Creates a blank canvas of the chosen dimensions, either transparent or filled with a solid color.",
 		category: "generate",
-		steps: [{ id: "create-empty-png" }],
+		steps: [{ id: "create-empty" }],
 	},
 	{
 		slug: "single-color-png",
 		title: "Create solid color PNG",
 		description: "Generates a rectangle of the given size and color.",
 		category: "generate",
-		steps: [{ id: "single-color-png" }],
+		steps: [{ id: "single-color" }],
 	},
 	{
 		slug: "random-noise-png",
@@ -22,7 +22,7 @@ export const generatePages: Page[] = [
 		description:
 			"Generates an image with random pixels. The seed fixes the result: one seed — one image.",
 		category: "generate",
-		steps: [{ id: "random-noise-png" }],
+		steps: [{ id: "random-noise" }],
 	},
 	{
 		slug: "linear-gradient-png",
@@ -30,7 +30,7 @@ export const generatePages: Page[] = [
 		description:
 			"Generates a smooth transition between two colors along a chosen angle.",
 		category: "generate",
-		steps: [{ id: "linear-gradient-png" }],
+		steps: [{ id: "linear-gradient" }],
 	},
 	{
 		slug: "color-spectrum-png",
@@ -38,7 +38,7 @@ export const generatePages: Page[] = [
 		description:
 			"Full hue rainbow 0–360° along the chosen axis with adjustable saturation and lightness.",
 		category: "generate",
-		steps: [{ id: "color-spectrum-png" }],
+		steps: [{ id: "color-spectrum" }],
 	},
 	{
 		slug: "random-colors-png",
@@ -46,7 +46,7 @@ export const generatePages: Page[] = [
 		description:
 			"Fills the canvas with random vivid color blocks. Deterministic by seed.",
 		category: "generate",
-		steps: [{ id: "random-colors-png" }],
+		steps: [{ id: "random-colors" }],
 	},
 	{
 		slug: "draw-grid-png",
@@ -54,7 +54,7 @@ export const generatePages: Page[] = [
 		description:
 			"Draws a grid with custom columns, rows and line width on a transparent or white background.",
 		category: "generate",
-		steps: [{ id: "draw-grid-png" }],
+		steps: [{ id: "draw-grid" }],
 	},
 	{
 		slug: "placeholder-png",
@@ -62,21 +62,21 @@ export const generatePages: Page[] = [
 		description:
 			"Generates a placeholder rectangle with its dimensions printed in the center.",
 		category: "generate",
-		steps: [{ id: "placeholder-png" }],
+		steps: [{ id: "placeholder" }],
 	},
 	{
 		slug: "blend-two-png",
 		title: "Blend Two Colors PNG",
 		description: "A continuous horizontal gradient between two colors.",
 		category: "generate",
-		steps: [{ id: "blend-two-png" }],
+		steps: [{ id: "blend-two" }],
 	},
 	{
 		slug: "step-colors-png",
 		title: "Color Steps PNG",
 		description: "A discrete set of evenly spaced steps between two colors.",
 		category: "generate",
-		steps: [{ id: "step-colors-png" }],
+		steps: [{ id: "step-colors" }],
 	},
 	{
 		slug: "emoji-to-png",
@@ -84,7 +84,7 @@ export const generatePages: Page[] = [
 		description:
 			"Renders an emoji or any Unicode symbol as a transparent PNG of the chosen size.",
 		category: "generate",
-		steps: [{ id: "emoji-to-png" }],
+		steps: [{ id: "from-emoji" }],
 	},
 	{
 		slug: "color-wheel-png",
@@ -92,7 +92,7 @@ export const generatePages: Page[] = [
 		description:
 			"Generates an HSL color wheel: hue around the circle, saturation from center to edge, chosen lightness.",
 		category: "generate",
-		steps: [{ id: "color-wheel-png" }],
+		steps: [{ id: "color-wheel" }],
 	},
 	{
 		slug: "complementary-png",
@@ -100,14 +100,14 @@ export const generatePages: Page[] = [
 		description:
 			"Two opposite colors on the color wheel — the base and its complement.",
 		category: "generate",
-		steps: [{ id: "complementary-png" }],
+		steps: [{ id: "complementary" }],
 	},
 	{
 		slug: "triadic-png",
 		title: "Triadic Palette PNG",
 		description: "Three colors evenly spaced 120° apart on the color wheel.",
 		category: "generate",
-		steps: [{ id: "triadic-png" }],
+		steps: [{ id: "triadic" }],
 	},
 	{
 		slug: "tetradic-png",
@@ -115,7 +115,7 @@ export const generatePages: Page[] = [
 		description:
 			"Four colors in two complementary pairs, 90° apart on the wheel.",
 		category: "generate",
-		steps: [{ id: "tetradic-png" }],
+		steps: [{ id: "tetradic" }],
 	},
 	{
 		slug: "analogous-png",
@@ -123,7 +123,7 @@ export const generatePages: Page[] = [
 		description:
 			"Neighboring hues around the base color — calm, related color scheme.",
 		category: "generate",
-		steps: [{ id: "analogous-png" }],
+		steps: [{ id: "analogous" }],
 	},
 	{
 		slug: "monochromatic-png",
@@ -131,14 +131,14 @@ export const generatePages: Page[] = [
 		description:
 			"Tones of a single hue: lightness varies within the chosen range, hue and saturation stay fixed.",
 		category: "generate",
-		steps: [{ id: "monochromatic-png" }],
+		steps: [{ id: "monochromatic" }],
 	},
 	{
 		slug: "shades-png",
 		title: "Shade Ramp PNG",
 		description: "A ramp of the base color getting darker step by step.",
 		category: "generate",
-		steps: [{ id: "shades-png" }],
+		steps: [{ id: "shades" }],
 	},
 	{
 		slug: "mix-colors-png",
@@ -146,7 +146,7 @@ export const generatePages: Page[] = [
 		description:
 			"Averages the selected colors into one swatch. Colors become one uniform fill.",
 		category: "generate",
-		steps: [{ id: "mix-colors-png" }],
+		steps: [{ id: "mix-colors" }],
 	},
 	{
 		slug: "sort-colors-png",
@@ -154,7 +154,7 @@ export const generatePages: Page[] = [
 		description:
 			"Renders the chosen colors as swatches sorted by hue, brightness or saturation.",
 		category: "generate",
-		steps: [{ id: "sort-colors-png" }],
+		steps: [{ id: "sort-colors" }],
 	},
 	{
 		slug: "text-to-png",
@@ -162,6 +162,6 @@ export const generatePages: Page[] = [
 		description:
 			"Creates a PNG image from text: the canvas is sized to fit the label plus padding.",
 		category: "generate",
-		steps: [{ id: "text-to-png" }],
+		steps: [{ id: "from-text" }],
 	},
 ];

@@ -7,7 +7,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Adds a colored ring outline around the opaque content with the chosen thickness.",
 		category: "alpha",
-		steps: [{ id: "add-stroke-png" }],
+		steps: [{ id: "add-stroke" }],
 	},
 	{
 		slug: "find-contour-png",
@@ -15,7 +15,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Leaves only a line along the boundary of opaque regions in the chosen color and thickness.",
 		category: "alpha",
-		steps: [{ id: "find-contour-png" }],
+		steps: [{ id: "find-contour" }],
 	},
 	{
 		slug: "remove-color-from-png",
@@ -23,7 +23,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Makes all pixels close to the chosen color transparent. The tolerance sets the allowed deviation as a percentage of the maximum color distance.",
 		category: "alpha",
-		steps: [{ id: "remove-color-from-png" }],
+		steps: [{ id: "remove-color-from" }],
 	},
 	{
 		slug: "circle-mask-png",
@@ -31,7 +31,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Cuts the image into a circle. Diameter is set as a share of the smaller side.",
 		category: "alpha",
-		steps: [{ id: "circle-mask-png" }],
+		steps: [{ id: "circle-mask" }],
 	},
 	{
 		slug: "square-mask-png",
@@ -39,7 +39,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Cuts the image into a rectangle with sides as a share of the smaller side.",
 		category: "alpha",
-		steps: [{ id: "square-mask-png" }],
+		steps: [{ id: "square-mask" }],
 	},
 	{
 		slug: "star-mask-png",
@@ -47,7 +47,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Cuts the image into an n-pointed star with adjustable inner radius and rotation.",
 		category: "alpha",
-		steps: [{ id: "star-mask-png" }],
+		steps: [{ id: "star-mask" }],
 	},
 	{
 		slug: "wavy-mask-png",
@@ -55,7 +55,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Cuts the image into a wavy-edged circle: radius is modulated by a sine with chosen amplitude and frequency.",
 		category: "alpha",
-		steps: [{ id: "wavy-mask-png" }],
+		steps: [{ id: "wavy-mask" }],
 	},
 	{
 		slug: "remove-alpha-channel-png",
@@ -63,7 +63,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Composites the image over a white background and saves without transparency.",
 		category: "alpha",
-		steps: [{ id: "remove-alpha-channel-png" }],
+		steps: [{ id: "remove-alpha-channel" }],
 	},
 	{
 		slug: "set-alpha-channel-png",
@@ -71,14 +71,14 @@ export const alphaPages: Page[] = [
 		description:
 			"Assigns the same opacity to all pixels; colors stay unchanged.",
 		category: "alpha",
-		steps: [{ id: "set-alpha-channel-png" }],
+		steps: [{ id: "set-alpha-channel" }],
 	},
 	{
 		slug: "extract-alpha-mask-png",
 		title: "Extract alpha mask PNG",
 		description: "Turns transparency into a black-and-white opaque mask.",
 		category: "alpha",
-		steps: [{ id: "extract-alpha-mask-png" }],
+		steps: [{ id: "extract-alpha-mask" }],
 	},
 	{
 		slug: "round-corners-png",
@@ -86,14 +86,14 @@ export const alphaPages: Page[] = [
 		description:
 			"Clips corners by a radius set as a percentage of half the smaller side.",
 		category: "alpha",
-		steps: [{ id: "round-corners-png" }],
+		steps: [{ id: "round-corners" }],
 	},
 	{
 		slug: "invert-alpha-png",
 		title: "Invert alpha PNG",
 		description: "Opaque areas become transparent and vice versa.",
 		category: "alpha",
-		steps: [{ id: "invert-alpha-png" }],
+		steps: [{ id: "invert-alpha" }],
 	},
 	{
 		slug: "remove-background-png",
@@ -101,14 +101,14 @@ export const alphaPages: Page[] = [
 		description:
 			"Removes a solid background: by color with tolerance, outer regions from the edges only, or every matching pixel. Can smooth the boundary.",
 		category: "alpha",
-		steps: [{ id: "remove-background-png" }],
+		steps: [{ id: "remove-background" }],
 	},
 	{
 		slug: "make-thicker-png",
 		title: "Thicken PNG",
 		description: "Expands opaque areas by the given number of pixels.",
 		category: "alpha",
-		steps: [{ id: "make-thicker-png" }],
+		steps: [{ id: "make-thicker" }],
 	},
 	{
 		slug: "make-thinner-png",
@@ -116,7 +116,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Shrinks opaque areas — thins the strokes of text and details.",
 		category: "alpha",
-		steps: [{ id: "make-thinner-png" }],
+		steps: [{ id: "make-thinner" }],
 	},
 	{
 		slug: "feather-edges-png",
@@ -124,7 +124,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Blurs only the alpha channel: hard cutout edges become soft and gradual, colors stay untouched.",
 		category: "alpha",
-		steps: [{ id: "feather-edges-png" }],
+		steps: [{ id: "feather-edges" }],
 	},
 	{
 		slug: "clean-edges-png",
@@ -132,7 +132,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Replaces edge-halo colors of semi-transparent pixels with the nearest fully opaque color. Alpha stays as is.",
 		category: "alpha",
-		steps: [{ id: "clean-edges-png" }],
+		steps: [{ id: "clean-edges" }],
 	},
 	{
 		slug: "harden-alpha-png",
@@ -140,7 +140,7 @@ export const alphaPages: Page[] = [
 		description:
 			"Binarizes the alpha channel by threshold: semi-transparent pixels become either fully transparent or fully opaque.",
 		category: "alpha",
-		steps: [{ id: "harden-alpha-png" }],
+		steps: [{ id: "harden-alpha" }],
 	},
 	{
 		slug: "despeckle-alpha-png",
@@ -148,13 +148,13 @@ export const alphaPages: Page[] = [
 		description:
 			"Opening: removes lone semi-transparent pixels and small specks.",
 		category: "alpha",
-		steps: [{ id: "despeckle-alpha-png" }],
+		steps: [{ id: "despeckle-alpha" }],
 	},
 	{
 		slug: "close-holes-png",
 		title: "Close holes PNG",
 		description: "Closing: fills lone transparent dots inside the object.",
 		category: "alpha",
-		steps: [{ id: "close-holes-png" }],
+		steps: [{ id: "close-holes" }],
 	},
 ];

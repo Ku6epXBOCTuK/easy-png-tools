@@ -59,7 +59,7 @@ const addTextSchema = toolSchema<AddTextParams>(
 );
 
 const addText: Tool<AddTextParams> = {
-	id: "add-text-png",
+	id: "add-text",
 	domOnly: true,
 	schema: addTextSchema,
 	input: "image",
@@ -133,7 +133,7 @@ const dateStampSchema = toolSchema<DateStampParams>(
 );
 
 const dateStamp: Tool<DateStampParams> = {
-	id: "date-stamp-png",
+	id: "date-stamp",
 	domOnly: true,
 	schema: dateStampSchema,
 	input: "image",
@@ -222,7 +222,7 @@ const watermarkTileSchema = toolSchema<WatermarkTileParams>(
 );
 
 const watermarkTile: Tool<WatermarkTileParams> = {
-	id: "watermark-tile-png",
+	id: "watermark-tile",
 	domOnly: true,
 	schema: watermarkTileSchema,
 	input: "image",

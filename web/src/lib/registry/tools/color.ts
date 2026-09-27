@@ -44,7 +44,7 @@ export const twoColorsSchema = toolSchema<TwoColorsParams>({
 });
 
 const twoColorsTool: Tool<TwoColorsParams> = {
-	id: "two-colors-png",
+	id: "two-colors",
 	schema: twoColorsSchema,
 	input: "image",
 	run: imgTool((img, p) => twoColors(img, p.pair.from, p.pair.to, p.threshold)),
@@ -65,7 +65,7 @@ export const gammaSchema = toolSchema<GammaParams>({
 });
 
 const gammaTool: Tool<GammaParams> = {
-	id: "gamma-png",
+	id: "gamma",
 	schema: gammaSchema,
 	input: "image",
 	run: imgTool((img, p) => gammaCorrection(img, p.value)),
@@ -86,7 +86,7 @@ export const temperatureSchema = toolSchema<TemperatureParams>({
 });
 
 const temperatureTool: Tool<TemperatureParams> = {
-	id: "temperature-png",
+	id: "temperature",
 	schema: temperatureSchema,
 	input: "image",
 	run: imgTool((img, p) => temperature(img, p.percent)),
@@ -109,7 +109,7 @@ export const tintSchema = toolSchema<TintParams>({
 });
 
 const tintTool: Tool<TintParams> = {
-	id: "tint-png",
+	id: "tint",
 	schema: tintSchema,
 	input: "image",
 	run: imgTool((img, p) => tint(img, p.color, p.strength)),
@@ -130,7 +130,7 @@ export const quantizeSchema = toolSchema<QuantizeParams>({
 });
 
 const quantizeTool: Tool<QuantizeParams> = {
-	id: "quantize-png",
+	id: "quantize",
 	schema: quantizeSchema,
 	input: "image",
 	run: imgTool((img, p) => quantizeImage(img, p.colors).image),
@@ -145,7 +145,7 @@ export const customPaletteSchema = toolSchema<CustomPaletteParams>({
 });
 
 const customPalette: Tool<CustomPaletteParams> = {
-	id: "custom-palette-png",
+	id: "custom-palette",
 	schema: customPaletteSchema,
 	input: "image",
 	run: imgTool((img, p) => mapToNearest(img, parseHexList(p.colors))),
@@ -175,7 +175,7 @@ export const ditheringSchema = toolSchema<DitheringParams>({
 });
 
 const ditheringTool: Tool<DitheringParams> = {
-	id: "dithering-png",
+	id: "dithering",
 	schema: ditheringSchema,
 	input: "image",
 	run: imgTool((img, p) => ditherImage(img, p.colors, p.pattern)),
@@ -186,7 +186,7 @@ interface EmptyParams {}
 export const grayscaleSchema = toolSchema<EmptyParams>({});
 
 const grayscaleTool: Tool<EmptyParams> = {
-	id: "grayscale-png",
+	id: "grayscale",
 	schema: grayscaleSchema,
 	input: "image",
 	run: imgTool((img) => grayscale(img)),
@@ -195,7 +195,7 @@ const grayscaleTool: Tool<EmptyParams> = {
 export const invertColorsSchema = toolSchema<EmptyParams>({});
 
 const invertColorsTool: Tool<EmptyParams> = {
-	id: "invert-colors-png",
+	id: "invert-colors",
 	schema: invertColorsSchema,
 	input: "image",
 	run: imgTool((img) => invert(img)),
@@ -233,7 +233,7 @@ export const brightnessContrastSchema = toolSchema<BrightnessContrastParams>(
 );
 
 const brightnessContrastTool: Tool<BrightnessContrastParams> = {
-	id: "adjust-brightness-contrast-png",
+	id: "adjust-brightness-contrast",
 	schema: brightnessContrastSchema,
 	input: "image",
 	run: imgTool((img, p) => brightnessContrast(img, p.brightness, p.contrast)),
@@ -254,7 +254,7 @@ export const opacitySchema = toolSchema<OpacityParams>({
 });
 
 const opacityTool: Tool<OpacityParams> = {
-	id: "change-png-opacity",
+	id: "change-opacity",
 	schema: opacitySchema,
 	input: "image",
 	run: imgTool((img, p) => setOpacity(img, p.percent)),
@@ -263,7 +263,7 @@ const opacityTool: Tool<OpacityParams> = {
 export const sepiaSchema = toolSchema<EmptyParams>({});
 
 const sepiaTool: Tool<EmptyParams> = {
-	id: "sepia-png",
+	id: "sepia",
 	schema: sepiaSchema,
 	input: "image",
 	run: imgTool((img) => sepia(img)),
@@ -284,7 +284,7 @@ export const hueShiftSchema = toolSchema<HueShiftParams>({
 });
 
 const hueShiftTool: Tool<HueShiftParams> = {
-	id: "change-png-hue",
+	id: "change-hue",
 	schema: hueShiftSchema,
 	input: "image",
 	run: imgTool((img, p) => changeHue(img, p.degrees)),
@@ -307,7 +307,7 @@ export const extractChannelSchema = toolSchema<ExtractChannelParams>({
 });
 
 const extractChannelTool: Tool<ExtractChannelParams> = {
-	id: "extract-channel-png",
+	id: "extract-channel",
 	schema: extractChannelSchema,
 	input: "image",
 	run: imgTool((img, p) => extractChannel(img, p.channel)),
@@ -330,7 +330,7 @@ export const swapChannelsSchema = toolSchema<SwapChannelsParams>({
 });
 
 const swapChannelsTool: Tool<SwapChannelsParams> = {
-	id: "swap-channels-png",
+	id: "swap-channels",
 	schema: swapChannelsSchema,
 	input: "image",
 	run: imgTool((img, p) => swapChannels(img, p.pair)),
@@ -351,7 +351,7 @@ export const blackAndWhiteSchema = toolSchema<BlackAndWhiteParams>({
 });
 
 const blackAndWhiteTool: Tool<BlackAndWhiteParams> = {
-	id: "black-and-white-png",
+	id: "black-and-white",
 	schema: blackAndWhiteSchema,
 	input: "image",
 	run: imgTool((img, p) => thresholdBlackWhite(img, p.threshold)),
@@ -372,7 +372,7 @@ export const posterizeSchema = toolSchema<PosterizeParams>({
 });
 
 const posterizeTool: Tool<PosterizeParams> = {
-	id: "posterize-png",
+	id: "posterize",
 	schema: posterizeSchema,
 	input: "image",
 	run: imgTool((img, p) => posterize(img, p.levels)),
@@ -381,7 +381,7 @@ const posterizeTool: Tool<PosterizeParams> = {
 export const autoContrastSchema = toolSchema<EmptyParams>({});
 
 const autoContrastTool: Tool<EmptyParams> = {
-	id: "auto-contrast-png",
+	id: "auto-contrast",
 	schema: autoContrastSchema,
 	input: "image",
 	run: imgTool((img) => autoContrast(img)),
@@ -413,7 +413,7 @@ export const decreaseColorCountSchema = toolSchema<DecreaseColorCountParams>({
 });
 
 const decreaseColorCountTool: Tool<DecreaseColorCountParams> = {
-	id: "decrease-color-count-png",
+	id: "decrease-color-count",
 	schema: decreaseColorCountSchema,
 	input: "image",
 	run: imgTool((img, p) => quantizeImage(img, Number(p.maxColors)).image),
@@ -432,7 +432,7 @@ function channelEntries(): Tool<ChannelParams>[] {
 	return CHANNEL_SPACES.map((space) => {
 		const components = SPACES[space].components;
 		return {
-			id: `png-to-${space}`,
+			id: `to-${space}`,
 			schema: toolSchema<ChannelParams>({
 				component: field.select({
 					label: "fields.component",

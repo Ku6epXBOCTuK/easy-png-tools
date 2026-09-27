@@ -48,7 +48,7 @@ export const addBorderSchema = toolSchema<AddBorderParams>({
 });
 
 const addBorder: Tool<AddBorderParams> = {
-	id: "add-border-png",
+	id: "add-border",
 	schema: addBorderSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -95,7 +95,7 @@ export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>(
 );
 
 const fitOnBackground: Tool<FitOnBackgroundParams> = {
-	id: "fit-on-background-png",
+	id: "fit-on-background",
 	schema: fitOnBackgroundSchema,
 	input: "image",
 	run: imgTool((img, p) => {
@@ -158,7 +158,7 @@ export const changeCanvasSizeSchema = toolSchema<ChangeCanvasSizeParams>(
 );
 
 const changeCanvasSizeTool: Tool<ChangeCanvasSizeParams> = {
-	id: "change-canvas-size-png",
+	id: "change-canvas-size",
 	schema: changeCanvasSizeSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -199,7 +199,7 @@ export const resizeSchema = toolSchema<ResizeParams>(
 );
 
 const resizeTool: Tool<ResizeParams> = {
-	id: "resize-png",
+	id: "resize",
 	schema: resizeSchema,
 	input: "image",
 	run: imgTool((img, p) => {
@@ -266,7 +266,7 @@ export const cropSchema = toolSchema<CropParams>(
 );
 
 const cropTool: Tool<CropParams> = {
-	id: "crop-png",
+	id: "crop",
 	schema: cropSchema,
 	input: "image",
 	run: imgTool((img, p) => {
@@ -296,7 +296,7 @@ export const rotateSchema = toolSchema<RotateParams>({
 });
 
 const rotateTool: Tool<RotateParams> = {
-	id: "rotate-png",
+	id: "rotate",
 	schema: rotateSchema,
 	input: "image",
 	run: imgTool((img, p) => rotate90(img, Number(p.angle) / 90)),
@@ -318,7 +318,7 @@ export const flipSchema = toolSchema<FlipParams>({
 });
 
 const flipTool: Tool<FlipParams> = {
-	id: "flip-png",
+	id: "flip",
 	schema: flipSchema,
 	input: "image",
 	run: imgTool((img, p) => flip(img, p.axis)),
@@ -353,7 +353,7 @@ export const addPaddingSchema = toolSchema<AddPaddingParams>(
 );
 
 const addPaddingTool: Tool<AddPaddingParams> = {
-	id: "add-padding-png",
+	id: "add-padding",
 	schema: addPaddingSchema,
 	input: "image",
 	run: imgTool((img, p) =>
@@ -391,7 +391,7 @@ export const tileSchema = toolSchema<TileParams>({
 });
 
 const tileTool: Tool<TileParams> = {
-	id: "tile-png",
+	id: "tile",
 	schema: tileSchema,
 	input: "image",
 	run: imgTool((img, p) => tile(img, p.columns, p.rows)),
@@ -422,7 +422,7 @@ export const splitPartsSchema = toolSchema<SplitPartsParams>({
 });
 
 const splitPartsTool: Tool<SplitPartsParams> = {
-	id: "split-into-parts-png",
+	id: "split-into-parts",
 	schema: splitPartsSchema,
 	input: "image",
 	result: "files",
@@ -455,7 +455,7 @@ interface EmptyParams {}
 export const centerByAlphaSchema = toolSchema<EmptyParams>({});
 
 const centerByAlphaTool: Tool<EmptyParams> = {
-	id: "center-by-alpha-png",
+	id: "center-by-alpha",
 	schema: centerByAlphaSchema,
 	input: "image",
 	run: imgTool((img) => centerByAlpha(img)),
@@ -484,7 +484,7 @@ export const skewSchema = toolSchema<SkewParams>({
 });
 
 const skewTool: Tool<SkewParams> = {
-	id: "skew-png",
+	id: "skew",
 	schema: skewSchema,
 	input: "image",
 	run: imgTool((img, p) => skewImage(img, p.degX, p.degY)),
@@ -505,7 +505,7 @@ export const rotateFreeSchema = toolSchema<RotateFreeParams>({
 });
 
 const rotateFreeTool: Tool<RotateFreeParams> = {
-	id: "rotate-free-png",
+	id: "rotate-free",
 	schema: rotateFreeSchema,
 	input: "image",
 	run: imgTool((img, p) => rotateFreeImage(img, p.angle)),
@@ -526,7 +526,7 @@ export const zoomSchema = toolSchema<ZoomParams>({
 });
 
 const zoomTool: Tool<ZoomParams> = {
-	id: "zoom-png",
+	id: "zoom",
 	schema: zoomSchema,
 	input: "image",
 	run: imgTool((img, p) => zoomImage(img, p.scale)),
@@ -547,7 +547,7 @@ export const trimEmptySpaceSchema = toolSchema<TrimEmptySpaceParams>({
 });
 
 const trimEmptySpaceTool: Tool<TrimEmptySpaceParams> = {
-	id: "trim-empty-space-png",
+	id: "trim-empty-space",
 	schema: trimEmptySpaceSchema,
 	input: "image",
 	run: imgTool((img, p) => trimToContent(img, p.threshold)),
@@ -585,7 +585,7 @@ export const changeAspectRatioSchema = toolSchema<ChangeAspectRatioParams>({
 });
 
 const changeAspectRatioTool: Tool<ChangeAspectRatioParams> = {
-	id: "change-aspect-ratio-png",
+	id: "change-aspect-ratio",
 	schema: changeAspectRatioSchema,
 	input: "image",
 	run: imgTool((img, p) => {
@@ -611,7 +611,7 @@ export const swapOrientationSchema = toolSchema<SwapOrientationParams>({
 });
 
 const swapOrientationTool: Tool<SwapOrientationParams> = {
-	id: "swap-orientation-png",
+	id: "swap-orientation",
 	schema: swapOrientationSchema,
 	input: "image",
 	run: imgTool((img, p) => forceOrientation(img, p.target)),
@@ -647,7 +647,7 @@ export const symmetricCopySchema = toolSchema<SymmetricCopyParams>({
 });
 
 const symmetricCopyTool: Tool<SymmetricCopyParams> = {
-	id: "symmetric-copy-png",
+	id: "symmetric-copy",
 	schema: symmetricCopySchema,
 	input: "image",
 	run: imgTool((img, p) => symmetricCopy(img, p.axis, p.keepSide)),
@@ -678,7 +678,7 @@ export const shiftSchema = toolSchema<ShiftParams>({
 });
 
 const shiftTool: Tool<ShiftParams> = {
-	id: "shift-png",
+	id: "shift",
 	schema: shiftSchema,
 	input: "image",
 	run: imgTool((img, p) =>

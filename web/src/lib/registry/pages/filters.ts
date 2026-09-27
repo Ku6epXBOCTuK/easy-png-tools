@@ -7,7 +7,7 @@ export const filtersPages: Page[] = [
 		description:
 			"Gaussian blur: three passes of separable box blur — fast at any radius. Transparent edges do not darken.",
 		category: "filters",
-		steps: [{ id: "blur-png" }],
+		steps: [{ id: "blur" }],
 	},
 	{
 		slug: "sharpen-png",
@@ -15,7 +15,7 @@ export const filtersPages: Page[] = [
 		description:
 			"Emphasizes edges with a sharpening kernel; strength sets the blend with the original. 0% means no change.",
 		category: "filters",
-		steps: [{ id: "sharpen-png" }],
+		steps: [{ id: "sharpen" }],
 	},
 	{
 		slug: "silhouette-png",
@@ -23,7 +23,7 @@ export const filtersPages: Page[] = [
 		description:
 			"Turns all visible pixels into a single solid color while keeping their transparency — instant silhouette.",
 		category: "filters",
-		steps: [{ id: "silhouette-png" }],
+		steps: [{ id: "silhouette" }],
 	},
 	{
 		slug: "vignette-png",
@@ -31,7 +31,7 @@ export const filtersPages: Page[] = [
 		description:
 			"Smoothly darkens the edges of the image, leaving the center untouched.",
 		category: "filters",
-		steps: [{ id: "vignette-png" }],
+		steps: [{ id: "vignette" }],
 	},
 	{
 		slug: "pixelate-png",
@@ -39,7 +39,7 @@ export const filtersPages: Page[] = [
 		description:
 			"Averages every blockSize×blockSize area into one color — classic mosaic.",
 		category: "filters",
-		steps: [{ id: "pixelate-png" }],
+		steps: [{ id: "pixelate" }],
 	},
 	{
 		slug: "randomize-pixels-png",
@@ -47,7 +47,7 @@ export const filtersPages: Page[] = [
 		description:
 			"Shuffles blocks of the image between positions. Same seed gives the same arrangement.",
 		category: "filters",
-		steps: [{ id: "randomize-pixels-png" }],
+		steps: [{ id: "randomize-pixels" }],
 	},
 	{
 		slug: "add-noise-png",
@@ -55,7 +55,7 @@ export const filtersPages: Page[] = [
 		description:
 			"Adds film-grain style noise. Deterministic by seed; monochrome keeps original hue balance.",
 		category: "filters",
-		steps: [{ id: "add-noise-png" }],
+		steps: [{ id: "add-noise" }],
 	},
 	{
 		slug: "jpeg-artifacts-png",
@@ -63,6 +63,6 @@ export const filtersPages: Page[] = [
 		description:
 			"Simulates low-quality JPEG re-compression — visible blocks and smeared colors.",
 		category: "filters",
-		steps: [{ id: "jpeg-artifacts-png" }],
+		steps: [{ id: "jpeg-artifacts" }],
 	},
 ];
