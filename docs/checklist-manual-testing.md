@@ -96,41 +96,10 @@
       корректный (не «кракозябры»).
 - [ ] remove-background на сложной полупрозрачности — края не «звенят».
 
-## G. Закрытые Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1/Q6f.2/Q6f.3-проблемы
-
-> Q5/Q6b/Q6c/Q6d/Q6e/Q6f.1/Q6f.2/Q6f.3-проблемы закрыты автоматическими тестами;
-> для ручной проверки остаются субъективные сценарии разделов A–F.
-
-- [x] **Генераторы:** auto-run по дефолтам, результат и изменение параметра без
-      кнопки Generate. `web/e2e/generators.spec.ts`.
-- [x] **resize-png/crop-png:** размеры текущего source используются по
-      умолчанию, alert не появляется. `web/e2e/pipeline.spec.ts`.
-- [x] **Reset:** defaults восстанавливаются, source сохраняется, deferred
-      auto-run завершается результатом. `web/e2e/pipeline.spec.ts`.
-- [x] **Локализация ошибок:** alert хранит key/vars, переводится при выводе и
-      обновляется при смене языка. `web/e2e/i18n.spec.ts`.
-- [x] **FileResult → ZIP:** `split-into-parts-png` скачивает
-      `split-into-parts-png.zip` с именованными PNG-частями; содержимое и
-      сигнатуры проверяются `web/src/lib/zip.test.ts` и
-      `web/e2e/pipeline.spec.ts`.
-- [x] **Output MIME/quality:** JPG/WebP/BMP имеют ожидаемые расширения и
-      сигнатуры, quality 10/90 меняет размер файла; `web/e2e/pipeline.spec.ts`.
-- [x] **Malformed/special PNG:** CRC, truncated, palette и 16-bit fixtures
-      проходят через upload без краша; `web/e2e/png-fixtures.spec.ts`.
-- [x] **Registry smoke:** все 122 production tools имеют специализированный
-      browser smoke по input/result-типу; `web/e2e/tools-smoke.spec.ts`,
-      `generators.spec.ts`, `text-and-verdicts.spec.ts`.
-- [x] **Layout resolver:** `resolveLayoutGroups` покрыт unit-тестами; UI
-      группировка полей использует тот же seam.
-- [x] **Preview model:** `buildSchemaPreviewModel` покрывает source/result
-      values, формат и `hasResult` для image/text/verdict/files.
-- [x] **Browser matrix:** pipeline, verdicts и PNG-fixtures проходят в Firefox и
-      WebKit, mobile viewport 390×844 — в Chromium; отказ декодера битого PNG
-      зафиксирован per-engine. См. раздел 7 `docs/testing-strategy.md`.
-
 ## Как долго
 
-- Полный прогон: ~40 минут (все разделы, включая мегапиксели и 4К) в двух
-  браузерах.
-- Быстрый смоук (< 15 мин): A (кроме мегапикселей), B (выборочно), C, F
-  выборочно, G обязательно.
+- Полный прогон: все разделы A–F, включая мегапиксели и 4К, в двух браузерах.
+- Быстрый смоук: A (кроме мегапикселей), B (выборочно), C, F выборочно.
+
+> Сценарии, закрытые e2e-тестами, в этот чек-лист не попадают: их покрытие видно
+> по спецификациям в `web/e2e/`, политика e2e — `docs/testing-strategy.md`.

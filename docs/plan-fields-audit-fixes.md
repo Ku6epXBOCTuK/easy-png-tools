@@ -3,7 +3,13 @@
 > Статус: **draft** — на ревью.
 >
 > Источник: `docs/tools-audit.md`. Этот документ разбивает аудит на конкретные
-> шаги, группирует по типу работы и фиксирует решения.
+> шаги, группирует по типу работы и фиксирует решения. Порядок и правила
+> проверки — `docs/quality-gates.md`; точки касания при добавлении вида поля —
+> `docs/architecture.md`, раздел 4.
+>
+> **Ids инструментов в таблицах волны B сверены с реестром.** Названия из
+> `tools-audit.md` вида `png-to-hsl` или `color-wheel-generator` в реестре нет
+> (`hsl`, `color-wheel-png`).
 
 ## 0. Ключевое решение: select → buttons
 
@@ -116,7 +122,7 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 Каждый шаг — один коммит, < 500 строк. Меняем `field.select()` →
 `field.buttons()` в перечисленных ниже схемах.
 
-### B1. geometry.ts (8 инструментов)
+### B1. geometry.ts
 
 | Инструмент              | Поле     | Опции                                     |
 | ----------------------- | -------- | ----------------------------------------- |
@@ -132,7 +138,7 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 `field.select()`, т.к. 9 кнопок в ряд не поместятся. Аналогично `position9` (уже
 отдельный компонент `PositionControl`).
 
-### B2. color.ts (4 инструмента)
+### B2. color.ts
 
 | Инструмент               | Поле      | Опции                                |
 | ------------------------ | --------- | ------------------------------------ |
@@ -144,7 +150,7 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 **Исключение:** channel spaces (hsl/hsv/... component) — 3-6 опций, но это
 динамические инструменты, оставить `select`.
 
-### B3. analyze.ts (5 инструментов)
+### B3. analyze.ts
 
 | Инструмент                | Поле | Опции              |
 | ------------------------- | ---- | ------------------ |
@@ -156,13 +162,13 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 
 Все используют общий `maskBaseFields` — правка в одном месте.
 
-### B4. filters.ts (1 инструмент)
+### B4. filters.ts
 
 | Инструмент    | Поле | Опции        |
 | ------------- | ---- | ------------ |
 | add-noise-png | mode | mono / color |
 
-### B5. generate.ts (12 инструментов)
+### B5. generate.ts
 
 | Инструмент         | Поле         | Опции                 |
 | ------------------ | ------------ | --------------------- |
@@ -183,10 +189,10 @@ buttons: <V extends string>(s: Omit<ButtonsSpec<V>, "kind">): Field<V> => ({
 
 ### C1. Source-aware defaults для dimension-полей
 
-Q5 добавил общий `defaultFromSource` resolver в `registry-schema`. Для
-`resize-png` и `crop-png` дефолт после загрузки равен размерам текущего source;
-до загрузки используется положительный fallback `1×1`. Один-sided `0` у resize
-сохраняет режим auto.
+Source-aware defaults реализованы: общий resolver в `registry-schema`
+(`applySourceDefaults`). Для `resize-png` и `crop-png` дефолт после загрузки
+равен размерам текущего source; до загрузки используется положительный fallback
+`1×1`. Один-sided `0` у resize сохраняет режим auto.
 
 ### C2. symmetric-copy-png: "keep side" не работает
 
@@ -201,9 +207,9 @@ Q5 добавил общий `defaultFromSource` resolver в `registry-schema`. 
 
 ### C3. Source-aware bounds (отдельный следующий шаг)
 
-Q5 реализовал только defaults dimension-полей через `SchemaContext` и
-`defaultFromSource`. Динамические min/max для crop x/y, shift и resize остаются
-отдельной задачей: bounds не следует смешивать с default resolver.
+Реализованы только defaults dimension-полей через `SchemaContext` и
+`applySourceDefaults`. Динамические min/max для crop x/y, shift и resize
+остаются отдельной задачей: bounds не следует смешивать с default resolver.
 
 **Что нужно спроектировать и завести:**
 
@@ -232,8 +238,7 @@ Q5 реализовал только defaults dimension-полей через `S
 4. **Первые потребители:** crop (x/y → ±sourceWidth/sourceHeight), shift
    (offsetX/offsetY), resize (max → maxSide).
 
-Это отдельный refactor после Q6/Q7; source-aware defaults из Q5 не заменяют
-bounds.
+Это отдельный рефакторинг; source-aware defaults не заменяют bounds.
 
 ### C4. verify-is-png: неверное название
 

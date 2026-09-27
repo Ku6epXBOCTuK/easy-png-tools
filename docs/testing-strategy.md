@@ -68,24 +68,8 @@ browser-контракт: critical CRC и truncated отклоняются дв�
 `src/**/*.test.ts`; DOM, hydration и пользовательские потоки — в Playwright.
 Component-тесты не дублируют e2e-контракт.
 
-### Что попадает в coverage
-
-Coverage-гейт считает только `src/lib` и только то, что node-Vitest способен
-исполнить. Исключения в `web/vitest.config.ts` и их причины:
-
-| Исключение                                  | Причина                                     |
-| ------------------------------------------- | ------------------------------------------- |
-| `**/*.test.ts`, `**/test-helpers.ts`        | сами тесты                                  |
-| `**/*.svelte.ts`                            | runes, не работают в node                   |
-| `executor/executor.worker.ts`               | entry worker, исполняется только в браузере |
-| `components/define.ts`                      | type-only, нет исполняемого кода            |
-| `core/domText.ts`, `core/io.ts`             | canvas, `createImageBitmap`, нужен браузер  |
-| `i18n/en.ts`, `i18n/ru.ts`, `tool-icons.ts` | данные, а не логика                         |
-
-`registry/*` в scope остаётся: низкое покрытие там — это непокрытая логика, а не
-следствие окружения. Исключение браузерных модулей означает, что переход
-браузерного кода в scope — отдельное решение, связанное с DOM-тестами или visual
-snapshots, а не молчаливое расширение списка исключений.
+Состав и причины исключений из coverage-гейта, а также пороги — в
+`docs/quality-gates.md`; здесь они не дублируются.
 
 ## 5. Helpers и `test.fixme`
 
@@ -99,7 +83,7 @@ text — `renderText` + результат, generator — auto-run без upload
 
 `test.fixme` допускается только для зарегистрированной проблемы в backlog или
 checklist. В комментарии указывается ссылка на неё. После исправления тест и
-ссылка обновляются вместе; в текущем Q6e baseline активных fixme нет.
+ссылка обновляются вместе.
 
 Если тест сравнивает два состояния одного элемента, он ждёт изменения значения
 (`not.toHaveText`, `not.toHaveAttribute`), а не его видимости. Пересчёт идёт
@@ -108,21 +92,14 @@ checklist. В комментарии указывается ссылка на н
 
 ## 6. Проверки
 
-Для изменений e2e выполняются:
-
-```text
-pnpm --dir web check
-pnpm --dir web test:rules
-pnpm --dir web lint:all
-pnpm --dir web format:check
-pnpm check:docs
-pnpm --dir web test:e2e
-pnpm verify
-```
+Матрица «изменение → минимальный набор проверок» и состав `pnpm verify` — в
+`docs/quality-gates.md`. Для изменений e2e дополнительно уместны
+`pnpm --dir web check` и `pnpm --dir web format:check`.
 
 `verify` не включает Playwright: E2E остаётся отдельным тяжёлым gate. В CI
 non-blocking E2E не считается заменой локальному smoke; перед ревью фиксируются
-число passed, skipped и известные fixme.
+число passed, skipped и известные fixme. Статус e2e в CI — `docs/decisions.md`,
+раздел 9.
 
 ## 7. Browser matrix
 
@@ -148,32 +125,9 @@ non-blocking E2E не считается заменой локальному smo
   | `idat-cut.png`                       | Chromium                  |
   | ancillary CRC, tail, palette, 16-bit | ни один движок            |
 
-- Firefox и WebKit работают с теми же таймаутами, что и Chromium: движок не
-  причина расхождений, поэтому per-project `expect.timeout` не задаётся.
-- `workers` — 1 локально и 2 в CI. Playwright не умеет per-project лимит
-  воркеров, а browser matrix ограничена памятью, а не CPU: при высокой
-  параллельности браузеры на машине с 16 GB RAM не успевают поднять worker, и
-  тесты падают без ошибок. Локальный matrix поэтому медленный, но не нагружает
-  компьютер.
-- Локальный baseline: 276 тестов, 276 passed, 0 skipped, 0 failed.
-- Coverage ограничена `src/lib` и не включает браузерные модули — см. раздел 4.
-
-## 8. Visual snapshots
-
-Сознательно не используются. `toHaveScreenshot` сравнивает страницу с
-PNG-baseline из прошлого коммита, а не с замыслом дизайна, поэтому:
-
-- визуальный язык в активной работе означает перегенерацию и ревью картинок в
-  каждом дизайн-изменяющем PR;
-- baseline привязан к платформе (ОС, шрифты, рендеринг): снимок с Windows не
-  совпадёт на `ubuntu-latest`, и baseline должны рождаться на Linux;
-- четыре проекта matrix плюс тема и viewport дают нелинейный рост числа файлов.
-
-Потребность закрывают e2e-поведение, `lint:tokens` с token audit, i18n-гейт и
-ручной чеклист `docs/checklist-manual-testing.md`; «элемент визуально наехал»
-ловится чеклистом и ревью.
-
-Возвращаться к snapshots стоит, когда визуальный язык стабилизируется, изменения
-станут редкими, а чеклист перестанет справляться. Тогда первым идёт `/kit` в
-двух темах, а baseline генерируются на Linux (docker-образ Playwright или
-отдельный CI-job).
+- `workers` — 1 локально и 2 в CI: Playwright не умеет per-project лимит
+  воркеров, а browser matrix ограничена памятью, а не CPU. Правила нагрузки на
+  машину и порядок диагностики флаков — `docs/agent-workflow.md`, раздел 3;
+  обоснование отсутствия per-project таймаутов — `docs/decisions.md`, раздел 7.
+- Visual snapshots и per-project таймауты сознательно не используются —
+  `docs/decisions.md`, разделы 5 и 7.

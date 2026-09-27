@@ -1,35 +1,35 @@
 # easy-png-tools
 
-Browser-based PNG utility toolkit — no server, no data upload, everything runs
-locally.
+Browser-based image utility toolkit — no server, no data upload, everything runs
+locally in your browser.
 
 Inspired by online services like onlinepngtools.com, but fully offline-capable
 and open source.
 
 ## Features
 
-- **Pixel-level image processing** — format conversion, transparency/alpha
-  channel, color transformations, geometry, filters/convolutions, morphology,
-  quantization & palettes, image generation, text/watermarks, analysis & checks
+- **A full set of image tools** across categories: conversion,
+  transparency/alpha, color, channel decomposition, geometry, filters,
+  pixel-property masks, generation, text/watermarks, analysis & verdicts — the
+  current list lives in [`docs/tools-map.md`](docs/tools-map.md)
 - **Pipeline system (workspace)** — load image → chain multiple tool steps →
   sequential application → download result; pipelines saved to localStorage,
   exportable as JSON
 - **Web Worker execution** — heavy operations run off the main thread with
   automatic fallback to direct calls
-- **i18n** — full Russian and English localization with search matching
+- **i18n** — full Russian and English localization
 - **Dark/Light themes** — persisted to localStorage
 - **Pure TypeScript core** — `lib/core/` operates on
   `ImageData`/`Uint8ClampedArray` with no DOM dependency
-- **~30+ tools** across categories: transparency, color, geometry, filters,
-  morphology, palettes, generation, text, analysis
+- **Fully static** — no backend, no analytics, no tracking
 
 ## Tech Stack
 
 - **SvelteKit** (Svelte 5, runes mode) with static adapter — pure static export,
   no server
 - **Vite** + **TypeScript** (strict)
-- **Vitest** for unit tests
-- **ESLint** + **Prettier**
+- **Vitest** for unit tests, **Playwright** for e2e
+- **ESLint** (incl. local plugins) + Stylelint + Prettier
 - **pnpm** (required, ^11.20.0)
 - **Lucide** icons, **IBM Plex** fonts (self-hosted)
 
@@ -54,54 +54,44 @@ pnpm build
 
 Static output is written to `web/build/`.
 
-### Other Commands
+### Commands
 
-| Command                  | Description                    |
-| ------------------------ | ------------------------------ |
-| `pnpm verify`            | Run the full fast quality gate |
-| `pnpm --dir web test`    | Run unit tests (Vitest)        |
-| `pnpm --dir web check`   | Type-check (svelte-check)      |
-| `pnpm --dir web lint`    | Lint (ESLint)                  |
-| `pnpm --dir web format`  | Format code (Prettier)         |
-| `pnpm format:docs`       | Format docs (Prettier)         |
-| `pnpm --dir web preview` | Preview production build       |
+Run from the repository root; `pnpm --dir web …` targets the app package.
 
-## Project Structure
-
-```txt
-easy-png-tools/
-├── web/                    # Main SvelteKit application
-│   ├── src/
-│   │   ├── lib/
-│   │   │   ├── core/       # Pure TS image processing (ImageData-based)
-│   │   │   ├── components/ # UI components
-│   │   │   ├── tools/      # Pipeline, executor, overlay store
-│   │   │   ├── i18n/       # Localization (ru/en)
-│   │   │   └── registry.ts # Tool registry (source of truth)
-│   │   └── routes/         # SvelteKit routes
-│   └── build/              # Static export output
-├── docs/                   # Architecture docs, roadmap, plans
-└── refs/                   # Design reference (Next.js, not part of runtime)
+```bash
+pnpm install
+pnpm dev        # dev server
+pnpm verify     # full fast quality gate — the pre-review gate
+pnpm build      # static production export → web/build/
 ```
+
+Полный список команд и матрица «какие проверки запускать при каком изменении» —
+в `AGENTS.md` и `docs/quality-gates.md`.
 
 ## Architecture
 
-The project is built around a **tool registry** (`registry.ts`) — each tool is a
-self-contained entry with `{id, title, description, category, params, run}`.
-Pages, forms, and pipelines are generated from this registry.
+Everything is built around the **tool registry** (`web/src/lib/registry/`): each
+tool is a self-contained entry
+`{id, title, description, category, schema, run}`. Pages, forms, and pipelines
+are generated from it, and all execution goes through a single
+`executor.execute` entry point.
 
-Core image processing lives in `lib/core/` and operates directly on `ImageData`
-objects with no browser API dependencies, making it portable to other
-environments (WASM, CLI) in the future.
+Core image processing lives in `web/src/lib/core/` and operates directly on
+`ImageData`, with no browser API dependencies.
+
+Layering, data flow, and the recipe for adding a tool or a field kind:
+[`docs/architecture.md`](docs/architecture.md).
 
 ## Roadmap
 
-See [docs/roadmap.md](docs/roadmap.md) for the full development plan. Current
-phases:
+See [`docs/roadmap.md`](docs/roadmap.md) for phases and
+[`docs/plan-platform.md`](docs/plan-platform.md) for the API/PWA direction. The
+current focus is SEO/GEO ([`docs/plan-seo.md`](docs/plan-seo.md)) plus the
+product tasks in [`docs/backlog.md`](docs/backlog.md).
 
-1. **Phase 1** — TypeScript core + web UI (in progress)
-2. **Phase 2** — Rust/WASM core for performance-critical operations
-3. **Phase 3** — CLI tool
+## For AI agents
+
+Read [`AGENTS.md`](AGENTS.md) first — it is the mandatory short contract.
 
 ## License
 
