@@ -34,7 +34,7 @@ function selectOptions(
 describe("полнота словарей для нового registry", () => {
 	it("у каждой страницы есть перевод ru с непустыми title/description", () => {
 		for (const page of PAGES) {
-			const strings = ru.tools[page.slug];
+			const strings = ru.pages?.[page.slug];
 			expect(strings, `нет перевода ru для ${page.slug}`).toBeDefined();
 			expect(strings?.title, `${page.slug}: title`).toBeTruthy();
 			expect(strings?.description, `${page.slug}: description`).toBeTruthy();
@@ -71,6 +71,20 @@ describe("полнота словарей для нового registry", () => {
 					ru.tools[tool.id]?.options?.[fieldId]?.[option.value],
 					key,
 				).toBeTruthy();
+			}
+		}
+	});
+
+	it("в секции pages нет лишних страниц", () => {
+		const slugs = new Set(PAGES.map((page) => page.slug));
+		for (const [locale, dict] of [
+			["ru", ru],
+			["en", en],
+		] as const) {
+			for (const key of Object.keys(dict.pages ?? {})) {
+				expect(slugs.has(key), `лишняя страница в ${locale}: ${key}`).toBe(
+					true,
+				);
 			}
 		}
 	});

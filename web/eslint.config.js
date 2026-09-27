@@ -175,7 +175,7 @@ export default tseslint.config(
 			"i18n/dict-consistency": [
 				"warn",
 				{
-					baseLocaleFallback: ["tools.*.title", "tools.*.description"],
+					baseLocaleFallback: ["pages.*.title", "pages.*.description"],
 					ignoreMissingPatterns: ["tools.*.params"],
 				},
 			],

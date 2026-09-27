@@ -12,10 +12,14 @@ export const de: Dict = {
 	errors: {
 		sourceRequired: "Quelle erforderlich",
 	},
-	tools: {
+	pages: {
 		addBorder: {
 			title: "Rahmen hinzufügen",
 			description: "Zeichnet einen {kind}-Rahmen.",
+		},
+	},
+	tools: {
+		addBorder: {
 			results: {
 				done: "Rahmen {what}",
 			},

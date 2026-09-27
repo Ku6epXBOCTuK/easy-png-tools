@@ -51,24 +51,28 @@ function messageIds(messages: { messageId?: string }[]) {
 	return messages.map((m) => m.messageId);
 }
 
+const registryPolicy = {
+	baseLocaleFallback: ["pages.*.title", "pages.*.description"],
+	ignoreMissingPatterns: ["tools.*.params"],
+};
+
 describe("i18n/dict-consistency", () => {
 	it("stays clean on the consistent fixture dicts", () => {
-		expect(messageIds(lint(fixture("en.ts"), "lib/i18n/en.ts"))).toEqual([]);
-		expect(messageIds(lint(fixture("ru.ts"), "lib/i18n/ru.ts"))).toEqual([]);
-		expect(messageIds(lint(fixture("de.ts"), "lib/i18n/de.ts"))).toEqual([]);
+		expect(
+			messageIds(lint(fixture("en.ts"), "lib/i18n/en.ts", registryPolicy)),
+		).toEqual([]);
+		expect(
+			messageIds(lint(fixture("ru.ts"), "lib/i18n/ru.ts", registryPolicy)),
+		).toEqual([]);
+		expect(
+			messageIds(lint(fixture("de.ts"), "lib/i18n/de.ts", registryPolicy)),
+		).toEqual([]);
 	});
 
-	const registryPolicy = {
-		baseLocaleFallback: ["tools.*.title", "tools.*.description"],
-		ignoreMissingPatterns: ["tools.*.params"],
-	};
-
-	it("allows registry metadata only in the base locale", () => {
-		const enMissing = fixture("en.ts")
-			.replace('\t\t\ttitle: "Add border",\n', "")
-			.replace('\t\t\tdescription: "Draws a {kind} frame.",\n', "");
+	it("allows page texts only in the base locale", () => {
+		// EN не переводит заголовки страниц: их берёт EN-строка реестра.
 		expect(
-			messageIds(lint(enMissing, "lib/i18n/en.ts", registryPolicy)),
+			messageIds(lint(fixture("en.ts"), "lib/i18n/en.ts", registryPolicy)),
 		).toEqual([]);
 
 		const ruMissing = fixture("ru.ts").replace(
@@ -80,7 +84,7 @@ describe("i18n/dict-consistency", () => {
 		).toEqual(["missingKey"]);
 	});
 
-	it("does not warn for a missing tool object with only fallback metadata", () => {
+	it("does not warn for a tool object with nothing but ignored results", () => {
 		const enMissingTool = fixture("en.ts").replace(
 			/\t\taddBorder: \{[\s\S]*?\n\t\t\},\n/,
 			"",
@@ -106,18 +110,19 @@ describe("i18n/dict-consistency", () => {
 		expect(
 			messageIds(
 				lint(enMissingResults, "lib/i18n/en.ts", {
+					...registryPolicy,
 					ignoreMissingPatterns: ["tools.*.results"],
 				}),
 			),
 		).toEqual([]);
 	});
 
-	it("still reports empty fallback metadata", () => {
-		const enEmpty = fixture("en.ts").replace(
-			'title: "Add border",',
+	it("still reports empty page text", () => {
+		const ruEmpty = fixture("ru.ts").replace(
+			'title: "Добавить рамку",',
 			'title: "",',
 		);
-		expect(messageIds(lint(enEmpty, "lib/i18n/en.ts", registryPolicy))).toEqual(
+		expect(messageIds(lint(ruEmpty, "lib/i18n/ru.ts", registryPolicy))).toEqual(
 			["emptyValue"],
 		);
 	});
@@ -127,7 +132,7 @@ describe("i18n/dict-consistency", () => {
 			'\t\trestoreLast: "Restore {title}",',
 			"",
 		);
-		const messages = lint(enMissing, "lib/i18n/en.ts");
+		const messages = lint(enMissing, "lib/i18n/en.ts", registryPolicy);
 		expect(messages).toHaveLength(1);
 		expect(messageIds(messages)).toEqual(["missingKey"]);
 		expect(messages[0].message).toContain('"home.restoreLast"');
@@ -136,7 +141,7 @@ describe("i18n/dict-consistency", () => {
 
 	it("reports a missing whole section once, not per child key", () => {
 		const enNoHeader = fixture("en.ts").replace(/\theader: \{[\s\S]*?\},/, "");
-		const messages = lint(enNoHeader, "lib/i18n/en.ts");
+		const messages = lint(enNoHeader, "lib/i18n/en.ts", registryPolicy);
 		expect(messageIds(messages)).toEqual(["missingKey"]);
 		expect(messages[0].message).toContain('"header"');
 		expect(messages[0].message).not.toContain("header.workspace");
@@ -147,7 +152,7 @@ describe("i18n/dict-consistency", () => {
 			'\t\tsourceRequired: "Source image required",',
 			"",
 		);
-		const messages = lint(enMissing, "lib/i18n/en.ts");
+		const messages = lint(enMissing, "lib/i18n/en.ts", registryPolicy);
 		expect(messages).toHaveLength(1);
 		expect(messageIds(messages)).toEqual(["missingKey"]);
 		expect(messages[0].message).toContain('"errors.sourceRequired"');
@@ -158,7 +163,7 @@ describe("i18n/dict-consistency", () => {
 		const enEmpty = fixture("en.ts")
 			.replace('workspace: "Workspace",', 'workspace: "",')
 			.replace('catalog: "Catalog",', 'catalog: "   ",');
-		const messages = lint(enEmpty, "lib/i18n/en.ts");
+		const messages = lint(enEmpty, "lib/i18n/en.ts", registryPolicy);
 		expect(messageIds(messages)).toEqual(["emptyValue", "emptyValue"]);
 		expect(messages[0].message).toContain('"header.workspace"');
 		expect(messages[0].message).toContain(" in en");
@@ -178,14 +183,14 @@ describe("i18n/dict-consistency", () => {
 	});
 
 	it("flags an extra placeholder introduced in one locale", () => {
-		const enExtraPlaceholder = fixture("en.ts").replace(
-			'description: "Draws a {kind} frame.",',
-			'description: "Draws a {kind} frame by {author}.",',
+		const ruExtraPlaceholder = fixture("ru.ts").replace(
+			'description: "Рисует рамку {kind}.",',
+			'description: "Рисует рамку {kind} от {author}.",',
 		);
-		const messages = lint(enExtraPlaceholder, "lib/i18n/en.ts");
+		const messages = lint(ruExtraPlaceholder, "lib/i18n/ru.ts");
 		expect(messages).toHaveLength(1);
 		expect(messageIds(messages)).toEqual(["placeholderMismatch"]);
-		expect(messages[0].message).toContain('"tools.addBorder.description"');
+		expect(messages[0].message).toContain('"pages.addBorder.description"');
 		expect(messages[0].message).toContain("{author, kind} vs expected {kind}");
 	});
 
@@ -195,6 +200,7 @@ describe("i18n/dict-consistency", () => {
 			"",
 		);
 		const messages = lint(enMissing, "lib/i18n/en.ts", {
+			...registryPolicy,
 			allowPaths: ["errors.sourceRequired"],
 		});
 		expect(messageIds(messages)).toEqual([]);

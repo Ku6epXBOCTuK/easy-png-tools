@@ -334,6 +334,9 @@ export const en: Dict = {
 		tile: "Tile",
 		watermark: "Watermark",
 	},
+	// Заголовки и описания страниц в базовой локали не дублируются: их берёт
+	// EN-строка из реестра страниц (`web/src/lib/registry/pages/`).
+	pages: {},
 	tools: {
 		"png-file-size": {
 			results: {

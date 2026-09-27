@@ -12,10 +12,14 @@ export const ru: Dict = {
 	errors: {
 		sourceRequired: "Нужен исходник",
 	},
-	tools: {
+	pages: {
 		addBorder: {
 			title: "Добавить рамку",
 			description: "Рисует рамку {kind}.",
+		},
+	},
+	tools: {
+		addBorder: {
 			results: {
 				done: "Рамка {what}",
 			},

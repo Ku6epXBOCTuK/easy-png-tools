@@ -12,10 +12,10 @@ export const en: Dict = {
 	errors: {
 		sourceRequired: "Source image required",
 	},
+	// Базовая локаль: тексты страниц берутся из EN-строк реестра.
+	pages: {},
 	tools: {
 		addBorder: {
-			title: "Add border",
-			description: "Draws a {kind} frame.",
 			results: {
 				done: "Border {what}",
 			},

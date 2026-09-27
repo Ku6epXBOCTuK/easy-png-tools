@@ -16,9 +16,14 @@ export function isLocale(value: unknown): value is Locale {
 	);
 }
 
-export type ToolStrings = {
+/** Тексты страницы (`pages.<slug>`): адрес, имя файла и иконка — по slug. */
+export type PageStrings = {
 	title?: string;
 	description?: string;
+};
+
+/** Тексты инструмента (`tools.<id>`): подписи полей, verdict-ключи. */
+export type ToolStrings = {
 	/** Подписи параметров по их id. */
 	params?: Record<string, string>;
 	/** Подписи опций select: paramId -> value -> label. */
@@ -54,6 +59,8 @@ export type Dict = {
 	search: Record<string, string>;
 	ui: Record<string, string>;
 	errors: Record<string, string>;
+	/** Заголовки и описания страниц; в базовой локали их нет — берётся EN из реестра. */
+	pages?: Record<string, PageStrings>;
 	tools: Record<string, ToolStrings>;
 	/** Действия панели результата/генерации (Generate, Open image…). */
 	actions?: Record<string, string>;

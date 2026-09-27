@@ -13,11 +13,11 @@ function labelOf(id: string): string {
 }
 
 export function pageTitle(page: Page): string {
-	return getMergedDict().tools[page.slug]?.title ?? page.title;
+	return getMergedDict().pages?.[page.slug]?.title ?? page.title;
 }
 
 export function pageDescription(page: Page): string {
-	return getMergedDict().tools[page.slug]?.description ?? page.description;
+	return getMergedDict().pages?.[page.slug]?.description ?? page.description;
 }
 
 export function fieldLabel(field: Field<unknown>, id: string): string {
@@ -65,17 +65,17 @@ function dedupe(values: string[]): string[] {
 }
 
 export function pageSearchDoc(page: Page): SearchDoc {
-	const active = getMergedDict().tools[page.slug];
+	const active = getMergedDict().pages?.[page.slug];
 	return {
 		id: page.slug,
 		titles: dedupe([
 			active?.title ?? "",
-			ru.tools[page.slug]?.title ?? "",
+			ru.pages?.[page.slug]?.title ?? "",
 			page.title,
 		]),
 		descriptions: dedupe([
 			active?.description ?? "",
-			ru.tools[page.slug]?.description ?? "",
+			ru.pages?.[page.slug]?.description ?? "",
 			page.description,
 		]),
 	};
