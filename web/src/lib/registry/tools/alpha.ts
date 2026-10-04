@@ -139,6 +139,7 @@ const circleMask: Tool<CircleMaskParams> = {
 			circleTest(p.size / 200),
 			p.offset.x / 100,
 			p.offset.y / 100,
+			{ x: p.size / 200, y: p.size / 200 },
 		),
 	),
 };
@@ -197,6 +198,7 @@ const squareMask: Tool<SquareMaskParams> = {
 			boxTest(p.widthPct / 200, p.heightPct / 200),
 			p.offset.x / 100,
 			p.offset.y / 100,
+			{ x: p.widthPct / 200, y: p.heightPct / 200 },
 		),
 	),
 };
@@ -271,6 +273,7 @@ const starMask: Tool<StarMaskParams> = {
 			starTest(p.points, p.innerRadius / 100, p.size / 200, p.rotation),
 			p.offset.x / 100,
 			p.offset.y / 100,
+			{ x: p.size / 200, y: p.size / 200 },
 		),
 	),
 };
@@ -345,6 +348,7 @@ const wavyMask: Tool<WavyMaskParams> = {
 			wavyTest(p.size / 200, p.amplitude / 200, p.waves, p.phase),
 			p.offset.x / 100,
 			p.offset.y / 100,
+			{ x: (p.size + p.amplitude) / 200, y: (p.size + p.amplitude) / 200 },
 		),
 	),
 };

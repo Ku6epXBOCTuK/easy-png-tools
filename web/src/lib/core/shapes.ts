@@ -3,6 +3,12 @@ import { createPixelImage } from "./types";
 
 export type ShapeTest = (nx: number, ny: number) => boolean;
 
+/** Полуразмер фигуры в нормированных координатах теста, по осям. */
+export interface ShapeExtent {
+	x: number;
+	y: number;
+}
+
 /**
  * Координаты теста: нормированные к половине меньшей стороны изображения,
  * центр в (0,0), ось Y вниз как в пикселях.
@@ -54,18 +60,24 @@ export function wavyTest(
 
 /**
  * Вырезает фигуру из изображения: внутри фигуры сохраняются исходные пиксели
- * (с их альфой), снаружи альфа обнуляется. Смещение задаётся в долях меньшей стороны.
+ * (с их альфой), снаружи альфа обнуляется. Смещение задаётся в долях свободного
+ * места по каждой оси: ±0.5 прижимает фигуру к краю независимо от её размера,
+ * поэтому фигура никогда не уезжает за холст. Свободное место считается от
+ * extent (полуразмера фигуры); без extent смещение считается от точки.
  */
 export function renderShape(
 	img: PixelImage,
 	test: ShapeTest,
 	offsetXFrac = 0,
 	offsetYFrac = 0,
+	extent: ShapeExtent = { x: 0, y: 0 },
 ): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	const minDim = Math.min(img.width, img.height);
-	const cx = img.width / 2 + offsetXFrac * minDim;
-	const cy = img.height / 2 + offsetYFrac * minDim;
+	const freeX = Math.max(0, img.width / (2 * minDim) - extent.x);
+	const freeY = Math.max(0, img.height / (2 * minDim) - extent.y);
+	const cx = img.width / 2 + offsetXFrac * 2 * freeX * minDim;
+	const cy = img.height / 2 + offsetYFrac * 2 * freeY * minDim;
 	for (let y = 0; y < img.height; y++) {
 		for (let x = 0; x < img.width; x++) {
 			const di = (y * img.width + x) * 4;

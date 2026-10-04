@@ -59,4 +59,32 @@ describe("renderShape", () => {
 		expect(shifted.data[3]).toBe(0);
 		expect(shifted.data[4 + 3]).toBe(255);
 	});
+
+	// Регрессия старого бага square-mask: полный размер без смещения обязан
+	// сохранять квадратную картинку целиком.
+	it("квадрат 100% без смещения сохраняет всё квадратное изображение", () => {
+		const out = renderShape(
+			makeImage(4, 4, new Array(16).fill([255, 255, 255, 255])),
+			boxTest(0.5, 0.5),
+		);
+		for (let i = 3; i < out.data.length; i += 4) expect(out.data[i]).toBe(255);
+	});
+
+	// Смещение — доля свободного места: ±0.5 прижимает фигуру к краю при любом
+	// её размере, фигура не уезжает за холст.
+	it("максимальное смещение прижимает фигуру к краю", () => {
+		const out = renderShape(
+			makeImage(4, 4, new Array(16).fill([255, 255, 255, 255])),
+			boxTest(0.25, 0.25),
+			0.5,
+			0.5,
+			{ x: 0.25, y: 0.25 },
+		);
+		const opaqueAt = (x: number, y: number) =>
+			out.data[(y * 4 + x) * 4 + 3] === 255;
+		expect(opaqueAt(3, 3)).toBe(true);
+		expect(opaqueAt(2, 2)).toBe(true);
+		expect(opaqueAt(1, 1)).toBe(false);
+		expect(opaqueAt(2, 1)).toBe(false);
+	});
 });
