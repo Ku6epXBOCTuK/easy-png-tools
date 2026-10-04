@@ -175,8 +175,12 @@ test("blur: changing slider updates result image", async ({ page }) => {
 	await expect(resultImage(page)).not.toHaveAttribute("src", firstSource ?? "");
 });
 
-test("runs without Web Worker (fallback)", async ({ browser }) => {
-	const context = await browser.newContext();
+test("runs without Web Worker (fallback)", async ({ browser }, testInfo) => {
+	// newContext() не наследует use.baseURL из конфига — пробрасываем явно,
+	// иначе относительный goto() в helpers не резолвится.
+	const context = await browser.newContext({
+		baseURL: testInfo.project.use.baseURL,
+	});
 	try {
 		await context.addInitScript(() => {
 			Object.defineProperty(window, "Worker", {

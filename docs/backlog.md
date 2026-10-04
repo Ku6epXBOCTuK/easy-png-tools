@@ -144,11 +144,6 @@
       странице инструмента, а готовые ключи `home.defaultTitle`,
       `catalog.pageTitle`, `catalog.metaDescription` не читает ни один компонент
       (S1d)
-- [ ] **Баг e2e:** `tool-flows.spec.ts:179` создаёт контекст через
-      `browser.newContext()`, который не наследует `use.baseURL` из
-      `playwright.config.ts`, — относительный `goto('/tools/flip-png')` внутри
-      `openTool` не резолвится, и тест «работает без Web Worker (fallback)»
-      падает на всех движках. В CI это не видно: job `e2e` неблокирующий
 - [ ] Component-тесты `SchemaToolView`/`SchemaPreview` требуют отдельного
       решения: node Vitest не имеет DOM/canvas, а e2e уже покрывает поведение.
 - [ ] Ошибка декодирования изображения из `createImageBitmap` пока показывается
