@@ -127,9 +127,8 @@
 - [ ] дистрибуция: закрепить репо, alternative.to, Product Hunt, Reddit/HN (S4c)
 - [ ] GSC: подключить домен, отправить sitemap, мониторинг индексации (S4a)
 - [ ] GA4: cookieless-конфигурация, отключить рекламные audiences и signals,
-      `anonymize_ip` — сейчас в `web/src/app.html` голый `gtag('config')` (S4b)
-- [ ] GA4: отсечь попадания с локальных и preview-сборок — тег стоит в
-      prerender-оболочке и грузится на каждой странице, нужен флаг окружения
+      `anonymize_ip` — сейчас в `web/src/routes/+layout.svelte` голый
+      `gtag('config')` (S4b)
 
 ## Платформа (API/PWA)
 

@@ -31,6 +31,10 @@
 
 	let crumb = $derived(toCrumb(page.url.pathname));
 
+	// GA подключается только в production-деплое: флаг выставляется в
+	// deploy-workflow, локальные и preview-сборки тег не получают.
+	const gaEnabled = import.meta.env.PUBLIC_GA_ENABLED === "true";
+
 	function toCrumb(path: string): string {
 		if (path === "/") return "/ " + t("header.home");
 		if (path === "/list-tools") return "/ " + t("header.catalog");
@@ -46,6 +50,13 @@
 
 <svelte:head>
 	<link rel="icon" href={`${resolve("/")}favicon.svg`} />
+	{#if gaEnabled}
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-MEQJ7JHRQQ"
+		></script>
+		<script src={`${resolve("/")}ga.js`}></script>
+	{/if}
 </svelte:head>
 
 <main class="preview-root" data-theme={theme}>

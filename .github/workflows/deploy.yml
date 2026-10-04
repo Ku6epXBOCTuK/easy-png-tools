@@ -50,6 +50,7 @@ jobs:
         run: pnpm build
         env:
           BASE_PATH: /easy-png-tools
+          PUBLIC_GA_ENABLED: "true"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
