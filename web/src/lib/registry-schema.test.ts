@@ -6,6 +6,7 @@ import {
 	resolveLayoutGroups,
 	sanitizeSchemaParams,
 	toolSchema,
+	withAspectLock,
 	type Dimension,
 } from "./registry-schema";
 
@@ -60,6 +61,30 @@ describe("registry-schema: дефолты из схемы", () => {
 			color: "#000000",
 			enabled: true,
 			count: "two",
+		});
+	});
+});
+
+describe("registry-schema: withAspectLock", () => {
+	const aspect = 64 / 48;
+
+	it("ведущая ширина — пересчитывается высота", () => {
+		expect(withAspectLock({ width: 32, height: 48 }, "width", aspect)).toEqual({
+			width: 32,
+			height: 24,
+		});
+	});
+
+	it("ведущая высота — пересчитывается ширина", () => {
+		expect(withAspectLock({ width: 64, height: 96 }, "height", aspect)).toEqual(
+			{ width: 128, height: 96 },
+		);
+	});
+
+	it("результат не опускается ниже 1", () => {
+		expect(withAspectLock({ width: 1, height: 48 }, "width", aspect)).toEqual({
+			width: 1,
+			height: 1,
 		});
 	});
 });

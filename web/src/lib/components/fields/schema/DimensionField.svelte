@@ -11,7 +11,7 @@
 		label: string;
 		value: unknown;
 		spec: FieldSpec;
-		onchange?: (value: Dimension) => void;
+		onchange?: (value: Dimension, axis?: "width" | "height") => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
@@ -31,7 +31,7 @@
 	});
 
 	function setAxis(axis: "width" | "height", n: number) {
-		onchange?.({ ...current, [axis]: n });
+		onchange?.({ ...current, [axis]: n }, axis);
 	}
 </script>
 

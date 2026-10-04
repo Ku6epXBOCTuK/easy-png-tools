@@ -70,6 +70,11 @@ export interface DimensionSpec extends FieldSpecBase {
 	width: number;
 	height: number;
 	defaultFromSource?: boolean;
+	/**
+	 * Id checkbox-поля «сохранять пропорции»: пока оно включено, правка одной
+	 * оси пересчитывает вторую по аспекту текущего исходника.
+	 */
+	lockAspectWith?: string;
 }
 
 export interface SchemaContext {
@@ -276,6 +281,7 @@ export const field = {
 		width: number;
 		height: number;
 		defaultFromSource?: boolean;
+		lockAspectWith?: string;
 	}): Field<Dimension> => ({
 		spec: { kind: "dimension", ...s },
 	}),
@@ -380,6 +386,21 @@ function clamp(value: number, min?: number, max?: number): number {
 	if (min !== undefined && value < min) return min;
 	if (max !== undefined && value > max) return max;
 	return value;
+}
+
+/**
+ * Пересчёт при включённом lockAspect: ведущая ось (последняя правка
+ * пользователя) сохраняется, вторая подгоняется под аспект исходника.
+ */
+export function withAspectLock(
+	next: Dimension,
+	leading: "width" | "height",
+	aspect: number,
+): Dimension {
+	if (leading === "width") {
+		return { ...next, height: Math.max(1, Math.round(next.width / aspect)) };
+	}
+	return { ...next, width: Math.max(1, Math.round(next.height * aspect)) };
 }
 
 function resolveDimensionDefaults(

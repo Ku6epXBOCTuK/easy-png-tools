@@ -185,6 +185,7 @@ export const resizeSchema = toolSchema<ResizeParams>(
 			width: 1,
 			height: 1,
 			defaultFromSource: true,
+			lockAspectWith: "keepAspect",
 		}),
 		keepAspect: field.checkbox({ label: "fields.keepAspect", default: true }),
 	},

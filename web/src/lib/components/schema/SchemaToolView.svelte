@@ -17,6 +17,8 @@
 		applySourceDefaults,
 		defaultSchemaParams,
 		sanitizeSchemaParams,
+		withAspectLock,
+		type Dimension,
 		type ToolSchema,
 	} from "$lib/registry-schema";
 	import { downloadZip } from "$lib/zip";
@@ -42,6 +44,8 @@
 	// Поля, изменённые пользователем: при загрузке нового файла им не даём
 	// перезаписаться source-дефолтами. Reset снимает пометку.
 	const touched = new SvelteSet<string>();
+	// Последняя правленая ось dimension-поля — ведущая при lockAspect.
+	const lastAxis: Record<string, "width" | "height"> = {};
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
 	let fileResult = $state<FileResult | null>(null);
@@ -70,9 +74,38 @@
 		values = defaultSchemaParams(schema);
 	}
 
-	function setValue(id: string, value: unknown) {
+	function setValue(id: string, value: unknown, axis?: "width" | "height") {
 		touched.add(id);
-		values = { ...values, [id]: value };
+		if (axis) lastAxis[id] = axis;
+		const next: Record<string, unknown> = { ...values, [id]: value };
+		const spec = schema?.fields[id]?.spec;
+		if (source && schema && spec) {
+			const aspect = source.width / source.height;
+			if (
+				spec.kind === "dimension" &&
+				spec.lockAspectWith &&
+				next[spec.lockAspectWith] === true
+			) {
+				next[id] = withAspectLock(
+					value as Dimension,
+					lastAxis[id] ?? "width",
+					aspect,
+				);
+			} else if (spec.kind === "checkbox" && value === true) {
+				// Включили lockAspect — сразу подгоняем привязанные поля под аспект.
+				for (const [fid, f] of Object.entries(schema.fields)) {
+					const fs = f.spec;
+					if (fs.kind === "dimension" && fs.lockAspectWith === id) {
+						next[fid] = withAspectLock(
+							next[fid] as Dimension,
+							lastAxis[fid] ?? "width",
+							aspect,
+						);
+					}
+				}
+			}
+		}
+		values = next;
 	}
 
 	function reset() {
