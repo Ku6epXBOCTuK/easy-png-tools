@@ -3,6 +3,7 @@
 	import type { PixelImage } from "$lib/core/types";
 	import { t } from "$lib/i18n/t";
 	import type { InputMode } from "$lib/registry";
+	import Dropzone from "./Dropzone.svelte";
 	import PreviewTile from "./PreviewTile.svelte";
 	import SchemaTextSource from "./SchemaTextSource.svelte";
 
@@ -13,6 +14,7 @@
 		running?: boolean;
 		ontextinput?: (text: string) => void;
 		onrendertext?: () => void;
+		onupload?: (file: File) => void;
 	}
 	let {
 		mode,
@@ -21,9 +23,19 @@
 		running = false,
 		ontextinput,
 		onrendertext,
+		onupload,
 	}: Props = $props();
 
 	const sourceUrl = $derived(source ? toDataUrl(source) : null);
+
+	let dragging = $state(false);
+
+	function onDrop(e: DragEvent) {
+		e.preventDefault();
+		dragging = false;
+		const file = e.dataTransfer?.files?.[0];
+		if (file) onupload?.(file);
+	}
 </script>
 
 <PreviewTile label={t("sourceCard.source")} viewMode={mode}>
@@ -37,9 +49,29 @@
 			/>
 		</div>
 	{:else if mode === "image" && sourceUrl}
-		<img data-testid="source-image" src={sourceUrl} alt={t("sourceCard.alt")} />
+		<div
+			class="tile-drop"
+			class:dragging
+			role="region"
+			aria-label={t("dropZone.overlayDefault")}
+			ondragover={(e) => {
+				e.preventDefault();
+				dragging = true;
+			}}
+			ondragleave={() => (dragging = false)}
+			ondrop={onDrop}
+		>
+			<img
+				data-testid="source-image"
+				src={sourceUrl}
+				alt={t("sourceCard.alt")}
+			/>
+			{#if dragging}
+				<span class="drop-hint">{t("dropZone.overlayDefault")}</span>
+			{/if}
+		</div>
 	{:else if mode === "image"}
-		<span class="empty">{t("sourceCard.chooseImage")}</span>
+		<Dropzone onfile={onupload} />
 	{:else}
 		<span class="empty">{t("sourceCard.noSource")}</span>
 	{/if}
@@ -53,5 +85,33 @@
 		width: 100%;
 		padding: var(--space-l);
 		box-sizing: border-box;
+	}
+	.tile-drop {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		align-self: stretch;
+	}
+	.tile-drop.dragging::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border: var(--size-border-thick) dashed var(--color-main);
+		border-radius: var(--radius-m);
+		background: var(--color-main-tint);
+		pointer-events: none;
+	}
+	.tile-drop .drop-hint {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		padding: var(--space-l);
+		color: var(--color-main);
+		font: var(--font-size-s) var(--font-mono);
+		text-align: center;
+		pointer-events: none;
 	}
 </style>

@@ -122,7 +122,7 @@ export const en: Dict = {
 		pickDefault: "Drop an image here or click to choose a file",
 		overlayDefault: "Release the file to replace the image",
 		pickTitle: "Drop a PNG here",
-		pickHint: "or click to browse — processed locally",
+		pickHint: "or click / paste (Ctrl+V) — processed locally",
 	},
 	search: {
 		placeholder: "Find a tool…",

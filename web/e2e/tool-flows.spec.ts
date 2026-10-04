@@ -18,6 +18,7 @@ import {
 	sourceImage,
 	trackErrors,
 	uploadImage,
+	uploadViaDrop,
 	useEnglish,
 } from "./helpers/page";
 
@@ -76,6 +77,15 @@ test("crop-png starts with the full source area", async ({ page }) => {
 	await expect(page.getByRole("spinbutton", { name: "Height" })).toHaveValue(
 		"48",
 	);
+	await expect(resultImage(page)).toBeVisible();
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
+});
+
+test("flip-png: upload via drag-and-drop on the dropzone", async ({ page }) => {
+	const sink = trackErrors(page);
+	await openTool(page, "flip-png");
+	await uploadViaDrop(page, opaquePng);
 	await expect(resultImage(page)).toBeVisible();
 	await expectNoErrorAlert(page);
 	expectNoErrors(sink);

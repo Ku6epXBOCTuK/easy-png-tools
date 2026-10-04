@@ -78,6 +78,7 @@
 		{running}
 		ontextinput={ontextsource}
 		{onrendertext}
+		{onupload}
 	/>
 	<SchemaResultTile
 		{resultKind}

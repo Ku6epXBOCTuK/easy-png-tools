@@ -76,13 +76,44 @@ export async function renderText(page: Page, value: string): Promise<void> {
 }
 
 export async function uploadImage(page: Page, file: SourceFile): Promise<void> {
-	const input = page.locator('input[type="file"]');
-	await expect(input).toHaveCount(1);
+	// На странице может быть два input[type=file]: дропзона + кнопка Open image;
+	// канонический — первый (кнопка в шапке панели).
+	const input = page.locator('input[type="file"]').first();
+	await expect(input).toBeAttached();
 	await input.setInputFiles({
 		name: file.name,
 		mimeType: file.mimeType,
 		buffer: file.buffer,
 	});
+}
+
+export async function uploadViaDrop(
+	page: Page,
+	file: SourceFile,
+): Promise<void> {
+	const dataTransfer = await page.evaluateHandle(
+		({
+			bytes,
+			name,
+			mimeType,
+		}: {
+			bytes: number[];
+			name: string;
+			mimeType: string;
+		}) => {
+			const dt = new DataTransfer();
+			dt.items.add(new File([new Uint8Array(bytes)], name, { type: mimeType }));
+			return dt;
+		},
+		{
+			bytes: Array.from(file.buffer),
+			name: file.name,
+			mimeType: file.mimeType,
+		},
+	);
+	await page
+		.getByRole("button", { name: /drop a png/i })
+		.dispatchEvent("drop", { dataTransfer });
 }
 
 export async function downloadResultFile(page: Page): Promise<Download> {

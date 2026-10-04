@@ -22,6 +22,7 @@
 		type ToolSchema,
 	} from "$lib/registry-schema";
 	import { downloadZip } from "$lib/zip";
+	import { onMount } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
 
 	interface Props {
@@ -233,6 +234,25 @@
 
 	$effect(() => {
 		init();
+	});
+
+	onMount(() => {
+		if (inputMode !== "image") return;
+		function onPaste(e: ClipboardEvent) {
+			const target = e.target as HTMLElement | null;
+			if (target?.closest("input, textarea, [contenteditable]")) return;
+			for (const item of e.clipboardData?.items ?? []) {
+				if (item.kind !== "file" || !item.type.startsWith("image/")) continue;
+				const file = item.getAsFile();
+				if (file) {
+					e.preventDefault();
+					void handleFile(file);
+				}
+				return;
+			}
+		}
+		window.addEventListener("paste", onPaste);
+		return () => window.removeEventListener("paste", onPaste);
 	});
 
 	$effect(() => {

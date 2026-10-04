@@ -59,16 +59,7 @@ export default tseslint.config(
 						"vitest.config.ts",
 						"eslint.config.js",
 						"playwright.config.ts",
-						"e2e/helpers/fixtures.ts",
-						"e2e/helpers/page.ts",
-						"e2e/navigation.spec.ts",
-						"e2e/catalog.spec.ts",
-						"e2e/tool-flows.spec.ts",
-						"e2e/text-and-verdicts.spec.ts",
-						"e2e/tools-smoke.spec.ts",
-						"e2e/generators.spec.ts",
-						"e2e/png-fixtures.spec.ts",
-						"e2e/i18n.spec.ts",
+						// e2e покрыты e2e/tsconfig.json.
 						// Тесты и фикстуры кастомных линт-правил лежат вне src/ (не в
 						// tsconfig), поэтому для типизированного парсинга резолвятся
 						// через default-проект. Перечисляются точечно: `**` в
