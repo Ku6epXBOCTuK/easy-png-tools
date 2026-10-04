@@ -26,6 +26,11 @@
 	);
 </script>
 
+<svelte:head>
+	<title>{t("catalog.pageTitle")}</title>
+	<meta name="description" content={t("catalog.metaDescription")} />
+</svelte:head>
+
 <div class="catalog-page">
 	<CatalogHeader total={PREVIEW_TOTAL} />
 	<CatalogToolbar bind:query bind:category />

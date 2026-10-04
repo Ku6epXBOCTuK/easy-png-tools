@@ -140,10 +140,6 @@
 
 ## Качество production UI
 
-- [ ] `/` и `/list-tools` выходят без `<title>`: `svelte:head` есть только на
-      странице инструмента, а готовые ключи `home.defaultTitle`,
-      `catalog.pageTitle`, `catalog.metaDescription` не читает ни один компонент
-      (S1d)
 - [ ] Component-тесты `SchemaToolView`/`SchemaPreview` требуют отдельного
       решения: node Vitest не имеет DOM/canvas, а e2e уже покрывает поведение.
 - [ ] Ошибка декодирования изображения из `createImageBitmap` пока показывается

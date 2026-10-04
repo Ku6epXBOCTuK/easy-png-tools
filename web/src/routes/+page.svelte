@@ -26,6 +26,10 @@
 	);
 </script>
 
+<svelte:head>
+	<title>{t("home.defaultTitle")}</title>
+</svelte:head>
+
 <div class="catalog-page">
 	<CatalogHeader total={PREVIEW_TOTAL} />
 	<CatalogToolbar bind:query bind:category />
