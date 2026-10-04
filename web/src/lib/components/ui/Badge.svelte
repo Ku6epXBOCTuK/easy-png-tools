@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Check } from "@lucide/svelte";
+	import type { Snippet } from "svelte";
+	import type { HTMLAttributes } from "svelte/elements";
 
 	const ToneVariantDefine = {
 		DEFAULT: "default",
@@ -15,28 +17,43 @@
 		DEFAULT: "default",
 		OUTLINE: "outline",
 		CLEAR: "clear",
+		TINT: "tint",
 	} as const;
 	type BadgeVariant =
 		(typeof BadgeVariantDefine)[keyof typeof BadgeVariantDefine];
 
-	interface Props {
+	const BadgeSizeDefine = {
+		S: "s",
+		M: "m",
+	} as const;
+	type BadgeSize = (typeof BadgeSizeDefine)[keyof typeof BadgeSizeDefine];
+
+	interface Props extends HTMLAttributes<HTMLSpanElement> {
 		tone?: ToneVariant;
 		variant?: BadgeVariant;
+		size?: BadgeSize;
 		check?: boolean;
 		label?: string;
+		children?: Snippet;
 	}
 
 	let {
 		tone = ToneVariantDefine.DEFAULT,
 		variant = BadgeVariantDefine.DEFAULT,
+		size = BadgeSizeDefine.S,
 		check = false,
 		label = "",
+		children,
+		...rest
 	}: Props = $props();
 </script>
 
-<span class="badge badge-tone--{tone} badge-variant--{variant}">
+<span
+	class="badge badge-tone--{tone} badge-variant--{variant} badge-size--{size}"
+	{...rest}
+>
 	{#if check}<Check size={12} />{/if}
-	{label}
+	{#if children}{@render children()}{:else}{label}{/if}
 </span>
 
 <style>
@@ -93,5 +110,19 @@
 		background-color: transparent;
 		border-color: transparent;
 		color: var(--color-badge-tint);
+	}
+
+	.badge-variant--tint {
+		background-color: var(--color-badge-tint);
+		border-style: solid;
+		border-color: var(--color-badge-main);
+		border-radius: var(--radius-m);
+		color: var(--color-badge-main);
+	}
+
+	.badge-size--m {
+		gap: var(--space-l);
+		padding: var(--space-m) var(--space-xl);
+		font-size: var(--font-size-m);
 	}
 </style>

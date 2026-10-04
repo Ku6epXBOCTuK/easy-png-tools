@@ -147,6 +147,13 @@
 				<Badge tone="warning" label="warning" />
 				<Badge tone="info" label="info" />
 			</SettingGroup>
+			<SettingGroup label="variants">
+				<Badge tone="success" variant="outline" label="outline" />
+				<Badge tone="success" variant="clear" label="clear" />
+				<Badge tone="success" variant="tint" label="tint" />
+				<Badge tone="danger" variant="tint" label="tint" />
+				<Badge tone="info" variant="tint" size="m" label="tint m" />
+			</SettingGroup>
 		</div>
 	</Panel>
 

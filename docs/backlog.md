@@ -82,13 +82,6 @@
 - [ ] придумать процесс редактирования и настройки pipeline - drag-n-drop,
       удаление, добавление инструментов. переход один инструмент - pipeline без
       перезагрузки
-- [ ] `CatalogToolbar`: фильтры используют сырой `<button>`, а не `ui/Button` —
-      единый контрол для всей библиотеки
-      (`web/src/lib/components/CatalogToolbar.svelte`).
-- [ ] `SchemaTextResult` вердикт-бейдж рисует руками: свои классы
-      `badge`/`badge-tone--{tone}` и свой CSS в `<style>` вместо
-      `ui/Badge.svelte` — тон и разметка бейджа живут в двух местах
-      (`web/src/lib/components/schema/SchemaTextResult.svelte`).
 - [ ] `PreviewTile`: высота плитки задана только `min-height: clamp(...)`,
       поэтому она не следует за пропорциями результата — широкий результат
       уезжает в узкую полосу, а высокий упирается в `max-height: 100vh`. Нужно,

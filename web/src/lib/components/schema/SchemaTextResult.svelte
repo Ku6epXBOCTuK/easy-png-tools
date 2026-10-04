@@ -2,6 +2,7 @@
 	import { verdictText, verdictTone } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import { Copy, Download, FileText } from "@lucide/svelte";
+	import Badge from "$lib/components/ui/Badge.svelte";
 	import IconButton from "$lib/components/ui/IconButton.svelte";
 
 	interface Props {
@@ -32,14 +33,16 @@
 {#if kind === "verdict"}
 	<div class="verdict">
 		<span class="verdict-label">{t("resultCard.result")}</span>
-		<div
+		<Badge
+			{tone}
+			variant="tint"
+			size="m"
 			data-testid="result-verdict"
-			class="badge badge-tone--{tone}"
 			role="status"
 		>
-			<span class="verdict-text">{displayValue}</span>
+			{displayValue}
 			<IconButton icon={Copy} label={t("textResult.copy")} onclick={oncopy} />
-		</div>
+		</Badge>
 	</div>
 {:else}
 	<div class="text-result">
@@ -108,32 +111,5 @@
 		font: var(--font-size-s) var(--font-mono);
 		letter-spacing: var(--space-text-l);
 		text-transform: uppercase;
-	}
-	.badge {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-l);
-		padding: var(--space-m) var(--space-xl);
-		border: var(--size-border-thick) solid transparent;
-		border-radius: var(--radius-m);
-		font: var(--font-size-m) var(--font-mono);
-	}
-	.badge-tone--success {
-		background: var(--color-success-tint);
-		border-color: var(--color-success);
-		color: var(--color-success);
-	}
-	.badge-tone--danger {
-		background: var(--color-danger-tint);
-		border-color: var(--color-danger);
-		color: var(--color-danger);
-	}
-	.badge-tone--info {
-		background: var(--color-info-tint);
-		border-color: var(--color-info);
-		color: var(--color-info);
-	}
-	.verdict-text {
-		line-height: normal;
 	}
 </style>
