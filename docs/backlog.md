@@ -101,8 +101,9 @@
 - [ ] Радиусы бордеров: `--radius-m` ненулевой и применён ко всем бордерам
       (`app.css`, `SchemaToolView.svelte`). Решить, где скругления реально есть
       в дизайне, а где должен быть 0
-- [ ] `Footer`: версию брать из `package.json`, а не писать `v0.1.0` вручную
-      (`web/src/lib/components/layout/Footer.svelte`).
+- [ ] надо добавить версионирование и changelog (cocogitto), пример можно взять
+      отсюда -
+      [https://github.com/Ku6epXBOCTuK/XBOCT-page](https://github.com/Ku6epXBOCTuK/XBOCT-page)
 
 ## Переезд
 
