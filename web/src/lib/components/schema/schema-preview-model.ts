@@ -15,7 +15,6 @@ export type SchemaPreviewModelInput = {
 export type SchemaPreviewModel = {
 	sourceValue: string;
 	resultValue: string;
-	formatValue: string;
 	hasResult: boolean;
 };
 
@@ -49,7 +48,6 @@ export function buildSchemaPreviewModel(
 	return {
 		sourceValue,
 		resultValue,
-		formatValue: resultKind === "files" ? "ZIP (PNG)" : "PNG",
 		hasResult:
 			resultKind === "image"
 				? Boolean(result)

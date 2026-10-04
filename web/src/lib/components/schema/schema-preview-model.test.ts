@@ -56,7 +56,6 @@ describe("buildSchemaPreviewModel", () => {
 		).toEqual({
 			sourceValue: "—",
 			resultValue: "2 × 3 px",
-			formatValue: "PNG",
 			hasResult: true,
 		});
 		expect(buildSchemaPreviewModel(input(), translate)).toMatchObject({
@@ -75,7 +74,6 @@ describe("buildSchemaPreviewModel", () => {
 		).toEqual({
 			sourceValue: "—",
 			resultValue: "1 parts",
-			formatValue: "ZIP (PNG)",
 			hasResult: true,
 		});
 		expect(
@@ -96,7 +94,6 @@ describe("buildSchemaPreviewModel", () => {
 				),
 			).toMatchObject({
 				resultValue: "Text",
-				formatValue: "PNG",
 				hasResult: true,
 			});
 			expect(

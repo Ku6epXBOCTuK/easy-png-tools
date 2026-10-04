@@ -5,6 +5,45 @@ import { type PixelImage } from "./types";
 export type OutputMime =
 	"image/png" | "image/jpeg" | "image/webp" | "image/bmp";
 
+export interface OutputFormatOption {
+	mime: OutputMime;
+	ext: string;
+	label: string;
+	supportsAlpha: boolean;
+	/** Точные настройки формата в dropdown кнопки Download (расширяемо). */
+	settings?: {
+		quality?: { min: number; max: number; step: number; default: number };
+	};
+}
+
+const QUALITY_SETTING = { min: 1, max: 100, step: 1, default: 90 } as const;
+
+/** Варианты формата в кнопке Download (селектор рядом с ней). */
+export const OUTPUT_FORMATS: readonly OutputFormatOption[] = [
+	{ mime: "image/png", ext: "png", label: "PNG", supportsAlpha: true },
+	{
+		mime: "image/jpeg",
+		ext: "jpg",
+		label: "JPG",
+		supportsAlpha: false,
+		settings: { quality: QUALITY_SETTING },
+	},
+	{
+		mime: "image/webp",
+		ext: "webp",
+		label: "WebP",
+		supportsAlpha: true,
+		settings: { quality: QUALITY_SETTING },
+	},
+	{ mime: "image/bmp", ext: "bmp", label: "BMP", supportsAlpha: false },
+];
+
+export function outputFormatByMime(mime: OutputMime): OutputFormatOption {
+	const found = OUTPUT_FORMATS.find((f) => f.mime === mime);
+	if (!found) throw new ToolError("errors.encodeUnsupported", { mime });
+	return found;
+}
+
 export const ACCEPTED_IMAGE_TYPES =
 	"image/png,image/jpeg,image/webp,image/gif,image/bmp,image/x-icon";
 

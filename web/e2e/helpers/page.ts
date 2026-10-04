@@ -117,13 +117,22 @@ export async function uploadViaDrop(
 }
 
 export async function downloadResultFile(page: Page): Promise<Download> {
-	const button = page.getByRole("button", { name: "Download result" });
+	// Split-кнопка: основная часть "Download" (image) или "Download ZIP" (files).
+	const button = page.getByRole("button", { name: /^Download( ZIP)?$/ });
 	await expect(button).toBeVisible();
 	const [download] = await Promise.all([
 		page.waitForEvent("download"),
 		button.click(),
 	]);
 	return download;
+}
+
+export async function chooseDownloadFormat(
+	page: Page,
+	format: string,
+): Promise<void> {
+	await page.getByRole("button", { name: "Choose download format" }).click();
+	await page.getByRole("menuitemradio", { name: format, exact: true }).click();
 }
 
 export async function downloadResultBytes(

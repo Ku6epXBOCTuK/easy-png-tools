@@ -75,7 +75,6 @@ export const en: Dict = {
 		result: "Result",
 		previewPanel: "Preview",
 		parts: "parts",
-		format: "Format",
 		alt: "Result image",
 	},
 	paramsCard: {
@@ -100,7 +99,10 @@ export const en: Dict = {
 		generate: "Generate",
 		generating: "Generating…",
 		openImage: "Open image",
-		downloadResult: "Download result",
+		download: "Download",
+		downloadFormat: "Download {format}",
+		formatAria: "Choose download format",
+		alphaLoss: "Result has transparency — {format} will flatten it",
 	},
 	textSource: {
 		placeholder: "Paste base64 / hex / bytes…",

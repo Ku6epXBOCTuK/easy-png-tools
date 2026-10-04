@@ -6,8 +6,10 @@ import {
 	largePng,
 	onePixelPng,
 	opaquePng,
+	transparentPng,
 } from "./helpers/fixtures";
 import {
+	chooseDownloadFormat,
 	downloadResultBytes,
 	errorAlert,
 	expectNoErrorAlert,
@@ -140,6 +142,26 @@ test("convert-png-to-webp: produces WebP and quality affects size", async ({
 	await quality.fill("90");
 	const high = await downloadResultBytes(page);
 	expect(high.bytes.length).toBeGreaterThan(low.bytes.length);
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
+});
+
+test("download format selector: JPG warns about alpha and produces JPEG", async ({
+	page,
+}) => {
+	const sink = trackErrors(page);
+	await openTool(page, "flip-png");
+	await uploadImage(page, transparentPng);
+	await expect(resultImage(page)).toBeVisible();
+	await chooseDownloadFormat(page, "JPG");
+	await expect(
+		page.getByRole("status").filter({ hasText: /transparency/ }),
+	).toBeVisible();
+	// у JPG в dropdown есть настройка качества
+	await rangeInput(page, "Quality").fill("10");
+	const { name, bytes } = await downloadResultBytes(page);
+	expect(name).toBe("flip-png.jpg");
+	expect(Array.from(bytes.subarray(0, 3))).toEqual([0xff, 0xd8, 0xff]);
 	await expectNoErrorAlert(page);
 	expectNoErrors(sink);
 });

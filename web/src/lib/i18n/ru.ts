@@ -76,7 +76,6 @@ export const ru: Dict = {
 		result: "Результат",
 		previewPanel: "Предпросмотр",
 		parts: "частей",
-		format: "Формат",
 		alt: "Изображение-результат",
 	},
 	paramsCard: {
@@ -101,7 +100,10 @@ export const ru: Dict = {
 		generate: "Сгенерировать",
 		generating: "Генерация…",
 		openImage: "Открыть изображение",
-		downloadResult: "Скачать результат",
+		download: "Скачать",
+		downloadFormat: "Скачать {format}",
+		formatAria: "Выбор формата скачивания",
+		alphaLoss: "В результате есть прозрачность — {format} её уберёт",
 	},
 	textSource: {
 		placeholder: "Вставьте base64 / hex / байты…",

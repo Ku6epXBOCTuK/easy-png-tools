@@ -2,8 +2,15 @@
 	import SchemaFields from "./SchemaFields.svelte";
 	import SchemaPreview from "./SchemaPreview.svelte";
 	import { debounce } from "$lib/core/debounce";
+	import { hasTransparency } from "$lib/core/analyze";
 	import { ToolError, type ErrorVars } from "$lib/core/errors";
-	import { decodeFile, downloadBlob, encode } from "$lib/core/io";
+	import {
+		decodeFile,
+		downloadBlob,
+		encode,
+		outputFormatByMime,
+		type OutputMime,
+	} from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
 	import {
@@ -58,6 +65,33 @@
 	let running = $state(false);
 	let displayError = $state<DisplayError | null>(null);
 	let started = $state(false);
+	let format = $state<OutputMime>("image/png");
+	// Качество lossy-форматов для инструментов без quality-параметра в схеме.
+	let formatQuality = $state<Record<string, number>>({});
+
+	const alphaLoss = $derived(
+		resultKind === "image" &&
+			result !== null &&
+			!outputFormatByMime(format).supportsAlpha &&
+			hasTransparency(result),
+	);
+	// Если в схеме есть quality-параметр (convert-инструменты), он — единый
+	// источник качества; dropdown редактирует его же.
+	const qualityParamId = $derived(tool.output?.qualityParamId);
+	const currentQuality = $derived.by(() => {
+		const setting = outputFormatByMime(format).settings?.quality;
+		if (!setting) return undefined;
+		if (qualityParamId) return Number(values[qualityParamId]);
+		return formatQuality[format] ?? setting.default;
+	});
+
+	function setFormatQuality(q: number) {
+		if (qualityParamId) {
+			setValue(qualityParamId, q);
+		} else {
+			formatQuality = { ...formatQuality, [format]: q };
+		}
+	}
 
 	const errorText = $derived.by(() => {
 		const current = displayError;
@@ -73,6 +107,7 @@
 		if (!schema || started) return;
 		started = true;
 		values = defaultSchemaParams(schema);
+		format = tool.output?.mime ?? "image/png";
 	}
 
 	function setValue(
@@ -196,12 +231,11 @@
 				return;
 			}
 			if (!result) return;
-			const out = tool.output;
-			const quality = out?.qualityParamId
-				? Number(values[out.qualityParamId]) / 100
-				: undefined;
-			const blob = await encode(result, out?.mime ?? "image/png", quality);
-			downloadBlob(blob, `${page.slug}.${out?.ext ?? "png"}`);
+			const out = outputFormatByMime(format);
+			const quality =
+				currentQuality !== undefined ? currentQuality / 100 : undefined;
+			const blob = await encode(result, out.mime, quality);
+			downloadBlob(blob, `${page.slug}.${out.ext}`);
 		} catch (e) {
 			displayError = toDisplayError(e);
 		} finally {
@@ -311,6 +345,11 @@
 					{resultKind}
 					{running}
 					error={errorText}
+					{format}
+					quality={currentQuality}
+					{alphaLoss}
+					onformat={(v) => (format = v)}
+					onquality={setFormatQuality}
 					onupload={handleFile}
 					ontextsource={(textValue) => {
 						textSource = textValue;

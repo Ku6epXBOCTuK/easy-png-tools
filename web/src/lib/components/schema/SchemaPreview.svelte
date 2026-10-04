@@ -5,6 +5,7 @@
 	import SchemaResultTile from "./SchemaResultTile.svelte";
 	import SchemaSourceTile from "./SchemaSourceTile.svelte";
 	import type { PixelImage } from "$lib/core/types";
+	import type { OutputMime } from "$lib/core/io";
 	import { t } from "$lib/i18n/t";
 	import type { FileResult, InputMode, ResultKind } from "$lib/registry";
 
@@ -20,12 +21,17 @@
 		textVars?: Record<string, string | number>;
 		running?: boolean;
 		error?: string;
+		format?: OutputMime;
+		quality?: number;
+		alphaLoss?: boolean;
 		onupload: (file: File) => void;
 		ontextsource?: (text: string) => void;
 		onrendertext?: () => void;
 		oncopytext?: () => void;
 		ondownloadtxt?: () => void;
 		ondownload: () => void;
+		onformat?: (mime: OutputMime) => void;
+		onquality?: (value: number) => void;
 	}
 	let {
 		inputMode,
@@ -39,12 +45,17 @@
 		textVars = undefined,
 		running = false,
 		error = "",
+		format = "image/png",
+		quality = undefined,
+		alphaLoss = false,
 		onupload,
 		ontextsource,
 		onrendertext,
 		oncopytext,
 		ondownloadtxt,
 		ondownload,
+		onformat,
+		onquality,
 	}: Props = $props();
 
 	const model = $derived(
@@ -59,10 +70,16 @@
 	<span class="label">{t("resultCard.previewPanel")}</span>
 	<SchemaActions
 		{inputMode}
+		{resultKind}
 		canDownload={model.hasResult}
 		{running}
+		{format}
+		{quality}
+		{alphaLoss}
 		{onupload}
 		{ondownload}
+		{onformat}
+		{onquality}
 	/>
 </div>
 
@@ -98,7 +115,6 @@
 		items={[
 			{ caption: t("sourceCard.source"), value: model.sourceValue },
 			{ caption: t("resultCard.result"), value: model.resultValue },
-			{ caption: t("resultCard.format"), value: model.formatValue },
 		]}
 	/>
 </div>
