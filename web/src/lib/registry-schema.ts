@@ -435,15 +435,22 @@ export function defaultSchemaParams<P>(
 	return out;
 }
 
+/**
+ * Пересчитывает дефолты от нового исходника, сохраняя значения пользователя.
+ * Поля из touched (изменённые вручную) не перезаписываются даже если у них
+ * source-дефолт — иначе загрузка нового файла сносила бы настроенные размеры.
+ */
 export function applySourceDefaults<P>(
 	schema: ToolSchema<P>,
 	values: Record<string, unknown>,
 	context: SchemaContext,
+	touched?: ReadonlySet<string>,
 ): Record<keyof P, unknown> {
 	const defaults = defaultSchemaParams(schema, context);
 	for (const key of Object.keys(schema.fields) as (keyof P)[]) {
 		const spec = schema.fields[key].spec;
-		if (spec.kind === "dimension" && spec.defaultFromSource) continue;
+		const fromSource = spec.kind === "dimension" && spec.defaultFromSource;
+		if (fromSource && !touched?.has(key as string)) continue;
 		if (Object.prototype.hasOwnProperty.call(values, key)) {
 			defaults[key] = values[key as string];
 		}

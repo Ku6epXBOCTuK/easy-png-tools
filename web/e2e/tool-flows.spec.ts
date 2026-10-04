@@ -36,6 +36,20 @@ test("resize-png uses the source dimensions by default", async ({ page }) => {
 	expectNoErrors(sink);
 });
 
+test("resize-png keeps user-set size when another image is uploaded", async ({
+	page,
+}) => {
+	await openTool(page, "resize-png");
+	await uploadImage(page, opaquePng);
+	const width = page.getByRole("spinbutton", { name: "Width" });
+	await width.fill("25");
+	await uploadImage(page, landscapePng);
+	await expect(width).toHaveValue("25");
+	await expect(page.getByRole("spinbutton", { name: "Height" })).toHaveValue(
+		"48",
+	);
+});
+
 test("crop-png starts with the full source area", async ({ page }) => {
 	const sink = trackErrors(page);
 	await openTool(page, "crop-png");

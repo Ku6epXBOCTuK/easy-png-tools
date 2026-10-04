@@ -89,6 +89,16 @@ describe("registry-schema: source-aware dimension defaults", () => {
 		});
 	});
 
+	it("touched-поля не перезаписываются source-дефолтами", () => {
+		const manual = { size: { width: 5, height: 6 } };
+		expect(
+			applySourceDefaults(sourceSchema, manual, { source }, new Set(["size"])),
+		).toEqual({
+			size: { width: 5, height: 6 },
+			fixed: { width: 10, height: 20 },
+		});
+	});
+
 	it("uses source dimensions when sanitizing missing values", () => {
 		expect(sanitizeSchemaParams(sourceSchema, {}, { source })).toEqual({
 			size: source,

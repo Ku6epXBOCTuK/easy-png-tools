@@ -20,6 +20,7 @@
 		type ToolSchema,
 	} from "$lib/registry-schema";
 	import { downloadZip } from "$lib/zip";
+	import { SvelteSet } from "svelte/reactivity";
 
 	interface Props {
 		page: Page;
@@ -38,6 +39,9 @@
 	const resultKind = $derived(tool.result ?? "image");
 
 	let values = $state<Record<string, unknown>>({});
+	// Поля, изменённые пользователем: при загрузке нового файла им не даём
+	// перезаписаться source-дефолтами. Reset снимает пометку.
+	const touched = new SvelteSet<string>();
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
 	let fileResult = $state<FileResult | null>(null);
@@ -67,10 +71,12 @@
 	}
 
 	function setValue(id: string, value: unknown) {
+		touched.add(id);
 		values = { ...values, [id]: value };
 	}
 
 	function reset() {
+		touched.clear();
 		values = schema
 			? defaultSchemaParams(schema, { source: source ?? undefined })
 			: {};
@@ -87,7 +93,12 @@
 			const decoded = await decodeFile(file);
 			source = decoded;
 			if (schema) {
-				values = applySourceDefaults(schema, values, { source: decoded });
+				values = applySourceDefaults(
+					schema,
+					values,
+					{ source: decoded },
+					touched,
+				);
 			}
 		} catch (e) {
 			displayError = toDisplayError(e);
