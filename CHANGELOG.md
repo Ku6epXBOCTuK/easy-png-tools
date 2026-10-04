@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.2.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/f40a7c89ae5615f2c16f1154116d35fdc0e53125..v0.2.0) - 2026-10-04
+#### Features
+- add pipeline flow - ([6b946bf](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/6b946bfb08729ead2515e87406cb3efd22ca9859)) - Ku6epXBOCTuK
+- add select format to download button - ([e87bc1d](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/e87bc1d7159e91acbf297351710c367eae543011)) - Ku6epXBOCTuK
+- upload source by ctrl+v and dropzone - ([864f9cd](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/864f9cdc9f355292d688a46f1d0383a893d252d3)) - Ku6epXBOCTuK
+- add size presets for tools - ([91150a1](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/91150a14bf8203627132f6d3a409109845ed749f)) - Ku6epXBOCTuK
+- touched fields dont reset on change source image - ([5743b9f](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/5743b9fb3f1eb7f3b4f9b01e35c9a0f897ee7411)) - Ku6epXBOCTuK
+#### Bug Fixes
+- keep aspect ratio flow - ([4d9cd2c](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/4d9cd2cfcbe6491dfe2ee6074e8f8c1d8abeee74)) - Ku6epXBOCTuK
+- update range slider field component - ([e73986f](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/e73986fefd7306391711a39f719e48f60f5d3292)) - Ku6epXBOCTuK
+- add title from i18n - ([62bdd5a](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/62bdd5a7c582c74118e964058f84108eaf0cf4cc)) - Ku6epXBOCTuK
+#### Refactoring
+- reuse badge component - ([409c98c](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/409c98ca295be7b4541148c9568ed9b89524e37a)) - Ku6epXBOCTuK
+
+- - -
+
 ## [v0.1.1](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/1db83d12ff717bc2e282fe21d35d282f261147f5..v0.1.1) - 2026-10-04
 #### Bug Fixes
 - google analytics only on production - ([e1fc11c](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/e1fc11cb5491a6f5be5c823140830672ea669a62)) - Ku6epXBOCTuK
