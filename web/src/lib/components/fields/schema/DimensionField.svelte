@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { t } from "$lib/i18n/t";
-	import type {
-		Dimension,
-		DimensionSpec,
-		FieldSpec,
+	import {
+		SIZE_PRESETS,
+		type Dimension,
+		type DimensionSpec,
+		type FieldSpec,
 	} from "$lib/registry-schema";
+	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
 		value: unknown;
 		spec: FieldSpec;
-		onchange?: (value: Dimension, axis?: "width" | "height") => void;
+		onchange?: (value: Dimension, axis?: "width" | "height" | "both") => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
@@ -32,6 +34,11 @@
 
 	function setAxis(axis: "width" | "height", n: number) {
 		onchange?.({ ...current, [axis]: n }, axis);
+	}
+
+	function applyPreset(n: number) {
+		// Пресет задаёт обе оси явно — lockAspect его не пересчитывает.
+		onchange?.({ width: n, height: n }, "both");
 	}
 </script>
 
@@ -60,6 +67,17 @@
 			/>
 		</label>
 	</div>
+	{#if sp.presets}
+		<div class="dimension-presets">
+			{#each SIZE_PRESETS as n (n)}
+				<ChipButton
+					label={`${n}×${n}`}
+					active={current.width === n && current.height === n}
+					onclick={() => applyPreset(n)}
+				/>
+			{/each}
+		</div>
+	{/if}
 </Control>
 
 <style>
@@ -80,5 +98,11 @@
 		border-radius: var(--radius-s);
 		color: var(--color-text);
 		font: var(--font-size-s) var(--font-mono);
+	}
+	.dimension-presets {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-s);
+		margin-top: var(--space-m);
 	}
 </style>

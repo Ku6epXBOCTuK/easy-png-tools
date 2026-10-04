@@ -43,10 +43,26 @@ test("resize-png keeps user-set size when another image is uploaded", async ({
 	await uploadImage(page, opaquePng);
 	const width = page.getByRole("spinbutton", { name: "Width" });
 	await width.fill("25");
+	// keepAspect включён по умолчанию: высота пересчитана из 64×48 → 19
+	await expect(page.getByRole("spinbutton", { name: "Height" })).toHaveValue(
+		"19",
+	);
 	await uploadImage(page, landscapePng);
 	await expect(width).toHaveValue("25");
 	await expect(page.getByRole("spinbutton", { name: "Height" })).toHaveValue(
-		"48",
+		"19",
+	);
+});
+
+test("resize-png applies size preset chips", async ({ page }) => {
+	await openTool(page, "resize-png");
+	await uploadImage(page, opaquePng);
+	await page.getByRole("button", { name: "32×32" }).click();
+	await expect(page.getByRole("spinbutton", { name: "Width" })).toHaveValue(
+		"32",
+	);
+	await expect(page.getByRole("spinbutton", { name: "Height" })).toHaveValue(
+		"32",
 	);
 });
 
@@ -141,7 +157,7 @@ test("reset restores defaults and re-runs with the source", async ({
 	await radius.fill("20");
 	await expect(radius).toHaveValue("20");
 
-	await page.getByRole("button", { name: "Reset" }).click();
+	await page.getByRole("button", { name: "Reset", exact: true }).click();
 	await expect(radius).toHaveValue("4");
 	await expect(sourceImage(page)).toBeVisible();
 	await expect(resultImage(page)).toBeVisible();

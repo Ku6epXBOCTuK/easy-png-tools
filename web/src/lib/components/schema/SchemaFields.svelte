@@ -30,7 +30,7 @@
 		spec: FieldSpec;
 		toolId: string;
 		fieldId: string;
-		onchange?: (value: unknown, axis?: "width" | "height") => void;
+		onchange?: (value: unknown, axis?: "width" | "height" | "both") => void;
 	}
 
 	const FIELDS: Record<FieldSpecKind, Component<FieldControlProps>> = {
@@ -54,7 +54,11 @@
 		schema: ToolSchema<Record<string, unknown>>;
 		values: Record<string, unknown>;
 		toolId: string;
-		onchange: (id: string, value: unknown, axis?: "width" | "height") => void;
+		onchange: (
+			id: string,
+			value: unknown,
+			axis?: "width" | "height" | "both",
+		) => void;
 		onreset: () => void;
 	}
 	let { schema, values, toolId, onchange, onreset }: Props = $props();

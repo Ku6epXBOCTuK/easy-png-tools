@@ -90,6 +90,7 @@ export const createEmptySchema = toolSchema<CreateEmptyParams>(
 			max: 20000,
 			width: 800,
 			height: 600,
+			presets: true,
 		}),
 		transparent: field.checkbox({ label: "fields.transparent", default: true }),
 		color: field.color({ label: "fields.fillColor", default: "#ffffff" }),
@@ -130,6 +131,7 @@ export const singleColorSchema = toolSchema<SingleColorParams>({
 		max: 20000,
 		width: 256,
 		height: 256,
+		presets: true,
 	}),
 	color: field.color({ label: "fields.color", default: "#ff0000" }),
 });
@@ -157,6 +159,7 @@ export const randomNoiseSchema = toolSchema<RandomNoiseParams>({
 		max: 5000,
 		width: 512,
 		height: 512,
+		presets: true,
 	}),
 	seed: field.number({
 		label: "fields.seed",
@@ -191,6 +194,7 @@ export const linearGradientSchema = toolSchema<LinearGradientParams>(
 			max: 20000,
 			width: 800,
 			height: 600,
+			presets: true,
 		}),
 		gradient: field.gradient({
 			label: "fields.gradient",
@@ -241,6 +245,7 @@ export const colorSpectrumSchema = toolSchema<ColorSpectrumParams>(
 			max: 5000,
 			width: 1024,
 			height: 128,
+			presets: true,
 		}),
 		direction: field.select({
 			label: "fields.direction",
@@ -303,6 +308,7 @@ export const randomColorsSchema = toolSchema<RandomColorsParams>(
 			max: 5000,
 			width: 512,
 			height: 512,
+			presets: true,
 		}),
 		blockSize: field.slider({
 			label: "fields.blockSize",
@@ -357,6 +363,7 @@ export const drawGridSchema = toolSchema<DrawGridParams>(
 			max: 5000,
 			width: 512,
 			height: 512,
+			presets: true,
 		}),
 		cols: field.slider({
 			label: "fields.cols",
@@ -433,6 +440,7 @@ export const placeholderSchema = toolSchema<PlaceholderParams>(
 			max: 5000,
 			width: 800,
 			height: 400,
+			presets: true,
 		}),
 		backgroundColor: field.color({
 			label: "fields.backgroundColor",

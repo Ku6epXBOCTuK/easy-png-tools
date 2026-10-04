@@ -62,6 +62,9 @@ export interface Dimension {
 	height: number;
 }
 
+/** Единый список тайловых пресетов (квадраты) для dimension-полей. */
+export const SIZE_PRESETS = [16, 32, 64, 128, 256, 512] as const;
+
 export interface DimensionSpec extends FieldSpecBase {
 	kind: "dimension";
 	/** Общий диапазон для обоих измерений. */
@@ -75,6 +78,8 @@ export interface DimensionSpec extends FieldSpecBase {
 	 * оси пересчитывает вторую по аспекту текущего исходника.
 	 */
 	lockAspectWith?: string;
+	/** Показывать чипы быстрого выбора из SIZE_PRESETS. */
+	presets?: boolean;
 }
 
 export interface SchemaContext {
@@ -282,6 +287,7 @@ export const field = {
 		height: number;
 		defaultFromSource?: boolean;
 		lockAspectWith?: string;
+		presets?: boolean;
 	}): Field<Dimension> => ({
 		spec: { kind: "dimension", ...s },
 	}),

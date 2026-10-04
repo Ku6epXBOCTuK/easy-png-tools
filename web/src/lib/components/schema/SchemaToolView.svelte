@@ -74,9 +74,13 @@
 		values = defaultSchemaParams(schema);
 	}
 
-	function setValue(id: string, value: unknown, axis?: "width" | "height") {
+	function setValue(
+		id: string,
+		value: unknown,
+		axis?: "width" | "height" | "both",
+	) {
 		touched.add(id);
-		if (axis) lastAxis[id] = axis;
+		if (axis) lastAxis[id] = axis === "both" ? "width" : axis;
 		const next: Record<string, unknown> = { ...values, [id]: value };
 		const spec = schema?.fields[id]?.spec;
 		if (source && schema && spec) {
@@ -84,6 +88,7 @@
 			if (
 				spec.kind === "dimension" &&
 				spec.lockAspectWith &&
+				axis !== "both" &&
 				next[spec.lockAspectWith] === true
 			) {
 				next[id] = withAspectLock(

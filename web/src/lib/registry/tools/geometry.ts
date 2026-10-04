@@ -77,6 +77,7 @@ export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>(
 			max: 20000,
 			width: 800,
 			height: 600,
+			presets: true,
 		}),
 		transparent: field.checkbox({
 			label: "fields.transparent",
@@ -130,6 +131,7 @@ export const changeCanvasSizeSchema = toolSchema<ChangeCanvasSizeParams>(
 			max: 20000,
 			width: 800,
 			height: 600,
+			presets: true,
 		}),
 		anchor: field.select({
 			label: "fields.anchor",
@@ -186,6 +188,7 @@ export const resizeSchema = toolSchema<ResizeParams>(
 			height: 1,
 			defaultFromSource: true,
 			lockAspectWith: "keepAspect",
+			presets: true,
 		}),
 		keepAspect: field.checkbox({ label: "fields.keepAspect", default: true }),
 	},
@@ -254,6 +257,7 @@ export const cropSchema = toolSchema<CropParams>(
 			width: 1,
 			height: 1,
 			defaultFromSource: true,
+			presets: true,
 		}),
 	},
 	{

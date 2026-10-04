@@ -39,7 +39,7 @@
 		<span class="range-trailing">
 			<IconButton
 				icon={Minus}
-				label={t("ui.decrease")}
+				label={`${t("ui.decrease")} ${label}`}
 				variant="clear"
 				size="s"
 				disabled={atMin}
@@ -57,7 +57,7 @@
 			/>
 			<IconButton
 				icon={Plus}
-				label={t("ui.increase")}
+				label={`${t("ui.increase")} ${label}`}
 				variant="clear"
 				size="s"
 				disabled={atMax}
@@ -65,7 +65,7 @@
 			/>
 			<IconButton
 				icon={RotateCcw}
-				label={t("ui.reset")}
+				label={`${t("ui.reset")} ${label}`}
 				variant="clear"
 				size="s"
 				disabled={atDefault}
