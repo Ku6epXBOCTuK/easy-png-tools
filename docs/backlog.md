@@ -92,12 +92,12 @@
 - [ ] `SchemaTextResult` вердикт-бейдж рисует руками: свои классы
       `badge`/`badge-tone--{tone}` и свой CSS в `<style>` вместо
       `ui/Badge.svelte` — тон и разметка бейджа живут в двух местах
-      (`web/src/lib/components/SchemaTextResult.svelte`).
+      (`web/src/lib/components/schema/SchemaTextResult.svelte`).
 - [ ] `PreviewTile`: высота плитки задана только `min-height: clamp(...)`,
       поэтому она не следует за пропорциями результата — широкий результат
       уезжает в узкую полосу, а высокий упирается в `max-height: 100vh`. Нужно,
       чтобы соотношение сторон выбиралось по результату в диапазоне 16:9…9:16
-      (`web/src/lib/components/layout/PreviewTile.svelte`).
+      (`web/src/lib/components/schema/PreviewTile.svelte`).
 - [ ] Радиусы бордеров: `--radius-m` ненулевой и применён ко всем бордерам
       (`app.css`, `SchemaToolView.svelte`). Решить, где скругления реально есть
       в дизайне, а где должен быть 0

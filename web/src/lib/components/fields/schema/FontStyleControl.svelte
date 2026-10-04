@@ -6,6 +6,8 @@
 		FontStyle,
 		FontStyleSpec,
 	} from "$lib/registry-schema";
+	import ColorSwatchInput from "./ColorSwatchInput.svelte";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -43,8 +45,7 @@
 	];
 </script>
 
-<div class="control font-style-control">
-	<span class="fs-label">{label}</span>
+<Control {label} caps>
 	<div class="fs-grid">
 		<label class="fs-cell">
 			<span class="fs-sub">{t("ui.font")}</span>
@@ -73,15 +74,10 @@
 		</label>
 		<label class="fs-cell">
 			<span class="fs-sub">{t("ui.color")}</span>
-			<span class="fs-color">
-				<span class="swatch" style="background:{current.color}"></span>
-				<input
-					class="fs-color-input"
-					type="color"
-					value={current.color}
-					oninput={(e) => set("color", (e.target as HTMLInputElement).value)}
-				/>
-			</span>
+			<ColorSwatchInput
+				value={current.color}
+				onchange={(v) => set("color", v)}
+			/>
 		</label>
 		<label class="fs-cell fs-bold">
 			<span class="fs-sub">{t("ui.bold")}</span>
@@ -92,23 +88,9 @@
 			/>
 		</label>
 	</div>
-</div>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.fs-label {
-		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-	}
 	.fs-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -122,8 +104,7 @@
 		font-size: var(--font-size-s);
 	}
 	.fs-select,
-	.fs-input,
-	.fs-color-input {
+	.fs-input {
 		width: 100%;
 		padding: var(--space-m) var(--space-l);
 		background: var(--color-background);
@@ -131,23 +112,6 @@
 		border-radius: var(--radius-s);
 		color: var(--color-text);
 		font: var(--font-size-s) var(--font-mono);
-	}
-	.fs-color {
-		display: grid;
-		grid-template-columns: var(--space-xxl) 1fr;
-		align-items: center;
-		gap: var(--space-m);
-	}
-	.swatch {
-		width: var(--space-xxl);
-		height: var(--space-xxl);
-		border-radius: var(--radius-s);
-		border: var(--size-border) solid var(--color-border);
-	}
-	.fs-color-input {
-		height: var(--space-xxl);
-		padding: 0;
-		cursor: pointer;
 	}
 	.fs-bold {
 		display: flex;

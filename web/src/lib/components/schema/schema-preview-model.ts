@@ -1,5 +1,5 @@
-import type { PixelImage } from "../core/types";
-import type { FileResult, InputMode, ResultKind } from "../registry";
+import type { PixelImage } from "$lib/core/types";
+import type { FileResult, InputMode, ResultKind } from "$lib/registry";
 
 export type PreviewTranslate = (key: string) => string;
 

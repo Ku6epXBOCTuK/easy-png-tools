@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { optionLabel } from "$lib/i18n/schema-tool-strings";
 	import type { FieldSpec, SelectSpec } from "$lib/registry-schema";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -20,8 +21,7 @@
 	);
 </script>
 
-<label class="control">
-	<span>{label}</span>
+<Control element="label" {label}>
 	<select
 		class="select-field"
 		value={current}
@@ -33,17 +33,9 @@
 			</option>
 		{/each}
 	</select>
-</label>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
 	.select-field {
 		width: 100%;
 		padding: var(--space-m) var(--space-l);

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Ellipsis, GripVertical, X } from "@lucide/svelte";
+	import IconButton from "$lib/components/ui/IconButton.svelte";
 	import { t } from "$lib/i18n/t";
 	import type { Snippet } from "svelte";
 
@@ -26,14 +27,13 @@
 			</div>
 			<div class="step-tools">
 				{#if tools}{@render tools()}{/if}
-				<button
-					type="button"
-					class="step-remove"
-					aria-label={t("chain.removeStepAria")}
+				<IconButton
+					icon={X}
+					label={t("chain.removeStepAria")}
+					variant="clear"
+					size="s"
 					onclick={() => onremove?.()}
-				>
-					<X size={16} />
-				</button>
+				/>
 				<Ellipsis size={17} />
 			</div>
 		</div>
@@ -81,23 +81,9 @@
 		align-items: center;
 		gap: var(--space-l);
 	}
-	.step-remove {
-		border: 0;
-		background: transparent;
-		color: var(--color-text-muted);
-		cursor: pointer;
-		line-height: inherit;
-		& :global(svg) {
-			display: block;
-			line-height: inherit;
-		}
-	}
 	.step-card :global(.drag) {
 		margin-top: var(--space-xl);
 		color: var(--color-border);
-	}
-	.step-remove:hover {
-		color: var(--color-danger);
 	}
 	.step-body > :not(.step-heading) {
 		padding: var(--space-l);

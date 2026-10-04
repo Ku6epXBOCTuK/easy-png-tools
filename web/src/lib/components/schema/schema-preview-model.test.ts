@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { makeImage } from "../core/test-helpers";
+import { makeImage } from "../../core/test-helpers";
 import {
 	buildSchemaPreviewModel,
 	type PreviewTranslate,

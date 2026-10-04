@@ -2,7 +2,7 @@
 	import { verdictText, verdictTone } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import { Copy, Download, FileText } from "@lucide/svelte";
-	import IconButton from "./ui/IconButton.svelte";
+	import IconButton from "$lib/components/ui/IconButton.svelte";
 
 	interface Props {
 		value: string;

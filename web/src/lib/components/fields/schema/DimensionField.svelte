@@ -5,6 +5,7 @@
 		DimensionSpec,
 		FieldSpec,
 	} from "$lib/registry-schema";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -34,8 +35,7 @@
 	}
 </script>
 
-<div class="control dimension-control">
-	<span class="dimension-label">{label}</span>
+<Control {label} caps>
 	<div class="dimension-field">
 		<label class="dimension-axis">
 			<span>{t("ui.width")}</span>
@@ -60,23 +60,9 @@
 			/>
 		</label>
 	</div>
-</div>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.dimension-label {
-		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-	}
 	.dimension-field {
 		display: grid;
 		grid-template-columns: 1fr 1fr;

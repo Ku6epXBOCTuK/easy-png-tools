@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { PREVIEW_GROUPS, PREVIEW_TOTAL } from "$lib/catalog";
-	import CatalogGroup from "$lib/components/CatalogGroup.svelte";
-	import CatalogHeader from "$lib/components/CatalogHeader.svelte";
-	import CatalogToolbar from "$lib/components/CatalogToolbar.svelte";
-	import ToolCard from "$lib/components/ToolCard.svelte";
+	import CatalogGroup from "$lib/components/catalog/CatalogGroup.svelte";
+	import CatalogHeader from "$lib/components/catalog/CatalogHeader.svelte";
+	import CatalogToolbar from "$lib/components/catalog/CatalogToolbar.svelte";
+	import ToolCard from "$lib/components/catalog/ToolCard.svelte";
 	import {
 		pageDescription,
 		pageTitle,

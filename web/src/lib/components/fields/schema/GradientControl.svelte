@@ -1,5 +1,7 @@
 <script lang="ts">
 	import AngleControl from "./AngleControl.svelte";
+	import ColorSwatchInput from "./ColorSwatchInput.svelte";
+	import Control from "./Control.svelte";
 	import { t } from "$lib/i18n/t";
 	import type { FieldSpec, Gradient, GradientSpec } from "$lib/registry-schema";
 
@@ -29,46 +31,21 @@
 	}
 </script>
 
-<div class="control gradient-control">
-	<span class="gradient-label">{label}</span>
+<Control {label} caps>
 	<div class="gradient-colors">
 		<label class="color-field">
 			<span>{t("ui.from")}</span>
-			<span class="swatch" style="background:{current.from}"></span>
-			<input
-				type="color"
-				value={current.from}
-				oninput={(e) => set("from", (e.target as HTMLInputElement).value)}
-			/>
+			<ColorSwatchInput value={current.from} onchange={(v) => set("from", v)} />
 		</label>
 		<label class="color-field">
 			<span>{t("ui.to")}</span>
-			<span class="swatch" style="background:{current.to}"></span>
-			<input
-				type="color"
-				value={current.to}
-				oninput={(e) => set("to", (e.target as HTMLInputElement).value)}
-			/>
+			<ColorSwatchInput value={current.to} onchange={(v) => set("to", v)} />
 		</label>
 	</div>
 	<AngleControl value={current.angle} onchange={(a) => set("angle", a)} />
-</div>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.gradient-label {
-		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-	}
 	.gradient-colors {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -76,22 +53,8 @@
 	}
 	.color-field {
 		display: grid;
-		grid-template-columns: auto var(--space-xxl) 1fr;
+		grid-template-columns: auto 1fr;
 		align-items: center;
 		gap: var(--space-m);
-	}
-	.swatch {
-		width: var(--space-xxl);
-		height: var(--space-xxl);
-		border-radius: var(--radius-s);
-		border: var(--size-border) solid var(--color-border);
-	}
-	.color-field input[type="color"] {
-		width: 100%;
-		height: var(--space-xxl);
-		padding: 0;
-		background: var(--color-background);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-s);
 	}
 </style>

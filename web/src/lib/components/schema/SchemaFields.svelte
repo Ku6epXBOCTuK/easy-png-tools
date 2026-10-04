@@ -9,19 +9,20 @@
 	import { t } from "$lib/i18n/t";
 	import { RotateCcw } from "@lucide/svelte";
 	import type { Component } from "svelte";
-	import DimensionField from "./fields/DimensionField.svelte";
-	import CheckboxControl from "./fields/schema/CheckboxControl.svelte";
-	import ColorControl from "./fields/schema/ColorControl.svelte";
-	import ColorPairControl from "./fields/schema/ColorPairControl.svelte";
-	import ColorsControl from "./fields/schema/ColorsControl.svelte";
-	import RangeControl from "./fields/schema/RangeControl.svelte";
-	import SelectControl from "./fields/schema/SelectControl.svelte";
-	import TextControl from "./fields/schema/TextControl.svelte";
-	import OffsetControl from "./fields/schema/OffsetControl.svelte";
-	import PositionControl from "./fields/schema/PositionControl.svelte";
-	import FontStyleControl from "./fields/schema/FontStyleControl.svelte";
-	import PlateControl from "./fields/schema/PlateControl.svelte";
-	import GradientControl from "./fields/schema/GradientControl.svelte";
+	import Button from "$lib/components/ui/Button.svelte";
+	import DimensionField from "$lib/components/fields/schema/DimensionField.svelte";
+	import CheckboxControl from "$lib/components/fields/schema/CheckboxControl.svelte";
+	import ColorControl from "$lib/components/fields/schema/ColorControl.svelte";
+	import ColorPairControl from "$lib/components/fields/schema/ColorPairControl.svelte";
+	import ColorsControl from "$lib/components/fields/schema/ColorsControl.svelte";
+	import RangeControl from "$lib/components/fields/schema/RangeControl.svelte";
+	import SelectControl from "$lib/components/fields/schema/SelectControl.svelte";
+	import TextControl from "$lib/components/fields/schema/TextControl.svelte";
+	import OffsetControl from "$lib/components/fields/schema/OffsetControl.svelte";
+	import PositionControl from "$lib/components/fields/schema/PositionControl.svelte";
+	import FontStyleControl from "$lib/components/fields/schema/FontStyleControl.svelte";
+	import PlateControl from "$lib/components/fields/schema/PlateControl.svelte";
+	import GradientControl from "$lib/components/fields/schema/GradientControl.svelte";
 
 	interface FieldControlProps {
 		label: string;
@@ -86,10 +87,13 @@
 {/each}
 
 <div class="panel-foot">
-	<button class="reset-btn" onclick={onreset}>
-		<RotateCcw size={14} />
-		{t("ui.reset")}
-	</button>
+	<Button
+		icon={RotateCcw}
+		label={t("ui.reset")}
+		variant="clear"
+		size="s"
+		onclick={onreset}
+	/>
 	<span class="auto-note"><i></i> {t("ui.autoUpdate")}</span>
 </div>
 
@@ -119,19 +123,6 @@
 		margin-top: var(--space-xl);
 		padding-top: var(--space-l);
 		border-top: var(--size-border) solid var(--color-border);
-	}
-	.reset-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-m);
-		background: none;
-		border: none;
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		cursor: pointer;
-	}
-	.reset-btn:hover {
-		color: var(--color-text);
 	}
 	.auto-note i {
 		width: var(--size-border-thick);

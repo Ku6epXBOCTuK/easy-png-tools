@@ -3,7 +3,7 @@
 	import type { PixelImage } from "$lib/core/types";
 	import { t } from "$lib/i18n/t";
 	import type { InputMode } from "$lib/registry";
-	import PreviewTile from "./layout/PreviewTile.svelte";
+	import PreviewTile from "./PreviewTile.svelte";
 	import SchemaTextSource from "./SchemaTextSource.svelte";
 
 	interface Props {

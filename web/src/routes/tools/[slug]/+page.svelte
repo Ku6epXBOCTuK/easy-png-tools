@@ -1,6 +1,6 @@
 <script lang="ts">
-	import EmptyState from "$lib/components/EmptyState.svelte";
-	import SchemaToolView from "$lib/components/SchemaToolView.svelte";
+	import EmptyState from "$lib/components/feedback/EmptyState.svelte";
+	import SchemaToolView from "$lib/components/schema/SchemaToolView.svelte";
 	import { t } from "$lib/i18n/t";
 	import { getPageBySlug, getTool } from "$lib/registry";
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";

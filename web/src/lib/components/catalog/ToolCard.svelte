@@ -2,7 +2,7 @@
 	import { resolve } from "$app/paths";
 	import { ArrowUpRight } from "@lucide/svelte";
 	import type { Component } from "svelte";
-	import Icon from "./ui/Icon.svelte";
+	import Icon from "$lib/components/ui/Icon.svelte";
 
 	interface Props {
 		title: string;

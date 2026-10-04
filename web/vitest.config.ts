@@ -20,7 +20,7 @@ export default defineConfig({
 				"src/lib/**/test-helpers.ts",
 				"src/lib/**/*.svelte.ts",
 				"src/lib/executor/executor.worker.ts",
-				"src/lib/components/define.ts",
+				"src/lib/components/ui/define.ts",
 				"src/lib/core/domText.ts",
 				"src/lib/core/io.ts",
 				"src/lib/i18n/en.ts",

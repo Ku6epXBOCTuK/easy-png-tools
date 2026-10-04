@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CheckboxSpec, FieldSpec } from "$lib/registry-schema";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -15,30 +16,16 @@
 	);
 </script>
 
-<label class="control checkbox-control">
-	<span>{label}</span>
+<Control element="label" {label} row>
 	<input
 		type="checkbox"
 		class="checkbox-field"
 		checked={current}
 		onchange={(e) => onchange?.((e.target as HTMLInputElement).checked)}
 	/>
-</label>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.checkbox-control {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
 	.checkbox-field {
 		width: var(--space-xl);
 		height: var(--space-xl);

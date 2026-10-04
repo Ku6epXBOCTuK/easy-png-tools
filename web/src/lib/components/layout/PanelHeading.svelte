@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from "svelte";
-	import MonoLabel from "./MonoLabel.svelte";
+	import MonoLabel from "$lib/components/display/MonoLabel.svelte";
 
 	interface Props {
 		title: string;

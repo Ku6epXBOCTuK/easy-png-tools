@@ -5,6 +5,7 @@
 		type FieldSpec,
 		type Position9Spec,
 	} from "$lib/registry-schema";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -23,8 +24,7 @@
 	);
 </script>
 
-<div class="control position-control">
-	<span class="position-label">{label}</span>
+<Control {label} caps>
 	<div class="grid">
 		{#each POSITION9_VALUES as position (position)}
 			<button
@@ -38,23 +38,9 @@
 			</button>
 		{/each}
 	</div>
-</div>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.position-label {
-		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-	}
 	.grid {
 		display: inline-grid;
 		grid-template-columns: repeat(3, var(--space-xl));

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { FieldSpec, TextSpec } from "$lib/registry-schema";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -13,8 +14,7 @@
 	const current = $derived(typeof value === "string" ? value : sp.default);
 </script>
 
-<label class="control">
-	<span>{label}</span>
+<Control element="label" {label}>
 	<input
 		class="text-field"
 		type="text"
@@ -22,17 +22,9 @@
 		placeholder={sp.placeholder}
 		oninput={(e) => onchange?.((e.target as HTMLInputElement).value)}
 	/>
-</label>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
 	.text-field {
 		width: 100%;
 		padding: var(--space-m) var(--space-l);

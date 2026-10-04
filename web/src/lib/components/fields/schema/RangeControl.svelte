@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { FieldSpec, NumberSpec, SliderSpec } from "$lib/registry-schema";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -19,11 +20,10 @@
 	}
 </script>
 
-<label class="control">
-	<span>
-		{label}
+<Control element="label" {label}>
+	{#snippet trailing()}
 		<output>{current}</output>
-	</span>
+	{/snippet}
 	<input
 		aria-label={label}
 		type="range"
@@ -33,22 +33,10 @@
 		value={current}
 		oninput={handle}
 	/>
-</label>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.control > span {
-		display: flex;
-		justify-content: space-between;
-	}
-	.control output {
+	output {
 		color: var(--color-text);
 	}
 	input[type="range"] {

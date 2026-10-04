@@ -19,7 +19,10 @@ web/src/lib/
   core/                # операции над ImageData; без DOM, кроме io.ts/domText.ts
   executor/            # единственная точка исполнения инструментов
   i18n/                # словари ru/en, t(), состояние локали
-  components/          # UI (fields/, layout/, ui/, schema-компоненты)
+  components/          # UI по слоям: ui/ примитивы, layout/ каркас,
+                       # catalog/ каталог, schema/ view инструмента,
+                       # fields/ поля (+ fields/schema/ контролы схемы),
+                       # display/ типографика и карточки, feedback/ состояния
   zip.ts               # сборка мультифайлового результата (1 → many)
   theme.svelte.ts      # light/dark + localStorage
 web/src/routes/
@@ -49,9 +52,10 @@ Coverage). Всё остальное в `core/**` — чистые функци�
   него нет. Модель страницы уже хранит список `steps`, но исполняет первый шаг,
   а `registry.test.ts` требует, чтобы шаг был ровно один: композиция формы из
   полей двух инструментов — отдельная работа, описанная как фаза 11
-  `docs/roadmap.md`. Под неё зарезервированы `components/StepCard.svelte`
-  (сейчас импортируется только витриной `/kit`) и ключи `chain.*`,
-  `errors.badPipelineShape`, `errors.pipelineVersion`, `errors.noSteps`.
+  `docs/roadmap.md`. Под неё зарезервированы
+  `components/display/StepCard.svelte` (сейчас импортируется только витриной
+  `/kit`) и ключи `chain.*`, `errors.badPipelineShape`,
+  `errors.pipelineVersion`, `errors.noSteps`.
 - **Разделения страниц, которые делят один инструмент** — сводит все
   convert-страницы на один инструмент; задача в `docs/backlog.md`. Пока
   `registry.test.ts` не требует, чтобы на инструмент ссылались две страницы, а
@@ -169,8 +173,7 @@ registry/{tools,pages}/*.ts
   допустимому виду. Правка поведения полей идёт здесь, а не в компоненте.
 
 Новый вид поля требует: спека + фабрика `field.*` → запись в `fieldSpecs` →
-контрол (`components/fields/schema/`, а для `dimension` —
-`fields/DimensionField.svelte`) → ключ в `FIELDS` → дефолт и санитизация →
+контрол (`components/fields/schema/`) → ключ в `FIELDS` → дефолт и санитизация →
 i18n-подписи → тест в `registry-schema.test.ts`.
 
 ## 5. Исполнение

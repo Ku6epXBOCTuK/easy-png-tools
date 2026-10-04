@@ -1,26 +1,28 @@
 <script lang="ts">
-	import CheckerCanvas from "$lib/components/CheckerCanvas.svelte";
-	import CodeBlock from "$lib/components/CodeBlock.svelte";
-	import EmptyState from "$lib/components/EmptyState.svelte";
+	import ToolCard from "$lib/components/catalog/ToolCard.svelte";
+	import CheckerCanvas from "$lib/components/display/CheckerCanvas.svelte";
+	import CodeBlock from "$lib/components/display/CodeBlock.svelte";
+	import ImageCard from "$lib/components/display/ImageCard.svelte";
+	import MetaList from "$lib/components/display/MetaList.svelte";
+	import SettingGroup from "$lib/components/display/SettingGroup.svelte";
+	import SettingsFooter from "$lib/components/display/SettingsFooter.svelte";
+	import StepCard from "$lib/components/display/StepCard.svelte";
+	import EmptyState from "$lib/components/feedback/EmptyState.svelte";
+	import StatusLine from "$lib/components/feedback/StatusLine.svelte";
 	import CheckboxField from "$lib/components/fields/CheckboxField.svelte";
 	import ColorField from "$lib/components/fields/ColorField.svelte";
 	import SelectField from "$lib/components/fields/SelectField.svelte";
 	import SliderField from "$lib/components/fields/SliderField.svelte";
 	import TextField from "$lib/components/fields/TextField.svelte";
-	import ImageCard from "$lib/components/ImageCard.svelte";
 	import Panel from "$lib/components/layout/Panel.svelte";
-	import MetaList from "$lib/components/MetaList.svelte";
-	import SettingGroup from "$lib/components/SettingGroup.svelte";
-	import SettingsFooter from "$lib/components/SettingsFooter.svelte";
-	import StatusLine from "$lib/components/StatusLine.svelte";
-	import StepCard from "$lib/components/StepCard.svelte";
-	import ToolCard from "$lib/components/ToolCard.svelte";
 	import Badge from "$lib/components/ui/Badge.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import DownloadButton from "$lib/components/ui/DownloadButton.svelte";
 	import IconButton from "$lib/components/ui/IconButton.svelte";
 	import Segmented from "$lib/components/ui/Segmented.svelte";
 	import Toggle from "$lib/components/ui/Toggle.svelte";
+	import UploadButton from "$lib/components/ui/UploadButton.svelte";
 	import { Download, ImageOff, Plus, Trash2 } from "@lucide/svelte";
 
 	import { PAGES } from "$lib/registry";
@@ -52,6 +54,26 @@
 				<Button variant="outline" onclick={() => {}} label="Outline" />
 				<Button variant="accent" onclick={() => {}} label="Accent" />
 				<Button variant="danger" onclick={() => {}} label="Danger" />
+				<Button variant="clear" onclick={() => {}} label="Clear" />
+			</SettingGroup>
+			<SettingGroup label="size s">
+				<Button size="s" onclick={() => {}} label="Primary" />
+				<Button size="s" variant="outline" onclick={() => {}} label="Outline" />
+				<Button size="s" variant="clear" onclick={() => {}} label="Clear" />
+				<IconButton size="s" icon={Plus} label="Add" onclick={() => {}} />
+				<IconButton
+					size="s"
+					variant="clear"
+					icon={Trash2}
+					label="Delete"
+					onclick={() => {}}
+				/>
+			</SettingGroup>
+			<SettingGroup label="chips">
+				<ChipButton label="All" active onclick={() => {}} />
+				<ChipButton label="Convert" onclick={() => {}} />
+				<ChipButton label="0°" variant="outline" active onclick={() => {}} />
+				<ChipButton label="90°" variant="outline" onclick={() => {}} />
 			</SettingGroup>
 			<SettingGroup label="states">
 				<Button disabled onclick={() => {}} label="Disabled" />
@@ -71,6 +93,7 @@
 			</SettingGroup>
 		</div>
 		<SettingsFooter>
+			<UploadButton label="Open image" onfile={() => {}} />
 			<DownloadButton label="Download PNG" onclick={() => {}} />
 		</SettingsFooter>
 	</Panel>

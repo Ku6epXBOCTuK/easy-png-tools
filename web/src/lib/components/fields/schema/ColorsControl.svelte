@@ -1,10 +1,14 @@
 <script lang="ts">
+	import { X } from "@lucide/svelte";
+	import Button from "$lib/components/ui/Button.svelte";
+	import IconButton from "$lib/components/ui/IconButton.svelte";
 	import { t } from "$lib/i18n/t";
 	import type {
 		ColorList,
 		ColorListSpec,
 		FieldSpec,
 	} from "$lib/registry-schema";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -41,8 +45,7 @@
 	}
 </script>
 
-<div class="control colors-control">
-	<span class="ctrl-label">{label}</span>
+<Control {label} caps>
 	<div class="chips">
 		{#each current as hex, i (i)}
 			<div class="chip">
@@ -55,38 +58,28 @@
 					/>
 				</label>
 				<span class="hex">{hex}</span>
-				<button
-					type="button"
-					class="remove"
+				<IconButton
+					icon={X}
+					label={t("ui.removeColor")}
+					variant="clear"
+					size="s"
 					onclick={() => removeColor(i)}
 					disabled={current.length <= 1}
-					aria-label={t("ui.removeColor")}
-				>
-					×
-				</button>
+				/>
 			</div>
 		{/each}
 	</div>
-	<button type="button" class="add" onclick={addColor}
-		>{t("ui.addColor")}</button
-	>
-</div>
+	<div class="add-row">
+		<Button
+			label={t("ui.addColor")}
+			variant="outline"
+			size="s"
+			onclick={addColor}
+		/>
+	</div>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.ctrl-label {
-		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-	}
 	.chips {
 		display: flex;
 		flex-wrap: wrap;
@@ -121,39 +114,8 @@
 		color: var(--color-text-muted);
 		font-size: var(--font-size-s);
 	}
-	.remove {
+	.add-row {
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: var(--space-xl);
-		height: var(--space-xl);
-		border: none;
-		border-radius: var(--radius-s);
-		background: none;
-		color: var(--color-text-muted);
-		font-size: var(--font-size-s);
-		cursor: pointer;
-	}
-	.remove:hover:not(:disabled) {
-		color: var(--color-text);
-		background: var(--color-background-muted);
-	}
-	.remove:disabled {
-		opacity: 0.4;
-		cursor: default;
-	}
-	.add {
-		justify-self: start;
-		padding: var(--space-s) var(--space-m);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-m);
-		background: none;
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		cursor: pointer;
-	}
-	.add:hover {
-		color: var(--color-text);
-		border-color: var(--color-text-muted);
+		justify-content: flex-start;
 	}
 </style>

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
-	import LangToggle from "../ui/LangToggle.svelte";
-	import ThemeToggle from "../ui/ThemeToggle.svelte";
-	import TopNav from "../ui/TopNav.svelte";
+	import LangToggle from "$lib/components/ui/LangToggle.svelte";
+	import ThemeToggle from "$lib/components/ui/ThemeToggle.svelte";
+	import TopNav from "./TopNav.svelte";
 
 	interface Props {
 		theme: "light" | "dark";

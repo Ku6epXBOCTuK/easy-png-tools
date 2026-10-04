@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { t } from "$lib/i18n/t";
 	import type { FieldSpec, Plate, PlateSpec } from "$lib/registry-schema";
+	import ColorSwatchInput from "./ColorSwatchInput.svelte";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -28,8 +30,7 @@
 	}
 </script>
 
-<div class="control plate-control">
-	<span class="plate-label">{label}</span>
+<Control {label} caps>
 	<div class="plate-row {current.enabled ? '' : 'off'}">
 		<label class="plate-enabled">
 			<span>{t("ui.backingPlate")}</span>
@@ -39,15 +40,11 @@
 				onchange={(e) => set("enabled", (e.target as HTMLInputElement).checked)}
 			/>
 		</label>
-		<label class="plate-color">
-			<span class="swatch" style="background:{current.color}"></span>
-			<input
-				type="color"
-				value={current.color}
-				disabled={!current.enabled}
-				oninput={(e) => set("color", (e.target as HTMLInputElement).value)}
-			/>
-		</label>
+		<ColorSwatchInput
+			value={current.color}
+			disabled={!current.enabled}
+			onchange={(v) => set("color", v)}
+		/>
 		<label class="plate-opacity">
 			<span>
 				{t("ui.opacity")}
@@ -65,23 +62,9 @@
 			/>
 		</label>
 	</div>
-</div>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.plate-label {
-		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-	}
 	.plate-row {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -100,26 +83,6 @@
 		width: var(--space-xl);
 		height: var(--space-xl);
 		accent-color: var(--color-main);
-	}
-	.plate-color {
-		display: grid;
-		grid-template-columns: var(--space-xxl) 1fr;
-		align-items: center;
-		gap: var(--space-m);
-	}
-	.swatch {
-		width: var(--space-xxl);
-		height: var(--space-xxl);
-		border-radius: var(--radius-s);
-		border: var(--size-border) solid var(--color-border);
-	}
-	.plate-color input[type="color"] {
-		width: 100%;
-		height: var(--space-xxl);
-		padding: 0;
-		background: var(--color-background);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-s);
 	}
 	.plate-opacity {
 		display: grid;

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Funnel, Search } from "@lucide/svelte";
+	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import { t } from "$lib/i18n/t";
 
 	interface Props {
@@ -33,14 +34,11 @@
 	<div class="catalog-filters">
 		<Funnel size={15} />
 		{#each FILTERS as f (f.value)}
-			<button
-				type="button"
-				class:active={category === f.value}
-				aria-pressed={category === f.value}
+			<ChipButton
+				label={f.label}
+				active={category === f.value}
 				onclick={() => (category = f.value)}
-			>
-				{f.label}
-			</button>
+			/>
 		{/each}
 	</div>
 </div>
@@ -80,21 +78,5 @@
 		gap: var(--space-s);
 		flex-wrap: wrap;
 		color: var(--color-text-muted);
-	}
-	.catalog-filters button {
-		border: var(--size-border) solid var(--color-border);
-		background: var(--color-panel);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-		text-transform: uppercase;
-		padding: var(--space-s) var(--space-m);
-		border-radius: var(--radius-m);
-		cursor: pointer;
-	}
-	.catalog-filters button.active {
-		background: var(--color-main);
-		color: var(--color-background);
-		border-color: var(--color-main);
 	}
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { FieldSpec, Offset, OffsetSpec } from "$lib/registry-schema";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -23,8 +24,7 @@
 	}
 </script>
 
-<div class="control offset-control">
-	<span class="offset-label">{label}</span>
+<Control {label} caps>
 	<div class="offset-field">
 		<label class="offset-axis">
 			<span>X</span>
@@ -49,23 +49,9 @@
 			/>
 		</label>
 	</div>
-</div>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.offset-label {
-		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-	}
 	.offset-field {
 		display: grid;
 		grid-template-columns: 1fr 1fr;

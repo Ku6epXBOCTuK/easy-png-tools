@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowUp, Upload } from "@lucide/svelte";
+	import Button from "$lib/components/ui/Button.svelte";
 	import { t } from "$lib/i18n/t";
 
 	interface Props {
@@ -36,15 +37,21 @@
 		}}></textarea>
 	<div class="actions">
 		{#if onsample}
-			<button type="button" class="secondary" onclick={onsample}>
-				<Upload size={14} />
-				{t("textSource.trySample")}
-			</button>
+			<Button
+				icon={Upload}
+				label={t("textSource.trySample")}
+				variant="outline"
+				size="s"
+				onclick={onsample}
+			/>
 		{/if}
-		<button type="button" class="render" onclick={onrender} {disabled}>
-			<ArrowUp size={14} />
-			{t("textSource.render")}
-		</button>
+		<Button
+			icon={ArrowUp}
+			label={t("textSource.render")}
+			size="s"
+			onclick={onrender}
+			{disabled}
+		/>
 	</div>
 </div>
 
@@ -75,37 +82,5 @@
 		display: flex;
 		gap: var(--space-m);
 		justify-content: flex-end;
-	}
-	.render {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-m);
-		padding: var(--space-m) var(--space-l);
-		border: var(--size-border) solid var(--color-main);
-		border-radius: var(--radius-m);
-		background: var(--color-main);
-		color: var(--color-background);
-		font: var(--font-size-s) var(--font-mono);
-		cursor: pointer;
-	}
-	.render:disabled {
-		opacity: 0.6;
-		cursor: default;
-	}
-	.secondary {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-m);
-		padding: var(--space-m) var(--space-l);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-m);
-		background: none;
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		cursor: pointer;
-	}
-	.secondary:hover {
-		color: var(--color-text);
-		border-color: var(--color-text-muted);
 	}
 </style>

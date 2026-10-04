@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import { t } from "$lib/i18n/t";
 
 	interface Preset {
@@ -49,10 +50,12 @@
 	</div>
 	<div class="angle-presets">
 		{#each presets as preset (preset.value)}
-			<button
-				class:active={preset.value === value}
-				onclick={() => onchange(preset.value)}>{preset.label}</button
-			>
+			<ChipButton
+				label={preset.label}
+				variant="outline"
+				active={preset.value === value}
+				onclick={() => onchange(preset.value)}
+			/>
 		{/each}
 	</div>
 </div>
@@ -87,23 +90,5 @@
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: var(--space-m);
-	}
-	.angle-presets button {
-		padding: var(--space-m) 0;
-		color: var(--color-text-muted);
-		background: var(--color-background);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-s);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-		cursor: pointer;
-	}
-	.angle-presets button:hover {
-		color: var(--color-text);
-		border-color: var(--color-main);
-	}
-	.angle-presets button.active {
-		color: var(--color-main);
-		border-color: var(--color-main);
 	}
 </style>

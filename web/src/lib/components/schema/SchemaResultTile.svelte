@@ -5,7 +5,7 @@
 	import type { FileResult, ResultKind } from "$lib/registry";
 	import { Check } from "@lucide/svelte";
 	import SchemaTextResult from "./SchemaTextResult.svelte";
-	import PreviewTile from "./layout/PreviewTile.svelte";
+	import PreviewTile from "./PreviewTile.svelte";
 
 	interface Props {
 		resultKind?: ResultKind;

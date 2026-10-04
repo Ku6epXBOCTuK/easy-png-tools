@@ -1,6 +1,6 @@
 <script lang="ts">
 	import StatusDot from "./StatusDot.svelte";
-	import MonoLabel from "./MonoLabel.svelte";
+	import MonoLabel from "$lib/components/display/MonoLabel.svelte";
 
 	interface Props {
 		label: string;

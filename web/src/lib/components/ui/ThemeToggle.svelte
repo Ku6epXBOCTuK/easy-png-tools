@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Moon, Sun } from "@lucide/svelte";
 	import { t } from "$lib/i18n/t";
-	import IconButton from "../ui/IconButton.svelte";
+	import IconButton from "./IconButton.svelte";
 
 	interface Props {
 		theme: "light" | "dark";

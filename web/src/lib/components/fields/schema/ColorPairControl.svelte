@@ -5,6 +5,8 @@
 		ColorPairSpec,
 		FieldSpec,
 	} from "$lib/registry-schema";
+	import ColorSwatchInput from "./ColorSwatchInput.svelte";
+	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
@@ -28,45 +30,26 @@
 	}
 </script>
 
-<div class="control color-pair-control">
-	<span class="pair-label">{label}</span>
+<Control {label} caps>
 	<div class="pair-field">
 		<label class="pair-axis">
-			<span class="swatch" style="background:{current.from}"></span>
-			<input
-				type="color"
+			<ColorSwatchInput
 				value={current.from}
-				oninput={(e) => setColor("from", (e.target as HTMLInputElement).value)}
+				onchange={(v) => setColor("from", v)}
 			/>
 			<span class="axis-label">{t("ui.from")}</span>
 		</label>
 		<label class="pair-axis">
-			<span class="swatch" style="background:{current.to}"></span>
-			<input
-				type="color"
+			<ColorSwatchInput
 				value={current.to}
-				oninput={(e) => setColor("to", (e.target as HTMLInputElement).value)}
+				onchange={(v) => setColor("to", v)}
 			/>
 			<span class="axis-label">{t("ui.to")}</span>
 		</label>
 	</div>
-</div>
+</Control>
 
 <style>
-	.control {
-		display: grid;
-		gap: var(--space-m);
-		margin-bottom: var(--space-xl);
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-m);
-	}
-	.pair-label {
-		color: var(--color-text);
-		font-size: var(--font-size-s);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-	}
 	.pair-field {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -74,25 +57,6 @@
 	}
 	.pair-axis {
 		display: grid;
-		grid-template-columns: var(--space-xxl) 1fr;
-		align-items: center;
 		gap: var(--space-m);
-	}
-	.swatch {
-		width: var(--space-xxl);
-		height: var(--space-xxl);
-		border-radius: var(--radius-s);
-		border: var(--size-border) solid var(--color-border);
-	}
-	.pair-axis input[type="color"] {
-		width: 100%;
-		height: var(--space-xxl);
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-s);
-		background: var(--color-background);
-		cursor: pointer;
-	}
-	.axis-label {
-		grid-column: 1 / -1;
 	}
 </style>
