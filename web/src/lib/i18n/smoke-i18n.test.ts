@@ -39,7 +39,6 @@ describe("Смоук §6 i18n (новый UI)", () => {
 			],
 			["chain.inputLegend", "Вход", "Input"],
 			["resultCard.nextTool", "Следующий инструмент", "Next tool"],
-			["paramsCard.toolSettings", "Настройки инструмента", "Tool settings"],
 			["download.busy", "Готовим файл", "Preparing file"],
 			["dropZone.pickDefault", "Перетащите изображение", "Drop an image"],
 		];

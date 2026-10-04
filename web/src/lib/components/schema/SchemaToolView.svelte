@@ -1,8 +1,10 @@
 <script lang="ts">
+	import AddStepButton from "./AddStepButton.svelte";
 	import SchemaFields from "./SchemaFields.svelte";
 	import SchemaPreview from "./SchemaPreview.svelte";
-	import { debounce } from "$lib/core/debounce";
+	import StepCard from "$lib/components/display/StepCard.svelte";
 	import { hasTransparency } from "$lib/core/analyze";
+	import { debounce } from "$lib/core/debounce";
 	import { ToolError, type ErrorVars } from "$lib/core/errors";
 	import {
 		decodeFile,
@@ -19,18 +21,33 @@
 		verdictText,
 	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
-	import type { FileResult, Page, Tool } from "$lib/registry";
+	import {
+		createChain,
+		insertStep,
+		loadChain,
+		moveStep,
+		removeStep,
+		saveChain,
+		type ChainStep,
+	} from "$lib/pipeline.svelte";
+	import {
+		getTool,
+		PAGES,
+		type FileResult,
+		type Page,
+		type Tool,
+		type ToolResult,
+	} from "$lib/registry";
 	import {
 		applySourceDefaults,
 		defaultSchemaParams,
-		sanitizeSchemaParams,
 		withAspectLock,
 		type Dimension,
 		type ToolSchema,
 	} from "$lib/registry-schema";
 	import { downloadZip } from "$lib/zip";
 	import { onMount } from "svelte";
-	import { SvelteSet } from "svelte/reactivity";
+	import { SvelteMap, SvelteSet } from "svelte/reactivity";
 
 	interface Props {
 		page: Page;
@@ -46,14 +63,14 @@
 	);
 
 	const inputMode = $derived(tool.input);
-	const resultKind = $derived(tool.result ?? "image");
 
-	let values = $state<Record<string, unknown>>({});
-	// Поля, изменённые пользователем: при загрузке нового файла им не даём
-	// перезаписаться source-дефолтами. Reset снимает пометку.
-	const touched = new SvelteSet<string>();
+	let steps = $state<ChainStep[]>([]);
+	// Поля, изменённые пользователем (по шагам): при загрузке нового файла им не
+	// даём перезаписаться source-дефолтами. Reset шага снимает пометку.
+	const touchedByStep = new SvelteMap<string, SvelteSet<string>>();
 	// Последняя правленая ось dimension-поля — ведущая при lockAspect.
 	const lastAxis: Record<string, "width" | "height"> = {};
+	let stepDims = $state<(Dimension | undefined)[]>([]);
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
 	let fileResult = $state<FileResult | null>(null);
@@ -64,10 +81,19 @@
 	);
 	let running = $state(false);
 	let displayError = $state<DisplayError | null>(null);
-	let started = $state(false);
+	let initedFor = $state("");
 	let format = $state<OutputMime>("image/png");
 	// Качество lossy-форматов для инструментов без quality-параметра в схеме.
 	let formatQuality = $state<Record<string, number>>({});
+	let dragFrom = $state<number | null>(null);
+
+	const lastTool = $derived(
+		(steps.length > 0 ? getTool(steps[steps.length - 1].id) : undefined) ??
+			tool,
+	);
+	const resultKind = $derived(lastTool.result ?? "image");
+	// Цепочку можно продолжить, только если последний шаг отдаёт картинку.
+	const canExtend = $derived((lastTool.result ?? "image") === "image");
 
 	const alphaLoss = $derived(
 		resultKind === "image" &&
@@ -75,19 +101,20 @@
 			!outputFormatByMime(format).supportsAlpha &&
 			hasTransparency(result),
 	);
-	// Если в схеме есть quality-параметр (convert-инструменты), он — единый
-	// источник качества; dropdown редактирует его же.
-	const qualityParamId = $derived(tool.output?.qualityParamId);
+	// Если в схеме последнего шага есть quality-параметр (convert-инструменты),
+	// он — единый источник качества; dropdown редактирует его же.
+	const qualityParamId = $derived(lastTool.output?.qualityParamId);
+	const lastParams = $derived(steps.at(-1)?.params);
 	const currentQuality = $derived.by(() => {
 		const setting = outputFormatByMime(format).settings?.quality;
 		if (!setting) return undefined;
-		if (qualityParamId) return Number(values[qualityParamId]);
+		if (qualityParamId && lastParams) return Number(lastParams[qualityParamId]);
 		return formatQuality[format] ?? setting.default;
 	});
 
 	function setFormatQuality(q: number) {
 		if (qualityParamId) {
-			setValue(qualityParamId, q);
+			setStepValue(steps.length - 1, qualityParamId, q);
 		} else {
 			formatQuality = { ...formatQuality, [format]: q };
 		}
@@ -103,24 +130,56 @@
 
 	const debouncedRun = debounce(() => run(), 200);
 
-	function init() {
-		if (!schema || started) return;
-		started = true;
-		values = defaultSchemaParams(schema);
-		format = tool.output?.mime ?? "image/png";
+	function touchedFor(key: string): SvelteSet<string> {
+		let set = touchedByStep.get(key);
+		if (!set) {
+			set = new SvelteSet();
+			touchedByStep.set(key, set);
+		}
+		return set;
 	}
 
-	function setValue(
+	function toolSchemaOf(step: ChainStep) {
+		return getTool(step.id)?.schema as ToolSchema<Record<string, unknown>>;
+	}
+
+	function stepTitle(toolId: string): string {
+		const owner = PAGES.find((p) => p.steps[0].id === toolId);
+		return owner ? pageTitle(owner) : toolId;
+	}
+
+	function init() {
+		if (!schema || page.slug === initedFor) return;
+		initedFor = page.slug;
+		steps = loadChain(page.slug) ?? createChain(page);
+		format = lastTool.output?.mime ?? "image/png";
+		source = null;
+		result = null;
+		fileResult = null;
+		textResult = null;
+		verdictVars = undefined;
+		displayError = null;
+	}
+
+	function setStepValue(
+		index: number,
 		id: string,
 		value: unknown,
 		axis?: "width" | "height" | "both",
 	) {
-		touched.add(id);
-		if (axis) lastAxis[id] = axis === "both" ? "width" : axis;
-		const next: Record<string, unknown> = { ...values, [id]: value };
-		const spec = schema?.fields[id]?.spec;
-		if (source && schema && spec) {
-			const aspect = source.width / source.height;
+		const step = steps[index];
+		if (!step) return;
+		touchedFor(step.key).add(id);
+		const axisKey = `${step.key}:${id}`;
+		if (axis) lastAxis[axisKey] = axis === "both" ? "width" : axis;
+		const next: Record<string, unknown> = { ...step.params, [id]: value };
+		const stepSchema = toolSchemaOf(step);
+		const spec = stepSchema?.fields[id]?.spec;
+		// Аспект считается от входа шага: для первого — исходник, для остальных —
+		// результат предыдущего шага (размеры известны после прогона).
+		const dims = index === 0 ? (source ?? undefined) : stepDims[index - 1];
+		if (dims && stepSchema && spec) {
+			const aspect = dims.width / dims.height;
 			if (
 				spec.kind === "dimension" &&
 				spec.lockAspectWith &&
@@ -129,31 +188,36 @@
 			) {
 				next[id] = withAspectLock(
 					value as Dimension,
-					lastAxis[id] ?? "width",
+					lastAxis[axisKey] ?? "width",
 					aspect,
 				);
 			} else if (spec.kind === "checkbox" && value === true) {
 				// Включили lockAspect — сразу подгоняем привязанные поля под аспект.
-				for (const [fid, f] of Object.entries(schema.fields)) {
+				for (const [fid, f] of Object.entries(stepSchema.fields)) {
 					const fs = f.spec;
 					if (fs.kind === "dimension" && fs.lockAspectWith === id) {
 						next[fid] = withAspectLock(
 							next[fid] as Dimension,
-							lastAxis[fid] ?? "width",
+							lastAxis[`${step.key}:${fid}`] ?? "width",
 							aspect,
 						);
 					}
 				}
 			}
 		}
-		values = next;
+		steps = steps.with(index, { ...step, params: next });
 	}
 
-	function reset() {
-		touched.clear();
-		values = schema
-			? defaultSchemaParams(schema, { source: source ?? undefined })
+	function resetStep(index: number) {
+		const step = steps[index];
+		if (!step) return;
+		touchedFor(step.key).clear();
+		const stepSchema = toolSchemaOf(step);
+		const dims = index === 0 ? (source ?? undefined) : stepDims[index - 1];
+		const params = stepSchema
+			? defaultSchemaParams(stepSchema, { source: dims })
 			: {};
+		steps = steps.with(index, { ...step, params });
 		result = null;
 		fileResult = null;
 		textResult = null;
@@ -161,58 +225,107 @@
 		displayError = null;
 	}
 
+	function addStepAt(index: number, toolId: string) {
+		steps = insertStep(steps, index, toolId);
+	}
+
+	function removeStepAt(key: string) {
+		steps = removeStep(steps, key);
+	}
+
+	function onStepDrop(e: DragEvent, to: number) {
+		e.preventDefault();
+		if (dragFrom !== null) steps = moveStep(steps, dragFrom, to);
+		dragFrom = null;
+	}
+
 	async function handleFile(file: File) {
 		displayError = null;
 		try {
 			const decoded = await decodeFile(file);
 			source = decoded;
-			if (schema) {
-				values = applySourceDefaults(
-					schema,
-					values,
-					{ source: decoded },
-					touched,
-				);
+			const first = steps[0];
+			const firstSchema = first ? toolSchemaOf(first) : undefined;
+			if (first && firstSchema) {
+				steps = steps.with(0, {
+					...first,
+					params: applySourceDefaults(
+						firstSchema,
+						first.params,
+						{ source: decoded },
+						touchedFor(first.key),
+					),
+				});
 			}
 		} catch (e) {
 			displayError = toDisplayError(e);
 		}
 	}
 
+	function assignResult(out: ToolResult) {
+		if (resultKind === "image") {
+			result = out as PixelImage;
+			textResult = null;
+			fileResult = null;
+		} else if (resultKind === "files") {
+			fileResult = out as FileResult;
+			result = null;
+			textResult = null;
+		} else {
+			if (typeof out === "string") {
+				textResult = out;
+				verdictVars = undefined;
+			} else if (out && "key" in out) {
+				textResult = out.key;
+				verdictVars = out.vars;
+			} else {
+				textResult = null;
+				verdictVars = undefined;
+			}
+			result = null;
+			fileResult = null;
+		}
+	}
+
 	async function run() {
-		if (!schema) return;
+		if (!schema || steps.length === 0) return;
 		displayError = null;
 		running = true;
 		try {
-			const out = await execute(tool, {
-				params: sanitizeSchemaParams(schema, values, {
-					source: source ?? undefined,
-				}),
-				source: source ?? undefined,
-				text: textSource || undefined,
-			});
-			if (resultKind === "image") {
-				result = out as PixelImage;
-				textResult = null;
-				fileResult = null;
-			} else if (resultKind === "files") {
-				fileResult = out as FileResult;
-				result = null;
-				textResult = null;
-			} else {
-				if (typeof out === "string") {
-					textResult = out;
-					verdictVars = undefined;
-				} else if (out && "key" in out) {
-					textResult = out.key;
-					verdictVars = out.vars;
-				} else {
-					textResult = null;
-					verdictVars = undefined;
+			let current: PixelImage | undefined = source ?? undefined;
+			const dims: (Dimension | undefined)[] = [];
+			let out: ToolResult = "";
+			for (let i = 0; i < steps.length; i++) {
+				const stepTool = getTool(steps[i].id);
+				if (!stepTool) continue;
+				try {
+					out = await execute(stepTool, {
+						params: steps[i].params,
+						source: stepTool.input === "image" ? current : undefined,
+						text:
+							stepTool.input === "text" ? textSource || undefined : undefined,
+					});
+				} catch (e) {
+					const base = toDisplayError(e);
+					const msg = base.kind === "i18n" ? t(base.key, base.vars) : base.text;
+					throw new Error(
+						t("chain.stepError", {
+							n: i + 1,
+							title: stepTitle(stepTool.id),
+							msg,
+						}),
+						{ cause: e },
+					);
 				}
-				result = null;
-				fileResult = null;
+				if (out && typeof out === "object" && "data" in out) {
+					current = out as PixelImage;
+					dims[i] = { width: current.width, height: current.height };
+				} else {
+					current = undefined;
+				}
 			}
+			stepDims = dims;
+			assignResult(out);
 		} catch (e) {
 			displayError = toDisplayError(e);
 		} finally {
@@ -247,7 +360,7 @@
 		if (!textResult) return;
 		const copyValue =
 			resultKind === "verdict"
-				? verdictText(tool.id, textResult, verdictVars)
+				? verdictText(lastTool.id, textResult, verdictVars)
 				: textResult;
 		try {
 			await navigator.clipboard.writeText(copyValue);
@@ -270,6 +383,13 @@
 		init();
 	});
 
+	// Цепочка персистится по slug страницы; сохраняем после инициализации.
+	$effect(() => {
+		if (!initedFor) return;
+		void steps;
+		saveChain(initedFor, steps);
+	});
+
 	onMount(() => {
 		if (inputMode !== "image") return;
 		function onPaste(e: ClipboardEvent) {
@@ -290,10 +410,10 @@
 	});
 
 	$effect(() => {
-		if (!started) return;
+		if (!initedFor) return;
 		if (inputMode === "image" && !source) return;
 		if (inputMode === "text" && !textSource.trim()) return;
-		void values;
+		void steps;
 		void source;
 		debouncedRun();
 		return () => debouncedRun.cancel();
@@ -318,23 +438,49 @@
 		</header>
 
 		<div class="workspace">
-			<section class="panel settings">
-				<div class="panel-head">
-					<span class="label">{t("paramsCard.toolSettings")}</span>
-					<strong>{t("paramsCard.configureOutput")}</strong>
-				</div>
-				<SchemaFields
-					{schema}
-					{values}
-					toolId={tool.id}
-					onchange={setValue}
-					onreset={reset}
-				/>
+			<section class="settings">
+				{#if canExtend}
+					<AddStepButton onadd={(id) => addStepAt(0, id)} />
+				{/if}
+				{#each steps as step, i (step.key)}
+					<StepCard
+						index={i + 1}
+						title={stepTitle(step.id)}
+						draggable
+						onremove={steps.length > 1
+							? () => removeStepAt(step.key)
+							: undefined}
+						ondragstart={(e) => {
+							dragFrom = i;
+							if (e.dataTransfer) {
+								e.dataTransfer.effectAllowed = "move";
+								e.dataTransfer.setData("text/plain", String(i));
+							}
+						}}
+						ondragover={(e) => {
+							e.preventDefault();
+							if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+						}}
+						ondrop={(e) => onStepDrop(e, i)}
+						ondragend={() => (dragFrom = null)}
+					>
+						<SchemaFields
+							schema={toolSchemaOf(step)}
+							values={step.params}
+							toolId={step.id}
+							onchange={(id, v, axis) => setStepValue(i, id, v, axis)}
+							onreset={() => resetStep(i)}
+						/>
+					</StepCard>
+					{#if canExtend}
+						<AddStepButton onadd={(id) => addStepAt(i + 1, id)} />
+					{/if}
+				{/each}
 			</section>
 
 			<section class="panel">
 				<SchemaPreview
-					toolId={tool.id}
+					toolId={lastTool.id}
 					{source}
 					{result}
 					{fileResult}
@@ -384,15 +530,6 @@
 		line-height: 1.1;
 		color: var(--color-text);
 	}
-	.label {
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-		color: var(--color-text-muted);
-	}
-	.label {
-		color: var(--color-main);
-	}
 	.lede {
 		max-width: 100%;
 		margin: var(--space-m) 0 0;
@@ -414,19 +551,6 @@
 		border-radius: var(--radius-m);
 		background: var(--color-panel);
 		padding: var(--space-xl);
-	}
-	.panel-head {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		gap: var(--space-m);
-		padding-bottom: var(--space-l);
-		border-bottom: var(--size-border) solid var(--color-border);
-		margin-bottom: var(--space-xl);
-	}
-	.panel-head strong {
-		font-size: var(--font-size-l);
-		color: var(--color-text);
 	}
 	.no-schema {
 		font: var(--font-size-s) var(--font-mono);

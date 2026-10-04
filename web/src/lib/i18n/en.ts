@@ -48,7 +48,7 @@ export const en: Dict = {
 		stepError: "Step {n} ({title}): {msg}",
 	},
 	chain: {
-		stepLabel: "Step {n}: {title}",
+		addStep: "Add step",
 		inputLegend: "Input",
 		resultLegend: "Result",
 		paramsLegend: "Parameters",
@@ -78,9 +78,7 @@ export const en: Dict = {
 		alt: "Result image",
 	},
 	paramsCard: {
-		toolSettings: "Tool settings",
 		noParams: "This tool has no parameters — the result is ready as is.",
-		configureOutput: "Configure output",
 		noSchema: "This tool has no schema yet.",
 	},
 	textInput: {
@@ -142,7 +140,6 @@ export const en: Dict = {
 		overlayTitle: "Watermark",
 		overlayDrop: "Drop a watermark PNG or click",
 		overlayRemove: "Remove watermark",
-		autoUpdate: "updates automatically",
 		width: "Width",
 		height: "Height",
 		from: "From",

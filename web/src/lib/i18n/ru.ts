@@ -49,7 +49,7 @@ export const ru: Dict = {
 		stepError: "Шаг {n} ({title}): {msg}",
 	},
 	chain: {
-		stepLabel: "Шаг {n}: {title}",
+		addStep: "Добавить шаг",
 		inputLegend: "Вход",
 		resultLegend: "Результат",
 		paramsLegend: "Параметры",
@@ -79,9 +79,7 @@ export const ru: Dict = {
 		alt: "Изображение-результат",
 	},
 	paramsCard: {
-		toolSettings: "Настройки инструмента",
 		noParams: "У этого инструмента нет параметров — результат уже готов.",
-		configureOutput: "Настроить вывод",
 		noSchema: "У этого инструмента пока нет схемы.",
 	},
 	textInput: {
@@ -143,7 +141,6 @@ export const ru: Dict = {
 		overlayTitle: "Знак",
 		overlayDrop: "Перетащите PNG-знак или нажмите",
 		overlayRemove: "Убрать знак",
-		autoUpdate: "обновляется автоматически",
 		width: "Ширина",
 		height: "Высота",
 		from: "От",

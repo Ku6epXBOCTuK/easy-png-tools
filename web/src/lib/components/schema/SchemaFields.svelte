@@ -98,7 +98,6 @@
 		size="s"
 		onclick={onreset}
 	/>
-	<span class="auto-note"><i></i> {t("ui.autoUpdate")}</span>
 </div>
 
 <style>
@@ -127,11 +126,5 @@
 		margin-top: var(--space-xl);
 		padding-top: var(--space-l);
 		border-top: var(--size-border) solid var(--color-border);
-	}
-	.auto-note i {
-		width: var(--size-border-thick);
-		height: var(--size-border-thick);
-		border-radius: 50%;
-		background: var(--color-success);
 	}
 </style>

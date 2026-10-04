@@ -263,6 +263,43 @@ test("runs without Web Worker (fallback)", async ({ browser }, testInfo) => {
 	}
 });
 
+test("chain: add step extends pipeline without reload and persists", async ({
+	page,
+}) => {
+	const sink = trackErrors(page);
+	await openTool(page, "flip-png");
+	await uploadImage(page, opaquePng);
+	await expect(resultImage(page)).toBeVisible();
+	await page.getByRole("button", { name: "Add step" }).last().click();
+	await page.getByRole("menuitem", { name: "Grayscale PNG" }).click();
+	const stepTwo = page.getByRole("heading", {
+		name: "Grayscale PNG",
+		exact: true,
+	});
+	await expect(stepTwo).toBeVisible();
+	await expect(resultImage(page)).toBeVisible();
+	// цепочка переживает перезагрузку (localStorage)
+	await page.reload();
+	await expect(stepTwo).toBeVisible();
+	await expectNoErrorAlert(page);
+	expectNoErrors(sink);
+});
+
+test("chain: remove step returns to a single tool", async ({ page }) => {
+	const sink = trackErrors(page);
+	await openTool(page, "flip-png");
+	await page.getByRole("button", { name: "Add step" }).last().click();
+	await page.getByRole("menuitem", { name: "Grayscale PNG" }).click();
+	const stepTwo = page.getByRole("heading", {
+		name: "Grayscale PNG",
+		exact: true,
+	});
+	await expect(stepTwo).toBeVisible();
+	await page.getByRole("button", { name: "Remove step" }).last().click();
+	await expect(stepTwo).toHaveCount(0);
+	expectNoErrors(sink);
+});
+
 test("invalid file upload shows error, no crash", async ({ page }) => {
 	const sink = trackErrors(page);
 	await openTool(page, "flip-png");
