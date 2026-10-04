@@ -1,0 +1,58 @@
+name: GitHub Release
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Версия для релиза (например, v0.2.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.XBOCT_BOT_ID }}
+          private-key: ${{ secrets.XBOCT_BOT_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Setup Cocogitto
+        uses: ./.github/actions/setup-cocogitto
+
+      - name: Sync and reset
+        run: |
+          git fetch origin main --tags --force
+          git reset --hard origin/main
+
+      - name: Get changelog
+        run: |
+          cog changelog "${{ inputs.version }}" > GITHUB_CHANGELOG.md
+          if [ ! -s GITHUB_CHANGELOG.md ]; then
+            echo "Release ${{ inputs.version }}" > GITHUB_CHANGELOG.md
+            echo "::warning title=Changelog::Changelog was empty, used default text."
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}
+          name: Release ${{ inputs.version }}
+          body_path: GITHUB_CHANGELOG.md
+          token: ${{ steps.generate_token.outputs.token }}

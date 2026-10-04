@@ -101,9 +101,6 @@
 - [ ] Радиусы бордеров: `--radius-m` ненулевой и применён ко всем бордерам
       (`app.css`, `SchemaToolView.svelte`). Решить, где скругления реально есть
       в дизайне, а где должен быть 0
-- [ ] надо добавить версионирование и changelog (cocogitto), пример можно взять
-      отсюда -
-      [https://github.com/Ku6epXBOCTuK/XBOCT-page](https://github.com/Ku6epXBOCTuK/XBOCT-page)
 
 ## Переезд
 
