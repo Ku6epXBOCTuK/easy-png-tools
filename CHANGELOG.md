@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.1.1](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/1db83d12ff717bc2e282fe21d35d282f261147f5..v0.1.1) - 2026-10-04
+#### Bug Fixes
+- google analytics only on production - ([e1fc11c](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/e1fc11cb5491a6f5be5c823140830672ea669a62)) - Ku6epXBOCTuK
+- shapes offset calculate - ([1db83d1](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/1db83d12ff717bc2e282fe21d35d282f261147f5)) - Ku6epXBOCTuK
+
+- - -
+
 ## [v0.1.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/fdf7e2a3cd68d6693f1c5581796fafaf8939dad4..v0.1.0) - 2026-10-04
 #### Features
 - change id - remove png intents - ([7b7e12f](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/7b7e12fafcbd7444be61426cd0b90104de9de40f)) - Ku6epXBOCTuK
