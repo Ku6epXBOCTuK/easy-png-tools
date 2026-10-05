@@ -29,12 +29,37 @@
 	const sourceUrl = $derived(source ? toDataUrl(source) : null);
 
 	let dragging = $state(false);
+	let input = $state<HTMLInputElement | null>(null);
+	// Подсказка замены: показываем на ховер и гасим через 10с до нового захода.
+	let hintVisible = $state(false);
+	let hintTimer: ReturnType<typeof setTimeout> | null = null;
+
+	function showHint() {
+		hintVisible = true;
+		if (hintTimer) clearTimeout(hintTimer);
+		hintTimer = setTimeout(() => {
+			hintVisible = false;
+			hintTimer = null;
+		}, 3_000);
+	}
+
+	function hideHint() {
+		hintVisible = false;
+		if (hintTimer) {
+			clearTimeout(hintTimer);
+			hintTimer = null;
+		}
+	}
 
 	function onDrop(e: DragEvent) {
 		e.preventDefault();
 		dragging = false;
 		const file = e.dataTransfer?.files?.[0];
 		if (file) onupload?.(file);
+	}
+
+	function open() {
+		input?.click();
 	}
 </script>
 
@@ -52,15 +77,38 @@
 		<div
 			class="tile-drop"
 			class:dragging
-			role="region"
-			aria-label={t("dropZone.overlayDefault")}
+			class:hint={hintVisible}
+			role="button"
+			tabindex="0"
+			aria-label={t("sourceCard.replaceImage")}
+			onclick={open}
+			onkeydown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					open();
+				}
+			}}
 			ondragover={(e) => {
 				e.preventDefault();
 				dragging = true;
 			}}
 			ondragleave={() => (dragging = false)}
 			ondrop={onDrop}
+			onmouseenter={showHint}
+			onmouseleave={hideHint}
+			onfocus={showHint}
+			onblur={hideHint}
 		>
+			<input
+				bind:this={input}
+				type="file"
+				accept="image/*"
+				hidden
+				onchange={(e) => {
+					const file = (e.target as HTMLInputElement).files?.[0];
+					if (file) onupload?.(file);
+				}}
+			/>
 			<img
 				data-testid="source-image"
 				src={sourceUrl}
@@ -68,6 +116,8 @@
 			/>
 			{#if dragging}
 				<span class="drop-hint">{t("dropZone.overlayDefault")}</span>
+			{:else}
+				<span class="hover-hint">{t("sourceCard.replaceHint")}</span>
 			{/if}
 		</div>
 	{:else if mode === "image"}
@@ -113,5 +163,39 @@
 		font: var(--font-size-s) var(--font-mono);
 		text-align: center;
 		pointer-events: none;
+	}
+	.tile-drop {
+		cursor: pointer;
+	}
+	.tile-drop::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: var(--color-scrim);
+		opacity: 0;
+		transition: opacity var(--duration-s) ease;
+		pointer-events: none;
+	}
+	.tile-drop.hint::before {
+		opacity: 1;
+	}
+	.tile-drop .hover-hint {
+		position: absolute;
+		inset: 25%;
+		display: grid;
+		place-items: center;
+		padding: var(--space-l);
+		border: var(--size-border-thick) dashed var(--color-main);
+		border-radius: var(--radius-m);
+		background: var(--color-panel);
+		color: var(--color-main);
+		font: 600 var(--font-size-l) var(--font-mono);
+		text-align: center;
+		opacity: 0;
+		transition: opacity var(--duration-s) ease;
+		pointer-events: none;
+	}
+	.tile-drop.hint .hover-hint {
+		opacity: 1;
 	}
 </style>

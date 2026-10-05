@@ -122,6 +122,7 @@
 
 		--color-main-tint: hct(from var(--brand-main) h 65 55);
 		--color-main-soft: color-mix(in srgb, var(--color-main) 12%, transparent);
+		--color-scrim: color-mix(in srgb, var(--color-background) 65%, transparent);
 		--color-accent-tint: hct(from var(--brand-alt) h 65 55);
 		--color-success-tint: hct(160 65 55);
 		--color-warning-tint: hct(80 65 55);

@@ -59,6 +59,7 @@ export const en: Dict = {
 	sourceCard: {
 		source: "Source",
 		replaceImage: "Replace image",
+		replaceHint: "Click to upload an image",
 		chooseImage: "choose an image",
 		noSource: "no source — configure the parameters",
 		alt: "Source image",

@@ -60,6 +60,7 @@ export const ru: Dict = {
 	sourceCard: {
 		source: "Источник",
 		replaceImage: "Заменить изображение",
+		replaceHint: "Кликните, чтобы загрузить изображение",
 		chooseImage: "выберите изображение",
 		noSource: "нет источника — настройте параметры",
 		alt: "Исходное изображение",
