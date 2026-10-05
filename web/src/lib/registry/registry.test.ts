@@ -699,18 +699,18 @@ describe("split-into-parts", () => {
 		}
 	});
 
-	it("работает максимум 6x6 = 36 частей", async () => {
+	it("принимает максимальную сетку 32x32 = 1024 части (потолок стража)", async () => {
 		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		const files = asFiles(
 			await tool.run({
 				source: solid(120, 120),
 				params: sanitizeSchemaParams(tool.schema, {
-					columns: 6,
-					rows: 6,
+					columns: 32,
+					rows: 32,
 				}),
 			}),
 		).files;
-		expect(files).toHaveLength(36);
+		expect(files).toHaveLength(1024);
 	});
 
 	it("выбрасывает errors.tooManyParts при переполнении", () => {

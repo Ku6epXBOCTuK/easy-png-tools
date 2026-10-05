@@ -102,6 +102,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		/* Вложен в PreviewTile.canvas: без растяжения сжимался по контенту и
+		   ломал parts-grid в одну колонку. */
+		width: 100%;
+		align-self: stretch;
 		min-height: clamp(var(--space-brand), 30vh, 60vh);
 		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-s);

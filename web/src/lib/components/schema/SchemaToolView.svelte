@@ -309,7 +309,7 @@
 					const base = toDisplayError(e);
 					const msg = base.kind === "i18n" ? t(base.key, base.vars) : base.text;
 					throw new Error(
-						t("chain.stepError", {
+						t("steps.stepError", {
 							n: i + 1,
 							title: stepTitle(stepTool.id),
 							msg,

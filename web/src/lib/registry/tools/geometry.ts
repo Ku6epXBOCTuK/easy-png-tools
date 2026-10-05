@@ -402,7 +402,7 @@ const tileTool: Tool<TileParams> = {
 	run: imgTool((img, p) => tile(img, p.columns, p.rows)),
 };
 
-const MAX_SPLIT_PARTS = 1000;
+const MAX_SPLIT_PARTS = 1024;
 
 interface SplitPartsParams {
 	columns: number;
@@ -413,14 +413,14 @@ export const splitPartsSchema = toolSchema<SplitPartsParams>({
 	columns: field.number({
 		label: "fields.columns",
 		min: 1,
-		max: 6,
+		max: 32,
 		step: 1,
 		default: 2,
 	}),
 	rows: field.number({
 		label: "fields.rows",
 		min: 1,
-		max: 6,
+		max: 32,
 		step: 1,
 		default: 2,
 	}),
