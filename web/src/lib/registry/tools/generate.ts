@@ -78,7 +78,7 @@ function angleGradient(
 
 interface CreateEmptyParams {
 	size: Dimension;
-	transparent: boolean;
+	opacity: number;
 	color: string;
 }
 
@@ -92,14 +92,20 @@ export const createEmptySchema = toolSchema<CreateEmptyParams>(
 			height: 600,
 			presets: true,
 		}),
-		transparent: field.checkbox({ label: "fields.transparent", default: true }),
+		opacity: field.slider({
+			label: "fields.opacity",
+			min: 0,
+			max: 100,
+			step: 1,
+			default: 0,
+		}),
 		color: field.color({ label: "fields.fillColor", default: "#ffffff" }),
 	},
 	{
 		layout: {
 			groups: [
 				{ title: "groups.canvas", fields: ["size"] },
-				{ title: "groups.fill", fields: ["transparent", "color"] },
+				{ title: "groups.fill", fields: ["opacity", "color"] },
 			],
 		},
 	},
@@ -112,10 +118,9 @@ const createEmpty: Tool<CreateEmptyParams> = {
 	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
-		if (p.transparent) {
-			return solidImage(w, h, [0, 0, 0, 0]);
-		}
-		return solidImage(w, h, rgba(p.color));
+		const [r, g, b] = rgba(p.color).slice(0, 3);
+		const alpha = Math.round((Math.trunc(p.opacity) / 100) * 255);
+		return solidImage(w, h, [r, g, b, alpha]);
 	}),
 };
 
@@ -352,7 +357,7 @@ interface DrawGridParams {
 	rows: number;
 	lineWidth: number;
 	color: string;
-	transparentBg: boolean;
+	bgOpacity: number;
 }
 
 export const drawGridSchema = toolSchema<DrawGridParams>(
@@ -387,9 +392,12 @@ export const drawGridSchema = toolSchema<DrawGridParams>(
 			default: 2,
 		}),
 		color: field.color({ label: "fields.lineColor", default: "#111318" }),
-		transparentBg: field.checkbox({
-			label: "fields.transparentBg",
-			default: true,
+		bgOpacity: field.slider({
+			label: "fields.opacity",
+			min: 0,
+			max: 100,
+			step: 1,
+			default: 0,
 		}),
 	},
 	{
@@ -399,7 +407,7 @@ export const drawGridSchema = toolSchema<DrawGridParams>(
 				{
 					title: "groups.grid",
 					cols: 2,
-					fields: ["cols", "rows", "lineWidth", "color", "transparentBg"],
+					fields: ["cols", "rows", "lineWidth", "color", "bgOpacity"],
 				},
 			],
 		},
@@ -413,15 +421,7 @@ const drawGridTool: Tool<DrawGridParams> = {
 	run: genTool((p) => {
 		const w = Math.trunc(p.size.width);
 		const h = Math.trunc(p.size.height);
-		return drawGrid(
-			w,
-			h,
-			p.cols,
-			p.rows,
-			p.lineWidth,
-			p.color,
-			p.transparentBg,
-		);
+		return drawGrid(w, h, p.cols, p.rows, p.lineWidth, p.color, p.bgOpacity);
 	}),
 };
 
@@ -481,7 +481,7 @@ const placeholder: Tool<PlaceholderParams> = {
 				bold: true,
 				color: p.color,
 				backgroundColor: p.backgroundColor,
-				transparentBg: false,
+				bgOpacity: 100,
 				padding: 0,
 			});
 			out = changeCanvasSize(label, w, h, "center");
@@ -931,7 +931,7 @@ const sortColorsTool: Tool<SortColorsParams> = {
 interface TextToPngParams {
 	text: string;
 	style: FontStyle;
-	transparentBg: boolean;
+	bgOpacity: number;
 	backgroundColor: string;
 	padding: number;
 }
@@ -952,9 +952,12 @@ export const textToPngSchema = toolSchema<TextToPngParams>(
 			bold: true,
 			color: "#111318",
 		}),
-		transparentBg: field.checkbox({
-			label: "fields.transparentBg",
-			default: false,
+		bgOpacity: field.slider({
+			label: "fields.opacity",
+			min: 0,
+			max: 100,
+			step: 1,
+			default: 100,
 		}),
 		backgroundColor: field.color({
 			label: "fields.backgroundColor",
@@ -974,7 +977,7 @@ export const textToPngSchema = toolSchema<TextToPngParams>(
 				{ title: "groups.text", fields: ["text", "style"] },
 				{
 					title: "groups.background",
-					fields: ["transparentBg", "backgroundColor"],
+					fields: ["bgOpacity", "backgroundColor"],
 				},
 				{ title: "groups.padding", fields: ["padding"] },
 			],
@@ -995,7 +998,7 @@ const textToPng: Tool<TextToPngParams> = {
 			bold: p.style.bold,
 			color: p.style.color,
 			backgroundColor: p.backgroundColor,
-			transparentBg: p.transparentBg,
+			bgOpacity: p.bgOpacity,
 			padding: p.padding,
 		}),
 	),

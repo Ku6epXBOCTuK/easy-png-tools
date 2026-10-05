@@ -299,8 +299,6 @@ export const ru: Dict = {
 		textStyle: "Стиль текста",
 		thickness: "Толщина",
 		threshold: "Порог",
-		transparent: "Прозрачный",
-		transparentBg: "Прозрачный фон",
 		waves: "Волны",
 		width: "Ширина",
 		x: "X",
@@ -972,7 +970,7 @@ export const ru: Dict = {
 		"add-padding": {
 			params: {
 				padding: "Поля, px",
-				transparent: "Прозрачные поля",
+				opacity: "Непрозрачность полей, %",
 				color: "Цвет полей",
 			},
 		},
@@ -983,7 +981,7 @@ export const ru: Dict = {
 			params: {
 				width: "Ширина полотна",
 				height: "Высота полотна",
-				transparent: "Прозрачный фон",
+				opacity: "Непрозрачность фона, %",
 				color: "Цвет фона",
 			},
 		},
@@ -1113,7 +1111,7 @@ export const ru: Dict = {
 			params: {
 				width: "Ширина",
 				height: "Высота",
-				transparent: "Прозрачный",
+				opacity: "Непрозрачность",
 				color: "Цвет",
 			},
 		},
@@ -1352,7 +1350,7 @@ export const ru: Dict = {
 				font: "Шрифт",
 				bold: "Жирный",
 				color: "Цвет текста",
-				transparentBg: "Прозрачный фон",
+				bgOpacity: "Непрозрачность фона, %",
 				backgroundColor: "Цвет фона",
 				padding: "Отступ, px",
 			},
@@ -1397,7 +1395,7 @@ export const ru: Dict = {
 				rows: "Строки",
 				lineWidth: "Толщина линий, px",
 				color: "Цвет линий",
-				transparentBg: "Прозрачный фон",
+				bgOpacity: "Непрозрачность фона, %",
 			},
 		},
 		quantize: {

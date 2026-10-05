@@ -127,7 +127,7 @@ export interface TextToImageOptions {
 	bold: boolean;
 	color: string;
 	backgroundColor: string;
-	transparentBg: boolean;
+	bgOpacity: number;
 	padding: number;
 	maxTextWidth?: number;
 }
@@ -148,9 +148,11 @@ export function renderTextToImage(o: TextToImageOptions): PixelImage {
 	const h = Math.max(1, Math.ceil(lineH + o.padding * 2));
 	const { canvas, ctx } = ctx2d(w, h);
 
-	if (!o.transparentBg) {
+	if (o.bgOpacity > 0) {
+		ctx.globalAlpha = Math.min(100, Math.max(0, o.bgOpacity)) / 100;
 		ctx.fillStyle = o.backgroundColor;
 		ctx.fillRect(0, 0, w, h);
+		ctx.globalAlpha = 1;
 	}
 	ctx.font = fontString(o.fontSize, o.font, o.bold);
 	ctx.fillStyle = o.color;

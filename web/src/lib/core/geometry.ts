@@ -9,19 +9,20 @@ export function expandCanvas(
 	right: number,
 	bottom: number,
 	backgroundHex?: string,
+	backgroundAlpha = 255,
 ): PixelImage {
 	const l = Math.max(0, Math.trunc(left));
 	const t = Math.max(0, Math.trunc(top));
 	const r = Math.max(0, Math.trunc(right));
 	const b = Math.max(0, Math.trunc(bottom));
 	const out = createPixelImage(img.width + l + r, img.height + t + b);
-	if (backgroundHex !== undefined) {
+	if (backgroundHex !== undefined && backgroundAlpha > 0) {
 		const [cr, cg, cb] = parseHex(backgroundHex);
 		for (let i = 0; i < out.data.length; i += 4) {
 			out.data[i] = cr;
 			out.data[i + 1] = cg;
 			out.data[i + 2] = cb;
-			out.data[i + 3] = 255;
+			out.data[i + 3] = backgroundAlpha;
 		}
 	}
 	for (let y = 0; y < img.height; y++) {

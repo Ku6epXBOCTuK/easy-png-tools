@@ -65,7 +65,7 @@ const addBorder: Tool<AddBorderParams> = {
 
 interface FitOnBackgroundParams {
 	size: Dimension;
-	transparent: boolean;
+	opacity: number;
 	color: string;
 }
 
@@ -79,9 +79,12 @@ export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>(
 			height: 600,
 			presets: true,
 		}),
-		transparent: field.checkbox({
-			label: "fields.transparent",
-			default: false,
+		opacity: field.slider({
+			label: "fields.opacity",
+			min: 0,
+			max: 100,
+			step: 1,
+			default: 100,
 		}),
 		color: field.color({ label: "fields.background", default: "#ffffff" }),
 	},
@@ -89,7 +92,7 @@ export const fitOnBackgroundSchema = toolSchema<FitOnBackgroundParams>(
 		layout: {
 			groups: [
 				{ title: "groups.canvas", fields: ["size"] },
-				{ title: "groups.background", fields: ["transparent", "color"] },
+				{ title: "groups.background", fields: ["opacity", "color"] },
 			],
 		},
 	},
@@ -113,7 +116,8 @@ const fitOnBackground: Tool<FitOnBackgroundParams> = {
 			top,
 			Math.max(0, width - img.width - left),
 			Math.max(0, height - img.height - top),
-			p.transparent ? undefined : p.color,
+			p.color,
+			Math.round((Math.trunc(p.opacity) / 100) * 255),
 		);
 	}),
 };
@@ -331,7 +335,7 @@ const flipTool: Tool<FlipParams> = {
 
 interface AddPaddingParams {
 	padding: number;
-	transparent: boolean;
+	opacity: number;
 	color: string;
 }
 
@@ -344,14 +348,20 @@ export const addPaddingSchema = toolSchema<AddPaddingParams>(
 			step: 1,
 			default: 10,
 		}),
-		transparent: field.checkbox({ label: "fields.transparent", default: true }),
+		opacity: field.slider({
+			label: "fields.opacity",
+			min: 0,
+			max: 100,
+			step: 1,
+			default: 0,
+		}),
 		color: field.color({ label: "fields.fillColor", default: "#ffffff" }),
 	},
 	{
 		layout: {
 			groups: [
 				{ title: "groups.padding", fields: ["padding"] },
-				{ title: "groups.fill", fields: ["transparent", "color"] },
+				{ title: "groups.fill", fields: ["opacity", "color"] },
 			],
 		},
 	},
@@ -368,7 +378,8 @@ const addPaddingTool: Tool<AddPaddingParams> = {
 			p.padding,
 			p.padding,
 			p.padding,
-			p.transparent ? undefined : p.color,
+			p.color,
+			Math.round((Math.trunc(p.opacity) / 100) * 255),
 		),
 	),
 };

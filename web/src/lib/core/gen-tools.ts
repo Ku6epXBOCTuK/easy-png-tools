@@ -79,7 +79,7 @@ function lineMask(
 	return mask;
 }
 
-/** Сетка линий на прозрачном или белом фоне. */
+/** Сетка линий на белом фоне заданной непрозрачности (0 — прозрачный). */
 export function drawGrid(
 	width: number,
 	height: number,
@@ -87,10 +87,20 @@ export function drawGrid(
 	rows: number,
 	lineWidth: number,
 	colorHex: string,
-	transparentBg: boolean,
+	bgOpacity: number,
 ): PixelImage {
 	const out = createPixelImage(width, height);
-	if (!transparentBg) out.data.fill(255);
+	const bgAlpha = Math.round(
+		(Math.max(0, Math.min(100, bgOpacity)) / 100) * 255,
+	);
+	if (bgAlpha > 0) {
+		for (let i = 0; i < out.data.length; i += 4) {
+			out.data[i] = 255;
+			out.data[i + 1] = 255;
+			out.data[i + 2] = 255;
+			out.data[i + 3] = bgAlpha;
+		}
+	}
 
 	const m = /^#([0-9a-f]{6})$/i.exec(colorHex.trim());
 	const r = m ? parseInt(m[1].slice(0, 2), 16) : 0;

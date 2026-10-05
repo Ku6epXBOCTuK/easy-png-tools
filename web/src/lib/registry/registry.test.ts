@@ -199,14 +199,14 @@ describe("registry-new (переведённые инструменты)", () =>
 		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.size).toEqual({ width: 800, height: 600 });
-		expect(d.transparent).toBe(true);
+		expect(d.opacity).toBe(0);
 	});
 
 	it("sanitize клампит dimension к min/max и чинит мусор", () => {
 		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			size: { width: 999999, height: -5 },
-			transparent: false,
+			opacity: 50,
 			color: "#ff0000",
 		});
 		expect(s.size).toEqual({ width: 20000, height: 1 });
@@ -218,7 +218,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const params = sanitizeSchemaParams(tool.schema, {
 			size: { width: 320, height: 200 },
-			transparent: true,
+			opacity: 0,
 			color: "#ff0000",
 		});
 		const img = asImage(await tool.run({ params }));
@@ -262,7 +262,7 @@ describe("registry-new (переведённые инструменты)", () =>
 				rows: 3,
 				lineWidth: 2,
 				color: "#000000",
-				transparentBg: true,
+				bgOpacity: 0,
 			},
 		],
 	])("генератор %s даёт картинку по dimension", async (id, params) => {
@@ -336,7 +336,7 @@ describe("registry-new (переведённые инструменты)", () =>
 				source: img,
 				params: sanitizeSchemaParams(tool.schema, {
 					size: { width: 60, height: 30 },
-					transparent: true,
+					opacity: 0,
 					color: "#ffffff",
 				}),
 			}),
@@ -633,7 +633,7 @@ describe("registry-new (переведённые инструменты)", () =>
 			bold: true,
 			color: "#111318",
 		});
-		expect(d.transparentBg).toBe(false);
+		expect(d.bgOpacity).toBe(100);
 		const s = sanitizeSchemaParams(tool.schema, {
 			style: { font: "sans", size: 9999, bold: false, color: "#123abc" },
 			padding: 200,

@@ -29,16 +29,22 @@ describe("randomColorBlocks", () => {
 
 describe("drawGrid", () => {
 	it("линии на пересечениях непрозрачны, фон прозрачен", () => {
-		const out = drawGrid(100, 100, 4, 4, 2, "#000000", true);
+		const out = drawGrid(100, 100, 4, 4, 2, "#000000", 0);
 		expect(out.data[0]).toBe(0);
 		expect(out.data[3]).toBe(255); // (0,0) на линии
 		const mid = (53 * 100 + 53) * 4;
 		expect(out.data[mid + 3]).toBe(0); // между линиями прозрачн
 	});
 
-	it("белый непрозрачный фон при transparentBg=false", () => {
-		const out = drawGrid(20, 20, 2, 2, 1, "#000000", false);
+	it("белый непрозрачный фон при bgOpacity=100", () => {
+		const out = drawGrid(20, 20, 2, 2, 1, "#000000", 100);
 		const mid = (5 * 20 + 5) * 4;
 		expect(out.data[mid]).toBe(255);
+	});
+
+	it("полупрозрачный фон при bgOpacity=50", () => {
+		const out = drawGrid(20, 20, 2, 2, 1, "#000000", 50);
+		const mid = (5 * 20 + 5) * 4;
+		expect(out.data[mid + 3]).toBe(128);
 	});
 });

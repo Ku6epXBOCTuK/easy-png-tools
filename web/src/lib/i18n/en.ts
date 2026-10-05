@@ -298,8 +298,6 @@ export const en: Dict = {
 		textStyle: "Text style",
 		thickness: "Thickness",
 		threshold: "Threshold",
-		transparent: "Transparent",
-		transparentBg: "Transparent bg",
 		waves: "Waves",
 		width: "Width",
 		x: "X",
