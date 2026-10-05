@@ -51,7 +51,11 @@
 	loading={running}
 	{parts}
 >
-	<div class="canvas" class:checker={resultKind === "image"}>
+	<div
+		class="canvas"
+		class:checker={resultKind === "image"}
+		class:files={resultKind === "files"}
+	>
 		{#if resultKind === "text" && textResult}
 			<div class="text-result-wrap">
 				<SchemaTextResult
@@ -127,6 +131,11 @@
 				var(--color-checker-alt) 0 50%
 			)
 			50% / 28px 28px;
+	}
+	/* Сетка частей: без потолка 1024 плитки растягивали страницу бесконечно. */
+	.canvas.files {
+		max-height: 60vh;
+		align-items: flex-start;
 	}
 	.empty {
 		font: var(--font-size-s) var(--font-mono);
