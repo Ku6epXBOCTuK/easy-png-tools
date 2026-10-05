@@ -10,6 +10,7 @@
 		children: Snippet;
 		loading?: boolean;
 		parts?: number;
+		partsDims?: string;
 	}
 	let {
 		label,
@@ -17,6 +18,7 @@
 		children,
 		loading = false,
 		parts = undefined,
+		partsDims = undefined,
 	}: Props = $props();
 </script>
 
@@ -25,7 +27,11 @@
 		<span>
 			{label}
 			{#if parts !== undefined}
-				<span class="count">{parts} {t("resultCard.parts")}</span>
+				<span class="count">
+					{parts}
+					{t("resultCard.parts")}{#if partsDims}
+						· {partsDims}{/if}
+				</span>
 			{/if}
 			{#if loading}
 				<RefreshCw class="rotating" size="12" />

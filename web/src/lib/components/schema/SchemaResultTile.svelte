@@ -43,6 +43,12 @@
 	let parts = $derived(
 		resultKind === "files" && fileResult ? fileResult.files.length : undefined,
 	);
+	// Размеры одинаковы у всех частей (канвас дополняется) — показываем один раз.
+	let partsDims = $derived(
+		resultKind === "files" && fileResult && fileResult.files.length > 0
+			? `${fileResult.files[0].image.width} × ${fileResult.files[0].image.height}`
+			: undefined,
+	);
 </script>
 
 <PreviewTile
@@ -50,6 +56,7 @@
 	viewMode={resultKind}
 	loading={running}
 	{parts}
+	{partsDims}
 >
 	<div
 		class="canvas"
