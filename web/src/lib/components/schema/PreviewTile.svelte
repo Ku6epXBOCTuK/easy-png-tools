@@ -75,7 +75,7 @@
 		width: auto;
 		max-width: 100%;
 		height: auto;
-		max-height: 100vh;
+		max-height: 60vh;
 		object-fit: contain;
 		display: block;
 	}
