@@ -35,13 +35,17 @@
 
 <article
 	class="step-card"
-	{draggable}
-	ondragstart={(e) => ondragstart?.(e)}
 	ondragover={(e) => ondragover?.(e)}
 	ondrop={(e) => ondrop?.(e)}
-	ondragend={() => ondragend?.()}
 >
-	<header class="step-head">
+	<header
+		class="step-head"
+		role="button"
+		tabindex="0"
+		{draggable}
+		ondragstart={(e) => ondragstart?.(e)}
+		ondragend={() => ondragend?.()}
+	>
 		<span class="step-index">{index.toString().padStart(2, "0")}</span>
 		<GripVertical size={16} class="drag" aria-hidden="true" />
 		<div class="step-heading-text">
