@@ -295,7 +295,10 @@ test("chain: remove step returns to a single tool", async ({ page }) => {
 		exact: true,
 	});
 	await expect(stepTwo).toBeVisible();
-	await page.getByRole("button", { name: "Remove step" }).last().click();
+	// Клик по remove именно в карточке Grayscale: порядок шагов зависит от
+	// тайминга рендера и на разных движках может отличаться.
+	const card = page.getByRole("article").filter({ hasText: "Grayscale PNG" });
+	await card.getByLabel("Remove step").click();
 	await expect(stepTwo).toHaveCount(0);
 	expectNoErrors(sink);
 });

@@ -56,12 +56,24 @@ const decodeContracts: readonly DecodeContract[] = [
 	{ file: sixteenBitPng, rejectedIn: [] },
 ];
 
+// На этих файлах createImageBitmap в webkit не завершается: ни результата, ни
+// ошибки — контракт «accept или reject» проверить нельзя.
+const webkitHangs = new Set([
+	"truncated-header.png",
+	"crc-bad-ancillary.png",
+	"palette-256.png",
+]);
+
 test.describe("PNG special fixtures", () => {
 	for (const { file, rejectedIn } of decodeContracts) {
 		test(`${file.name}: matches the engine decode contract`, async ({
 			browserName,
 			page,
 		}) => {
+			test.fixme(
+				browserName === "webkit" && webkitHangs.has(file.name),
+				"webkit createImageBitmap зависает на этом файле",
+			);
 			if (rejectedIn.includes(browserName)) {
 				await expectRejected(page, file);
 			} else {

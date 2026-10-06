@@ -217,12 +217,6 @@
 - [ ] e2e: `i18n.spec.ts` и `text-and-verdicts.spec.ts` дублируют локаторы из
       `helpers/page.ts` вместо вызова — правило «спека зовёт helpers»
       (`docs/testing-strategy.md`, раздел 5)
-- [ ] e2e webkit: случайные падения по таймауту 5с (элемент не появляется),
-      каждый прогон падают разные тесты — webkit под Windows слишком медленный.
-      Рассмотреть увеличение timeout/expectTimeout для webkit-проекта в
-      `playwright.config.ts`. После фикса перепроверить `tool-flows.spec.ts`
-      «chain: remove step» — на webkit удаление шага не успевает за 5с (на
-      остальных движках стабильно)
 - [ ] Пересмотреть тесты — убрать точные совпадения текстов и любые селекторы,
       привязанные к разметке или svelte-классам (сейчас остались:
       `tool-flows.spec.ts`, `schema-tool-strings.test.ts`)
