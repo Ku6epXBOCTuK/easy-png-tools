@@ -75,6 +75,7 @@
 	}: Props = $props();
 
 	const layoutGroups = $derived(resolveLayoutGroups(schema));
+	const isEmpty = $derived(Object.keys(schema.fields).length === 0);
 
 	function effectiveSpec(spec: FieldSpec): FieldSpec {
 		if (sourceDims && spec.kind === "number" && spec.maxFromSource) {
@@ -84,40 +85,44 @@
 	}
 </script>
 
-{#each layoutGroups as group (group.key)}
-	{#if group.title}
-		<span class="group-title">{groupLabel(group.title)}</span>
-	{/if}
-	<div
-		class="group-fields"
-		style:grid-template-columns={group.cols > 1
-			? `repeat(${group.cols}, minmax(0, 1fr))`
-			: undefined}
-	>
-		{#each group.fields as id (id)}
-			{@const Control = FIELDS[schema.fields[id].spec.kind]}
-			<Control
-				label={fieldLabel(schema.fields[id], id)}
-				value={values[id]}
-				spec={effectiveSpec(schema.fields[id].spec)}
-				{toolId}
-				fieldId={id}
-				{sourceDims}
-				onchange={(v, axis) => onchange(id, v, axis)}
-			/>
-		{/each}
-	</div>
-{/each}
+{#if isEmpty}
+	<p class="no-params">{t("paramsCard.noParams")}</p>
+{:else}
+	{#each layoutGroups as group (group.key)}
+		{#if group.title}
+			<span class="group-title">{groupLabel(group.title)}</span>
+		{/if}
+		<div
+			class="group-fields"
+			style:grid-template-columns={group.cols > 1
+				? `repeat(${group.cols}, minmax(0, 1fr))`
+				: undefined}
+		>
+			{#each group.fields as id (id)}
+				{@const Control = FIELDS[schema.fields[id].spec.kind]}
+				<Control
+					label={fieldLabel(schema.fields[id], id)}
+					value={values[id]}
+					spec={effectiveSpec(schema.fields[id].spec)}
+					{toolId}
+					fieldId={id}
+					{sourceDims}
+					onchange={(v, axis) => onchange(id, v, axis)}
+				/>
+			{/each}
+		</div>
+	{/each}
 
-<div class="panel-foot">
-	<Button
-		icon={RotateCcw}
-		label={t("ui.reset")}
-		variant="clear"
-		size="s"
-		onclick={onreset}
-	/>
-</div>
+	<div class="panel-foot">
+		<Button
+			icon={RotateCcw}
+			label={t("ui.reset")}
+			variant="clear"
+			size="s"
+			onclick={onreset}
+		/>
+	</div>
+{/if}
 
 <style>
 	.group-title {
@@ -131,6 +136,11 @@
 	}
 	.group-title:first-child {
 		margin-top: 0;
+	}
+	.no-params {
+		margin: 0;
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
 	}
 	.group-fields {
 		display: grid;
