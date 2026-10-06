@@ -50,6 +50,7 @@ export const ru: Dict = {
 	},
 	chain: {
 		addStep: "Добавить шаг",
+		changeTool: "Поменять инструмент",
 		collapseStep: "Свернуть шаг",
 		expandStep: "Развернуть шаг",
 		inputLegend: "Вход",

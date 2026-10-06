@@ -2,6 +2,7 @@
 	import AddStepButton from "./AddStepButton.svelte";
 	import SchemaFields from "./SchemaFields.svelte";
 	import SchemaPreview from "./SchemaPreview.svelte";
+	import ToolPickerButton from "./ToolPickerButton.svelte";
 	import StepCard from "$lib/components/display/StepCard.svelte";
 	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
@@ -23,6 +24,7 @@
 	import { t } from "$lib/i18n/t";
 	import {
 		createChain,
+		createStep,
 		insertStep,
 		loadChain,
 		moveStep,
@@ -244,6 +246,20 @@
 		const step = steps[index];
 		if (!step) return;
 		steps = steps.with(index, { ...step, collapsed: !step.collapsed });
+	}
+
+	// Замена инструмента на месте: ключ и свёрнутость шага сохраняются,
+	// параметры — дефолты нового инструмента, вход пересчитывается при прогоне.
+	function replaceStepTool(index: number, toolId: string) {
+		const step = steps[index];
+		const next = createStep(toolId);
+		if (!step || !next) return;
+		touchedFor(step.key).clear();
+		steps = steps.with(index, {
+			...next,
+			key: step.key,
+			collapsed: step.collapsed,
+		});
 	}
 
 	function onStepDrop(e: DragEvent, to: number) {
@@ -483,6 +499,13 @@
 						ondrop={(e) => onStepDrop(e, i)}
 						ondragend={() => (dragFrom = null)}
 					>
+						{#snippet tools()}
+							<ToolPickerButton
+								label={t("chain.changeTool")}
+								iconOnly
+								onadd={(id) => replaceStepTool(i, id)}
+							/>
+						{/snippet}
 						<SchemaFields
 							schema={toolSchemaOf(step)}
 							values={step.params}
