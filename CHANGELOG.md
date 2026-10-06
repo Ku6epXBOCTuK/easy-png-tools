@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.3.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/a9327eaa2757917fc1d58fb0a2989e98a0e1b07c..v0.3.0) - 2026-10-06
+#### Features
+- add info\warning badge, update size range workflow - ([92cc590](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/92cc5909594a8fe25f6cc70427b219e0dc22d774)) - Ku6epXBOCTuK
+- add transparency range slider to opacity fields - ([ba533e6](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/ba533e67fdba5e6b40f21c6b3ca375cf16426fef)) - Ku6epXBOCTuK
+- upload image on click, tooltip - ([a0bc72e](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/a0bc72ef5d06b65507d6fe2ee3150872dbc146ae)) - Ku6epXBOCTuK
+- split to parts show sizes of parts - ([684423d](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/684423de679fc1b65195bd4fb1ce43290577722e)) - Ku6epXBOCTuK
+#### Bug Fixes
+- max height for source preview - ([0753c95](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/0753c95583e83adb9fa25779bb5263a5cfe93ba2)) - Ku6epXBOCTuK
+- scroll in result for split parts - ([7763fb7](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/7763fb7faa790c2e41f85362d375f576f28a4de1)) - Ku6epXBOCTuK
+- range slider drag after regression - ([f00dae8](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/f00dae8b0158b9ff779511e1dd46cda8f5b6cb14)) - Ku6epXBOCTuK
+- update split into parts max params - ([2a282b4](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/2a282b48f8d6be2bd3a4079f3a1a77031072b970)) - Ku6epXBOCTuK
+
+- - -
+
 ## [v0.2.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/f40a7c89ae5615f2c16f1154116d35fdc0e53125..v0.2.0) - 2026-10-04
 #### Features
 - add pipeline flow - ([6b946bf](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/6b946bfb08729ead2515e87406cb3efd22ca9859)) - Ku6epXBOCTuK
