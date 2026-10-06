@@ -2,6 +2,7 @@
 	import type { InputMode, ResultKind } from "$lib/registry";
 	import { RefreshCw } from "@lucide/svelte";
 	import { t } from "$lib/i18n/t";
+	import Badge from "$lib/components/ui/Badge.svelte";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -11,6 +12,9 @@
 		loading?: boolean;
 		parts?: number;
 		partsDims?: string;
+		dims?: string;
+		note?: string;
+		noteTone?: "warning" | "info";
 	}
 	let {
 		label,
@@ -19,22 +23,29 @@
 		loading = false,
 		parts = undefined,
 		partsDims = undefined,
+		dims = undefined,
+		note = undefined,
+		noteTone = "warning",
 	}: Props = $props();
 </script>
 
 <figure class="tile">
 	<figcaption>
-		<span>
-			{label}
-			{#if parts !== undefined}
-				<span class="count">
-					{parts}
-					{t("resultCard.parts")}{#if partsDims}
-						· {partsDims}{/if}
-				</span>
-			{/if}
+		<span class="tile-label">
+			<span
+				>{label}{#if parts !== undefined}<span class="dims"
+						>: {parts}
+						{t("resultCard.parts")}{#if partsDims}
+							· {partsDims}{/if}</span
+					>{:else if dims}<span class="dims">: {dims}</span>{/if}</span
+			>
 			{#if loading}
 				<RefreshCw class="rotating" size="12" />
+			{/if}
+		</span>
+		<span class="tile-note">
+			{#if note}
+				<Badge tone={noteTone} label={note} />
 			{/if}
 		</span>
 	</figcaption>
@@ -47,7 +58,10 @@
 	.tile figcaption {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		gap: var(--space-m);
+		/* Резерв под бейдж: строка не прыгает, когда заметка появляется. */
+		min-height: var(--space-xxl);
 		margin-bottom: var(--space-m);
 		font: var(--font-size-s) var(--font-mono);
 		text-transform: uppercase;
@@ -56,8 +70,18 @@
 			animation: rotate var(--duration-l) linear infinite;
 		}
 	}
-	.count {
-		margin-left: var(--space-m);
+	.tile-label {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-m);
+	}
+	/* Место под заметки результата: бейджи-предупреждения. */
+	.tile-note {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-m);
+	}
+	.dims {
 		color: var(--color-main);
 	}
 	.canvas {

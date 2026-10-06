@@ -24,6 +24,9 @@ export interface NumberSpec extends FieldSpecBase {
 	min?: number;
 	max?: number;
 	step?: number;
+	/** Потолок из размеров исходника (ось); статический max — фолбэк. */
+	maxFromSource?: "width" | "height";
+	maxMinus?: number;
 }
 
 export interface SliderSpec extends FieldSpecBase {
@@ -73,10 +76,9 @@ export interface DimensionSpec extends FieldSpecBase {
 	width: number;
 	height: number;
 	defaultFromSource?: boolean;
-	/**
-	 * Id checkbox-поля «сохранять пропорции»: пока оно включено, правка одной
-	 * оси пересчитывает вторую по аспекту текущего исходника.
-	 */
+	/** Потолок каждой оси из соответствующего размера исходника. */
+	maxFromSource?: boolean;
+	/** Id checkbox-поля «сохранять пропорции». */
 	lockAspectWith?: string;
 	/** Показывать чипы быстрого выбора из SIZE_PRESETS. */
 	presets?: boolean;
@@ -286,6 +288,7 @@ export const field = {
 		width: number;
 		height: number;
 		defaultFromSource?: boolean;
+		maxFromSource?: boolean;
 		lockAspectWith?: string;
 		presets?: boolean;
 	}): Field<Dimension> => ({
@@ -394,6 +397,68 @@ function clamp(value: number, min?: number, max?: number): number {
 	return value;
 }
 
+/** Потолок поля: из размеров исходника при maxFromSource, иначе статический. */
+export function effectiveMax(
+	spec: NumberSpec,
+	source?: Dimension,
+): number | undefined {
+	if (spec.maxFromSource && source) {
+		return source[spec.maxFromSource] - (spec.maxMinus ?? 0);
+	}
+	return spec.max;
+}
+
+function dimensionAxisMax(
+	spec: DimensionSpec,
+	axis: "width" | "height",
+	source?: Dimension,
+): number {
+	return spec.maxFromSource && source ? source[axis] : spec.max;
+}
+
+/** Поджимает maxFromSource-поля к актуальному потолку (сменился исходник). */
+export function clampSourceAwareMaxes<P>(
+	schema: ToolSchema<P>,
+	params: Record<string, unknown>,
+	source?: Dimension,
+): Record<string, unknown> {
+	if (!source) return params;
+	let changed = false;
+	const out = { ...params };
+	for (const key of Object.keys(schema.fields) as (keyof P)[]) {
+		const spec = schema.fields[key].spec;
+		if (spec.kind === "number" && spec.maxFromSource) {
+			const v = out[key as string];
+			if (typeof v !== "number" || !Number.isFinite(v)) continue;
+			const clamped = clamp(v, spec.min, effectiveMax(spec, source));
+			if (clamped !== v) {
+				out[key as string] = clamped;
+				changed = true;
+			}
+		} else if (spec.kind === "dimension" && spec.maxFromSource) {
+			const v = out[key as string] as Partial<Dimension> | undefined;
+			if (typeof v?.width !== "number" || typeof v?.height !== "number") {
+				continue;
+			}
+			const width = clamp(
+				v.width,
+				spec.min,
+				dimensionAxisMax(spec, "width", source),
+			);
+			const height = clamp(
+				v.height,
+				spec.min,
+				dimensionAxisMax(spec, "height", source),
+			);
+			if (width !== v.width || height !== v.height) {
+				out[key as string] = { width, height };
+				changed = true;
+			}
+		}
+	}
+	return changed ? out : params;
+}
+
 /**
  * Пересчёт при включённом lockAspect: ведущая ось (последняя правка
  * пользователя) сохраняется, вторая подгоняется под аспект исходника.
@@ -500,7 +565,11 @@ export function sanitizeSchemaParams<P>(
 			case "slider": {
 				const n =
 					typeof raw === "number" && Number.isFinite(raw) ? raw : spec.default;
-				out[key] = clamp(n, spec.min, spec.max);
+				const max =
+					spec.kind === "number"
+						? effectiveMax(spec, context?.source)
+						: spec.max;
+				out[key] = clamp(n, spec.min, max);
 				break;
 			}
 			case "select":
@@ -543,8 +612,16 @@ export function sanitizeSchemaParams<P>(
 						? defaults
 						: { width: w, height: h };
 				out[key] = {
-					width: clamp(sourceSize.width, spec.min, spec.max),
-					height: clamp(sourceSize.height, spec.min, spec.max),
+					width: clamp(
+						sourceSize.width,
+						spec.min,
+						dimensionAxisMax(spec, "width", context?.source),
+					),
+					height: clamp(
+						sourceSize.height,
+						spec.min,
+						dimensionAxisMax(spec, "height", context?.source),
+					),
 				};
 				break;
 			}

@@ -27,6 +27,9 @@
 	}: Props = $props();
 
 	const sourceUrl = $derived(source ? toDataUrl(source) : null);
+	const sourceDims = $derived(
+		source ? `${source.width} × ${source.height}` : undefined,
+	);
 
 	let dragging = $state(false);
 	let input = $state<HTMLInputElement | null>(null);
@@ -63,7 +66,7 @@
 	}
 </script>
 
-<PreviewTile label={t("sourceCard.source")} viewMode={mode}>
+<PreviewTile label={t("sourceCard.source")} viewMode={mode} dims={sourceDims}>
 	{#if mode === "text"}
 		<div class="text-source-wrap">
 			<SchemaTextSource

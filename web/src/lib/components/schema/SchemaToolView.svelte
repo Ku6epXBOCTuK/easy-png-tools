@@ -40,6 +40,7 @@
 	} from "$lib/registry";
 	import {
 		applySourceDefaults,
+		clampSourceAwareMaxes,
 		defaultSchemaParams,
 		withAspectLock,
 		type Dimension,
@@ -105,6 +106,11 @@
 	// он — единый источник качества; dropdown редактирует его же.
 	const qualityParamId = $derived(lastTool.output?.qualityParamId);
 	const lastParams = $derived(steps.at(-1)?.params);
+	const resultNote = $derived(
+		result && lastTool.resultNote
+			? lastTool.resultNote(lastParams ?? {}, result)
+			: null,
+	);
 	const currentQuality = $derived.by(() => {
 		const setting = outputFormatByMime(format).settings?.quality;
 		if (!setting) return undefined;
@@ -205,7 +211,8 @@
 				}
 			}
 		}
-		steps = steps.with(index, { ...step, params: next });
+		const clamped = dims ? clampSourceAwareMaxes(stepSchema, next, dims) : next;
+		steps = steps.with(index, { ...step, params: clamped });
 	}
 
 	function resetStep(index: number) {
@@ -249,11 +256,15 @@
 			if (first && firstSchema) {
 				steps = steps.with(0, {
 					...first,
-					params: applySourceDefaults(
+					params: clampSourceAwareMaxes(
 						firstSchema,
-						first.params,
-						{ source: decoded },
-						touchedFor(first.key),
+						applySourceDefaults(
+							firstSchema,
+							first.params,
+							{ source: decoded },
+							touchedFor(first.key),
+						),
+						decoded,
 					),
 				});
 			}
@@ -309,7 +320,7 @@
 					const base = toDisplayError(e);
 					const msg = base.kind === "i18n" ? t(base.key, base.vars) : base.text;
 					throw new Error(
-						t("steps.stepError", {
+						t("toolPage.stepError", {
 							n: i + 1,
 							title: stepTitle(stepTool.id),
 							msg,
@@ -468,6 +479,7 @@
 							schema={toolSchemaOf(step)}
 							values={step.params}
 							toolId={step.id}
+							sourceDims={i === 0 ? (source ?? undefined) : stepDims[i - 1]}
 							onchange={(id, v, axis) => setStepValue(i, id, v, axis)}
 							onreset={() => resetStep(i)}
 						/>
@@ -483,6 +495,7 @@
 					toolId={lastTool.id}
 					{source}
 					{result}
+					{resultNote}
 					{fileResult}
 					{textSource}
 					{textResult}

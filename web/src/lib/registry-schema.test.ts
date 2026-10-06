@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	applySourceDefaults,
+	clampSourceAwareMaxes,
 	defaultSchemaParams,
 	field,
 	resolveLayoutGroups,
@@ -86,6 +87,64 @@ describe("registry-schema: withAspectLock", () => {
 			width: 1,
 			height: 1,
 		});
+	});
+});
+
+describe("registry-schema: maxFromSource", () => {
+	const cropLike = toolSchema<{
+		x: number;
+		size: Dimension;
+	}>({
+		x: field.number({ min: 0, max: 20000, default: 0, maxFromSource: "width" }),
+		size: field.dimension({
+			min: 1,
+			max: 20000,
+			width: 1,
+			height: 1,
+			maxFromSource: true,
+		}),
+	});
+	const img = { width: 832, height: 1216 };
+
+	it("number клампится к размеру исходника, а не к статическому max", () => {
+		const s = sanitizeSchemaParams(cropLike, { x: 5000 }, { source: img });
+		expect(s.x).toBe(832);
+	});
+
+	it("dimension клампится по осям исходника", () => {
+		const s = sanitizeSchemaParams(
+			cropLike,
+			{ size: { width: 5000, height: 5000 } },
+			{ source: img },
+		);
+		expect(s.size).toEqual({ width: 832, height: 1216 });
+	});
+
+	it("без исходника — статический max", () => {
+		const s = sanitizeSchemaParams(cropLike, {
+			x: 5000,
+			size: { width: 5000, height: 5000 },
+		});
+		expect(s.x).toBe(5000);
+		expect(s.size).toEqual({ width: 5000, height: 5000 });
+	});
+
+	it("maxMinus: потолок = исходник − константа (offset до size−1)", () => {
+		const offsetLike = toolSchema<{ x: number }>({
+			x: field.number({
+				min: 0,
+				max: 20000,
+				default: 0,
+				maxFromSource: "width",
+				maxMinus: 1,
+			}),
+		});
+		const s = sanitizeSchemaParams(
+			offsetLike,
+			{ x: 5000 },
+			{ source: { width: 832, height: 1216 } },
+		);
+		expect(s.x).toBe(831);
 	});
 });
 

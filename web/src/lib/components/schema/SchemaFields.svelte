@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type {
+		Dimension,
 		FieldSpec,
 		FieldSpecKind,
 		ToolSchema,
 	} from "$lib/registry-schema";
-	import { resolveLayoutGroups } from "$lib/registry-schema";
+	import { effectiveMax, resolveLayoutGroups } from "$lib/registry-schema";
 	import { fieldLabel, groupLabel } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import { RotateCcw } from "@lucide/svelte";
@@ -30,6 +31,7 @@
 		spec: FieldSpec;
 		toolId: string;
 		fieldId: string;
+		sourceDims?: Dimension;
 		onchange?: (value: unknown, axis?: "width" | "height" | "both") => void;
 	}
 
@@ -54,6 +56,8 @@
 		schema: ToolSchema<Record<string, unknown>>;
 		values: Record<string, unknown>;
 		toolId: string;
+		/** Размеры входа шага: для maxFromSource-полей (crop и т.п.). */
+		sourceDims?: Dimension;
 		onchange: (
 			id: string,
 			value: unknown,
@@ -61,9 +65,23 @@
 		) => void;
 		onreset: () => void;
 	}
-	let { schema, values, toolId, onchange, onreset }: Props = $props();
+	let {
+		schema,
+		values,
+		toolId,
+		sourceDims = undefined,
+		onchange,
+		onreset,
+	}: Props = $props();
 
 	const layoutGroups = $derived(resolveLayoutGroups(schema));
+
+	function effectiveSpec(spec: FieldSpec): FieldSpec {
+		if (sourceDims && spec.kind === "number" && spec.maxFromSource) {
+			return { ...spec, max: effectiveMax(spec, sourceDims) };
+		}
+		return spec;
+	}
 </script>
 
 {#each layoutGroups as group (group.key)}
@@ -81,9 +99,10 @@
 			<Control
 				label={fieldLabel(schema.fields[id], id)}
 				value={values[id]}
-				spec={schema.fields[id].spec}
+				spec={effectiveSpec(schema.fields[id].spec)}
 				{toolId}
 				fieldId={id}
+				{sourceDims}
 				onchange={(v, axis) => onchange(id, v, axis)}
 			/>
 		{/each}

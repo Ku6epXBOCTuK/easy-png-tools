@@ -31,6 +31,7 @@ export type {
 	Page,
 	PageStep,
 	ResultKind,
+	ResultNote,
 	Tool,
 	ToolContext,
 	ToolImageFile,

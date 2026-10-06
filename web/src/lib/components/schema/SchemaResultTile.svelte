@@ -2,7 +2,7 @@
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import { t } from "$lib/i18n/t";
-	import type { FileResult, ResultKind } from "$lib/registry";
+	import type { FileResult, ResultKind, ResultNote } from "$lib/registry";
 	import { Check } from "@lucide/svelte";
 	import SchemaTextResult from "./SchemaTextResult.svelte";
 	import PreviewTile from "./PreviewTile.svelte";
@@ -10,6 +10,7 @@
 	interface Props {
 		resultKind?: ResultKind;
 		result: PixelImage | null;
+		resultNote?: ResultNote | null;
 		fileResult?: FileResult | null;
 		textResult?: string | null;
 		textVars?: Record<string, string | number>;
@@ -21,6 +22,7 @@
 	let {
 		resultKind = "image",
 		result,
+		resultNote = null,
 		fileResult = null,
 		textResult = null,
 		textVars = undefined,
@@ -31,6 +33,11 @@
 	}: Props = $props();
 
 	const resultUrl = $derived(result ? toDataUrl(result) : null);
+	const resultDims = $derived(
+		resultKind === "image" && result
+			? `${result.width} × ${result.height}`
+			: undefined,
+	);
 	const partUrls = $derived(
 		resultKind === "files" && fileResult
 			? fileResult.files.map((file) => ({
@@ -57,6 +64,9 @@
 	loading={running}
 	{parts}
 	{partsDims}
+	dims={resultDims}
+	note={resultNote ? t(resultNote.key) : undefined}
+	noteTone={resultNote?.tone ?? "warning"}
 >
 	<div
 		class="canvas"

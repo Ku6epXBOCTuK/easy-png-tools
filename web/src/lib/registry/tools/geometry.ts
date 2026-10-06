@@ -120,6 +120,11 @@ const fitOnBackground: Tool<FitOnBackgroundParams> = {
 			Math.round((Math.trunc(p.opacity) / 100) * 255),
 		);
 	}),
+	resultNote: (p, result) =>
+		result.width !== Math.trunc(p.size.width) ||
+		result.height !== Math.trunc(p.size.height)
+			? { key: "resultCard.grown", tone: "info" }
+			: null,
 };
 
 interface ChangeCanvasSizeParams {
@@ -230,6 +235,12 @@ const resizeTool: Tool<ResizeParams> = {
 		}
 		return resize(img, w, h);
 	}),
+	resultNote: (p, result) =>
+		p.keepAspect &&
+		(result.width !== Math.trunc(p.size.width) ||
+			result.height !== Math.trunc(p.size.height))
+			? { key: "resultCard.aspectAdjusted", tone: "info" }
+			: null,
 };
 
 interface CropParams {
@@ -243,24 +254,29 @@ export const cropSchema = toolSchema<CropParams>(
 		x: field.number({
 			label: "fields.x",
 			min: 0,
-			max: 2000,
+			max: 20000,
 			step: 1,
 			default: 0,
+			maxFromSource: "width",
+			maxMinus: 1,
 		}),
 		y: field.number({
 			label: "fields.y",
 			min: 0,
-			max: 1200,
+			max: 20000,
 			step: 1,
 			default: 0,
+			maxFromSource: "height",
+			maxMinus: 1,
 		}),
 		size: field.dimension({
 			label: "fields.cropAreaSize",
 			min: 1,
-			max: 2000,
+			max: 20000,
 			width: 1,
 			height: 1,
 			defaultFromSource: true,
+			maxFromSource: true,
 			presets: true,
 		}),
 	},
@@ -286,6 +302,11 @@ const cropTool: Tool<CropParams> = {
 		}
 		return crop(img, Math.trunc(p.x), Math.trunc(p.y), w, h);
 	}),
+	resultNote: (p, result) =>
+		result.width < Math.trunc(p.size.width) ||
+		result.height < Math.trunc(p.size.height)
+			? { key: "resultCard.clamped" }
+			: null,
 };
 
 interface RotateParams {
@@ -449,7 +470,10 @@ const splitPartsTool: Tool<SplitPartsParams> = {
 		const rowsCount = Math.max(1, Math.trunc(params.rows));
 		const count = cols * rowsCount;
 		if (count > MAX_SPLIT_PARTS) {
-			throw new ToolError("errors.tooManyParts", { count });
+			throw new ToolError("errors.tooManyParts", {
+				count,
+				max: MAX_SPLIT_PARTS,
+			});
 		}
 		const parts = splitToParts(img, cols, rowsCount);
 		const rowLen = String(rowsCount).length;

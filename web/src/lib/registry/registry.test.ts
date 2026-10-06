@@ -346,6 +346,53 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(out.data[3]).toBe(0);
 	});
 
+	it("crop: resultNote предупреждает, когда результат ужался по границам", () => {
+		const tool = TOOLS.find((t) => t.id === "crop")!;
+		expect(
+			tool.resultNote?.(
+				{ x: 700, y: 0, size: { width: 256, height: 256 } },
+				solid(132, 256),
+			),
+		).toEqual({ key: "resultCard.clamped" });
+		expect(
+			tool.resultNote?.(
+				{ x: 0, y: 0, size: { width: 256, height: 256 } },
+				solid(256, 256),
+			),
+		).toBeNull();
+	});
+
+	it("resize: resultNote при keepAspect и скорректированной стороне", () => {
+		const tool = TOOLS.find((t) => t.id === "resize")!;
+		const p = { size: { width: 500, height: 300 }, keepAspect: true };
+		expect(tool.resultNote?.(p, solid(300, 300))).toEqual({
+			key: "resultCard.aspectAdjusted",
+			tone: "info",
+		});
+		expect(tool.resultNote?.(p, solid(500, 300))).toBeNull();
+		// без keepAspect результат всегда как запрошено
+		expect(
+			tool.resultNote?.(
+				{ size: { width: 500, height: 300 }, keepAspect: false },
+				solid(500, 300),
+			),
+		).toBeNull();
+	});
+
+	it("fit-on-background: resultNote, когда картинка крупнее канваса", () => {
+		const tool = TOOLS.find((t) => t.id === "fit-on-background")!;
+		const p = {
+			size: { width: 100, height: 100 },
+			opacity: 100,
+			color: "#ffffff",
+		};
+		expect(tool.resultNote?.(p, solid(200, 100))).toEqual({
+			key: "resultCard.grown",
+			tone: "info",
+		});
+		expect(tool.resultNote?.(p, solid(100, 100))).toBeNull();
+	});
+
 	it("change-canvas-size использует anchor для позиции", async () => {
 		const tool = TOOLS.find((t) => t.id === "change-canvas-size")!;
 		const img = solid(10, 10);

@@ -76,6 +76,9 @@ export const en: Dict = {
 		result: "Result",
 		previewPanel: "Preview",
 		parts: "parts",
+		clamped: "clamped to image bounds",
+		aspectAdjusted: "size adjusted to keep aspect",
+		grown: "grew beyond requested size — image is larger",
 		alt: "Result image",
 	},
 	paramsCard: {
@@ -174,7 +177,8 @@ export const en: Dict = {
 		radiusInt: "Radius must be a non-negative integer",
 		kernelSize: "Kernel does not match the image dimensions",
 		sizeInt: "Width and height must be integers ≥ 1",
-		cropBounds: "Crop area does not intersect the image",
+		cropBounds:
+			"Crop area doesn't fit: offset plus size exceeds the image bounds",
 		noCanvasCtx: "Canvas 2D context is unavailable in this environment",
 		badBase64: "Expected a base64 string or a data-uri of an image",
 		qualityRange: "quality must be within 0..1",
@@ -197,9 +201,9 @@ export const en: Dict = {
 		paramString: 'Parameter "{id}" must be a string',
 		paramBool: 'Parameter "{id}" must be a checkbox value',
 		resizeSize: "Width and/or height must be positive",
-		cropSize: "Crop width and height must be positive",
+		cropSize: "Crop width and height must be at least 1 px",
 		sizePositive: "Dimensions must be positive and finite",
-		tooManyParts: "Too many parts ({count}). Maximum is 1000.",
+		tooManyParts: "Too many parts ({count}). The limit is {max}.",
 		pageUnknown: 'No page is registered under "{slug}".',
 	},
 	fields: {

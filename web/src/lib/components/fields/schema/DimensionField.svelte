@@ -13,11 +13,25 @@
 		label: string;
 		value: unknown;
 		spec: FieldSpec;
+		/** Размеры входа шага: потолок осей для maxFromSource-полей. */
+		sourceDims?: Dimension;
 		onchange?: (value: Dimension, axis?: "width" | "height" | "both") => void;
 	}
-	let { label, value, spec, onchange }: Props = $props();
+	let {
+		label,
+		value,
+		spec,
+		sourceDims = undefined,
+		onchange,
+	}: Props = $props();
 
 	const sp = $derived(spec as DimensionSpec);
+	const maxW = $derived(
+		sp.maxFromSource && sourceDims ? sourceDims.width : sp.max,
+	);
+	const maxH = $derived(
+		sp.maxFromSource && sourceDims ? sourceDims.height : sp.max,
+	);
 	const current = $derived.by(() => {
 		const v = value as Partial<Dimension> | undefined;
 		return {
@@ -49,7 +63,7 @@
 			<input
 				type="number"
 				min={sp.min}
-				max={sp.max}
+				max={maxW}
 				value={current.width}
 				oninput={(e) =>
 					setAxis("width", Number((e.target as HTMLInputElement).value))}
@@ -60,7 +74,7 @@
 			<input
 				type="number"
 				min={sp.min}
-				max={sp.max}
+				max={maxH}
 				value={current.height}
 				oninput={(e) =>
 					setAxis("height", Number((e.target as HTMLInputElement).value))}

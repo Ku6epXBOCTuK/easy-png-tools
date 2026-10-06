@@ -62,6 +62,9 @@ export interface VerdictResult {
 
 export type ToolResult = PixelImage | string | FileResult | VerdictResult;
 
+/** Заметка у тайла результата: i18n-ключ и тон бейджа (warning по умолчанию). */
+export type ResultNote = { key: string; tone?: "warning" | "info" };
+
 /**
  * Инструмент: уникальная реализация без адреса, текстов и категории — всё это
  * у страницы. `id` уникален, но обслуживает сколько угодно страниц, поэтому
@@ -86,6 +89,12 @@ export type Tool<P = Record<string, unknown>> = {
 	domOnly?: boolean;
 	/** Формат/качество скачивания результата; по умолчанию — PNG. */
 	output?: OutputFormat;
+	/**
+	 * Заметка у тайла результата, когда итог отличается от запрошенного:
+	 * ужат по границам (crop), скорректирован по пропорциям (resize),
+	 * вырос за канвас (fit-on-background).
+	 */
+	resultNote?: (params: P, result: PixelImage) => ResultNote | null;
 };
 
 /** Шаг страницы: инструмент и зафиксированные под него значения параметров. */

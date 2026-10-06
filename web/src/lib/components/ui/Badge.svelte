@@ -61,7 +61,7 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-s);
-		line-height: normal;
+		line-height: 1;
 		font-family: var(--font-mono);
 		font-size: var(--font-size-s);
 		font-weight: bold;

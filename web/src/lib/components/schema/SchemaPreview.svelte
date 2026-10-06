@@ -1,13 +1,17 @@
 <script lang="ts">
-	import MetaList from "$lib/components/display/MetaList.svelte";
-	import { buildSchemaPreviewModel } from "./schema-preview-model";
+	import { hasPreviewResult } from "./schema-preview-model";
 	import SchemaActions from "./SchemaActions.svelte";
 	import SchemaResultTile from "./SchemaResultTile.svelte";
 	import SchemaSourceTile from "./SchemaSourceTile.svelte";
 	import type { PixelImage } from "$lib/core/types";
 	import type { OutputMime } from "$lib/core/io";
 	import { t } from "$lib/i18n/t";
-	import type { FileResult, InputMode, ResultKind } from "$lib/registry";
+	import type {
+		FileResult,
+		InputMode,
+		ResultKind,
+		ResultNote,
+	} from "$lib/registry";
 
 	interface Props {
 		inputMode: InputMode;
@@ -15,6 +19,7 @@
 		toolId: string;
 		source: PixelImage | null;
 		result: PixelImage | null;
+		resultNote?: ResultNote | null;
 		fileResult?: FileResult | null;
 		textSource?: string;
 		textResult?: string | null;
@@ -39,6 +44,7 @@
 		toolId,
 		source,
 		result,
+		resultNote = null,
 		fileResult = null,
 		textSource = "",
 		textResult = null,
@@ -58,11 +64,8 @@
 		onquality,
 	}: Props = $props();
 
-	const model = $derived(
-		buildSchemaPreviewModel(
-			{ inputMode, resultKind, source, result, fileResult, textResult },
-			t,
-		),
+	const hasResult = $derived(
+		hasPreviewResult({ inputMode, resultKind, result, fileResult, textResult }),
 	);
 </script>
 
@@ -71,7 +74,7 @@
 	<SchemaActions
 		{inputMode}
 		{resultKind}
-		canDownload={model.hasResult}
+		canDownload={hasResult}
 		{running}
 		{format}
 		{quality}
@@ -100,6 +103,7 @@
 	<SchemaResultTile
 		{resultKind}
 		{result}
+		{resultNote}
 		{fileResult}
 		{textResult}
 		{textVars}
@@ -107,15 +111,6 @@
 		{running}
 		oncopy={oncopytext}
 		{ondownloadtxt}
-	/>
-</div>
-
-<div class="meta">
-	<MetaList
-		items={[
-			{ caption: t("sourceCard.source"), value: model.sourceValue },
-			{ caption: t("resultCard.result"), value: model.resultValue },
-		]}
 	/>
 </div>
 
@@ -144,9 +139,6 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: var(--space-l);
-	}
-	.meta {
-		margin-top: var(--space-l);
 	}
 	@media (--bp-tablet) {
 		.pair {
