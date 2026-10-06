@@ -49,6 +49,8 @@ export const en: Dict = {
 	},
 	chain: {
 		addStep: "Add step",
+		collapseStep: "Collapse step",
+		expandStep: "Expand step",
 		inputLegend: "Input",
 		resultLegend: "Result",
 		paramsLegend: "Parameters",

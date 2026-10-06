@@ -2,10 +2,10 @@ import { getTool, PAGES, type Page } from "./registry";
 import { defaultSchemaParams, sanitizeSchemaParams } from "./registry-schema";
 
 export interface ChainStep {
-	/** Стабильный ключ для keyed each и drag-n-drop (переживает reorder). */
 	key: string;
 	id: string;
 	params: Record<string, unknown>;
+	collapsed?: boolean;
 }
 
 export const CHAIN_VERSION = 1;
@@ -77,6 +77,8 @@ export function parseChain(data: unknown): ChainStep[] | null {
 		out.push({
 			key: uid(),
 			id,
+			collapsed:
+				(raw as { collapsed?: unknown }).collapsed === true ? true : undefined,
 			params: sanitizeSchemaParams(
 				tool.schema,
 				(params ?? {}) as Record<string, unknown>,
@@ -101,7 +103,11 @@ export function saveChain(slug: string, steps: ChainStep[]): void {
 		storageKey(slug),
 		JSON.stringify({
 			version: CHAIN_VERSION,
-			steps: steps.map((s) => ({ id: s.id, params: s.params })),
+			steps: steps.map((s) => ({
+				id: s.id,
+				params: s.params,
+				...(s.collapsed ? { collapsed: true } : {}),
+			})),
 		}),
 	);
 }

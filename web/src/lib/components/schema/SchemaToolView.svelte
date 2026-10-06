@@ -240,6 +240,12 @@
 		steps = removeStep(steps, key);
 	}
 
+	function toggleStep(index: number) {
+		const step = steps[index];
+		if (!step) return;
+		steps = steps.with(index, { ...step, collapsed: !step.collapsed });
+	}
+
 	function onStepDrop(e: DragEvent, to: number) {
 		e.preventDefault();
 		if (dragFrom !== null) steps = moveStep(steps, dragFrom, to);
@@ -458,6 +464,8 @@
 						index={i + 1}
 						title={stepTitle(step.id)}
 						draggable
+						collapsed={step.collapsed ?? false}
+						ontoggle={() => toggleStep(i)}
 						onremove={steps.length > 1
 							? () => removeStepAt(step.key)
 							: undefined}

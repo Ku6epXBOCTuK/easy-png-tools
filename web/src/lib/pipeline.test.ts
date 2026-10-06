@@ -79,6 +79,18 @@ describe("pipeline: parseChain (localStorage/импорт)", () => {
 		expect(chain[0].params).toMatchObject({ x: 5, y: 0 });
 	});
 
+	it("parseChain сохраняет collapsed, по умолчанию шаг развёрнут", () => {
+		const chain = parseChain({
+			version: CHAIN_VERSION,
+			steps: [
+				{ id: "crop", params: {}, collapsed: true },
+				{ id: "resize", params: {} },
+			],
+		})!;
+		expect(chain[0].collapsed).toBe(true);
+		expect(chain[1].collapsed).toBeUndefined();
+	});
+
 	it.each([
 		["нет версии", { steps: [{ id: "crop" }] }],
 		["другая версия", { version: 99, steps: [{ id: "crop" }] }],

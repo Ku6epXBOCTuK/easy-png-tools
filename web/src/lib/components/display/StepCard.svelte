@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { GripVertical, X } from "@lucide/svelte";
+	import { ChevronDown, ChevronRight, GripVertical, X } from "@lucide/svelte";
 	import IconButton from "$lib/components/ui/IconButton.svelte";
 	import { t } from "$lib/i18n/t";
 	import type { Snippet } from "svelte";
@@ -9,9 +9,11 @@
 		title?: string;
 		type?: string;
 		draggable?: boolean;
+		collapsed?: boolean;
 		tools?: Snippet;
 		children?: Snippet;
 		onremove?: () => void;
+		ontoggle?: () => void;
 		ondragstart?: (e: DragEvent) => void;
 		ondragover?: (e: DragEvent) => void;
 		ondrop?: (e: DragEvent) => void;
@@ -23,9 +25,11 @@
 		title,
 		type,
 		draggable = false,
+		collapsed = false,
 		tools,
 		children,
 		onremove,
+		ontoggle,
 		ondragstart,
 		ondragover,
 		ondrop,
@@ -54,6 +58,15 @@
 		</div>
 		<div class="step-tools">
 			{#if tools}{@render tools()}{/if}
+			{#if ontoggle}
+				<IconButton
+					icon={collapsed ? ChevronRight : ChevronDown}
+					label={collapsed ? t("chain.expandStep") : t("chain.collapseStep")}
+					variant="clear"
+					size="s"
+					onclick={() => ontoggle()}
+				/>
+			{/if}
 			{#if onremove}
 				<IconButton
 					icon={X}
@@ -65,7 +78,7 @@
 			{/if}
 		</div>
 	</header>
-	{#if children}
+	{#if children && !collapsed}
 		<div class="step-body">
 			{@render children()}
 		</div>
