@@ -146,6 +146,49 @@ describe("registry-schema: maxFromSource", () => {
 		);
 		expect(s.x).toBe(831);
 	});
+
+	it("effectiveMax: без maxFromSource и без исходника — статический max", () => {
+		const plain = toolSchema<{ a: number; b: number }>({
+			a: field.number({ min: 0, max: 100, default: 0 }),
+			b: field.number({
+				min: 0,
+				max: 20000,
+				default: 0,
+				maxFromSource: "width",
+			}),
+		});
+		const s = sanitizeSchemaParams(
+			plain,
+			{ a: 500, b: 5000 },
+			{ source: { width: 832, height: 1216 } },
+		);
+		expect(s.a).toBe(100);
+		const noSource = sanitizeSchemaParams(plain, { b: 5000 });
+		expect(noSource.b).toBe(5000);
+	});
+
+	it("clampSourceAwareMaxes: без исходника и без изменений — те же params", () => {
+		const noSource = clampSourceAwareMaxes(cropLike, { x: 5000 });
+		expect(noSource).toEqual({ x: 5000 });
+		const untouched = clampSourceAwareMaxes(
+			cropLike,
+			{ x: "мусор", size: { width: 100, height: 100 } },
+			img,
+		);
+		expect(untouched).toEqual({
+			x: "мусор",
+			size: { width: 100, height: 100 },
+		});
+	});
+
+	it("clampSourceAwareMaxes: dimension с мусором пропускается", () => {
+		const out = clampSourceAwareMaxes(
+			cropLike,
+			{ size: "не-объект" as unknown as Dimension },
+			img,
+		);
+		expect(out).toEqual({ size: "не-объект" });
+	});
 });
 
 describe("registry-schema: source-aware dimension defaults", () => {
