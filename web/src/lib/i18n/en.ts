@@ -235,6 +235,8 @@ export const en: Dict = {
 		colorTolerance: "Color tolerance",
 		cols: "Cols",
 		columns: "Columns",
+		splitMode: "Split by",
+		tileSize: "Tile size",
 		component: "Component",
 		contrast: "Contrast",
 		count: "Count",
@@ -323,6 +325,8 @@ export const en: Dict = {
 		cropArea: "Crop area",
 		fill: "Fill",
 		grid: "Grid",
+		splitMode: "Split by",
+		tileSize: "Tile size",
 		noise: "Noise",
 		offset: "Offset",
 		options: "Options",
@@ -373,6 +377,11 @@ export const en: Dict = {
 				orientationPortrait: "Portrait — height is greater than width.",
 				orientationLandscape: "Landscape — width is greater than height.",
 				orientationSquare: "Square — the sides are equal.",
+			},
+		},
+		"split-into-parts": {
+			options: {
+				mode: { grid: "Grid", tile: "Tile size" },
 			},
 		},
 		"show-transparent": {

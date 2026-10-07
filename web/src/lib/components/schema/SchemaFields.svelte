@@ -83,6 +83,11 @@
 		}
 		return spec;
 	}
+
+	function isHidden(spec: FieldSpec): boolean {
+		const rule = spec.visibleWhen;
+		return rule !== undefined && values[rule.field] !== rule.equals;
+	}
 </script>
 
 {#if isEmpty}
@@ -99,16 +104,19 @@
 				: undefined}
 		>
 			{#each group.fields as id (id)}
-				{@const Control = FIELDS[schema.fields[id].spec.kind]}
-				<Control
-					label={fieldLabel(schema.fields[id], id)}
-					value={values[id]}
-					spec={effectiveSpec(schema.fields[id].spec)}
-					{toolId}
-					fieldId={id}
-					{sourceDims}
-					onchange={(v, axis) => onchange(id, v, axis)}
-				/>
+				{@const spec = schema.fields[id].spec}
+				{@const Control = FIELDS[spec.kind]}
+				{#if !isHidden(spec)}
+					<Control
+						label={fieldLabel(schema.fields[id], id)}
+						value={values[id]}
+						spec={effectiveSpec(spec)}
+						{toolId}
+						fieldId={id}
+						{sourceDims}
+						onchange={(v, axis) => onchange(id, v, axis)}
+					/>
+				{/if}
 			{/each}
 		</div>
 	{/each}

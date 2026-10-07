@@ -760,6 +760,25 @@ describe("split-into-parts", () => {
 		expect(files).toHaveLength(1024);
 	});
 
+	it("режим tile: сетка считается от размера тайла, части точные", async () => {
+		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
+		const files = asFiles(
+			await tool.run({
+				source: solid(100, 70),
+				params: sanitizeSchemaParams(tool.schema, {
+					mode: "tile",
+					tile: { width: 32, height: 32 },
+				}),
+			}),
+		).files;
+		// 100/32 → 4 колонки, 70/32 → 3 строки
+		expect(files).toHaveLength(12);
+		for (const file of files) {
+			expect(file.image.width).toBe(32);
+			expect(file.image.height).toBe(32);
+		}
+	});
+
 	it("выбрасывает errors.tooManyParts при переполнении", () => {
 		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		expect(() =>

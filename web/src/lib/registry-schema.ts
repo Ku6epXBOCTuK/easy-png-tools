@@ -16,6 +16,8 @@ import type { Position9 } from "./core/textdraw";
  */
 export interface FieldSpecBase {
 	label?: string;
+	/** Поле видно только когда другое поле равно значению (режимы инструмента). */
+	visibleWhen?: { field: string; equals: string };
 }
 
 export interface NumberSpec extends FieldSpecBase {
@@ -291,6 +293,7 @@ export const field = {
 		maxFromSource?: boolean;
 		lockAspectWith?: string;
 		presets?: boolean;
+		visibleWhen?: { field: string; equals: string };
 	}): Field<Dimension> => ({
 		spec: { kind: "dimension", ...s },
 	}),

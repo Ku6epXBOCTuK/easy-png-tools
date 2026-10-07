@@ -236,6 +236,8 @@ export const ru: Dict = {
 		colorTolerance: "Допуск похожести",
 		cols: "Колонки",
 		columns: "Столбцы",
+		splitMode: "Делить по",
+		tileSize: "Размер тайла",
 		component: "Компонент",
 		contrast: "Контраст",
 		count: "Количество",
@@ -324,6 +326,8 @@ export const ru: Dict = {
 		cropArea: "Область кадрирования",
 		fill: "Заливка",
 		grid: "Сетка",
+		splitMode: "Режим разделения",
+		tileSize: "Размер тайла",
 		noise: "Шум",
 		offset: "Смещение",
 		options: "Параметры",
@@ -992,6 +996,17 @@ export const ru: Dict = {
 				height: "Высота полотна",
 				opacity: "Непрозрачность фона, %",
 				color: "Цвет фона",
+			},
+		},
+		"split-into-parts": {
+			params: {
+				mode: "Режим",
+				columns: "Столбцов",
+				rows: "Строк",
+				tile: "Размер тайла",
+			},
+			options: {
+				mode: { grid: "Сетка", tile: "Размер тайла" },
 			},
 		},
 		tile: {

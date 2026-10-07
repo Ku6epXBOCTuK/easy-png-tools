@@ -17,6 +17,7 @@ import {
 	resize,
 	rotate90,
 	splitToParts,
+	splitToTileSize,
 	symmetricCopy,
 	tile,
 	trimToContent,
@@ -437,26 +438,58 @@ const tileTool: Tool<TileParams> = {
 const MAX_SPLIT_PARTS = 1024;
 
 interface SplitPartsParams {
+	mode: "grid" | "tile";
 	columns: number;
 	rows: number;
+	tile: Dimension;
 }
 
-export const splitPartsSchema = toolSchema<SplitPartsParams>({
-	columns: field.number({
-		label: "fields.columns",
-		min: 1,
-		max: 32,
-		step: 1,
-		default: 2,
-	}),
-	rows: field.number({
-		label: "fields.rows",
-		min: 1,
-		max: 32,
-		step: 1,
-		default: 2,
-	}),
-});
+export const splitPartsSchema = toolSchema<SplitPartsParams>(
+	{
+		mode: field.select({
+			label: "fields.splitMode",
+			default: "grid",
+			options: [
+				{ value: "grid", label: "Grid" },
+				{ value: "tile", label: "Tile size" },
+			],
+		}),
+		columns: field.number({
+			label: "fields.columns",
+			min: 1,
+			max: 32,
+			step: 1,
+			default: 2,
+			visibleWhen: { field: "mode", equals: "grid" },
+		}),
+		rows: field.number({
+			label: "fields.rows",
+			min: 1,
+			max: 32,
+			step: 1,
+			default: 2,
+			visibleWhen: { field: "mode", equals: "grid" },
+		}),
+		tile: field.dimension({
+			label: "fields.tileSize",
+			min: 1,
+			max: 20000,
+			width: 32,
+			height: 32,
+			presets: true,
+			visibleWhen: { field: "mode", equals: "tile" },
+		}),
+	},
+	{
+		layout: {
+			groups: [
+				{ title: "groups.splitMode", fields: ["mode"] },
+				{ title: "groups.grid", fields: ["columns", "rows"] },
+				{ title: "groups.tileSize", fields: ["tile"] },
+			],
+		},
+	},
+);
 
 const splitPartsTool: Tool<SplitPartsParams> = {
 	id: "split-into-parts",
@@ -466,8 +499,20 @@ const splitPartsTool: Tool<SplitPartsParams> = {
 	run: (ctx) => {
 		const img = requireSource(ctx);
 		const params = ctx.params as SplitPartsParams;
-		const cols = Math.max(1, Math.trunc(params.columns));
-		const rowsCount = Math.max(1, Math.trunc(params.rows));
+		const cols =
+			params.mode === "tile"
+				? Math.max(
+						1,
+						Math.ceil(img.width / Math.max(1, Math.trunc(params.tile.width))),
+					)
+				: Math.max(1, Math.trunc(params.columns));
+		const rowsCount =
+			params.mode === "tile"
+				? Math.max(
+						1,
+						Math.ceil(img.height / Math.max(1, Math.trunc(params.tile.height))),
+					)
+				: Math.max(1, Math.trunc(params.rows));
 		const count = cols * rowsCount;
 		if (count > MAX_SPLIT_PARTS) {
 			throw new ToolError("errors.tooManyParts", {
@@ -475,7 +520,10 @@ const splitPartsTool: Tool<SplitPartsParams> = {
 				max: MAX_SPLIT_PARTS,
 			});
 		}
-		const parts = splitToParts(img, cols, rowsCount);
+		const parts =
+			params.mode === "tile"
+				? splitToTileSize(img, params.tile.width, params.tile.height)
+				: splitToParts(img, cols, rowsCount);
 		const rowLen = String(rowsCount).length;
 		const colLen = String(cols).length;
 		const files: ToolImageFile[] = parts.map((image, index) => {

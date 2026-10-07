@@ -7,6 +7,7 @@ import {
 	resize,
 	rotate90,
 	splitToParts,
+	splitToTileSize,
 	tile,
 } from "./geometry";
 import { expectImageEqual, makeImage } from "./test-helpers";
@@ -320,5 +321,65 @@ describe("splitToParts", () => {
 		expect(parts).toHaveLength(2);
 		expect(parts[0].width).toBe(3);
 		expect(parts[0].height).toBe(6);
+	});
+});
+
+describe("splitToTileSize", () => {
+	function grid(w: number, h: number): PixelImage {
+		const pixels: number[][] = [];
+		for (let y = 0; y < h; y++) {
+			for (let x = 0; x < w; x++) {
+				const v = y * w + x + 1;
+				pixels.push([v, v, v, 255]);
+			}
+		}
+		return makeImage(w, h, pixels);
+	}
+
+	it("кратный размер: части ровно tileW×tileH без паддинга", () => {
+		const parts = splitToTileSize(grid(4, 4), 2, 2);
+		expect(parts).toHaveLength(4);
+		for (const part of parts) {
+			expect(part.width).toBe(2);
+			expect(part.height).toBe(2);
+		}
+		expectImageEqual(parts[1], [
+			[3, 3, 3, 255],
+			[4, 4, 4, 255],
+			[7, 7, 7, 255],
+			[8, 8, 8, 255],
+		]);
+	});
+
+	it("некратный размер: канвас дополняется прозрачным до кратности", () => {
+		const parts = splitToTileSize(grid(5, 3), 3, 2);
+		expect(parts).toHaveLength(4);
+		for (const part of parts) {
+			expect(part.width).toBe(3);
+			expect(part.height).toBe(2);
+		}
+		expectImageEqual(parts[1], [
+			[4, 4, 4, 255],
+			[5, 5, 5, 255],
+			[0, 0, 0, 0],
+			[9, 9, 9, 255],
+			[10, 10, 10, 255],
+			[0, 0, 0, 0],
+		]);
+		expectImageEqual(parts[2], [
+			[11, 11, 11, 255],
+			[12, 12, 12, 255],
+			[13, 13, 13, 255],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+		]);
+	});
+
+	it("тайл больше картинки — одна часть с паддингом", () => {
+		const parts = splitToTileSize(grid(2, 2), 4, 4);
+		expect(parts).toHaveLength(1);
+		expect(parts[0].width).toBe(4);
+		expect(parts[0].height).toBe(4);
 	});
 });

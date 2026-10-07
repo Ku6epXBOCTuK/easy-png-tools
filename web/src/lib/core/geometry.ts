@@ -87,6 +87,31 @@ export function splitToParts(
 	return parts;
 }
 
+/** Нарезка по размеру тайла: канвас дополняется прозрачным до кратности. */
+export function splitToTileSize(
+	img: PixelImage,
+	tileW: number,
+	tileH: number,
+): PixelImage[] {
+	const tw = Math.max(1, Math.trunc(tileW));
+	const th = Math.max(1, Math.trunc(tileH));
+	const cols = Math.max(1, Math.ceil(img.width / tw));
+	const rows = Math.max(1, Math.ceil(img.height / th));
+	const gridW = cols * tw;
+	const gridH = rows * th;
+	const padded =
+		gridW === img.width && gridH === img.height
+			? img
+			: expandCanvas(img, 0, 0, gridW - img.width, gridH - img.height);
+	const parts: PixelImage[] = [];
+	for (let row = 0; row < rows; row++) {
+		for (let col = 0; col < cols; col++) {
+			parts.push(crop(padded, col * tw, row * th, tw, th));
+		}
+	}
+	return parts;
+}
+
 export function centerByAlpha(img: PixelImage): PixelImage {
 	let minX = img.width;
 	let minY = img.height;
