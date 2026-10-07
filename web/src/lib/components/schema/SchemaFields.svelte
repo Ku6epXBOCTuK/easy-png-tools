@@ -18,6 +18,7 @@
 	import ColorsControl from "$lib/components/fields/schema/ColorsControl.svelte";
 	import RangeControl from "$lib/components/fields/schema/RangeControl.svelte";
 	import SelectControl from "$lib/components/fields/schema/SelectControl.svelte";
+	import SegmentedControl from "$lib/components/fields/schema/SegmentedControl.svelte";
 	import TextControl from "$lib/components/fields/schema/TextControl.svelte";
 	import OffsetControl from "$lib/components/fields/schema/OffsetControl.svelte";
 	import PositionControl from "$lib/components/fields/schema/PositionControl.svelte";
@@ -42,6 +43,7 @@
 		"color-pair": ColorPairControl,
 		colors: ColorsControl,
 		select: SelectControl,
+		segmented: SegmentedControl,
 		checkbox: CheckboxControl,
 		text: TextControl,
 		dimension: DimensionField,

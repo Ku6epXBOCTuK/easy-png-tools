@@ -50,6 +50,15 @@ export interface SelectSpec<V extends string = string> extends FieldSpecBase {
 	options: { value: V; label: string }[];
 }
 
+/** То же, что select, но рендерится кнопками-сегментами (выбор в 1 клик). */
+export interface SegmentedSpec<
+	V extends string = string,
+> extends FieldSpecBase {
+	kind: "segmented";
+	default: V;
+	options: { value: V; label: string }[];
+}
+
 export interface TextSpec extends FieldSpecBase {
 	kind: "text";
 	default: string;
@@ -214,6 +223,7 @@ export const fieldSpecs = {
 	slider: {} as SliderSpec,
 	color: {} as ColorSpec,
 	select: {} as SelectSpec,
+	segmented: {} as SegmentedSpec,
 	text: {} as TextSpec,
 	checkbox: {} as CheckboxSpec,
 	dimension: {} as DimensionSpec,
@@ -276,6 +286,11 @@ export const field = {
 	}),
 	select: <V extends string>(s: Omit<SelectSpec<V>, "kind">): Field<V> => ({
 		spec: { kind: "select", ...s },
+	}),
+	segmented: <V extends string>(
+		s: Omit<SegmentedSpec<V>, "kind">,
+	): Field<V> => ({
+		spec: { kind: "segmented", ...s },
 	}),
 	text: (s: Omit<TextSpec, "kind">): Field<string> => ({
 		spec: { kind: "text", ...s },
@@ -576,6 +591,7 @@ export function sanitizeSchemaParams<P>(
 				break;
 			}
 			case "select":
+			case "segmented":
 				out[key] =
 					typeof raw === "string" && spec.options.some((o) => o.value === raw)
 						? raw

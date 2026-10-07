@@ -25,7 +25,7 @@ function selectOptions(
 		const spec = (
 			field as { spec?: { kind?: string; options?: SelectOption[] } }
 		).spec;
-		if (spec?.kind !== "select") continue;
+		if (spec?.kind !== "select" && spec?.kind !== "segmented") continue;
 		for (const option of spec.options ?? []) result.push({ fieldId, option });
 	}
 	return result;

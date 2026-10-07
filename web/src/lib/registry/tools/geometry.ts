@@ -446,7 +446,7 @@ interface SplitPartsParams {
 
 export const splitPartsSchema = toolSchema<SplitPartsParams>(
 	{
-		mode: field.select({
+		mode: field.segmented({
 			label: "fields.splitMode",
 			default: "grid",
 			options: [
