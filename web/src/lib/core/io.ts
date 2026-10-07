@@ -59,6 +59,14 @@ export function unsupportedImageError(file: File): ToolError {
 	});
 }
 
+async function toBitmap(source: Blob | File): Promise<ImageBitmap> {
+	try {
+		return await createImageBitmap(source);
+	} catch {
+		throw new ToolError("errors.imageDecode");
+	}
+}
+
 async function decodeBitmap(bitmap: ImageBitmap): Promise<PixelImage> {
 	const canvas = document.createElement("canvas");
 	canvas.width = bitmap.width;
@@ -77,7 +85,7 @@ async function decodeBitmap(bitmap: ImageBitmap): Promise<PixelImage> {
 }
 
 export async function decodeFile(file: File): Promise<PixelImage> {
-	const bitmap = await createImageBitmap(file);
+	const bitmap = await toBitmap(file);
 	try {
 		return await decodeBitmap(bitmap);
 	} finally {
@@ -89,7 +97,7 @@ export async function decodeBytes(
 	bytes: Uint8Array<ArrayBuffer>,
 ): Promise<PixelImage> {
 	const blob = new Blob([bytes]);
-	const bitmap = await createImageBitmap(blob);
+	const bitmap = await toBitmap(blob);
 	try {
 		return await decodeBitmap(bitmap);
 	} finally {

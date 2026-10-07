@@ -192,6 +192,8 @@ export const en: Dict = {
 			"Crop area doesn't fit: offset plus size exceeds the image bounds",
 		noCanvasCtx: "Canvas 2D context is unavailable in this environment",
 		badBase64: "Expected a base64 string or a data-uri of an image",
+		imageDecode:
+			"Can't read the image — the file is corrupted or the format is unsupported",
 		qualityRange: "quality must be within 0..1",
 		svgSize: "Could not determine SVG dimensions",
 		svgLoad: "Failed to load SVG — check the markup",
