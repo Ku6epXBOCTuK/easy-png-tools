@@ -1,6 +1,8 @@
 <script lang="ts">
 	import EmptyState from "$lib/components/feedback/EmptyState.svelte";
 	import SchemaToolView from "$lib/components/schema/SchemaToolView.svelte";
+	import Seo from "$lib/components/Seo.svelte";
+	import { pageDescription, pageTitle } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import { getPageBySlug, getTool } from "$lib/registry";
 	import { SlidersHorizontal as ToolIcon } from "@lucide/svelte";
@@ -14,8 +16,17 @@
 	const tool = $derived(page ? getTool(page.steps[0].id) : undefined);
 </script>
 
+{#if page}
+	<Seo
+		title={`easy-png-tools / ${pageTitle(page)}`}
+		description={pageDescription(page)}
+		path={`/tools/${page.slug}`}
+	/>
+{/if}
 <svelte:head>
-	<title>easy-png-tools / {page?.title ?? t("toolPage.fallbackTitle")}</title>
+	{#if !page}
+		<title>easy-png-tools / {t("toolPage.fallbackTitle")}</title>
+	{/if}
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 

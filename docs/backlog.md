@@ -227,7 +227,15 @@
       переименований уже опубликованных страниц; клонов с canonical не делать
       (`docs/plan-seo.md` §5)
 - [ ] sitemap.xml из реестра + `Sitemap:` в robots.txt (S1b/S1c)
-- [ ] Seo.svelte: canonical + OG-теги, per-tool OG-картинки (S1d/S1e)
+- [ ] Seo.svelte: per-tool OG-картинки (S1e) — у каждой страницы инструмента
+      своя превью-карточка 1200×630 для соцсетей/мессенджеров: имя инструмента,
+      бренд, иконка. Сейчас все страницы ссылаются на общую
+      `static/og/default.png` (генерирует `pnpm --dir web gen:og` —
+      Playwright-скриншот HTML-карточки в `web/scripts/gen-og.mjs`). Что делать:
+      расширить gen-og.mjs — проход по реестру страниц, карточка с названием
+      инструмента в `static/og/[slug].png`, в `Seo.svelte` подставлять og-URL по
+      slug страницы. Критерий приёмки: у `/tools/flip-png` в og:image своя
+      картинка с названием инструмента, файл лежит в `static/og/`
 - [ ] контент страницы инструмента: seo-блок в словарях, how-to/FAQ/related (S2)
 - [ ] JSON-LD (SoftwareApplication/FAQPage/Breadcrumb) + llms.txt (S3)
 - [ ] дистрибуция: закрепить репо, alternative.to, Product Hunt, Reddit/HN (S4c)

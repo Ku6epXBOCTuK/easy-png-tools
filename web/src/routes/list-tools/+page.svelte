@@ -4,6 +4,7 @@
 	import CatalogHeader from "$lib/components/catalog/CatalogHeader.svelte";
 	import CatalogToolbar from "$lib/components/catalog/CatalogToolbar.svelte";
 	import ToolCard from "$lib/components/catalog/ToolCard.svelte";
+	import Seo from "$lib/components/Seo.svelte";
 	import { favFirst, isFav } from "$lib/favorites.svelte";
 	import {
 		pageDescription,
@@ -37,10 +38,11 @@
 	);
 </script>
 
-<svelte:head>
-	<title>{t("catalog.pageTitle")}</title>
-	<meta name="description" content={t("catalog.metaDescription")} />
-</svelte:head>
+<Seo
+	title={t("catalog.pageTitle")}
+	description={t("catalog.metaDescription")}
+	path="/list-tools"
+/>
 
 <div class="catalog-page">
 	<CatalogHeader total={PREVIEW_TOTAL} />
