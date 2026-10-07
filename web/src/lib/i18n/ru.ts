@@ -171,6 +171,9 @@ export const ru: Dict = {
 		language: "Язык",
 		addFav: "В избранное",
 		removeFav: "Убрать из избранного",
+		github: "GitHub",
+		telegram: "Telegram",
+		twitch: "Twitch",
 	},
 	errors: {
 		noImageRun: "Этот инструмент не обрабатывает изображения",

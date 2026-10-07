@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
+	import BrandIcon from "$lib/components/ui/BrandIcon.svelte";
 	import LangToggle from "$lib/components/ui/LangToggle.svelte";
 	import ThemeToggle from "$lib/components/ui/ThemeToggle.svelte";
+	import { t } from "$lib/i18n/t";
+	import { siGithub, siTelegram, siTwitch } from "simple-icons";
 	import TopNav from "./TopNav.svelte";
 
 	interface Props {
@@ -23,6 +26,33 @@
 	</a>
 	<TopNav />
 	<div class="top-actions">
+		<a
+			class="social"
+			href="https://github.com/Ku6epXBOCTuK/easy-png-tools"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label={t("ui.github")}
+		>
+			<BrandIcon path={siGithub.path} size={16} />
+		</a>
+		<a
+			class="social"
+			href="https://t.me/Ku6epXBOCTuK_feed"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label={t("ui.telegram")}
+		>
+			<BrandIcon path={siTelegram.path} size={16} />
+		</a>
+		<a
+			class="social"
+			href="https://www.twitch.tv/ku6epxboctuk"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label={t("ui.twitch")}
+		>
+			<BrandIcon path={siTwitch.path} size={16} />
+		</a>
 		<ThemeToggle {theme} {ontoggle} />
 		<LangToggle />
 	</div>
@@ -63,5 +93,13 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-xl);
+	}
+	.social {
+		display: inline-flex;
+		align-items: center;
+		color: var(--color-text-muted);
+	}
+	.social:hover {
+		color: var(--color-text);
 	}
 </style>

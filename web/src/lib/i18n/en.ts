@@ -170,6 +170,9 @@ export const en: Dict = {
 		language: "Language",
 		addFav: "Add to favorites",
 		removeFav: "Remove from favorites",
+		github: "GitHub",
+		telegram: "Telegram",
+		twitch: "Twitch",
 	},
 	errors: {
 		noImageRun: "This tool does not process images",
