@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.4.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/83e75b5589ee200b6e216bc0187404b8be086149..v0.4.0) - 2026-10-07
+#### Features
+- add og description\image\etc - ([31ace35](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/31ace359d7ff187cbe9ba968facc498e75e66b3d)) - Ku6epXBOCTuK
+- add socials icons - ([fbe6139](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/fbe6139585aeaca2b70b55224115c9e2b7653ca6)) - Ku6epXBOCTuK
+- add favorites tools - ([2f11cb8](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/2f11cb86ade08b91f48c823f3354f62260bae262)) - Ku6epXBOCTuK
+- add split to parts by tile size - ([32cb369](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/32cb369ca96a96fc0194a63d8086db610f3f190a)) - Ku6epXBOCTuK
+- aligned mode for pipeline - ([b7be973](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/b7be973b54091b071e0c751533a73ad1d0ea11fb)) - Ku6epXBOCTuK
+- change tool inplace - ([1ba03b7](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/1ba03b731d80212eedcf9d8985478dc78e2e32f4)) - Ku6epXBOCTuK
+- collapse\expand steps in pipeline - ([5c58451](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/5c58451f2f5a0dde167d7b2bebcc8f3190f20212)) - Ku6epXBOCTuK
+#### Bug Fixes
+- select mode via segmented button in split by parts - ([676be38](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/676be383d9fb71b7dc4e83d8c243dc39c60f6c36)) - Ku6epXBOCTuK
+- add text to no param tools - ([e7d3925](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/e7d3925eb2063b0265a396bf693b4ed95b49782b)) - Ku6epXBOCTuK
+
+- - -
+
 ## [v0.3.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/a9327eaa2757917fc1d58fb0a2989e98a0e1b07c..v0.3.0) - 2026-10-06
 #### Features
 - add info\warning badge, update size range workflow - ([92cc590](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/92cc5909594a8fe25f6cc70427b219e0dc22d774)) - Ku6epXBOCTuK
