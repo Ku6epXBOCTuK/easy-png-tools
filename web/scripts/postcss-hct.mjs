@@ -1,16 +1,7 @@
-// postcss-hct: PostCSS plugin that lets design tokens be authored as hct() and
-// emits plain sRGB hex colors.
-//
-// Supported syntax (Material Design 3 HCT; hue 0–360, chroma 0–~120, tone 0–100):
-//
-//	--color-success: hct(155 40 55);                    // literal
-//	--color-muted:   hct(from var(--brand-main) h 6 97); // take hue from seed
-//	--brand-alt:     hct(from var(--brand-main) h c calc(t + 36)); // channel math
-//
-// `from` seeds are resolved from sibling custom properties in the same
-// stylesheet (:root tokens plus the current rule's own tokens). Seeds may be
-// #hex, oklch(), rgb() or another hct(). Anything the plugin cannot resolve is
-// left as-is. The emitter is sRGB hex; HCT stays the single source of truth.
+// postcss-hct: PostCSS plugin that lets design tokens be authored as hct()
+// (literal, `from var(...)` seed, channel math) and emits sRGB hex. `from`
+// seeds resolve from sibling custom properties (#hex, oklch(), rgb(), hct());
+// anything unresolvable is left as-is. HCT stays the single source of truth.
 
 import { Color } from "@panmdaa/colors";
 

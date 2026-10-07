@@ -44,9 +44,9 @@ export default defineConfig({
 		{
 			name: "webkit",
 			testMatch: browserContractTests,
-			// webkit под Windows заметно медленнее и под нагрузкой случайно
-			// превышает любые таймауты (каждый прогон — разные тесты): запас по
-			// таймаутам + retries против флака.
+			// WebKit on Windows is noticeably slower and under load randomly
+			// exceeds any timeout (different tests each run): timeout headroom
+			// plus retries against flakiness.
 			timeout: 120_000,
 			expect: { timeout: 30_000 },
 			retries: 2,

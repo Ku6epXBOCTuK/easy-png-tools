@@ -1,19 +1,7 @@
-// Rule: NO HARDCODED USER TEXT IN SVELTE TEMPLATES.
-//
-// Every user-visible string must come from the dictionaries via t(); a literal in
-// the template silently ships English to the RU locale. Warn-only by design
-// (report-only pilot), so the baseline stays green while the rule is calibrated.
-//
-// What is NOT reported (the pilot's exclusion list, from the plan):
-//   - brand and version strings ("easy-png-tools", "v0.1.0");
-//   - formats, file names and units ("PNG", "result.png", "512×512", "px", "%");
-//   - X/Y axis markers and other one-letter technical markers;
-//   - registry source strings (ALL CAPS identifiers such as "BACKGROUND");
-//   - /kit, which is a component gallery with deliberately hardcoded labels.
-//
-// Detection surface: SvelteText nodes (including the text parts of mixed content)
-// and string-literal values of user-facing attributes. Values written as
-// expressions ({...}) are not inspected — the value is computed elsewhere.
+// Rule: NO HARDCODED USER TEXT IN SVELTE TEMPLATES. Every user-visible
+// string must come from the dictionaries via t(); a literal silently ships
+// English to the RU locale. Warn-only report-only pilot. Exclusion list
+// (brand, units, registry strings, /kit): web/eslint-plugins/README.md.
 
 import { USER_TEXT_ATTRS } from "./lists.js";
 

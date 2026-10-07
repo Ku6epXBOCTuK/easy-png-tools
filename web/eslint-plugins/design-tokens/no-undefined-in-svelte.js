@@ -10,7 +10,7 @@ import { getStyleNodeLoc, getStyleRoot } from "./style-context.js";
 
 // A custom property DEFINITION: "--x:" followed by a colon.
 const DEFINED_RE = /--[\w-]+(?=\s*:)/g;
-// A var() REFERENCE (primary argument only — fallbacks are optional overrides).
+// A var() REFERENCE (primary argument only; fallbacks are optional overrides).
 const VAR_REF_RE = /var\(\s*(--[\w-]+)/g;
 
 const definedCache = new Map();

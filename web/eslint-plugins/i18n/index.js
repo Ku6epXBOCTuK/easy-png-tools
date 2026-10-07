@@ -1,11 +1,7 @@
 /**
- * Local ESLint plugin "i18n".
- *
- * Cross-locale dictionary hygiene (i18n/dict-consistency): every locale dict in
- * `lib/i18n/` is compared against all the others — key parity, empty values,
- * `{placeholder}` parity — warn-only by design (a missing translation must not
- * break the build). The set of locales comes from `LOCALES` in `dict.ts`, so
- * new locales are picked up automatically.
+ * Local ESLint plugin "i18n": cross-locale dictionary hygiene
+ * (dict-consistency) and no hardcoded user text in templates. Warn-only by
+ * design. Rule details: web/eslint-plugins/README.md.
  */
 import dictConsistency from "./dict-consistency.js";
 import noHardcodedUserText from "./no-hardcoded-user-text.js";

@@ -1,9 +1,7 @@
 // Color authorship: every color value in app.css must be authored as hct()
-// — literals AND derived forms (hct(from var(...) h c t) with channel math) —
-// so the whole palette is computed through HCT channels and output as sRGB by
-// the postcss-hct plugin. Exceptions: the seed tokens --brand-main/--brand-alt
-// (any format allowed) and color-mix(...) (the only sanctioned way to blend
-// two tokens).
+// (literals and derived forms), so the whole palette is computed through HCT
+// and output as sRGB by postcss-hct. Exceptions: the seed tokens
+// --brand-main/--brand-alt and color-mix(...) (the only sanctioned blend).
 
 import { isColorValue } from "./helpers.mjs";
 

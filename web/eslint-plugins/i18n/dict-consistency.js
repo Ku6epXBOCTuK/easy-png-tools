@@ -1,30 +1,7 @@
 /**
- * Cross-locale dictionary linter (i18n/dict-consistency).
- *
- * Each locale dict in `lib/i18n/` is checked against ALL the others (not just
- * against the base locale). The set of locales comes from `LOCALES` in the
- * sibling `dict.ts`, so a new locale is picked up automatically — no rule
- * changes needed. The rule only ever warns (a missing translation must not
- * break the build) — see docs/plan-preview-i18n.md §Фаза 8.
- *
- * The diagnostic lives where the fix lives — each file reports its OWN gaps:
- *   - missing keys: the union of all keys is collected from the on-disk dicts;
- *     whatever the current file lacks is reported here (a missing whole
- *     section is reported once, not per descendant key);
- *   - empty values:  `""` or whitespace-only values;
- *   - placeholders:  for a shared key the `{name}` set is compared against the
- *     canonical set (the one shared by most locales, ties broken by BASE_LOCALE
- *     then LOCALES order) — catches a variable lost in translation exactly once,
- *     even when only one locale deviates.
- *
- * The rule self-filters: files whose basename is not one of LOCALES are
- * ignored, so it can be attached to the whole `lib/i18n/` directory.
- *
- * Options (object, all optional):
- *   - allowPaths: dot-path keys excluded from every check.
- *   - baseLocaleFallback: patterns whose missing keys are allowed in BASE_LOCALE.
- *   - ignoreMissingPatterns: patterns temporarily excluded from missing-key
- *     checks.
+ * Cross-locale dictionary linter: each dict in lib/i18n/ is checked against
+ * ALL others (key parity, empty values, placeholders), warn-only.
+ * Full semantics and options: web/eslint-plugins/README.md.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -54,7 +31,7 @@ function unwrap(node) {
 }
 
 /**
- * The exported dict `export const <name>: Dict = {...}` — the declarator id
+ * The exported dict `export const <name>: Dict = {...}`: the declarator id
  * (for reporting) and the object literal, or null.
  */
 function findDictExport(ast) {
@@ -109,7 +86,7 @@ function findLocalesList(ast) {
 
 /**
  * String literal node. The parser emits `Literal` in some ESTree versions and
- * `StringLiteral` in others — accept both.
+ * `StringLiteral` in others; accept both.
  */
 function isStringLiteral(node) {
 	if (!node) return false;
@@ -148,10 +125,9 @@ function propKey(prop) {
 }
 
 /**
- * Flatten an exported dict object into `path -> { node, kind, value }`.
- * Computed properties are skipped; intermediate objects are recorded too, so a
- * missing whole section is reported once (children of a missing path are
- * skipped when reporting).
+ * Flatten an exported dict into `path -> { node, kind, value }`. Computed
+ * properties are skipped; intermediate objects are recorded too, so a
+ * missing whole section is reported once.
  */
 function buildKeyMap(objectNode) {
 	const map = new Map();
@@ -226,7 +202,7 @@ function readDir(dir) {
 	for (const locale of locales) {
 		const file = path.join(dir, `${locale}.ts`);
 		if (!fs.existsSync(file)) {
-			// Declared in LOCALES but not yet translated — treated as an empty
+			// Declared in LOCALES but not yet translated; treated as an empty
 			// dict so every key it lacks reports `missing key ... in <locale>`.
 			dicts.push({ locale, map: new Map() });
 			continue;

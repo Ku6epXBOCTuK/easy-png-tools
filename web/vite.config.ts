@@ -11,7 +11,7 @@ const base: "" | `/${string}` =
 		: (`/${rawBase.replace(/^\/+/, "").replace(/\/+$/, "")}` as `/${string}`);
 
 export default defineConfig({
-	// PUBLIC_* попадают в import.meta.env — флаги окружения вроде GA.
+	// PUBLIC_* lands in import.meta.env: environment flags like GA.
 	envPrefix: ["VITE_", "PUBLIC_"],
 	ssr: {
 		noExternal: ["@lucide/svelte"],

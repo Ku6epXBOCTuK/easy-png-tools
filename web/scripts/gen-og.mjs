@@ -1,6 +1,6 @@
-// Генерирует static/og/default.png — дефолтная OG-карточка 1200×630.
-// Запуск: pnpm --dir web gen:og. Карточка рисуется в браузере (текст, иконки),
-// per-tool карточки — этим же harness позже (docs/plan-seo.md S1e).
+// Generates static/og/default.png: the default 1200x630 OG card.
+// Run: pnpm --dir web gen:og. The card is rendered in a browser (text,
+// icons); per-tool cards will reuse this harness (docs/plan-seo.md S1e).
 import { mkdirSync } from "node:fs";
 import { chromium } from "playwright";
 

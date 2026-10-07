@@ -1,10 +1,8 @@
 // Rule: NO DESIGN PRIMITIVE IN COMPONENT TOKEN DEFINITIONS (variant A).
-// A custom property may be DEFINED inside a component's <style> block, but its
-// value must not introduce a design primitive: a raw color literal (hex/rgb/
-// oklch/named) or an absolute size (px/rem/em). This keeps the design surface
-// (colors/sizes) a single source of truth in app.css, while still allowing
-// local DERIVED variables built from tokens: var(--...), calc(), unitless
-// ratios (--ratio: 1.5) — those are legitimate component-local state.
+// A custom property may be DEFINED in a component's <style>, but its value
+// must not introduce a design primitive (raw color, absolute size): the
+// design surface stays in app.css, while local DERIVED variables (var(),
+// calc(), unitless ratios) remain legitimate.
 
 import { COLOR_LITERAL, FORBIDDEN_SIZE_TOKEN } from "./lists.js";
 import { getStyleNodeLoc, getStyleRoot } from "./style-context.js";
@@ -57,7 +55,7 @@ export default {
 
 					const primitive = stripVars(value);
 
-					// A color literal in the definition → primitive.
+					// A color literal in the definition is a primitive.
 					const colorHit = primitive.match(COLOR_LITERAL);
 					if (colorHit) {
 						report(decl, "tokenPrimitive", {
@@ -67,7 +65,7 @@ export default {
 						return;
 					}
 
-					// An absolute size (px/rem/em) in the definition → primitive.
+					// An absolute size (px/rem/em) in the definition is a primitive.
 					const sizeHit = primitive.match(FORBIDDEN_SIZE_TOKEN);
 					if (sizeHit) {
 						report(decl, "tokenPrimitive", {

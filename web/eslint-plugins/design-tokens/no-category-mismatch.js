@@ -1,9 +1,7 @@
-// Rule: NO TOKEN-CATEGORY MISMATCH IN COMPONENTS.
-// A size property (padding, gap, font-size ...) must use a SIZE token
-// (--space-*, --size-*, --text-*, --radius-*, --bp-*, --z-*). A color property
-// (color, background, border-color ...) must use a COLOR token
-// (--color-*, --brand-*). Crossing categories (e.g. padding: var(--color-x))
-// is a sign the wrong token is being reused.
+// Rule: NO TOKEN-CATEGORY MISMATCH IN COMPONENTS. A size property must use
+// a SIZE token (--space-*, --size-*, ...), a color property a COLOR token
+// (--color-*, --brand-*). Crossing categories (padding: var(--color-x))
+// means the wrong token is being reused.
 
 import {
 	COLOR_PROPS,
@@ -56,12 +54,10 @@ export default {
 					const prop = decl.prop ?? "";
 					const value = decl.value ?? "";
 
-					// Mixed shorthands (border, outline, text-decoration,
-					// column-rule) legitimately take BOTH a size and a color.
-					// The browser assigns sub-properties by value type at runtime,
-					// not by position, so skip category checks for them.
-					// Their longhands (border-width, border-color, ...) are still
-					// covered individually.
+					// Mixed shorthands (border, outline, ...) legitimately take
+					// BOTH a size and a color: the browser assigns sub-properties
+					// by value type, not by position, so skip category checks.
+					// Their longhands are still covered individually.
 					if (MIXED_PROPS.test(prop)) return;
 
 					const isSizeProp = SIZE_PROPS.test(prop);

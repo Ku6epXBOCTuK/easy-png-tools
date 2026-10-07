@@ -1,5 +1,5 @@
 // Unused tokens: defined in app.css but never referenced via var()
-// anywhere in src. A dead token is not the single source of truth — it's dust.
+// anywhere in src. A dead token is not the single source of truth; it's dust.
 // Reported as a warning; it does not fail the run. The `used` set is injectable
 // so tests can pass a fixture instead of scanning src.
 

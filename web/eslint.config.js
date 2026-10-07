@@ -8,28 +8,27 @@ import designTokens from "./eslint-plugins/index.js";
 import conventionsPlugin from "./eslint-plugins/conventions/index.js";
 import i18nPlugin from "./eslint-plugins/i18n/index.js";
 
-// Production-UI: к нему применяются полные recommended-наборы.
+// Production UI: the full recommended sets apply to it.
 const productionCode = ["**/src/lib/components/**", "**/src/routes/**"];
 
-// Инфраструктура линтинга: сами плагины, скрипты и конфиги. Это не
-// продуктовый код, но всё это влияет на гейты, поэтому к нему тоже
-// применяется базовый JS recommended. Полные TS/svelte-наборы здесь не
-// подключаются: файлы .mjs и .js проверяются только базовым набором.
+// Lint tooling: the plugins, gate scripts and configs. Not product code,
+// but it feeds the gates, so the base JS recommended set applies; the full
+// TS/svelte sets do not (.mjs/.js only).
 const toolingFiles = [
 	"**/eslint-plugins/**/*.js",
 	"**/scripts/**/*.mjs",
 	"*.config.js",
 ];
 
-// Полные recommended-наборы — только на production-код (см. ниже, блок перед prettier).
+// Full recommended sets apply to production code only (block before prettier).
 const jsRecommended = Array.isArray(js.configs.recommended)
 	? js.configs.recommended
 	: [js.configs.recommended];
 const svelteRecommended = Array.isArray(svelte.configs["flat/recommended"])
 	? svelte.configs["flat/recommended"]
 	: [svelte.configs["flat/recommended"]];
-// Svelte-рекомендации применяем только к .svelte-файлам production-кода, иначе
-// svelte-eslint-parser "съедает" обычные .ts в тех же папках (напр. +page.ts).
+// Svelte recommended targets production .svelte files only, otherwise
+// svelte-eslint-parser swallows plain .ts in the same folders (+page.ts).
 const productionSvelte = [
 	"**/src/lib/components/**/*.svelte",
 	"**/src/routes/**/*.svelte",
@@ -45,7 +44,7 @@ export default tseslint.config(
 			"**/static/**",
 		],
 	},
-	// Минимально на весь код: парсинг TS/Svelte + запрет инлайн-тип-импортов.
+	// Minimum on all code: TS/Svelte parsing + ban on inline type imports.
 	{
 		files: ["**/*.ts", "**/*.svelte.ts", "**/*.svelte.js", "**/*.svelte"],
 		languageOptions: {
@@ -59,17 +58,18 @@ export default tseslint.config(
 						"vitest.config.ts",
 						"eslint.config.js",
 						"playwright.config.ts",
-						// e2e покрыты e2e/tsconfig.json.
-						// Тесты и фикстуры кастомных линт-правил лежат вне src/ (не в
-						// tsconfig), поэтому для типизированного парсинга резолвятся
-						// через default-проект. Перечисляются точечно: `**` в
-						// allowDefaultProject запрещён tseslint.
+						// e2e are covered by e2e/tsconfig.json. Lint-rule tests and
+						// fixtures live outside src/, so typed parsing resolves them
+						// via the default project; tseslint bans `**` here.
 						"eslint-plugins/__tests__/design-tokens.test.ts",
 						"eslint-plugins/__tests__/interface-props.test.ts",
 						"eslint-plugins/__tests__/no-string-union-alias.test.ts",
 						"eslint-plugins/__tests__/helpers.ts",
 						"eslint-plugins/__tests__/dict-consistency.test.ts",
 						"eslint-plugins/__tests__/no-hardcoded-user-text.test.ts",
+						"eslint-plugins/__tests__/ascii-only.test.ts",
+						"eslint-plugins/__tests__/comments-english.test.ts",
+						"eslint-plugins/__tests__/comment-format.test.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/dict.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/en.ts",
 						"eslint-plugins/__fixtures__/src/lib/i18n/ru.ts",
@@ -90,8 +90,8 @@ export default tseslint.config(
 			"@typescript-eslint": tseslint.plugin,
 		},
 		rules: {
-			// Инлайн-тип-импорты (import('x').Y) запрещены — только
-			// `import type { Y } from 'x'` наверху файла.
+			// Inline type imports (import('x').Y) are banned; only
+			// `import type { Y } from 'x'` at the top of the file.
 			"@typescript-eslint/consistent-type-imports": [
 				"error",
 				{ prefer: "type-imports", fixStyle: "separate-type-imports" },
@@ -116,8 +116,7 @@ export default tseslint.config(
 			"design-tokens": designTokens,
 		},
 	},
-	// Правило дизайн-токенов: запрет хардкода цветов/размеров в style-блоках.
-	// Применяется к новому коду редизайна.
+	// Design-token rules: no hardcoded colors/sizes in style blocks.
 	{
 		files: productionSvelte,
 		plugins: {
@@ -130,8 +129,8 @@ export default tseslint.config(
 			"design-tokens/no-undefined-in-svelte": "error",
 		},
 	},
-	// Конвенция Svelte 5: пропсы через локальный `interface Props` +
-	// `let {...}: Props = $props()` (плагин conventions/interface-props).
+	// Svelte 5 convention: props via a local `interface Props` +
+	// `let {...}: Props = $props()` (conventions/interface-props).
 	{
 		files: productionSvelte,
 		plugins: {
@@ -141,8 +140,8 @@ export default tseslint.config(
 			"conventions/interface-props": "error",
 		},
 	},
-	// Запрет строковых union-алиасов в пользу `as const` объектов
-	// (плагин conventions/no-string-union-alias). TS и Svelte-скрипты production-кода.
+	// Ban string-literal union aliases in favor of `as const` objects
+	// (conventions/no-string-union-alias).
 	{
 		files: productionCode,
 		plugins: {
@@ -152,11 +151,9 @@ export default tseslint.config(
 			"conventions/no-string-union-alias": "error",
 		},
 	},
-	// Кросс-языковой линтер словарей (плагин i18n/dict-consistency) и запрет
-	// захардкоженного пользовательского текста (i18n/no-hardcoded-user-text).
-	// Правила сообщают warning, а `lint:all` превращает новые warnings в
-	// blocking через --max-warnings=0. Список локалей берётся из LOCALES в
-	// lib/i18n/dict.ts; новые локали подхватываются автоматически.
+	// Cross-locale dictionary linter (i18n/dict-consistency). Reports warn;
+	// `lint:all` makes any new warning blocking via --max-warnings=0. The
+	// locale list comes from LOCALES in lib/i18n/dict.ts.
 	{
 		files: ["**/src/lib/i18n/*.ts"],
 		plugins: {
@@ -173,9 +170,9 @@ export default tseslint.config(
 		},
 	},
 	{
-		// Хардкод пользовательского текста ловим и в components, и в routes:
-		// `+page.svelte`/`+layout.svelte` — такой же production-UI, иначе
-		// захардкоженная строка молча уедет в RU-локаль.
+		// Hardcoded user text is caught in components and routes alike:
+		// `+page.svelte` is production UI too, a hardcoded string silently
+		// ships in the RU locale.
 		files: productionSvelte,
 		plugins: {
 			i18n: i18nPlugin,
@@ -184,19 +181,80 @@ export default tseslint.config(
 			"i18n/no-hardcoded-user-text": [
 				"warn",
 				{
-					// Название продукта — бренд, а не переводимый текст.
+					// The product name is a brand, not translatable text.
 					allowWords: ["easy-png-tools"],
 				},
 			],
 		},
 	},
 	{
-		// Исключение для /kit — витрина компонентов с намеренно латинскими
-		// подписями. Отдельный объект, а не негативный glob в `files` выше:
-		// негативные паттерны не сужают область действия правила.
+		// /kit exception: a showcase with intentionally Latin labels. Separate
+		// object: negative globs in `files` do not narrow a rule's scope.
 		files: ["**/src/routes/kit/**/*.svelte"],
 		rules: {
 			"i18n/no-hardcoded-user-text": "off",
+		},
+	},
+	// Tests are written in ASCII English: typography and non-English prose in
+	// describe/it hurt grep-ability and hide hardcoded localized strings.
+	// Warn-only until the cleanup lands; intentional glyphs go to allowChars.
+	{
+		files: ["**/*.test.ts", "**/*.spec.ts", "**/e2e/**/*.ts"],
+		plugins: {
+			conventions: conventionsPlugin,
+		},
+		rules: {
+			"conventions/ascii-only": "warn",
+		},
+	},
+	// Comments in English, in short blocks, without turning a file into an
+	// essay (conventions/comments-english + conventions/comment-format).
+	// Warn-only: excess is a cue to refactor code, not squeeze comments.
+	{
+		files: [
+			"**/src/**/*.ts",
+			"**/src/**/*.svelte",
+			// Dogfooding: lint rules, gate scripts and configs follow the same
+			// comment conventions as production code.
+			"**/eslint-plugins/**/*.js",
+			"**/scripts/**/*.mjs",
+			"**/*.config.js",
+			"**/*.config.ts",
+			"**/*.config.mjs",
+		],
+		plugins: {
+			conventions: conventionsPlugin,
+		},
+		rules: {
+			"conventions/comments-english": "warn",
+			"conventions/comment-format": [
+				"warn",
+				// minLines: density only checks files with 100+ non-blank lines;
+				// in small files any header gives a false excess.
+				{ maxBlockLines: 5, maxRatio: 0.15, minLines: 100 },
+			],
+		},
+	},
+	{
+		// Lint-rule fixtures are intentional stubs (including non-ASCII and
+		// non-English comments as input cases); the conventions do not apply.
+		files: [
+			"**/eslint-plugins/__fixtures__/**",
+			"**/eslint-plugins/__tests__/**",
+		],
+		rules: {
+			"conventions/ascii-only": "off",
+			"conventions/comments-english": "off",
+			"conventions/comment-format": "off",
+		},
+	},
+	{
+		files: productionCode,
+		rules: {
+			"max-lines-per-function": [
+				"warn",
+				{ max: 100, skipBlankLines: true, skipComments: true },
+			],
 		},
 	},
 	{
@@ -209,7 +267,7 @@ export default tseslint.config(
 			},
 		},
 	},
-	// Полные recommended-наборы — только на production-код.
+	// Full recommended sets: production code only.
 	...[
 		...jsRecommended.map((cfg) => ({
 			...cfg,
@@ -229,14 +287,14 @@ export default tseslint.config(
 		})),
 	],
 
-	// В Svelte 5 пропсы деструктурируются через `let` (конвенция документации и
-	// наш AGENTS.md), поэтому prefer-const на них — ложноположительный.
+	// In Svelte 5 props are destructured via `let` (docs convention and our
+	// AGENTS.md), so prefer-const is a false positive on them.
 	{
 		files: ["**/*.svelte"],
 		rules: {
 			"prefer-const": "off",
 		},
 	},
-	// prettier — последним, чтобы гасить форматирующие правила из recommended.
+	// prettier goes last to silence formatting rules from the recommended sets.
 	prettier,
 );

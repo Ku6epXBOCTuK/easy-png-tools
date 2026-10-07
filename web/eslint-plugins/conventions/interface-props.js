@@ -1,28 +1,8 @@
-// Rule: SVELTE 5 PROPS MUST USE A LOCAL `interface Props`.
-//
-// Convention (AGENTS.md): every typed props of a component is described by a
-// local `interface Props`, and the props are destructured with the annotation:
-//
-//     interface Props {
-//       label: string;
-//       accent?: boolean;
-//       children?: Snippet;
-//     }
-//     let { label, accent = false, children }: Props = $props();
-//
-// Banned instead:
-//   - the inline generic `$props<{ ... }>()` — hard to read and splits the
-//     type away from the file structure;
-//   - untyped destructuring `let { ... } = $props()`;
-//   - binding the whole props object (`const props = $props()`);
-//   - any props type name other than the local `interface Props`.
-//
-// Inline `import('...')` type queries are NOT checked here: they are already
-// banned by @typescript-eslint/consistent-type-imports.
-//
-// The check is purely syntactic (AST-level). Svelte's runes model guarantees
-// $props() only exists in instance <script> blocks, so no scope/type info is
-// needed. Interfaces are collected from every <script> (module + instance).
+// Rule: SVELTE 5 PROPS MUST USE A LOCAL `interface Props` (AGENTS.md).
+// Banned: the inline generic `$props<T>()`, untyped destructuring, binding
+// the whole `$props()` object, non-local props type names. Purely syntactic
+// check; inline import('...') types are already covered by
+// @typescript-eslint/consistent-type-imports.
 
 import { isInsideScriptElement } from "./utils.js";
 

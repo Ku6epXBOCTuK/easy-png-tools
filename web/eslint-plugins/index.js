@@ -1,10 +1,7 @@
 /**
- * Local ESLint plugin "design-tokens".
- *
- * Goal: a single source of truth for design. In Svelte components, hardcoded
- * colors and sizes are banned; everything must come from CSS variables (tokens
- * in app.css). Rules inspect the postcss AST of Svelte <style> blocks
- * exposed by svelte-eslint-parser.
+ * Local ESLint plugin "design-tokens": hardcoded colors/sizes are banned in
+ * Svelte <style> blocks, everything comes from CSS tokens in app.css.
+ * Rule details: web/eslint-plugins/README.md.
  */
 import noCategoryMismatch from "./design-tokens/no-category-mismatch.js";
 import noHardcodedInSvelte from "./design-tokens/no-hardcoded-in-svelte.js";

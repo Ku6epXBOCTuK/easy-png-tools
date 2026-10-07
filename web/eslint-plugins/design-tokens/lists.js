@@ -16,31 +16,21 @@ export const SIZE_PROPS =
 	/^(width|height|min-width|max-width|min-height|max-height|padding|padding-top|padding-right|padding-bottom|padding-left|margin|margin-top|margin-right|margin-bottom|margin-left|gap|column-gap|row-gap|top|right|bottom|left|inset|font|font-size|letter-spacing|word-spacing|line-height|border-radius|border-top-left-radius|border-top-right-radius|border-bottom-left-radius|border-bottom-right-radius|border-width|border-top-width|border-right-width|border-bottom-width|border-left-width|flex-basis|background-size|background-position|border-spacing|grid-template-columns|grid-template-rows)$/;
 
 // =====================================================================
-// SHORTHAND properties that accept BOTH a color and a size. The browser
-// assigns their sub-properties by value type at runtime (length -> width,
-// color -> ...-color), so they cannot be category-checked positionally.
-//      border      -> border-width + border-color
-//      outline     -> outline-width + outline-color
-//      text-decoration -> text-decoration-line/-color/...
-//      column-rule     -> column-rule-width + column-rule-color
-// The longhands they expand to (border-width, border-color, ...) are already
-// covered individually by SIZE_PROPS / COLOR_PROPS.
+// SHORTHANDS taking BOTH a color and a size: the browser assigns
+// sub-properties by value type, so no positional category check. Their
+// longhands are covered by SIZE_PROPS / COLOR_PROPS individually.
 // =====================================================================
 export const MIXED_PROPS =
 	/^(border|border-top|border-right|border-bottom|border-left|outline|text-decoration|column-rule)$/;
 
 // =====================================================================
-// Properties that carry a DURATION (ms/s) — transitions/animations.
+// Properties that carry a DURATION (ms/s): transitions/animations.
 // =====================================================================
 export const DURATION_PROPS =
 	/^(transition|transition-duration|transition-delay|animation|animation-duration|animation-delay)$/;
 
 // =====================================================================
 // A hardcoded COLOR literal: hex / color functions / named colors.
-// Regex legend:
-//    - hex:    #[0-9a-fA-F]{3,8}\b  — #fff / #112233 / #1234
-//    - funcs:  (rgb|rgba|hsl|hsla|hwb|lab|lch|oklch|oklab)(
-//    - names:  common CSS color names on a word boundary
 // =====================================================================
 export const COLOR_LITERAL =
 	/#[0-9a-fA-F]{3,8}\b|\b(?:rgb|rgba|hsl|hsla|hwb|lab|lch|oklch|oklab)\s*\(|(?:^|\s|,|\()(?:white|black|red|green|blue|yellow|orange|purple|pink|gray|grey|silver|lime|teal|cyan|navy|maroon|olive|aqua|fuchsia|gold|indigo|violet|magenta|grey)\b/gi;

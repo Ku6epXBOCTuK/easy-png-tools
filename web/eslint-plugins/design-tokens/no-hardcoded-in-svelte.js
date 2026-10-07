@@ -1,6 +1,6 @@
 // Rule: NO HARDCODED COLORS / SIZES / DURATIONS / Z-INDEX IN COMPONENTS.
 // Everything visual in a Svelte <style> block must come from design tokens
-// (var(--...)); direct literals are banned. color-mix() is banned too — its
+// (var(--...)); direct literals are banned. color-mix() is banned too: its
 // result must be tokenized in the design CSS file.
 
 import {
@@ -14,8 +14,7 @@ import {
 } from "./lists.js";
 import { getStyleNodeLoc, getStyleRoot } from "./style-context.js";
 
-// Sub-rule: stripe var(...) bodies out of a value, so tokens inside are never
-// mistaken for literals.
+// Strip var(...) bodies so tokens inside are never mistaken for literals.
 const stripVars = (value) => value.replace(/var\([^)]*\)/g, "");
 
 export default {
@@ -64,16 +63,12 @@ export default {
 					});
 				};
 
-				// =====================================================================
-				// 3) NO HARDCODED BREAKPOINTS IN @media
-				//    @media conditions must use --bp-* tokens, not raw lengths.
-				//    Regex: (max|min)-width followed by a NON-var(() number.
-				// =====================================================================
+				// --- NO HARDCODED BREAKPOINTS IN @media ---
+				// (max|min)-width followed by a NON-var( number is a raw length.
 				const BREAKPOINT_RE =
 					/(?:(?:max|min)-width)\s*:\s*(?!var\()(\d+(?:\.\d+)?(?:px|rem|em))/gi;
 
-				// Custom properties do not resolve inside @media conditions, so any
-				// var(--bp-*) inside @media is a latent bug — the block never applies.
+				// Custom properties do not resolve in @media: var(--bp-*) there is a latent bug.
 				const VAR_IN_MEDIA_RE = /var\(\s*(--[a-zA-Z0-9-]+)/g;
 
 				// Sub-rule 6: color-mix() is banned anywhere in a component style.
@@ -123,12 +118,10 @@ export default {
 					// Only inspect known layout properties from here on.
 					if (!COLOR_PROPS.test(prop) && !SIZE_PROPS.test(prop)) return;
 
-					// Sub-rule 2: sizes.
-					// Fire only on a real remaining px/rem/em token — percentages
-					// (width: 80%) and unitless values (line-height: 1.5) stay legal.
-					// The only legal absolute length is a 0px reset line.
-					// MIXED_PROPS (border/outline shorthands) are checked for their
-					// SIZE half too — a border width must come from var(--size-*).
+					// Sub-rule 2: sizes. Fire only on a real px/rem/em token:
+					// percentages and unitless values stay legal, a 0px reset is
+					// the only legal absolute length. MIXED_PROPS shorthands are
+					// checked for their SIZE half too.
 					if (SIZE_PROPS.test(prop) || MIXED_PROPS.test(prop)) {
 						const withoutVars = stripVars(value);
 						const reported = new Set();
@@ -141,9 +134,8 @@ export default {
 						}
 					}
 
-					// Sub-rule 1: colors.
-					// Remaining value must be only allowed keywords
-					// (currentColor/transparent/inherit/none/0); otherwise a color
+					// Sub-rule 1: colors. After stripping allowed keywords
+					// (currentColor/transparent/inherit/none/0), any color
 					// literal is reported.
 					if (COLOR_PROPS.test(prop)) {
 						const withoutVars = stripVars(value);

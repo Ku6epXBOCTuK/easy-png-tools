@@ -1,9 +1,6 @@
 // Unresolved references: every var(--x) in app.css must point at a token the
-// same file defines. A typo here silently drops the declaration, so unlike the
-// unused-token dust it is a defect, not a style choice.
-//
-// `var(--x, fallback)` is legal without --x (CSS custom property fallback), so
-// those references are exempt.
+// same file defines: a typo silently drops the declaration, so this is a
+// defect, not a style choice. `var(--x, fallback)` is legal without --x.
 
 const VAR_REF_RE = /var\(\s*(--[\w-]+)\s*([,)])/g;
 

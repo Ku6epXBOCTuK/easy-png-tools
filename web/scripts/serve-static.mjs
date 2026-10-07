@@ -1,6 +1,6 @@
-// Статический сервер для e2e (Playwright webServer). Раздаёт web/build
-// (adapter-static): /foo -> foo.html | foo/index.html, MIME по расширению.
-// Запуск: pnpm build && node scripts/serve-static.mjs --port 4173
+// Static server for e2e (Playwright webServer). Serves web/build
+// (adapter-static): /foo -> foo.html | foo/index.html, MIME by extension.
+// Run: pnpm build && node scripts/serve-static.mjs --port 4173
 import { createServer } from "node:http";
 import { readFileSync, statSync } from "node:fs";
 import { extname, join } from "node:path";
@@ -56,7 +56,7 @@ function serve(req, res) {
 			res.end(body);
 			return;
 		} catch {
-			/* not found — try next candidate */
+			/* not found - try next candidate */
 		}
 	}
 	res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });

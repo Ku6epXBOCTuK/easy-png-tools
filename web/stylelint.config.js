@@ -1,4 +1,4 @@
-// Stylelint config — design-token enforcement for easy-png-tools.
+// Stylelint config: design-token enforcement for easy-png-tools.
 // FWHM: keeps the design system a single source of truth. Colors and sizes must
 // come from prefixed tokens; direct color values are allowed only for the two
 // brand tokens.
@@ -12,15 +12,10 @@ export default {
 		"**/static/**",
 	],
 	rules: {
-		// Rule: every CSS variable must carry a system prefix so the design
-		// vocabulary stays a single, greppable source of truth.
-		// The two brand tokens (brand-main / brand-alt) are the only
-		// exceptions that may exist as-is.
-		// NOTE: stylelint tests the pattern against the property WITHOUT the
-		// leading "--", so the regex must NOT start with --.
-		// Regex: either an exact brand token or a prefixed token:
-		//   ^(brand-main|brand-alt)$                         — brand exceptions
-		//   |^(color|space|size|text|radius|bp|font)-        — prefixed
+		// Every CSS variable must carry a system prefix so the design
+		// vocabulary stays a single greppable source of truth; the two brand
+		// tokens are the only exceptions. NOTE: stylelint tests the pattern
+		// WITHOUT the leading "--", so the regex must not start with --.
 		"custom-property-pattern": [
 			"^(brand-main|brand-alt)$|^(color|space|size|text|radius|bp|font|duration|ease|z)-",
 			{
@@ -33,10 +28,8 @@ export default {
 		"declaration-no-important": true,
 		// Grouping whitespace for the token file. The standard config puts
 		// "after-custom-property" into `except`, which makes --fix DELETE blank
-		// lines between consecutive custom properties — so color/size token groups
-		// collapse into one wall. Moving it to `ignore` frees blank lines between
-		// tokens (groups stay readable); the blank line is still REQUIRED before a
-		// token that follows a regular declaration.
+		// lines between consecutive custom properties, collapsing token groups
+		// into one wall. `ignore` keeps groups readable.
 		"custom-property-empty-line-before": [
 			"always",
 			{
