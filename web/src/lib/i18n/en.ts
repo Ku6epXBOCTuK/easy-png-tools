@@ -52,6 +52,8 @@ export const en: Dict = {
 		changeTool: "Change tool",
 		collapseStep: "Collapse step",
 		expandStep: "Expand step",
+		stepResult: "Result {n}",
+		alignToggle: "Align tools and preview",
 		inputLegend: "Input",
 		resultLegend: "Result",
 		paramsLegend: "Parameters",

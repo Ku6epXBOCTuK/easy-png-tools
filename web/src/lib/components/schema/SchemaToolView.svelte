@@ -1,9 +1,6 @@
 <script lang="ts">
-	import AddStepButton from "./AddStepButton.svelte";
-	import SchemaFields from "./SchemaFields.svelte";
-	import SchemaPreview from "./SchemaPreview.svelte";
-	import ToolPickerButton from "./ToolPickerButton.svelte";
 	import StepCard from "$lib/components/display/StepCard.svelte";
+	import Toggle from "$lib/components/ui/Toggle.svelte";
 	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
 	import { ToolError, type ErrorVars } from "$lib/core/errors";
@@ -12,6 +9,7 @@
 		downloadBlob,
 		encode,
 		outputFormatByMime,
+		toDataUrl,
 		type OutputMime,
 	} from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
@@ -51,6 +49,14 @@
 	import { downloadZip } from "$lib/zip";
 	import { onMount } from "svelte";
 	import { SvelteMap, SvelteSet } from "svelte/reactivity";
+	import AddStepButton from "./AddStepButton.svelte";
+	import PreviewTile from "./PreviewTile.svelte";
+	import SchemaActions from "./SchemaActions.svelte";
+	import SchemaFields from "./SchemaFields.svelte";
+	import SchemaPreview from "./SchemaPreview.svelte";
+	import SchemaResultTile from "./SchemaResultTile.svelte";
+	import SchemaSourceTile from "./SchemaSourceTile.svelte";
+	import ToolPickerButton from "./ToolPickerButton.svelte";
 
 	interface Props {
 		page: Page;
@@ -74,6 +80,8 @@
 	// Последняя правленая ось dimension-поля — ведущая при lockAspect.
 	const lastAxis: Record<string, "width" | "height"> = {};
 	let stepDims = $state<(Dimension | undefined)[]>([]);
+	let stepResults = $state<(PixelImage | null)[]>([]);
+	let aligned = $state(false);
 	let source = $state<PixelImage | null>(null);
 	let result = $state<PixelImage | null>(null);
 	let fileResult = $state<FileResult | null>(null);
@@ -97,6 +105,9 @@
 	const resultKind = $derived(lastTool.result ?? "image");
 	// Цепочку можно продолжить, только если последний шаг отдаёт картинку.
 	const canExtend = $derived((lastTool.result ?? "image") === "image");
+	const alignedMode = $derived(
+		aligned && resultKind === "image" && steps.length > 1,
+	);
 
 	const alphaLoss = $derived(
 		resultKind === "image" &&
@@ -327,6 +338,7 @@
 		try {
 			let current: PixelImage | undefined = source ?? undefined;
 			const dims: (Dimension | undefined)[] = [];
+			const results: (PixelImage | null)[] = [];
 			let out: ToolResult = "";
 			for (let i = 0; i < steps.length; i++) {
 				const stepTool = getTool(steps[i].id);
@@ -353,11 +365,14 @@
 				if (out && typeof out === "object" && "data" in out) {
 					current = out as PixelImage;
 					dims[i] = { width: current.width, height: current.height };
+					results[i] = current;
 				} else {
 					current = undefined;
+					results[i] = null;
 				}
 			}
 			stepDims = dims;
+			stepResults = results;
 			assignResult(out);
 		} catch (e) {
 			displayError = toDisplayError(e);
@@ -470,87 +485,204 @@
 			</div>
 		</header>
 
-		<div class="workspace">
-			<section class="settings">
+		{#snippet stepCard(step: ChainStep, i: number)}
+			<StepCard
+				index={i + 1}
+				title={stepTitle(step.id)}
+				draggable
+				collapsed={step.collapsed ?? false}
+				ontoggle={() => toggleStep(i)}
+				onremove={steps.length > 1 ? () => removeStepAt(step.key) : undefined}
+				ondragstart={(e) => {
+					dragFrom = i;
+					if (e.dataTransfer) {
+						e.dataTransfer.effectAllowed = "move";
+						e.dataTransfer.setData("text/plain", String(i));
+					}
+				}}
+				ondragover={(e) => {
+					e.preventDefault();
+					if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+				}}
+				ondrop={(e) => onStepDrop(e, i)}
+				ondragend={() => (dragFrom = null)}
+			>
+				{#snippet tools()}
+					<ToolPickerButton
+						label={t("chain.changeTool")}
+						iconOnly
+						onadd={(id) => replaceStepTool(i, id)}
+					/>
+				{/snippet}
+				<SchemaFields
+					schema={toolSchemaOf(step)}
+					values={step.params}
+					toolId={step.id}
+					sourceDims={i === 0 ? (source ?? undefined) : stepDims[i - 1]}
+					onchange={(id, v, axis) => setStepValue(i, id, v, axis)}
+					onreset={() => resetStep(i)}
+				/>
+			</StepCard>
+		{/snippet}
+
+		{#if !alignedMode}
+			<div class="workspace">
+				<section class="settings">
+					{#if canExtend}
+						<AddStepButton onadd={(id) => addStepAt(0, id)} />
+					{/if}
+					{#each steps as step, i (step.key)}
+						{@render stepCard(step, i)}
+						{#if canExtend}
+							<AddStepButton onadd={(id) => addStepAt(i + 1, id)} />
+						{/if}
+					{/each}
+				</section>
+
+				<section class="panel">
+					<SchemaPreview
+						toolId={lastTool.id}
+						{source}
+						{result}
+						{resultNote}
+						{fileResult}
+						{textSource}
+						{textResult}
+						textVars={verdictVars}
+						{inputMode}
+						{resultKind}
+						{running}
+						error={errorText}
+						{format}
+						quality={currentQuality}
+						{alphaLoss}
+						{stepResults}
+						{aligned}
+						ontogglealign={() => (aligned = !aligned)}
+						onformat={(v) => (format = v)}
+						onquality={setFormatQuality}
+						onupload={handleFile}
+						ontextsource={(textValue) => {
+							textSource = textValue;
+						}}
+						onrendertext={run}
+						oncopytext={copyText}
+						ondownloadtxt={downloadText}
+						ondownload={download}
+					/>
+				</section>
+			</div>
+		{:else}
+			<div class="aligned">
+				<div class="aligned-row">
+					<div></div>
+					<div class="panel-segment head-segment">
+						<span class="label">{t("resultCard.previewPanel")}</span>
+						<label class="align-toggle">
+							<Toggle bind:checked={aligned} label={t("chain.alignToggle")} />
+							<span>{t("chain.alignToggle")}</span>
+						</label>
+						<SchemaActions
+							{inputMode}
+							{resultKind}
+							canDownload={result !== null}
+							{running}
+							{format}
+							quality={currentQuality}
+							{alphaLoss}
+							onupload={handleFile}
+							ondownload={download}
+							onformat={(v) => (format = v)}
+							onquality={setFormatQuality}
+						/>
+					</div>
+				</div>
+				{#if errorText}
+					<p class="error" role="alert">{errorText}</p>
+				{/if}
 				{#if canExtend}
-					<AddStepButton onadd={(id) => addStepAt(0, id)} />
+					<div class="aligned-row">
+						<AddStepButton onadd={(id) => addStepAt(0, id)} />
+						<div class="panel-segment connect-segment"></div>
+					</div>
 				{/if}
 				{#each steps as step, i (step.key)}
-					<StepCard
-						index={i + 1}
-						title={stepTitle(step.id)}
-						draggable
-						collapsed={step.collapsed ?? false}
-						ontoggle={() => toggleStep(i)}
-						onremove={steps.length > 1
-							? () => removeStepAt(step.key)
-							: undefined}
-						ondragstart={(e) => {
-							dragFrom = i;
-							if (e.dataTransfer) {
-								e.dataTransfer.effectAllowed = "move";
-								e.dataTransfer.setData("text/plain", String(i));
-							}
-						}}
-						ondragover={(e) => {
-							e.preventDefault();
-							if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
-						}}
-						ondrop={(e) => onStepDrop(e, i)}
-						ondragend={() => (dragFrom = null)}
-					>
-						{#snippet tools()}
-							<ToolPickerButton
-								label={t("chain.changeTool")}
-								iconOnly
-								onadd={(id) => replaceStepTool(i, id)}
-							/>
-						{/snippet}
-						<SchemaFields
-							schema={toolSchemaOf(step)}
-							values={step.params}
-							toolId={step.id}
-							sourceDims={i === 0 ? (source ?? undefined) : stepDims[i - 1]}
-							onchange={(id, v, axis) => setStepValue(i, id, v, axis)}
-							onreset={() => resetStep(i)}
-						/>
-					</StepCard>
+					{@const input = i === 0 ? null : stepResults[i - 1]}
+					{@const out = stepResults[i]}
+					{#if i > 0}
+						<div class="group-divider">
+							<div class="gd-cell"></div>
+						</div>
+					{/if}
+					<div class="aligned-row">
+						{@render stepCard(step, i)}
+						<div
+							class="panel-segment pair-segment"
+							class:last-segment={i === steps.length - 1 && !canExtend}
+						>
+							{#if i === 0}
+								<SchemaSourceTile
+									mode={inputMode}
+									{source}
+									{textSource}
+									{running}
+									ontextinput={(v) => (textSource = v)}
+									onrendertext={run}
+									onupload={handleFile}
+								/>
+							{:else}
+								<PreviewTile
+									label={t("chain.inputLegend")}
+									viewMode="image"
+									dims={input ? `${input.width} × ${input.height}` : undefined}
+								>
+									{#if input}
+										<img src={toDataUrl(input)} alt="" />
+									{:else}
+										<span class="empty">{t("resultCard.noResult")}</span>
+									{/if}
+								</PreviewTile>
+							{/if}
+							{#if i === steps.length - 1}
+								<SchemaResultTile
+									{resultKind}
+									result={out}
+									{resultNote}
+									{fileResult}
+									{textResult}
+									textVars={verdictVars}
+									toolId={lastTool.id}
+									{running}
+									oncopy={copyText}
+									ondownloadtxt={downloadText}
+								/>
+							{:else}
+								<PreviewTile
+									label={t("chain.stepResult", { n: i + 1 })}
+									viewMode="image"
+									dims={out ? `${out.width} × ${out.height}` : undefined}
+								>
+									{#if out}
+										<img src={toDataUrl(out)} alt="" />
+									{:else}
+										<span class="empty">{t("resultCard.noResult")}</span>
+									{/if}
+								</PreviewTile>
+							{/if}
+						</div>
+					</div>
 					{#if canExtend}
-						<AddStepButton onadd={(id) => addStepAt(i + 1, id)} />
+						<div class="aligned-row">
+							<AddStepButton onadd={(id) => addStepAt(i + 1, id)} />
+							<div
+								class="panel-segment connect-segment"
+								class:add-last={i === steps.length - 1}
+							></div>
+						</div>
 					{/if}
 				{/each}
-			</section>
-
-			<section class="panel">
-				<SchemaPreview
-					toolId={lastTool.id}
-					{source}
-					{result}
-					{resultNote}
-					{fileResult}
-					{textSource}
-					{textResult}
-					textVars={verdictVars}
-					{inputMode}
-					{resultKind}
-					{running}
-					error={errorText}
-					{format}
-					quality={currentQuality}
-					{alphaLoss}
-					onformat={(v) => (format = v)}
-					onquality={setFormatQuality}
-					onupload={handleFile}
-					ontextsource={(textValue) => {
-						textSource = textValue;
-					}}
-					onrendertext={run}
-					oncopytext={copyText}
-					ondownloadtxt={downloadText}
-					ondownload={download}
-				/>
-			</section>
-		</div>
+			</div>
+		{/if}
 	</div>
 {:else}
 	<p class="no-schema">{t("paramsCard.noSchema")}</p>
@@ -599,8 +731,99 @@
 	.no-schema {
 		font: var(--font-size-s) var(--font-mono);
 	}
+	.aligned {
+		display: grid;
+	}
+	.aligned-row {
+		display: grid;
+		grid-template-columns: minmax(var(--size-workspace-min), 1fr) 2fr;
+		gap: var(--space-xxl);
+		align-items: start;
+	}
+	/* Сегменты справа образуют «одну панель»: общий фон, боковые границы,
+	   верх у шапки и низ у последней строки. */
+	.panel-segment {
+		background: var(--color-panel);
+		border-left: var(--size-border) solid var(--color-border);
+		border-right: var(--size-border) solid var(--color-border);
+		padding: var(--space-xl);
+	}
+	.head-segment {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xl);
+		flex-wrap: wrap;
+		border-top: var(--size-border) solid var(--color-border);
+		border-bottom: var(--size-border) solid var(--color-border);
+		border-radius: var(--radius-m) var(--radius-m) 0 0;
+	}
+	.head-segment .label {
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-l);
+		text-transform: uppercase;
+		color: var(--color-main);
+	}
+	.pair-segment {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-l);
+	}
+	/* Коннектор в строках «Add step»: продолжает боковые границы панели. */
+	.connect-segment {
+		align-self: stretch;
+		padding: 0;
+	}
+	.connect-segment.add-last {
+		border-bottom: var(--size-border) solid var(--color-border);
+		border-radius: 0 0 var(--radius-m) var(--radius-m);
+	}
+	/* Полоса-разделитель между группами: ячейки с фоном и боковыми границами
+	   (как у карточки слева и панели справа), сверху — линия через всю ширину. */
+	.group-divider {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(var(--size-workspace-min), 1fr) 2fr;
+		gap: var(--space-xxl);
+	}
+	.gd-cell {
+		grid-column: 2;
+		background: var(--color-panel);
+		border-left: var(--size-border) solid var(--color-border);
+		border-right: var(--size-border) solid var(--color-border);
+		padding: var(--space-s) 0;
+	}
+	.group-divider::after {
+		content: "";
+		position: absolute;
+		inset: 0 0 auto;
+		border-top: var(--size-border) solid var(--color-border);
+	}
+	.last-segment {
+		border-bottom: var(--size-border) solid var(--color-border);
+		border-radius: 0 0 var(--radius-m) var(--radius-m);
+	}
+	.align-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-m);
+		margin-right: auto;
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+		cursor: pointer;
+	}
+	.error {
+		margin: 0;
+		color: var(--color-danger);
+		font: var(--font-size-s) var(--font-mono);
+	}
+	.empty {
+		font: var(--font-size-s) var(--font-mono);
+	}
 	@media (--bp-tablet) {
 		.workspace {
+			grid-template-columns: 1fr;
+		}
+		.aligned-row {
 			grid-template-columns: 1fr;
 		}
 	}

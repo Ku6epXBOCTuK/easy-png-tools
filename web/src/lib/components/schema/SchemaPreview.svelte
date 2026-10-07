@@ -3,6 +3,9 @@
 	import SchemaActions from "./SchemaActions.svelte";
 	import SchemaResultTile from "./SchemaResultTile.svelte";
 	import SchemaSourceTile from "./SchemaSourceTile.svelte";
+	import PreviewTile from "./PreviewTile.svelte";
+	import Toggle from "$lib/components/ui/Toggle.svelte";
+	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import type { OutputMime } from "$lib/core/io";
 	import { t } from "$lib/i18n/t";
@@ -26,6 +29,9 @@
 		textVars?: Record<string, string | number>;
 		running?: boolean;
 		error?: string;
+		stepResults?: (PixelImage | null)[];
+		aligned?: boolean;
+		ontogglealign?: () => void;
 		format?: OutputMime;
 		quality?: number;
 		alphaLoss?: boolean;
@@ -51,6 +57,9 @@
 		textVars = undefined,
 		running = false,
 		error = "",
+		stepResults = [],
+		aligned = false,
+		ontogglealign,
 		format = "image/png",
 		quality = undefined,
 		alphaLoss = false,
@@ -71,6 +80,16 @@
 
 <div class="panel-head">
 	<span class="label">{t("resultCard.previewPanel")}</span>
+	{#if stepResults.length > 1}
+		<label class="align-toggle">
+			<Toggle
+				checked={aligned}
+				label={t("chain.alignToggle")}
+				onchange={() => ontogglealign?.()}
+			/>
+			<span>{t("chain.alignToggle")}</span>
+		</label>
+	{/if}
 	<SchemaActions
 		{inputMode}
 		{resultKind}
@@ -100,6 +119,17 @@
 		{onrendertext}
 		{onupload}
 	/>
+	{#each stepResults.slice(0, -1) as img, i (i)}
+		{#if img}
+			<PreviewTile
+				label={t("chain.stepResult", { n: i + 1 })}
+				viewMode="image"
+				dims={`${img.width} × ${img.height}`}
+			>
+				<img src={toDataUrl(img)} alt="" />
+			</PreviewTile>
+		{/if}
+	{/each}
 	<SchemaResultTile
 		{resultKind}
 		{result}
@@ -118,7 +148,7 @@
 	.panel-head {
 		display: flex;
 		justify-content: space-between;
-		align-items: baseline;
+		align-items: center;
 		gap: var(--space-m);
 		padding-bottom: var(--space-l);
 		border-bottom: var(--size-border) solid var(--color-border);
@@ -129,6 +159,15 @@
 		letter-spacing: var(--space-text-l);
 		text-transform: uppercase;
 		color: var(--color-main);
+	}
+	.align-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-m);
+		margin-right: auto;
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+		cursor: pointer;
 	}
 	.error {
 		margin: 0 0 var(--space-l);

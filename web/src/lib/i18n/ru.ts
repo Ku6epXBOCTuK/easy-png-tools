@@ -53,6 +53,8 @@ export const ru: Dict = {
 		changeTool: "Поменять инструмент",
 		collapseStep: "Свернуть шаг",
 		expandStep: "Развернуть шаг",
+		stepResult: "Результат {n}",
+		alignToggle: "Выровнять инструменты и просмотр",
 		inputLegend: "Вход",
 		resultLegend: "Результат",
 		paramsLegend: "Параметры",
