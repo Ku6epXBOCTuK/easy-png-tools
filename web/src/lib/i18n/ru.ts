@@ -37,6 +37,7 @@ export const ru: Dict = {
 		lead: "Утилиты для работы с PNG. Анализируйте, преобразуйте и экспортируйте — локально в браузере.",
 		toolsAvailable: "Инструментов доступно",
 		toolsCount: "Инструментов",
+		favorites: "Избранное",
 	},
 	toolPage: {
 		fallbackTitle: "Инструмент",
@@ -168,6 +169,8 @@ export const ru: Dict = {
 		removeColor: "Удалить цвет",
 		themeToggle: "Переключить тему",
 		language: "Язык",
+		addFav: "В избранное",
+		removeFav: "Убрать из избранного",
 	},
 	errors: {
 		noImageRun: "Этот инструмент не обрабатывает изображения",

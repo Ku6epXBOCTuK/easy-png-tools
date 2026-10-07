@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
-	import { ArrowUpRight } from "@lucide/svelte";
+	import { ArrowUpRight, Star } from "@lucide/svelte";
 	import type { Component } from "svelte";
 	import Icon from "$lib/components/ui/Icon.svelte";
+	import { isFav, toggleFav } from "$lib/favorites.svelte";
+	import { t } from "$lib/i18n/t";
 
 	interface Props {
 		title: string;
@@ -20,6 +22,20 @@
 		<strong>{title}</strong>
 		{#if description}<span>{description}</span>{/if}
 	</span>
+	<button
+		type="button"
+		class="tool-fav"
+		class:active={isFav(slug)}
+		aria-label={isFav(slug) ? t("ui.removeFav") : t("ui.addFav")}
+		aria-pressed={isFav(slug)}
+		onclick={(e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			toggleFav(slug);
+		}}
+	>
+		<Star size={15} fill={isFav(slug) ? "currentColor" : "none"} />
+	</button>
 	<span class="tool-index">
 		{index !== undefined ? index.toString().padStart(2, "0") : ""}
 	</span>
@@ -31,7 +47,7 @@
 		display: grid;
 		grid-template-columns:
 			var(--size-tool-icon) minmax(0, 1fr) var(--space-xxl)
-			var(--size-tool-arrow);
+			var(--space-xxl) var(--size-tool-arrow);
 		align-items: center;
 		gap: var(--space-l);
 		min-height: var(--size-tool-min-height);
@@ -53,6 +69,19 @@
 		background: var(--color-main-soft);
 		color: var(--color-main);
 		border-radius: var(--radius-m);
+	}
+	.tool-fav {
+		display: grid;
+		place-items: center;
+		padding: var(--space-s);
+		border: none;
+		background: none;
+		color: var(--color-text-muted);
+		cursor: pointer;
+	}
+	.tool-fav:hover,
+	.tool-fav.active {
+		color: var(--color-warning);
 	}
 	.tool-copy {
 		display: flex;

@@ -3,6 +3,7 @@
 	import { page } from "$app/state";
 	import Footer from "$lib/components/layout/Footer.svelte";
 	import TopBar from "$lib/components/layout/TopBar.svelte";
+	import { initFavorites } from "$lib/favorites.svelte";
 	import { initLocale } from "$lib/i18n/locale.svelte";
 	import { pageTitle } from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
@@ -27,6 +28,7 @@
 	onMount(() => {
 		initLocale();
 		initTheme();
+		initFavorites();
 	});
 
 	let crumb = $derived(toCrumb(page.url.pathname));

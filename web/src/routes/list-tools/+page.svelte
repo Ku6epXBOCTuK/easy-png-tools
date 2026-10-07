@@ -4,23 +4,34 @@
 	import CatalogHeader from "$lib/components/catalog/CatalogHeader.svelte";
 	import CatalogToolbar from "$lib/components/catalog/CatalogToolbar.svelte";
 	import ToolCard from "$lib/components/catalog/ToolCard.svelte";
+	import { favFirst, isFav } from "$lib/favorites.svelte";
 	import {
 		pageDescription,
 		pageTitle,
 		searchPages,
 	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
+	import { PAGES } from "$lib/registry";
 	import { TOOL_ICONS } from "$lib/tool-icons";
 
 	let query = $state("");
 	let category = $state<string>("all");
 
+	const favorites = $derived(
+		searchPages(
+			PAGES.filter((p) => isFav(p.slug)),
+			query,
+		),
+	);
+
 	const groups = $derived(
 		PREVIEW_GROUPS.map((g) => ({
 			id: g.id,
 			label: t(`categories.${g.id}`),
-			pages: searchPages(g.pages, query).filter(
-				() => category === "all" || category === g.id,
+			pages: favFirst(
+				searchPages(g.pages, query).filter(
+					() => category === "all" || category === g.id,
+				),
 			),
 		})).filter((g) => g.pages.length > 0),
 	);
@@ -35,6 +46,19 @@
 	<CatalogHeader total={PREVIEW_TOTAL} />
 	<CatalogToolbar bind:query bind:category />
 	<div class="catalog-groups">
+		{#if favorites.length > 0}
+			<CatalogGroup label={t("catalog.favorites")} count={favorites.length}>
+				{#each favorites as page, i (page.slug)}
+					<ToolCard
+						title={pageTitle(page)}
+						slug={page.slug}
+						description={pageDescription(page)}
+						index={i + 1}
+						icon={TOOL_ICONS[page.slug]}
+					/>
+				{/each}
+			</CatalogGroup>
+		{/if}
 		{#each groups as group (group.id)}
 			<CatalogGroup label={group.label} count={group.pages.length}>
 				{#each group.pages as page, i (page.slug)}

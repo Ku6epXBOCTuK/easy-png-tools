@@ -1,6 +1,8 @@
 <script lang="ts">
 	import StepCard from "$lib/components/display/StepCard.svelte";
 	import Toggle from "$lib/components/ui/Toggle.svelte";
+	import { isFav, toggleFav } from "$lib/favorites.svelte";
+	import { Star } from "@lucide/svelte";
 	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
 	import { ToolError, type ErrorVars } from "$lib/core/errors";
@@ -480,7 +482,19 @@
 	<div class="schema-tool">
 		<header class="header">
 			<div class="title-block">
-				<h1>{pageTitle(page)}</h1>
+				<h1>
+					{pageTitle(page)}
+					<button
+						type="button"
+						class="tool-fav"
+						class:active={isFav(page.slug)}
+						aria-label={isFav(page.slug) ? t("ui.removeFav") : t("ui.addFav")}
+						aria-pressed={isFav(page.slug)}
+						onclick={() => toggleFav(page.slug)}
+					>
+						<Star size={18} fill={isFav(page.slug) ? "currentColor" : "none"} />
+					</button>
+				</h1>
 				<p class="lede">{pageDescription(page)}</p>
 			</div>
 		</header>
@@ -701,10 +715,26 @@
 		margin-bottom: var(--space-xxxl);
 	}
 	.title-block h1 {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-m);
 		margin: var(--space-s) 0 0;
 		font-size: clamp(var(--font-size-xl), 4vw, var(--font-size-2xl));
 		line-height: 1.1;
 		color: var(--color-text);
+	}
+	.tool-fav {
+		display: inline-grid;
+		place-items: center;
+		padding: var(--space-s);
+		border: none;
+		background: none;
+		color: var(--color-text-muted);
+		cursor: pointer;
+	}
+	.tool-fav:hover,
+	.tool-fav.active {
+		color: var(--color-warning);
 	}
 	.lede {
 		max-width: 100%;

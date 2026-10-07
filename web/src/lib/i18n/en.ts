@@ -36,6 +36,7 @@ export const en: Dict = {
 		lead: "Focused utilities for working with PNG. Inspect, transform, and export — locally in your browser.",
 		toolsAvailable: "Tools available",
 		toolsCount: "Tools",
+		favorites: "Favorites",
 	},
 	toolPage: {
 		fallbackTitle: "Tool",
@@ -167,6 +168,8 @@ export const en: Dict = {
 		removeColor: "Remove color",
 		themeToggle: "Toggle theme",
 		language: "Language",
+		addFav: "Add to favorites",
+		removeFav: "Remove from favorites",
 	},
 	errors: {
 		noImageRun: "This tool does not process images",
