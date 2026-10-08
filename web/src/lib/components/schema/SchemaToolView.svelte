@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import { resolve } from "$app/paths";
 	import StepCard from "$lib/components/display/StepCard.svelte";
+	import Button from "$lib/components/ui/Button.svelte";
+	import { ButtonVariantDefine } from "$lib/components/ui/define";
 	import Toggle from "$lib/components/ui/Toggle.svelte";
 	import { isFav, toggleFav } from "$lib/favorites.svelte";
 	import { Star } from "@lucide/svelte";
@@ -20,22 +24,29 @@
 	import {
 		pageDescription,
 		pageTitle,
+		chainStepTitle,
 		verdictText,
 	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import {
+		autoChainName,
+		createNamedChain,
+		getChain,
+		stashHandoff,
+		takeHandoff,
+		updateChainSteps,
+	} from "$lib/chains.svelte";
+	import {
 		createChain,
 		createStep,
 		insertStep,
-		loadChain,
+		isStructuralDefault,
 		moveStep,
 		removeStep,
-		saveChain,
 		type ChainStep,
 	} from "$lib/pipeline.svelte";
 	import {
 		getTool,
-		PAGES,
 		type FileResult,
 		type Page,
 		type Tool,
@@ -64,11 +75,13 @@
 	interface Props {
 		page: Page;
 		tool: Tool;
+		/** Named-chain mode: the chain id and display name; page is virtual. */
+		chainId?: string;
 	}
 	type DisplayError =
 		| { kind: "i18n"; key: string; vars?: ErrorVars }
 		| { kind: "plain"; text: string };
-	let { page, tool }: Props = $props();
+	let { page, tool, chainId = undefined }: Props = $props();
 
 	const schema = $derived(
 		tool.schema as ToolSchema<Record<string, unknown>> | undefined,
@@ -168,17 +181,29 @@
 	}
 
 	function stepTitle(toolId: string): string {
-		const owner = PAGES.find((p) => p.steps[0].id === toolId);
-		return owner ? pageTitle(owner) : toolId;
+		return chainStepTitle(toolId);
 	}
 
 	function init() {
-		if (!schema || page.slug === initedFor) return;
-		initedFor = page.slug;
-		steps = loadChain(page.slug) ?? createChain(page);
-		format = lastTool.output?.mime ?? "image/png";
-		limitKb = undefined;
-		source = null;
+		if (!schema) return;
+		const host = chainId ? `chain:${chainId}` : page.slug;
+		if (host === initedFor) return;
+		initedFor = host;
+		if (chainId) {
+			const handoff = takeHandoff(chainId);
+			steps = getChain(chainId)?.steps ?? createChain(page);
+			source = handoff?.source ?? null;
+			textSource = handoff?.textSource ?? "";
+			if (handoff?.format) format = handoff.format;
+			else format = lastTool.output?.mime ?? "image/png";
+			limitKb = handoff?.limitKb;
+		} else {
+			steps = createChain(page);
+			format = lastTool.output?.mime ?? "image/png";
+			limitKb = undefined;
+			source = null;
+			textSource = "";
+		}
 		result = null;
 		fileResult = null;
 		textResult = null;
@@ -439,11 +464,28 @@
 		init();
 	});
 
-	// Chain persists per page slug; save only after initialization.
+	// Named-chain mode autosaves into the chains store; a plain tool page
+	// persists nothing -- it becomes a named chain on structural change below.
 	$effect(() => {
-		if (!initedFor) return;
+		if (!initedFor || !chainId) return;
 		void steps;
-		saveChain(initedFor, steps);
+		updateChainSteps(chainId, steps);
+	});
+
+	// A tool page turns into a pipeline on the first structural change (step
+	// added, first tool swapped): create the named chain and swap routes
+	// seamlessly -- steps persist via the store, the source via the handoff.
+	$effect(() => {
+		if (!initedFor || chainId) return;
+		void steps;
+		if (isStructuralDefault(page, steps)) return;
+		const chain = createNamedChain(autoChainName(), steps);
+		stashHandoff(chain.id, { source, textSource, format, limitKb });
+		goto(resolve(`/pipeline?id=${chain.id}`), {
+			replaceState: true,
+			keepFocus: true,
+			noScroll: true,
+		});
 	});
 
 	onMount(() => {
@@ -482,6 +524,18 @@
 		if (e instanceof Error) return { kind: "plain", text: e.message };
 		return { kind: "plain", text: String(e) };
 	}
+
+	// Explicit save for a structurally default chain (single tuned step): the
+	// auto-create effect only fires on structural change.
+	function saveAsChain() {
+		const chain = createNamedChain(autoChainName(), steps);
+		stashHandoff(chain.id, { source, textSource, format, limitKb });
+		goto(resolve(`/pipeline?id=${chain.id}`), {
+			replaceState: true,
+			keepFocus: true,
+			noScroll: true,
+		});
+	}
 </script>
 
 {#if schema}
@@ -490,19 +544,34 @@
 			<div class="title-block">
 				<h1>
 					{pageTitle(page)}
-					<button
-						type="button"
-						class="tool-fav"
-						class:active={isFav(page.slug)}
-						aria-label={isFav(page.slug) ? t("ui.removeFav") : t("ui.addFav")}
-						aria-pressed={isFav(page.slug)}
-						onclick={() => toggleFav(page.slug)}
-					>
-						<Star size={18} fill={isFav(page.slug) ? "currentColor" : "none"} />
-					</button>
+					{#if !chainId}
+						<button
+							type="button"
+							class="tool-fav"
+							class:active={isFav(page.slug)}
+							aria-label={isFav(page.slug) ? t("ui.removeFav") : t("ui.addFav")}
+							aria-pressed={isFav(page.slug)}
+							onclick={() => toggleFav(page.slug)}
+						>
+							<Star
+								size={18}
+								fill={isFav(page.slug) ? "currentColor" : "none"}
+							/>
+						</button>
+					{/if}
 				</h1>
-				<p class="lede">{pageDescription(page)}</p>
+				{#if pageDescription(page)}
+					<p class="lede">{pageDescription(page)}</p>
+				{/if}
 			</div>
+			{#if !chainId}
+				<Button
+					label={t("savedChains.saveAs")}
+					variant={ButtonVariantDefine.OUTLINE}
+					size="s"
+					onclick={saveAsChain}
+				/>
+			{/if}
 		</header>
 
 		{#snippet stepCard(step: ChainStep, i: number)}

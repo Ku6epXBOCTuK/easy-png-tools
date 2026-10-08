@@ -14,14 +14,6 @@ function uid(): string {
 	return crypto.randomUUID();
 }
 
-function storageKey(slug: string): string {
-	return `pipeline:${slug}`;
-}
-
-function storage(): Storage | null {
-	return typeof localStorage === "undefined" ? null : localStorage;
-}
-
 /** Tool can be inserted mid-chain: it accepts and returns an image. */
 export function isChainable(toolId: string): boolean {
 	const tool = getTool(toolId);
@@ -88,27 +80,20 @@ export function parseChain(data: unknown): ChainStep[] | null {
 	return out.length > 0 ? out : null;
 }
 
-export function loadChain(slug: string): ChainStep[] | null {
-	const raw = storage()?.getItem(storageKey(slug));
-	if (!raw) return null;
-	try {
-		return parseChain(JSON.parse(raw));
-	} catch {
-		return null;
-	}
+/** Serialized step shape shared by per-slug chains and named chains. */
+export function serializeSteps(steps: ChainStep[]): Record<string, unknown>[] {
+	return steps.map((s) => ({
+		id: s.id,
+		params: s.params,
+		...(s.collapsed ? { collapsed: true } : {}),
+	}));
 }
 
-export function saveChain(slug: string, steps: ChainStep[]): void {
-	storage()?.setItem(
-		storageKey(slug),
-		JSON.stringify({
-			version: CHAIN_VERSION,
-			steps: steps.map((s) => ({
-				id: s.id,
-				params: s.params,
-				...(s.collapsed ? { collapsed: true } : {}),
-			})),
-		}),
+/** True while steps match the page definition identity-wise (params ignored). */
+export function isStructuralDefault(page: Page, steps: ChainStep[]): boolean {
+	return (
+		steps.length === page.steps.length &&
+		steps.every((s, i) => s.id === page.steps[i].id)
 	);
 }
 

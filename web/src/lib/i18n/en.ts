@@ -7,6 +7,8 @@ export const en: Dict = {
 		sectionsAria: "Sections",
 		home: "Home page",
 		uiKit: "UI Kit",
+		chains: "Pipelines",
+		pipeline: "Pipeline",
 		footerNote:
 			"All operations run locally in your browser — your files are never uploaded anywhere.",
 	},
@@ -61,6 +63,23 @@ export const en: Dict = {
 		busyTitle: "Processing…",
 		busyHint: "Running chain step",
 		removeStepAria: "Remove step",
+	},
+	savedChains: {
+		pageTitle: "Saved pipelines — easy-png-tools",
+		metaDescription:
+			"Your saved image pipelines: named tool chains stored locally in your browser.",
+		heading: "Saved pipelines",
+		empty:
+			"No saved pipelines yet — add a step on any tool page and it will appear here.",
+		autoName: "Pipeline {stamp}",
+		saveAs: "Save as pipeline",
+		newChain: "New pipeline",
+		use: "Open",
+		rename: "Rename",
+		renameSave: "Save name",
+		deleteAction: "Delete",
+		confirmDelete: "Sure?",
+		nameAria: "Pipeline name",
 	},
 	sourceCard: {
 		source: "Source",

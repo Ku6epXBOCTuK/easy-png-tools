@@ -6,6 +6,7 @@
 <nav class="nav">
 	<a href={resolve("/")}>{t("header.home")}</a>
 	<a href={resolve("/list-tools")}>{t("header.catalog")}</a>
+	<a href={resolve("/chains")}>{t("header.chains")}</a>
 	<a href={resolve("/kit")}>{t("header.uiKit")}</a>
 </nav>
 

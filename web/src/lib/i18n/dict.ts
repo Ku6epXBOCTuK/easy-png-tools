@@ -39,6 +39,8 @@ export type HeaderStrings = {
 	footerNote: string;
 	home: string;
 	uiKit: string;
+	chains: string;
+	pipeline: string;
 };
 
 export type Dict = {
@@ -48,6 +50,7 @@ export type Dict = {
 	catalog: Record<string, string>;
 	toolPage: Record<string, string>;
 	chain: Record<string, string>;
+	savedChains: Record<string, string>;
 	sourceCard: Record<string, string>;
 	resultCard: Record<string, string>;
 	paramsCard: Record<string, string>;

@@ -1,4 +1,5 @@
 import type { Page } from "$lib/registry";
+import { PAGES } from "../registry";
 import type { Field } from "$lib/registry-schema";
 import { getMergedDict } from "./locale.svelte";
 import { normalizeForSearch, scoreDoc, type SearchDoc } from "./matching";
@@ -18,6 +19,12 @@ export function pageTitle(page: Page): string {
 
 export function pageDescription(page: Page): string {
 	return getMergedDict().pages?.[page.slug]?.description ?? page.description;
+}
+
+/** Step title for chain UIs: the owning page title, else the raw tool id. */
+export function chainStepTitle(toolId: string): string {
+	const owner = PAGES.find((p) => p.steps[0].id === toolId);
+	return owner ? pageTitle(owner) : toolId;
 }
 
 export function fieldLabel(field: Field<unknown>, id: string): string {

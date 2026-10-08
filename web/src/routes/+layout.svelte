@@ -40,6 +40,8 @@
 	function toCrumb(path: string): string {
 		if (path === "/") return "/ " + t("header.home");
 		if (path === "/list-tools") return "/ " + t("header.catalog");
+		if (path === "/chains") return "/ " + t("header.chains");
+		if (path === "/pipeline") return "/ " + t("header.pipeline");
 		if (path === "/kit") return "/ " + t("header.uiKit");
 		const match = /^\/tools\/([^/]+)$/.exec(path);
 		if (match) {
