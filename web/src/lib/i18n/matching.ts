@@ -1,5 +1,5 @@
 /**
- * Нормализация строки для поиска: нижний регистр, ё→е, снятие диакритики (NFD).
+ * Search string normalization: lowercase, yo->ye (Cyrillic), strip diacritics (NFD).
  */
 export function normalizeForSearch(value: string): string {
 	return value
@@ -45,8 +45,8 @@ function bestTitleScore(titles: string[], q: string): number | null {
 }
 
 /**
- * Скоринг документа против нормализованного запроса.
- * Пустой запрос — нейтральный балл; отсутствие совпадения — null.
+ * Scores a document against a normalized query.
+ * Empty query: neutral score; no match: null.
  */
 export function scoreDoc(
 	doc: SearchDoc,

@@ -13,23 +13,23 @@ describe("isSupportedImage", () => {
 		"image/gif",
 		"image/bmp",
 		"image/x-icon",
-	])("принимает %s", (type) => {
+	])("accepts %s", (type) => {
 		expect(isSupportedImage(new File([], "x", { type }))).toBe(true);
 	});
 
-	it("отклоняет неподдерживаемый тип", () => {
+	it("rejects unsupported type", () => {
 		expect(
 			isSupportedImage(new File([], "a.txt", { type: "text/plain" })),
 		).toBe(false);
 	});
 
-	it("отклоняет файл без типа", () => {
+	it("rejects file without type", () => {
 		expect(isSupportedImage(new File([], "x"))).toBe(false);
 	});
 });
 
 describe("unsupportedImageError", () => {
-	it("ключ ошибки и тип файла в vars", () => {
+	it("error key and file type in vars", () => {
 		const err = unsupportedImageError(
 			new File([], "a.txt", { type: "text/plain" }),
 		);
@@ -37,7 +37,7 @@ describe("unsupportedImageError", () => {
 		expect(err.vars?.type).toBe("text/plain");
 	});
 
-	it("пустой тип передаётся как unknown", () => {
+	it("empty type passed as unknown", () => {
 		const err = unsupportedImageError(new File([], "x"));
 		expect(err.vars?.type).toBe("unknown");
 	});
@@ -45,7 +45,7 @@ describe("unsupportedImageError", () => {
 
 describe("validateOutputQuality", () => {
 	it.each(["image/jpeg", "image/webp"] as const)(
-		"принимает границы 0 и 1 для %s",
+		"accepts bounds 0 and 1 for %s",
 		(mime) => {
 			expect(() => validateOutputQuality(mime, 0)).not.toThrow();
 			expect(() => validateOutputQuality(mime, 1)).not.toThrow();
@@ -53,7 +53,7 @@ describe("validateOutputQuality", () => {
 	);
 
 	it.each(["image/jpeg", "image/webp"] as const)(
-		"отклоняет значение вне 0..1 для %s",
+		"rejects value outside 0..1 for %s",
 		(mime) => {
 			expect(() => validateOutputQuality(mime, -0.01)).toThrow(
 				"errors.qualityRange",
@@ -67,7 +67,7 @@ describe("validateOutputQuality", () => {
 		},
 	);
 
-	it("не применяет quality к PNG и BMP", () => {
+	it("ignores quality for PNG and BMP", () => {
 		expect(() => validateOutputQuality("image/png", 2)).not.toThrow();
 		expect(() => validateOutputQuality("image/bmp", 2)).not.toThrow();
 	});

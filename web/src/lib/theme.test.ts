@@ -29,13 +29,13 @@ beforeEach(() => {
 });
 
 describe("initTheme", () => {
-	it("доверяет атрибуту от анти-вспышки скрипта", () => {
+	it("trusts attribute from anti-flash script", () => {
 		stubEnv({ attr: "dark" });
 		initTheme();
 		expect(getTheme()).toBe("dark");
 	});
 
-	it("без атрибута берёт системную тему", () => {
+	it("without attribute uses system theme", () => {
 		stubEnv({ system: true });
 		initTheme();
 		expect(getTheme()).toBe("dark");
@@ -44,7 +44,7 @@ describe("initTheme", () => {
 		expect(getTheme()).toBe("light");
 	});
 
-	it("мусорный атрибут игнорируется в пользу системной", () => {
+	it("junk attribute ignored in favor of system", () => {
 		stubEnv({ attr: "sepia", system: false });
 		initTheme();
 		expect(getTheme()).toBe("light");
@@ -52,7 +52,7 @@ describe("initTheme", () => {
 });
 
 describe("setTheme", () => {
-	it("сохраняет выбор и применяет атрибут на html", () => {
+	it("persists choice and applies attribute on html", () => {
 		const { store, doc } = stubEnv({});
 		initTheme();
 		setTheme("dark");

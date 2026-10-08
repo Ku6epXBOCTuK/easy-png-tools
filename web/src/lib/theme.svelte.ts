@@ -31,9 +31,9 @@ export function setTheme(next: ThemeChoice): void {
 }
 
 /**
- * Догоняет состояние после гидрации: фактический атрибут уже выставлен
- * инлайн-скриптом в app.html; здесь он читается и синхронизируется с runes,
- * чтобы кнопка в шапке отражала реальную тему.
+ * Catches up state after hydration: the actual attribute is already set by
+ * the inline script in app.html; here it is read and synced with runes so
+ * the header button reflects the real theme.
  */
 export function initTheme(): void {
 	if (typeof window === "undefined") return;

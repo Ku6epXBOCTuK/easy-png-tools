@@ -3,15 +3,15 @@ import { createPixelImage } from "./types";
 
 export type ShapeTest = (nx: number, ny: number) => boolean;
 
-/** Полуразмер фигуры в нормированных координатах теста, по осям. */
+/** Half-size of the shape in normalized test coordinates, per axis. */
 export interface ShapeExtent {
 	x: number;
 	y: number;
 }
 
 /**
- * Координаты теста: нормированные к половине меньшей стороны изображения,
- * центр в (0,0), ось Y вниз как в пикселях.
+ * Test coordinates: normalized to half of the image's smaller side,
+ * center at (0,0), Y axis pointing down as in pixels.
  */
 
 export function circleTest(radiusFrac: number): ShapeTest {
@@ -22,7 +22,7 @@ export function boxTest(halfWFrac: number, halfHFrac: number): ShapeTest {
 	return (nx, ny) => Math.abs(nx) <= halfWFrac && Math.abs(ny) <= halfHFrac;
 }
 
-/** Звезда с points лучами; innerFrac — радиус впадин в долях внешнего радиуса. */
+/** Star with `points` rays; innerFrac is the valley radius as a fraction of the outer radius. */
 export function starTest(
 	points: number,
 	innerFrac: number,
@@ -36,13 +36,13 @@ export function starTest(
 		const r = Math.hypot(nx, ny);
 		if (r > outerFrac) return false;
 		const t = ((theta * n) / (2 * Math.PI)) % 1;
-		const tri = Math.abs(t - Math.floor(t + 0.5)) * 2; // 0 на луче, 1 во впадине
+		const tri = Math.abs(t - Math.floor(t + 0.5)) * 2; // 0 on a ray, 1 in a valley
 		const edge = outerFrac - (outerFrac - innerFrac) * tri;
 		return r <= edge;
 	};
 }
 
-/** Волнистый круг: радиус модулируется синусом с частотой waves. */
+/** Wavy circle: radius modulated by a sine of frequency `waves`. */
 export function wavyTest(
 	baseFrac: number,
 	amplitudeFrac: number,
@@ -59,11 +59,9 @@ export function wavyTest(
 }
 
 /**
- * Вырезает фигуру из изображения: внутри фигуры сохраняются исходные пиксели
- * (с их альфой), снаружи альфа обнуляется. Смещение задаётся в долях свободного
- * места по каждой оси: ±0.5 прижимает фигуру к краю независимо от её размера,
- * поэтому фигура никогда не уезжает за холст. Свободное место считается от
- * extent (полуразмера фигуры); без extent смещение считается от точки.
+ * Cuts a shape out of the image: source pixels kept inside, alpha zeroed
+ * outside. Offset is a fraction of free space per axis: +-0.5 pins the shape
+ * to the edge regardless of size. Free space derives from extent (half-size).
  */
 export function renderShape(
 	img: PixelImage,

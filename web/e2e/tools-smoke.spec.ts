@@ -15,7 +15,7 @@ import {
 type Kind = "image" | "text-out" | "verdict";
 
 const CASES: { id: string; kind: Kind; file?: SourceFile }[] = [
-	// ── convert ────────────────────────────────────────────────
+	// -- convert
 	{ id: "convert-png-to-jpg", kind: "image" },
 	{ id: "convert-png-to-webp", kind: "image" },
 	{ id: "png-to-bmp", kind: "image" },
@@ -24,7 +24,7 @@ const CASES: { id: string; kind: Kind; file?: SourceFile }[] = [
 	{ id: "png-to-hex", kind: "text-out" },
 	{ id: "png-to-bytes", kind: "text-out" },
 	{ id: "png-to-rgb-values", kind: "text-out" },
-	// ── alpha ──────────────────────────────────────────────────
+	// -- alpha
 	{ id: "remove-background-png", kind: "image", file: transparentPng },
 	{ id: "remove-color-from-png", kind: "image", file: transparentPng },
 	{ id: "round-corners-png", kind: "image", file: transparentPng },
@@ -45,7 +45,7 @@ const CASES: { id: string; kind: Kind; file?: SourceFile }[] = [
 	{ id: "remove-alpha-channel-png", kind: "image", file: transparentPng },
 	{ id: "square-mask-png", kind: "image", file: transparentPng },
 	{ id: "star-mask-png", kind: "image", file: transparentPng },
-	// ── color ──────────────────────────────────────────────────
+	// -- color
 	{ id: "grayscale-png", kind: "image" },
 	{ id: "invert-colors-png", kind: "image" },
 	{ id: "sepia-png", kind: "image" },
@@ -70,7 +70,7 @@ const CASES: { id: string; kind: Kind; file?: SourceFile }[] = [
 	{ id: "png-to-hsi", kind: "image" },
 	{ id: "png-to-ycbcr", kind: "image" },
 	{ id: "png-to-lab", kind: "image" },
-	// ── geometry ───────────────────────────────────────────────
+	// -- geometry
 	{ id: "flip-png", kind: "image" },
 	{ id: "rotate-png", kind: "image" },
 	{ id: "rotate-free-png", kind: "image" },
@@ -87,7 +87,7 @@ const CASES: { id: string; kind: Kind; file?: SourceFile }[] = [
 	{ id: "change-aspect-ratio-png", kind: "image" },
 	{ id: "symmetric-copy-png", kind: "image" },
 	{ id: "shift-png", kind: "image" },
-	// ── filters ────────────────────────────────────────────────
+	// -- filters
 	{ id: "blur-png", kind: "image" },
 	{ id: "sharpen-png", kind: "image" },
 	{ id: "pixelate-png", kind: "image" },
@@ -96,11 +96,11 @@ const CASES: { id: string; kind: Kind; file?: SourceFile }[] = [
 	{ id: "silhouette-png", kind: "image" },
 	{ id: "randomize-pixels-png", kind: "image" },
 	{ id: "jpeg-artifacts-png", kind: "image" },
-	// ── text ───────────────────────────────────────────────────
+	// -- text
 	{ id: "add-text-png", kind: "image" },
 	{ id: "date-stamp-png", kind: "image" },
 	{ id: "watermark-tile-png", kind: "image" },
-	// ── analyze (image output) ─────────────────────────────────
+	// -- analyze (image output)
 	{ id: "extract-color-from-png", kind: "image", file: transparentPng },
 	{ id: "show-transparent-png", kind: "image", file: transparentPng },
 	{ id: "light-pixel-mask-png", kind: "image", file: transparentPng },
@@ -109,7 +109,7 @@ const CASES: { id: string; kind: Kind; file?: SourceFile }[] = [
 	{ id: "show-grayscale-pixels-png", kind: "image", file: transparentPng },
 	{ id: "show-color-pixels-png", kind: "image", file: transparentPng },
 	{ id: "dark-pixel-mask-png", kind: "image", file: transparentPng },
-	// ── analyze (verdict output) ───────────────────────────────
+	// -- analyze (verdict output)
 	{ id: "png-is-transparent", kind: "verdict" },
 	{ id: "png-is-grayscale", kind: "verdict" },
 	{ id: "png-orientation", kind: "verdict" },
@@ -132,8 +132,8 @@ test.describe("smoke: tools produce output without errors", () => {
 				}
 			};
 
-			// toPass: устойчивость к hydration-рейсу (ввод до гидрации SvelteKit
-			// может не обработаться с первого раза).
+			// toPass: tolerates the hydration race (input before SvelteKit
+			// hydration may not be processed on the first attempt).
 			await expect(async () => {
 				await openTool(page, id);
 				await uploadImage(page, fixture ?? opaquePng);

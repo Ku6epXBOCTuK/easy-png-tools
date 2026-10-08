@@ -9,7 +9,7 @@ import {
 import { makeImage } from "./test-helpers";
 
 describe("sampleBilinear", () => {
-	it("целые координаты возвращают точный пиксель", () => {
+	it("integer coordinates return exact pixel", () => {
 		const img = makeImage(2, 1, [
 			[255, 0, 0, 255],
 			[0, 0, 255, 255],
@@ -18,7 +18,7 @@ describe("sampleBilinear", () => {
 		expect(sampleBilinear(img, 1, 0)).toEqual([0, 0, 255, 255]);
 	});
 
-	it("дробная координата интерполирует", () => {
+	it("fractional coordinate interpolates", () => {
 		const img = makeImage(2, 1, [
 			[0, 0, 0, 255],
 			[200, 200, 200, 255],
@@ -27,14 +27,14 @@ describe("sampleBilinear", () => {
 		expect(r).toBeCloseTo(100, 0);
 	});
 
-	it("координаты за краем клампятся", () => {
+	it("out-of-bounds coordinates are clamped", () => {
 		const img = makeImage(1, 1, [[7, 7, 7, 255]]);
 		expect(sampleBilinear(img, -10, -10)).toEqual([7, 7, 7, 255]);
 	});
 });
 
 describe("rotateFreeImage", () => {
-	it("поворот на 180° даёт размеры не меньше исходных и непустой результат", () => {
+	it("180 deg rotation keeps size and fills result", () => {
 		const img = makeImage(4, 3, [
 			[255, 0, 0, 255],
 			[0, 255, 0, 255],
@@ -60,7 +60,7 @@ describe("rotateFreeImage", () => {
 		expect(opaque / total).toBeGreaterThan(0.8);
 	});
 
-	it("поворот квадрата на 360° близок к оригиналу", () => {
+	it("360 deg rotation of square is close to original", () => {
 		const img = makeImage(5, 5, new Array(25).fill([200, 100, 50, 255]));
 		const out = rotateFreeImage(img, 360);
 		expect(out.width).toBeGreaterThanOrEqual(5);
@@ -79,7 +79,7 @@ describe("rotateFreeImage", () => {
 });
 
 describe("skewImage", () => {
-	it("наклон X=45° расширяет холст до w+h−1 и сдвигает строки вправо", () => {
+	it("skew X=45 deg widens canvas to w+h-1 and shifts rows right", () => {
 		const img = makeImage(2, 2, new Array(4).fill([255, 0, 0, 255]));
 		const out = skewImage(img, 45, 0);
 		expect(out.width).toBe(3);
@@ -96,7 +96,7 @@ describe("skewImage", () => {
 		expect(opaque).toBe(4);
 	});
 
-	it("углы 0° — тождественное преобразование", () => {
+	it("zero angles are identity transform", () => {
 		const img = makeImage(2, 2, [
 			[255, 0, 0, 255],
 			[0, 255, 0, 255],
@@ -109,8 +109,8 @@ describe("skewImage", () => {
 	});
 });
 
-describe("transformImage — заливка фона", () => {
-	it("сдвиг с белым фоном заполняет освободившийся край", () => {
+describe("transformImage - background fill", () => {
+	it("shift with white background fills freed edge", () => {
 		const img = makeImage(2, 2, [
 			[255, 0, 0, 255],
 			[0, 255, 0, 255],
@@ -126,7 +126,7 @@ describe("transformImage — заливка фона", () => {
 		}
 	});
 
-	it("без фона освободившийся край остаётся прозрачным", () => {
+	it("without background freed edge stays transparent", () => {
 		const img = makeImage(2, 2, new Array(4).fill([10, 20, 30, 255]));
 		const out = transformImage(img, [1, 0, 0, 1, -1, 0], 2, 2);
 		expect(out.data[3]).toBe(0);

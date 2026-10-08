@@ -3,7 +3,7 @@ import { encodeBmpBytes } from "./bmp";
 import { makeImage } from "./test-helpers";
 
 describe("encodeBmpBytes", () => {
-	it("пишет заголовки BM и размеры для 2x1 без паддинга-неопределённости", () => {
+	it("writes BM headers and sizes for 2x1 without padding ambiguity", () => {
 		const bytes = encodeBmpBytes(
 			makeImage(2, 1, [
 				[255, 0, 0, 255],
@@ -18,7 +18,7 @@ describe("encodeBmpBytes", () => {
 		expect(view.getUint16(28, true)).toBe(24);
 	});
 
-	it("хранит пиксели в BGR снизу-вверх с паддингом строки", () => {
+	it("stores pixels as BGR bottom-up with row padding", () => {
 		const bytes = encodeBmpBytes(
 			makeImage(2, 1, [
 				[255, 0, 0, 255],
@@ -30,7 +30,7 @@ describe("encodeBmpBytes", () => {
 		expect(bytes[61]).toBe(0);
 	});
 
-	it("нижняя строка изображения идёт первой в файле", () => {
+	it("bottom image row comes first in file", () => {
 		const bytes = encodeBmpBytes(
 			makeImage(4, 2, [
 				[10, 10, 10, 255],

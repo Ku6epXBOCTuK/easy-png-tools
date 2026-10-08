@@ -9,7 +9,7 @@ export type SchemaPreviewModelInput = {
 	textResult: string | null;
 };
 
-/** Можно ли скачать результат: он есть и он не пустой. */
+/** Whether the result is downloadable: it exists and is non-empty. */
 export function hasPreviewResult(input: SchemaPreviewModelInput): boolean {
 	const { resultKind, result, fileResult, textResult } = input;
 	if (resultKind === "image") return Boolean(result);

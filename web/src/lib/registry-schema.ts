@@ -1,22 +1,19 @@
-// Типизированная схема параметров для нового UI.
-//
-// Связка типов на этапе компиляции (защита от рассинхрона):
-//   - `field.x<T>()` возвращает `Field<T>` — phantom `__fieldT` связывает
-//     runtime-спецификацию поля с ожидаемым типом значения (`number`|`string`|`boolean`).
-//   - `toolSchema<P>(fields)` требует, чтобы ключи `fields` в точности совпадали
-//     с полями `P`, а `Field<P[K]>` тип-проверялся на соответствие `P[K]`.
-// Ошибки компилятора ловят расхождения между интерфейсом Params и схемой.
+// Typed parameter schema for the UI.
+// Compile-time type binding (drift protection): `field.x<T>()` returns
+// `Field<T>` whose phantom `__fieldT` ties the runtime spec to the expected
+// value type; `toolSchema<P>(fields)` requires `fields` keys to match `P`
+// exactly. Compiler errors catch Params/schema mismatches.
 
 import type { TextFont } from "./core/domText";
 import type { Position9 } from "./core/textdraw";
 
 /**
- * Общее необязательное поле всех спеков: ключ подписи поля в словаре.
- * Рендерится через `fieldLabel` (решение C) — без ключа используется `labelOf(id)`.
+ * Optional field of every spec: the field's label key in the dictionary.
+ * Rendered via `fieldLabel` (decision C); without a key, `labelOf(id)` is used.
  */
 export interface FieldSpecBase {
 	label?: string;
-	/** Поле видно только когда другое поле равно значению (режимы инструмента). */
+	/** Field visible only when another field equals a value (tool modes). */
 	visibleWhen?: { field: string; equals: string };
 }
 
@@ -26,7 +23,7 @@ export interface NumberSpec extends FieldSpecBase {
 	min?: number;
 	max?: number;
 	step?: number;
-	/** Потолок из размеров исходника (ось); статический max — фолбэк. */
+	/** Cap from source dimensions (axis); static max is the fallback. */
 	maxFromSource?: "width" | "height";
 	maxMinus?: number;
 }
@@ -50,7 +47,7 @@ export interface SelectSpec<V extends string = string> extends FieldSpecBase {
 	options: { value: V; label: string }[];
 }
 
-/** То же, что select, но рендерится кнопками-сегментами (выбор в 1 клик). */
+/** Same as select but rendered as segment buttons (1-click choice). */
 export interface SegmentedSpec<
 	V extends string = string,
 > extends FieldSpecBase {
@@ -70,28 +67,28 @@ export interface CheckboxSpec extends FieldSpecBase {
 	default: boolean;
 }
 
-/** Составное поле «размеры»: width + height как один объект. */
+/** Composite "dimensions" field: width + height as one object. */
 export interface Dimension {
 	width: number;
 	height: number;
 }
 
-/** Единый список тайловых пресетов (квадраты) для dimension-полей. */
+/** Single list of tile presets (squares) for dimension fields. */
 export const SIZE_PRESETS = [16, 32, 64, 128, 256, 512] as const;
 
 export interface DimensionSpec extends FieldSpecBase {
 	kind: "dimension";
-	/** Общий диапазон для обоих измерений. */
+	/** Shared range for both dimensions. */
 	min: number;
 	max: number;
 	width: number;
 	height: number;
 	defaultFromSource?: boolean;
-	/** Потолок каждой оси из соответствующего размера исходника. */
+	/** Per-axis cap from the matching source dimension. */
 	maxFromSource?: boolean;
-	/** Id checkbox-поля «сохранять пропорции». */
+	/** Id of the "keep aspect ratio" checkbox field. */
 	lockAspectWith?: string;
-	/** Показывать чипы быстрого выбора из SIZE_PRESETS. */
+	/** Show quick-pick chips from SIZE_PRESETS. */
 	presets?: boolean;
 }
 
@@ -99,7 +96,7 @@ export interface SchemaContext {
 	source?: Dimension;
 }
 
-/** Пара цветов «от → к» (градиенты, сведение к двум цветам и т.п.). */
+/** Color pair "from -> to" (gradients, two-color mapping, etc.). */
 export interface ColorPair {
 	from: string;
 	to: string;
@@ -111,7 +108,7 @@ export interface ColorPairSpec extends FieldSpecBase {
 	to: string;
 }
 
-/** Список цветов (палитра): массив hex-строк. */
+/** Color list (palette): array of hex strings. */
 export type ColorList = string[];
 
 export interface ColorListSpec extends FieldSpecBase {
@@ -119,7 +116,7 @@ export interface ColorListSpec extends FieldSpecBase {
 	default: string[];
 }
 
-/** Смещение фигуры/объекта по центру: x + y в процентах. */
+/** Shape/object offset from center: x + y in percent. */
 export interface Offset {
 	x: number;
 	y: number;
@@ -127,7 +124,7 @@ export interface Offset {
 
 export interface OffsetSpec extends FieldSpecBase {
 	kind: "offset";
-	/** Общий диапазон для обеих осей (в процентах). */
+	/** Shared range for both axes (in percent). */
 	min: number;
 	max: number;
 	x: number;
@@ -135,8 +132,8 @@ export interface OffsetSpec extends FieldSpecBase {
 }
 
 /**
- * 9-позиционная сетка (3×3): top/middle/bottom × left/center/right.
- * Значение совпадает со строковым типом `Position9` из core/textdraw.
+ * 9-position grid (3x3): top/middle/bottom x left/center/right.
+ * Values match the `Position9` string type from core/textdraw.
  */
 export const POSITION9_VALUES = [
 	"top-left",
@@ -156,8 +153,8 @@ export interface Position9Spec extends FieldSpecBase {
 }
 
 /**
- * Стиль текстовой надписи: шрифт, размер, жирность и цвет как один объект
- * (переиспользуется text-to-png, add-text, date-stamp).
+ * Text caption style: font, size, bold, and color as one object
+ * (reused by text-to-png, add-text, date-stamp).
  */
 export interface FontStyle {
 	font: TextFont;
@@ -168,7 +165,7 @@ export interface FontStyle {
 
 export interface FontStyleSpec extends FieldSpecBase {
 	kind: "font-style";
-	/** Диапазон размера шрифта. */
+	/** Font size range. */
 	min: number;
 	max: number;
 	size: number;
@@ -178,8 +175,8 @@ export interface FontStyleSpec extends FieldSpecBase {
 }
 
 /**
- * Подложка-плашка под текстовой надписью: вкл/выкл, цвет и непрозрачность
- * как один объект (add-text, date-stamp).
+ * Backing plate under a text caption: on/off, color, and opacity
+ * as one object (add-text, date-stamp).
  */
 export interface Plate {
 	enabled: boolean;
@@ -195,8 +192,8 @@ export interface PlateSpec extends FieldSpecBase {
 }
 
 /**
- * Цветовой градиент: пара цветов + угол направления. 0° — слева направо,
- * 90° — сверху вниз (прирост по часовой в пиксельных осях, ось Y вниз).
+ * Color gradient: color pair + direction angle. 0 deg: left to right,
+ * 90 deg: top to bottom (clockwise growth in pixel axes, Y axis down).
  */
 export interface Gradient {
 	from: string;
@@ -208,15 +205,14 @@ export interface GradientSpec extends FieldSpecBase {
 	kind: "gradient";
 	from: string;
 	to: string;
-	/** Направление градиента: 0..360°, угол в градусах. */
+	/** Gradient direction: 0..360, angle in degrees. */
 	angle: number;
 }
 
 /**
- * «Объект as const» kind → спека поля. Единственный источник правды для
- * перечня kinds: `FieldSpecKind` = ключи map, `FieldSpec` = значение по любому
- * ключу (тот же union). Добавляем новый составной тип — добавляем сюда, и
- * type-checker укажет, где его не хватает (record контролов, default/sanitize).
+ * "as const" object: kind -> field spec. Single source of truth for the kind
+ * list: `FieldSpecKind` = map keys, `FieldSpec` = union of values. A new kind
+ * added here makes the type-checker flag where it is missing (default/sanitize).
  */
 export const fieldSpecs = {
 	number: {} as NumberSpec,
@@ -240,31 +236,31 @@ export type FieldSpecKind = keyof typeof fieldSpecs;
 export type FieldSpecOf<K extends FieldSpecKind> = (typeof fieldSpecs)[K];
 export type FieldSpec = FieldSpecOf<FieldSpecKind>;
 
-/** `Field<T>`: runtime-спека поля + phantom-тип ожидаемого значения (number|string|boolean). */
+/** `Field<T>`: runtime field spec + phantom type of the expected value (number|string|boolean). */
 export interface Field<T> {
 	spec: FieldSpec;
-	/** Phantom, только для типобезопасности — не задаётся и не читается в рантайме. */
+	/** Phantom, for type safety only; never set or read at runtime. */
 	__fieldT?: T;
 }
 
 export interface ToolLayoutGroup {
-	/** Подпись группы (пустая группа не рендерится). */
+	/** Group title (an empty group is not rendered). */
 	title?: string;
-	/** Количество колонок сетки внутри группы (по умолчанию 1). */
+	/** Grid column count inside the group (default 1). */
 	cols?: number;
-	/** Имена полей схемы, попадающих в группу. */
+	/** Schema field names belonging to the group. */
 	fields: string[];
 }
 
 export interface ToolSchemaLayout {
-	/** Группы полей виджета. Неупомянутые поля — в общей группе в конце. */
+	/** Widget field groups. Unmentioned fields go to a trailing default group. */
 	groups: ToolLayoutGroup[];
 }
 
 export interface ToolSchemaMeta {
-	/** Пер-инструмент раскладка полей (группировка/колонки). */
+	/** Per-tool field layout (grouping/columns). */
 	layout?: ToolSchemaLayout;
-	/** Короткая подпись инструмента для нового UI (необязательно). */
+	/** Short tool label for the UI (optional). */
 	label?: string;
 }
 
@@ -364,8 +360,8 @@ export const field = {
 };
 
 /**
- * Собирает `ToolSchema<P>` из объявленных полей.
- * Компилятор проверяет: ключи `fields` === полям `P`, типы полей совместимы с `P[K]`.
+ * Builds a `ToolSchema<P>` from declared fields.
+ * The compiler checks: `fields` keys === keys of `P`, field types match `P[K]`.
  */
 export function toolSchema<P>(
 	fields: { [K in keyof P]: Field<P[K]> },
@@ -415,7 +411,7 @@ function clamp(value: number, min?: number, max?: number): number {
 	return value;
 }
 
-/** Потолок поля: из размеров исходника при maxFromSource, иначе статический. */
+/** Field cap: from source dimensions under maxFromSource, else static. */
 export function effectiveMax(
 	spec: NumberSpec,
 	source?: Dimension,
@@ -434,7 +430,7 @@ function dimensionAxisMax(
 	return spec.maxFromSource && source ? source[axis] : spec.max;
 }
 
-/** Поджимает maxFromSource-поля к актуальному потолку (сменился исходник). */
+/** Clamps maxFromSource fields to the current cap (source changed). */
 export function clampSourceAwareMaxes<P>(
 	schema: ToolSchema<P>,
 	params: Record<string, unknown>,
@@ -478,8 +474,8 @@ export function clampSourceAwareMaxes<P>(
 }
 
 /**
- * Пересчёт при включённом lockAspect: ведущая ось (последняя правка
- * пользователя) сохраняется, вторая подгоняется под аспект исходника.
+ * Recompute under lockAspect: the leading axis (last user edit) is kept,
+ * the other is fitted to the source aspect.
  */
 export function withAspectLock(
 	next: Dimension,
@@ -503,7 +499,7 @@ function resolveDimensionDefaults(
 	};
 }
 
-/** Дефолты из схемы — единый источник значений по умолчанию для нового UI. */
+/** Defaults from the schema: the single source of default values for the UI. */
 export function defaultSchemaParams<P>(
 	schema: ToolSchema<P>,
 	context?: SchemaContext,
@@ -546,9 +542,9 @@ export function defaultSchemaParams<P>(
 }
 
 /**
- * Пересчитывает дефолты от нового исходника, сохраняя значения пользователя.
- * Поля из touched (изменённые вручную) не перезаписываются даже если у них
- * source-дефолт — иначе загрузка нового файла сносила бы настроенные размеры.
+ * Recomputes defaults from a new source, preserving user values. Fields in
+ * touched (edited manually) are not overwritten even with a source default;
+ * otherwise loading a new file would wipe configured sizes.
  */
 export function applySourceDefaults<P>(
 	schema: ToolSchema<P>,
@@ -568,7 +564,7 @@ export function applySourceDefaults<P>(
 	return defaults;
 }
 
-/** Валидация/нормализация значений по схеме. Аналог старого `sanitizeParams`. */
+/** Validation/normalization of values against the schema. Successor of `sanitizeParams`. */
 export function sanitizeSchemaParams<P>(
 	schema: ToolSchema<P>,
 	values: Record<string, unknown>,

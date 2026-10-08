@@ -13,15 +13,15 @@ import { getPageBySlug } from "./registry";
 
 const cropPage = getPageBySlug("crop-png")!;
 
-describe("pipeline: цепочка шагов", () => {
-	it("createChain собирает шаги из страницы с дефолтами схемы", () => {
+describe("pipeline: step chain", () => {
+	it("createChain builds steps from page with schema defaults", () => {
 		const chain = createChain(cropPage);
 		expect(chain).toHaveLength(1);
 		expect(chain[0].id).toBe("crop");
 		expect(chain[0].params).toMatchObject({ x: 0, y: 0 });
 	});
 
-	it("isChainable: image→image можно, терминальные и text-вход нельзя", () => {
+	it("isChainable: image->image allowed, terminal and text-input not", () => {
 		expect(isChainable("resize")).toBe(true);
 		expect(isChainable("to-base64")).toBe(false); // result: text
 		expect(isChainable("split-into-parts")).toBe(false); // result: files
@@ -29,22 +29,22 @@ describe("pipeline: цепочка шагов", () => {
 		expect(isChainable("unknown-tool")).toBe(false);
 	});
 
-	it("chainablePages содержит только совместимые страницы", () => {
+	it("chainablePages holds only compatible pages", () => {
 		const pages = chainablePages();
 		expect(pages.some((p) => p.slug === "resize-png")).toBe(true);
 		expect(pages.some((p) => p.slug === "png-to-base64")).toBe(false);
 	});
 
-	it("insertStep вставляет шаг в произвольную позицию", () => {
+	it("insertStep inserts step at arbitrary position", () => {
 		const chain = createChain(cropPage);
 		const grown = insertStep(chain, 0, "resize");
 		expect(grown.map((s) => s.id)).toEqual(["resize", "crop"]);
 		expect(grown[0].params).toHaveProperty("keepAspect");
-		// исходная цепочка не мутирует
+		// original chain not mutated
 		expect(chain).toHaveLength(1);
 	});
 
-	it("removeStep не удаляет последний шаг", () => {
+	it("removeStep does not remove last step", () => {
 		const chain = createChain(cropPage);
 		expect(removeStep(chain, chain[0].key)).toHaveLength(1);
 		const grown = insertStep(chain, 1, "flip");
@@ -52,7 +52,7 @@ describe("pipeline: цепочка шагов", () => {
 		expect(shrunk.map((s) => s.id)).toEqual(["flip"]);
 	});
 
-	it("moveStep меняет порядок, ключи шагов сохраняются", () => {
+	it("moveStep reorders, step keys preserved", () => {
 		let chain = createChain(cropPage);
 		chain = insertStep(chain, 1, "flip");
 		chain = insertStep(chain, 2, "grayscale");
@@ -64,7 +64,7 @@ describe("pipeline: цепочка шагов", () => {
 	});
 });
 
-describe("pipeline: parseChain (localStorage/импорт)", () => {
+describe("pipeline: parseChain (localStorage/import)", () => {
 	const valid = {
 		version: CHAIN_VERSION,
 		steps: [
@@ -73,13 +73,13 @@ describe("pipeline: parseChain (localStorage/импорт)", () => {
 		],
 	};
 
-	it("валидная цепочка разбирается, параметры санитизируются", () => {
+	it("valid chain parses, params sanitized", () => {
 		const chain = parseChain(valid)!;
 		expect(chain.map((s) => s.id)).toEqual(["crop", "resize"]);
 		expect(chain[0].params).toMatchObject({ x: 5, y: 0 });
 	});
 
-	it("parseChain сохраняет collapsed, по умолчанию шаг развёрнут", () => {
+	it("parseChain keeps collapsed, default expanded", () => {
 		const chain = parseChain({
 			version: CHAIN_VERSION,
 			steps: [
@@ -92,15 +92,12 @@ describe("pipeline: parseChain (localStorage/импорт)", () => {
 	});
 
 	it.each([
-		["нет версии", { steps: [{ id: "crop" }] }],
-		["другая версия", { version: 99, steps: [{ id: "crop" }] }],
-		["пустой список", { version: CHAIN_VERSION, steps: [] }],
-		[
-			"неизвестный инструмент",
-			{ version: CHAIN_VERSION, steps: [{ id: "nope" }] },
-		],
-		["мусор", "just a string"],
-	])("невалидные данные → null (%s)", (_name, data) => {
+		["no version", { steps: [{ id: "crop" }] }],
+		["other version", { version: 99, steps: [{ id: "crop" }] }],
+		["empty list", { version: CHAIN_VERSION, steps: [] }],
+		["unknown tool", { version: CHAIN_VERSION, steps: [{ id: "nope" }] }],
+		["junk", "just a string"],
+	])("invalid data -> null (%s)", (_name, data) => {
 		expect(parseChain(data)).toBeNull();
 	});
 });

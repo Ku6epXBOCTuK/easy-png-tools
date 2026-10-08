@@ -10,8 +10,8 @@ export type Position9 =
 	| "bottom-right";
 
 /**
- * Левый верхний угол контента размером contentW×contentH при размещении
- * на холсте cw×ch с отступом margin согласно 9-позиционной сетке.
+ * Top-left corner of content sized contentW x contentH placed on a cw x ch
+ * canvas with margin, per the 9-position grid.
  */
 export function anchorOrigin(
 	position: Position9,
@@ -47,8 +47,8 @@ export function anchorOrigin(
 }
 
 /**
- * Жадный перенос текста по словам под ширину maxWidth.
- * measure — инъекция измерителя ширины строки. Пустой текст → пустой массив строк.
+ * Greedy word-wrap of text to maxWidth.
+ * measure is an injected line-width meter. Empty text -> empty line array.
  */
 export function wrapText(
 	text: string,
@@ -80,10 +80,9 @@ export type TilePoint = { x: number; y: number };
 const MAX_TILES = 2500;
 
 /**
- * Сетка позиций плитки водяного знака в повернутой системе координат:
- * рисующий код один раз поворачивает контекст и ставит блоки в этих точках.
- * Шаги автоматически увеличиваются, если расчетное количество плиток
- * превышает кап — большие холсты не подвешивают страницу.
+ * Grid of watermark tile positions in the rotated coordinate system:
+ * the drawing code rotates the context once and stamps blocks at these points.
+ * Steps grow when the tile count exceeds the cap, so big canvases stay fast.
  */
 export function tileGrid(
 	cw: number,

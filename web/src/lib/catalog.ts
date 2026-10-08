@@ -7,7 +7,7 @@ export type PreviewGroup = {
 };
 
 /**
- * Preview-каталог: все страницы, сгруппированные по категориям.
+ * Preview catalog: all pages grouped by category.
  */
 export const PREVIEW_GROUPS: PreviewGroup[] = CATEGORY_IDS.map((category) => ({
 	id: category,

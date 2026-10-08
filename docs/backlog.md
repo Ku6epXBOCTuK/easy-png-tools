@@ -208,17 +208,6 @@
       `tool-flows.spec.ts`, `schema-tool-strings.test.ts`)
 - [ ] можно ли в тестах получать i18n ключ вместо текста? можно ли написать lint
       правило такое (запретить toContain без i18n)
-- [ ] чистка под новые конвенции комментариев и тестов: правила
-      `conventions/ascii-only` (тесты — ASCII), `conventions/comments-english`
-      (комментарии — английский), `conventions/comment-format` (≤5 строк на
-      блок, ≤15% файла) уже работают в warn-режиме, но в `lint:all` отключены
-      через override в `web/scripts/lint-all.mjs` (baseline ≠ 0). Критерий
-      закрытия: ноль срабатываний по всем трём правилам, overrides удалены,
-      правила переведены с warn на error
-- [ ] убрать в тестах все нестандартные символы `→`, длинные тире, русский язык
-      и т.д. — часть чистки под `conventions/ascii-only` (см. выше)
-- [ ] комментарии на английском — часть чистки под
-      `conventions/comments-english` (см. выше)
 
 ## SEO/GEO
 

@@ -3,7 +3,7 @@ import type { PixelImage } from "./types";
 import { createPixelImage } from "./types";
 import { gaussianBlur } from "./convolution";
 
-/** Детерминированный ГПСЧ (mulberry32): одинаковый seed — одинаковый результат. */
+/** Deterministic PRNG (mulberry32): same seed gives the same result. */
 export function mulberry32(seed: number): () => number {
 	let a = seed >>> 0;
 	return () => {
@@ -19,7 +19,7 @@ function clampByte(v: number): number {
 	return v < 0 ? 0 : v > 255 ? 255 : Math.round(v);
 }
 
-/** Усреднение каждого блока blockSize×BlockSize в его верхний-левый пиксель цвета. */
+/** Averages each blockSize x blockSize block into a single color. */
 export function pixelate(img: PixelImage, blockSize: number): PixelImage {
 	const bs = Math.max(1, Math.round(blockSize));
 	const out = createPixelImage(img.width, img.height);
@@ -58,7 +58,7 @@ export function pixelate(img: PixelImage, blockSize: number): PixelImage {
 	return out;
 }
 
-/** Перемешивает блоки blockSize×Blocksize между собой детерминированно по seed. */
+/** Shuffles blockSize x blockSize blocks deterministically per seed. */
 export function shuffleBlocks(
 	img: PixelImage,
 	blockSize: number,
@@ -98,7 +98,7 @@ export function shuffleBlocks(
 
 export type NoiseMode = "mono" | "color";
 
-/** Зерно: amountPercent — сила отклонения от оригинала. Детерминировано по seed. */
+/** Grain: amountPercent is the deviation strength from the original. Deterministic per seed. */
 export function addNoise(
 	img: PixelImage,
 	amountPercent: number,
@@ -128,7 +128,7 @@ export function addNoise(
 	return out;
 }
 
-/** Размытие только альфа-канала: мягкие края при неизменном цвете. */
+/** Blurs only the alpha channel: soft edges with unchanged color. */
 export function featherAlpha(img: PixelImage, radius: number): PixelImage {
 	const gray = createPixelImage(img.width, img.height);
 	for (let i = 0; i < img.data.length; i += 4) {
@@ -149,8 +149,9 @@ export function featherAlpha(img: PixelImage, radius: number): PixelImage {
 }
 
 /**
- * Убирает цветную кайму на полупрозрачных краях: RGB полупрозрачного пикселя
- * заменяется цветом ближайшего полностью непрозрачного соседа в пределах radius.
+ * Removes the color fringe on semi-transparent edges: the RGB of a
+ * semi-transparent pixel is replaced by the color of the nearest fully
+ * opaque neighbor within radius.
  */
 export function defringe(img: PixelImage, radius: number): PixelImage {
 	const out = createPixelImage(img.width, img.height);
@@ -184,7 +185,7 @@ export function defringe(img: PixelImage, radius: number): PixelImage {
 	return out;
 }
 
-/** Силуэт: все видимые пиксели заливаются одним цветом, альфа сохраняется. */
+/** Silhouette: all visible pixels filled with one color, alpha preserved. */
 export function silhouette(
 	img: PixelImage,
 	colorHex: string,

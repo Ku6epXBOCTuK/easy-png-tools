@@ -10,7 +10,7 @@ const GREEN = [0, 255, 0, 255];
 const RED = [255, 0, 0, 255];
 
 describe("backgroundRemovalMask", () => {
-	it("глобальный режим удаляет все совпадающие пиксели", () => {
+	it("global mode removes all matching pixels", () => {
 		const mask = backgroundRemovalMask(makeImage(2, 1, [GREEN, RED]), {
 			color: "#00ff00",
 			tolerancePercent: 0,
@@ -20,10 +20,10 @@ describe("backgroundRemovalMask", () => {
 		expect([...mask]).toEqual([1, 0]);
 	});
 
-	describe("режим внешних областей", () => {
+	describe("outer regions mode", () => {
 		const ringRedCenterGreen = [RED, RED, RED, RED, GREEN, RED, RED, RED, RED];
 
-		it("заливка от краёв не достаёт до изолированного совпадающего острова", () => {
+		it("edge flood cannot reach isolated matching island", () => {
 			const mask = backgroundRemovalMask(makeImage(3, 3, ringRedCenterGreen), {
 				color: "#00ff00",
 				tolerancePercent: 0,
@@ -33,7 +33,7 @@ describe("backgroundRemovalMask", () => {
 			expect(mask[4]).toBe(0);
 		});
 
-		it("глобальный режим удаляет и изолированный остров", () => {
+		it("global mode removes isolated island too", () => {
 			const mask = backgroundRemovalMask(makeImage(3, 3, ringRedCenterGreen), {
 				color: "#00ff00",
 				tolerancePercent: 0,
@@ -45,7 +45,7 @@ describe("backgroundRemovalMask", () => {
 		});
 	});
 
-	it("допуск расширяет захват по цветовому расстоянию", () => {
+	it("tolerance widens capture by color distance", () => {
 		const img = makeImage(2, 1, [
 			[10, 10, 10, 255],
 			[128, 128, 128, 255],
@@ -67,13 +67,13 @@ describe("backgroundRemovalMask", () => {
 	});
 });
 
-describe("smoothMask-поведение через backgroundRemovalMask", () => {
+describe("smoothMask behavior via backgroundRemovalMask", () => {
 	const ringRedCenterGreen = [RED, RED, RED, RED, GREEN, RED, RED, RED, RED];
 	const opts = { color: "#00ff00", tolerancePercent: 0, outerOnly: false };
 
 	const alphaAtCenter = (img: { data: Uint8ClampedArray }) => img.data[19];
 
-	it("без сглаживания центр удалён", () => {
+	it("without smoothing center is removed", () => {
 		const img = removeBackground(makeImage(3, 3, ringRedCenterGreen), {
 			...opts,
 			smoothPasses: 0,
@@ -81,7 +81,7 @@ describe("smoothMask-поведение через backgroundRemovalMask", () =>
 		expect(alphaAtCenter(img)).toBe(0);
 	});
 
-	it("два прохода мажоритарного фильтра возвращают изолированный пиксель", () => {
+	it("two majority filter passes restore isolated pixel", () => {
 		const img = removeBackground(makeImage(3, 3, ringRedCenterGreen), {
 			...opts,
 			smoothPasses: 2,
@@ -91,7 +91,7 @@ describe("smoothMask-поведение через backgroundRemovalMask", () =>
 });
 
 describe("removeBackground", () => {
-	it("обнуляет альфу удалённых, сохраняет RGB остальных", () => {
+	it("zeroes alpha of removed, keeps RGB of rest", () => {
 		const out = removeBackground(makeImage(2, 1, [GREEN, [5, 6, 7, 200]]), {
 			color: "#00ff00",
 			tolerancePercent: 0,
@@ -104,7 +104,7 @@ describe("removeBackground", () => {
 });
 
 describe("backgroundMaskPreview", () => {
-	it("белое там, где удаление, чёрное — где остаёмся, всё непрозрачно", () => {
+	it("white where removed, black where kept, all opaque", () => {
 		const preview = backgroundMaskPreview(
 			makeImage(2, 1, [GREEN, [9, 9, 9, 60]]),
 			{

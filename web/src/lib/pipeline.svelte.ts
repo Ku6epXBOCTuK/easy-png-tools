@@ -22,7 +22,7 @@ function storage(): Storage | null {
 	return typeof localStorage === "undefined" ? null : localStorage;
 }
 
-/** Инструмент можно вставить в середину цепочки: принимает и отдаёт картинку. */
+/** Tool can be inserted mid-chain: it accepts and returns an image. */
 export function isChainable(toolId: string): boolean {
 	const tool = getTool(toolId);
 	return (
@@ -32,7 +32,7 @@ export function isChainable(toolId: string): boolean {
 	);
 }
 
-/** Страницы, чьи инструменты можно добавлять шагами (для picker'а). */
+/** Pages whose tools can be added as steps (for the picker). */
 export function chainablePages(): Page[] {
 	return PAGES.filter((p) => isChainable(p.steps[0].id));
 }
@@ -57,7 +57,7 @@ export function createChain(page: Page): ChainStep[] {
 	return steps;
 }
 
-/** Валидация сохранённой цепочки; невалидные данные → null (дефолт страницы). */
+/** Validates a saved chain; invalid data -> null (page default). */
 export function parseChain(data: unknown): ChainStep[] | null {
 	if (
 		!data ||

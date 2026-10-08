@@ -33,7 +33,7 @@
 
 	let dragging = $state(false);
 	let input = $state<HTMLInputElement | null>(null);
-	// Подсказка замены: показываем на ховер и гасим через 10с до нового захода.
+	// Replace hint: show on hover, fade after 10s until the next hover.
 	let hintVisible = $state(false);
 	let hintTimer: ReturnType<typeof setTimeout> | null = null;
 

@@ -50,7 +50,7 @@
 	let parts = $derived(
 		resultKind === "files" && fileResult ? fileResult.files.length : undefined,
 	);
-	// Размеры одинаковы у всех частей (канвас дополняется) — показываем один раз.
+	// All parts share the same size (canvas is padded); show it once.
 	let partsDims = $derived(
 		resultKind === "files" && fileResult && fileResult.files.length > 0
 			? `${fileResult.files[0].image.width} × ${fileResult.files[0].image.height}`

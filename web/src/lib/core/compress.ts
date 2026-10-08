@@ -1,4 +1,4 @@
-/** Пресеты сжатия: уровень → число цветов квантования. */
+/** Compression presets: level -> number of quantization colors. */
 export const COMPRESSION_LEVELS = {
 	light: 192,
 	balanced: 96,
@@ -9,9 +9,9 @@ export const COMPRESSION_LEVELS = {
 export type CompressionLevel = keyof typeof COMPRESSION_LEVELS;
 
 /**
- * Бинарный поиск наибольшего k ∈ [2..maxK], при котором закодированный размер
- * укладывается в targetBytes. Если даже k=2 не влезает — возвращается 2 (best effort).
- * encodeSize может вернуть null (ошибка кодирования) — трактуется как «не влезло».
+ * Binary search for the largest k in [2..maxK] whose encoded size fits
+ * targetBytes. If even k=2 does not fit, returns 2 (best effort).
+ * encodeSize may return null (encode error), treated as "does not fit".
  */
 export async function findMaxColorsWithin(
 	targetBytes: number,

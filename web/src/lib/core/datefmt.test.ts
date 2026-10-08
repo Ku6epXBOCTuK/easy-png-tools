@@ -4,16 +4,16 @@ import { formatStamp } from "./datefmt";
 const d = new Date(2026, 7, 25, 9, 5, 3);
 
 describe("formatStamp", () => {
-	it("разворачивает все базовые токены", () => {
+	it("expands all base tokens", () => {
 		expect(formatStamp(d, "YYYY-MM-DD hh:mm:ss")).toBe("2026-08-25 09:05:03");
 	});
 
-	it("произвольный текст между токенами сохраняется", () => {
+	it("arbitrary text between tokens is preserved", () => {
 		expect(formatStamp(d, "DD.MM.YYYY")).toBe("25.08.2026");
-		expect(formatStamp(d, "YYYY год, MM месяц")).toBe("2026 год, 08 месяц");
+		expect(formatStamp(d, "YYYY year, MM month")).toBe("2026 year, 08 month");
 	});
 
-	it("неизвестные последовательности не трогаются", () => {
-		expect(formatStamp(d, "YYYYYY MMМ")).toBe("2026YY 08М");
+	it("unknown sequences are left alone", () => {
+		expect(formatStamp(d, "YYYYYY MMX")).toBe("2026YY 08X");
 	});
 });

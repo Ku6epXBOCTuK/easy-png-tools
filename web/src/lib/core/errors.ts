@@ -1,9 +1,9 @@
 export type ErrorVars = Record<string, string | number>;
 
 /**
- * Ошибка с стабильным ключом перевода вместо готового текста.
- * Ядро бросает только её; человекочитаемый текст подставляет слой UI
- * по секции errors активной локали.
+ * Error with a stable translation key instead of ready-made text.
+ * Core throws only this; the UI layer supplies human-readable text
+ * from the errors section of the active locale.
  */
 export class ToolError extends Error {
 	readonly key: string;

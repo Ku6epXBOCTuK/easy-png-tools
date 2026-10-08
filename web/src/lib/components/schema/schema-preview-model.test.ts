@@ -18,12 +18,12 @@ function input(over: Partial<SchemaPreviewModelInput> = {}) {
 }
 
 describe("hasPreviewResult", () => {
-	it("image: результат только при наличии картинки", () => {
+	it("image: result only when image present", () => {
 		expect(hasPreviewResult(input({ result: image }))).toBe(true);
 		expect(hasPreviewResult(input())).toBe(false);
 	});
 
-	it("files: результат только при непустом наборе", () => {
+	it("files: result only for non-empty set", () => {
 		const fileResult = { files: [{ name: "part.png", image }] };
 		expect(hasPreviewResult(input({ resultKind: "files", fileResult }))).toBe(
 			true,
@@ -36,7 +36,7 @@ describe("hasPreviewResult", () => {
 	});
 
 	it.each(["text", "verdict"] as const)(
-		"%s: результат по наличию текста",
+		"%s: result depends on text presence",
 		(resultKind) => {
 			expect(hasPreviewResult(input({ resultKind, textResult: "done" }))).toBe(
 				true,

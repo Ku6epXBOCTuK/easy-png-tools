@@ -76,8 +76,8 @@ export async function renderText(page: Page, value: string): Promise<void> {
 }
 
 export async function uploadImage(page: Page, file: SourceFile): Promise<void> {
-	// На странице может быть два input[type=file]: дропзона + кнопка Open image;
-	// канонический — первый (кнопка в шапке панели).
+	// The page can have two input[type=file]: dropzone + Open image button;
+	// the canonical one is the first (the button in the panel header).
 	const input = page.locator('input[type="file"]').first();
 	await expect(input).toBeAttached();
 	await input.setInputFiles({
@@ -117,7 +117,7 @@ export async function uploadViaDrop(
 }
 
 export async function downloadResultFile(page: Page): Promise<Download> {
-	// Split-кнопка: основная часть "Download" (image) или "Download ZIP" (files).
+	// Split button: the main part is "Download" (image) or "Download ZIP" (files).
 	const button = page.getByRole("button", { name: /^Download( ZIP)?$/ });
 	await expect(button).toBeVisible();
 	const [download] = await Promise.all([
@@ -156,5 +156,5 @@ export async function expectNoErrorAlert(page: Page): Promise<void> {
 }
 
 export async function expectNoErrors(sink: ErrorSink): Promise<void> {
-	expect(sink.errors, "нет console/page errors").toEqual([]);
+	expect(sink.errors, "no console/page errors").toEqual([]);
 }

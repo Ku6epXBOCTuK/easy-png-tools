@@ -3,7 +3,7 @@ import { hexToPixels, pixelsToHex } from "./text";
 import { makeImage } from "./test-helpers";
 
 describe("pixelsToHex", () => {
-	it("форматирует пиксели как rrggbbaa построчно", () => {
+	it("formats pixels as rrggbbaa row by row", () => {
 		const out = pixelsToHex(
 			makeImage(2, 2, [
 				[255, 0, 0, 255],
@@ -17,7 +17,7 @@ describe("pixelsToHex", () => {
 });
 
 describe("hexToPixels", () => {
-	it("обратим к pixelsToHex", () => {
+	it("inverse of pixelsToHex", () => {
 		const source = makeImage(3, 1, [
 			[1, 2, 3, 4],
 			[250, 251, 252, 253],
@@ -26,7 +26,7 @@ describe("hexToPixels", () => {
 		expect(hexToPixels(pixelsToHex(source), 3)).toEqual(source);
 	});
 
-	it("допускает произвольные переводы строк и регистр", () => {
+	it("tolerates arbitrary newlines and case", () => {
 		const out = hexToPixels("FF0000FF\n\n00FF0080 00000080", 1);
 		expect(out.width).toBe(1);
 		expect(out.height).toBe(3);
@@ -36,10 +36,10 @@ describe("hexToPixels", () => {
 	});
 
 	it.each([
-		["ff0000", "битые токены"],
-		["ff0000ff ff0000ff ff0000ff", "не делится на ширину"],
-		["", "пустой ввод"],
-	])("бросает понятную ошибку: %s (%s)", (input) => {
+		["ff0000", "broken tokens"],
+		["ff0000ff ff0000ff ff0000ff", "not divisible by width"],
+		["", "empty input"],
+	])("throws clear error: %s (%s)", (input) => {
 		expect(() => hexToPixels(input, 2)).toThrow();
 	});
 });

@@ -25,7 +25,7 @@ function nearestIndex(palette: Rgb[], r: number, g: number, b: number): number {
 	return best;
 }
 
-/** Median-cut: делит корзину с наибольшим разбросом по самому широкому каналу до k корзин. */
+/** Median-cut: splits the bucket with the largest spread along its widest channel until k buckets. */
 export function medianCutPalette(img: PixelImage, k: number): Rgb[] {
 	const maxColors = Math.max(2, Math.min(64, Math.round(k)));
 	const pixels: Rgb[] = [];
@@ -102,7 +102,7 @@ export interface QuantizeResult {
 	palette: string[];
 }
 
-/** Приводит изображение к k цветам: median-cut + ближайший цвет палитры. Прозрачные пиксели не трогаются. */
+/** Reduces the image to k colors: median-cut + nearest palette color. Transparent pixels untouched. */
 export function quantizeImage(img: PixelImage, k: number): QuantizeResult {
 	const palette = medianCutPalette(img, k);
 	const out = createPixelImage(img.width, img.height);
@@ -122,7 +122,7 @@ export function quantizeImage(img: PixelImage, k: number): QuantizeResult {
 	return { image: out, palette: palette.map(rgbToHex) };
 }
 
-/** Маппинг каждого пикселя на ближайший цвет пользовательского списка. */
+/** Maps each pixel to the nearest color of the user-provided list. */
 export function mapToNearest(
 	img: PixelImage,
 	paletteHexes: string[],
@@ -155,8 +155,8 @@ const BAYER_4 = [
 export type DitherPattern = "floyd-steinberg" | "bayer";
 
 /**
- * Дизеринг к палитре из k цветов (median-cut) или к явно заданному списку hex.
- * floyd-steinberg — распространение ошибки; bayer — упорядоченный 4×4.
+ * Dithering to a k-color palette (median-cut) or an explicit hex list.
+ * floyd-steinberg: error diffusion; bayer: ordered 4x4.
  */
 export function ditherImage(
 	img: PixelImage,

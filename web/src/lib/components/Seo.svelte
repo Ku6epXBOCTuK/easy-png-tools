@@ -4,7 +4,7 @@
 	interface Props {
 		title: string;
 		description: string;
-		/** Путь страницы от корня роутера ("/", "/list-tools", "/tools/…"). */
+		/** Page path from the router root ("/", "/list-tools", "/tools/..."). */
 		path: string;
 	}
 	let { title, description, path }: Props = $props();

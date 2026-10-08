@@ -151,13 +151,13 @@ report-only (`warn`), baseline — 0 срабатываний.
   кода, а не к сжатию комментария.
 
 Scope правил комментариев — не только `src/`: сами плагины, `scripts/` и
-`*.config.*` живут по тем же конвенциям (dogfooding, их baseline вычищен до
-нуля). Фикстуры и тесты правил (`__fixtures__/`, `__tests__/`) — намеренные
-входные кейсы и из scope исключены. В `src/` baseline ненулевой, поэтому все три
-правила введены warn-only и в `lint:all` отключены через override в
-`scripts/lint-all.mjs`, пока не сделана чистка (`docs/backlog.md`, раздел «Тесты
-и lint»). Тесты: `__tests__/ascii-only.test.ts`,
-`__tests__/comments-english.test.ts`, `__tests__/comment-format.test.ts`.
+`*.config.*` живут по тем же конвенциям (dogfooding). Фикстуры и тесты правил
+(`__fixtures__/`, `__tests__/`) — намеренные входные кейсы и из scope исключены.
+Все три правила — `error`, baseline нулевой. Русские ожидания в тестах не
+хардкодятся: значения берутся из словарей `lib/i18n/` (см.
+`src/lib/i18n/*.test.ts` и `e2e/helpers/i18n.ts`). Тесты правил:
+`__tests__/ascii-only.test.ts`, `__tests__/comments-english.test.ts`,
+`__tests__/comment-format.test.ts`.
 
 ## Токены-префиксы (целевой словарь дизайна)
 

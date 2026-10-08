@@ -25,7 +25,7 @@ export function rgbToHex({ r, g, b }: Rgb): string {
 	return `#${byte(r)}${byte(g)}${byte(b)}`;
 }
 
-/** h ∈ [0..360), s,l ∈ [0..1] */
+/** h in [0..360), s,l in [0..1] */
 export function rgbToHsl({ r, g, b }: Rgb): Hsl {
 	const rn = r / 255;
 	const gn = g / 255;
@@ -184,7 +184,7 @@ function clamp01(v: number): number {
 	return Math.min(1, Math.max(0, v));
 }
 
-/** Горизонтальные равные колонки-свотчи (strip) или сетка ~квадратных ячеек (grid). */
+/** Horizontal equal swatch columns (strip) or a grid of ~square cells (grid). */
 export function renderSwatches(
 	colors: string[],
 	width: number,

@@ -13,20 +13,20 @@ function asImage(result: ToolResult): PixelImage {
 	return result;
 }
 
-describe("registry-new (переведённые инструменты)", () => {
-	it("id инструментов уникальны", () => {
+describe("registry-new (migrated tools)", () => {
+	it("tool ids are unique", () => {
 		const ids = TOOLS.map((t) => t.id);
 		expect(new Set(ids).size).toBe(ids.length);
 	});
 
-	it("slug страниц уникальны", () => {
+	it("page slugs are unique", () => {
 		const slugs = PAGES.map((page) => page.slug);
 		expect(new Set(slugs).size).toBe(slugs.length);
 	});
 
-	it("id и slug пригодны для адреса и для кода", () => {
-		// Тот же формат, что разбирает `tools-map-doc.test.ts`: латиница в
-		// нижнем регистре, слова через дефис.
+	it("id and slug are usable in URLs and in code", () => {
+		// Same format that `tools-map-doc.test.ts` parses: lowercase latin,
+		// words joined by hyphens.
 		const shape = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
 		for (const tool of TOOLS) {
 			expect(shape.test(tool.id), `id: ${tool.id}`).toBe(true);
@@ -36,47 +36,45 @@ describe("registry-new (переведённые инструменты)", () =>
 		}
 	});
 
-	it("каждый шаг страницы ссылается на существующий инструмент", () => {
+	it("every page step references an existing tool", () => {
 		const ids = new Set(TOOLS.map((tool) => tool.id));
 		for (const page of PAGES) {
-			expect(page.steps.length, `${page.slug}: шагов`).toBeGreaterThan(0);
+			expect(page.steps.length, `${page.slug}: steps`).toBeGreaterThan(0);
 			for (const step of page.steps) {
-				expect(ids.has(step.id), `${page.slug} → ${step.id}`).toBe(true);
+				expect(ids.has(step.id), `${page.slug} -> ${step.id}`).toBe(true);
 			}
 		}
 	});
 
-	it("каждый инструмент используется хотя бы одной страницей", () => {
+	it("every tool is used by at least one page", () => {
 		const used = new Set(PAGES.flatMap((page) => page.steps.map((s) => s.id)));
 		const orphans = TOOLS.map((tool) => tool.id).filter((id) => !used.has(id));
-		expect(orphans, `инструменты без страниц:\n${orphans.join("\n")}`).toEqual(
-			[],
-		);
+		expect(orphans, `tools without pages:\n${orphans.join("\n")}`).toEqual([]);
 	});
 
-	it("guard: у страницы ровно один шаг", () => {
-		// Модель допускает цепочку, но `SchemaToolView` исполняет первый шаг и
-		// форма параметров одна на страницу. Исполнение цепочек и общая форма
-		// из полей двух инструментов — фаза 11 `docs/roadmap.md`.
+	it("guard: a page has exactly one step", () => {
+		// The model allows a chain, but `SchemaToolView` runs the first step
+		// and there is one params form per page. Chain execution and a shared
+		// form over two tools' fields are phase 11 of `docs/roadmap.md`.
 		for (const page of PAGES) {
-			expect(page.steps.length, `${page.slug}: шагов`).toBe(1);
+			expect(page.steps.length, `${page.slug}: steps`).toBe(1);
 		}
 	});
 
-	it("PREVIEW_GROUPS строится без ошибок", () => {
+	it("PREVIEW_GROUPS builds without errors", () => {
 		expect(PREVIEW_GROUPS.length).toBeGreaterThan(0);
 		expect(PREVIEW_GROUPS.reduce((n, g) => n + g.pages.length, 0)).toBe(
 			PAGES.length,
 		);
 	});
 
-	it("guard: у всех инструментов задан валидный input", () => {
+	it("guard: every tool has a valid input", () => {
 		for (const tool of TOOLS) {
 			expect(tool.input, tool.id).toMatch(/^(image|text|none)$/);
 		}
 	});
 
-	it("guard: input=image требует источник, input=text — текст", () => {
+	it("guard: input=image requires a source, input=text requires text", () => {
 		for (const tool of TOOLS) {
 			const params = sanitizeSchemaParams(tool.schema, {});
 			if (tool.input === "image") {
@@ -91,7 +89,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		}
 	});
 
-	it("guard: input=none работает без источника", async () => {
+	it("guard: input=none works without a source", async () => {
 		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const img = asImage(
 			await tool.run({ params: sanitizeSchemaParams(tool.schema, {}) }),
@@ -100,7 +98,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(img.height).toBe(600);
 	});
 
-	it("дефолты схем дают валидные параметры (включая dimension)", () => {
+	it("schema defaults yield valid params (including dimension)", () => {
 		for (const tool of TOOLS) {
 			const defaults = defaultSchemaParams(tool.schema);
 			const sanitized = sanitizeSchemaParams(tool.schema, defaults);
@@ -123,7 +121,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		}
 	});
 
-	it("output metadata согласован с MIME и quality-схемой", () => {
+	it("output metadata is consistent with MIME and the quality schema", () => {
 		const extensions: Record<OutputMime, string> = {
 			"image/png": "png",
 			"image/jpeg": "jpg",
@@ -156,7 +154,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		}
 	});
 
-	it("source-aware dimension defaults применяются только к image tools", () => {
+	it("source-aware dimension defaults apply only to image tools", () => {
 		for (const tool of TOOLS) {
 			for (const field of Object.values(tool.schema.fields)) {
 				if (field.spec.kind === "dimension" && field.spec.defaultFromSource) {
@@ -166,7 +164,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		}
 	});
 
-	it("resize и crop получают размеры текущего source", async () => {
+	it("resize and crop get the dimensions of the current source", async () => {
 		const source = solid(64, 48);
 		const resize = TOOLS.find((t) => t.id === "resize")!;
 		const resizeDefaults = defaultSchemaParams(resize.schema, { source });
@@ -195,14 +193,14 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect([cropped.width, cropped.height]).toEqual([64, 48]);
 	});
 
-	it("create-empty: dimension-дефолты корректны", () => {
+	it("create-empty: dimension defaults are correct", () => {
 		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.size).toEqual({ width: 800, height: 600 });
 		expect(d.opacity).toBe(0);
 	});
 
-	it("sanitize клампит dimension к min/max и чинит мусор", () => {
+	it("sanitize clamps dimension to min/max and fixes garbage", () => {
 		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			size: { width: 999999, height: -5 },
@@ -214,7 +212,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(bad.size).toEqual({ width: 800, height: 600 });
 	});
 
-	it("executeGenerate для create-empty даёт картинку нужного размера", async () => {
+	it("executeGenerate for create-empty returns an image of the requested size", async () => {
 		const tool = TOOLS.find((t) => t.id === "create-empty")!;
 		const params = sanitizeSchemaParams(tool.schema, {
 			size: { width: 320, height: 200 },
@@ -265,16 +263,19 @@ describe("registry-new (переведённые инструменты)", () =>
 				bgOpacity: 0,
 			},
 		],
-	])("генератор %s даёт картинку по dimension", async (id, params) => {
-		const tool = TOOLS.find((t) => t.id === id)!;
-		expect(tool.input).toBe("none");
-		const sanitized = sanitizeSchemaParams(tool.schema, params);
-		const img = asImage(await tool.run({ params: sanitized }));
-		expect(img.width).toBe(40);
-		expect(img.height).toBe(30);
-	});
+	])(
+		"generator %s returns an image of the given dimension",
+		async (id, params) => {
+			const tool = TOOLS.find((t) => t.id === id)!;
+			expect(tool.input).toBe("none");
+			const sanitized = sanitizeSchemaParams(tool.schema, params);
+			const img = asImage(await tool.run({ params: sanitized }));
+			expect(img.width).toBe(40);
+			expect(img.height).toBe(30);
+		},
+	);
 
-	it("random-noisе детерминирован по seed", async () => {
+	it("random-noise is deterministic by seed", async () => {
 		const tool = TOOLS.find((t) => t.id === "random-noise")!;
 		const a = asImage(
 			await tool.run({
@@ -295,7 +296,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(a.data).toEqual(b.data);
 	});
 
-	it("resize: keepAspect с одной стороной сохраняет пропорции", async () => {
+	it("resize: keepAspect with one side preserves proportions", async () => {
 		const tool = TOOLS.find((t) => t.id === "resize")!;
 		const img = solid(100, 50);
 		const out = asImage(
@@ -311,7 +312,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(out.height).toBe(100);
 	});
 
-	it("crop вырезает область по x/y", async () => {
+	it("crop cuts out an area by x/y", async () => {
 		const tool = TOOLS.find((t) => t.id === "crop")!;
 		const img = solid(100, 100);
 		const out = asImage(
@@ -328,7 +329,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(out.height).toBe(40);
 	});
 
-	it("fit-on-background центрирует картинку на канвасе", async () => {
+	it("fit-on-background centers the image on the canvas", async () => {
 		const tool = TOOLS.find((t) => t.id === "fit-on-background")!;
 		const img = solid(20, 10);
 		const out = asImage(
@@ -346,7 +347,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(out.data[3]).toBe(0);
 	});
 
-	it("crop: resultNote предупреждает, когда результат ужался по границам", () => {
+	it("crop: resultNote warns when the result was clamped to the bounds", () => {
 		const tool = TOOLS.find((t) => t.id === "crop")!;
 		expect(
 			tool.resultNote?.(
@@ -362,7 +363,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		).toBeNull();
 	});
 
-	it("resize: resultNote при keepAspect и скорректированной стороне", () => {
+	it("resize: resultNote with keepAspect and an adjusted side", () => {
 		const tool = TOOLS.find((t) => t.id === "resize")!;
 		const p = { size: { width: 500, height: 300 }, keepAspect: true };
 		expect(tool.resultNote?.(p, solid(300, 300))).toEqual({
@@ -370,7 +371,7 @@ describe("registry-new (переведённые инструменты)", () =>
 			tone: "info",
 		});
 		expect(tool.resultNote?.(p, solid(500, 300))).toBeNull();
-		// без keepAspect результат всегда как запрошено
+		// without keepAspect the result is always exactly as requested
 		expect(
 			tool.resultNote?.(
 				{ size: { width: 500, height: 300 }, keepAspect: false },
@@ -379,7 +380,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		).toBeNull();
 	});
 
-	it("fit-on-background: resultNote, когда картинка крупнее канваса", () => {
+	it("fit-on-background: resultNote when the image is larger than the canvas", () => {
 		const tool = TOOLS.find((t) => t.id === "fit-on-background")!;
 		const p = {
 			size: { width: 100, height: 100 },
@@ -393,7 +394,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(tool.resultNote?.(p, solid(100, 100))).toBeNull();
 	});
 
-	it("change-canvas-size использует anchor для позиции", async () => {
+	it("change-canvas-size uses anchor for positioning", async () => {
 		const tool = TOOLS.find((t) => t.id === "change-canvas-size")!;
 		const img = solid(10, 10);
 		const out = asImage(
@@ -413,7 +414,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(center).toBe(0);
 	});
 
-	it("blend-two: дефолты пары и работа генератора", async () => {
+	it("blend-two: pair defaults and generator output", async () => {
 		const tool = TOOLS.find((t) => t.id === "blend-two")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.pair).toEqual({ from: "#000000", to: "#ffffff" });
@@ -428,7 +429,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(img.width).toBe(128);
 	});
 
-	it("step-colors: рендерит steps полос по паре", async () => {
+	it("step-colors: renders steps stripes from the pair", async () => {
 		const tool = TOOLS.find((t) => t.id === "step-colors")!;
 		const img = asImage(
 			await tool.run({
@@ -443,9 +444,9 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(img.width).toBe(128);
 	});
 
-	it("two-colors: перекрашивает светлые/тёмные пиксели по паре", async () => {
+	it("two-colors: recolors light/dark pixels by the pair", async () => {
 		const tool = TOOLS.find((t) => t.id === "two-colors")!;
-		// 50×1, левая половина тёмная, правая светлая
+		// 50x1, left half dark, right half light
 		const data = new Uint8ClampedArray(50 * 4).fill(255);
 		const img = { width: 50, height: 1, data };
 		for (let x = 0; x < 25; x++) {
@@ -463,7 +464,7 @@ describe("registry-new (переведённые инструменты)", () =>
 				}),
 			}),
 		);
-		// Светлый пиксель → from (#ffffff), тёмный → to (#ff0000)
+		// Light pixel -> from (#ffffff), dark pixel -> to (#ff0000)
 		expect(out.data[0]).toBe(255);
 		expect(out.data[1]).toBe(0);
 		expect(out.data[2]).toBe(0);
@@ -472,7 +473,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(out.data[102]).toBe(255);
 	});
 
-	it("linear-gradient: дефолты gradient и направление по углу", async () => {
+	it("linear-gradient: gradient defaults and direction by angle", async () => {
 		const tool = TOOLS.find((t) => t.id === "linear-gradient")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.gradient).toEqual({
@@ -480,7 +481,7 @@ describe("registry-new (переведённые инструменты)", () =>
 			to: "#ffffff",
 			angle: 0,
 		});
-		// 0° — слева направо: крайний левый пиксель = from, крайний правый = to
+		// 0 deg - left to right: leftmost pixel = from, rightmost = to
 		let img = asImage(
 			await tool.run({
 				params: sanitizeSchemaParams(tool.schema, {
@@ -491,7 +492,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		);
 		expect(img.data[0]).toBe(0);
 		expect(img.data[12]).toBe(255);
-		// 90° — сверху вниз: верхний пиксель = from, нижний = to
+		// 90 deg - top to bottom: top pixel = from, bottom = to
 		img = asImage(
 			await tool.run({
 				params: sanitizeSchemaParams(tool.schema, {
@@ -502,7 +503,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		);
 		expect(img.data[0]).toBe(0);
 		expect(img.data[12]).toBe(255);
-		// 180° — разворот: левый пиксель = to
+		// 180 deg - reversed: left pixel = to
 		img = asImage(
 			await tool.run({
 				params: sanitizeSchemaParams(tool.schema, {
@@ -515,7 +516,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(img.data[12]).toBe(0);
 	});
 
-	it("sanitize чинит мусор в gradient и клампит angle в 0..360", () => {
+	it("sanitize fixes garbage in gradient and clamps angle to 0..360", () => {
 		const tool = TOOLS.find((t) => t.id === "linear-gradient")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			size: { width: 10, height: 10 },
@@ -533,7 +534,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		});
 	});
 
-	it("sanitize чинит мусор в паре и клампит threshold", () => {
+	it("sanitize fixes garbage in the pair and clamps threshold", () => {
 		const tool = TOOLS.find((t) => t.id === "two-colors")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			pair: { from: "not-a-color", to: "#00ff00", extra: 1 },
@@ -543,7 +544,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(s.threshold).toBe(100);
 	});
 
-	it("circle-mask: срезает углы и сохраняет центр", async () => {
+	it("circle-mask: cuts corners and keeps the center", async () => {
 		const tool = TOOLS.find((t) => t.id === "circle-mask")!;
 		const img = asImage(
 			await tool.run({
@@ -554,13 +555,13 @@ describe("registry-new (переведённые инструменты)", () =>
 				}),
 			}),
 		);
-		// Внешний угол (0,0) — вне круга радиуса 50 → прозрачен
+		// Outer corner (0,0) is outside the circle of radius 50 -> transparent
 		expect(img.data[3]).toBe(0);
-		// Центр (50,50) — внутри
+		// Center (50,50) is inside
 		expect(img.data[(50 * img.width + 50) * 4 + 3]).toBe(255);
 	});
 
-	it("circle-mask: offset сдвигает фигуру", async () => {
+	it("circle-mask: offset shifts the shape", async () => {
 		const tool = TOOLS.find((t) => t.id === "circle-mask")!;
 		const img = asImage(
 			await tool.run({
@@ -571,12 +572,12 @@ describe("registry-new (переведённые инструменты)", () =>
 				}),
 			}),
 		);
-		// Радиус 25, центр смещён к x=100; пиксель (75,50) внутри, (49,50) снаружи
+		// Radius 25, center shifted to x=100; pixel (75,50) inside, (49,50) outside
 		expect(img.data[(50 * img.width + 75) * 4 + 3]).toBe(255);
 		expect(img.data[(50 * img.width + 49) * 4 + 3]).toBe(0);
 	});
 
-	it("star-mask: сохраняет центр, режет углы", async () => {
+	it("star-mask: keeps the center, cuts corners", async () => {
 		const tool = TOOLS.find((t) => t.id === "star-mask")!;
 		const img = asImage(
 			await tool.run({
@@ -594,7 +595,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(img.data[3]).toBe(0);
 	});
 
-	it("sanitize клампит offset к min/max и чинит мусор", () => {
+	it("sanitize clamps offset to min/max and fixes garbage", () => {
 		const tool = TOOLS.find((t) => t.id === "wavy-mask")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			size: 90,
@@ -609,7 +610,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		expect(s.offset).toEqual({ x: 50, y: 0 });
 	});
 
-	it("add-text: дефолты position9, font-style, plate и текстовых полей", () => {
+	it("add-text: defaults of position9, font-style, plate and text fields", () => {
 		const tool = TOOLS.find((t) => t.id === "add-text")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.position).toBe("bottom-right");
@@ -627,7 +628,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		});
 	});
 
-	it("sanitize чинит мусор в position9, font-style, plate и оставляет валидные значения", () => {
+	it("sanitize fixes garbage in position9, font-style, plate and keeps valid values", () => {
 		const tool = TOOLS.find((t) => t.id === "date-stamp")!;
 		const s = sanitizeSchemaParams(tool.schema, {
 			format: "YYYY-MM-DD",
@@ -671,7 +672,7 @@ describe("registry-new (переведённые инструменты)", () =>
 		});
 	});
 
-	it("from-text: дефолты font-style и sanitize", () => {
+	it("from-text: font-style defaults and sanitize", () => {
 		const tool = TOOLS.find((t) => t.id === "from-text")!;
 		const d = defaultSchemaParams(tool.schema);
 		expect(d.style).toEqual({
@@ -695,7 +696,7 @@ describe("registry-new (переведённые инструменты)", () =>
 });
 
 describe("split-into-parts", () => {
-	it("объявлен с result=files и дефолтом 2x2", () => {
+	it("is declared with result=files and a 2x2 default", () => {
 		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		expect(tool).toBeDefined();
 		expect(tool.result).toBe("files");
@@ -704,7 +705,7 @@ describe("split-into-parts", () => {
 		expect(defaults.rows).toBe(2);
 	});
 
-	it("на ровном размере даёт cols*rows частей одинакового размера", async () => {
+	it("on an even size returns cols*rows parts of equal size", async () => {
 		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		const files = asFiles(
 			await tool.run({
@@ -728,7 +729,7 @@ describe("split-into-parts", () => {
 		]);
 	});
 
-	it("на неделимом размере части строго равные (канвас дополняется)", async () => {
+	it("on an indivisible size parts are strictly equal (canvas is padded)", async () => {
 		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		const files = asFiles(
 			await tool.run({
@@ -746,7 +747,7 @@ describe("split-into-parts", () => {
 		}
 	});
 
-	it("принимает максимальную сетку 32x32 = 1024 части (потолок стража)", async () => {
+	it("accepts the max grid 32x32 = 1024 parts (guard ceiling)", async () => {
 		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		const files = asFiles(
 			await tool.run({
@@ -760,7 +761,7 @@ describe("split-into-parts", () => {
 		expect(files).toHaveLength(1024);
 	});
 
-	it("режим tile: сетка считается от размера тайла, части точные", async () => {
+	it("tile mode: grid is derived from the tile size, parts are exact", async () => {
 		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		const files = asFiles(
 			await tool.run({
@@ -771,7 +772,7 @@ describe("split-into-parts", () => {
 				}),
 			}),
 		).files;
-		// 100/32 → 4 колонки, 70/32 → 3 строки
+		// 100/32 -> 4 columns, 70/32 -> 3 rows
 		expect(files).toHaveLength(12);
 		for (const file of files) {
 			expect(file.image.width).toBe(32);
@@ -779,7 +780,7 @@ describe("split-into-parts", () => {
 		}
 	});
 
-	it("выбрасывает errors.tooManyParts при переполнении", () => {
+	it("throws errors.tooManyParts on overflow", () => {
 		const tool = TOOLS.find((t) => t.id === "split-into-parts")!;
 		expect(() =>
 			tool.run({

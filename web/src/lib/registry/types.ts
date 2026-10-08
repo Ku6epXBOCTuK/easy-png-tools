@@ -4,14 +4,12 @@ import type { OutputMime } from "../core/io";
 import type { PixelImage } from "../core/types";
 import type { ToolSchema } from "../registry-schema";
 
-/** Формат скачивания, отличный от PNG (bmp/jpeg/webp). */
 export interface OutputFormat {
 	mime: OutputMime;
 	ext: string;
 	qualityParamId?: string;
 }
 
-/** Чем управляется инструмент. `image` — требуется входное изображение. */
 export const INPUT_MODES = {
 	image: "image",
 	text: "text",
@@ -19,10 +17,6 @@ export const INPUT_MODES = {
 } as const;
 export type InputMode = (typeof INPUT_MODES)[keyof typeof INPUT_MODES];
 
-/**
- * Тип результата: картинка (по умолчанию), большой текст, короткий вердикт
- * или набор файлов (1 → many, скачивается zip-архивом).
- */
 export const RESULT_KINDS = {
 	image: "image",
 	text: "text",
@@ -31,30 +25,24 @@ export const RESULT_KINDS = {
 } as const;
 export type ResultKind = (typeof RESULT_KINDS)[keyof typeof RESULT_KINDS];
 
-/** Единый вход инструмента. `source`/`text` присутствуют строго по `input`. */
+/** Unified tool input. `source`/`text` are present strictly per `input`. */
 export interface ToolContext<P> {
 	params: P;
 	source?: PixelImage;
 	text?: string;
 }
 
-/** Один файл мультифайлового результата (1 → many). */
 export interface ToolImageFile {
 	name: string;
 	image: PixelImage;
 }
 
-/** Результат-набор файлов; скачивается zip-архивом. */
+/** File-set result (1 -> many); downloaded as a zip archive. */
 export interface FileResult {
 	files: ToolImageFile[];
 }
 
-/**
- * Вердикт с подстановками: `key` — ключ словаря (`tools[id].results[key]`),
- * `vars` — значения для интерполяции `{name}`. Локализация выполняется на
- * стороне UI; из run() (и тем более из worker) локализованные строки не
- * возвращаются.
- */
+/** Verdict: dict `key` + `vars` for `{name}` interpolation; localized on the UI side, never inside run(). */
 export interface VerdictResult {
 	key: string;
 	vars?: Record<string, string | number>;
@@ -62,64 +50,43 @@ export interface VerdictResult {
 
 export type ToolResult = PixelImage | string | FileResult | VerdictResult;
 
-/** Заметка у тайла результата: i18n-ключ и тон бейджа (warning по умолчанию). */
 export type ResultNote = { key: string; tone?: "warning" | "info" };
 
 /**
- * Инструмент: уникальная реализация без адреса, текстов и категории — всё это
- * у страницы. `id` уникален, но обслуживает сколько угодно страниц, поэтому
- * одного инструмента на две страницы хватает, а страница из нескольких
- * инструментов — это уже цепочка. Схема обязательна (единый источник
- * дефолтов/валидации/UI). У каждого инструмента ровно один метод `run(ctx)`;
- * контракт входа декларируется через `input` (обязательное поле), а результат —
- * через `result`. Отдельных методов `generate`/`runFromText`/`toText`/
- * `textToText` нет.
+ * Tool: unique implementation without address, strings, or category; those
+ * belong to the page, and one tool may serve many pages. Schema is required
+ * (single source of defaults/validation/UI). Exactly one `run(ctx)` method.
  */
 export type Tool<P = Record<string, unknown>> = {
-	/** Внутреннее имя: ключ словаря инструмента, `toolId` worker-протокола, запись пайплайна. */
+	/** Dict key of the tool, `toolId` of the worker protocol, pipeline record. */
 	id: string;
 	schema: ToolSchema<P>;
-	/** Чем управляется инструмент: входным изображением, текстом или ничем. */
 	input: InputMode;
-	/** Тип результата: картинка (по умолчанию), большой текст или короткий вердикт. */
 	result?: ResultKind;
-	/** Единственный метод исполнения — и для генераторов, и для трансформаторов. */
 	run(ctx: ToolContext<P>): Promise<ToolResult> | ToolResult;
-	/** Требует DOM (canvas/document); превью-executor запускает напрямую, не в worker. */
+	/** Needs the DOM (canvas/document); the preview executor runs it directly, not in a worker. */
 	domOnly?: boolean;
-	/** Формат/качество скачивания результата; по умолчанию — PNG. */
 	output?: OutputFormat;
-	/**
-	 * Заметка у тайла результата, когда итог отличается от запрошенного:
-	 * ужат по границам (crop), скорректирован по пропорциям (resize),
-	 * вырос за канвас (fit-on-background).
-	 */
+	/** Note at the result tile when the outcome differs from requested (clamped, aspect-corrected, grew past canvas). */
 	resultNote?: (params: P, result: PixelImage) => ResultNote | null;
 };
 
-/** Шаг страницы: инструмент и зафиксированные под него значения параметров. */
 export type PageStep = {
 	id: string;
 	params?: Record<string, unknown>;
 };
 
-/**
- * Страница: уникальный адрес, тексты и то, что на ней выполняется. `steps` —
- * упорядоченный список инструментов, потому что страница может быть готовой
- * цепочкой; исполняет их `SchemaToolView`, и на сегодня шаг ровно один.
- */
+/** Page: unique address, strings, and the ordered tool list in `steps` (a page may be a ready-made chain run by `SchemaToolView`). */
 export type Page = {
-	/** Адрес `/tools/<slug>`, имя скачиваемого файла и ключ иконки. */
+	/** Address `/tools/<slug>`, downloaded file name, and icon key. */
 	slug: string;
-	/** EN-строка страницы; перевод лежит в словаре по slug. */
+	/** EN string; the translation lives in the dictionary by slug. */
 	title: string;
-	/** EN-строка страницы; перевод лежит в словаре по slug. */
 	description: string;
 	category: CategoryId;
 	steps: PageStep[];
 };
 
-/** Гарантирует наличие входного изображения для трансформаторов. */
 export function requireSource<P>(ctx: ToolContext<P>): PixelImage {
 	if (!ctx.source) {
 		throw new ToolError("errors.sourceRequired");
@@ -127,7 +94,6 @@ export function requireSource<P>(ctx: ToolContext<P>): PixelImage {
 	return ctx.source;
 }
 
-/** Гарантирует наличие текстового входа для text-инструментов. */
 export function requireText<P>(ctx: ToolContext<P>): string {
 	if (!ctx.text?.trim()) {
 		throw new ToolError("errors.textRequired");
@@ -135,24 +101,19 @@ export function requireText<P>(ctx: ToolContext<P>): string {
 	return ctx.text;
 }
 
-/**
- * Обёртка для image-to-image инструментов: подставляет `src` и `params`
- * из контекста. Позволяет оставить тело инструмента в виде `(img, p) => …`.
- */
+/** Wrapper for image-to-image tools: injects source and params from the context, keeping the tool body as `(img, p) => ...`. */
 export function imgTool<P>(
 	fn: (img: PixelImage, params: P) => ToolResult | Promise<ToolResult>,
 ): (ctx: ToolContext<P>) => ToolResult | Promise<ToolResult> {
 	return (ctx) => fn(requireSource(ctx), ctx.params);
 }
 
-/** Обёртка для генераторов: инструменту нужны только параметры. */
 export function genTool<P>(
 	fn: (params: P) => ToolResult | Promise<ToolResult>,
 ): (ctx: ToolContext<P>) => ToolResult | Promise<ToolResult> {
 	return (ctx) => fn(ctx.params);
 }
 
-/** Обёртка для text-to-image инструментов: подставляет `text` и `params`. */
 export function textGen<P>(
 	fn: (text: string, params: P) => ToolResult | Promise<ToolResult>,
 ): (ctx: ToolContext<P>) => ToolResult | Promise<ToolResult> {

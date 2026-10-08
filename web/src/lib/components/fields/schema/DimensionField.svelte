@@ -13,7 +13,7 @@
 		label: string;
 		value: unknown;
 		spec: FieldSpec;
-		/** Размеры входа шага: потолок осей для maxFromSource-полей. */
+		/** Step input dimensions: axis cap for maxFromSource fields. */
 		sourceDims?: Dimension;
 		onchange?: (value: Dimension, axis?: "width" | "height" | "both") => void;
 	}
@@ -51,7 +51,7 @@
 	}
 
 	function applyPreset(n: number) {
-		// Пресет задаёт обе оси явно — lockAspect его не пересчитывает.
+		// Preset sets both axes explicitly; lockAspect does not recompute it.
 		onchange?.({ width: n, height: n }, "both");
 	}
 </script>

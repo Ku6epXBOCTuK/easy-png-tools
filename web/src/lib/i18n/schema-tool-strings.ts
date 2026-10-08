@@ -33,7 +33,7 @@ export function groupLabel(title: string): string {
 	return t(title);
 }
 
-/** Подпись опции select: словарь `tools[id].options[fieldId][value]`, фолбэк — label из схемы. */
+/** Select option label: dict `tools[id].options[fieldId][value]`, fallback is the schema label. */
 export function optionLabel(
 	toolId: string,
 	fieldId: string,
@@ -82,9 +82,9 @@ export function pageSearchDoc(page: Page): SearchDoc {
 }
 
 /**
- * Кросс-языковой поиск по каталогу: скор через `scoreDoc` на
- * `pageSearchDoc` (заголовки/описания всех локалей). Порядок каталога
- * сохраняется, элементы без совпадения отбрасываются.
+ * Cross-language catalog search: scores via `scoreDoc` over `pageSearchDoc`
+ * (titles/descriptions of all locales). Catalog order is preserved,
+ * non-matching entries are dropped.
  */
 export function searchPages(pages: readonly Page[], query: string): Page[] {
 	const q = normalizeForSearch(query.trim());

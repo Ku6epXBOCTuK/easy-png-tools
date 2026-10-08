@@ -5,15 +5,15 @@ import { createPixelImage } from "./types";
 export type MaskMode = "binary" | "highlight";
 
 export interface MaskOptions {
-	/** binary: белое/чёрное без альфы; highlight: подкрасить совпавшие пиксели цветом. */
+	/** binary: white/black without alpha; highlight: tint matching pixels. */
 	mode?: MaskMode;
 	color?: string;
 	opacityPercent?: number;
 }
 
 /**
- * Единый рендер масок: предикат решает, совпал ли пиксель;
- * режим определяет вид результата.
+ * Unified mask renderer: the predicate decides whether a pixel matches;
+ * the mode defines the look of the result.
  */
 export function renderPredicateMask(
 	img: PixelImage,
@@ -25,7 +25,7 @@ export function renderPredicateMask(
 	const tint = o.color ? hexToRgb(o.color) : { r: 255, g: 0, b: 170 };
 	const opacity = Math.min(Math.max(o.opacityPercent ?? 70, 0), 100) / 100;
 	if (!highlight) {
-		// Бинарная маска — непрозрачное белое-на-чёрном
+		// Binary mask: opaque white-on-black
 		for (let a = 3; a < out.data.length; a += 4) out.data[a] = 255;
 	}
 	for (let i = 0; i < img.data.length; i += 4) {
@@ -86,8 +86,8 @@ export function luma01(r: number, g: number, b: number): number {
 }
 
 /**
- * Оставляет пиксели, близкие к целевому цвету, остальное делает прозрачным.
- * Допуск — в процентах от максимального поканального разброса (255).
+ * Keeps pixels close to the target color, makes the rest transparent.
+ * Tolerance is a percentage of the max per-channel delta (255).
  */
 export function extractByColor(
 	img: PixelImage,
@@ -118,7 +118,7 @@ export function extractByColor(
 }
 
 /**
- * Считает частоты цветов и возвращает предикат «встречается не чаще limit раз».
+ * Counts color frequencies and returns a predicate "occurs at most limit times".
  */
 export function rarityPredicate(
 	img: PixelImage,

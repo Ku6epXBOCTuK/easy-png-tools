@@ -20,7 +20,7 @@ export function getDict(): Dict {
 	return DICTS[locale];
 }
 
-/** Словарь активной локали; для отсутствующих в ней значений — фолбэк на базовую. */
+/** Dictionary of the active locale; missing values fall back to the base locale. */
 export function getMergedDict(): Dict {
 	if (locale === BASE_LOCALE) return DICTS[BASE_LOCALE];
 	const active = DICTS[locale];
@@ -43,7 +43,7 @@ export function setLocale(next: Locale): void {
 	syncLangAttr();
 }
 
-/** Читает сохранённый выбор и синхронизирует атрибут lang. Вызывается на клиенте. */
+/** Reads the saved choice and syncs the lang attribute. Called on the client. */
 export function initLocale(): void {
 	if (typeof window === "undefined") return;
 	const saved = storage()?.getItem(STORAGE_KEY);

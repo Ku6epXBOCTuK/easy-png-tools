@@ -38,9 +38,9 @@ function rgba(hex: string): [number, number, number, number] {
 }
 
 /**
- * Линейный градиент по произвольному углу. 0° — слева направо, 90° — сверху
- * вниз (рост угла по часовой, ось Y вниз). Угол задаёт направление оси
- * градиента; t пикселя — нормализованная проекция на эту ось.
+ * Linear gradient at an arbitrary angle. 0 deg: left to right, 90 deg: top
+ * to bottom (angle grows clockwise, Y axis down). The angle sets the
+ * gradient axis direction; a pixel's t is its normalized projection on it.
  */
 function angleGradient(
 	width: number,
@@ -52,7 +52,7 @@ function angleGradient(
 	const rad = (angle * Math.PI) / 180;
 	const vx = Math.cos(rad);
 	const vy = Math.sin(rad);
-	// Минимум и максимум проекции на ось достигаются в противоположных углах.
+	// Projection min and max on the axis are reached at opposite corners.
 	const rightX = vx >= 0 ? width - 1 : 0;
 	const bottomY = vy >= 0 ? height - 1 : 0;
 	const projMax = rightX * vx + bottomY * vy;

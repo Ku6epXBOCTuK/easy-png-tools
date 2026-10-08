@@ -34,7 +34,7 @@ for (const [id, input] of [
 	["data-uri-to-png", `data:image/png;base64,${tinyBase64}`],
 	["svg-to-png", svgMarkup],
 ] as const) {
-	test(`text input → ${id} produces result image`, async ({ page }) => {
+	test(`text input -> ${id} produces result image`, async ({ page }) => {
 		const sink = trackErrors(page);
 		await openTool(page, id);
 		await expect(async () => {

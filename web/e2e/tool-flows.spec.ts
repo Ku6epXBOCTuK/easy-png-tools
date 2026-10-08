@@ -46,7 +46,7 @@ test("resize-png keeps user-set size when another image is uploaded", async ({
 	await uploadImage(page, opaquePng);
 	const width = page.getByRole("spinbutton", { name: "Width" });
 	await width.fill("25");
-	// keepAspect включён по умолчанию: высота пересчитана из 64×48 → 19
+	// keepAspect is on by default: height is recomputed from 64×48 -> 19
 	await expect(page.getByRole("spinbutton", { name: "Height" })).toHaveValue(
 		"19",
 	);
@@ -157,7 +157,7 @@ test("download format selector: JPG warns about alpha and produces JPEG", async 
 	await expect(
 		page.getByRole("status").filter({ hasText: /transparency/ }),
 	).toBeVisible();
-	// у JPG в dropdown есть настройка качества
+	// JPG has a quality setting in the dropdown
 	await rangeInput(page, "Quality").fill("10");
 	const { name, bytes } = await downloadResultBytes(page);
 	expect(name).toBe("flip-png.jpg");
@@ -238,8 +238,8 @@ test("blur: changing slider updates result image", async ({ page }) => {
 });
 
 test("runs without Web Worker (fallback)", async ({ browser }, testInfo) => {
-	// newContext() не наследует use.baseURL из конфига — пробрасываем явно,
-	// иначе относительный goto() в helpers не резолвится.
+	// newContext() does not inherit use.baseURL from the config - pass it
+	// explicitly, otherwise the relative goto() in helpers does not resolve.
 	const context = await browser.newContext({
 		baseURL: testInfo.project.use.baseURL,
 	});
@@ -278,7 +278,7 @@ test("chain: add step extends pipeline without reload and persists", async ({
 	});
 	await expect(stepTwo).toBeVisible();
 	await expect(resultImage(page)).toBeVisible();
-	// цепочка переживает перезагрузку (localStorage)
+	// the chain survives a reload (localStorage)
 	await page.reload();
 	await expect(stepTwo).toBeVisible();
 	await expectNoErrorAlert(page);
@@ -295,8 +295,8 @@ test("chain: remove step returns to a single tool", async ({ page }) => {
 		exact: true,
 	});
 	await expect(stepTwo).toBeVisible();
-	// Клик по remove именно в карточке Grayscale: порядок шагов зависит от
-	// тайминга рендера и на разных движках может отличаться.
+	// Click remove in the Grayscale card specifically: step order depends on
+	// render timing and can differ between engines.
 	const card = page.getByRole("article").filter({ hasText: "Grayscale PNG" });
 	await card.getByLabel("Remove step").click();
 	await expect(stepTwo).toHaveCount(0);

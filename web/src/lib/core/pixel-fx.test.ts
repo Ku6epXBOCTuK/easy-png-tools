@@ -11,7 +11,7 @@ import {
 import { makeImage } from "./test-helpers";
 
 describe("pixelate", () => {
-	it("блок усредняется: шахматка 2×2 с блоком 2 → один цвет", () => {
+	it("block averaged: 2x2 checker with block 2 -> one color", () => {
 		const img = makeImage(2, 2, [
 			[0, 0, 0, 255],
 			[200, 200, 200, 255],
@@ -23,14 +23,14 @@ describe("pixelate", () => {
 		expect(out.data[4]).toBeCloseTo(110, 0);
 	});
 
-	it("однотонное изображение не меняется", () => {
+	it("solid image unchanged", () => {
 		const img = makeImage(3, 3, new Array(9).fill([50, 60, 70, 255]));
 		expect([...pixelate(img, 2).data]).toEqual([...img.data]);
 	});
 });
 
-describe("shuffleBlocks / addNoise — детерминизм по seed", () => {
-	it("тот же seed даёт то же перемешивание", () => {
+describe("shuffleBlocks / addNoise - seed determinism", () => {
+	it("same seed gives same shuffle", () => {
 		const img = makeImage(4, 1, [
 			[10, 0, 0, 255],
 			[20, 0, 0, 255],
@@ -42,7 +42,7 @@ describe("shuffleBlocks / addNoise — детерминизм по seed", () => 
 		expect([...a.data]).toEqual([...b.data]);
 	});
 
-	it("мультимножество пикселей сохраняется (перестановка)", () => {
+	it("pixel multiset preserved (permutation)", () => {
 		const img = makeImage(4, 1, [
 			[10, 0, 0, 255],
 			[20, 0, 0, 255],
@@ -55,7 +55,7 @@ describe("shuffleBlocks / addNoise — детерминизм по seed", () => 
 		expect(out).toEqual([10, 20, 30, 40]);
 	});
 
-	it("addNoise при том же seed воспроизводим, amount=0 — идентичность", () => {
+	it("addNoise reproducible at same seed, amount=0 - identity", () => {
 		const img = makeImage(2, 2, new Array(4).fill([128, 64, 32, 255]));
 		const a = addNoise(img, 20, "mono", 5);
 		const b = addNoise(img, 20, "mono", 5);
@@ -65,8 +65,8 @@ describe("shuffleBlocks / addNoise — детерминизм по seed", () => 
 });
 
 describe("featherAlpha", () => {
-	it("жёсткий край получает промежуточные альфы", () => {
-		// левая половина непрозрачная, правая прозрачная
+	it("hard edge gets intermediate alphas", () => {
+		// left half opaque, right transparent
 		const img = makeImage(6, 1, [
 			[255, 0, 0, 255],
 			[255, 0, 0, 255],
@@ -83,7 +83,7 @@ describe("featherAlpha", () => {
 });
 
 describe("defringe", () => {
-	it("полупрозрачному пикселю берётся RGB от соседнего непрозрачного", () => {
+	it("semi-transparent pixel takes RGB from opaque neighbor", () => {
 		const img = makeImage(2, 1, [
 			[250, 250, 250, 255],
 			[255, 0, 0, 128],
@@ -91,10 +91,10 @@ describe("defringe", () => {
 		const out = defringe(img, 2);
 		expect(out.data[4]).toBe(250);
 		expect(out.data[6]).toBe(250);
-		expect(out.data[7]).toBe(128); // альфа сохранена
+		expect(out.data[7]).toBe(128); // alpha preserved
 	});
 
-	it("полностью прозрачные области не трогаются", () => {
+	it("fully transparent areas untouched", () => {
 		const img = makeImage(2, 1, [
 			[250, 250, 250, 255],
 			[0, 0, 0, 0],
@@ -105,7 +105,7 @@ describe("defringe", () => {
 });
 
 describe("silhouette", () => {
-	it("видимые пиксели заливаются цветом, ниже порога — прозрачность", () => {
+	it("visible pixels filled with color, below threshold - transparent", () => {
 		const img = makeImage(2, 1, [
 			[123, 45, 67, 255],
 			[123, 45, 67, 10],
@@ -117,7 +117,7 @@ describe("silhouette", () => {
 });
 
 describe("mulberry32", () => {
-	it("последовательность детерминирована", () => {
+	it("sequence is deterministic", () => {
 		const a = mulberry32(42);
 		const b = mulberry32(42);
 		expect([a(), a(), a()]).toEqual([b(), b(), b()]);

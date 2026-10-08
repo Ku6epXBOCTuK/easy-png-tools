@@ -22,7 +22,7 @@ const square = () =>
 	]);
 
 describe("flip", () => {
-	it("отражает по горизонтали (зеркало слева-направо)", () => {
+	it("flips horizontally (left-right mirror)", () => {
 		const out = flip(square(), "horizontal");
 		expect(out.width).toBe(2);
 		expect(out.height).toBe(2);
@@ -31,14 +31,14 @@ describe("flip", () => {
 		]);
 	});
 
-	it("отражает по вертикали (сверху-вниз)", () => {
+	it("flips vertically (top-bottom)", () => {
 		const out = flip(square(), "vertical");
 		expect([...out.data]).toEqual([
 			3, 3, 3, 3, 4, 4, 4, 4, 1, 1, 1, 1, 2, 2, 2, 2,
 		]);
 	});
 
-	it("не мутирует вход", () => {
+	it("does not mutate input", () => {
 		const img = square();
 		flip(img, "horizontal");
 		expect([...img.data]).toEqual([
@@ -48,7 +48,7 @@ describe("flip", () => {
 });
 
 describe("rotate90", () => {
-	it("поворачивает неквадрат 2x3 на 90° по часовой", () => {
+	it("rotates non-square 2x3 by 90 deg clockwise", () => {
 		const rect = makeImage(2, 3, [
 			[1, 1, 1, 1],
 			[2, 2, 2, 2],
@@ -65,21 +65,21 @@ describe("rotate90", () => {
 		]);
 	});
 
-	it("turns=0 возвращает копию без изменений", () => {
+	it("turns=0 returns unchanged copy", () => {
 		const img = square();
 		const out = rotate90(img, 0);
 		expect(out).not.toBe(img);
 		expect([...out.data]).toEqual([...img.data]);
 	});
 
-	it("нормализует turns: 5 ≡ 1, -3 ≡ 1, 4 ≡ 0", () => {
+	it("normalizes turns: 5 == 1, -3 == 1, 4 == 0", () => {
 		const once = [...rotate90(square(), 1).data];
 		expect([...rotate90(square(), 5).data]).toEqual(once);
 		expect([...rotate90(square(), -3).data]).toEqual(once);
 		expect([...rotate90(square(), 4).data]).toEqual([...square().data]);
 	});
 
-	it("turns=2 на квадрате равно двойному отражению", () => {
+	it("turns=2 on square equals double flip", () => {
 		const out = rotate90(square(), 2);
 		expect([...out.data]).toEqual([
 			4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1,
@@ -101,7 +101,7 @@ describe("crop", () => {
 			[9, 9, 9, 9],
 		]);
 
-	it("вырезает центральную область 2x2 из 3x3", () => {
+	it("cuts central 2x2 area from 3x3", () => {
 		const out = crop(grid(), 1, 1, 2, 2);
 		expect(out.width).toBe(2);
 		expect(out.height).toBe(2);
@@ -110,14 +110,14 @@ describe("crop", () => {
 		]);
 	});
 
-	it("усекает область, выходящую за границы", () => {
+	it("clamps area exceeding bounds", () => {
 		const out = crop(grid(), -1, -1, 2, 2);
 		expect(out.width).toBe(1);
 		expect(out.height).toBe(1);
 		expect([...out.data]).toEqual([1, 1, 1, 1]);
 	});
 
-	it("бросает ToolError для области вне изображения", () => {
+	it("throws ToolError for area outside image", () => {
 		expect(() => crop(grid(), 5, 5, 2, 2)).toThrow(/errors\.cropBounds/);
 	});
 });
@@ -125,7 +125,7 @@ describe("crop", () => {
 describe("expandCanvas", () => {
 	const pixel = () => makeImage(1, 1, [[10, 20, 30, 255]]);
 
-	it("прозрачное расширение кладёт пиксель со смещением", () => {
+	it("transparent expansion places pixel with offset", () => {
 		const out = expandCanvas(pixel(), 1, 2, 3, 4);
 		expect(out.width).toBe(5);
 		expect(out.height).toBe(7);
@@ -135,7 +135,7 @@ describe("expandCanvas", () => {
 		]);
 	});
 
-	it("цветной фон заливает всё вокруг", () => {
+	it("colored background fills surroundings", () => {
 		const out = expandCanvas(pixel(), 1, 0, 0, 0, "#ffffff");
 		expect(out.data[0]).toBe(255);
 		expect(out.data[3]).toBe(255);
@@ -144,7 +144,7 @@ describe("expandCanvas", () => {
 });
 
 describe("tile", () => {
-	it("повторяет изображение по сетке", () => {
+	it("repeats image on grid", () => {
 		const out = tile(makeImage(1, 1, [[9, 9, 9, 255]]), 3, 2);
 		expect(out.width).toBe(3);
 		expect(out.height).toBe(2);
@@ -155,7 +155,7 @@ describe("tile", () => {
 });
 
 describe("centerByAlpha", () => {
-	it("вырезает непрозрачный блок и центрирует на прежнем холсте", () => {
+	it("cuts opaque block and centers on same canvas", () => {
 		const img = makeImage(3, 3, [
 			[0, 0, 0, 0],
 			[0, 0, 0, 0],
@@ -175,7 +175,7 @@ describe("centerByAlpha", () => {
 		expect(alphaAt(1, 1)).toBe(255);
 	});
 
-	it("полностью прозрачное изображение возвращается без изменений", () => {
+	it("fully transparent image returned unchanged", () => {
 		const img = makeImage(2, 1, [
 			[0, 0, 0, 0],
 			[0, 0, 0, 0],
@@ -193,12 +193,12 @@ describe("resize", () => {
 			[255, 255, 255, 255],
 		]);
 
-	it("совпадает с входом при тех же размерах", () => {
+	it("matches input at same size", () => {
 		const img = twoByTwo();
 		expect([...resize(img, 2, 2).data]).toEqual([...img.data]);
 	});
 
-	it("апскейл 2x2 -> 4x4 билинейно интерполирует", () => {
+	it("upscale 2x2 -> 4x4 bilinear interpolation", () => {
 		const out = resize(twoByTwo(), 4, 4);
 		expect(out.width).toBe(4);
 		expect(out.height).toBe(4);
@@ -207,7 +207,7 @@ describe("resize", () => {
 		expect(red.slice(4, 8)).toEqual([50, 72, 117, 139]);
 	});
 
-	it("бросает ToolError на некорректные размеры", () => {
+	it("throws ToolError on invalid sizes", () => {
 		const img = twoByTwo();
 		expect(() => resize(img, 0, 10)).toThrow(/errors\.sizeInt/);
 		expect(() => resize(img, 10.5, 10)).toThrow(/errors\.sizeInt/);
@@ -226,7 +226,7 @@ describe("splitToParts", () => {
 		return makeImage(w, h, pixels);
 	}
 
-	it("ровное деление 4x4 на 2x2 даёт четыре части 2x2 в row-major порядке", () => {
+	it("even 4x4 split into 2x2 gives four parts in row-major order", () => {
 		const parts = splitToParts(grid(4, 4), 2, 2);
 		expect(parts).toHaveLength(4);
 		for (const part of parts) {
@@ -259,7 +259,7 @@ describe("splitToParts", () => {
 		]);
 	});
 
-	it("неделимый размер: канвас дополняется прозрачным, части одинаковые", () => {
+	it("indivisible size: canvas padded transparent, parts equal", () => {
 		const parts = splitToParts(grid(5, 3), 2, 2);
 		expect(parts).toHaveLength(4);
 		for (const part of parts) {
@@ -300,7 +300,7 @@ describe("splitToParts", () => {
 		]);
 	});
 
-	it("одна колонка или строка — полосы без паддинга", () => {
+	it("single column or row - strips without padding", () => {
 		const parts = splitToParts(grid(3, 4), 1, 2);
 		expect(parts).toHaveLength(2);
 		expect(parts[0].width).toBe(3);
@@ -308,7 +308,7 @@ describe("splitToParts", () => {
 		expect(parts[1].height).toBe(2);
 	});
 
-	it("части в row-major порядке: последний кусок содержит правый нижний пиксель", () => {
+	it("row-major order: last part holds bottom-right pixel", () => {
 		const img = grid(5, 3);
 		const parts = splitToParts(img, 2, 2);
 		expect(parts[parts.length - 1].data[0]).toBe(14);
@@ -316,7 +316,7 @@ describe("splitToParts", () => {
 		expect(parts[parts.length - 1].data[8]).toBe(0);
 	});
 
-	it("дробные и нулевые значения колонок/строк нормализуются", () => {
+	it("fractional and zero cols/rows are normalized", () => {
 		const parts = splitToParts(grid(6, 6), 2.9, 0);
 		expect(parts).toHaveLength(2);
 		expect(parts[0].width).toBe(3);
@@ -336,7 +336,7 @@ describe("splitToTileSize", () => {
 		return makeImage(w, h, pixels);
 	}
 
-	it("кратный размер: части ровно tileW×tileH без паддинга", () => {
+	it("multiple size: parts exactly tileW x tileH without padding", () => {
 		const parts = splitToTileSize(grid(4, 4), 2, 2);
 		expect(parts).toHaveLength(4);
 		for (const part of parts) {
@@ -351,7 +351,7 @@ describe("splitToTileSize", () => {
 		]);
 	});
 
-	it("некратный размер: канвас дополняется прозрачным до кратности", () => {
+	it("non-multiple size: canvas padded transparent to multiple", () => {
 		const parts = splitToTileSize(grid(5, 3), 3, 2);
 		expect(parts).toHaveLength(4);
 		for (const part of parts) {
@@ -376,7 +376,7 @@ describe("splitToTileSize", () => {
 		]);
 	});
 
-	it("тайл больше картинки — одна часть с паддингом", () => {
+	it("tile bigger than image - one part with padding", () => {
 		const parts = splitToTileSize(grid(2, 2), 4, 4);
 		expect(parts).toHaveLength(1);
 		expect(parts[0].width).toBe(4);

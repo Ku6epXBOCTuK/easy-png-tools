@@ -1,11 +1,7 @@
 /**
- * Категории инструментов для нового registry.
- *
- * Единая точка правды: тип `CategoryId` и порядок отображения в каталоге
- * выводятся из одного `as const`-объекта, чтобы не рассинхронизироваться.
- *
- * Человекочитаемые названия живут в словарях i18n: секция categories,
- * ключ = CategoryId.
+ * Tool categories: `CategoryId` type and catalog display order derive from
+ * one `as const` object to avoid drift. Human-readable names live in the
+ * i18n dictionaries, section categories, key = CategoryId.
  */
 export const CATEGORIES = {
 	convert: "convert",
@@ -20,5 +16,5 @@ export const CATEGORIES = {
 
 export type CategoryId = (typeof CATEGORIES)[keyof typeof CATEGORIES];
 
-/** Порядок категорий в каталоге (как задано в `CATEGORIES`). */
+/** Category order in the catalog (as defined in `CATEGORIES`). */
 export const CATEGORY_IDS = Object.keys(CATEGORIES) as CategoryId[];

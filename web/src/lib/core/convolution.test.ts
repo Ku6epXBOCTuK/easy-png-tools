@@ -5,7 +5,7 @@ import { makeImage } from "./test-helpers";
 const SHARPEN_KERNEL = [0, -1, 0, -1, 5, -1, 0, -1, 0];
 
 describe("convolve", () => {
-	it("крестовое ядро резкости на полоске из трёх пикселей", () => {
+	it("cross sharpen kernel on three-pixel strip", () => {
 		const out = convolve(
 			makeImage(3, 1, [
 				[0, 0, 0, 255],
@@ -24,7 +24,7 @@ describe("convolve", () => {
 		[2, 3],
 		[3.5, 3],
 		[0, 3],
-	])("бросает ошибку на некорректном размере ядра %i", (size) => {
+	])("throws on invalid kernel size %i", (size) => {
 		expect(() =>
 			convolve(makeImage(1, 1, [[0, 0, 0, 255]]), [1], size as number),
 		).toThrow();
@@ -32,7 +32,7 @@ describe("convolve", () => {
 });
 
 describe("sharpen", () => {
-	it("сила 0 возвращает копию", () => {
+	it("strength 0 returns copy", () => {
 		const img = makeImage(2, 2, [
 			[10, 20, 30, 255],
 			[40, 50, 60, 128],
@@ -42,7 +42,7 @@ describe("sharpen", () => {
 		expect([...sharpen(img, 0).data]).toEqual([...img.data]);
 	});
 
-	it("сила 100 применяет чистое ядро резкости", () => {
+	it("strength 100 applies pure sharpen kernel", () => {
 		const out = sharpen(
 			makeImage(3, 1, [
 				[0, 0, 0, 255],
@@ -57,7 +57,7 @@ describe("sharpen", () => {
 });
 
 describe("gaussianBlur", () => {
-	it("постоянное изображение не меняется ни в RGB, ни в альфе", () => {
+	it("constant image unchanged in RGB and alpha", () => {
 		const img = makeImage(3, 3, new Array(9).fill([40, 80, 120, 128]));
 		const out = gaussianBlur(img, 16);
 		for (let i = 0; i < out.data.length; i++) {
@@ -65,7 +65,7 @@ describe("gaussianBlur", () => {
 		}
 	});
 
-	it("далёкие углы остаются прозрачными, цвет центра не искажается", () => {
+	it("far corners stay transparent, center color undistorted", () => {
 		const size = 61;
 		const pixels: number[][] = [];
 		for (let y = 0; y < size; y++) {
@@ -89,7 +89,7 @@ describe("gaussianBlur", () => {
 		expect(out.data[center + 2]).toBe(25);
 	});
 
-	it("симметричный вход даёт симметричный результат", () => {
+	it("symmetric input yields symmetric result", () => {
 		const leftByRow = [
 			[
 				[255, 0, 0, 255],

@@ -65,7 +65,7 @@ export function getTool(id: string): Tool | undefined {
 	return TOOLS.find((tool) => tool.id === id);
 }
 
-/** Единственный способ достать страницу: маршрут, крошка и имя файла идут от slug. */
+/** The only way to get a page: route, crumb, and file name derive from slug. */
 export function getPageBySlug(slug: string): Page | undefined {
 	return PAGES.find((page) => page.slug === slug);
 }

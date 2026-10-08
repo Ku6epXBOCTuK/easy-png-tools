@@ -76,10 +76,10 @@
 	const inputMode = $derived(tool.input);
 
 	let steps = $state<ChainStep[]>([]);
-	// Поля, изменённые пользователем (по шагам): при загрузке нового файла им не
-	// даём перезаписаться source-дефолтами. Reset шага снимает пометку.
+	// Fields edited by the user (per step): on new file load they must not be
+	// overwritten by source defaults. Step reset clears the mark.
 	const touchedByStep = new SvelteMap<string, SvelteSet<string>>();
-	// Последняя правленая ось dimension-поля — ведущая при lockAspect.
+	// Last edited axis of a dimension field; leads under lockAspect.
 	const lastAxis: Record<string, "width" | "height"> = {};
 	let stepDims = $state<(Dimension | undefined)[]>([]);
 	let stepResults = $state<(PixelImage | null)[]>([]);
@@ -96,7 +96,7 @@
 	let displayError = $state<DisplayError | null>(null);
 	let initedFor = $state("");
 	let format = $state<OutputMime>("image/png");
-	// Качество lossy-форматов для инструментов без quality-параметра в схеме.
+	// Lossy-format quality for tools without a quality param in the schema.
 	let formatQuality = $state<Record<string, number>>({});
 	let dragFrom = $state<number | null>(null);
 
@@ -105,7 +105,7 @@
 			tool,
 	);
 	const resultKind = $derived(lastTool.result ?? "image");
-	// Цепочку можно продолжить, только если последний шаг отдаёт картинку.
+	// Chain can be extended only if the last step outputs an image.
 	const canExtend = $derived((lastTool.result ?? "image") === "image");
 	const alignedMode = $derived(
 		aligned && resultKind === "image" && steps.length > 1,
@@ -117,8 +117,8 @@
 			!outputFormatByMime(format).supportsAlpha &&
 			hasTransparency(result),
 	);
-	// Если в схеме последнего шага есть quality-параметр (convert-инструменты),
-	// он — единый источник качества; dropdown редактирует его же.
+	// If the last step's schema has a quality param (convert tools), it is the
+	// single source of quality; the dropdown edits the same value.
 	const qualityParamId = $derived(lastTool.output?.qualityParamId);
 	const lastParams = $derived(steps.at(-1)?.params);
 	const resultNote = $derived(
@@ -196,8 +196,8 @@
 		const next: Record<string, unknown> = { ...step.params, [id]: value };
 		const stepSchema = toolSchemaOf(step);
 		const spec = stepSchema?.fields[id]?.spec;
-		// Аспект считается от входа шага: для первого — исходник, для остальных —
-		// результат предыдущего шага (размеры известны после прогона).
+		// Aspect derives from the step input: source for the first step,
+		// previous step's result for the rest (dims known after the run).
 		const dims = index === 0 ? (source ?? undefined) : stepDims[index - 1];
 		if (dims && stepSchema && spec) {
 			const aspect = dims.width / dims.height;
@@ -213,7 +213,7 @@
 					aspect,
 				);
 			} else if (spec.kind === "checkbox" && value === true) {
-				// Включили lockAspect — сразу подгоняем привязанные поля под аспект.
+				// lockAspect just enabled: snap bound fields to the aspect at once.
 				for (const [fid, f] of Object.entries(stepSchema.fields)) {
 					const fs = f.spec;
 					if (fs.kind === "dimension" && fs.lockAspectWith === id) {
@@ -261,8 +261,8 @@
 		steps = steps.with(index, { ...step, collapsed: !step.collapsed });
 	}
 
-	// Замена инструмента на месте: ключ и свёрнутость шага сохраняются,
-	// параметры — дефолты нового инструмента, вход пересчитывается при прогоне.
+	// In-place tool swap: step key and collapsed state are kept, params become
+	// the new tool's defaults, input is recomputed on run.
 	function replaceStepTool(index: number, toolId: string) {
 		const step = steps[index];
 		const next = createStep(toolId);
@@ -433,7 +433,7 @@
 		init();
 	});
 
-	// Цепочка персистится по slug страницы; сохраняем после инициализации.
+	// Chain persists per page slug; save only after initialization.
 	$effect(() => {
 		if (!initedFor) return;
 		void steps;

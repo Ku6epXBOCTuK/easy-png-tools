@@ -4,7 +4,7 @@ import { createPixelImage } from "./types";
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 
-/** Строки вида «r g b a» по одной строке на ряд пикселей. */
+/** Rows of "r g b a" values, one text line per pixel row. */
 export function imageToByteRows(img: PixelImage): string {
 	const rows: string[] = [];
 	for (let y = 0; y < img.height; y++) {
@@ -41,7 +41,7 @@ export function bytesToImage(text: string, width: number): PixelImage {
 	return out;
 }
 
-/** Строки вида «rgba(r, g, b, a)», по одной на пиксель, ряды через перевод строки. */
+/** Rows of "rgba(r, g, b, a)" values, one per pixel, rows separated by newlines. */
 export function imageToRgbValues(img: PixelImage): string {
 	const rows: string[] = [];
 	for (let y = 0; y < img.height; y++) {
@@ -79,7 +79,7 @@ export function rgbValuesToImage(text: string, width: number): PixelImage {
 	return out;
 }
 
-/** Снимает префикс data-uri (data:image/...;base64,) при наличии. */
+/** Strips the data-uri prefix (data:image/...;base64,) if present. */
 export function stripDataUri(text: string): string {
 	const m = /^\s*data:[^,\s]*base64,/i.exec(text);
 	return m ? text.slice(m[0].length) : text.trim();

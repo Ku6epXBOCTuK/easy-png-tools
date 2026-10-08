@@ -58,10 +58,9 @@ export function tile(
 }
 
 /**
- * Разрезает изображение на сетку columns × rows строго равных частей.
- * Холст дополняется прозрачным до кратного размера (`ceil(width / cols)`),
- * поэтому весь исходный контент сохраняется. Порядок — row-major: сначала все
- * столбцы первой строки (part 1-1, 1-2, …), затем второй и т.д.
+ * Splits the image into a columns x rows grid of strictly equal parts.
+ * Canvas transparently padded to a multiple size, so all content survives.
+ * Row-major order: row 1 columns first (part 1-1, 1-2, ...), then row 2, etc.
  */
 export function splitToParts(
 	img: PixelImage,
@@ -87,7 +86,7 @@ export function splitToParts(
 	return parts;
 }
 
-/** Нарезка по размеру тайла: канвас дополняется прозрачным до кратности. */
+/** Split by tile size: canvas transparently padded to a multiple. */
 export function splitToTileSize(
 	img: PixelImage,
 	tileW: number,
@@ -301,7 +300,7 @@ export type Anchor9 =
 	| "bottom-center"
 	| "bottom-right";
 
-/** Границы контента: пиксели с альфой строго больше порога. Пустое изображение → null. */
+/** Content bounds: pixels with alpha strictly above threshold. Empty image -> null. */
 export function contentBounds(
 	img: PixelImage,
 	alphaThreshold = 0,
@@ -324,14 +323,14 @@ export function contentBounds(
 	return { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 };
 }
 
-/** Обрезка прозрачных полей по порогу альфы. Полностью пустое → 1×1 прозрачный пиксель. */
+/** Trims transparent margins by alpha threshold. Fully empty -> 1x1 transparent pixel. */
 export function trimToContent(img: PixelImage, alphaThreshold = 0): PixelImage {
 	const b = contentBounds(img, alphaThreshold);
 	if (!b) return crop(img, 0, 0, 1, 1);
 	return crop(img, b.x, b.y, b.w, b.h);
 }
 
-/** Приводит холст к точному размеру: лишнее обрезается, недостающее дополняется прозрачным. */
+/** Fits the canvas to an exact size: excess is cropped, missing space transparently padded. */
 export function changeCanvasSize(
 	img: PixelImage,
 	width: number,
@@ -366,7 +365,7 @@ export function changeCanvasSize(
 	return out;
 }
 
-/** Центральный кроп до соотношения сторон (ratio ≥ 1 = широкое). */
+/** Center crop to an aspect ratio (ratio >= 1 = wide). */
 export function cropToRatio(img: PixelImage, ratio: number): PixelImage {
 	const current = img.width / img.height;
 	if (current > ratio) {
@@ -380,7 +379,7 @@ export function cropToRatio(img: PixelImage, ratio: number): PixelImage {
 	return clonePixelImage(img);
 }
 
-/** Вписывает в соотношение сторон, добавляя прозрачные поля. */
+/** Fits into an aspect ratio by adding transparent margins. */
 export function padToRatio(img: PixelImage, ratio: number): PixelImage {
 	const current = img.width / img.height;
 	let w = img.width;
@@ -392,7 +391,7 @@ export function padToRatio(img: PixelImage, ratio: number): PixelImage {
 	return changeCanvasSize(img, w, h, "center");
 }
 
-/** Разворачивает изображение на 90°, если его ориентация не совпадает с целевой. Квадрат не трогает. */
+/** Rotates the image 90 degrees if its orientation differs from the target. Square untouched. */
 export function forceOrientation(
 	img: PixelImage,
 	target: "portrait" | "landscape",
@@ -408,8 +407,8 @@ export function forceOrientation(
 }
 
 /**
- * Симметричная копия: к выбранной стороне оригинала добавляется его зеркало.
- * axis vertical — зеркалим по вертикальной линии (ширина ×2), horizontal — по горизонтальной (высота ×2).
+ * Symmetric copy: the chosen side of the original gets its mirror appended.
+ * axis vertical mirrors across a vertical line (width x2), horizontal across a horizontal one (height x2).
  */
 export function symmetricCopy(
 	img: PixelImage,

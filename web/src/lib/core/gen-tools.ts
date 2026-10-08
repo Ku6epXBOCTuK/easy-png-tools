@@ -2,7 +2,7 @@ import { createPixelImage, type PixelImage } from "./types";
 import { hslToRgb } from "./palette";
 import { mulberry32 } from "./pixel-fx";
 
-/** Радужный спектр: оттенок 0..360 вдоль выбранной оси. */
+/** Rainbow spectrum: hue 0..360 along the chosen axis. */
 export function colorSpectrum(
 	width: number,
 	height: number,
@@ -32,7 +32,7 @@ export function colorSpectrum(
 	return out;
 }
 
-/** Случайные яркие блоки: детерминировано по seed. */
+/** Random vivid blocks: deterministic per seed. */
 export function randomColorBlocks(
 	width: number,
 	height: number,
@@ -79,7 +79,7 @@ function lineMask(
 	return mask;
 }
 
-/** Сетка линий на белом фоне заданной непрозрачности (0 — прозрачный). */
+/** Line grid on a white background of given opacity (0 = transparent). */
 export function drawGrid(
 	width: number,
 	height: number,

@@ -196,20 +196,22 @@ export default tseslint.config(
 		},
 	},
 	// Tests are written in ASCII English: typography and non-English prose in
-	// describe/it hurt grep-ability and hide hardcoded localized strings.
-	// Warn-only until the cleanup lands; intentional glyphs go to allowChars.
+	// describe/it hurt grep-ability and hide hardcoded localized strings
+	// (expected values come from the dictionaries, not literals).
 	{
 		files: ["**/*.test.ts", "**/*.spec.ts", "**/e2e/**/*.ts"],
 		plugins: {
 			conventions: conventionsPlugin,
 		},
 		rules: {
-			"conventions/ascii-only": "warn",
+			// allowChars: U+00D7 is intentional - the pipeline emits sizes with
+			// it and tests must assert that exact output.
+			"conventions/ascii-only": ["error", { allowChars: ["×"] }],
 		},
 	},
 	// Comments in English, in short blocks, without turning a file into an
 	// essay (conventions/comments-english + conventions/comment-format).
-	// Warn-only: excess is a cue to refactor code, not squeeze comments.
+	// Excess is a cue to refactor code, not squeeze comments.
 	{
 		files: [
 			"**/src/**/*.ts",
@@ -226,11 +228,10 @@ export default tseslint.config(
 			conventions: conventionsPlugin,
 		},
 		rules: {
-			"conventions/comments-english": "warn",
+			"conventions/comments-english": "error",
 			"conventions/comment-format": [
-				"warn",
-				// minLines: density only checks files with 100+ non-blank lines;
-				// in small files any header gives a false excess.
+				"error",
+				// minLines: density skips small files (any header would trip it).
 				{ maxBlockLines: 5, maxRatio: 0.15, minLines: 100 },
 			],
 		},

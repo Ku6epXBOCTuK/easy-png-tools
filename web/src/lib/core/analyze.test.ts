@@ -8,7 +8,7 @@ import {
 import { makeImage } from "./test-helpers";
 
 describe("imageInfo", () => {
-	it("находит полупрозрачные пиксели и считает уникальные RGBA-цвета", () => {
+	it("finds semi-transparent pixels and counts unique RGBA colors", () => {
 		const info = imageInfo(
 			makeImage(2, 2, [
 				[0, 0, 0, 255],
@@ -25,7 +25,7 @@ describe("imageInfo", () => {
 		});
 	});
 
-	it("полностью непрозрачное изображение — hasAlpha false", () => {
+	it("fully opaque image - hasAlpha false", () => {
 		const info = imageInfo(
 			makeImage(2, 1, [
 				[10, 20, 30, 255],
@@ -36,7 +36,7 @@ describe("imageInfo", () => {
 		expect(info.colorCount).toBe(2);
 	});
 
-	it("разная альфа означает разные цвета", () => {
+	it("different alpha means different colors", () => {
 		const info = imageInfo(
 			makeImage(2, 1, [
 				[255, 0, 0, 255],
@@ -47,7 +47,7 @@ describe("imageInfo", () => {
 		expect(info.colorCount).toBe(2);
 	});
 
-	it("возвращает корректные размеры неквадрата", () => {
+	it("returns correct sizes for non-square image", () => {
 		const info = imageInfo(makeImage(5, 3, new Array(15).fill([1, 2, 3, 4])));
 		expect(info.width).toBe(5);
 		expect(info.height).toBe(3);
@@ -55,25 +55,25 @@ describe("imageInfo", () => {
 });
 
 describe("isGrayscale", () => {
-	it("серые пиксели — монохром", () => {
+	it("gray pixels are monochrome", () => {
 		expect(isGrayscale(makeImage(1, 1, [[10, 10, 10, 255]]))).toBe(true);
 	});
-	it("цветной пиксель ломает монохром", () => {
+	it("colored pixel breaks monochrome", () => {
 		expect(isGrayscale(makeImage(1, 1, [[10, 11, 10, 255]]))).toBe(false);
 	});
 });
 
 describe("hasTransparency", () => {
-	it("альфа ниже 255 — прозрачность есть", () => {
+	it("alpha below 255 means transparency", () => {
 		expect(hasTransparency(makeImage(1, 1, [[0, 0, 0, 254]]))).toBe(true);
 	});
-	it("все пиксели непрозрачны", () => {
+	it("all pixels opaque", () => {
 		expect(hasTransparency(makeImage(1, 1, [[0, 0, 0, 255]]))).toBe(false);
 	});
 });
 
 describe("special decoded pixel data", () => {
-	it("палитра после browser-декодирования сохраняет количество цветов", () => {
+	it("palette keeps color count after browser decode", () => {
 		const image = makeImage(2, 2, [
 			[255, 0, 0, 255],
 			[0, 255, 0, 255],
@@ -89,7 +89,7 @@ describe("special decoded pixel data", () => {
 		});
 	});
 
-	it("16-bit после downscale остаётся цветным и непрозрачным", () => {
+	it("16-bit stays colored and opaque after downscale", () => {
 		const image = makeImage(
 			4,
 			4,
@@ -107,7 +107,7 @@ describe("special decoded pixel data", () => {
 });
 
 describe("orientationOf", () => {
-	it("определяет ориентацию", () => {
+	it("detects orientation", () => {
 		expect(
 			orientationOf(makeImage(2, 3, new Array(6).fill([1, 1, 1, 1]))),
 		).toBe("portrait");

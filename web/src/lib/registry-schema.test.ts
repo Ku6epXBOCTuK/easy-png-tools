@@ -55,8 +55,8 @@ const sourceSchema = toolSchema<SourceParams>({
 
 const source = { width: 64, height: 48 };
 
-describe("registry-schema: дефолты из схемы", () => {
-	it("собирает дефолты всех полей", () => {
+describe("registry-schema: schema defaults", () => {
+	it("collects defaults of all fields", () => {
 		expect(defaultSchemaParams(frameSchema)).toEqual({
 			thickness: 5,
 			color: "#000000",
@@ -69,20 +69,20 @@ describe("registry-schema: дефолты из схемы", () => {
 describe("registry-schema: withAspectLock", () => {
 	const aspect = 64 / 48;
 
-	it("ведущая ширина — пересчитывается высота", () => {
+	it("leading width - height is recomputed", () => {
 		expect(withAspectLock({ width: 32, height: 48 }, "width", aspect)).toEqual({
 			width: 32,
 			height: 24,
 		});
 	});
 
-	it("ведущая высота — пересчитывается ширина", () => {
+	it("leading height - width is recomputed", () => {
 		expect(withAspectLock({ width: 64, height: 96 }, "height", aspect)).toEqual(
 			{ width: 128, height: 96 },
 		);
 	});
 
-	it("результат не опускается ниже 1", () => {
+	it("result never goes below 1", () => {
 		expect(withAspectLock({ width: 1, height: 48 }, "width", aspect)).toEqual({
 			width: 1,
 			height: 1,
@@ -106,12 +106,12 @@ describe("registry-schema: maxFromSource", () => {
 	});
 	const img = { width: 832, height: 1216 };
 
-	it("number клампится к размеру исходника, а не к статическому max", () => {
+	it("number clamps to the source size, not the static max", () => {
 		const s = sanitizeSchemaParams(cropLike, { x: 5000 }, { source: img });
 		expect(s.x).toBe(832);
 	});
 
-	it("dimension клампится по осям исходника", () => {
+	it("dimension clamps to the source axes", () => {
 		const s = sanitizeSchemaParams(
 			cropLike,
 			{ size: { width: 5000, height: 5000 } },
@@ -120,7 +120,7 @@ describe("registry-schema: maxFromSource", () => {
 		expect(s.size).toEqual({ width: 832, height: 1216 });
 	});
 
-	it("без исходника — статический max", () => {
+	it("without a source - static max", () => {
 		const s = sanitizeSchemaParams(cropLike, {
 			x: 5000,
 			size: { width: 5000, height: 5000 },
@@ -129,7 +129,7 @@ describe("registry-schema: maxFromSource", () => {
 		expect(s.size).toEqual({ width: 5000, height: 5000 });
 	});
 
-	it("maxMinus: потолок = исходник − константа (offset до size−1)", () => {
+	it("maxMinus: cap = source minus constant (offset up to size-1)", () => {
 		const offsetLike = toolSchema<{ x: number }>({
 			x: field.number({
 				min: 0,
@@ -147,7 +147,7 @@ describe("registry-schema: maxFromSource", () => {
 		expect(s.x).toBe(831);
 	});
 
-	it("effectiveMax: без maxFromSource и без исходника — статический max", () => {
+	it("effectiveMax: no maxFromSource and no source - static max", () => {
 		const plain = toolSchema<{ a: number; b: number }>({
 			a: field.number({ min: 0, max: 100, default: 0 }),
 			b: field.number({
@@ -167,27 +167,27 @@ describe("registry-schema: maxFromSource", () => {
 		expect(noSource.b).toBe(5000);
 	});
 
-	it("clampSourceAwareMaxes: без исходника и без изменений — те же params", () => {
+	it("clampSourceAwareMaxes: no source and no changes - same params", () => {
 		const noSource = clampSourceAwareMaxes(cropLike, { x: 5000 });
 		expect(noSource).toEqual({ x: 5000 });
 		const untouched = clampSourceAwareMaxes(
 			cropLike,
-			{ x: "мусор", size: { width: 100, height: 100 } },
+			{ x: "garbage", size: { width: 100, height: 100 } },
 			img,
 		);
 		expect(untouched).toEqual({
-			x: "мусор",
+			x: "garbage",
 			size: { width: 100, height: 100 },
 		});
 	});
 
-	it("clampSourceAwareMaxes: dimension с мусором пропускается", () => {
+	it("clampSourceAwareMaxes: dimension with garbage is passed through", () => {
 		const out = clampSourceAwareMaxes(
 			cropLike,
-			{ size: "не-объект" as unknown as Dimension },
+			{ size: "not-an-object" as unknown as Dimension },
 			img,
 		);
-		expect(out).toEqual({ size: "не-объект" });
+		expect(out).toEqual({ size: "not-an-object" });
 	});
 });
 
@@ -216,7 +216,7 @@ describe("registry-schema: source-aware dimension defaults", () => {
 		});
 	});
 
-	it("touched-поля не перезаписываются source-дефолтами", () => {
+	it("touched fields are not overwritten by source defaults", () => {
 		const manual = { size: { width: 5, height: 6 } };
 		expect(
 			applySourceDefaults(sourceSchema, manual, { source }, new Set(["size"])),
@@ -246,14 +246,14 @@ describe("registry-schema: source-aware dimension defaults", () => {
 	});
 });
 
-describe("registry-schema: раскладка (schema.layout)", () => {
-	it("toolSchema сохраняет группы полей", () => {
+describe("registry-schema: layout (schema.layout)", () => {
+	it("toolSchema keeps field groups", () => {
 		expect(frameSchema.layout).toEqual({
 			groups: [{ title: "Frame", fields: ["thickness", "color"] }],
 		});
 	});
 
-	it("обе схемы без layout не добавляют layout", () => {
+	it("schemas without layout do not add layout", () => {
 		const plain = toolSchema<FrameParams>({
 			thickness: field.slider({ min: 1, max: 500, default: 5 }),
 			color: field.color({ default: "#000000" }),
@@ -269,7 +269,7 @@ describe("registry-schema: раскладка (schema.layout)", () => {
 		expect(plain.layout).toBeUndefined();
 	});
 
-	it("разрешает named-группы и хвост без layout", () => {
+	it("resolves named groups and the ungrouped tail", () => {
 		expect(resolveLayoutGroups(frameSchema)).toEqual([
 			{
 				key: "Frame-0",
@@ -281,7 +281,7 @@ describe("registry-schema: раскладка (schema.layout)", () => {
 		]);
 	});
 
-	it("убирает неизвестные и повторные поля, нормализует cols", () => {
+	it("drops unknown and duplicate fields, normalizes cols", () => {
 		const schema = toolSchema<FrameParams>(
 			{
 				thickness: field.slider({ min: 1, max: 500, default: 5 }),
@@ -322,7 +322,7 @@ describe("registry-schema: раскладка (schema.layout)", () => {
 		]);
 	});
 
-	it("складывает все поля без layout в default-группу", () => {
+	it("puts all fields without layout into the default group", () => {
 		const plain = toolSchema<FrameParams>({
 			thickness: field.slider({ min: 1, max: 500, default: 5 }),
 			color: field.color({ default: "#000000" }),
@@ -346,8 +346,8 @@ describe("registry-schema: раскладка (schema.layout)", () => {
 	});
 });
 
-describe("registry-schema: санитайз", () => {
-	it("пропускает валидные значения", () => {
+describe("registry-schema: sanitize", () => {
+	it("passes valid values through", () => {
 		const out = sanitizeSchemaParams(frameSchema, {
 			thickness: 40,
 			color: "#ff0000",
@@ -362,7 +362,7 @@ describe("registry-schema: санитайз", () => {
 		});
 	});
 
-	it("заменяет мусор дефолтами", () => {
+	it("replaces garbage with defaults", () => {
 		const out = sanitizeSchemaParams(frameSchema, {
 			thickness: "abc",
 			color: "not-a-color",
@@ -378,7 +378,7 @@ describe("registry-schema: санитайз", () => {
 		});
 	});
 
-	it("clamp-ит числовые поля к min/max", () => {
+	it("clamps numeric fields to min/max", () => {
 		const out = sanitizeSchemaParams(frameSchema, {
 			thickness: 9999,
 			color: "#000000",

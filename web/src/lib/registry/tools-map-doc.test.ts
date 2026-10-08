@@ -10,17 +10,17 @@ const MAP_PATH = fileURLToPath(
 const SECTION_START = /^## 1\.\s/;
 const SECTION_PLANNED = /^## 2\.\s/;
 
-// Все slug страниц содержат дефис, поэтому формат строгий: это отсекает слова
-// описания вроде `median-cut` из «colors (k, median-cut)».
+// Every page slug contains a hyphen, so the shape is strict: it excludes
+// description words like `median-cut` in "colors (k, median-cut)".
 const ID_SHAPE = /^[a-z][a-z0-9]*(-[a-z0-9]+)+$/;
 const ID_TOKEN = /[a-z][a-z0-9]*(?:-[a-z0-9]+)+/g;
 
 type Mention = { id: string; line: number };
 
 /**
- * Буллиты раздела вместе с номером первой строки. Перенесённые строки
- * приклеиваются к буллету: иначе slug, оказавшийся на следующей строке, молча
- * выпадал бы из разбора и страница считалась бы неописанной.
+ * Section bullets with the line number of the first line. Continuation lines
+ * are glued to the bullet: otherwise a slug wrapped to the next line would
+ * silently drop out of parsing and the page would count as undocumented.
  */
 function sectionBullets(
 	markdown: string,
@@ -35,8 +35,8 @@ function sectionBullets(
 			: lines.findIndex((l) => endPattern.test(l));
 	if (start === -1 || end === -1 || end <= start) {
 		throw new Error(
-			`docs/tools-map.md: не найден раздел по ${startPattern} — тест не может ` +
-				"определить границы разделов карты",
+			`docs/tools-map.md: section not found by ${startPattern} - the test ` +
+				"cannot determine the map section boundaries",
 		);
 	}
 
@@ -61,8 +61,9 @@ function sectionBullets(
 }
 
 /**
- * Всё до первого тире `—` — slug через `/` или `,`; после тире свободное
- * описание параметров, оно не разбирается. Формат закреплён в самой карте.
+ * Everything before the first em dash is slugs separated by `/` or `,`; the
+ * free-form parameter description after the dash is not parsed. The format is
+ * pinned by the map itself.
  */
 function mentionedIds(markdown: string): Mention[] {
 	const found: Mention[] = [];
@@ -71,7 +72,7 @@ function mentionedIds(markdown: string): Mention[] {
 		SECTION_START,
 		SECTION_PLANNED,
 	)) {
-		const head = text.split("—")[0];
+		const head = text.split("\u2014")[0];
 		for (const raw of head.split(/[/,]/)) {
 			const id = raw.trim().replace(/`/g, "");
 			if (ID_SHAPE.test(id)) found.push({ id, line });
@@ -81,9 +82,9 @@ function mentionedIds(markdown: string): Mention[] {
 }
 
 /**
- * Плановые разделы «2. Можно добавить» и «3. Идеи» устроены прозой: slug стоит
- * где угодно в буллите, после тире и в скобках. Поэтому берём все токены
- * нужной формы из всего текста буллита, а не из «головы» до тире.
+ * Planned sections "2."/"3." are prose: a slug may appear anywhere in the
+ * bullet, after the dash or in parentheses. Take every token of the required
+ * shape from the whole bullet, not just the head before the dash.
  */
 function plannedIds(markdown: string): Mention[] {
 	const found: Mention[] = [];
@@ -99,63 +100,63 @@ function plannedIds(markdown: string): Mention[] {
 	return found;
 }
 
-describe("docs/tools-map.md ↔ страницы реестра", () => {
+describe("docs/tools-map.md vs registry pages", () => {
 	const markdown = readFileSync(MAP_PATH, "utf8");
 	const mentioned = mentionedIds(markdown);
 	const planned = plannedIds(markdown);
 	const registrySlugs = new Set(PAGES.map((page) => page.slug));
 
-	it("разбирает непустой список slug (парсер не сломался молча)", () => {
+	it("parses a non-empty slug list (parser did not silently break)", () => {
 		expect(mentioned.length).toBeGreaterThan(0);
 		expect(new Set(mentioned.map((m) => m.id)).size).toBeGreaterThan(50);
 		expect(new Set(planned.map((m) => m.id)).size).toBeGreaterThan(10);
 	});
 
-	it("в карте нет slug, которых нет в реестре", () => {
+	it("map has no slugs missing from the registry", () => {
 		const bogus = mentioned.filter((m) => !registrySlugs.has(m.id));
 		expect(
 			bogus,
 			bogus
 				.map(
 					(m) =>
-						`${m.id} (docs/tools-map.md:${m.line}) — такой страницы нет в web/src/lib/registry/pages/`,
+						`${m.id} (docs/tools-map.md:${m.line}) - no such page in web/src/lib/registry/pages/`,
 				)
 				.join("\n"),
 		).toEqual([]);
 	});
 
-	it("каждая страница реестра описана в карте", () => {
+	it("every registry page is described in the map", () => {
 		const mentionedSet = new Set(mentioned.map((m) => m.id));
 		const missing = [...registrySlugs].filter((id) => !mentionedSet.has(id));
 		expect(
 			missing,
-			`не описаны в разделе «Реализовано»:\n${missing.join("\n")}`,
+			`not described in the "1. Implemented" section:\n${missing.join("\n")}`,
 		).toEqual([]);
 	});
 
-	it("slug не продублированы между буллетами", () => {
+	it("slugs are not duplicated between bullets", () => {
 		const seen = new Map<string, number>();
 		const dupes: string[] = [];
 		for (const { id, line } of mentioned) {
 			const first = seen.get(id);
 			if (first !== undefined) {
-				dupes.push(`${id} (строки ${first} и ${line})`);
+				dupes.push(`${id} (lines ${first} and ${line})`);
 			} else {
 				seen.set(id, line);
 			}
 		}
-		expect(dupes, `повторяющиеся slug:\n${dupes.join("\n")}`).toEqual([]);
+		expect(dupes, `duplicate slugs:\n${dupes.join("\n")}`).toEqual([]);
 	});
 
-	it("плановый slug уже не реализован (перенос из «2./3.» в «1.»)", () => {
+	it("planned slugs are not already implemented (move from 2./3. to 1.)", () => {
 		const stale = planned.filter((m) => registrySlugs.has(m.id));
 		expect(
 			stale,
 			stale
 				.map(
 					(m) =>
-						`${m.id} (docs/tools-map.md:${m.line}) — страница уже есть в реестре, ` +
-						"перенеси её из планового раздела в «1. Реализовано»",
+						`${m.id} (docs/tools-map.md:${m.line}) - the page is already in the registry, ` +
+						'move it from a planned section to "1. Implemented"',
 				)
 				.join("\n"),
 		).toEqual([]);

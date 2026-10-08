@@ -33,8 +33,8 @@
 
 	let crumb = $derived(toCrumb(page.url.pathname));
 
-	// GA подключается только в production-деплое: флаг выставляется в
-	// deploy-workflow, локальные и preview-сборки тег не получают.
+	// GA is included only in the production deploy: the flag is set in the
+	// deploy workflow; local and preview builds do not get the tag.
 	const gaEnabled = import.meta.env.PUBLIC_GA_ENABLED === "true";
 
 	function toCrumb(path: string): string {

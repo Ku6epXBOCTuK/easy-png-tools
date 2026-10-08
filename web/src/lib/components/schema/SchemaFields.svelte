@@ -58,7 +58,7 @@
 		schema: ToolSchema<Record<string, unknown>>;
 		values: Record<string, unknown>;
 		toolId: string;
-		/** Размеры входа шага: для maxFromSource-полей (crop и т.п.). */
+		/** Step input dimensions: for maxFromSource fields (crop, etc.). */
 		sourceDims?: Dimension;
 		onchange: (
 			id: string,

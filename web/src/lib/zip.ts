@@ -17,8 +17,8 @@ export async function buildZipEntries(
 }
 
 /**
- * Собирает набор картинок (1 → many) в zip-архив и скачивает его.
- * Картинки кодируются как PNG; кодирование требует DOM — вызов из UI-слоя.
+ * Packs a set of images (1 -> many) into a zip archive and downloads it.
+ * Images are encoded as PNG; encoding needs the DOM, call from the UI layer.
  */
 export async function downloadZip(
 	files: ToolImageFile[],

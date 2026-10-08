@@ -131,8 +131,8 @@ function ratio(fgHex: string, bgHex: string): number {
 describe.each([
 	["light", lightEnv],
 	["dark", darkEnv],
-])("контраст палитры (%s)", (_name, theme) => {
-	it("основной текст на фоне и панели ≥ 4.5", () => {
+])("palette contrast (%s)", (_name, theme) => {
+	it("main text on background and panel >= 4.5", () => {
 		expect(
 			ratio(
 				colorOf(theme, "--color-text"),
@@ -144,7 +144,7 @@ describe.each([
 		).toBeGreaterThanOrEqual(4.5);
 	});
 
-	it("вторичный текст (muted) на фоне и панели ≥ 4.5", () => {
+	it("muted text on background and panel >= 4.5", () => {
 		expect(
 			ratio(
 				colorOf(theme, "--color-text-muted"),
@@ -159,7 +159,7 @@ describe.each([
 		).toBeGreaterThanOrEqual(4.5);
 	});
 
-	it("текст-цвет на акцентной кнопке ≥ 4.0 (AA large-text)", () => {
+	it("text color on accent button >= 4.0 (AA large-text)", () => {
 		expect(
 			ratio(
 				colorOf(theme, "--color-background"),
@@ -174,7 +174,7 @@ describe.each([
 		).toBeGreaterThanOrEqual(4.0);
 	});
 
-	it("бордер панели различим на фоне ≥ 1.15", () => {
+	it("panel border distinguishable on background >= 1.15", () => {
 		expect(
 			ratio(
 				colorOf(theme, "--color-border"),

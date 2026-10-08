@@ -4,7 +4,7 @@ import { anchorOrigin, tileGrid, wrapText } from "./textdraw";
 const measure = (s: string) => s.length * 10;
 
 describe("anchorOrigin", () => {
-	it("углы и отступ считаются от краёв", () => {
+	it("corners and padding measured from edges", () => {
 		expect(anchorOrigin("top-left", 100, 50, 400, 300, 30)).toEqual({
 			x: 30,
 			y: 30,
@@ -23,7 +23,7 @@ describe("anchorOrigin", () => {
 		});
 	});
 
-	it("центрирование — ровно половина остатка", () => {
+	it("centering - exactly half the remainder", () => {
 		expect(anchorOrigin("center", 100, 50, 401, 301, 0)).toEqual({
 			x: 150.5,
 			y: 125.5,
@@ -40,28 +40,28 @@ describe("anchorOrigin", () => {
 });
 
 describe("wrapText", () => {
-	it("жадно набирает строки в пределах ширины", () => {
-		// measure: 10px за символ → строка ≤ 120px = 12 символов
-		expect(wrapText("один два три четыре пять", 120, measure)).toEqual([
-			"один два три",
-			"четыре пять",
+	it("greedily fills lines within width", () => {
+		// measure: 10px per char -> line <= 120px = 12 chars
+		expect(wrapText("four two six banana pear", 120, measure)).toEqual([
+			"four two six",
+			"banana pear",
 		]);
 	});
 
-	it("слово длиннее ширины уходит на отдельную строку целиком", () => {
+	it("word longer than width goes on its own line", () => {
 		expect(
-			wrapText("короткое сверхдлинноеслово без переносов", 90, measure),
-		).toEqual(["короткое", "сверхдлинноеслово", "без", "переносов"]);
+			wrapText("giraffes superlongwordhere cat crocodile", 90, measure),
+		).toEqual(["giraffes", "superlongwordhere", "cat", "crocodile"]);
 	});
 
-	it("пустой и пробельный текст дают пустой массив", () => {
+	it("empty and whitespace text give empty array", () => {
 		expect(wrapText("", 100, measure)).toEqual([]);
 		expect(wrapText("   \n\t ", 100, measure)).toEqual([]);
 	});
 });
 
 describe("tileGrid", () => {
-	it("стабильная сетка с шагом и центрированием", () => {
+	it("stable grid with spacing and centering", () => {
 		const pts = tileGrid(200, 200, 0, 60, 60, 80, 24);
 		expect(pts.length).toBeGreaterThan(0);
 		const xs = new Set(pts.map((p) => p.x));
@@ -70,13 +70,13 @@ describe("tileGrid", () => {
 		expect(ys.size).toBeGreaterThan(1);
 	});
 
-	it("кап защищает от гигантского количества плиток", () => {
+	it("cap protects against huge tile count", () => {
 		const pts = tileGrid(4000, 4000, 45, 8, 8, 100, 40);
 		expect(pts.length).toBeLessThanOrEqual(2500);
 		expect(pts.length).toBeGreaterThan(0);
 	});
 
-	it("обычные входные данные не триггерят кап", () => {
+	it("normal input does not trigger cap", () => {
 		const pts = tileGrid(800, 600, 30, 140, 90, 160, 40);
 		expect(pts.length).toBeLessThanOrEqual(2500);
 		expect(pts.length).toBeGreaterThan(4);

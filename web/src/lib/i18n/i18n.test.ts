@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getLocale, initLocale, setLocale } from "./locale.svelte";
 import { interpolate, t } from "./t";
 import { en } from "./en";
+import { ru } from "./ru";
 
 type Store = Record<string, string>;
 
@@ -24,19 +25,19 @@ beforeEach(() => {
 });
 
 describe("t", () => {
-	it("возвращает строку по точечному пути активной локали", () => {
-		expect(t("header.workspace")).toBe("Рабочая область");
+	it("returns the string by dot path of the active locale", () => {
+		expect(t("header.workspace")).toBe(ru.header.workspace);
 		setLocale("en");
-		expect(t("header.catalog")).toBe("Catalog");
+		expect(t("header.catalog")).toBe(en.header.catalog);
 	});
 
-	it("фолбэк на английскую базу, если в активной локали нет ключа", () => {
+	it("falls back to the English base when the active locale lacks the key", () => {
 		(en.home as Record<string, string>).onlyEnKey = "Only English string";
 		setLocale("ru");
 		expect(t("home.onlyEnKey")).toBe("Only English string");
 	});
 
-	it("переводит ошибки с vars в активной локали", () => {
+	it("translates errors with vars in the active locale", () => {
 		setLocale("ru");
 		expect(t("errors.pixelCountMismatch", { count: 33, width: 32 })).toContain(
 			"33",
@@ -47,43 +48,43 @@ describe("t", () => {
 		);
 	});
 
-	it("неизвестный путь возвращает сам путь", () => {
+	it("unknown path returns the path itself", () => {
 		expect(t("no.such.key")).toBe("no.such.key");
 	});
 });
 
 describe("interpolate", () => {
-	it("подставляет переменные в шаблон", () => {
-		expect(interpolate("Шаг {n} из {total}", { n: 2, total: 5 })).toBe(
-			"Шаг 2 из 5",
+	it("substitutes variables into the template", () => {
+		expect(interpolate("Step {n} of {total}", { n: 2, total: 5 })).toBe(
+			"Step 2 of 5",
 		);
 	});
 
-	it("оставляет плейсхолдер без переменной как есть", () => {
-		expect(interpolate("Привет, {name}!", {})).toBe("Привет, {name}!");
+	it("leaves a placeholder without a variable as-is", () => {
+		expect(interpolate("Hello, {name}!", {})).toBe("Hello, {name}!");
 	});
 
-	it("без переменных возвращает строку без изменений", () => {
-		expect(interpolate("Просто текст")).toBe("Просто текст");
+	it("without variables returns the string unchanged", () => {
+		expect(interpolate("Plain text")).toBe("Plain text");
 	});
 });
 
-describe("персист локали", () => {
-	it("initLocale читает сохранённый выбор", () => {
+describe("locale persistence", () => {
+	it("initLocale reads the saved choice", () => {
 		const { store } = stubStorage();
 		store["locale"] = "en";
 		initLocale();
 		expect(getLocale()).toBe("en");
 	});
 
-	it("initLocale игнорирует мусор в хранилище", () => {
+	it("initLocale ignores garbage in the storage", () => {
 		const { store } = stubStorage();
 		store["locale"] = "fr";
 		initLocale();
 		expect(getLocale()).toBe("ru");
 	});
 
-	it("setLocale сохраняет выбор в localStorage", () => {
+	it("setLocale saves the choice to localStorage", () => {
 		const { store } = stubStorage();
 		initLocale();
 		setLocale("en");

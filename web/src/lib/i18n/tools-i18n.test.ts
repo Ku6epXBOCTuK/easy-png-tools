@@ -31,35 +31,35 @@ function selectOptions(
 	return result;
 }
 
-describe("полнота словарей для нового registry", () => {
-	it("у каждой страницы есть перевод ru с непустыми title/description", () => {
+describe("dictionary completeness for the new registry", () => {
+	it("every page has an ru translation with non-empty title/description", () => {
 		for (const page of PAGES) {
 			const strings = ru.pages?.[page.slug];
-			expect(strings, `нет перевода ru для ${page.slug}`).toBeDefined();
+			expect(strings, `no ru translation for ${page.slug}`).toBeDefined();
 			expect(strings?.title, `${page.slug}: title`).toBeTruthy();
 			expect(strings?.description, `${page.slug}: description`).toBeTruthy();
 		}
 	});
 
-	it("каждый label-ключ поля схемы переведён в fields обоих словарей", () => {
+	it("every schema field label key is translated in fields of both dictionaries", () => {
 		for (const tool of TOOLS) {
 			for (const key of toolKeys(tool).fields) {
-				expect(en.fields?.[key], `${tool.id}: ${key} в en`).toBeTruthy();
-				expect(ru.fields?.[key], `${tool.id}: ${key} в ru`).toBeTruthy();
+				expect(en.fields?.[key], `${tool.id}: ${key} in en`).toBeTruthy();
+				expect(ru.fields?.[key], `${tool.id}: ${key} in ru`).toBeTruthy();
 			}
 		}
 	});
 
-	it("каждый groups-ключ схемы переведён в groups обоих словарей", () => {
+	it("every schema groups key is translated in groups of both dictionaries", () => {
 		for (const tool of TOOLS) {
 			for (const key of toolKeys(tool).groups) {
-				expect(en.groups?.[key], `${tool.id}: ${key} в en`).toBeTruthy();
-				expect(ru.groups?.[key], `${tool.id}: ${key} в ru`).toBeTruthy();
+				expect(en.groups?.[key], `${tool.id}: ${key} in en`).toBeTruthy();
+				expect(ru.groups?.[key], `${tool.id}: ${key} in ru`).toBeTruthy();
 			}
 		}
 	});
 
-	it("все active select options переведены в en и ru", () => {
+	it("all active select options are translated in en and ru", () => {
 		for (const tool of TOOLS) {
 			for (const { fieldId, option } of selectOptions(tool)) {
 				if (fieldId === "component") continue;
@@ -75,33 +75,31 @@ describe("полнота словарей для нового registry", () => {
 		}
 	});
 
-	it("в секции pages нет лишних страниц", () => {
+	it("the pages section has no extra pages", () => {
 		const slugs = new Set(PAGES.map((page) => page.slug));
 		for (const [locale, dict] of [
 			["ru", ru],
 			["en", en],
 		] as const) {
 			for (const key of Object.keys(dict.pages ?? {})) {
-				expect(slugs.has(key), `лишняя страница в ${locale}: ${key}`).toBe(
-					true,
-				);
+				expect(slugs.has(key), `extra page in ${locale}: ${key}`).toBe(true);
 			}
 		}
 	});
 
-	it("в словарях нет ключей без записи в реестре", () => {
+	it("dictionaries have no keys without a registry entry", () => {
 		const known = new Set([
 			...TOOLS.map((tool) => tool.id),
 			...PAGES.map((page) => page.slug),
 		]);
 		for (const dict of [ru.tools, en.tools]) {
 			for (const key of Object.keys(dict)) {
-				expect(known.has(key), `лишний ключ в словаре: ${key}`).toBe(true);
+				expect(known.has(key), `extra dictionary key: ${key}`).toBe(true);
 			}
 		}
 	});
 
-	it("в fields и groups нет ключей, не используемых схемами", () => {
+	it("fields and groups have no keys unused by schemas", () => {
 		const usedFields = new Set<string>();
 		const usedGroups = new Set<string>();
 		for (const tool of TOOLS) {
@@ -111,10 +109,10 @@ describe("полнота словарей для нового registry", () => {
 		}
 		for (const dict of [en, ru]) {
 			for (const key of Object.keys(dict.fields ?? {})) {
-				expect(usedFields.has(key), `лишний fields-ключ: ${key}`).toBe(true);
+				expect(usedFields.has(key), `extra fields key: ${key}`).toBe(true);
 			}
 			for (const key of Object.keys(dict.groups ?? {})) {
-				expect(usedGroups.has(key), `лишний groups-ключ: ${key}`).toBe(true);
+				expect(usedGroups.has(key), `extra groups key: ${key}`).toBe(true);
 			}
 		}
 	});

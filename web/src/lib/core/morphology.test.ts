@@ -34,7 +34,7 @@ function toRows(mask: Uint8Array, w: number): string[] {
 }
 
 describe("dilateMask", () => {
-	it("одиночный пиксель r=1 превращается в плюс", () => {
+	it("single pixel r=1 becomes a plus", () => {
 		const out = dilateMask(
 			maskFrom([".....", ".....", "..#..", ".....", "....."]),
 			5,
@@ -50,7 +50,7 @@ describe("dilateMask", () => {
 		]);
 	});
 
-	it("r=2 даёт ромб радиуса 2", () => {
+	it("r=2 yields diamond of radius 2", () => {
 		const out = dilateMask(
 			maskFrom([".....", ".....", "..#..", ".....", "....."]),
 			5,
@@ -68,12 +68,12 @@ describe("dilateMask", () => {
 });
 
 describe("erodeMask", () => {
-	it("сплошной объект во весь кадр не сжимается от границ", () => {
+	it("full-frame solid object not shrunk from borders", () => {
 		const solid = maskFrom(["#####", "#####", "#####", "#####", "#####"]);
 		expect([...erodeMask(solid, 5, 5, 1)]).toEqual([...solid]);
 	});
 
-	it("изолированный пиксель исчезает", () => {
+	it("isolated pixel vanishes", () => {
 		const out = erodeMask(
 			maskFrom([".....", ".....", "..#..", ".....", "....."]),
 			5,
@@ -84,8 +84,8 @@ describe("erodeMask", () => {
 	});
 });
 
-describe("opening/closing образы", () => {
-	it("opening убирает отстоящий мусорный пиксель и сохраняет блок", () => {
+describe("opening/closing images", () => {
+	it("opening removes stray noise pixel and keeps block", () => {
 		const B = [10, 10, 10, 255];
 		const T = [0, 0, 0, 0];
 		const S = [200, 200, 200, 255];
@@ -99,7 +99,7 @@ describe("opening/closing образы", () => {
 		expect(at(4, 1)).toBe(0);
 	});
 
-	it("closing заполняет одиночную прозрачную дыру чёрным", () => {
+	it("closing fills single transparent hole with black", () => {
 		const pixels: number[][] = [];
 		for (let y = 0; y < 3; y++) {
 			for (let x = 0; x < 3; x++) {
@@ -112,8 +112,8 @@ describe("opening/closing образы", () => {
 	});
 });
 
-describe("image-обёртки", () => {
-	it("dilateImage сохраняет RGB содержимого, новые пиксели непрозрачны", () => {
+describe("image wrappers", () => {
+	it("dilateImage keeps content RGB, new pixels opaque", () => {
 		const T = [0, 0, 0, 0];
 		const O = [200, 50, 25, 255];
 		const img = makeImage(5, 2, [T, O, T, T, T, T, T, T, T, T]);
@@ -132,7 +132,7 @@ describe("image-обёртки", () => {
 		expect(at(4, 0)[3]).toBe(0);
 	});
 
-	it("erodeImage не стирает объект у края кадра", () => {
+	it("erodeImage does not erase object at frame edge", () => {
 		const img = makeImage(2, 2, [
 			[10, 20, 30, 255],
 			[10, 20, 30, 255],
@@ -147,7 +147,7 @@ describe("image-обёртки", () => {
 });
 
 describe("strokeImage", () => {
-	it("кольцо цвета обводки вокруг квадрата", () => {
+	it("ring of stroke color around square", () => {
 		const pixels: number[][] = [];
 		for (let y = 0; y < 7; y++) {
 			for (let x = 0; x < 7; x++) {
@@ -169,7 +169,7 @@ describe("strokeImage", () => {
 });
 
 describe("contourImage", () => {
-	it("линия по краю квадрата, центр прозрачен", () => {
+	it("line along square edge, center transparent", () => {
 		const pixels: number[][] = [];
 		for (let y = 0; y < 7; y++) {
 			for (let x = 0; x < 7; x++) {

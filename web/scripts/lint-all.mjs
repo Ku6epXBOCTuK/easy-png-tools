@@ -20,26 +20,10 @@ const bins = {
 	checkTokens: fileURLToPath(new URL("check-tokens.mjs", import.meta.url)),
 };
 
-// Warn-only rules with a non-zero baseline stay out of the gate until the
-// cleanup lands (docs/backlog.md, tests-and-lint section): they nag in
-// `pnpm lint` and editors, but --max-warnings=0 would make the gate red.
-// After the cleanup the overrides are removed and the rules become errors.
-const pendingCleanupOverrides = [
-	"conventions/ascii-only",
-	"conventions/comments-english",
-	"conventions/comment-format",
-].flatMap((rule) => ["--rule", `${rule}: off`]);
-
 const steps = [
 	{
 		name: "ESLint (svelte) + design-tokens rules",
-		args: [
-			bins.eslint,
-			...colorFlag,
-			"--max-warnings=0",
-			...pendingCleanupOverrides,
-			".",
-		],
+		args: [bins.eslint, ...colorFlag, "--max-warnings=0", "."],
 	},
 	{
 		name: "Stylelint (css) — design-token style",

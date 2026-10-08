@@ -33,8 +33,8 @@ function px(
 	] as const;
 }
 
-describe("Смоук §5 wave3", () => {
-	it("1. Наклон X/Y по отдельности и вместе искажает форму без чёрных полос", () => {
+describe("Smoke wave3 (sec. 5)", () => {
+	it("1. Skew X/Y separately and together distorts shape without black bands", () => {
 		const img = solid(20, 20, [200, 30, 30, 255]);
 		for (const [dx, dy] of [
 			[15, 0],
@@ -55,7 +55,7 @@ describe("Смоук §5 wave3", () => {
 		}
 	});
 
-	it("2. Поворот 30°: холст вырос, углы прозрачны, центр на месте", () => {
+	it("2. Rotate 30 deg: canvas grew, corners transparent, center in place", () => {
 		const img = solid(100, 100, [255, 0, 0, 255]);
 		const out = rotateFreeImage(img, 30);
 		expect(out.width).toBe(136);
@@ -67,7 +67,7 @@ describe("Смоук §5 wave3", () => {
 		expect(px(out, 67, 67)).toEqual([255, 0, 0, 255]);
 	});
 
-	it("3. Зум 200%: холст прежний, центр совпадает, края обрезаны", () => {
+	it("3. Zoom 200%: canvas same, center matches, edges cropped", () => {
 		const grad = makeImage(
 			11,
 			11,
@@ -88,14 +88,14 @@ describe("Смоук §5 wave3", () => {
 		expect([...px(out, 5, 5)]).toEqual([...px(grad, 5, 5)]);
 	});
 
-	it("4. Сдвиг уводит содержимое за край, противоположный край залит фоном", () => {
+	it("4. Shift moves content off edge, opposite edge filled with background", () => {
 		const img = solid(4, 4, [0, 0, 255, 255]);
 		const out = transformImage(img, [1, 0, 0, 1, -2, 0], 4, 4, "#ffffff");
 		expect(px(out, 0, 0)).toEqual([255, 255, 255, 255]);
 		expect(px(out, 3, 0)).toEqual([0, 0, 255, 255]);
 	});
 
-	it("5. Гамма: 1 — без изменений, 0.5 темнее, 2 светлее", () => {
+	it("5. Gamma: 1 - unchanged, 0.5 darker, 2 lighter", () => {
 		const img = solid(3, 3, [128, 128, 128, 255]);
 		const id = gammaCorrection(img, 1);
 		expect([...id.data]).toEqual([...img.data]);
@@ -105,7 +105,7 @@ describe("Смоук §5 wave3", () => {
 		expect(light).toBeGreaterThan(128);
 	});
 
-	it("6. Автоконтраст вытягивает тусклый диапазон", () => {
+	it("6. Auto contrast stretches dim range", () => {
 		const dim = makeImage(2, 2, new Array(4).fill([50, 55, 45, 255]));
 		dim.data[0] = 40;
 		const out = autoContrast(dim);
@@ -116,7 +116,7 @@ describe("Смоук §5 wave3", () => {
 		expect(Math.min(...values)).toBeLessThanOrEqual(1);
 	});
 
-	it("7. Температура ±50 теплеет/холодеет заметно", () => {
+	it("7. Temperature +/-50 warms/cools noticeably", () => {
 		const img = solid(2, 2, [128, 128, 128, 255]);
 		const warm = px(temperature(img, 50), 0, 0);
 		const cool = px(temperature(img, -50), 0, 0);
@@ -124,7 +124,7 @@ describe("Смоук §5 wave3", () => {
 		expect(warm[2]).toBeLessThan(cool[2]);
 	});
 
-	it("8. Тонирование красным: белое окрашивается сильнее серого", () => {
+	it("8. Red tint: white tinted stronger than gray", () => {
 		const img = makeImage(2, 1, [
 			[255, 255, 255, 255],
 			[128, 128, 128, 255],
@@ -136,7 +136,7 @@ describe("Смоук §5 wave3", () => {
 		expect(gray[0]).toBeGreaterThan(gray[2]);
 	});
 
-	it("9. Виньетка: сила 0 — идентичность, центр не темнеет, углы темнеют", () => {
+	it("9. Vignette: strength 0 - identity, center not darkened, corners darkened", () => {
 		const img = solid(21, 21, [200, 200, 200, 255]);
 		expect([...vignette(img, 0).data]).toEqual([...img.data]);
 		const out = vignette(img, 60);

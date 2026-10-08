@@ -16,19 +16,19 @@ export function isLocale(value: unknown): value is Locale {
 	);
 }
 
-/** Тексты страницы (`pages.<slug>`): адрес, имя файла и иконка — по slug. */
+/** Page strings (`pages.<slug>`): title and description keyed by slug. */
 export type PageStrings = {
 	title?: string;
 	description?: string;
 };
 
-/** Тексты инструмента (`tools.<id>`): подписи полей, verdict-ключи. */
+/** Tool strings (`tools.<id>`): field labels, verdict keys. */
 export type ToolStrings = {
-	/** Подписи параметров по их id. */
+	/** Param labels by param id. */
 	params?: Record<string, string>;
-	/** Подписи опций select: paramId -> value -> label. */
+	/** Select option labels: paramId -> value -> label. */
 	options?: Record<string, Record<string, string>>;
-	/** Тексты-результаты текстовых инструментов (analyze): ключ -> строка. */
+	/** Result strings of text tools (analyze): key -> string. */
 	results?: Record<string, string>;
 };
 
@@ -59,15 +59,15 @@ export type Dict = {
 	search: Record<string, string>;
 	ui: Record<string, string>;
 	errors: Record<string, string>;
-	/** Заголовки и описания страниц; в базовой локали их нет — берётся EN из реестра. */
+	/** Page titles/descriptions; absent in the base locale, EN from the registry is used. */
 	pages?: Record<string, PageStrings>;
 	tools: Record<string, ToolStrings>;
-	/** Действия панели результата/генерации (Generate, Open image…). */
+	/** Result/generation panel actions (Generate, Open image...). */
 	actions?: Record<string, string>;
-	/** Поля ввода текста нового UI (placeholder, Try sample…). */
+	/** Text input fields of the new UI (placeholder, Try sample...). */
 	textSource?: Record<string, string>;
-	/** Подписи полей по ключу (решение C: label-ключ на поле). */
+	/** Field labels by key (decision C: label key on the field). */
 	fields?: Record<string, string>;
-	/** Заголовки групп полей по ключу (решение A). */
+	/** Field group titles by key (decision A). */
 	groups?: Record<string, string>;
 };

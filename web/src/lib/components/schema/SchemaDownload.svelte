@@ -39,8 +39,8 @@
 	let root = $state<HTMLDivElement | null>(null);
 
 	function choose(mime: OutputMime) {
-		// Меню — ещё и панель настроек формата: не закрываем при выборе,
-		// чтобы можно было сразу настроить качество.
+		// Menu doubles as a format-settings panel: keep it open on select
+		// so quality can be tuned right away.
 		onformat(mime);
 	}
 

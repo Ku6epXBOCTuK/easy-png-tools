@@ -1,6 +1,6 @@
 /**
- * Публичный URL сайта для canonical/OG (абсолютные URL, включая base-path
- * GitHub Pages). После покупки домена меняется здесь — `docs/plan-seo.md` §6.
- * Внимание: `$app/paths.base` для этого не подходит — он относительный.
+ * Public site URL for canonical/OG (absolute URLs including the GitHub Pages
+ * base path). After the domain purchase, change it here; `docs/plan-seo.md` section 6.
+ * Note: `$app/paths.base` does not work for this; it is relative.
  */
 export const SITE_URL = "https://ku6epxboctuk.github.io/easy-png-tools";
