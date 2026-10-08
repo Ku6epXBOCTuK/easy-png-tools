@@ -112,6 +112,8 @@ export const ru: Dict = {
 		downloadFormat: "Скачать {format}",
 		formatAria: "Выбор формата скачивания",
 		alphaLoss: "В результате есть прозрачность — {format} её уберёт",
+		sizeLimitKb: "Лимит, КБ",
+		sizeLimitBmp: "Лимит размера не действует на BMP — он всегда несжатый",
 	},
 	textSource: {
 		placeholder: "Вставьте base64 / hex / байты…",

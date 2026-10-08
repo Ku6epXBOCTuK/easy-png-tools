@@ -34,6 +34,7 @@
 		ontogglealign?: () => void;
 		format?: OutputMime;
 		quality?: number;
+		limitKb?: number;
 		alphaLoss?: boolean;
 		onupload: (file: File) => void;
 		ontextsource?: (text: string) => void;
@@ -43,6 +44,7 @@
 		ondownload: () => void;
 		onformat?: (mime: OutputMime) => void;
 		onquality?: (value: number) => void;
+		onlimit?: (kb: number | undefined) => void;
 	}
 	let {
 		inputMode,
@@ -62,6 +64,7 @@
 		ontogglealign,
 		format = "image/png",
 		quality = undefined,
+		limitKb = undefined,
 		alphaLoss = false,
 		onupload,
 		ontextsource,
@@ -71,6 +74,7 @@
 		ondownload,
 		onformat,
 		onquality,
+		onlimit,
 	}: Props = $props();
 
 	const hasResult = $derived(
@@ -97,11 +101,13 @@
 		{running}
 		{format}
 		{quality}
+		{limitKb}
 		{alphaLoss}
 		{onupload}
 		{ondownload}
 		{onformat}
 		{onquality}
+		{onlimit}
 	/>
 </div>
 

@@ -111,6 +111,9 @@ export const en: Dict = {
 		downloadFormat: "Download {format}",
 		formatAria: "Choose download format",
 		alphaLoss: "Result has transparency — {format} will flatten it",
+		sizeLimitKb: "Max size, KB",
+		sizeLimitBmp:
+			"Size limit does not apply to BMP — it is always uncompressed",
 	},
 	textSource: {
 		placeholder: "Paste base64 / hex / bytes…",

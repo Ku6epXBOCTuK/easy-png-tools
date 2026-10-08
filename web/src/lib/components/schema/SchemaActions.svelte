@@ -14,11 +14,13 @@
 		running: boolean;
 		format?: OutputMime;
 		quality?: number;
+		limitKb?: number;
 		alphaLoss?: boolean;
 		onupload: (file: File) => void;
 		ondownload: () => void;
 		onformat?: (mime: OutputMime) => void;
 		onquality?: (value: number) => void;
+		onlimit?: (kb: number | undefined) => void;
 	}
 	let {
 		inputMode,
@@ -27,11 +29,13 @@
 		running,
 		format = "image/png",
 		quality = undefined,
+		limitKb = undefined,
 		alphaLoss = false,
 		onupload,
 		ondownload,
 		onformat,
 		onquality,
+		onlimit,
 	}: Props = $props();
 </script>
 
@@ -43,10 +47,12 @@
 		<SchemaDownload
 			{format}
 			{quality}
+			{limitKb}
 			{running}
 			{ondownload}
 			onformat={(v) => onformat?.(v)}
 			onquality={(v) => onquality?.(v)}
+			onlimit={(v) => onlimit?.(v)}
 		/>
 	{:else if canDownload && resultKind === "files"}
 		<DownloadButton

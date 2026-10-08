@@ -13,13 +13,23 @@
 	interface Props {
 		format: OutputMime;
 		quality?: number;
+		limitKb?: number;
 		running: boolean;
 		ondownload: () => void;
 		onformat: (mime: OutputMime) => void;
 		onquality: (value: number) => void;
+		onlimit: (kb: number | undefined) => void;
 	}
-	let { format, quality, running, ondownload, onformat, onquality }: Props =
-		$props();
+	let {
+		format,
+		quality,
+		limitKb,
+		running,
+		ondownload,
+		onformat,
+		onquality,
+		onlimit,
+	}: Props = $props();
 
 	const current = $derived(outputFormatByMime(format));
 	const qualitySetting = $derived(current.settings?.quality);
@@ -42,6 +52,11 @@
 		// Menu doubles as a format-settings panel: keep it open on select
 		// so quality can be tuned right away.
 		onformat(mime);
+	}
+
+	function handleLimit(e: Event) {
+		const raw = (e.target as HTMLInputElement).valueAsNumber;
+		onlimit(Number.isFinite(raw) && raw >= 1 ? Math.round(raw) : undefined);
 	}
 
 	$effect(() => {
@@ -110,6 +125,24 @@
 					/>
 				</div>
 			{/if}
+			<div class="limit">
+				<label class="limit-field">
+					<span>{t("actions.sizeLimitKb")}</span>
+					<input
+						type="number"
+						min="1"
+						step="1"
+						placeholder="∞"
+						value={limitKb ?? ""}
+						oninput={handleLimit}
+					/>
+				</label>
+				{#if limitKb !== undefined && format === "image/bmp"}
+					<p class="limit-warn" role="status">
+						{t("actions.sizeLimitBmp")}
+					</p>
+				{/if}
+			</div>
 		</div>
 	{/if}
 </div>
@@ -182,5 +215,38 @@
 	.quality {
 		padding-top: var(--space-m);
 		border-top: var(--size-border) solid var(--color-border);
+	}
+	.limit {
+		padding-top: var(--space-m);
+		border-top: var(--size-border) solid var(--color-border);
+	}
+	.limit-field {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-m);
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+	}
+	.limit-field input {
+		width: calc(var(--space-xxxl) * 3);
+		padding: var(--space-m) var(--space-l);
+		background: var(--color-background);
+		border: var(--size-border) solid var(--color-border);
+		border-radius: var(--radius-s);
+		color: var(--color-text);
+		font: var(--font-size-m) var(--font-mono);
+		text-align: center;
+		appearance: textfield;
+	}
+	.limit-field input::-webkit-outer-spin-button,
+	.limit-field input::-webkit-inner-spin-button {
+		appearance: none;
+		margin: 0;
+	}
+	.limit-warn {
+		margin: var(--space-m) 0 0;
+		color: var(--color-warning);
+		font: var(--font-size-s) var(--font-mono);
 	}
 </style>

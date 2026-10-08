@@ -44,3 +44,39 @@ export async function findMaxColorsWithin(
 	void fitsAtTwo;
 	return ok;
 }
+
+/**
+ * Binary search for the highest quality percent in [min..max] whose encoded
+ * size fits targetBytes. If even min does not fit, returns min (best effort).
+ * encodeSize may return null (encode error), treated as "does not fit".
+ */
+export async function findQualityWithin(
+	targetBytes: number,
+	encodeSize: (quality: number) => Promise<number | null>,
+	min = 1,
+	max = 100,
+): Promise<number> {
+	const lo = Math.max(1, Math.round(min));
+	const hi = Math.max(lo, Math.round(max));
+	let ok = lo;
+	const probe = async (q: number): Promise<boolean> => {
+		const size = await encodeSize(Math.max(lo, Math.min(hi, q)));
+		if (size === null) return false;
+		if (size <= targetBytes) {
+			ok = q;
+			return true;
+		}
+		return false;
+	};
+
+	if (!(await probe(lo))) return lo;
+	if (await probe(hi)) return hi;
+	let a = lo;
+	let b = hi;
+	while (b - a > 1) {
+		const mid = Math.floor((a + b) / 2);
+		if (await probe(mid)) a = mid;
+		else b = mid;
+	}
+	return ok;
+}

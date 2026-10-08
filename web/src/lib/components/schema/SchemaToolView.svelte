@@ -10,6 +10,7 @@
 		decodeFile,
 		downloadBlob,
 		encode,
+		fitWithinBytes,
 		outputFormatByMime,
 		toDataUrl,
 		type OutputMime,
@@ -98,6 +99,8 @@
 	let format = $state<OutputMime>("image/png");
 	// Lossy-format quality for tools without a quality param in the schema.
 	let formatQuality = $state<Record<string, number>>({});
+	// Optional download size limit (KB); undefined = no limit.
+	let limitKb = $state<number | undefined>(undefined);
 	let dragFrom = $state<number | null>(null);
 
 	const lastTool = $derived(
@@ -174,6 +177,7 @@
 		initedFor = page.slug;
 		steps = loadChain(page.slug) ?? createChain(page);
 		format = lastTool.output?.mime ?? "image/png";
+		limitKb = undefined;
 		source = null;
 		result = null;
 		fileResult = null;
@@ -397,7 +401,9 @@
 			const out = outputFormatByMime(format);
 			const quality =
 				currentQuality !== undefined ? currentQuality / 100 : undefined;
-			const blob = await encode(result, out.mime, quality);
+			const blob = limitKb
+				? await fitWithinBytes(result, out.mime, limitKb * 1024, quality)
+				: await encode(result, out.mime, quality);
 			downloadBlob(blob, `${page.slug}.${out.ext}`);
 		} catch (e) {
 			displayError = toDisplayError(e);
@@ -569,12 +575,14 @@
 						error={errorText}
 						{format}
 						quality={currentQuality}
+						{limitKb}
 						{alphaLoss}
 						{stepResults}
 						{aligned}
 						ontogglealign={() => (aligned = !aligned)}
 						onformat={(v) => (format = v)}
 						onquality={setFormatQuality}
+						onlimit={(v) => (limitKb = v)}
 						onupload={handleFile}
 						ontextsource={(textValue) => {
 							textSource = textValue;
@@ -603,11 +611,13 @@
 							{running}
 							{format}
 							quality={currentQuality}
+							{limitKb}
 							{alphaLoss}
 							onupload={handleFile}
 							ondownload={download}
 							onformat={(v) => (format = v)}
 							onquality={setFormatQuality}
+							onlimit={(v) => (limitKb = v)}
 						/>
 					</div>
 				</div>

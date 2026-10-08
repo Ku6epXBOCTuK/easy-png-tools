@@ -1,5 +1,7 @@
 import { encodeBmpBytes } from "./bmp";
+import { findMaxColorsWithin, findQualityWithin } from "./compress";
 import { ToolError } from "./errors";
+import { quantizeImage } from "./quantize";
 import { type PixelImage } from "./types";
 
 export type OutputMime =
@@ -179,6 +181,32 @@ function canvasToBlob(
 			quality,
 		);
 	});
+}
+
+/**
+ * Encodes img to fit targetBytes: binary search over quality for lossy
+ * formats, over quantization colors for PNG. BMP has no compression knobs --
+ * returned as-is (the caller warns the user the limit does not apply).
+ */
+export async function fitWithinBytes(
+	img: PixelImage,
+	mime: OutputMime,
+	targetBytes: number,
+	quality?: number,
+): Promise<Blob> {
+	if (mime === "image/bmp") return encode(img, mime);
+	const initial = await encode(img, mime, quality);
+	if (initial.size <= targetBytes) return initial;
+	if (mime === "image/png") {
+		const encodeSize = async (k: number) =>
+			(await encode(quantizeImage(img, k).image, mime)).size;
+		const k = await findMaxColorsWithin(targetBytes, 256, encodeSize);
+		return encode(quantizeImage(img, k).image, mime);
+	}
+	const encodeSize = async (q: number) =>
+		(await encode(img, mime, q / 100)).size;
+	const q = await findQualityWithin(targetBytes, encodeSize);
+	return encode(img, mime, q / 100);
 }
 
 export function downloadBlob(blob: Blob, filename: string): void {
