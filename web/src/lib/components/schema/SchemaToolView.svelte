@@ -275,6 +275,10 @@
 		verdictVars = undefined;
 		displayError = null;
 		maskOnKeys.clear();
+		// Marks are keyed by step.key from the previous host; keep them and
+		// stale keys leak into the new chain's fields.
+		touchedByStep.clear();
+		for (const k of Object.keys(lastAxis)) delete lastAxis[k];
 	}
 
 	function setStepValue(
