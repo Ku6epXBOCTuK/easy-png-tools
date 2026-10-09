@@ -35,17 +35,12 @@
 `schema-tool-state.svelte.ts` (стейт шагов), `AlignedLayout.svelte` /
 `WorkspaceLayout.svelte`.
 
-### H2. Race condition превью: устаревший ответ worker'а перезаписывает новый
+### H2. Race condition превью — СДЕЛАНО (2026-10)
 
-`SchemaToolView.svelte:430-465` (`run()`) + эффект :567-575. Debounce (:199)
-отменяет только запланированный запуск; уже летящий `runChain` не отменяется и
-нет generation-токена: при смене параметров во время долгого worker-прогона
-старый результат перезапишет новый (`assignResult` без проверки актуальности).
-Сам executor с request-id корректен (`executor/executor.ts:45-96`) — проблема на
-уровне UI. Пользователь видит превью не от своих параметров.
-
-Минимальный фикс:
-`let runGen = 0; const gen = ++runGen; ... if (gen !== runGen) return;`.
+`SchemaToolView.svelte`: добавлен generation-counter `runGen`; устаревший прогон
+`runChain` после `await` выходит без записи результатов, ошибок и сброса
+`running` (`finally` сбрасывает только актуальный); `init()` инкрементом
+инвалидирует прогоны прошлого хоста.
 
 ### H3. `registry-schema.ts` — 723 строки, 45 экспортов, 5 ответственностей
 

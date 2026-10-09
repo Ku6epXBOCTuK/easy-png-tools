@@ -122,6 +122,9 @@
 		undefined,
 	);
 	let running = $state(false);
+	// Generation of the latest run(): a stale in-flight chain (params changed
+	// while the worker was busy) must not overwrite newer results.
+	let runGen = 0;
 	let displayError = $state<DisplayError | null>(null);
 	let sourceWarnings = $state<ChainWarning[]>([]);
 	let runWarnings = $state<ChainWarning[]>([]);
@@ -220,6 +223,8 @@
 		const host = chainId ? `chain:${chainId}` : page.slug;
 		if (host === initedFor) return;
 		initedFor = host;
+		// Invalidate any in-flight run from the previous host.
+		runGen++;
 		if (chainId) {
 			const handoff = takeHandoff(chainId);
 			steps = getChain(chainId)?.steps ?? createChain(page);
@@ -429,6 +434,7 @@
 
 	async function run() {
 		if (!schema || steps.length === 0) return;
+		const gen = ++runGen;
 		displayError = null;
 		running = true;
 		try {
@@ -439,12 +445,14 @@
 						? [{ name: `${baseName(page.slug)}.png`, image: source }]
 						: [];
 			const r = await runChain(steps, input, textSource || undefined, execute);
+			if (gen !== runGen) return;
 			stepDims = r.stepDims;
 			stepResults = r.stepResults;
 			stepFileSets = r.stepFileSets;
 			runWarnings = r.warnings;
 			assignResult(r.out);
 		} catch (e) {
+			if (gen !== runGen) return;
 			if (e instanceof ChainStepError) {
 				const base = toDisplayError(e.cause);
 				const msg = base.kind === "i18n" ? t(base.key, base.vars) : base.text;
@@ -460,7 +468,7 @@
 				displayError = toDisplayError(e);
 			}
 		} finally {
-			running = false;
+			if (gen === runGen) running = false;
 		}
 	}
 
