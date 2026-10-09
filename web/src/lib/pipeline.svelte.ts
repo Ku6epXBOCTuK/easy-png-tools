@@ -14,14 +14,12 @@ function uid(): string {
 	return crypto.randomUUID();
 }
 
-/** Tool can be inserted mid-chain: it accepts and returns an image. */
+/** Tool can be inserted mid-chain: image in, one or many images out. */
 export function isChainable(toolId: string): boolean {
 	const tool = getTool(toolId);
-	return (
-		tool !== undefined &&
-		tool.input === "image" &&
-		(tool.result ?? "image") === "image"
-	);
+	if (!tool || tool.input !== "image") return false;
+	const kind = tool.result ?? "image";
+	return kind === "image" || kind === "files";
 }
 
 /** Pages whose tools can be added as steps (for the picker). */

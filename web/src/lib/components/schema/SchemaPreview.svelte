@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { hasPreviewResult } from "./schema-preview-model";
 	import SchemaActions from "./SchemaActions.svelte";
+	import PartsGrid from "./PartsGrid.svelte";
 	import SchemaResultTile from "./SchemaResultTile.svelte";
 	import SchemaSourceTile from "./SchemaSourceTile.svelte";
 	import PreviewTile from "./PreviewTile.svelte";
@@ -15,6 +16,7 @@
 		InputMode,
 		ResultKind,
 		ResultNote,
+		ToolImageFile,
 	} from "$lib/registry";
 
 	interface Props {
@@ -22,6 +24,8 @@
 		resultKind?: ResultKind;
 		toolId: string;
 		source: PixelImage | null;
+		sources?: ToolImageFile[];
+		fileCount?: number;
 		result: PixelImage | null;
 		resultNote?: ResultNote | null;
 		fileResult?: FileResult | null;
@@ -34,6 +38,7 @@
 		running?: boolean;
 		error?: string;
 		stepResults?: (PixelImage | null)[];
+		stepFileSets?: ToolImageFile[][];
 		stepMaskable?: boolean[];
 		stepMaskOn?: boolean[];
 		stepMasks?: (PixelImage | null)[];
@@ -45,6 +50,7 @@
 		limitKb?: number;
 		alphaLoss?: boolean;
 		onupload: (file: File) => void;
+		onuploadmany?: (files: File[]) => void;
 		ontextsource?: (text: string) => void;
 		onrendertext?: () => void;
 		oncopytext?: () => void;
@@ -59,6 +65,8 @@
 		resultKind = "image",
 		toolId,
 		source,
+		sources = [],
+		fileCount = 0,
 		result,
 		resultNote = null,
 		fileResult = null,
@@ -71,6 +79,7 @@
 		running = false,
 		error = "",
 		stepResults = [],
+		stepFileSets = [],
 		stepMaskable = [],
 		stepMaskOn = [],
 		stepMasks = [],
@@ -82,6 +91,7 @@
 		limitKb = undefined,
 		alphaLoss = false,
 		onupload,
+		onuploadmany,
 		ontextsource,
 		onrendertext,
 		oncopytext,
@@ -134,14 +144,36 @@
 	<SchemaSourceTile
 		mode={inputMode}
 		{source}
+		{sources}
 		{textSource}
 		{running}
+		{fileCount}
 		ontextinput={ontextsource}
 		{onrendertext}
 		{onupload}
+		{onuploadmany}
 	/>
 	{#each stepResults.slice(0, -1) as img, i (i)}
-		{#if img}
+		{@const set = stepFileSets[i] ?? []}
+		{#if set.length > 1 && !stepMaskOn[i]}
+			<PreviewTile
+				label={t("chain.stepResult", { n: i + 1 })}
+				viewMode="image"
+				parts={set.length}
+				partsDims={`${set[0].image.width} × ${set[0].image.height}`}
+			>
+				{#snippet actions()}
+					{#if stepMaskable[i]}
+						<ChipButton
+							label={t("resultCard.maskToggle")}
+							active={stepMaskOn[i] ?? false}
+							onclick={() => ontogglestepmask?.(i)}
+						/>
+					{/if}
+				{/snippet}
+				<PartsGrid files={set} />
+			</PreviewTile>
+		{:else if img}
 			<PreviewTile
 				label={t("chain.stepResult", { n: i + 1 })}
 				viewMode="image"

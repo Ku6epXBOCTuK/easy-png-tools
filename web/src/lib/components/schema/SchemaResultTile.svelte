@@ -5,6 +5,7 @@
 	import type { FileResult, ResultKind, ResultNote } from "$lib/registry";
 	import { Check } from "@lucide/svelte";
 	import ChipButton from "$lib/components/ui/ChipButton.svelte";
+	import PartsGrid from "./PartsGrid.svelte";
 	import SchemaTextResult from "./SchemaTextResult.svelte";
 	import PreviewTile from "./PreviewTile.svelte";
 
@@ -46,14 +47,6 @@
 			? `${result.width} × ${result.height}`
 			: undefined,
 	);
-	const partUrls = $derived(
-		resultKind === "files" && fileResult
-			? fileResult.files.map((file) => ({
-					name: file.name,
-					url: toDataUrl(file.image),
-				}))
-			: [],
-	);
 
 	let parts = $derived(
 		resultKind === "files" && fileResult ? fileResult.files.length : undefined,
@@ -85,11 +78,7 @@
 			/>
 		{/if}
 	{/snippet}
-	<div
-		class="canvas"
-		class:checker={resultKind === "image"}
-		class:files={resultKind === "files"}
-	>
+	<div class="canvas" class:checker={resultKind === "image"}>
 		{#if resultKind === "text" && textResult}
 			<div class="text-result-wrap">
 				<SchemaTextResult
@@ -110,15 +99,8 @@
 					ondownload={ondownloadtxt ?? (() => {})}
 				/>
 			</div>
-		{:else if resultKind === "files" && partUrls.length > 0}
-			<div class="parts-grid">
-				{#each partUrls as part (part.name)}
-					<figure class="part">
-						<img src={part.url} alt={part.name} loading="lazy" />
-						<figcaption>{part.name}</figcaption>
-					</figure>
-				{/each}
-			</div>
+		{:else if resultKind === "files" && fileResult && fileResult.files.length > 0}
+			<PartsGrid files={fileResult.files} />
 		{:else if resultKind === "image" && resultUrl}
 			<img
 				data-testid="result-image"
@@ -166,50 +148,8 @@
 			)
 			50% / 28px 28px;
 	}
-	/* Сетка частей: без потолка 1024 плитки растягивали страницу бесконечно. */
-	.canvas.files {
-		max-height: 60vh;
-		align-items: flex-start;
-	}
 	.empty {
 		font: var(--font-size-s) var(--font-mono);
-	}
-	.parts-grid {
-		display: grid;
-		grid-template-columns: repeat(
-			auto-fill,
-			minmax(var(--size-parts-grid-min), 1fr)
-		);
-		gap: var(--space-m);
-		width: 100%;
-		height: 100%;
-		padding: var(--space-l);
-		box-sizing: border-box;
-		align-content: start;
-	}
-	.part {
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-s);
-	}
-	.part img {
-		width: 100%;
-		height: auto;
-		display: block;
-		border: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-s);
-		background: repeating-conic-gradient(
-				var(--color-checker-main) 0 25%,
-				var(--color-checker-alt) 0 50%
-			)
-			50% / 16px 16px;
-	}
-	.part figcaption {
-		font: var(--font-size-s) var(--font-mono);
-		color: var(--color-text-muted);
-		text-align: center;
-		overflow-wrap: anywhere;
 	}
 	.text-result-wrap {
 		width: 100%;

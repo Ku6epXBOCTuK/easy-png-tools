@@ -23,6 +23,13 @@
 	import type { PixelImage } from "$lib/core/types";
 	import { execute } from "$lib/executor";
 	import {
+		baseName,
+		ChainStepError,
+		runChain,
+		uniqueName,
+		type ChainWarning,
+	} from "$lib/run-chain";
+	import {
 		pageDescription,
 		pageTitle,
 		chainStepTitle,
@@ -51,6 +58,7 @@
 		type FileResult,
 		type Page,
 		type Tool,
+		type ToolImageFile,
 		type ToolResult,
 	} from "$lib/registry";
 	import {
@@ -66,6 +74,7 @@
 	import { SvelteMap, SvelteSet } from "svelte/reactivity";
 	import AddStepButton from "./AddStepButton.svelte";
 	import PreviewTile from "./PreviewTile.svelte";
+	import PartsGrid from "./PartsGrid.svelte";
 	import SchemaActions from "./SchemaActions.svelte";
 	import SchemaFields from "./SchemaFields.svelte";
 	import SchemaPreview from "./SchemaPreview.svelte";
@@ -98,8 +107,13 @@
 	const lastAxis: Record<string, "width" | "height"> = {};
 	let stepDims = $state<(Dimension | undefined)[]>([]);
 	let stepResults = $state<(PixelImage | null)[]>([]);
+	// Full named set per step (batch/fan-out); intermediate tiles show a grid.
+	let stepFileSets = $state<ToolImageFile[][]>([]);
 	let aligned = $state(false);
 	let source = $state<PixelImage | null>(null);
+	// The full named input set (multi-upload); `source` above is the first
+	// image for preview/defaults. Single upload = one element.
+	let sourceFiles = $state<ToolImageFile[]>([]);
 	let result = $state<PixelImage | null>(null);
 	let fileResult = $state<FileResult | null>(null);
 	let textSource = $state("");
@@ -109,6 +123,9 @@
 	);
 	let running = $state(false);
 	let displayError = $state<DisplayError | null>(null);
+	let sourceWarnings = $state<ChainWarning[]>([]);
+	let runWarnings = $state<ChainWarning[]>([]);
+	const allWarnings = $derived([...sourceWarnings, ...runWarnings]);
 	let initedFor = $state("");
 	let format = $state<OutputMime>("image/png");
 	// Lossy-format quality for tools without a quality param in the schema.
@@ -126,8 +143,13 @@
 			tool,
 	);
 	const resultKind = $derived(lastTool.result ?? "image");
-	// Chain can be extended only if the last step outputs an image.
-	const canExtend = $derived((lastTool.result ?? "image") === "image");
+	// Display kind follows the actual output: a batch run of an image tool
+	// produces a file set, not a single image.
+	const displayResultKind = $derived(fileResult ? "files" : resultKind);
+	// Chain can be extended while the last step outputs images (one or many).
+	const canExtend = $derived(
+		["image", "files"].includes(lastTool.result ?? "image"),
+	);
 	const alignedMode = $derived(
 		aligned && resultKind === "image" && steps.length > 1,
 	);
@@ -202,6 +224,11 @@
 			const handoff = takeHandoff(chainId);
 			steps = getChain(chainId)?.steps ?? createChain(page);
 			source = handoff?.source ?? null;
+			sourceFiles =
+				handoff?.sourceFiles ??
+				(handoff?.source
+					? [{ name: `${baseName(page.slug)}.png`, image: handoff.source }]
+					: []);
 			textSource = handoff?.textSource ?? "";
 			if (handoff?.format) format = handoff.format;
 			else format = lastTool.output?.mime ?? "image/png";
@@ -211,8 +238,12 @@
 			format = lastTool.output?.mime ?? "image/png";
 			limitKb = undefined;
 			source = null;
+			sourceFiles = [];
 			textSource = "";
 		}
+		sourceWarnings = [];
+		runWarnings = [];
+		stepFileSets = [];
 		result = null;
 		fileResult = null;
 		textResult = null;
@@ -321,42 +352,65 @@
 		dragFrom = null;
 	}
 
-	async function handleFile(file: File) {
+	async function handleFiles(files: File[]) {
 		displayError = null;
-		try {
-			const decoded = await decodeFile(file);
-			source = decoded;
-			const first = steps[0];
-			const firstSchema = first ? toolSchemaOf(first) : undefined;
-			if (first && firstSchema) {
-				steps = steps.with(0, {
-					...first,
-					params: clampSourceAwareMaxes(
-						firstSchema,
-						applySourceDefaults(
-							firstSchema,
-							first.params,
-							{ source: decoded },
-							touchedFor(first.key),
-						),
-						decoded,
-					),
-				});
+		sourceWarnings = [];
+		const decoded: ToolImageFile[] = [];
+		const usedNames = new SvelteSet<string>();
+		let skipped = 0;
+		for (const file of files) {
+			try {
+				const name = uniqueName(`${baseName(file.name)}.png`, usedNames);
+				usedNames.add(name);
+				decoded.push({ name, image: await decodeFile(file) });
+			} catch {
+				skipped++;
 			}
-		} catch (e) {
-			displayError = toDisplayError(e);
+		}
+		if (decoded.length === 0) {
+			displayError = toDisplayError(new ToolError("errors.imageDecode"));
+			return;
+		}
+		if (skipped > 0) {
+			sourceWarnings = [{ kind: "sourceSkip", skipped, total: files.length }];
+		}
+		const firstImage = decoded[0].image;
+		source = firstImage;
+		sourceFiles = decoded;
+		const first = steps[0];
+		const firstSchema = first ? toolSchemaOf(first) : undefined;
+		if (first && firstSchema) {
+			steps = steps.with(0, {
+				...first,
+				params: clampSourceAwareMaxes(
+					firstSchema,
+					applySourceDefaults(
+						firstSchema,
+						first.params,
+						{ source: firstImage },
+						touchedFor(first.key),
+					),
+					firstImage,
+				),
+			});
 		}
 	}
 
+	async function handleFile(file: File) {
+		await handleFiles([file]);
+	}
+
 	function assignResult(out: ToolResult) {
-		if (resultKind === "image") {
-			result = out as PixelImage;
-			textResult = null;
-			fileResult = null;
-		} else if (resultKind === "files") {
-			fileResult = out as FileResult;
+		if (typeof out === "object" && out !== null && "files" in out) {
+			fileResult = out;
 			result = null;
 			textResult = null;
+			verdictVars = undefined;
+		} else if (typeof out === "object" && out !== null && "data" in out) {
+			result = out as PixelImage;
+			fileResult = null;
+			textResult = null;
+			verdictVars = undefined;
 		} else {
 			if (typeof out === "string") {
 				textResult = out;
@@ -378,46 +432,33 @@
 		displayError = null;
 		running = true;
 		try {
-			let current: PixelImage | undefined = source ?? undefined;
-			const dims: (Dimension | undefined)[] = [];
-			const results: (PixelImage | null)[] = [];
-			let out: ToolResult = "";
-			for (let i = 0; i < steps.length; i++) {
-				const stepTool = getTool(steps[i].id);
-				if (!stepTool) continue;
-				try {
-					out = await execute(stepTool, {
-						params: steps[i].params,
-						source: stepTool.input === "image" ? current : undefined,
-						text:
-							stepTool.input === "text" ? textSource || undefined : undefined,
-					});
-				} catch (e) {
-					const base = toDisplayError(e);
-					const msg = base.kind === "i18n" ? t(base.key, base.vars) : base.text;
-					throw new Error(
-						t("toolPage.stepError", {
-							n: i + 1,
-							title: stepTitle(stepTool.id),
-							msg,
-						}),
-						{ cause: e },
-					);
-				}
-				if (out && typeof out === "object" && "data" in out) {
-					current = out as PixelImage;
-					dims[i] = { width: current.width, height: current.height };
-					results[i] = current;
-				} else {
-					current = undefined;
-					results[i] = null;
-				}
-			}
-			stepDims = dims;
-			stepResults = results;
-			assignResult(out);
+			const input =
+				sourceFiles.length > 0
+					? sourceFiles
+					: source
+						? [{ name: `${baseName(page.slug)}.png`, image: source }]
+						: [];
+			const r = await runChain(steps, input, textSource || undefined, execute);
+			stepDims = r.stepDims;
+			stepResults = r.stepResults;
+			stepFileSets = r.stepFileSets;
+			runWarnings = r.warnings;
+			assignResult(r.out);
 		} catch (e) {
-			displayError = toDisplayError(e);
+			if (e instanceof ChainStepError) {
+				const base = toDisplayError(e.cause);
+				const msg = base.kind === "i18n" ? t(base.key, base.vars) : base.text;
+				displayError = {
+					kind: "plain",
+					text: t("toolPage.stepError", {
+						n: e.stepIndex + 1,
+						title: stepTitle(e.toolId),
+						msg,
+					}),
+				};
+			} else {
+				displayError = toDisplayError(e);
+			}
 		} finally {
 			running = false;
 		}
@@ -428,8 +469,7 @@
 		running = true;
 		displayError = null;
 		try {
-			if (resultKind === "files") {
-				if (!fileResult) return;
+			if (fileResult) {
 				await downloadZip(fileResult.files, `${page.slug}.zip`);
 				return;
 			}
@@ -491,7 +531,13 @@
 		void steps;
 		if (isStructuralDefault(page, steps)) return;
 		const chain = createNamedChain(autoChainName(), steps);
-		stashHandoff(chain.id, { source, textSource, format, limitKb });
+		stashHandoff(chain.id, {
+			source,
+			sourceFiles,
+			textSource,
+			format,
+			limitKb,
+		});
 		goto(resolve(`/pipeline?id=${chain.id}`), {
 			replaceState: true,
 			keepFocus: true,
@@ -571,11 +617,31 @@
 		return { kind: "plain", text: String(e) };
 	}
 
+	function warningText(w: ChainWarning): string {
+		switch (w.kind) {
+			case "partial":
+				return t("chain.warnPartial", { n: w.step, ok: w.ok, total: w.total });
+			case "firstOnly":
+				return t("chain.warnFirstOnly", { n: w.step, total: w.total });
+			case "sourceSkip":
+				return t("chain.warnSourceSkip", {
+					skipped: w.skipped,
+					total: w.total,
+				});
+		}
+	}
+
 	// Explicit save for a structurally default chain (single tuned step): the
 	// auto-create effect only fires on structural change.
 	function saveAsChain() {
 		const chain = createNamedChain(autoChainName(), steps);
-		stashHandoff(chain.id, { source, textSource, format, limitKb });
+		stashHandoff(chain.id, {
+			source,
+			sourceFiles,
+			textSource,
+			format,
+			limitKb,
+		});
 		goto(resolve(`/pipeline?id=${chain.id}`), {
 			replaceState: true,
 			keepFocus: true,
@@ -688,6 +754,8 @@
 					<SchemaPreview
 						toolId={lastTool.id}
 						{source}
+						sources={sourceFiles}
+						fileCount={sourceFiles.length}
 						{result}
 						{resultNote}
 						{fileResult}
@@ -695,7 +763,7 @@
 						{textResult}
 						textVars={verdictVars}
 						{inputMode}
-						{resultKind}
+						resultKind={displayResultKind}
 						{running}
 						error={errorText}
 						{format}
@@ -703,6 +771,7 @@
 						{limitKb}
 						{alphaLoss}
 						{stepResults}
+						{stepFileSets}
 						{aligned}
 						{stepMaskable}
 						{stepMaskOn}
@@ -718,6 +787,7 @@
 						onquality={setFormatQuality}
 						onlimit={(v) => (limitKb = v)}
 						onupload={handleFile}
+						onuploadmany={handleFiles}
 						ontextsource={(textValue) => {
 							textSource = textValue;
 						}}
@@ -728,6 +798,9 @@
 					/>
 				</section>
 			</div>
+			{#each allWarnings as w (warningText(w))}
+				<p class="warn" role="status">{warningText(w)}</p>
+			{/each}
 		{:else}
 			<div class="aligned">
 				<div class="aligned-row">
@@ -740,7 +813,7 @@
 						</label>
 						<SchemaActions
 							{inputMode}
-							{resultKind}
+							resultKind={displayResultKind}
 							canDownload={result !== null}
 							{running}
 							{format}
@@ -758,6 +831,9 @@
 				{#if errorText}
 					<p class="error" role="alert">{errorText}</p>
 				{/if}
+				{#each allWarnings as w (warningText(w))}
+					<p class="warn" role="status">{warningText(w)}</p>
+				{/each}
 				{#if canExtend}
 					<div class="aligned-row">
 						<AddStepButton onadd={(id) => addStepAt(0, id)} />
@@ -782,19 +858,26 @@
 								<SchemaSourceTile
 									mode={inputMode}
 									{source}
+									sources={sourceFiles}
 									{textSource}
 									{running}
+									fileCount={sourceFiles.length}
 									ontextinput={(v) => (textSource = v)}
 									onrendertext={run}
 									onupload={handleFile}
+									onuploadmany={handleFiles}
 								/>
 							{:else}
+								{@const inSet = stepFileSets[i - 1] ?? []}
 								<PreviewTile
 									label={t("chain.inputLegend")}
 									viewMode="image"
 									dims={input ? `${input.width} × ${input.height}` : undefined}
+									parts={inSet.length > 1 ? inSet.length : undefined}
 								>
-									{#if input}
+									{#if inSet.length > 1}
+										<PartsGrid files={inSet} />
+									{:else if input}
 										<img src={toDataUrl(input)} alt="" />
 									{:else}
 										<span class="empty">{t("resultCard.noResult")}</span>
@@ -803,7 +886,7 @@
 							{/if}
 							{#if i === steps.length - 1}
 								<SchemaResultTile
-									{resultKind}
+									resultKind={displayResultKind}
 									result={out}
 									{resultNote}
 									{fileResult}
@@ -820,15 +903,19 @@
 									ondownloadtxt={downloadText}
 								/>
 							{:else}
+								{@const outSet = stepFileSets[i] ?? []}
 								<PreviewTile
 									label={t("chain.stepResult", { n: i + 1 })}
 									viewMode="image"
 									dims={out ? `${out.width} × ${out.height}` : undefined}
+									parts={outSet.length > 1 ? outSet.length : undefined}
 								>
 									{#snippet actions()}
 										{@render maskChip(i)}
 									{/snippet}
-									{#if out}
+									{#if outSet.length > 1 && !stepMaskOn[i]}
+										<PartsGrid files={outSet} />
+									{:else if out}
 										<img
 											src={toDataUrl(
 												stepMaskOn[i] && stepMasks[i] ? stepMasks[i]! : out,
@@ -1001,6 +1088,11 @@
 	.error {
 		margin: 0;
 		color: var(--color-danger);
+		font: var(--font-size-s) var(--font-mono);
+	}
+	.warn {
+		margin: 0;
+		color: var(--color-warning);
 		font: var(--font-size-s) var(--font-mono);
 	}
 	.empty {

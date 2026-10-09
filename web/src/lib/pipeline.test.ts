@@ -21,10 +21,10 @@ describe("pipeline: step chain", () => {
 		expect(chain[0].params).toMatchObject({ x: 0, y: 0 });
 	});
 
-	it("isChainable: image->image allowed, terminal and text-input not", () => {
+	it("isChainable: image->image and image->files allowed, terminal and text-input not", () => {
 		expect(isChainable("resize")).toBe(true);
+		expect(isChainable("split-into-parts")).toBe(true); // result: files, fan-out
 		expect(isChainable("to-base64")).toBe(false); // result: text
-		expect(isChainable("split-into-parts")).toBe(false); // result: files
 		expect(isChainable("from-svg")).toBe(false); // input: text
 		expect(isChainable("unknown-tool")).toBe(false);
 	});

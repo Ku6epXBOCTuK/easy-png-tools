@@ -64,6 +64,11 @@ export const ru: Dict = {
 		busyTitle: "Обработка…",
 		busyHint: "Выполняется шаг цепочки",
 		removeStepAria: "Убрать шаг",
+		warnPartial:
+			"Шаг {n}: обработано {ok} из {total} файлов, остальные с ошибкой",
+		warnFirstOnly:
+			"Шаг {n}: анализ работает с одним изображением — показан первый из {total}",
+		warnSourceSkip: "{skipped} из {total} файлов не удалось прочитать",
 	},
 	savedChains: {
 		pageTitle: "Сохранённые пайплайны — easy-png-tools",
@@ -86,6 +91,7 @@ export const ru: Dict = {
 		source: "Источник",
 		replaceImage: "Заменить изображение",
 		replaceHint: "Кликните, чтобы загрузить изображение",
+		countFiles: "{count} шт.",
 		chooseImage: "выберите изображение",
 		noSource: "нет источника — настройте параметры",
 		alt: "Исходное изображение",

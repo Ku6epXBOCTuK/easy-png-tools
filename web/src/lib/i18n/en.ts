@@ -63,6 +63,10 @@ export const en: Dict = {
 		busyTitle: "Processing…",
 		busyHint: "Running chain step",
 		removeStepAria: "Remove step",
+		warnPartial: "Step {n}: {ok} of {total} files processed, the rest failed",
+		warnFirstOnly:
+			"Step {n}: analyze works on one image — showing the first of {total}",
+		warnSourceSkip: "{skipped} of {total} files could not be read",
 	},
 	savedChains: {
 		pageTitle: "Saved pipelines — easy-png-tools",
@@ -85,6 +89,7 @@ export const en: Dict = {
 		source: "Source",
 		replaceImage: "Replace image",
 		replaceHint: "Click to upload an image",
+		countFiles: "{count} files",
 		chooseImage: "choose an image",
 		noSource: "no source — configure the parameters",
 		alt: "Source image",

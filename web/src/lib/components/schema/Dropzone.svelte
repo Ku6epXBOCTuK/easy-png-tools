@@ -5,15 +5,18 @@
 	interface Props {
 		accept?: string;
 		onfile?: (file: File) => void;
+		onfiles?: (files: File[]) => void;
 	}
-	let { accept = "image/*", onfile }: Props = $props();
+	let { accept = "image/*", onfile, onfiles }: Props = $props();
 
 	let dragging = $state(false);
 	let input = $state<HTMLInputElement | null>(null);
 
 	function handleFiles(files: FileList | null | undefined) {
-		const file = files?.[0];
-		if (file) onfile?.(file);
+		const list = Array.from(files ?? []);
+		if (list.length === 0) return;
+		if (list.length > 1 && onfiles) onfiles(list);
+		else if (list[0]) onfile?.(list[0]);
 	}
 
 	function onDrop(e: DragEvent) {
@@ -50,6 +53,7 @@
 		bind:this={input}
 		type="file"
 		{accept}
+		multiple
 		hidden
 		onchange={(e) => handleFiles((e.target as HTMLInputElement).files)}
 	/>

@@ -8,6 +8,7 @@ import {
 	serializeSteps,
 	type ChainStep,
 } from "./pipeline.svelte";
+import type { ToolImageFile } from "./registry";
 
 export interface NamedChain {
 	id: string;
@@ -135,6 +136,7 @@ export function deleteChain(id: string): void {
 /** State that cannot persist across the tool -> pipeline route swap. */
 export interface ChainHandoff {
 	source: PixelImage | null;
+	sourceFiles?: ToolImageFile[];
 	textSource: string;
 	format: OutputMime;
 	limitKb: number | undefined;
