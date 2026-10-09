@@ -8,29 +8,18 @@
 	import { Star } from "@lucide/svelte";
 	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
-	import { ToolError, type ErrorVars } from "$lib/core/errors";
+	import { ToolError } from "$lib/core/errors";
 	import {
 		decodeFile,
-		downloadBlob,
-		encode,
-		fitWithinBytes,
 		outputFormatByMime,
 		type OutputMime,
 	} from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import { execute } from "$lib/executor";
-	import {
-		baseName,
-		ChainStepError,
-		runChain,
-		uniqueName,
-		type ChainWarning,
-	} from "$lib/run-chain";
+	import { baseName, uniqueName, type ChainWarning } from "$lib/run-chain";
 	import {
 		pageDescription,
 		pageTitle,
 		chainStepTitle,
-		verdictText,
 	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import {
@@ -52,11 +41,9 @@
 	} from "$lib/pipeline.svelte";
 	import {
 		getTool,
-		type FileResult,
 		type Page,
 		type Tool,
 		type ToolImageFile,
-		type ToolResult,
 	} from "$lib/registry";
 	import {
 		applySourceDefaults,
@@ -66,7 +53,6 @@
 		type Dimension,
 		type ToolSchema,
 	} from "$lib/registry-schema";
-	import { downloadZip } from "$lib/zip";
 	import { onMount } from "svelte";
 	import { SvelteMap, SvelteSet } from "svelte/reactivity";
 	import AddStepButton from "./AddStepButton.svelte";
@@ -74,6 +60,7 @@
 	import SchemaFields from "./SchemaFields.svelte";
 	import SchemaPreview from "./SchemaPreview.svelte";
 	import ToolPickerButton from "./ToolPickerButton.svelte";
+	import { createSchemaToolRunner } from "./schema-tool-runner.svelte";
 
 	interface Props {
 		page: Page;
@@ -81,9 +68,6 @@
 		/** Named-chain mode: the chain id and display name; page is virtual. */
 		chainId?: string;
 	}
-	type DisplayError =
-		| { kind: "i18n"; key: string; vars?: ErrorVars }
-		| { kind: "plain"; text: string };
 	let { page, tool, chainId = undefined }: Props = $props();
 
 	const schema = $derived(
@@ -98,30 +82,13 @@
 	const touchedByStep = new SvelteMap<string, SvelteSet<string>>();
 	// Last edited axis of a dimension field; leads under lockAspect.
 	const lastAxis: Record<string, "width" | "height"> = {};
-	let stepDims = $state<(Dimension | undefined)[]>([]);
-	let stepResults = $state<(PixelImage | null)[]>([]);
-	// Full named set per step (batch/fan-out); intermediate tiles show a grid.
-	let stepFileSets = $state<ToolImageFile[][]>([]);
 	let aligned = $state(false);
 	let source = $state<PixelImage | null>(null);
 	// The full named input set (multi-upload); `source` above is the first
 	// image for preview/defaults. Single upload = one element.
 	let sourceFiles = $state<ToolImageFile[]>([]);
-	let result = $state<PixelImage | null>(null);
-	let fileResult = $state<FileResult | null>(null);
 	let textSource = $state("");
-	let textResult = $state<string | null>(null);
-	let verdictVars = $state<Record<string, string | number> | undefined>(
-		undefined,
-	);
-	let running = $state(false);
-	// Generation of the latest run(): a stale in-flight chain (params changed
-	// while the worker was busy) must not overwrite newer results.
-	let runGen = 0;
-	let displayError = $state<DisplayError | null>(null);
 	let sourceWarnings = $state<ChainWarning[]>([]);
-	let runWarnings = $state<ChainWarning[]>([]);
-	const allWarnings = $derived([...sourceWarnings, ...runWarnings]);
 	let initedFor = $state("");
 	let format = $state<OutputMime>("image/png");
 	// Lossy-format quality for tools without a quality param in the schema.
@@ -153,6 +120,31 @@
 		return next;
 	});
 	let dragFrom = $state<number | null>(null);
+
+	const runner = createSchemaToolRunner({
+		pageSlug: () => page.slug,
+		schema: () => schema,
+		steps: () => steps,
+		source: () => source,
+		sourceFiles: () => sourceFiles,
+		textSource: () => textSource,
+		format: () => format,
+		quality: () => currentQuality,
+		limitKb: () => limitKb,
+		lastTool: () => lastTool,
+	});
+	const { run, download, copyText, downloadText } = runner;
+	const running = $derived(runner.running);
+	const result = $derived(runner.result);
+	const fileResult = $derived(runner.fileResult);
+	const textResult = $derived(runner.textResult);
+	const verdictVars = $derived(runner.verdictVars);
+	const stepDims = $derived(runner.stepDims);
+	const stepResults = $derived(runner.stepResults);
+	const stepFileSets = $derived(runner.stepFileSets);
+	const runWarnings = $derived(runner.runWarnings);
+	const displayError = $derived(runner.displayError);
+	const allWarnings = $derived([...sourceWarnings, ...runWarnings]);
 
 	const lastTool = $derived(
 		(steps.length > 0 ? getTool(steps[steps.length - 1].id) : undefined) ??
@@ -237,7 +229,7 @@
 		if (host === initedFor) return;
 		initedFor = host;
 		// Invalidate any in-flight run from the previous host.
-		runGen++;
+		runner.resetForHost();
 		if (chainId) {
 			const handoff = takeHandoff(chainId);
 			steps = getChain(chainId)?.steps ?? createChain(page);
@@ -260,13 +252,6 @@
 			textSource = "";
 		}
 		sourceWarnings = [];
-		runWarnings = [];
-		stepFileSets = [];
-		result = null;
-		fileResult = null;
-		textResult = null;
-		verdictVars = undefined;
-		displayError = null;
 		maskOnKeys.clear();
 		// Marks are keyed by step.key from the previous host; keep them and
 		// stale keys leak into the new chain's fields.
@@ -332,11 +317,7 @@
 			? defaultSchemaParams(stepSchema, { source: dims })
 			: {};
 		steps = steps.with(index, { ...step, params });
-		result = null;
-		fileResult = null;
-		textResult = null;
-		verdictVars = undefined;
-		displayError = null;
+		runner.clearResults();
 	}
 
 	function addStepAt(index: number, toolId: string) {
@@ -374,7 +355,7 @@
 	}
 
 	async function handleFiles(files: File[]) {
-		displayError = null;
+		runner.displayError = null;
 		sourceWarnings = [];
 		const decoded: ToolImageFile[] = [];
 		const usedNames = new SvelteSet<string>();
@@ -389,7 +370,7 @@
 			}
 		}
 		if (decoded.length === 0) {
-			displayError = toDisplayError(new ToolError("errors.imageDecode"));
+			runner.reportError(new ToolError("errors.imageDecode"));
 			return;
 		}
 		if (skipped > 0) {
@@ -419,120 +400,6 @@
 
 	async function handleFile(file: File) {
 		await handleFiles([file]);
-	}
-
-	function assignResult(out: ToolResult) {
-		if (typeof out === "object" && out !== null && "files" in out) {
-			fileResult = out;
-			result = null;
-			textResult = null;
-			verdictVars = undefined;
-		} else if (typeof out === "object" && out !== null && "data" in out) {
-			result = out as PixelImage;
-			fileResult = null;
-			textResult = null;
-			verdictVars = undefined;
-		} else {
-			if (typeof out === "string") {
-				textResult = out;
-				verdictVars = undefined;
-			} else if (out && "key" in out) {
-				textResult = out.key;
-				verdictVars = out.vars;
-			} else {
-				textResult = null;
-				verdictVars = undefined;
-			}
-			result = null;
-			fileResult = null;
-		}
-	}
-
-	async function run() {
-		if (!schema || steps.length === 0) return;
-		const gen = ++runGen;
-		displayError = null;
-		running = true;
-		try {
-			const input =
-				sourceFiles.length > 0
-					? sourceFiles
-					: source
-						? [{ name: `${baseName(page.slug)}.png`, image: source }]
-						: [];
-			const r = await runChain(steps, input, textSource || undefined, execute);
-			if (gen !== runGen) return;
-			stepDims = r.stepDims;
-			stepResults = r.stepResults;
-			stepFileSets = r.stepFileSets;
-			runWarnings = r.warnings;
-			assignResult(r.out);
-		} catch (e) {
-			if (gen !== runGen) return;
-			if (e instanceof ChainStepError) {
-				const base = toDisplayError(e.cause);
-				const msg = base.kind === "i18n" ? t(base.key, base.vars) : base.text;
-				displayError = {
-					kind: "plain",
-					text: t("toolPage.stepError", {
-						n: e.stepIndex + 1,
-						title: stepTitle(e.toolId),
-						msg,
-					}),
-				};
-			} else {
-				displayError = toDisplayError(e);
-			}
-		} finally {
-			if (gen === runGen) running = false;
-		}
-	}
-
-	async function download() {
-		if (!schema) return;
-		running = true;
-		displayError = null;
-		try {
-			if (fileResult) {
-				await downloadZip(fileResult.files, `${page.slug}.zip`);
-				return;
-			}
-			if (!result) return;
-			const out = outputFormatByMime(format);
-			const quality =
-				currentQuality !== undefined ? currentQuality / 100 : undefined;
-			const blob = limitKb
-				? await fitWithinBytes(result, out.mime, limitKb * 1024, quality)
-				: await encode(result, out.mime, quality);
-			downloadBlob(blob, `${page.slug}.${out.ext}`);
-		} catch (e) {
-			displayError = toDisplayError(e);
-		} finally {
-			running = false;
-		}
-	}
-
-	async function copyText() {
-		if (!textResult) return;
-		const copyValue =
-			resultKind === "verdict"
-				? verdictText(lastTool.id, textResult, verdictVars)
-				: textResult;
-		try {
-			await navigator.clipboard.writeText(copyValue);
-		} catch (e) {
-			displayError = toDisplayError(e);
-		}
-	}
-
-	async function downloadText() {
-		if (!textResult) return;
-		try {
-			const blob = new Blob([textResult], { type: "text/plain" });
-			downloadBlob(blob, `${page.slug}.txt`);
-		} catch (e) {
-			displayError = toDisplayError(e);
-		}
 	}
 
 	$effect(() => {
@@ -606,14 +473,6 @@
 	function toggleStepMaskByIndex(i: number) {
 		const step = steps[i];
 		if (step) toggleStepMask(step.key);
-	}
-
-	function toDisplayError(e: unknown): DisplayError {
-		if (e instanceof ToolError) {
-			return { kind: "i18n", key: e.key, vars: e.vars };
-		}
-		if (e instanceof Error) return { kind: "plain", text: e.message };
-		return { kind: "plain", text: String(e) };
 	}
 
 	function warningText(w: ChainWarning): string {

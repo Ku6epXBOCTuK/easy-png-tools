@@ -29,8 +29,12 @@
   `SchemaAlignedLayout.svelte` (view-only: разметка + scoped-стили, сниппет
   `stepCard` остался в родителе и передаётся пропсом). Родитель уменьшился
   примерно на 200 строк.
-- **H1b (далее):** runner (run/download/clipboard, `runGen`/`running`,
-  `assignResult`, `toDisplayError`) → `schema-tool-runner.svelte.ts`.
+- **H1b — СДЕЛАНО (2026-10):** runner вынесен в `schema-tool-runner.svelte.ts`
+  (`createSchemaToolRunner(ctx)`: состояние в `$state`-объекте `RunnerState`,
+  действия — модульные функции run/download/
+  copyText/downloadText/assignResult/toDisplayError, геттеры наружу; лимит
+  `max-lines-per-function` не даёт держать всё в одной фабрике). Компонент
+  читает состояние через `$derived`-алиасы.
 - **H1c (далее):** стейт шагов (мутации `steps`, `touchedByStep`, `lastAxis`) →
   `schema-tool-state.svelte.ts`.
 
