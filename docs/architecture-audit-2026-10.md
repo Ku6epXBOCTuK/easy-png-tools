@@ -21,19 +21,22 @@
 
 ## High
 
-### H1. `SchemaToolView.svelte` — god-component, 1064 строки
+### H1. `SchemaToolView.svelte` — god-component — В РАБОТЕ
 
-`web/src/lib/components/schema/SchemaToolView.svelte` — ~10 ответственностей в
-одном компоненте: состояние цепочки шагов (`init` :218, `setStepValue` :256,
-`resetStep` :304, `replaceStepTool` :337), загрузка файлов (`handleFiles` :355),
-оркестрация запуска (`run` :430), политика скачивания с encode/fitWithinBytes
-(`download` :467), clipboard (`copyText` :491), paste-listener (`onMount` :548),
-вычисление mask-превью (:579), drag&drop шагов (:349), aspect-lock (:272-299),
-две большие раскладки в разметке (workspace :739-803, aligned :804-943).
+План декомпозиции (подшаги, каждый отдельным ревью-коммитом):
 
-Кандидаты на вынос: `useChainRunner` (run/download/clipboard), `useStepMasks`,
-`schema-tool-state.svelte.ts` (стейт шагов), `AlignedLayout.svelte` /
-`WorkspaceLayout.svelte`.
+- **H1a — СДЕЛАНО (2026-10):** aligned-раскладка вынесена в
+  `SchemaAlignedLayout.svelte` (view-only: разметка + scoped-стили, сниппет
+  `stepCard` остался в родителе и передаётся пропсом). Родитель уменьшился
+  примерно на 200 строк.
+- **H1b (далее):** runner (run/download/clipboard, `runGen`/`running`,
+  `assignResult`, `toDisplayError`) → `schema-tool-runner.svelte.ts`.
+- **H1c (далее):** стейт шагов (мутации `steps`, `touchedByStep`, `lastAxis`) →
+  `schema-tool-state.svelte.ts`.
+
+Исходная формулировка: ~10 ответственностей в одном компоненте — состояние
+цепочки шагов, загрузка файлов, оркестрация запуска, политика скачивания,
+clipboard, paste-listener, mask-превью, drag&drop, aspect-lock, две раскладки.
 
 ### H2. Race condition превью — СДЕЛАНО (2026-10)
 

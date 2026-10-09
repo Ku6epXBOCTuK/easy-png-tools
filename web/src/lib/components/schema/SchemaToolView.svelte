@@ -3,9 +3,7 @@
 	import { resolve } from "$app/paths";
 	import StepCard from "$lib/components/display/StepCard.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
-	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import { ButtonVariantDefine } from "$lib/components/ui/define";
-	import Toggle from "$lib/components/ui/Toggle.svelte";
 	import { isFav, toggleFav } from "$lib/favorites.svelte";
 	import { Star } from "@lucide/svelte";
 	import { hasTransparency } from "$lib/core/analyze";
@@ -17,7 +15,6 @@
 		encode,
 		fitWithinBytes,
 		outputFormatByMime,
-		toDataUrl,
 		type OutputMime,
 	} from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
@@ -73,13 +70,9 @@
 	import { onMount } from "svelte";
 	import { SvelteMap, SvelteSet } from "svelte/reactivity";
 	import AddStepButton from "./AddStepButton.svelte";
-	import PreviewTile from "./PreviewTile.svelte";
-	import PartsGrid from "./PartsGrid.svelte";
-	import SchemaActions from "./SchemaActions.svelte";
+	import SchemaAlignedLayout from "./SchemaAlignedLayout.svelte";
 	import SchemaFields from "./SchemaFields.svelte";
 	import SchemaPreview from "./SchemaPreview.svelte";
-	import SchemaResultTile from "./SchemaResultTile.svelte";
-	import SchemaSourceTile from "./SchemaSourceTile.svelte";
 	import ToolPickerButton from "./ToolPickerButton.svelte";
 
 	interface Props {
@@ -732,16 +725,6 @@
 			</StepCard>
 		{/snippet}
 
-		{#snippet maskChip(i: number)}
-			{#if stepMaskable[i]}
-				<ChipButton
-					label={t("resultCard.maskToggle")}
-					active={stepMaskOn[i]}
-					onclick={() => toggleStepMask(steps[i].key)}
-				/>
-			{/if}
-		{/snippet}
-
 		{#if !alignedMode}
 			<div class="workspace">
 				<section class="settings">
@@ -808,144 +791,47 @@
 				<p class="warn" role="status">{warningText(w)}</p>
 			{/each}
 		{:else}
-			<div class="aligned">
-				<div class="aligned-row">
-					<div></div>
-					<div class="panel-segment head-segment">
-						<span class="label">{t("resultCard.previewPanel")}</span>
-						<label class="align-toggle">
-							<Toggle bind:checked={aligned} label={t("chain.alignToggle")} />
-							<span>{t("chain.alignToggle")}</span>
-						</label>
-						<SchemaActions
-							{inputMode}
-							resultKind={displayResultKind}
-							canDownload={result !== null}
-							{running}
-							{format}
-							quality={currentQuality}
-							{limitKb}
-							{alphaLoss}
-							onupload={handleFile}
-							ondownload={download}
-							onformat={(v) => (format = v)}
-							onquality={setFormatQuality}
-							onlimit={(v) => (limitKb = v)}
-						/>
-					</div>
-				</div>
-				{#if errorText}
-					<p class="error" role="alert">{errorText}</p>
-				{/if}
-				{#each allWarnings as w (warningText(w))}
-					<p class="warn" role="status">{warningText(w)}</p>
-				{/each}
-				{#if canExtend}
-					<div class="aligned-row">
-						<AddStepButton onadd={(id) => addStepAt(0, id)} />
-						<div class="panel-segment connect-segment"></div>
-					</div>
-				{/if}
-				{#each steps as step, i (step.key)}
-					{@const input = i === 0 ? null : stepResults[i - 1]}
-					{@const out = stepResults[i]}
-					{#if i > 0}
-						<div class="group-divider">
-							<div class="gd-cell"></div>
-						</div>
-					{/if}
-					<div class="aligned-row">
-						{@render stepCard(step, i)}
-						<div
-							class="panel-segment pair-segment"
-							class:last-segment={i === steps.length - 1 && !canExtend}
-						>
-							{#if i === 0}
-								<SchemaSourceTile
-									mode={inputMode}
-									{source}
-									sources={sourceFiles}
-									{textSource}
-									{running}
-									fileCount={sourceFiles.length}
-									ontextinput={(v) => (textSource = v)}
-									onrendertext={run}
-									onupload={handleFile}
-									onuploadmany={handleFiles}
-								/>
-							{:else}
-								{@const inSet = stepFileSets[i - 1] ?? []}
-								<PreviewTile
-									label={t("chain.inputLegend")}
-									viewMode="image"
-									dims={input ? `${input.width} × ${input.height}` : undefined}
-									parts={inSet.length > 1 ? inSet.length : undefined}
-								>
-									{#if inSet.length > 1}
-										<PartsGrid files={inSet} />
-									{:else if input}
-										<img src={toDataUrl(input)} alt="" />
-									{:else}
-										<span class="empty">{t("resultCard.noResult")}</span>
-									{/if}
-								</PreviewTile>
-							{/if}
-							{#if i === steps.length - 1}
-								<SchemaResultTile
-									resultKind={displayResultKind}
-									result={out}
-									{resultNote}
-									{fileResult}
-									{textResult}
-									textVars={verdictVars}
-									toolId={lastTool.id}
-									{running}
-									mask={stepMasks[i] ?? null}
-									maskOn={stepMaskOn[i] ?? false}
-									ontogglemask={stepMaskable[i]
-										? () => toggleStepMask(steps[i].key)
-										: undefined}
-									oncopy={copyText}
-									ondownloadtxt={downloadText}
-								/>
-							{:else}
-								{@const outSet = stepFileSets[i] ?? []}
-								<PreviewTile
-									label={t("chain.stepResult", { n: i + 1 })}
-									viewMode="image"
-									dims={out ? `${out.width} × ${out.height}` : undefined}
-									parts={outSet.length > 1 ? outSet.length : undefined}
-								>
-									{#snippet actions()}
-										{@render maskChip(i)}
-									{/snippet}
-									{#if outSet.length > 1 && !stepMaskOn[i]}
-										<PartsGrid files={outSet} />
-									{:else if out}
-										<img
-											src={toDataUrl(
-												stepMaskOn[i] && stepMasks[i] ? stepMasks[i]! : out,
-											)}
-											alt=""
-										/>
-									{:else}
-										<span class="empty">{t("resultCard.noResult")}</span>
-									{/if}
-								</PreviewTile>
-							{/if}
-						</div>
-					</div>
-					{#if canExtend}
-						<div class="aligned-row">
-							<AddStepButton onadd={(id) => addStepAt(i + 1, id)} />
-							<div
-								class="panel-segment connect-segment"
-								class:add-last={i === steps.length - 1}
-							></div>
-						</div>
-					{/if}
-				{/each}
-			</div>
+			<SchemaAlignedLayout
+				{steps}
+				{stepCard}
+				{canExtend}
+				bind:aligned
+				{inputMode}
+				{source}
+				{sourceFiles}
+				{textSource}
+				{running}
+				resultKind={displayResultKind}
+				{result}
+				{resultNote}
+				{fileResult}
+				{textResult}
+				textVars={verdictVars}
+				toolId={lastTool.id}
+				{format}
+				quality={currentQuality}
+				{limitKb}
+				{alphaLoss}
+				{errorText}
+				warnings={allWarnings.map(warningText)}
+				{stepResults}
+				{stepFileSets}
+				{stepMasks}
+				{stepMaskOn}
+				{stepMaskable}
+				onaddstep={addStepAt}
+				ontogglestepmask={toggleStepMaskByIndex}
+				ontextinput={(v) => (textSource = v)}
+				onrendertext={run}
+				onupload={handleFile}
+				onuploadmany={handleFiles}
+				ondownload={download}
+				oncopy={copyText}
+				ondownloadtxt={downloadText}
+				onformat={(v) => (format = v)}
+				onquality={setFormatQuality}
+				onlimit={(v) => (limitKb = v)}
+			/>
 		{/if}
 	</div>
 {:else}
@@ -1011,104 +897,13 @@
 	.no-schema {
 		font: var(--font-size-s) var(--font-mono);
 	}
-	.aligned {
-		display: grid;
-	}
-	.aligned-row {
-		display: grid;
-		grid-template-columns: minmax(var(--size-workspace-min), 1fr) 2fr;
-		gap: var(--space-xxl);
-		align-items: start;
-	}
-	/* Сегменты справа образуют «одну панель»: общий фон, боковые границы,
-	   верх у шапки и низ у последней строки. */
-	.panel-segment {
-		background: var(--color-panel);
-		border-left: var(--size-border) solid var(--color-border);
-		border-right: var(--size-border) solid var(--color-border);
-		padding: var(--space-xl);
-	}
-	.head-segment {
-		display: flex;
-		align-items: center;
-		gap: var(--space-xl);
-		flex-wrap: wrap;
-		border-top: var(--size-border) solid var(--color-border);
-		border-bottom: var(--size-border) solid var(--color-border);
-		border-radius: var(--radius-m) var(--radius-m) 0 0;
-	}
-	.head-segment .label {
-		font: var(--font-size-s) var(--font-mono);
-		letter-spacing: var(--space-text-l);
-		text-transform: uppercase;
-		color: var(--color-main);
-	}
-	.pair-segment {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--space-l);
-	}
-	/* Коннектор в строках «Add step»: продолжает боковые границы панели. */
-	.connect-segment {
-		align-self: stretch;
-		padding: 0;
-	}
-	.connect-segment.add-last {
-		border-bottom: var(--size-border) solid var(--color-border);
-		border-radius: 0 0 var(--radius-m) var(--radius-m);
-	}
-	/* Полоса-разделитель между группами: ячейки с фоном и боковыми границами
-	   (как у карточки слева и панели справа), сверху — линия через всю ширину. */
-	.group-divider {
-		position: relative;
-		display: grid;
-		grid-template-columns: minmax(var(--size-workspace-min), 1fr) 2fr;
-		gap: var(--space-xxl);
-	}
-	.gd-cell {
-		grid-column: 2;
-		background: var(--color-panel);
-		border-left: var(--size-border) solid var(--color-border);
-		border-right: var(--size-border) solid var(--color-border);
-		padding: var(--space-s) 0;
-	}
-	.group-divider::after {
-		content: "";
-		position: absolute;
-		inset: 0 0 auto;
-		border-top: var(--size-border) solid var(--color-border);
-	}
-	.last-segment {
-		border-bottom: var(--size-border) solid var(--color-border);
-		border-radius: 0 0 var(--radius-m) var(--radius-m);
-	}
-	.align-toggle {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-m);
-		margin-right: auto;
-		color: var(--color-text-muted);
-		font: var(--font-size-s) var(--font-mono);
-		cursor: pointer;
-	}
-	.error {
-		margin: 0;
-		color: var(--color-danger);
-		font: var(--font-size-s) var(--font-mono);
-	}
 	.warn {
 		margin: 0;
 		color: var(--color-warning);
 		font: var(--font-size-s) var(--font-mono);
 	}
-	.empty {
-		font: var(--font-size-s) var(--font-mono);
-	}
 	@media (--bp-tablet) {
 		.workspace {
-			grid-template-columns: 1fr;
-		}
-		.aligned-row {
 			grid-template-columns: 1fr;
 		}
 	}
