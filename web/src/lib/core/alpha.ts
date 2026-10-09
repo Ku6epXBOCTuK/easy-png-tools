@@ -1,5 +1,6 @@
 import { createPixelImage, type PixelImage } from "./types";
 import { ToolError } from "./errors";
+import { clamp } from "./math";
 
 const MAX_COLOR_DISTANCE = Math.sqrt(3 * 255 * 255);
 
@@ -162,8 +163,4 @@ export function parseHex(hex: string): [number, number, number] {
 		parseInt(digits.slice(2, 4), 16),
 		parseInt(digits.slice(4, 6), 16),
 	];
-}
-
-function clamp(value: number, min: number, max: number): number {
-	return Math.min(max, Math.max(min, value));
 }

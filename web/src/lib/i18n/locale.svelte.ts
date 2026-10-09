@@ -1,16 +1,13 @@
 import { BASE_LOCALE, isLocale, type Dict, type Locale } from "./dict";
 import { ru } from "./ru";
 import { en } from "./en";
+import { safeSetItem, storage } from "../storage";
 
 const STORAGE_KEY = "locale";
 
 const DICTS: Record<Locale, Dict> = { ru, en };
 
 let locale = $state<Locale>(BASE_LOCALE);
-
-function storage(): Storage | null {
-	return typeof localStorage === "undefined" ? null : localStorage;
-}
 
 export function getLocale(): Locale {
 	return locale;
@@ -39,7 +36,7 @@ export function getMergedDict(): Dict {
 
 export function setLocale(next: Locale): void {
 	locale = next;
-	storage()?.setItem(STORAGE_KEY, next);
+	safeSetItem(STORAGE_KEY, next);
 	syncLangAttr();
 }
 

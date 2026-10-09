@@ -1,5 +1,6 @@
 import { parseHex } from "./alpha";
 import { createPixelImage, type PixelImage } from "./types";
+import { clamp } from "./math";
 
 export type BackgroundOptions = {
 	color: string;
@@ -131,8 +132,4 @@ export function backgroundMaskPreview(
 		out.data[di + 3] = 255;
 	}
 	return out;
-}
-
-function clamp(value: number, min: number, max: number): number {
-	return Math.min(max, Math.max(min, value));
 }

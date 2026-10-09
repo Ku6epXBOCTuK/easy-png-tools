@@ -6,6 +6,7 @@
 
 import type { TextFont } from "./core/domText";
 import type { Position9 } from "./core/textdraw";
+import { clamp } from "./core/math";
 
 /**
  * Optional field of every spec: the field's label key in the dictionary.
@@ -405,12 +406,6 @@ export function resolveLayoutGroups<P>(
 	return named;
 }
 
-function clamp(value: number, min?: number, max?: number): number {
-	if (min !== undefined && value < min) return min;
-	if (max !== undefined && value > max) return max;
-	return value;
-}
-
 /** Field cap: from source dimensions under maxFromSource, else static. */
 export function effectiveMax(
 	spec: NumberSpec,
@@ -444,7 +439,11 @@ export function clampSourceAwareMaxes<P>(
 		if (spec.kind === "number" && spec.maxFromSource) {
 			const v = out[key as string];
 			if (typeof v !== "number" || !Number.isFinite(v)) continue;
-			const clamped = clamp(v, spec.min, effectiveMax(spec, source));
+			const clamped = clamp(
+				v,
+				spec.min ?? -Infinity,
+				effectiveMax(spec, source) ?? Infinity,
+			);
 			if (clamped !== v) {
 				out[key as string] = clamped;
 				changed = true;
@@ -456,12 +455,12 @@ export function clampSourceAwareMaxes<P>(
 			}
 			const width = clamp(
 				v.width,
-				spec.min,
+				spec.min ?? -Infinity,
 				dimensionAxisMax(spec, "width", source),
 			);
 			const height = clamp(
 				v.height,
-				spec.min,
+				spec.min ?? -Infinity,
 				dimensionAxisMax(spec, "height", source),
 			);
 			if (width !== v.width || height !== v.height) {
@@ -583,7 +582,7 @@ export function sanitizeSchemaParams<P>(
 					spec.kind === "number"
 						? effectiveMax(spec, context?.source)
 						: spec.max;
-				out[key] = clamp(n, spec.min, max);
+				out[key] = clamp(n, spec.min ?? -Infinity, max ?? Infinity);
 				break;
 			}
 			case "select":

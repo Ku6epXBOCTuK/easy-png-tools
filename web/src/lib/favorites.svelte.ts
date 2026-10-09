@@ -1,12 +1,9 @@
 import { SvelteSet } from "svelte/reactivity";
+import { safeSetItem, storage } from "./storage";
 
 const KEY = "fav-tools";
 
 const slugs = new SvelteSet<string>();
-
-function storage(): Storage | null {
-	return typeof localStorage === "undefined" ? null : localStorage;
-}
 
 export function initFavorites(): void {
 	const raw = storage()?.getItem(KEY);
@@ -31,7 +28,7 @@ export function toggleFav(slug: string): void {
 	} else {
 		slugs.add(slug);
 	}
-	storage()?.setItem(KEY, JSON.stringify([...slugs]));
+	safeSetItem(KEY, JSON.stringify([...slugs]));
 }
 
 /** Favorite pages from the list (order preserved). */

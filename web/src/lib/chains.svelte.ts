@@ -2,6 +2,7 @@ import { formatStamp } from "./core/datefmt";
 import type { OutputMime } from "./core/io";
 import type { PixelImage } from "./core/types";
 import { t } from "./i18n/t";
+import { safeSetItem, storage } from "./storage";
 import {
 	CHAIN_VERSION,
 	parseChain,
@@ -18,10 +19,6 @@ export interface NamedChain {
 }
 
 const STORE_KEY = "chains:named";
-
-function storage(): Storage | null {
-	return typeof localStorage === "undefined" ? null : localStorage;
-}
 
 export function autoChainName(date = new Date()): string {
 	return t("savedChains.autoName", {
@@ -92,7 +89,7 @@ function readAll(): NamedChain[] {
 }
 
 function writeAll(chains: NamedChain[]): void {
-	storage()?.setItem(STORE_KEY, JSON.stringify(serializeNamedChains(chains)));
+	safeSetItem(STORE_KEY, JSON.stringify(serializeNamedChains(chains)));
 }
 
 /** Newest first. */

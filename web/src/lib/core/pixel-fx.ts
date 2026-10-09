@@ -2,6 +2,7 @@ import { hexToRgb } from "./palette";
 import type { PixelImage } from "./types";
 import { createPixelImage } from "./types";
 import { gaussianBlur } from "./convolution";
+import { clampByte } from "./math";
 
 /** Deterministic PRNG (mulberry32): same seed gives the same result. */
 export function mulberry32(seed: number): () => number {
@@ -13,10 +14,6 @@ export function mulberry32(seed: number): () => number {
 		t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
 		return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 	};
-}
-
-function clampByte(v: number): number {
-	return v < 0 ? 0 : v > 255 ? 255 : Math.round(v);
 }
 
 /** Averages each blockSize x blockSize block into a single color. */

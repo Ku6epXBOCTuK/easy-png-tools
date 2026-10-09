@@ -1,5 +1,6 @@
 import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
 import { ToolError } from "./errors";
+import { clamp, clampInt } from "./math";
 
 type Plane = Float64Array;
 
@@ -176,12 +177,4 @@ function boxesForGauss(sigma: number, boxes: number): number[] {
 		sizes.push(i < m ? wl : wu);
 	}
 	return sizes;
-}
-
-function clamp(v: number, min: number, max: number): number {
-	return Math.min(max, Math.max(min, v));
-}
-
-function clampInt(value: number, min: number, max: number): number {
-	return Math.min(max, Math.max(min, Math.trunc(value)));
 }

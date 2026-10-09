@@ -1,12 +1,10 @@
+import { safeSetItem } from "./storage";
+
 export type ThemeChoice = "light" | "dark";
 
 const STORAGE_KEY = "theme";
 
 let theme = $state<ThemeChoice>("light");
-
-function storage(): Storage | null {
-	return typeof localStorage === "undefined" ? null : localStorage;
-}
 
 function systemTheme(): ThemeChoice {
 	if (typeof window === "undefined" || !window.matchMedia) return "light";
@@ -26,7 +24,7 @@ export function getTheme(): ThemeChoice {
 
 export function setTheme(next: ThemeChoice): void {
 	theme = next;
-	storage()?.setItem(STORAGE_KEY, next);
+	safeSetItem(STORAGE_KEY, next);
 	apply();
 }
 

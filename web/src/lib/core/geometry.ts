@@ -1,6 +1,7 @@
 ﻿import { parseHex } from "./alpha";
 import { ToolError } from "./errors";
 import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
+import { clampInt } from "./math";
 
 export function expandCanvas(
 	img: PixelImage,
@@ -283,10 +284,6 @@ export function sampleBilinear(
 		result[ch] = (1 - ty) * top + ty * bottom;
 	}
 	return result;
-}
-
-function clampInt(value: number, min: number, max: number): number {
-	return Math.min(max, Math.max(min, Math.trunc(value)));
 }
 
 export type Anchor9 =

@@ -1,6 +1,7 @@
 import { ToolError } from "./errors";
 import type { PixelImage } from "./types";
 import { createPixelImage } from "./types";
+import { clamp01 } from "./math";
 
 export type Rgb = { r: number; g: number; b: number };
 export type Hsl = { h: number; s: number; l: number };
@@ -178,10 +179,6 @@ export function sortPalette(hexes: string[], key: SortKey): string[] {
 	return scored
 		.sort((a, b) => a.k - b.k || a.h.localeCompare(b.h))
 		.map((s) => s.h);
-}
-
-function clamp01(v: number): number {
-	return Math.min(1, Math.max(0, v));
 }
 
 /** Horizontal equal swatch columns (strip) or a grid of ~square cells (grid). */

@@ -94,12 +94,15 @@ Download. Core по канону «не знает ни о ком».
 `findMaxColorsWithin`, `findQualityWithin`. Это доменная логика, не ввод-вывод
 (у файла 19 экспортов).
 
-### M7. `clamp` продублирован 5 раз
+### M7. `clamp` продублирован 5 раз — СДЕЛАНО (2026-10)
 
-Идентичная локальная функция: `core/alpha.ts:167`, `core/background.ts:136`,
-`core/color.ts:239`, `core/convolution.ts:181`, `registry-schema.ts:408`. Плюс
-`clampInt` дважды: `convolution.ts:185` и `geometry.ts:288`. Прямое нарушение
-инварианта «сначала искать».
+Создан `web/src/lib/core/math.ts` (`clamp`, `clampInt`, `clamp01`, `clampByte` —
+round-семантика `clampByte` и trunc-семантика `clampInt` сохранены раздельно);
+локальные копии удалены из `core/alpha.ts`, `core/background.ts`,
+`core/color.ts`, `core/convolution.ts`, `core/geometry.ts`, `core/palette.ts`,
+`core/pixel-fx.ts`. Вариант с опциональными границами в `registry-schema.ts`
+переведён на общий `clamp` через `?? -Infinity / ?? Infinity`. Копия в
+`palette.test.ts` оставлена — тесты независимы.
 
 ### M8. Два параллельных hex-парсера
 
@@ -108,12 +111,11 @@ Download. Core по канону «не знает ни о ком».
 (`affine.ts:31`, `geometry.ts:20`, `morphology.ts:123,150`), другая — второй
 (`masks.ts:25,98`, `pixel-fx.ts:195`, `registry/tools/generate.ts:36`).
 
-### M9. Гард `localStorage` продублирован 4 раза
+### M9. Гард `localStorage` продублирован 4 раза — СДЕЛАНО (2026-10)
 
-Идентичный `typeof localStorage === "undefined" ? null : localStorage`:
-`chains.svelte.ts:22-24`, `favorites.svelte.ts:8`, `i18n/locale.svelte.ts:12`,
-`theme.svelte.ts:7-9`. Общий `storage()`-хелпер даст одну точку
-SSR-безопасности.
+Создан `web/src/lib/storage.ts` (`storage()` + `safeSetItem`); локальные гарды
+удалены из `chains.svelte.ts`, `favorites.svelte.ts`, `i18n/locale.svelte.ts`,
+`theme.svelte.ts`.
 
 ### M10. Логика темы дублируется между `app.html` и `theme.svelte.ts` — ОТКЛОНЕНО
 
@@ -172,12 +174,11 @@ production).
 `clamp(var(--space-brand), 30vh, 60vh)` в `PreviewTile.svelte:96` и
 `SchemaResultTile.svelte:129`; магические `30vh/60vh` не в токенах.
 
-### L7. `localStorage.setItem` без try/catch вне app.html
+### L7. `localStorage.setItem` без try/catch вне app.html — СДЕЛАНО (2026-10)
 
-`theme.svelte.ts:29`, `chains.svelte.ts`, `favorites.svelte.ts`,
-`locale.svelte.ts`: в privacy-режимах `setItem` бросает; только inline-скрипт
-`app.html:9-20` обёрнут в try/catch. SSR не ломается (typeof-гарды есть), но
-клик по переключателю темы может уронить обработчик.
+Все `setItem` в `theme.svelte.ts`, `chains.svelte.ts`, `favorites.svelte.ts`,
+`locale.svelte.ts` переведены на `safeSetItem` из `web/src/lib/storage.ts`
+(best-effort persistence: бросок в privacy-режиме проглатывается).
 
 ### L8. Переросшие файлы групп реестра и core
 
