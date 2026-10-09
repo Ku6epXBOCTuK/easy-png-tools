@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.5.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/76039f7bf3247ef9711113608f5ec2d01a7fa56f..v0.5.0) - 2026-10-09
+#### Features
+- add show mask chip for tools - ([c22c6e5](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/c22c6e55741f99a6c8a79a82b7b3deadd33fa3dc)) - Ku6epXBOCTuK
+- add chains page, update pipeline usage - ([a51e224](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/a51e224d02ccd45ca0adc69135112b8a0a3839c7)) - Ku6epXBOCTuK
+- add limit size to download flow - ([8dcc263](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/8dcc263461111937d1b116cbfec41329c314b7b9)) - Ku6epXBOCTuK
+#### Bug Fixes
+- image decode error i18n - ([76039f7](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/76039f7bf3247ef9711113608f5ec2d01a7fa56f)) - Ku6epXBOCTuK
+
+- - -
+
 ## [v0.4.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/83e75b5589ee200b6e216bc0187404b8be086149..v0.4.0) - 2026-10-07
 #### Features
 - add og description\image\etc - ([31ace35](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/31ace359d7ff187cbe9ba968facc498e75e66b3d)) - Ku6epXBOCTuK
