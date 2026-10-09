@@ -138,7 +138,27 @@
 	// Mask preview per step (keyed by step.key): the toggle lives on every
 	// step result tile, not just the final one.
 	const maskOnKeys = new SvelteSet<string>();
-	let maskResults = $state<Record<string, PixelImage | null>>({});
+	// Mask preview: recomputed on the main thread per toggled step from that
+	// step's input; a mask never enters the chain itself.
+	const maskResults = $derived.by(() => {
+		const next: Record<string, PixelImage | null> = {};
+		steps.forEach((step, i) => {
+			if (!maskOnKeys.has(step.key)) return;
+			const stepTool = getTool(step.id);
+			if (!stepTool?.runMask) return;
+			const input = i === 0 ? source : stepResults[i - 1];
+			if (!input) return;
+			try {
+				next[step.key] = stepTool.runMask({
+					params: step.params,
+					source: input,
+				});
+			} catch {
+				next[step.key] = null;
+			}
+		});
+		return next;
+	});
 	let dragFrom = $state<number | null>(null);
 
 	const lastTool = $derived(
@@ -255,7 +275,6 @@
 		verdictVars = undefined;
 		displayError = null;
 		maskOnKeys.clear();
-		maskResults = {};
 	}
 
 	function setStepValue(
@@ -580,31 +599,6 @@
 		void source;
 		debouncedRun();
 		return () => debouncedRun.cancel();
-	});
-
-	// Mask preview: recomputed on the main thread per toggled step from that
-	// step's input; a mask never enters the chain itself.
-	$effect(() => {
-		void steps;
-		void stepResults;
-		void source;
-		const next: Record<string, PixelImage | null> = {};
-		steps.forEach((step, i) => {
-			if (!maskOnKeys.has(step.key)) return;
-			const stepTool = getTool(step.id);
-			if (!stepTool?.runMask) return;
-			const input = i === 0 ? source : stepResults[i - 1];
-			if (!input) return;
-			try {
-				next[step.key] = stepTool.runMask({
-					params: step.params,
-					source: input,
-				});
-			} catch {
-				next[step.key] = null;
-			}
-		});
-		maskResults = next;
 	});
 
 	function toggleStepMask(key: string) {

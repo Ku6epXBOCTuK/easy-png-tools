@@ -52,11 +52,11 @@
 
 ## Med
 
-### M1. Маски через `$effect` вместо `$derived.by`
+### M1. Маски через `$effect` вместо `$derived.by` — СДЕЛАНО (2026-10)
 
-`SchemaToolView.svelte:579-600`: `$effect` чисто вычисляет `maskResults` из
-`steps`/`stepResults`/`source`/`maskOnKeys` и пишет в `$state`. `runMask`
-синхронный и чистый — учебниковый случай `$derived.by`, эффект не нужен.
+`SchemaToolView.svelte`: эффект вычисления `maskResults` заменён на
+`$derived.by`; ручной сброс `maskResults = {}` в `init()` удалён — derived
+пересчитывается сам по смене `steps`/`source`/`maskOnKeys`.
 
 ### M2. `init()` в эффекте не сбрасывает часть состояния
 
