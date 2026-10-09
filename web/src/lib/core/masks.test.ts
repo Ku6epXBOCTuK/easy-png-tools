@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+	diffMask,
 	extractByColor,
 	isGrayscaleish,
 	luma01,
@@ -72,5 +73,28 @@ describe("rarityPredicate + extractByColor", () => {
 		const out = extractByColor(px, "#0a0a0a", 5);
 		expect(out.data[3]).toBe(0);
 		expect(out.data[7]).toBe(255);
+	});
+});
+
+describe("diffMask", () => {
+	const before = makeImage(2, 1, [
+		[255, 0, 0, 255],
+		[0, 255, 0, 128],
+	]);
+
+	it("white where channels differ, black where equal, always opaque", () => {
+		const after = makeImage(2, 1, [
+			[255, 0, 0, 255],
+			[0, 255, 0, 255],
+		]);
+		const out = diffMask(before, after);
+		expect([...out.data.slice(0, 4)]).toEqual([0, 0, 0, 255]);
+		expect([...out.data.slice(4, 8)]).toEqual([255, 255, 255, 255]);
+	});
+
+	it("size mismatch means everything changed", () => {
+		const smaller = makeImage(1, 1, [[255, 0, 0, 255]]);
+		const out = diffMask(before, smaller);
+		expect([...out.data.slice(0, 4)]).toEqual([255, 255, 255, 255]);
 	});
 });

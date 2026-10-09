@@ -167,6 +167,23 @@ export function contourImage(
 	return out;
 }
 
+/** B/w preview of the contour line: white where the stroke will land. */
+export function contourMask(img: PixelImage, radiusPx: number): PixelImage {
+	const r = Math.max(1, Math.trunc(radiusPx));
+	const mask = buildAlphaMask(img);
+	const inner = erodeMask(mask, img.width, img.height, r);
+	const out = createPixelImage(img.width, img.height);
+	for (let i = 0; i < mask.length; i++) {
+		const v = mask[i] === 1 && inner[i] === 0 ? 255 : 0;
+		const di = i * 4;
+		out.data[di] = v;
+		out.data[di + 1] = v;
+		out.data[di + 2] = v;
+		out.data[di + 3] = 255;
+	}
+	return out;
+}
+
 export function openingMask(
 	mask: Mask,
 	w: number,

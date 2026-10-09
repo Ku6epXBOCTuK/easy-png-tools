@@ -15,6 +15,7 @@
 		dims?: string;
 		note?: string;
 		noteTone?: "warning" | "info";
+		actions?: Snippet;
 	}
 	let {
 		label,
@@ -26,6 +27,7 @@
 		dims = undefined,
 		note = undefined,
 		noteTone = "warning",
+		actions = undefined,
 	}: Props = $props();
 </script>
 
@@ -44,6 +46,9 @@
 			{/if}
 		</span>
 		<span class="tile-note">
+			{#if actions}
+				{@render actions()}
+			{/if}
 			{#if note}
 				<Badge tone={noteTone} label={note} />
 			{/if}

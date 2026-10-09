@@ -5,6 +5,7 @@
 	import SchemaSourceTile from "./SchemaSourceTile.svelte";
 	import PreviewTile from "./PreviewTile.svelte";
 	import Toggle from "$lib/components/ui/Toggle.svelte";
+	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import type { OutputMime } from "$lib/core/io";
@@ -27,9 +28,16 @@
 		textSource?: string;
 		textResult?: string | null;
 		textVars?: Record<string, string | number>;
+		mask?: PixelImage | null;
+		maskOn?: boolean;
+		ontogglemask?: () => void;
 		running?: boolean;
 		error?: string;
 		stepResults?: (PixelImage | null)[];
+		stepMaskable?: boolean[];
+		stepMaskOn?: boolean[];
+		stepMasks?: (PixelImage | null)[];
+		ontogglestepmask?: (i: number) => void;
 		aligned?: boolean;
 		ontogglealign?: () => void;
 		format?: OutputMime;
@@ -57,9 +65,16 @@
 		textSource = "",
 		textResult = null,
 		textVars = undefined,
+		mask = null,
+		maskOn = false,
+		ontogglemask,
 		running = false,
 		error = "",
 		stepResults = [],
+		stepMaskable = [],
+		stepMaskOn = [],
+		stepMasks = [],
+		ontogglestepmask,
 		aligned = false,
 		ontogglealign,
 		format = "image/png",
@@ -132,7 +147,21 @@
 				viewMode="image"
 				dims={`${img.width} × ${img.height}`}
 			>
-				<img src={toDataUrl(img)} alt="" />
+				{#snippet actions()}
+					{#if stepMaskable[i]}
+						<ChipButton
+							label={t("resultCard.maskToggle")}
+							active={stepMaskOn[i] ?? false}
+							onclick={() => ontogglestepmask?.(i)}
+						/>
+					{/if}
+				{/snippet}
+				<img
+					src={toDataUrl(
+						stepMaskOn[i] && stepMasks[i] ? (stepMasks[i] as PixelImage) : img,
+					)}
+					alt=""
+				/>
 			</PreviewTile>
 		{/if}
 	{/each}
@@ -145,6 +174,9 @@
 		{textVars}
 		{toolId}
 		{running}
+		{mask}
+		{maskOn}
+		{ontogglemask}
 		oncopy={oncopytext}
 		{ondownloadtxt}
 	/>

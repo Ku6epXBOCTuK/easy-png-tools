@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { boxTest, circleTest, renderShape, starTest, wavyTest } from "./shapes";
+import {
+	boxTest,
+	circleTest,
+	renderShape,
+	renderShapeMask,
+	starTest,
+	wavyTest,
+} from "./shapes";
 import { makeImage } from "./test-helpers";
 
 describe("shape predicates", () => {
@@ -86,5 +93,27 @@ describe("renderShape", () => {
 		expect(opaqueAt(2, 2)).toBe(true);
 		expect(opaqueAt(1, 1)).toBe(false);
 		expect(opaqueAt(2, 1)).toBe(false);
+	});
+});
+
+describe("renderShapeMask", () => {
+	it("white inside the shape, black outside, same geometry as renderShape", () => {
+		const shape = renderShape(
+			makeImage(5, 5, new Array(25).fill([200, 100, 50, 255])),
+			circleTest(0.4),
+			0,
+			0,
+			{ x: 0.4, y: 0.4 },
+		);
+		const mask = renderShapeMask(5, 5, circleTest(0.4), 0, 0, {
+			x: 0.4,
+			y: 0.4,
+		});
+		for (let i = 0; i < 25; i++) {
+			const shaped = shape.data[i * 4 + 3] === 255;
+			const v = mask.data[i * 4];
+			expect(v, `pixel ${i}`).toBe(shaped ? 255 : 0);
+			expect(mask.data[i * 4 + 3]).toBe(255);
+		}
 	});
 });

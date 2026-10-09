@@ -100,6 +100,7 @@ export const ru: Dict = {
 		breakChain: "✂ Оборвать цепочку",
 		noResult: "результата пока нет",
 		result: "Результат",
+		maskToggle: "Маска",
 		previewPanel: "Предпросмотр",
 		parts: "частей",
 		clamped: "уменьшено до границ изображения",

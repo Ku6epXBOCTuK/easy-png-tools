@@ -99,6 +99,7 @@ export const en: Dict = {
 		breakChain: "✂ Break the chain",
 		noResult: "no result yet",
 		result: "Result",
+		maskToggle: "Mask",
 		previewPanel: "Preview",
 		parts: "parts",
 		clamped: "clamped to image bounds",

@@ -122,6 +122,7 @@ registry/{tools,pages}/*.ts
 | `result`?  | `"image" \| "text" \| "verdict" \| "files"` — что отдаёт                       |
 | `domOnly`? | инструмент требует DOM (canvas); превью-executor запускает его напрямую        |
 | `output`?  | mime/ext/quality для скачивания (не у всех)                                    |
+| `runMask`? | ч/б превью «что изменится»; тогл на тайле результата, в цепочку не идёт        |
 | `run(ctx)` | единственный метод: `ctx` → `ToolResult`                                       |
 
 `Page` (записи в `registry/pages/<group>.ts`):

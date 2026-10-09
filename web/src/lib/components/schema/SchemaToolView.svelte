@@ -3,6 +3,7 @@
 	import { resolve } from "$app/paths";
 	import StepCard from "$lib/components/display/StepCard.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
+	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import { ButtonVariantDefine } from "$lib/components/ui/define";
 	import Toggle from "$lib/components/ui/Toggle.svelte";
 	import { isFav, toggleFav } from "$lib/favorites.svelte";
@@ -114,6 +115,10 @@
 	let formatQuality = $state<Record<string, number>>({});
 	// Optional download size limit (KB); undefined = no limit.
 	let limitKb = $state<number | undefined>(undefined);
+	// Mask preview per step (keyed by step.key): the toggle lives on every
+	// step result tile, not just the final one.
+	const maskOnKeys = new SvelteSet<string>();
+	let maskResults = $state<Record<string, PixelImage | null>>({});
 	let dragFrom = $state<number | null>(null);
 
 	const lastTool = $derived(
@@ -165,6 +170,10 @@
 			: current.text;
 	});
 
+	const stepMaskable = $derived(steps.map((s) => !!getTool(s.id)?.runMask));
+	const stepMaskOn = $derived(steps.map((s) => maskOnKeys.has(s.key)));
+	const stepMasks = $derived(steps.map((s) => maskResults[s.key] ?? null));
+
 	const debouncedRun = debounce(() => run(), 200);
 
 	function touchedFor(key: string): SvelteSet<string> {
@@ -209,6 +218,8 @@
 		textResult = null;
 		verdictVars = undefined;
 		displayError = null;
+		maskOnKeys.clear();
+		maskResults = {};
 	}
 
 	function setStepValue(
@@ -517,6 +528,41 @@
 		return () => debouncedRun.cancel();
 	});
 
+	// Mask preview: recomputed on the main thread per toggled step from that
+	// step's input; a mask never enters the chain itself.
+	$effect(() => {
+		void steps;
+		void stepResults;
+		void source;
+		const next: Record<string, PixelImage | null> = {};
+		steps.forEach((step, i) => {
+			if (!maskOnKeys.has(step.key)) return;
+			const stepTool = getTool(step.id);
+			if (!stepTool?.runMask) return;
+			const input = i === 0 ? source : stepResults[i - 1];
+			if (!input) return;
+			try {
+				next[step.key] = stepTool.runMask({
+					params: step.params,
+					source: input,
+				});
+			} catch {
+				next[step.key] = null;
+			}
+		});
+		maskResults = next;
+	});
+
+	function toggleStepMask(key: string) {
+		if (maskOnKeys.has(key)) maskOnKeys.delete(key);
+		else maskOnKeys.add(key);
+	}
+
+	function toggleStepMaskByIndex(i: number) {
+		const step = steps[i];
+		if (step) toggleStepMask(step.key);
+	}
+
 	function toDisplayError(e: unknown): DisplayError {
 		if (e instanceof ToolError) {
 			return { kind: "i18n", key: e.key, vars: e.vars };
@@ -614,6 +660,16 @@
 			</StepCard>
 		{/snippet}
 
+		{#snippet maskChip(i: number)}
+			{#if stepMaskable[i]}
+				<ChipButton
+					label={t("resultCard.maskToggle")}
+					active={stepMaskOn[i]}
+					onclick={() => toggleStepMask(steps[i].key)}
+				/>
+			{/if}
+		{/snippet}
+
 		{#if !alignedMode}
 			<div class="workspace">
 				<section class="settings">
@@ -648,6 +704,15 @@
 						{alphaLoss}
 						{stepResults}
 						{aligned}
+						{stepMaskable}
+						{stepMaskOn}
+						{stepMasks}
+						ontogglestepmask={toggleStepMaskByIndex}
+						mask={stepMasks.at(-1) ?? null}
+						maskOn={stepMaskOn.at(-1) ?? false}
+						ontogglemask={stepMaskable.at(-1)
+							? () => toggleStepMask(steps[steps.length - 1].key)
+							: undefined}
 						ontogglealign={() => (aligned = !aligned)}
 						onformat={(v) => (format = v)}
 						onquality={setFormatQuality}
@@ -746,6 +811,11 @@
 									textVars={verdictVars}
 									toolId={lastTool.id}
 									{running}
+									mask={stepMasks[i] ?? null}
+									maskOn={stepMaskOn[i] ?? false}
+									ontogglemask={stepMaskable[i]
+										? () => toggleStepMask(steps[i].key)
+										: undefined}
 									oncopy={copyText}
 									ondownloadtxt={downloadText}
 								/>
@@ -755,8 +825,16 @@
 									viewMode="image"
 									dims={out ? `${out.width} × ${out.height}` : undefined}
 								>
+									{#snippet actions()}
+										{@render maskChip(i)}
+									{/snippet}
 									{#if out}
-										<img src={toDataUrl(out)} alt="" />
+										<img
+											src={toDataUrl(
+												stepMaskOn[i] && stepMasks[i] ? stepMasks[i]! : out,
+											)}
+											alt=""
+										/>
 									{:else}
 										<span class="empty">{t("resultCard.noResult")}</span>
 									{/if}

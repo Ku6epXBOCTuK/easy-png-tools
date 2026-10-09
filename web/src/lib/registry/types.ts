@@ -67,6 +67,7 @@ export type Tool<P = Record<string, unknown>> = {
 	/** Needs the DOM (canvas/document); the preview executor runs it directly, not in a worker. */
 	domOnly?: boolean;
 	output?: OutputFormat;
+	runMask?: (ctx: ToolContext<P>) => PixelImage;
 	/** Note at the result tile when the outcome differs from requested (clamped, aspect-corrected, grew past canvas). */
 	resultNote?: (params: P, result: PixelImage) => ResultNote | null;
 };

@@ -1,4 +1,5 @@
 import {
+	colorMask,
 	extractAlphaMask,
 	flattenOntoColor,
 	hardenAlpha,
@@ -7,10 +8,12 @@ import {
 	roundCorners,
 	setAlphaChannel,
 } from "../../core/alpha";
-import { removeBackground } from "../../core/background";
+import { backgroundMaskPreview, removeBackground } from "../../core/background";
+import { diffMask, renderPredicateMask } from "../../core/masks";
 import {
 	closingImage,
 	contourImage,
+	contourMask,
 	dilateImage,
 	erodeImage,
 	openingImage,
@@ -21,12 +24,23 @@ import {
 	boxTest,
 	circleTest,
 	renderShape,
+	renderShapeMask,
 	starTest,
 	wavyTest,
 } from "../../core/shapes";
+import type { PixelImage } from "../../core/types";
 import type { Offset } from "../../registry-schema";
 import { field, toolSchema } from "../../registry-schema";
-import { imgTool, type Tool } from "../types";
+import { imgTool, requireSource, type Tool, type ToolContext } from "../types";
+
+/** Mask of an alpha-morphology tool: grayscale alpha of the result. */
+function alphaOfResult<P>(
+	ctx: ToolContext<P>,
+	fn: (img: PixelImage, p: P) => PixelImage,
+): PixelImage {
+	const img = requireSource(ctx);
+	return extractAlphaMask(fn(img, ctx.params));
+}
 
 interface AddStrokeParams {
 	color: string;
@@ -95,6 +109,10 @@ const removeColor: Tool<RemoveColorParams> = {
 	schema: removeColorSchema,
 	input: "image",
 	run: imgTool((img, p) => removeColorToAlpha(img, p.targetColor, p.tolerance)),
+	runMask: (ctx) => {
+		const img = requireSource(ctx);
+		return colorMask(img, ctx.params.targetColor, ctx.params.tolerance);
+	},
 };
 
 interface CircleMaskParams {
@@ -142,6 +160,18 @@ const circleMask: Tool<CircleMaskParams> = {
 			{ x: p.size / 200, y: p.size / 200 },
 		),
 	),
+	runMask: (ctx) => {
+		const img = requireSource(ctx);
+		const p = ctx.params;
+		return renderShapeMask(
+			img.width,
+			img.height,
+			circleTest(p.size / 200),
+			p.offset.x / 100,
+			p.offset.y / 100,
+			{ x: p.size / 200, y: p.size / 200 },
+		);
+	},
 };
 
 interface SquareMaskParams {
@@ -201,6 +231,18 @@ const squareMask: Tool<SquareMaskParams> = {
 			{ x: p.widthPct / 200, y: p.heightPct / 200 },
 		),
 	),
+	runMask: (ctx) => {
+		const img = requireSource(ctx);
+		const p = ctx.params;
+		return renderShapeMask(
+			img.width,
+			img.height,
+			boxTest(p.widthPct / 200, p.heightPct / 200),
+			p.offset.x / 100,
+			p.offset.y / 100,
+			{ x: p.widthPct / 200, y: p.heightPct / 200 },
+		);
+	},
 };
 
 interface StarMaskParams {
@@ -276,6 +318,18 @@ const starMask: Tool<StarMaskParams> = {
 			{ x: p.size / 200, y: p.size / 200 },
 		),
 	),
+	runMask: (ctx) => {
+		const img = requireSource(ctx);
+		const p = ctx.params;
+		return renderShapeMask(
+			img.width,
+			img.height,
+			starTest(p.points, p.innerRadius / 100, p.size / 200, p.rotation),
+			p.offset.x / 100,
+			p.offset.y / 100,
+			{ x: p.size / 200, y: p.size / 200 },
+		);
+	},
 };
 
 interface WavyMaskParams {
@@ -351,6 +405,18 @@ const wavyMask: Tool<WavyMaskParams> = {
 			{ x: (p.size + p.amplitude) / 200, y: (p.size + p.amplitude) / 200 },
 		),
 	),
+	runMask: (ctx) => {
+		const img = requireSource(ctx);
+		const p = ctx.params;
+		return renderShapeMask(
+			img.width,
+			img.height,
+			wavyTest(p.size / 200, p.amplitude / 200, p.waves, p.phase),
+			p.offset.x / 100,
+			p.offset.y / 100,
+			{ x: (p.size + p.amplitude) / 200, y: (p.size + p.amplitude) / 200 },
+		);
+	},
 };
 
 interface EmptyParams {}
@@ -362,6 +428,10 @@ const removeAlphaChannel: Tool<EmptyParams> = {
 	schema: removeAlphaChannelSchema,
 	input: "image",
 	run: imgTool((img) => flattenOntoColor(img, "#ffffff")),
+	runMask: (ctx) =>
+		renderPredicateMask(requireSource(ctx), (_r, _g, _b, a) => a < 255, {
+			mode: "binary",
+		}),
 };
 
 interface SetAlphaChannelParams {
@@ -413,6 +483,7 @@ const roundCornersTool: Tool<RoundCornersParams> = {
 	schema: roundCornersSchema,
 	input: "image",
 	run: imgTool((img, p) => roundCorners(img, p.radius)),
+	runMask: (ctx) => alphaOfResult(ctx, (img, p) => roundCorners(img, p.radius)),
 };
 
 export const invertAlphaSchema = toolSchema<EmptyParams>({});
@@ -422,6 +493,7 @@ const invertAlphaTool: Tool<EmptyParams> = {
 	schema: invertAlphaSchema,
 	input: "image",
 	run: imgTool((img) => invertAlpha(img)),
+	runMask: (ctx) => alphaOfResult(ctx, invertAlpha),
 };
 
 interface RemoveBackgroundParams {
@@ -476,6 +548,15 @@ const removeBackgroundTool: Tool<RemoveBackgroundParams> = {
 			smoothPasses: p.smooth,
 		}),
 	),
+	runMask: (ctx) => {
+		const p = ctx.params;
+		return backgroundMaskPreview(requireSource(ctx), {
+			color: p.color,
+			tolerancePercent: p.tolerance,
+			outerOnly: p.outerOnly,
+			smoothPasses: p.smooth,
+		});
+	},
 };
 
 interface MakeThickerParams {
@@ -497,6 +578,7 @@ const makeThickerTool: Tool<MakeThickerParams> = {
 	schema: makeThickerSchema,
 	input: "image",
 	run: imgTool((img, p) => dilateImage(img, p.radius)),
+	runMask: (ctx) => alphaOfResult(ctx, (img, p) => dilateImage(img, p.radius)),
 };
 
 interface MakeThinnerParams {
@@ -518,6 +600,7 @@ const makeThinnerTool: Tool<MakeThinnerParams> = {
 	schema: makeThinnerSchema,
 	input: "image",
 	run: imgTool((img, p) => erodeImage(img, p.radius)),
+	runMask: (ctx) => alphaOfResult(ctx, (img, p) => erodeImage(img, p.radius)),
 };
 
 interface FeatherEdgesParams {
@@ -539,6 +622,7 @@ const featherEdgesTool: Tool<FeatherEdgesParams> = {
 	schema: featherEdgesSchema,
 	input: "image",
 	run: imgTool((img, p) => featherAlpha(img, p.radius)),
+	runMask: (ctx) => alphaOfResult(ctx, (img, p) => featherAlpha(img, p.radius)),
 };
 
 interface CleanEdgesParams {
@@ -560,6 +644,10 @@ const cleanEdgesTool: Tool<CleanEdgesParams> = {
 	schema: cleanEdgesSchema,
 	input: "image",
 	run: imgTool((img, p) => defringe(img, p.radius)),
+	runMask: (ctx) => {
+		const img = requireSource(ctx);
+		return diffMask(img, defringe(img, ctx.params.radius));
+	},
 };
 
 interface HardenAlphaParams {
@@ -581,6 +669,8 @@ const hardenAlphaTool: Tool<HardenAlphaParams> = {
 	schema: hardenAlphaSchema,
 	input: "image",
 	run: imgTool((img, p) => hardenAlpha(img, p.threshold)),
+	runMask: (ctx) =>
+		alphaOfResult(ctx, (img, p) => hardenAlpha(img, p.threshold)),
 };
 
 interface DespeckleAlphaParams {
@@ -602,6 +692,7 @@ const despeckleAlphaTool: Tool<DespeckleAlphaParams> = {
 	schema: despeckleAlphaSchema,
 	input: "image",
 	run: imgTool((img, p) => openingImage(img, p.radius)),
+	runMask: (ctx) => alphaOfResult(ctx, (img, p) => openingImage(img, p.radius)),
 };
 
 interface CloseHolesParams {
@@ -623,6 +714,7 @@ const closeHolesTool: Tool<CloseHolesParams> = {
 	schema: closeHolesSchema,
 	input: "image",
 	run: imgTool((img, p) => closingImage(img, p.radius)),
+	runMask: (ctx) => alphaOfResult(ctx, (img, p) => closingImage(img, p.radius)),
 };
 
 export const alphaTools = [

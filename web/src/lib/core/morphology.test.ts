@@ -3,6 +3,7 @@ import {
 	buildAlphaMask,
 	closingImage,
 	contourImage,
+	contourMask,
 	dilateImage,
 	dilateMask,
 	erodeImage,
@@ -187,5 +188,26 @@ describe("contourImage", () => {
 		expect(at(2, 2)).toEqual([0, 0, 255, 255]);
 		expect(at(3, 3)).toEqual([0, 0, 0, 0]);
 		expect(at(1, 3)).toEqual([0, 0, 0, 0]);
+	});
+});
+
+describe("contourMask", () => {
+	it("white line on the alpha edge, black elsewhere", () => {
+		const pixels = [];
+		for (let y = 0; y < 7; y++) {
+			for (let x = 0; x < 7; x++) {
+				pixels.push(
+					x >= 2 && x <= 4 && y >= 2 && y <= 4
+						? [255, 255, 255, 255]
+						: [0, 0, 0, 0],
+				);
+			}
+		}
+		const out = contourMask(makeImage(7, 7, pixels), 1);
+		const at = (x: number, y: number) => out.data[(y * 7 + x) * 4];
+		expect(at(2, 2)).toBe(255);
+		expect(at(3, 3)).toBe(0);
+		expect(at(0, 0)).toBe(0);
+		expect(out.data[3]).toBe(255);
 	});
 });

@@ -1,5 +1,5 @@
 import { gaussianBlur, sharpen as sharpenImage } from "../../core/convolution";
-import { vignette } from "../../core/effects";
+import { vignette, vignetteMask } from "../../core/effects";
 import { jpegRoundtrip } from "../../core/io";
 import {
 	addNoise,
@@ -8,7 +8,7 @@ import {
 	silhouette,
 } from "../../core/pixel-fx";
 import { field, toolSchema } from "../../registry-schema";
-import { imgTool, type Tool } from "../types";
+import { imgTool, requireSource, type Tool } from "../types";
 
 interface BlurParams {
 	radius: number;
@@ -94,6 +94,10 @@ const vignetteTool: Tool<VignetteParams> = {
 	schema: vignetteSchema,
 	input: "image",
 	run: imgTool((img, p) => vignette(img, p.strength)),
+	runMask: (ctx) => {
+		const img = requireSource(ctx);
+		return vignetteMask(img.width, img.height, ctx.params.strength);
+	},
 };
 
 interface PixelateParams {

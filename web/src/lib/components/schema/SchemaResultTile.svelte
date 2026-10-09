@@ -4,6 +4,7 @@
 	import { t } from "$lib/i18n/t";
 	import type { FileResult, ResultKind, ResultNote } from "$lib/registry";
 	import { Check } from "@lucide/svelte";
+	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import SchemaTextResult from "./SchemaTextResult.svelte";
 	import PreviewTile from "./PreviewTile.svelte";
 
@@ -16,6 +17,9 @@
 		textVars?: Record<string, string | number>;
 		toolId?: string;
 		running?: boolean;
+		mask?: PixelImage | null;
+		maskOn?: boolean;
+		ontogglemask?: () => void;
 		oncopy?: () => void;
 		ondownloadtxt?: () => void;
 	}
@@ -28,11 +32,15 @@
 		textVars = undefined,
 		toolId = "",
 		running = false,
+		mask = null,
+		maskOn = false,
+		ontogglemask,
 		oncopy,
 		ondownloadtxt,
 	}: Props = $props();
 
-	const resultUrl = $derived(result ? toDataUrl(result) : null);
+	const shown = $derived(maskOn && mask ? mask : result);
+	const resultUrl = $derived(shown ? toDataUrl(shown) : null);
 	const resultDims = $derived(
 		resultKind === "image" && result
 			? `${result.width} × ${result.height}`
@@ -68,6 +76,15 @@
 	note={resultNote ? t(resultNote.key) : undefined}
 	noteTone={resultNote?.tone ?? "warning"}
 >
+	{#snippet actions()}
+		{#if ontogglemask}
+			<ChipButton
+				label={t("resultCard.maskToggle")}
+				active={maskOn}
+				onclick={ontogglemask}
+			/>
+		{/if}
+	{/snippet}
 	<div
 		class="canvas"
 		class:checker={resultKind === "image"}

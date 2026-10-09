@@ -13,7 +13,8 @@ import {
 } from "../../core/masks";
 import { base64ToBytes, looksLikePng, stripDataUri } from "../../core/textio";
 import { field, toolSchema } from "../../registry-schema";
-import { imgTool, textGen, type Tool } from "../types";
+import { colorMask } from "../../core/alpha";
+import { imgTool, requireSource, textGen, type Tool } from "../types";
 
 interface ExtractColorParams {
 	color: string;
@@ -36,6 +37,10 @@ const extractColor: Tool<ExtractColorParams> = {
 	schema: extractColorSchema,
 	input: "image",
 	run: imgTool((img, p) => extractByColor(img, p.color, p.tolerance)),
+	runMask: (ctx) => {
+		const img = requireSource(ctx);
+		return colorMask(img, ctx.params.color, ctx.params.tolerance);
+	},
 };
 
 interface MaskParams {

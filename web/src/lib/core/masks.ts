@@ -118,6 +118,30 @@ export function extractByColor(
 }
 
 /**
+ * Pixels that differ between before/after become white, the rest black.
+ * Size mismatch (crop/trim) means everything changed: all white.
+ */
+export function diffMask(before: PixelImage, after: PixelImage): PixelImage {
+	const out = createPixelImage(before.width, before.height);
+	const sameSize =
+		before.width === after.width && before.height === after.height;
+	for (let i = 0; i < out.data.length; i += 4) {
+		const changed =
+			!sameSize ||
+			before.data[i] !== after.data[i] ||
+			before.data[i + 1] !== after.data[i + 1] ||
+			before.data[i + 2] !== after.data[i + 2] ||
+			before.data[i + 3] !== after.data[i + 3];
+		const v = changed ? 255 : 0;
+		out.data[i] = v;
+		out.data[i + 1] = v;
+		out.data[i + 2] = v;
+		out.data[i + 3] = 255;
+	}
+	return out;
+}
+
+/**
  * Counts color frequencies and returns a predicate "occurs at most limit times".
  */
 export function rarityPredicate(

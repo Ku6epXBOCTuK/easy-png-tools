@@ -3,6 +3,7 @@ import { PAGES, TOOLS } from ".";
 import { PREVIEW_GROUPS } from "../catalog";
 import type { PixelImage } from "../core/types";
 import type { OutputMime } from "../core/io";
+import { makeImage } from "../core/test-helpers";
 import { defaultSchemaParams, sanitizeSchemaParams } from "../registry-schema";
 import type { FileResult, ToolResult } from "./types";
 
@@ -150,6 +151,38 @@ describe("registry-new (migrated tools)", () => {
 					output.qualityParamId,
 					`${tool.id}: bmp quality`,
 				).toBeUndefined();
+			}
+		}
+	});
+
+	it("runMask returns an opaque source-sized mask for tools declaring it", () => {
+		// Mask preview contract: same geometry as the step input, fully opaque
+		// b/w rendering, synchronous and DOM-free.
+		const source = makeImage(4, 3, [
+			[255, 0, 0, 255],
+			[0, 255, 0, 255],
+			[0, 0, 255, 128],
+			[255, 255, 255, 0],
+			[0, 0, 0, 255],
+			[255, 255, 0, 255],
+			[0, 255, 255, 64],
+			[255, 0, 255, 255],
+			[128, 128, 128, 255],
+			[32, 64, 128, 200],
+			[255, 128, 0, 255],
+			[0, 128, 255, 255],
+		]);
+		const withMask = TOOLS.filter((tool) => tool.runMask);
+		expect(withMask.length).toBeGreaterThan(0);
+		for (const tool of withMask) {
+			const mask = tool.runMask!({
+				params: defaultSchemaParams(tool.schema),
+				source,
+			});
+			expect(mask.width, `${tool.id}: width`).toBe(source.width);
+			expect(mask.height, `${tool.id}: height`).toBe(source.height);
+			for (let a = 3; a < mask.data.length; a += 4) {
+				expect(mask.data[a], `${tool.id}: alpha @${a}`).toBe(255);
 			}
 		}
 	});

@@ -24,6 +24,7 @@ import {
 	type Anchor9,
 	type FlipAxis,
 } from "../../core/geometry";
+import { renderPredicateMask } from "../../core/masks";
 import { field, toolSchema, type Dimension } from "../../registry-schema";
 import {
 	imgTool,
@@ -547,6 +548,10 @@ const centerByAlphaTool: Tool<EmptyParams> = {
 	schema: centerByAlphaSchema,
 	input: "image",
 	run: imgTool((img) => centerByAlpha(img)),
+	runMask: (ctx) =>
+		renderPredicateMask(requireSource(ctx), (_r, _g, _b, a) => a > 0, {
+			mode: "binary",
+		}),
 };
 
 interface SkewParams {
@@ -639,6 +644,12 @@ const trimEmptySpaceTool: Tool<TrimEmptySpaceParams> = {
 	schema: trimEmptySpaceSchema,
 	input: "image",
 	run: imgTool((img, p) => trimToContent(img, p.threshold)),
+	runMask: (ctx) =>
+		renderPredicateMask(
+			requireSource(ctx),
+			(_r, _g, _b, a) => a > ctx.params.threshold,
+			{ mode: "binary" },
+		),
 };
 
 type AspectRatio = "1:1" | "4:3" | "3:4" | "3:2" | "2:3" | "16:9" | "9:16";
