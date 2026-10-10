@@ -2,7 +2,6 @@ import type { PixelImage } from "$lib/core/types";
 import {
 	createStep,
 	insertStep,
-	moveStep,
 	removeStep,
 	type ChainStep,
 } from "$lib/pipeline.svelte";
@@ -23,7 +22,6 @@ export interface SchemaToolStateCtx {
 
 interface StepsState {
 	steps: ChainStep[];
-	dragFrom: number | null;
 }
 
 export function toolSchemaOf(step: ChainStep) {
@@ -122,7 +120,7 @@ function touchedFor(marks: Marks, key: string): SvelteSet<string> {
 // Chain-step state of SchemaToolView: the steps array, per-step edit marks
 // and all mutations. Results/execution live in schema-tool-runner.svelte.ts.
 export function createSchemaToolState(ctx: SchemaToolStateCtx) {
-	const s = $state<StepsState>({ steps: [], dragFrom: null });
+	const s = $state<StepsState>({ steps: [] });
 	const marks: Marks = {
 		touchedByStep: new SvelteMap(),
 		lastAxis: {},
@@ -133,12 +131,6 @@ export function createSchemaToolState(ctx: SchemaToolStateCtx) {
 		},
 		set steps(v: ChainStep[]) {
 			s.steps = v;
-		},
-		get dragFrom() {
-			return s.dragFrom;
-		},
-		set dragFrom(v: number | null) {
-			s.dragFrom = v;
 		},
 		touchedFor: (key: string) => touchedFor(marks, key),
 		// Marks are keyed by step.key from the previous host; keep them and
@@ -180,11 +172,6 @@ export function createSchemaToolState(ctx: SchemaToolStateCtx) {
 				key: step.key,
 				collapsed: step.collapsed,
 			});
-		},
-		onStepDrop: (e: DragEvent, to: number) => {
-			e.preventDefault();
-			if (s.dragFrom !== null) s.steps = moveStep(s.steps, s.dragFrom, to);
-			s.dragFrom = null;
 		},
 	};
 }

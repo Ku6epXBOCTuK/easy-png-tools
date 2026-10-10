@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { resolve } from "$app/paths";
-	import StepCard from "$lib/components/display/StepCard.svelte";
 	import Button from "$lib/components/ui/Button.svelte";
 	import { ButtonVariantDefine } from "$lib/components/ui/define";
 	import { isFav, toggleFav } from "$lib/favorites.svelte";
-	import { Star } from "@lucide/svelte";
+	import { GripVertical, Star } from "@lucide/svelte";
+	import { DragDropProvider } from "@dnd-kit/svelte";
 	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
 	import { ToolError } from "$lib/core/errors";
@@ -30,6 +30,7 @@
 	import {
 		createChain,
 		isStructuralDefault,
+		moveStep,
 		type ChainStep,
 	} from "$lib/pipeline.svelte";
 	import {
@@ -49,8 +50,11 @@
 	import SchemaAlignedLayout from "./SchemaAlignedLayout.svelte";
 	import SchemaFields from "./SchemaFields.svelte";
 	import SchemaPreview from "./SchemaPreview.svelte";
+	import SortableStepCard from "./SortableStepCard.svelte";
+	import StepDropIndicator from "./StepDropIndicator.svelte";
 	import ToolPickerButton from "./ToolPickerButton.svelte";
 	import { createSchemaToolRunner } from "./schema-tool-runner.svelte";
+	import { createStepDnd } from "./step-dnd.svelte";
 	import {
 		createSchemaToolState,
 		toolSchemaOf,
@@ -121,9 +125,13 @@
 		removeStepAt,
 		toggleStep,
 		replaceStepTool,
-		onStepDrop,
 	} = stepState;
 	const steps = $derived(stepState.steps);
+	const stepDnd = createStepDnd({
+		onMove: (from, to) => {
+			stepState.steps = moveStep(stepState.steps, from, to);
+		},
+	});
 
 	const runner = createSchemaToolRunner({
 		pageSlug: () => page.slug,
@@ -440,26 +448,13 @@
 		</header>
 
 		{#snippet stepCard(step: ChainStep, i: number)}
-			<StepCard
-				index={i + 1}
+			<SortableStepCard
+				{step}
+				index={i}
 				title={stepTitle(step.id)}
-				draggable
 				collapsed={step.collapsed ?? false}
 				ontoggle={() => toggleStep(i)}
 				onremove={steps.length > 1 ? () => removeStepAt(step.key) : undefined}
-				ondragstart={(e) => {
-					stepState.dragFrom = i;
-					if (e.dataTransfer) {
-						e.dataTransfer.effectAllowed = "move";
-						e.dataTransfer.setData("text/plain", String(i));
-					}
-				}}
-				ondragover={(e) => {
-					e.preventDefault();
-					if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
-				}}
-				ondrop={(e) => onStepDrop(e, i)}
-				ondragend={() => (stepState.dragFrom = null)}
 			>
 				{#snippet tools()}
 					<ToolPickerButton
@@ -479,122 +474,147 @@
 						onreset={() => resetStep(i)}
 					/>
 				{/if}
-			</StepCard>
+			</SortableStepCard>
 		{/snippet}
 
-		{#if !alignedMode}
-			<div class="workspace">
-				<section class="settings">
-					{#if canExtend}
-						<AddStepButton onadd={(id) => addStepAt(0, id)} />
-					{/if}
-					{#each steps as step, i (step.key)}
-						{@render stepCard(step, i)}
-						{#if canExtend}
-							<AddStepButton onadd={(id) => addStepAt(i + 1, id)} />
+		<DragDropProvider
+			onDragStart={stepDnd.onDragStart}
+			onDragMove={stepDnd.onDragOver}
+			onDragOver={stepDnd.onDragOver}
+			onDragEnd={stepDnd.onDragEnd}
+		>
+			{#if !alignedMode}
+				<div class="workspace">
+					<section class="settings">
+						{#if canExtend && !stepDnd.active}
+							<AddStepButton onadd={(id) => addStepAt(0, id)} />
 						{/if}
-					{/each}
-				</section>
+						{#each steps as step, i (step.key)}
+							{#if stepDnd.isIndicatorAt(i)}
+								<StepDropIndicator height={stepDnd.dragHeight} />
+							{/if}
+							{@render stepCard(step, i)}
+							{#if canExtend && !stepDnd.active}
+								<AddStepButton onadd={(id) => addStepAt(i + 1, id)} />
+							{/if}
+						{/each}
+						{#if stepDnd.isIndicatorAt(steps.length)}
+							<StepDropIndicator height={stepDnd.dragHeight} />
+						{/if}
+					</section>
 
-				<section class="panel">
-					<SchemaPreview
-						toolId={lastTool.id}
-						{inputMode}
-						resultKind={displayResultKind}
-						running={busy}
-						error={errorText}
-						bind:aligned
-						head={{
-							format,
-							quality: currentQuality,
-							limitKb,
-							alphaLoss,
-							onupload: handleFile,
-							ondownload: download,
-							onformat: (v) => (format = v),
-							onquality: setFormatQuality,
-							onlimit: (v) => (limitKb = v),
-						}}
-						source={{
-							source,
-							sources: sourceFiles,
-							fileCount: sourceFiles.length,
-							textSource,
-							ontextinput: (v) => (textSource = v),
-							onrendertext: run,
-							onuploadmany: handleFiles,
-						}}
-						steps={{
-							results: stepResults,
-							fileSets: stepFileSets,
-							maskable: stepMaskable,
-							maskOn: stepMaskOn,
-							masks: stepMasks,
-							ontogglestepmask: toggleStepMaskByIndex,
-						}}
-						result={{
-							result,
-							resultNote,
-							fileResult,
-							textResult,
-							textVars: verdictVars,
-							mask: stepMasks.at(-1) ?? null,
-							maskOn: stepMaskOn.at(-1) ?? false,
-							ontogglemask: stepMaskable.at(-1)
-								? () => toggleStepMask(steps[steps.length - 1].key)
-								: undefined,
-							oncopy: copyText,
-							ondownloadtxt: downloadText,
-						}}
-					/>
-				</section>
-			</div>
-			{#each allWarnings as w (warningText(w))}
-				<p class="warn" role="status">{warningText(w)}</p>
-			{/each}
-		{:else}
-			<SchemaAlignedLayout
-				{steps}
-				{stepCard}
-				{canExtend}
-				bind:aligned
-				{inputMode}
-				{source}
-				{sourceFiles}
-				{textSource}
-				running={busy}
-				resultKind={displayResultKind}
-				{result}
-				{resultNote}
-				{fileResult}
-				{textResult}
-				textVars={verdictVars}
-				toolId={lastTool.id}
-				{format}
-				quality={currentQuality}
-				{limitKb}
-				{alphaLoss}
-				{errorText}
-				warnings={allWarnings.map(warningText)}
-				{stepResults}
-				{stepFileSets}
-				{stepMasks}
-				{stepMaskOn}
-				{stepMaskable}
-				onaddstep={addStepAt}
-				ontogglestepmask={toggleStepMaskByIndex}
-				ontextinput={(v) => (textSource = v)}
-				onrendertext={run}
-				onupload={handleFile}
-				onuploadmany={handleFiles}
-				ondownload={download}
-				oncopy={copyText}
-				ondownloadtxt={downloadText}
-				onformat={(v) => (format = v)}
-				onquality={setFormatQuality}
-				onlimit={(v) => (limitKb = v)}
-			/>
-		{/if}
+					<section class="panel">
+						<SchemaPreview
+							toolId={lastTool.id}
+							{inputMode}
+							resultKind={displayResultKind}
+							running={busy}
+							error={errorText}
+							bind:aligned
+							head={{
+								format,
+								quality: currentQuality,
+								limitKb,
+								alphaLoss,
+								onupload: handleFile,
+								ondownload: download,
+								onformat: (v) => (format = v),
+								onquality: setFormatQuality,
+								onlimit: (v) => (limitKb = v),
+							}}
+							source={{
+								source,
+								sources: sourceFiles,
+								fileCount: sourceFiles.length,
+								textSource,
+								ontextinput: (v) => (textSource = v),
+								onrendertext: run,
+								onuploadmany: handleFiles,
+							}}
+							steps={{
+								results: stepResults,
+								fileSets: stepFileSets,
+								maskable: stepMaskable,
+								maskOn: stepMaskOn,
+								masks: stepMasks,
+								ontogglestepmask: toggleStepMaskByIndex,
+							}}
+							result={{
+								result,
+								resultNote,
+								fileResult,
+								textResult,
+								textVars: verdictVars,
+								mask: stepMasks.at(-1) ?? null,
+								maskOn: stepMaskOn.at(-1) ?? false,
+								ontogglemask: stepMaskable.at(-1)
+									? () => toggleStepMask(steps[steps.length - 1].key)
+									: undefined,
+								oncopy: copyText,
+								ondownloadtxt: downloadText,
+							}}
+						/>
+					</section>
+				</div>
+				{#each allWarnings as w (warningText(w))}
+					<p class="warn" role="status">{warningText(w)}</p>
+				{/each}
+			{:else}
+				<SchemaAlignedLayout
+					{steps}
+					{stepCard}
+					{canExtend}
+					{stepDnd}
+					bind:aligned
+					{inputMode}
+					{source}
+					{sourceFiles}
+					{textSource}
+					running={busy}
+					resultKind={displayResultKind}
+					{result}
+					{resultNote}
+					{fileResult}
+					{textResult}
+					textVars={verdictVars}
+					toolId={lastTool.id}
+					{format}
+					quality={currentQuality}
+					{limitKb}
+					{alphaLoss}
+					{errorText}
+					warnings={allWarnings.map(warningText)}
+					{stepResults}
+					{stepFileSets}
+					{stepMasks}
+					{stepMaskOn}
+					{stepMaskable}
+					onaddstep={addStepAt}
+					ontogglestepmask={toggleStepMaskByIndex}
+					ontextinput={(v) => (textSource = v)}
+					onrendertext={run}
+					onupload={handleFile}
+					onuploadmany={handleFiles}
+					ondownload={download}
+					oncopy={copyText}
+					ondownloadtxt={downloadText}
+					onformat={(v) => (format = v)}
+					onquality={setFormatQuality}
+					onlimit={(v) => (limitKb = v)}
+				/>
+			{/if}
+			{#if stepDnd.activeData && stepDnd.pointer}
+				<div
+					class="step-ghost"
+					style:width="{stepDnd.ghostWidth}px"
+					style:left="{stepDnd.pointer.x - stepDnd.grabOffset.x}px"
+					style:top="{stepDnd.pointer.y - stepDnd.grabOffset.y}px"
+				>
+					<GripVertical size={16} aria-hidden="true" />
+					<span class="step-ghost-title">{stepDnd.activeData.title}</span>
+				</div>
+			{/if}
+		</DragDropProvider>
 	</div>
 {:else}
 	<p class="no-schema">{t("paramsCard.noSchema")}</p>
@@ -605,6 +625,23 @@
 		padding: calc(var(--space-xxxl) + var(--space-l))
 			clamp(var(--space-m), 4vw, var(--space-xxxl));
 		flex: 1;
+	}
+	.step-ghost {
+		position: fixed;
+		z-index: var(--z-drag);
+		display: flex;
+		align-items: center;
+		gap: var(--space-m);
+		padding: var(--space-m) var(--space-xl);
+		border: var(--size-border-thick) dashed var(--color-main);
+		background: var(--color-panel);
+		color: var(--color-border);
+		opacity: 0.85;
+		pointer-events: none;
+	}
+	.step-ghost-title {
+		font: 600 var(--font-size-m) var(--font-mono);
+		color: var(--color-text);
 	}
 	.header {
 		display: flex;

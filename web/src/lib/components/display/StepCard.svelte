@@ -3,55 +3,44 @@
 	import IconButton from "$lib/components/ui/IconButton.svelte";
 	import { t } from "$lib/i18n/t";
 	import type { Snippet } from "svelte";
+	import type { Attachment } from "svelte/attachments";
 
 	interface Props {
 		index: number;
 		title?: string;
 		type?: string;
-		draggable?: boolean;
 		collapsed?: boolean;
 		tools?: Snippet;
 		children?: Snippet;
 		onremove?: () => void;
 		ontoggle?: () => void;
-		ondragstart?: (e: DragEvent) => void;
-		ondragover?: (e: DragEvent) => void;
-		ondrop?: (e: DragEvent) => void;
-		ondragend?: () => void;
+		// dnd-kit attachments wired by SortableStepCard; noop on static usage.
+		elementAttachment?: Attachment<HTMLElement>;
+		handleAttachment?: Attachment<HTMLElement>;
 	}
+
+	const noopAttach: Attachment<HTMLElement> = () => {};
 
 	let {
 		index,
 		title,
 		type,
-		draggable = false,
 		collapsed = false,
 		tools,
 		children,
 		onremove,
 		ontoggle,
-		ondragstart,
-		ondragover,
-		ondrop,
-		ondragend,
+		elementAttachment = noopAttach,
+		handleAttachment = noopAttach,
 	}: Props = $props();
 </script>
 
-<article
-	class="step-card"
-	ondragover={(e) => ondragover?.(e)}
-	ondrop={(e) => ondrop?.(e)}
->
-	<header
-		class="step-head"
-		role="button"
-		tabindex="0"
-		{draggable}
-		ondragstart={(e) => ondragstart?.(e)}
-		ondragend={() => ondragend?.()}
-	>
+<article class="step-card" {@attach elementAttachment}>
+	<header class="step-head" role="button" tabindex="0">
 		<span class="step-index">{index.toString().padStart(2, "0")}</span>
-		<GripVertical size={16} class="drag" aria-hidden="true" />
+		<span class="drag-handle" {@attach handleAttachment}>
+			<GripVertical size={16} class="drag" aria-hidden="true" />
+		</span>
 		<div class="step-heading-text">
 			{#if type}<span class="step-type">{type}</span>{/if}
 			{#if title}<h2 class="step-title">{title}</h2>{/if}
@@ -101,6 +90,12 @@
 		font: var(--font-size-s) var(--font-mono);
 		color: var(--color-main);
 	}
+	.drag-handle {
+		display: flex;
+		align-items: center;
+		cursor: grab;
+		touch-action: none;
+	}
 	.step-heading-text {
 		flex: 1;
 		display: flex;
@@ -127,6 +122,5 @@
 	}
 	.step-card :global(.drag) {
 		color: var(--color-border);
-		cursor: grab;
 	}
 </style>

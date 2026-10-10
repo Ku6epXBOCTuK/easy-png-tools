@@ -19,11 +19,14 @@
 	import SchemaActions from "./SchemaActions.svelte";
 	import SchemaResultTile from "./SchemaResultTile.svelte";
 	import SchemaSourceTile from "./SchemaSourceTile.svelte";
+	import StepDropIndicator from "./StepDropIndicator.svelte";
+	import type { StepDnd } from "./step-dnd.svelte";
 
 	interface Props {
 		steps: ChainStep[];
 		stepCard: Snippet<[ChainStep, number]>;
 		canExtend: boolean;
+		stepDnd?: StepDnd;
 		aligned: boolean;
 		inputMode: InputMode;
 		source: PixelImage | null;
@@ -65,6 +68,7 @@
 		steps,
 		stepCard,
 		canExtend,
+		stepDnd,
 		aligned = $bindable(false),
 		inputMode,
 		source,
@@ -146,13 +150,19 @@
 	{#each warnings as w (w)}
 		<p class="warn" role="status">{w}</p>
 	{/each}
-	{#if canExtend}
+	{#if canExtend && !stepDnd?.active}
 		<div class="aligned-row">
 			<AddStepButton onadd={(id) => onaddstep(0, id)} />
 			<div class="panel-segment connect-segment"></div>
 		</div>
 	{/if}
 	{#each steps as step, i (step.key)}
+		{#if stepDnd?.isIndicatorAt(i)}
+			<div class="aligned-row">
+				<StepDropIndicator height={stepDnd.dragHeight} />
+				<div class="panel-segment connect-segment"></div>
+			</div>
+		{/if}
 		{@const input = i === 0 ? null : stepResults[i - 1]}
 		{@const out = stepResults[i]}
 		{#if i > 0}
@@ -241,7 +251,7 @@
 				{/if}
 			</div>
 		</div>
-		{#if canExtend}
+		{#if canExtend && !stepDnd?.active}
 			<div class="aligned-row">
 				<AddStepButton onadd={(id) => onaddstep(i + 1, id)} />
 				<div
@@ -251,6 +261,15 @@
 			</div>
 		{/if}
 	{/each}
+	{#if stepDnd?.isIndicatorAt(steps.length)}
+		<div class="aligned-row">
+			<StepDropIndicator height={stepDnd.dragHeight} />
+			<div
+				class="panel-segment connect-segment"
+				class:add-last={!canExtend || stepDnd.active}
+			></div>
+		</div>
+	{/if}
 </div>
 
 <style>

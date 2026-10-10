@@ -177,6 +177,7 @@
 		--duration-l: 0.8s;
 
 		--z-dropdown: 10;
+		--z-drag: 20;
 	}
 
 	[data-theme="dark"] {
