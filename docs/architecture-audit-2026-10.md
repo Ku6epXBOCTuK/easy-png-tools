@@ -67,13 +67,15 @@ handleFiles, эффекты, workspace-разметка). Декомпозици
 Переработка самого паттерна `$effect(() => init())` — часть H1, отдельно не
 делалась.
 
-### M3. `SchemaPreview.svelte` — интерфейс из ~40 пропсов
+### M3. `SchemaPreview.svelte` — интерфейс из ~40 пропсов — СДЕЛАНО (2026-10)
 
-`web/src/lib/components/schema/SchemaPreview.svelte:22-103`: весь стейт
-оркестратора проброшен вниз по одному (`stepResults`, `stepMaskable`,
-`stepMaskOn`, `stepMasks`, `format`, `quality`, `limitKb`, `alphaLoss` + 11
-колбэков `on*`). Нужен группирующий view-model-объект или разбиение на
-подкомпоненты.
+Пропсы сгруппированы в 4 view-model объекта по внутреннему потребителю: `head`
+(SchemaActions), `source` (SchemaSourceTile), `steps` (промежуточные тайлы),
+`result` (SchemaResultTile). Интерфейсы — в `schema-preview-model.ts`
+(`PreviewHeadModel` и др.); имена полей зеркалят пропсы потребителей, поэтому
+внутри работает спред (`<SchemaActions {...head}>`). Плоскими остались 7
+идентифицирующих пропсов (inputMode, resultKind, toolId, running, error,
+aligned, ontogglealign).
 
 ### M4. `runMask` обходил санитизацию параметров — СДЕЛАНО (2026-10)
 

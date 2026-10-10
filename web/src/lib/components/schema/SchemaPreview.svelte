@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { hasPreviewResult } from "./schema-preview-model";
+	import {
+		hasPreviewResult,
+		type PreviewHeadModel,
+		type PreviewResultModel,
+		type PreviewSourceModel,
+		type PreviewStepsModel,
+	} from "./schema-preview-model";
 	import SchemaActions from "./SchemaActions.svelte";
 	import PartsGrid from "./PartsGrid.svelte";
 	import SchemaResultTile from "./SchemaResultTile.svelte";
@@ -9,101 +15,50 @@
 	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import type { OutputMime } from "$lib/core/io";
 	import { t } from "$lib/i18n/t";
-	import type {
-		FileResult,
-		InputMode,
-		ResultKind,
-		ResultNote,
-		ToolImageFile,
-	} from "$lib/registry";
+	import type { InputMode, ResultKind } from "$lib/registry";
 
 	interface Props {
 		inputMode: InputMode;
 		resultKind?: ResultKind;
 		toolId: string;
-		source: PixelImage | null;
-		sources?: ToolImageFile[];
-		fileCount?: number;
-		result: PixelImage | null;
-		resultNote?: ResultNote | null;
-		fileResult?: FileResult | null;
-		textSource?: string;
-		textResult?: string | null;
-		textVars?: Record<string, string | number>;
-		mask?: PixelImage | null;
-		maskOn?: boolean;
-		ontogglemask?: () => void;
 		running?: boolean;
 		error?: string;
-		stepResults?: (PixelImage | null)[];
-		stepFileSets?: ToolImageFile[][];
-		stepMaskable?: boolean[];
-		stepMaskOn?: boolean[];
-		stepMasks?: (PixelImage | null)[];
-		ontogglestepmask?: (i: number) => void;
 		aligned?: boolean;
 		ontogglealign?: () => void;
-		format?: OutputMime;
-		quality?: number;
-		limitKb?: number;
-		alphaLoss?: boolean;
-		onupload: (file: File) => void;
-		onuploadmany?: (files: File[]) => void;
-		ontextsource?: (text: string) => void;
-		onrendertext?: () => void;
-		oncopytext?: () => void;
-		ondownloadtxt?: () => void;
-		ondownload: () => void;
-		onformat?: (mime: OutputMime) => void;
-		onquality?: (value: number) => void;
-		onlimit?: (kb: number | undefined) => void;
+		head: PreviewHeadModel;
+		source: PreviewSourceModel;
+		steps?: PreviewStepsModel;
+		result: PreviewResultModel;
 	}
 	let {
 		inputMode,
 		resultKind = "image",
 		toolId,
-		source,
-		sources = [],
-		fileCount = 0,
-		result,
-		resultNote = null,
-		fileResult = null,
-		textSource = "",
-		textResult = null,
-		textVars = undefined,
-		mask = null,
-		maskOn = false,
-		ontogglemask,
 		running = false,
 		error = "",
-		stepResults = [],
-		stepFileSets = [],
-		stepMaskable = [],
-		stepMaskOn = [],
-		stepMasks = [],
-		ontogglestepmask,
 		aligned = false,
 		ontogglealign,
-		format = "image/png",
-		quality = undefined,
-		limitKb = undefined,
-		alphaLoss = false,
-		onupload,
-		onuploadmany,
-		ontextsource,
-		onrendertext,
-		oncopytext,
-		ondownloadtxt,
-		ondownload,
-		onformat,
-		onquality,
-		onlimit,
+		head,
+		source,
+		steps = {},
+		result,
 	}: Props = $props();
 
+	const stepResults = $derived(steps.results ?? []);
+	const stepFileSets = $derived(steps.fileSets ?? []);
+	const stepMaskable = $derived(steps.maskable ?? []);
+	const stepMaskOn = $derived(steps.maskOn ?? []);
+	const stepMasks = $derived(steps.masks ?? []);
+
 	const hasResult = $derived(
-		hasPreviewResult({ inputMode, resultKind, result, fileResult, textResult }),
+		hasPreviewResult({
+			inputMode,
+			resultKind,
+			result: result.result,
+			fileResult: result.fileResult ?? null,
+			textResult: result.textResult ?? null,
+		}),
 	);
 </script>
 
@@ -124,15 +79,7 @@
 		{resultKind}
 		canDownload={hasResult}
 		{running}
-		{format}
-		{quality}
-		{limitKb}
-		{alphaLoss}
-		{onupload}
-		{ondownload}
-		{onformat}
-		{onquality}
-		{onlimit}
+		{...head}
 	/>
 </div>
 
@@ -143,15 +90,9 @@
 <div class="pair">
 	<SchemaSourceTile
 		mode={inputMode}
-		{source}
-		{sources}
-		{textSource}
 		{running}
-		{fileCount}
-		ontextinput={ontextsource}
-		{onrendertext}
-		{onupload}
-		{onuploadmany}
+		onupload={head.onupload}
+		{...source}
 	/>
 	{#each stepResults.slice(0, -1) as img, i (i)}
 		{@const set = stepFileSets[i] ?? []}
@@ -167,7 +108,7 @@
 						<ChipButton
 							label={t("resultCard.maskToggle")}
 							active={stepMaskOn[i] ?? false}
-							onclick={() => ontogglestepmask?.(i)}
+							onclick={() => steps.ontogglestepmask?.(i)}
 						/>
 					{/if}
 				{/snippet}
@@ -184,7 +125,7 @@
 						<ChipButton
 							label={t("resultCard.maskToggle")}
 							active={stepMaskOn[i] ?? false}
-							onclick={() => ontogglestepmask?.(i)}
+							onclick={() => steps.ontogglestepmask?.(i)}
 						/>
 					{/if}
 				{/snippet}
@@ -197,21 +138,7 @@
 			</PreviewTile>
 		{/if}
 	{/each}
-	<SchemaResultTile
-		{resultKind}
-		{result}
-		{resultNote}
-		{fileResult}
-		{textResult}
-		{textVars}
-		{toolId}
-		{running}
-		{mask}
-		{maskOn}
-		{ontogglemask}
-		oncopy={oncopytext}
-		{ondownloadtxt}
-	/>
+	<SchemaResultTile {resultKind} {toolId} {running} {...result} />
 </div>
 
 <style>

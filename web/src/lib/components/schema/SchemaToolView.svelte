@@ -500,48 +500,54 @@
 				<section class="panel">
 					<SchemaPreview
 						toolId={lastTool.id}
-						{source}
-						sources={sourceFiles}
-						fileCount={sourceFiles.length}
-						{result}
-						{resultNote}
-						{fileResult}
-						{textSource}
-						{textResult}
-						textVars={verdictVars}
 						{inputMode}
 						resultKind={displayResultKind}
 						{running}
 						error={errorText}
-						{format}
-						quality={currentQuality}
-						{limitKb}
-						{alphaLoss}
-						{stepResults}
-						{stepFileSets}
 						{aligned}
-						{stepMaskable}
-						{stepMaskOn}
-						{stepMasks}
-						ontogglestepmask={toggleStepMaskByIndex}
-						mask={stepMasks.at(-1) ?? null}
-						maskOn={stepMaskOn.at(-1) ?? false}
-						ontogglemask={stepMaskable.at(-1)
-							? () => toggleStepMask(steps[steps.length - 1].key)
-							: undefined}
 						ontogglealign={() => (aligned = !aligned)}
-						onformat={(v) => (format = v)}
-						onquality={setFormatQuality}
-						onlimit={(v) => (limitKb = v)}
-						onupload={handleFile}
-						onuploadmany={handleFiles}
-						ontextsource={(textValue) => {
-							textSource = textValue;
+						head={{
+							format,
+							quality: currentQuality,
+							limitKb,
+							alphaLoss,
+							onupload: handleFile,
+							ondownload: download,
+							onformat: (v) => (format = v),
+							onquality: setFormatQuality,
+							onlimit: (v) => (limitKb = v),
 						}}
-						onrendertext={run}
-						oncopytext={copyText}
-						ondownloadtxt={downloadText}
-						ondownload={download}
+						source={{
+							source,
+							sources: sourceFiles,
+							fileCount: sourceFiles.length,
+							textSource,
+							ontextinput: (v) => (textSource = v),
+							onrendertext: run,
+							onuploadmany: handleFiles,
+						}}
+						steps={{
+							results: stepResults,
+							fileSets: stepFileSets,
+							maskable: stepMaskable,
+							maskOn: stepMaskOn,
+							masks: stepMasks,
+							ontogglestepmask: toggleStepMaskByIndex,
+						}}
+						result={{
+							result,
+							resultNote,
+							fileResult,
+							textResult,
+							textVars: verdictVars,
+							mask: stepMasks.at(-1) ?? null,
+							maskOn: stepMaskOn.at(-1) ?? false,
+							ontogglemask: stepMaskable.at(-1)
+								? () => toggleStepMask(steps[steps.length - 1].key)
+								: undefined,
+							oncopy: copyText,
+							ondownloadtxt: downloadText,
+						}}
 					/>
 				</section>
 			</div>
