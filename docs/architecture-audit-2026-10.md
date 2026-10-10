@@ -73,13 +73,11 @@ handleFiles, эффекты, workspace-разметка). Декомпозици
 колбэков `on*`). Нужен группирующий view-model-объект или разбиение на
 подкомпоненты.
 
-### M4. `runMask` обходит санитизацию параметров
+### M4. `runMask` обходил санитизацию параметров — СДЕЛАНО (2026-10)
 
-`SchemaToolView.svelte:591`: основной путь `run()` идёт через `execute` →
-`sanitizeSchemaParams` (`executor/executor.ts:153`), а mask-превью передаёт
-`step.params` как есть. Значения вне диапазона/невалидный hex дойдут до
-core-функций без клампинга. (Сам обход executor для `domOnly`-маски каноничен по
-`docs/architecture.md`; рассинхрон санитизации — нет.)
+`SchemaToolView.svelte` (derived `maskResults`): параметры шага теперь проходят
+`sanitizeSchemaParams(stepSchema, step.params, { source: input })` — тот же
+контракт, что в `executor/executor.ts` (вход шага как source-контекст).
 
 ### M5. UI-метаданные дропдауна скачивания в core-слое
 

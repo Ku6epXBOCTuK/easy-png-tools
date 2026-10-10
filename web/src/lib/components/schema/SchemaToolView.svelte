@@ -44,6 +44,7 @@
 	import {
 		applySourceDefaults,
 		clampSourceAwareMaxes,
+		sanitizeSchemaParams,
 		type ToolSchema,
 	} from "$lib/registry-schema";
 	import { onMount } from "svelte";
@@ -99,11 +100,14 @@
 			if (!stepTool?.runMask) return;
 			const input = i === 0 ? source : stepResults[i - 1];
 			if (!input) return;
+			// Same contract as executor.ts: params are sanitized against the
+			// schema with the step input as the source context.
+			const stepSchema = toolSchemaOf(step);
+			const params = stepSchema
+				? sanitizeSchemaParams(stepSchema, step.params, { source: input })
+				: step.params;
 			try {
-				next[step.key] = stepTool.runMask({
-					params: step.params,
-					source: input,
-				});
+				next[step.key] = stepTool.runMask({ params, source: input });
 			} catch {
 				next[step.key] = null;
 			}
