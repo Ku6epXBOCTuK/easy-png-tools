@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.7.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/7bbcec5ff0c72044dcec70d5ba41c513a0eac16b..v0.7.0) - 2026-10-10
+#### Features
+- update dnd tools in pipeline - ([7bbcec5](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/7bbcec5ff0c72044dcec70d5ba41c513a0eac16b)) - Ku6epXBOCTuK
+#### Bug Fixes
+- update drag-n-drop tools - overlay, page scrim - ([dd9cb6d](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/dd9cb6d574181ffa7520adeff5faef5cbbd494ac)) - Ku6epXBOCTuK
+- update dnd tools in pipeline - ([e866975](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/e866975045aebda6353808d419189f6aae986687)) - Ku6epXBOCTuK
+#### Performance Improvements
+- add cache for images - ([5f4c383](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/5f4c3833a199044c875b5b8e3dd8aa52b472f8a5)) - Ku6epXBOCTuK
+#### Refactoring
+- separate logic from schema tool view component - ([b7613e8](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/b7613e8c0ff82469de2585b1572fbae8f5a796fa)) - Ku6epXBOCTuK
+
+- - -
+
 ## [v0.6.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/bac82f8442a8262e757d18f0cc2b5e7fb8291516..v0.6.0) - 2026-10-10
 #### Features
 - flow for multiple files - pipeline, tools - ([bac82f8](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/bac82f8442a8262e757d18f0cc2b5e7fb8291516)) - Ku6epXBOCTuK
