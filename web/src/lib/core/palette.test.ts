@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
 	analogousSet,
 	complementarySet,
-	hexToRgb,
+	parseHexColor,
 	hslToRgb,
 	monochromaticSet,
 	mixColors,
@@ -19,9 +19,21 @@ import {
 	tetradicSet,
 } from "./palette";
 
+describe("parseHexColor", () => {
+	it("parses #rrggbb, rrggbb, #rgb", () => {
+		expect(parseHexColor("#ff8040")).toEqual({ r: 255, g: 128, b: 64 });
+		expect(parseHexColor("ff8040")).toEqual({ r: 255, g: 128, b: 64 });
+		expect(parseHexColor("#F80")).toEqual({ r: 255, g: 136, b: 0 });
+	});
+
+	it.each(["zzz", "12345", "##ff", ""])('throws on "%s"', (bad) => {
+		expect(() => parseHexColor(bad)).toThrow(/errors\.badHex/);
+	});
+});
+
 describe("rgb<->hsl conversion", () => {
 	it("red -> hsl(0,100%,50%) and back", () => {
-		const hsl = rgbToHsl(hexToRgb("#ff0000"));
+		const hsl = rgbToHsl(parseHexColor("#ff0000"));
 		expect(hsl.h).toBeCloseTo(0, 0);
 		expect(hsl.s).toBeCloseTo(1, 5);
 		expect(hsl.l).toBeCloseTo(0.5, 5);
@@ -29,14 +41,14 @@ describe("rgb<->hsl conversion", () => {
 	});
 
 	it("grays have no hue", () => {
-		expect(rgbToHsl(hexToRgb("#808080")).s).toBe(0);
+		expect(rgbToHsl(parseHexColor("#808080")).s).toBe(0);
 	});
 
 	it("360 deg wraparound returns original color", () => {
 		const base = "#3b82f6";
 		expect(
-			rgbToHex(hslToRgb({ ...rgbToHsl(hexToRgb(base)), h: 720 + 30 })),
-		).toBe(rgbToHex(hslToRgb({ ...rgbToHsl(hexToRgb(base)), h: 30 })));
+			rgbToHex(hslToRgb({ ...rgbToHsl(parseHexColor(base)), h: 720 + 30 })),
+		).toBe(rgbToHex(hslToRgb({ ...rgbToHsl(parseHexColor(base)), h: 30 })));
 	});
 });
 
@@ -44,15 +56,15 @@ describe("harmonies", () => {
 	it("complementary - pair shifted 180 deg", () => {
 		const [a, b] = complementarySet("#ff0000");
 		expect(a).toBe("#ff0000");
-		const ha = rgbToHsl(hexToRgb(a)).h;
-		const hb = rgbToHsl(hexToRgb(b)).h;
+		const ha = rgbToHsl(parseHexColor(a)).h;
+		const hb = rgbToHsl(parseHexColor(b)).h;
 		expect(Math.abs((hb - ha + 360) % 360)).toBeCloseTo(180, 0);
 	});
 
 	it("triadic - three colors 120 deg apart", () => {
 		const set = triadicSet("#ff0000");
 		expect(set).toHaveLength(3);
-		const hues = set.map((h) => rgbToHsl(hexToRgb(h)).h);
+		const hues = set.map((h) => rgbToHsl(parseHexColor(h)).h);
 		expect(hues[1] - hues[0]).toBeCloseTo(120, 0);
 		expect(hues[2] - hues[0]).toBeCloseTo(240, 0);
 	});
@@ -71,15 +83,17 @@ describe("harmonies", () => {
 	it("monochromatic keeps hue, varies lightness", () => {
 		const set = monochromaticSet("#ff8800", 5, 60);
 		expect(set).toHaveLength(5);
-		const hues = new Set(set.map((h) => Math.round(rgbToHsl(hexToRgb(h)).h)));
+		const hues = new Set(
+			set.map((h) => Math.round(rgbToHsl(parseHexColor(h)).h)),
+		);
 		expect(hues.size).toBe(1);
-		const lights = set.map((h) => rgbToHsl(hexToRgb(h)).l);
+		const lights = set.map((h) => rgbToHsl(parseHexColor(h)).l);
 		expect(Math.min(...lights)).toBeLessThan(Math.max(...lights));
 	});
 
 	it("shades - dark edge darker than base", () => {
 		const set = shadeSet("#88cc44", 4, 70);
-		const lights = set.map((h) => rgbToHsl(hexToRgb(h)).l);
+		const lights = set.map((h) => rgbToHsl(parseHexColor(h)).l);
 		expect(lights[lights.length - 1]).toBeLessThan(lights[0]);
 	});
 });

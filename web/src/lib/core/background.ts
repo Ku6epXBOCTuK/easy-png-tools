@@ -1,4 +1,4 @@
-import { parseHex } from "./alpha";
+import { parseHexColor } from "./palette";
 import { createPixelImage, type PixelImage } from "./types";
 import { clamp } from "./math";
 
@@ -93,7 +93,7 @@ export function backgroundRemovalMask(
 	img: PixelImage,
 	options: BackgroundOptions,
 ): Uint8Array {
-	const [tr, tg, tb] = parseHex(options.color);
+	const { r: tr, g: tg, b: tb } = parseHexColor(options.color);
 	const mask = buildRawMask(img, tr, tg, tb, options.tolerancePercent);
 	if (options.outerOnly) {
 		floodFromBorders(mask, img.width, img.height);

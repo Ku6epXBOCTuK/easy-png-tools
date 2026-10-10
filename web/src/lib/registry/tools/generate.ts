@@ -9,9 +9,9 @@ import { changeCanvasSize } from "../../core/geometry";
 import {
 	analogousSet,
 	complementarySet,
-	hexToRgb,
 	mixColors,
 	monochromaticSet,
+	parseHexColor,
 	renderBlend,
 	renderSwatches,
 	renderWheel,
@@ -33,7 +33,7 @@ import {
 import { genTool, type Tool } from "../types";
 
 function rgba(hex: string): [number, number, number, number] {
-	const { r, g, b } = hexToRgb(hex);
+	const { r, g, b } = parseHexColor(hex);
 	return [r, g, b, 255];
 }
 

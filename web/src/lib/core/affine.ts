@@ -1,4 +1,4 @@
-import { parseHex } from "./alpha";
+import { parseHexColor } from "./palette";
 import { ToolError } from "./errors";
 import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
 import { sampleBilinear } from "./geometry";
@@ -28,7 +28,7 @@ export function transformImage(
 ): PixelImage {
 	const [a, b, c, d, e, f] = dstToSrc;
 	const out = createPixelImage(outWidth, outHeight);
-	const bg = bgHex ? parseHex(bgHex) : null;
+	const bg = bgHex ? parseHexColor(bgHex) : null;
 	for (let y = 0; y < outHeight; y++) {
 		for (let x = 0; x < outWidth; x++) {
 			const sx = a * x + c * y + e;
@@ -41,9 +41,9 @@ export function transformImage(
 				sy > img.height - 1 + EPS
 			) {
 				if (bg) {
-					out.data[di] = bg[0];
-					out.data[di + 1] = bg[1];
-					out.data[di + 2] = bg[2];
+					out.data[di] = bg.r;
+					out.data[di + 1] = bg.g;
+					out.data[di + 2] = bg.b;
 					out.data[di + 3] = 255;
 				}
 				continue;
@@ -51,9 +51,9 @@ export function transformImage(
 			const [r, g, bl, al] = sampleBilinear(img, sx, sy);
 			if (bg) {
 				const sa = al / 255;
-				out.data[di] = r * sa + bg[0] * (1 - sa);
-				out.data[di + 1] = g * sa + bg[1] * (1 - sa);
-				out.data[di + 2] = bl * sa + bg[2] * (1 - sa);
+				out.data[di] = r * sa + bg.r * (1 - sa);
+				out.data[di + 1] = g * sa + bg.g * (1 - sa);
+				out.data[di + 2] = bl * sa + bg.b * (1 - sa);
 				out.data[di + 3] = 255;
 			} else {
 				out.data[di] = r;

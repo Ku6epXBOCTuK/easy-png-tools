@@ -1,7 +1,7 @@
 import type { PixelImage } from "./types";
 import { createPixelImage } from "./types";
 import { rgbToHex } from "./palette";
-import { hexToRgb } from "./palette";
+import { parseHexColor } from "./palette";
 
 type Rgb = { r: number; g: number; b: number };
 
@@ -127,7 +127,7 @@ export function mapToNearest(
 	img: PixelImage,
 	paletteHexes: string[],
 ): PixelImage {
-	const palette = paletteHexes.map(hexToRgb);
+	const palette = paletteHexes.map(parseHexColor);
 	const out = createPixelImage(img.width, img.height);
 	for (let i = 0; i < img.data.length; i += 4) {
 		out.data[i + 3] = img.data[i + 3];
@@ -165,7 +165,7 @@ export function ditherImage(
 	forcedPaletteHexes?: string[],
 ): PixelImage {
 	const palette = forcedPaletteHexes
-		? forcedPaletteHexes.map(hexToRgb)
+		? forcedPaletteHexes.map(parseHexColor)
 		: medianCutPalette(img, k);
 	const total = img.width * img.height;
 	const buf = new Float32Array(total * 3);

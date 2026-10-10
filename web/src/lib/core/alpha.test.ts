@@ -5,7 +5,6 @@ import {
 	flattenOntoColor,
 	hardenAlpha,
 	invertAlpha,
-	parseHex,
 	removeColorToAlpha,
 	roundCorners,
 	setAlphaChannel,
@@ -169,17 +168,5 @@ describe("flattenOntoColor", () => {
 			"#ffffff",
 		);
 		expect([...out.data]).toEqual([132, 137, 142, 255]);
-	});
-});
-
-describe("parseHex", () => {
-	it("parses #rrggbb, rrggbb, #rgb", () => {
-		expect(parseHex("#ff8040")).toEqual([255, 128, 64]);
-		expect(parseHex("ff8040")).toEqual([255, 128, 64]);
-		expect(parseHex("#F80")).toEqual([255, 136, 0]);
-	});
-
-	it.each(["zzz", "12345", "##ff", ""])('throws on "%s"', (bad) => {
-		expect(() => parseHex(bad)).toThrow(/errors\.badHex/);
 	});
 });

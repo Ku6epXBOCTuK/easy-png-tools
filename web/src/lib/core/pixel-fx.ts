@@ -1,4 +1,4 @@
-import { hexToRgb } from "./palette";
+import { parseHexColor } from "./palette";
 import type { PixelImage } from "./types";
 import { createPixelImage } from "./types";
 import { gaussianBlur } from "./convolution";
@@ -189,7 +189,7 @@ export function silhouette(
 	alphaThreshold: number,
 ): PixelImage {
 	const out = createPixelImage(img.width, img.height);
-	const { r, g, b } = hexToRgb(colorHex);
+	const { r, g, b } = parseHexColor(colorHex);
 	for (let i = 0; i < img.data.length; i += 4) {
 		if (img.data[i + 3] <= alphaThreshold) continue;
 		out.data[i] = r;

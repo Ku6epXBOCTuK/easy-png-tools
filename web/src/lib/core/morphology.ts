@@ -1,4 +1,4 @@
-import { parseHex } from "./alpha";
+import { parseHexColor } from "./palette";
 import { clonePixelImage, createPixelImage, type PixelImage } from "./types";
 
 type Mask = Uint8Array;
@@ -120,7 +120,7 @@ export function strokeImage(
 ): PixelImage {
 	const r = Math.trunc(radiusPx);
 	if (r < 1) return clonePixelImage(img);
-	const [cr, cg, cb] = parseHex(colorHex);
+	const { r: cr, g: cg, b: cb } = parseHexColor(colorHex);
 	const mask = buildAlphaMask(img);
 	const ring = dilateMask(mask, img.width, img.height, r);
 	const out = createPixelImage(img.width, img.height);
@@ -147,7 +147,7 @@ export function contourImage(
 	colorHex: string,
 ): PixelImage {
 	const r = Math.max(1, Math.trunc(radiusPx));
-	const [cr, cg, cb] = parseHex(colorHex);
+	const { r: cr, g: cg, b: cb } = parseHexColor(colorHex);
 	const mask = buildAlphaMask(img);
 	const inner = erodeMask(mask, img.width, img.height, r);
 	const line = new Uint8Array(mask.length);

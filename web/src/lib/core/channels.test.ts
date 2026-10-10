@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { hexToRgb } from "./palette";
+import { parseHexColor } from "./palette";
 import { renderSpace, SPACES } from "./channels";
 import { makeImage } from "./test-helpers";
 
 describe("space conversions", () => {
 	it("hsl of red: h=0, s=1, l=0.5", () => {
-		const [h, s, l] = SPACES.hsl.convert(hexToRgb("#ff0000"));
+		const [h, s, l] = SPACES.hsl.convert(parseHexColor("#ff0000"));
 		expect(h).toBeCloseTo(0);
 		expect(s).toBeCloseTo(1);
 		expect(l).toBeCloseTo(0.5);

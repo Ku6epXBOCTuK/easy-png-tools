@@ -1,4 +1,4 @@
-﻿import { hexToRgb } from "./palette";
+import { parseHexColor } from "./palette";
 import type { PixelImage } from "./types";
 import { createPixelImage } from "./types";
 
@@ -22,7 +22,7 @@ export function renderPredicateMask(
 ): PixelImage {
 	const out = createPixelImage(img.width, img.height);
 	const highlight = o.mode !== "binary";
-	const tint = o.color ? hexToRgb(o.color) : { r: 255, g: 0, b: 170 };
+	const tint = o.color ? parseHexColor(o.color) : { r: 255, g: 0, b: 170 };
 	const opacity = Math.min(Math.max(o.opacityPercent ?? 70, 0), 100) / 100;
 	if (!highlight) {
 		// Binary mask: opaque white-on-black
@@ -95,7 +95,7 @@ export function extractByColor(
 	tolerancePercent: number,
 ): PixelImage {
 	const out = createPixelImage(img.width, img.height);
-	const t = hexToRgb(targetHex);
+	const t = parseHexColor(targetHex);
 	const tol = (Math.min(Math.max(tolerancePercent, 0), 100) / 100) * 255;
 	for (let i = 0; i < img.data.length; i += 4) {
 		if (

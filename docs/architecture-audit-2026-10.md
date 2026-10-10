@@ -110,12 +110,15 @@ round-семантика `clampByte` и trunc-семантика `clampInt` со
 переведён на общий `clamp` через `?? -Infinity / ?? Infinity`. Копия в
 `palette.test.ts` оставлена — тесты независимы.
 
-### M8. Два параллельных hex-парсера
+### M8. Два параллельных hex-парсера — СДЕЛАНО (2026-10)
 
-`parseHex` (`core/alpha.ts:147`, tuple, бросает `ToolError`) и `hexToRgb`
-(`core/palette.ts:8`, объект `{r,g,b}`). Половина core-модулей использует первый
-(`affine.ts:31`, `geometry.ts:20`, `morphology.ts:123,150`), другая — второй
-(`masks.ts:25,98`, `pixel-fx.ts:195`, `registry/tools/generate.ts:36`).
+Единый парсер — `parseHexColor(hex): Rgb` в `core/palette.ts` (терпимый: `#?`,
+3/6 цифр, бросает `ToolError`). `hexToRgb` удалён; `parseHex` из `core/alpha.ts`
+удалён, потребители (`affine`, `background`, `geometry`, `morphology`, `alpha`)
+переведены на объектную деструктуризацию и импорт из `palette`. Тест `parseHex`
+переехал из `alpha.test.ts` в `palette.test.ts`. Поведенческое послабление:
+бывшие потребители `hexToRgb` теперь принимают и 3-значный hex — вход всё равно
+проходит санитизацию схемы.
 
 ### M9. Гард `localStorage` продублирован 4 раза — СДЕЛАНО (2026-10)
 

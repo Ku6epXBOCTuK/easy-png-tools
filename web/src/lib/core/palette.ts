@@ -6,10 +6,16 @@ import { clamp01 } from "./math";
 export type Rgb = { r: number; g: number; b: number };
 export type Hsl = { h: number; s: number; l: number };
 
-export function hexToRgb(hex: string): Rgb {
-	const m = /^#([0-9a-f]{6})$/i.exec(hex.trim());
+export function parseHexColor(hex: string): Rgb {
+	const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
 	if (!m) throw new ToolError("errors.badHex", { value: hex });
-	const d = m[1];
+	const d =
+		m[1].length === 3
+			? m[1]
+					.split("")
+					.map((ch) => ch + ch)
+					.join("")
+			: m[1];
 	return {
 		r: parseInt(d.slice(0, 2), 16),
 		g: parseInt(d.slice(2, 4), 16),
@@ -66,12 +72,12 @@ export function hslToRgb({ h, s, l }: Hsl): Rgb {
 }
 
 export function shiftHue(hex: string, deltaDeg: number): string {
-	const hsl = rgbToHsl(hexToRgb(hex));
+	const hsl = rgbToHsl(parseHexColor(hex));
 	return rgbToHex(hslToRgb({ ...hsl, h: hsl.h + deltaDeg }));
 }
 
 function withLightness(hex: string, l: number): string {
-	return rgbToHex(hslToRgb({ ...rgbToHsl(hexToRgb(hex)), l }));
+	return rgbToHex(hslToRgb({ ...rgbToHsl(parseHexColor(hex)), l }));
 }
 
 export function complementarySet(base: string): string[] {
@@ -109,7 +115,7 @@ export function monochromaticSet(
 	rangePercent: number,
 ): string[] {
 	const n = Math.max(2, Math.min(9, Math.round(count)));
-	const baseL = rgbToHsl(hexToRgb(normalizeHex(base))).l;
+	const baseL = rgbToHsl(parseHexColor(normalizeHex(base))).l;
 	const halfSpan = Math.min(0.495, rangePercent / 200);
 	return Array.from({ length: n }, (_, i) => {
 		const t = n === 1 ? 0.5 : i / (n - 1);
@@ -124,7 +130,7 @@ export function shadeSet(
 	depthPercent: number,
 ): string[] {
 	const n = Math.max(2, Math.min(9, Math.round(count)));
-	const baseL = rgbToHsl(hexToRgb(normalizeHex(base))).l;
+	const baseL = rgbToHsl(parseHexColor(normalizeHex(base))).l;
 	const floorL = Math.max(0.03, baseL - depthPercent / 100);
 	return Array.from({ length: n }, (_, i) => {
 		const t = i / (n - 1);
@@ -150,7 +156,7 @@ export function normalizeHex(hex: string): string {
 
 export function mixColors(hexes: string[]): string {
 	const sum = hexes
-		.map(hexToRgb)
+		.map(parseHexColor)
 		.reduce((acc, c) => ({ r: acc.r + c.r, g: acc.g + c.g, b: acc.b + c.b }), {
 			r: 0,
 			g: 0,
@@ -164,7 +170,7 @@ export function mixColors(hexes: string[]): string {
 }
 
 export function luma(hex: string): number {
-	const { r, g, b } = hexToRgb(hex);
+	const { r, g, b } = parseHexColor(hex);
 	return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
@@ -173,7 +179,7 @@ export type SortKey = "hue" | "luma" | "sat";
 export function sortPalette(hexes: string[], key: SortKey): string[] {
 	const scored = hexes.map((h) => {
 		if (key === "luma") return { h, k: luma(h) };
-		const hsl = rgbToHsl(hexToRgb(h));
+		const hsl = rgbToHsl(parseHexColor(h));
 		return { h, k: key === "hue" ? hsl.h : hsl.s };
 	});
 	return scored
@@ -193,7 +199,7 @@ export function renderSwatches(
 		const height = Math.max(24, Math.round(cellW));
 		const out = createPixelImage(width, height);
 		colors.forEach((hex, i) => {
-			const { r, g, b } = hexToRgb(hex);
+			const { r, g, b } = parseHexColor(hex);
 			fillRect(
 				out,
 				Math.floor(i * cellW),
@@ -213,7 +219,7 @@ export function renderSwatches(
 	const height = cell * rows;
 	const out = createPixelImage(width, height);
 	colors.forEach((hex, i) => {
-		const { r, g, b } = hexToRgb(hex);
+		const { r, g, b } = parseHexColor(hex);
 		fillRect(
 			out,
 			(i % cols) * cell,
@@ -254,8 +260,8 @@ export function renderWheel(size: number, lightness: number): PixelImage {
 export function renderBlend(a: string, b: string, width: number): PixelImage {
 	const height = Math.max(24, Math.round(width / 4));
 	const out = createPixelImage(width, height);
-	const ca = hexToRgb(a);
-	const cb = hexToRgb(b);
+	const ca = parseHexColor(a);
+	const cb = parseHexColor(b);
 	for (let x = 0; x < width; x++) {
 		const t = width === 1 ? 0 : x / (width - 1);
 		fillRect(
@@ -278,8 +284,8 @@ export function stepColors(
 	steps: number,
 ): string[] {
 	const n = Math.max(2, Math.min(12, Math.round(steps)));
-	const ca = hexToRgb(aHex);
-	const cb = hexToRgb(bHex);
+	const ca = parseHexColor(aHex);
+	const cb = parseHexColor(bHex);
 	return Array.from({ length: n }, (_, i) => {
 		const t = i / (n - 1);
 		return rgbToHex({
