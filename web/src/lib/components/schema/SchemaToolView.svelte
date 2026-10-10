@@ -4,7 +4,7 @@
 	import Button from "$lib/components/ui/Button.svelte";
 	import { ButtonVariantDefine } from "$lib/components/ui/define";
 	import { isFav, toggleFav } from "$lib/favorites.svelte";
-	import { GripVertical, Star } from "@lucide/svelte";
+	import { Star } from "@lucide/svelte";
 	import { DragDropProvider } from "@dnd-kit/svelte";
 	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
@@ -56,7 +56,7 @@
 	import SchemaResultTile from "./SchemaResultTile.svelte";
 	import SchemaSourceTile from "./SchemaSourceTile.svelte";
 	import SortableStepCard from "./SortableStepCard.svelte";
-	import StepDropIndicator from "./StepDropIndicator.svelte";
+	import StepReorderOverlay from "./StepReorderOverlay.svelte";
 	import ToolPickerButton from "./ToolPickerButton.svelte";
 	import { hasPreviewResult } from "./schema-preview-model";
 	import { createSchemaToolRunner } from "./schema-tool-runner.svelte";
@@ -613,20 +613,9 @@
 		{/snippet}
 
 		{#snippet addRow(index: number)}
-			{#if canExtend && !stepDnd.active}
+			{#if canExtend}
 				<div class="add-row">
 					<AddStepButton onadd={(id) => addStepAt(index, id)} />
-					{#if alignedMode}
-						<div class="row-bridge" aria-hidden="true"></div>
-					{/if}
-				</div>
-			{/if}
-		{/snippet}
-
-		{#snippet indicator(slot: number)}
-			{#if stepDnd.isIndicatorAt(slot)}
-				<div class="indicator-row">
-					<StepDropIndicator height={stepDnd.dragHeight} />
 					{#if alignedMode}
 						<div class="row-bridge" aria-hidden="true"></div>
 					{/if}
@@ -641,12 +630,11 @@
 			onDragEnd={stepDnd.onDragEnd}
 		>
 			{#if alignedMode}
-				<div class="workspace aligned" class:dnd-active={stepDnd.active}>
+				<div class="workspace aligned">
 					<div class="head-spacer" aria-hidden="true"></div>
 					{@render panelHead()}
 					{@render addRow(0)}
 					{#each steps as step, i (step.key)}
-						{@render indicator(i)}
 						{@render stepCard(step, i)}
 						<div class="pair">
 							{@render inputTile(i)}
@@ -654,19 +642,16 @@
 						</div>
 						{@render addRow(i + 1)}
 					{/each}
-					{@render indicator(steps.length)}
 					<div class="panel-foot" aria-hidden="true"></div>
 				</div>
 			{:else}
-				<div class="workspace" class:dnd-active={stepDnd.active}>
+				<div class="workspace">
 					<section class="settings">
 						{@render addRow(0)}
 						{#each steps as step, i (step.key)}
-							{@render indicator(i)}
 							{@render stepCard(step, i)}
 							{@render addRow(i + 1)}
 						{/each}
-						{@render indicator(steps.length)}
 					</section>
 					<section class="panel">
 						{@render panelHead()}
@@ -685,17 +670,7 @@
 			{#each allWarnings as w (warningText(w))}
 				<p class="warn" role="status">{warningText(w)}</p>
 			{/each}
-			{#if stepDnd.activeData && stepDnd.pointer}
-				<div
-					class="step-ghost"
-					style:width="{stepDnd.ghostWidth}px"
-					style:left="{stepDnd.pointer.x - stepDnd.grabOffset.x}px"
-					style:top="{stepDnd.pointer.y - stepDnd.grabOffset.y}px"
-				>
-					<GripVertical size={16} aria-hidden="true" />
-					<span class="step-ghost-title">{stepDnd.activeData.title}</span>
-				</div>
-			{/if}
+			<StepReorderOverlay {steps} dnd={stepDnd} />
 		</DragDropProvider>
 	</div>
 {:else}
@@ -707,23 +682,6 @@
 		padding: calc(var(--space-xxxl) + var(--space-l))
 			clamp(var(--space-m), 4vw, var(--space-xxxl));
 		flex: 1;
-	}
-	.step-ghost {
-		position: fixed;
-		z-index: var(--z-drag);
-		display: flex;
-		align-items: center;
-		gap: var(--space-m);
-		padding: var(--space-m) var(--space-xl);
-		border: var(--size-border-thick) dashed var(--color-main);
-		background: var(--color-panel);
-		color: var(--color-border);
-		opacity: 0.85;
-		pointer-events: none;
-	}
-	.step-ghost-title {
-		font: 600 var(--font-size-m) var(--font-mono);
-		color: var(--color-text);
 	}
 	.header {
 		display: flex;
@@ -859,8 +817,7 @@
 	.aligned .panel-foot {
 		align-self: stretch;
 	}
-	.aligned .add-row,
-	.aligned .indicator-row {
+	.aligned .add-row {
 		grid-column: 1 / -1;
 		display: grid;
 		grid-template-columns: subgrid;
@@ -878,19 +835,6 @@
 		border-top: none;
 		border-radius: 0 0 var(--radius-m) var(--radius-m);
 		background: var(--color-panel);
-	}
-	/* Compact drag: while a step is dragged, cards collapse to headers so the
-	   reorder happens in a tight list; aligned additionally drops the preview
-	   panel (its rows are too tall to drag across). */
-	.dnd-active :global(.step-body) {
-		display: none;
-	}
-	.aligned.dnd-active .panel-head,
-	.aligned.dnd-active .pair,
-	.aligned.dnd-active .row-bridge,
-	.aligned.dnd-active .panel-foot,
-	.aligned.dnd-active .head-spacer {
-		display: none;
 	}
 	.error {
 		margin: var(--space-l) 0 0;

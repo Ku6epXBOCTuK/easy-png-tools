@@ -1,5 +1,5 @@
-import type { Draggable, Droppable } from "@dnd-kit/dom";
-import { isSortable, type SortableDraggable } from "@dnd-kit/dom/sortable";
+import type { Draggable } from "@dnd-kit/dom";
+import { isSortable } from "@dnd-kit/dom/sortable";
 
 export interface StepDragData {
 	title: string;
@@ -19,139 +19,103 @@ interface DndEvent {
 	canceled?: boolean;
 }
 
-// Count the slot the pointer is over: how many non-source cards have their
-// vertical midpoint above the pointer. Also reports the height of the first
-// visible card: during drag all cards collapse to headers, so the indicator
-// takes that uniform height rather than the hidden source's stale height.
-function indexAtPosition(
-	source: SortableDraggable<StepDragData>,
-	pointerY: number,
-): { index: number; cardHeight: number } {
-	const manager = source.sortable.manager;
-	let index = 0;
-	let cardHeight = 0;
-	if (!manager) return { index, cardHeight };
-	for (const droppable of manager.registry.droppables) {
-		if (!isSortable(droppable)) continue;
-		if (droppable.sortable.id === source.id) continue;
-		const el = (droppable as Droppable).element;
-		if (!el) continue;
-		const rect = el.getBoundingClientRect();
-		if (rect.height === 0) continue;
-		if (!cardHeight) cardHeight = rect.height;
-		if (pointerY > rect.top + rect.height / 2) index++;
-	}
-	return { index, cardHeight };
+export interface StepDragAnchor {
+	left: number;
+	width: number;
+	// Pointer Y and the source card's top at drag start: the overlay aligns
+	// its source row under the cursor.
+	startY: number;
+	sourceTop: number;
 }
 
-// Step-reorder state for SchemaToolView, single list. The dragged card is
-// hidden (DragOverlay renders the ghost) and a dashed indicator of the
-// dragged height marks the insertion slot between the remaining cards.
+// Step-reorder state for SchemaToolView. Dragging a card handle opens a
+// compact overlay list (StepReorderOverlay) instead of reshaping the page:
+// the page keeps its layout and scroll position, drop targeting is computed
+// against the overlay rows.
 export function createStepDnd({ onMove }: StepDndOptions) {
 	let activeData = $state<StepDragData | null>(null);
-	let indicatorIndex = $state<number | null>(null);
-	let dragHeight = $state(0);
+	let indicatorSlot = $state<number | null>(null);
 	let sourceIndex = $state<number | null>(null);
-	let sourceElement: HTMLElement | null = null;
-	// Ghost positioning: current pointer, grab offset inside the card and the
-	// card width. DragOverlay is not used -- the Feedback plugin skips
-	// draggables with feedback: "none", so the ghost follows the pointer here.
-	let pointer = $state<{ x: number; y: number } | null>(null);
-	let grabOffset = $state<{ x: number; y: number }>({ x: 0, y: 0 });
-	let ghostWidth = $state(0);
-	// X-range of the source card: dragging sideways over the preview panel
-	// must not light up the indicator.
-	let sourceX: { left: number; right: number } | null = null;
+	let anchor = $state<StepDragAnchor | null>(null);
+	let listEl: HTMLElement | null = null;
 
-	function computeIndicator(event: DndEvent): number | null {
-		const source = event.operation?.source;
-		if (!source || !isSortable(source)) return null;
-		const position = event.operation?.position?.current;
-		if (!position || !sourceX) return null;
-		if (position.x < sourceX.left || position.x > sourceX.right) return null;
-		const { index, cardHeight } = indexAtPosition(
-			source as SortableDraggable<StepDragData>,
-			position.y,
-		);
-		if (cardHeight) dragHeight = cardHeight;
-		return index;
+	// Slot in full-list coordinates: how many overlay rows have their midpoint
+	// above the pointer. Rows are uniform single-line height.
+	function slotAt(position: { x: number; y: number }): number | null {
+		const el = listEl;
+		if (!el || el.childElementCount === 0) return null;
+		const rect = el.getBoundingClientRect();
+		if (position.x < rect.left || position.x > rect.right) return null;
+		const count = el.childElementCount;
+		const rowH = el.scrollHeight / count;
+		if (rowH <= 0) return null;
+		const offsetY = position.y - rect.top + el.scrollTop;
+		const slot = Math.floor(offsetY / rowH + 0.5);
+		return Math.min(Math.max(slot, 0), count);
 	}
 
 	function onDragStart(event: DndEvent) {
 		const source = event.operation?.source;
 		if (!source) return;
 		activeData = (source.data as StepDragData | undefined) ?? null;
-		sourceElement = (source.element as HTMLElement | undefined) ?? null;
-		const rect = sourceElement?.getBoundingClientRect();
-		dragHeight = rect?.height ?? 0;
-		ghostWidth = rect?.width ?? 0;
-		sourceX = rect ? { left: rect.left, right: rect.right } : null;
-		const start = event.operation?.position?.current;
-		grabOffset =
-			start && rect
-				? { x: start.x - rect.left, y: start.y - rect.top }
-				: { x: 0, y: 0 };
-		pointer = start ?? null;
 		if (isSortable(source)) sourceIndex = source.sortable.initialIndex;
-		if (sourceElement) sourceElement.style.display = "none";
+		const el = source.element as HTMLElement | undefined;
+		const rect = el?.getBoundingClientRect();
+		const position = event.operation?.position?.current;
+		if (rect) {
+			anchor = {
+				left: rect.left,
+				width: rect.width,
+				startY: position?.y ?? rect.top + rect.height / 2,
+				sourceTop: rect.top,
+			};
+		}
 	}
 
 	function onDragOver(event: DndEvent) {
-		pointer = event.operation?.position?.current ?? pointer;
-		indicatorIndex = computeIndicator(event);
+		const position = event.operation?.position?.current;
+		indicatorSlot = position ? slotAt(position) : null;
 	}
 
 	function onDragEnd(event: DndEvent) {
-		const drop = event.canceled ? null : computeIndicator(event);
-		if (sourceElement) {
-			sourceElement.style.display = "";
-			sourceElement = null;
-		}
+		const position = event.operation?.position?.current;
+		const slot = event.canceled || !position ? null : slotAt(position);
 		const from = sourceIndex;
 		activeData = null;
-		indicatorIndex = null;
-		dragHeight = 0;
+		indicatorSlot = null;
 		sourceIndex = null;
-		sourceX = null;
-		pointer = null;
-		if (from === null || drop === null || drop === from) return;
-		onMove(from, drop);
+		anchor = null;
+		if (from === null || slot === null) return;
+		// Slots include the source row; moveStep wants the compressed index.
+		const to = slot > from ? slot - 1 : slot;
+		if (to === from) return;
+		onMove(from, to);
 	}
 
-	// Slots render in the full list where the hidden source still occupies
-	// its DOM position: a compressed index at/past the source shifts by 1.
-	function isIndicatorAt(slot: number): boolean {
-		if (indicatorIndex === null) return false;
-		let renderIndex = indicatorIndex;
-		if (sourceIndex !== null && indicatorIndex >= sourceIndex) {
-			renderIndex += 1;
-		}
-		return renderIndex === slot;
+	function registerList(el: HTMLElement | null) {
+		listEl = el;
 	}
 
 	return {
 		get activeData() {
 			return activeData;
 		},
-		get dragHeight() {
-			return dragHeight;
-		},
-		get pointer() {
-			return pointer;
-		},
-		get grabOffset() {
-			return grabOffset;
-		},
-		get ghostWidth() {
-			return ghostWidth;
-		},
 		get active() {
 			return activeData !== null;
+		},
+		get indicatorSlot() {
+			return indicatorSlot;
+		},
+		get sourceIndex() {
+			return sourceIndex;
+		},
+		get anchor() {
+			return anchor;
 		},
 		onDragStart,
 		onDragOver,
 		onDragEnd,
-		isIndicatorAt,
+		registerList,
 	};
 }
 
