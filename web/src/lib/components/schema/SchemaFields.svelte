@@ -1,8 +1,23 @@
 <script lang="ts">
 	import type {
+		CheckboxSpec,
+		ColorListSpec,
+		ColorPairSpec,
+		ColorSpec,
 		Dimension,
+		DimensionSpec,
 		FieldSpec,
 		FieldSpecKind,
+		FontStyleSpec,
+		GradientSpec,
+		NumberSpec,
+		OffsetSpec,
+		PlateSpec,
+		Position9Spec,
+		SegmentedSpec,
+		SelectSpec,
+		SliderSpec,
+		TextSpec,
 		ToolSchema,
 	} from "$lib/registry-schema";
 	import { effectiveMax, resolveLayoutGroups } from "$lib/registry-schema";
@@ -36,22 +51,34 @@
 		onchange?: (value: unknown, axis?: "width" | "height" | "both") => void;
 	}
 
+	// The kind key of FIELDS guarantees the spec subtype at runtime (fieldSpecs
+	// map in registry-schema); the cast lives once here, so each control
+	// declares its exact spec type instead of casting internally.
+	type ControlFor<S extends FieldSpec> = Component<
+		Omit<FieldControlProps, "spec"> & { spec: S }
+	>;
+	function controlFor<S extends FieldSpec>(
+		c: ControlFor<S>,
+	): Component<FieldControlProps> {
+		return c as unknown as Component<FieldControlProps>;
+	}
+
 	const FIELDS: Record<FieldSpecKind, Component<FieldControlProps>> = {
-		number: RangeControl,
-		slider: RangeControl,
-		color: ColorControl,
-		"color-pair": ColorPairControl,
-		colors: ColorsControl,
-		select: SelectControl,
-		segmented: SegmentedControl,
-		checkbox: CheckboxControl,
-		text: TextControl,
-		dimension: DimensionField,
-		offset: OffsetControl,
-		position9: PositionControl,
-		"font-style": FontStyleControl,
-		plate: PlateControl,
-		gradient: GradientControl,
+		number: controlFor<NumberSpec | SliderSpec>(RangeControl),
+		slider: controlFor<NumberSpec | SliderSpec>(RangeControl),
+		color: controlFor<ColorSpec>(ColorControl),
+		"color-pair": controlFor<ColorPairSpec>(ColorPairControl),
+		colors: controlFor<ColorListSpec>(ColorsControl),
+		select: controlFor<SelectSpec>(SelectControl),
+		segmented: controlFor<SegmentedSpec>(SegmentedControl),
+		checkbox: controlFor<CheckboxSpec>(CheckboxControl),
+		text: controlFor<TextSpec>(TextControl),
+		dimension: controlFor<DimensionSpec>(DimensionField),
+		offset: controlFor<OffsetSpec>(OffsetControl),
+		position9: controlFor<Position9Spec>(PositionControl),
+		"font-style": controlFor<FontStyleSpec>(FontStyleControl),
+		plate: controlFor<PlateSpec>(PlateControl),
+		gradient: controlFor<GradientSpec>(GradientControl),
 	};
 
 	interface Props {

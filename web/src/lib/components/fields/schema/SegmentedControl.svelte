@@ -2,19 +2,19 @@
 	import Control from "./Control.svelte";
 	import Segmented from "$lib/components/ui/Segmented.svelte";
 	import { optionLabel } from "$lib/i18n/schema-tool-strings";
-	import type { FieldSpec, SegmentedSpec } from "$lib/registry-schema";
+	import type { SegmentedSpec } from "$lib/registry-schema";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: SegmentedSpec;
 		toolId: string;
 		fieldId: string;
 		onchange?: (value: string) => void;
 	}
 	let { label, value, spec, toolId, fieldId, onchange }: Props = $props();
 
-	const sp = $derived(spec as SegmentedSpec);
+	const sp = $derived(spec);
 	const current = $derived(
 		typeof value === "string" && sp.options.some((o) => o.value === value)
 			? value

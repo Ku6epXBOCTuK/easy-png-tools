@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { optionLabel } from "$lib/i18n/schema-tool-strings";
-	import type { FieldSpec, SelectSpec } from "$lib/registry-schema";
+	import type { SelectSpec } from "$lib/registry-schema";
 	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: SelectSpec;
 		toolId: string;
 		fieldId: string;
 		onchange?: (value: string) => void;
 	}
 	let { label, value, spec, toolId, fieldId, onchange }: Props = $props();
 
-	const sp = $derived(spec as SelectSpec);
+	const sp = $derived(spec);
 	const current = $derived(
 		typeof value === "string" && sp.options.some((o) => o.value === value)
 			? value

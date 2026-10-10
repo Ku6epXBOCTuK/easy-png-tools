@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { CheckboxSpec, FieldSpec } from "$lib/registry-schema";
+	import type { CheckboxSpec } from "$lib/registry-schema";
 	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: CheckboxSpec;
 		onchange?: (value: boolean) => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
-	const sp = $derived(spec as CheckboxSpec);
+	const sp = $derived(spec);
 	const current = $derived(
 		typeof value === "boolean" ? value : Boolean(sp.default),
 	);

@@ -166,13 +166,19 @@ round-семантика `clampByte` и trunc-семантика `clampInt` со
 `$bindable`, пропс `ontogglealign` удалён; `SchemaToolView` передаёт
 `bind:aligned`.
 
-### L4. Непроверяемые `as`-касты схемы
+### L4. Непроверяемые `as`-касты схемы — СДЕЛАНО (2026-10)
 
-`SchemaToolView.svelte:97,211`
-(`tool.schema as ToolSchema<Record<string, unknown>>`) и паттерн `spec as XSpec`
-в 14+ field-компонентах (`CheckboxControl.svelte:13`, `ColorControl.svelte:14`,
-`GradientControl.svelte:16` и др.); двойной каст `as unknown as WorkerLike` в
-`executor/executor.ts:35`. Касты отключают проверку соответствия spec kind'у.
+- 14 field-контролов: `spec: FieldSpec` + `spec as XSpec` → точный тип спеки в
+  пропсах (`spec: ColorSpec` и т.д.); каст собран в одном месте — типизированный
+  хелпер `controlFor<S>()` в `SchemaFields.svelte` (ключ kind в `FIELDS`
+  гарантирует подтип спеки по `fieldSpecs`).
+- `SchemaToolView`/`toolSchemaOf`: касты
+  `as ToolSchema<Record<string, unknown>>` удалены — дефолт дженерика
+  `Tool<P = Record<string, unknown>>` уже даёт нужный тип; `undefined`
+  обрабатывается гардами (`{#if stepSchema}` в разметке, `dims && stepSchema` в
+  `setStepValue`).
+- `executor.ts` `as unknown as WorkerLike` оставлен намеренно: несовместимость
+  `onerror` (ErrorEvent vs Event) в типах lib.dom; добавлен комментарий-причина.
 
 ### L5. Хардкод slug-ов вне registry
 

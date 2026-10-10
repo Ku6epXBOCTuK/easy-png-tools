@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { FieldSpec, TextSpec } from "$lib/registry-schema";
+	import type { TextSpec } from "$lib/registry-schema";
 	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: TextSpec;
 		onchange?: (value: string) => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
-	const sp = $derived(spec as TextSpec);
+	const sp = $derived(spec);
 	const current = $derived(typeof value === "string" ? value : sp.default);
 </script>
 

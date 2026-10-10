@@ -3,22 +3,18 @@
 	import Button from "$lib/components/ui/Button.svelte";
 	import IconButton from "$lib/components/ui/IconButton.svelte";
 	import { t } from "$lib/i18n/t";
-	import type {
-		ColorList,
-		ColorListSpec,
-		FieldSpec,
-	} from "$lib/registry-schema";
+	import type { ColorList, ColorListSpec } from "$lib/registry-schema";
 	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: ColorListSpec;
 		onchange?: (value: ColorList) => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
-	const sp = $derived(spec as ColorListSpec);
+	const sp = $derived(spec);
 	const current = $derived.by((): ColorList => {
 		if (Array.isArray(value)) {
 			const valid = value.filter(

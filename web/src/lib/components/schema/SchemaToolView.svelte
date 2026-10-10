@@ -42,7 +42,6 @@
 		applySourceDefaults,
 		clampSourceAwareMaxes,
 		sanitizeSchemaParams,
-		type ToolSchema,
 	} from "$lib/registry-schema";
 	import { onMount } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
@@ -65,9 +64,7 @@
 	}
 	let { page, tool, chainId = undefined }: Props = $props();
 
-	const schema = $derived(
-		tool.schema as ToolSchema<Record<string, unknown>> | undefined,
-	);
+	const schema = $derived(tool.schema);
 
 	const inputMode = $derived(tool.input);
 
@@ -471,14 +468,17 @@
 						onadd={(id) => replaceStepTool(i, id)}
 					/>
 				{/snippet}
-				<SchemaFields
-					schema={toolSchemaOf(step)}
-					values={step.params}
-					toolId={step.id}
-					sourceDims={i === 0 ? (source ?? undefined) : stepDims[i - 1]}
-					onchange={(id, v, axis) => setStepValue(i, id, v, axis)}
-					onreset={() => resetStep(i)}
-				/>
+				{@const stepSchema = toolSchemaOf(step)}
+				{#if stepSchema}
+					<SchemaFields
+						schema={stepSchema}
+						values={step.params}
+						toolId={step.id}
+						sourceDims={i === 0 ? (source ?? undefined) : stepDims[i - 1]}
+						onchange={(id, v, axis) => setStepValue(i, id, v, axis)}
+						onreset={() => resetStep(i)}
+					/>
+				{/if}
 			</StepCard>
 		{/snippet}
 

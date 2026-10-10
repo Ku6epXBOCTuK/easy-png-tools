@@ -1,23 +1,19 @@
 <script lang="ts">
 	import { t } from "$lib/i18n/t";
 	import type { TextFont } from "$lib/core/domText";
-	import type {
-		FieldSpec,
-		FontStyle,
-		FontStyleSpec,
-	} from "$lib/registry-schema";
+	import type { FontStyle, FontStyleSpec } from "$lib/registry-schema";
 	import ColorSwatchInput from "./ColorSwatchInput.svelte";
 	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: FontStyleSpec;
 		onchange?: (value: FontStyle) => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
-	const sp = $derived(spec as FontStyleSpec);
+	const sp = $derived(spec);
 	const current = $derived.by(() => {
 		const v = value as Partial<FontStyle> | undefined;
 		return {

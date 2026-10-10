@@ -3,17 +3,17 @@
 	import ColorSwatchInput from "./ColorSwatchInput.svelte";
 	import Control from "./Control.svelte";
 	import { t } from "$lib/i18n/t";
-	import type { FieldSpec, Gradient, GradientSpec } from "$lib/registry-schema";
+	import type { Gradient, GradientSpec } from "$lib/registry-schema";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: GradientSpec;
 		onchange?: (value: Gradient) => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
-	const sp = $derived(spec as GradientSpec);
+	const sp = $derived(spec);
 	const current = $derived.by(() => {
 		const v = value as Partial<Gradient> | undefined;
 		return {

@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { t } from "$lib/i18n/t";
-	import type { FieldSpec, Plate, PlateSpec } from "$lib/registry-schema";
+	import type { Plate, PlateSpec } from "$lib/registry-schema";
 	import ColorSwatchInput from "./ColorSwatchInput.svelte";
 	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: PlateSpec;
 		onchange?: (value: Plate) => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
-	const sp = $derived(spec as PlateSpec);
+	const sp = $derived(spec);
 	const current = $derived.by(() => {
 		const v = value as Partial<Plate> | undefined;
 		return {

@@ -4,7 +4,6 @@
 		SIZE_PRESETS,
 		type Dimension,
 		type DimensionSpec,
-		type FieldSpec,
 	} from "$lib/registry-schema";
 	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import Control from "./Control.svelte";
@@ -12,7 +11,7 @@
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: DimensionSpec;
 		/** Step input dimensions: axis cap for maxFromSource fields. */
 		sourceDims?: Dimension;
 		onchange?: (value: Dimension, axis?: "width" | "height" | "both") => void;
@@ -25,7 +24,7 @@
 		onchange,
 	}: Props = $props();
 
-	const sp = $derived(spec as DimensionSpec);
+	const sp = $derived(spec);
 	const maxW = $derived(
 		sp.maxFromSource && sourceDims ? sourceDims.width : sp.max,
 	);

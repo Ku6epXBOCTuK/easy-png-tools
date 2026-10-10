@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { FieldSpec, NumberSpec, SliderSpec } from "$lib/registry-schema";
+	import type { NumberSpec, SliderSpec } from "$lib/registry-schema";
 	import { t } from "$lib/i18n/t";
 	import { Minus, Plus, RotateCcw } from "@lucide/svelte";
 	import IconButton from "$lib/components/ui/IconButton.svelte";
@@ -8,12 +8,12 @@
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: NumberSpec | SliderSpec;
 		onchange?: (value: number) => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
-	const sp = $derived(spec as NumberSpec | SliderSpec);
+	const sp = $derived(spec);
 	const min = $derived(sp.min ?? 0);
 	const max = $derived(sp.max ?? 100);
 	const step = $derived(sp.step ?? 1);

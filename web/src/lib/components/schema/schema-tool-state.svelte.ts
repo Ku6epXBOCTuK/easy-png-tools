@@ -12,7 +12,6 @@ import {
 	defaultSchemaParams,
 	withAspectLock,
 	type Dimension,
-	type ToolSchema,
 } from "$lib/registry-schema";
 import { SvelteMap, SvelteSet } from "svelte/reactivity";
 
@@ -28,7 +27,7 @@ interface StepsState {
 }
 
 export function toolSchemaOf(step: ChainStep) {
-	return getTool(step.id)?.schema as ToolSchema<Record<string, unknown>>;
+	return getTool(step.id)?.schema;
 }
 
 function setStepValue(
@@ -79,7 +78,8 @@ function setStepValue(
 			}
 		}
 	}
-	const clamped = dims ? clampSourceAwareMaxes(stepSchema, next, dims) : next;
+	const clamped =
+		dims && stepSchema ? clampSourceAwareMaxes(stepSchema, next, dims) : next;
 	s.steps = s.steps.with(index, { ...step, params: clamped });
 }
 

@@ -1,21 +1,17 @@
 <script lang="ts">
 	import type { Position9 } from "$lib/core/textdraw";
-	import {
-		POSITION9_VALUES,
-		type FieldSpec,
-		type Position9Spec,
-	} from "$lib/registry-schema";
+	import { POSITION9_VALUES, type Position9Spec } from "$lib/registry-schema";
 	import Control from "./Control.svelte";
 
 	interface Props {
 		label: string;
 		value: unknown;
-		spec: FieldSpec;
+		spec: Position9Spec;
 		onchange?: (value: Position9) => void;
 	}
 	let { label, value, spec, onchange }: Props = $props();
 
-	const sp = $derived(spec as Position9Spec);
+	const sp = $derived(spec);
 	const current = $derived(
 		typeof value === "string" &&
 			(POSITION9_VALUES as readonly string[]).includes(value)
