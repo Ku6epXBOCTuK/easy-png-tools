@@ -145,17 +145,19 @@ round-семантика `clampByte` и trunc-семантика `clampInt` со
 
 ## Low
 
-### L1. Флаг `running` общий для `run()` и `download()`
+### L1. Флаг `running` общий для `run()` и `download()` — СДЕЛАНО (2026-10)
 
-`SchemaToolView.svelte:124,433,469`: параллельный auto-run и клик по download
-гоняют один `$state`; индикация и `disabled` ведут себя некорректно.
+В `schema-tool-runner.svelte.ts` флаги разделены: `running` (run) и
+`downloading` (download); `download()` больше не затирает индикацию
+параллельного auto-run. Компонент передаёт в превью
+`busy = running || downloading`.
 
-### L2. Дублирование dismiss-логики поповеров
+### L2. Дублирование dismiss-логики поповеров — СДЕЛАНО (2026-10)
 
-`SchemaDownload.svelte:62-76` и `ToolPickerButton.svelte:25-39` — побуквенно
-одинаковые ~15 строк: pointerdown-outside + Escape + подписка на `window` в
-`$effect`. Кандидат на shared action (`clickOutside`/`popoverDismiss`). Сами
-эффекты корректны.
+Общий хелпер `onDismiss(root, close)` в `web/src/lib/components/ui/dismiss.ts`
+(pointerdown-outside + Escape + отписка); `SchemaDownload.svelte` и
+`ToolPickerButton.svelte` переведены на него — по ~15 одинаковых строк удалено
+из каждого.
 
 ### L3. Несогласованный API `Toggle`
 
@@ -178,10 +180,11 @@ round-семантика `clampByte` и trunc-семантика `clampInt` со
 `["linear-gradient-png","resize-png","quantize-png"]` (kit — витрина, не
 production).
 
-### L6. Дублирование CSS-значения превью-тайла
+### L6. Дублирование CSS-значения превью-тайла — СДЕЛАНО (2026-10)
 
-`clamp(var(--space-brand), 30vh, 60vh)` в `PreviewTile.svelte:96` и
-`SchemaResultTile.svelte:129`; магические `30vh/60vh` не в токенах.
+Новый токен `--size-tile-canvas-min: clamp(var(--space-brand), 30vh, 60vh)` в
+`app.css`; `PreviewTile.svelte` и `SchemaResultTile.svelte` используют
+`var(--size-tile-canvas-min)`.
 
 ### L7. `localStorage.setItem` без try/catch вне app.html — СДЕЛАНО (2026-10)
 

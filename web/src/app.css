@@ -151,6 +151,7 @@
 
 		--size-preview-canvas-min-height-s: 180px;
 		--size-preview-canvas-min-height-l: 360px;
+		--size-tile-canvas-min: clamp(var(--space-brand), 30vh, 60vh);
 		--size-panel-min-height: 220px;
 
 		--size-tool-icon: 42px;

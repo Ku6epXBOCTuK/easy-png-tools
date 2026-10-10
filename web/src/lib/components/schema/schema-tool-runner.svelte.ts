@@ -40,7 +40,10 @@ export interface SchemaToolRunnerCtx {
 }
 
 interface RunnerState {
+	// run() and download() have separate flags: a parallel auto-run and a
+	// download click must not clobber each other's indicator/disabled state.
 	running: boolean;
+	downloading: boolean;
 	// Generation of the latest run(): a stale in-flight chain (params changed
 	// while the worker was busy) must not overwrite newer results.
 	runGen: number;
@@ -138,7 +141,7 @@ async function run(s: RunnerState, ctx: SchemaToolRunnerCtx) {
 
 async function download(s: RunnerState, ctx: SchemaToolRunnerCtx) {
 	if (!ctx.schema()) return;
-	s.running = true;
+	s.downloading = true;
 	s.displayError = null;
 	try {
 		if (s.fileResult) {
@@ -157,7 +160,7 @@ async function download(s: RunnerState, ctx: SchemaToolRunnerCtx) {
 	} catch (e) {
 		s.displayError = toDisplayError(e);
 	} finally {
-		s.running = false;
+		s.downloading = false;
 	}
 }
 
@@ -198,6 +201,7 @@ function clearResults(s: RunnerState) {
 export function createSchemaToolRunner(ctx: SchemaToolRunnerCtx) {
 	const s = $state<RunnerState>({
 		running: false,
+		downloading: false,
 		runGen: 0,
 		result: null,
 		fileResult: null,
@@ -212,6 +216,9 @@ export function createSchemaToolRunner(ctx: SchemaToolRunnerCtx) {
 	return {
 		get running() {
 			return s.running;
+		},
+		get downloading() {
+			return s.downloading;
 		},
 		get result() {
 			return s.result;

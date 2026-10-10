@@ -93,7 +93,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		min-height: clamp(var(--space-brand), 30vh, 60vh);
+		min-height: var(--size-tile-canvas-min);
 		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-s);
 		overflow: hidden;

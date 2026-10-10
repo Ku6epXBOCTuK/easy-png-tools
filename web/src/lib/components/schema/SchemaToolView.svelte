@@ -142,6 +142,8 @@
 	});
 	const { run, download, copyText, downloadText } = runner;
 	const running = $derived(runner.running);
+	// Display-level busy: either a run or a download is in flight.
+	const busy = $derived(running || runner.downloading);
 	const result = $derived(runner.result);
 	const fileResult = $derived(runner.fileResult);
 	const textResult = $derived(runner.textResult);
@@ -499,7 +501,7 @@
 						toolId={lastTool.id}
 						{inputMode}
 						resultKind={displayResultKind}
-						{running}
+						running={busy}
 						error={errorText}
 						{aligned}
 						ontogglealign={() => (aligned = !aligned)}
@@ -561,7 +563,7 @@
 				{source}
 				{sourceFiles}
 				{textSource}
-				{running}
+				running={busy}
 				resultKind={displayResultKind}
 				{result}
 				{resultNote}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from "$lib/components/ui/Icon.svelte";
+	import { onDismiss } from "$lib/components/ui/dismiss";
 	import { pageTitle } from "$lib/i18n/schema-tool-strings";
 	import { chainablePages } from "$lib/pipeline.svelte";
 	import type { Page } from "$lib/registry";
@@ -24,18 +25,10 @@
 
 	$effect(() => {
 		if (!open) return;
-		function onPointerDown(e: PointerEvent) {
-			if (!root?.contains(e.target as Node)) open = false;
-		}
-		function onKey(e: KeyboardEvent) {
-			if (e.key === "Escape") open = false;
-		}
-		window.addEventListener("pointerdown", onPointerDown);
-		window.addEventListener("keydown", onKey);
-		return () => {
-			window.removeEventListener("pointerdown", onPointerDown);
-			window.removeEventListener("keydown", onKey);
-		};
+		return onDismiss(
+			() => root,
+			() => (open = false),
+		);
 	});
 </script>
 

@@ -126,7 +126,7 @@
 		   ломал parts-grid в одну колонку. */
 		width: 100%;
 		align-self: stretch;
-		min-height: clamp(var(--space-brand), 30vh, 60vh);
+		min-height: var(--size-tile-canvas-min);
 		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-s);
 		overflow: auto;

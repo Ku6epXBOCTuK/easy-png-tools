@@ -1,6 +1,7 @@
 <script lang="ts">
 	import RangeControl from "$lib/components/fields/schema/RangeControl.svelte";
 	import Icon from "$lib/components/ui/Icon.svelte";
+	import { onDismiss } from "$lib/components/ui/dismiss";
 	import type { OutputMime } from "$lib/core/io";
 	import { OUTPUT_FORMATS, outputFormatByMime } from "$lib/output-formats";
 	import type { SliderSpec } from "$lib/registry-schema";
@@ -58,18 +59,10 @@
 
 	$effect(() => {
 		if (!open) return;
-		function onPointerDown(e: PointerEvent) {
-			if (!root?.contains(e.target as Node)) open = false;
-		}
-		function onKey(e: KeyboardEvent) {
-			if (e.key === "Escape") open = false;
-		}
-		window.addEventListener("pointerdown", onPointerDown);
-		window.addEventListener("keydown", onKey);
-		return () => {
-			window.removeEventListener("pointerdown", onPointerDown);
-			window.removeEventListener("keydown", onKey);
-		};
+		return onDismiss(
+			() => root,
+			() => (open = false),
+		);
 	});
 </script>
 
