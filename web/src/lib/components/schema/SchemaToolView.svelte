@@ -503,8 +503,7 @@
 						resultKind={displayResultKind}
 						running={busy}
 						error={errorText}
-						{aligned}
-						ontogglealign={() => (aligned = !aligned)}
+						bind:aligned
 						head={{
 							format,
 							quality: currentQuality,

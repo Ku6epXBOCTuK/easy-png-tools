@@ -25,7 +25,6 @@
 		running?: boolean;
 		error?: string;
 		aligned?: boolean;
-		ontogglealign?: () => void;
 		head: PreviewHeadModel;
 		source: PreviewSourceModel;
 		steps?: PreviewStepsModel;
@@ -37,8 +36,7 @@
 		toolId,
 		running = false,
 		error = "",
-		aligned = false,
-		ontogglealign,
+		aligned = $bindable(false),
 		head,
 		source,
 		steps = {},
@@ -66,11 +64,7 @@
 	<span class="label">{t("resultCard.previewPanel")}</span>
 	{#if stepResults.length > 1}
 		<label class="align-toggle">
-			<Toggle
-				checked={aligned}
-				label={t("chain.alignToggle")}
-				onchange={() => ontogglealign?.()}
-			/>
+			<Toggle bind:checked={aligned} label={t("chain.alignToggle")} />
 			<span>{t("chain.alignToggle")}</span>
 		</label>
 	{/if}

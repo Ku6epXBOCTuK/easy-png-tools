@@ -159,11 +159,12 @@ round-семантика `clampByte` и trunc-семантика `clampInt` со
 `ToolPickerButton.svelte` переведены на него — по ~15 одинаковых строк удалено
 из каждого.
 
-### L3. Несогласованный API `Toggle`
+### L3. Несогласованный API `Toggle` — СДЕЛАНО (2026-10)
 
-`SchemaToolView.svelte:811` — `bind:checked={aligned}`;
-`SchemaPreview.svelte:114-118` тот же компонент — `checked` + `onchange`.
-Компонент (`ui/Toggle.svelte:7`) поддерживает оба; стоит выбрать один паттерн.
+Единый паттерн — `bind:checked` (задокументирован в `Toggle.svelte`; `onchange`
+оставлен только для side-эффектов). `SchemaPreview.svelte`: `aligned` стал
+`$bindable`, пропс `ontogglealign` удалён; `SchemaToolView` передаёт
+`bind:aligned`.
 
 ### L4. Непроверяемые `as`-касты схемы
 
