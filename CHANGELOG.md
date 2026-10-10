@@ -2,6 +2,31 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.6.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/bac82f8442a8262e757d18f0cc2b5e7fb8291516..v0.6.0) - 2026-10-10
+#### Features
+- flow for multiple files - pipeline, tools - ([bac82f8](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/bac82f8442a8262e757d18f0cc2b5e7fb8291516)) - Ku6epXBOCTuK
+#### Bug Fixes
+- update field spec types - ([8b2172c](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/8b2172c39aa9cd41118b18d0a7028b4f2752cb8a)) - Ku6epXBOCTuK
+- use toggle component with single pattern - ([4eb657d](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/4eb657dd505aacf2f453b43ab082a599090a6c45)) - Ku6epXBOCTuK
+- mask result sanitize params - ([421f078](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/421f078f9051329ca9277425b60ee5b6adfa68b3)) - Ku6epXBOCTuK
+- touched by step flag issue - ([d58f6c9](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/d58f6c90bee245c672f61dbd46e37a8d1df6fca7)) - Ku6epXBOCTuK
+- run gen race condition - ([6dcbb7c](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/6dcbb7c0f8d8876f2ec479dcbce4dff7f9ab104a)) - Ku6epXBOCTuK
+#### Refactoring
+- better typing for tool icons - ([2ddb348](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/2ddb348e54fe681594abe4abe44d3e435277d5c0)) - Ku6epXBOCTuK
+- remove double logic, change names - ([6288b03](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/6288b03ac0a1c8f63476a4682e43ba96e783955e)) - Ku6epXBOCTuK
+- parse hex color - ([637f656](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/637f65622911034c59a1c62b0f5436675765b475)) - Ku6epXBOCTuK
+- move fit to size function - ([0b929ec](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/0b929eced2980f7509263873f2ceb79cd87dbf52)) - Ku6epXBOCTuK
+- separate output formats from io core - ([dfb1f53](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/dfb1f531fa121f0750f5b093cec6c63b439df572)) - Ku6epXBOCTuK
+- group props in view models - ([e51d6f3](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/e51d6f32396003c614ba5c8f97943cd37a0883b4)) - Ku6epXBOCTuK
+- separate registry schema file - ([731f4ba](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/731f4ba90e3aad3f3a48c9e98abde0b357b3fdd1)) - Ku6epXBOCTuK
+- separate schema tool state - ([0b3eeab](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/0b3eeab959de1cf12542b9686b91e9e8c97eb888)) - Ku6epXBOCTuK
+- separate schema tool runner - ([551da33](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/551da338f38a96b2519e783d1f5d38e17d8d8c9e)) - Ku6epXBOCTuK
+- separate SchemaAlignedLayout component - ([52cb9c8](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/52cb9c8a1148f50825f9761f5bfbf8ba0776fca2)) - Ku6epXBOCTuK
+- clamp\storage dry - ([07c6475](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/07c6475c214868ae035461223fc32c516194aa90)) - Ku6epXBOCTuK
+- use derived by instead of effect - ([9916955](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/9916955b967a858aff5554c40f65cf9197dda480)) - Ku6epXBOCTuK
+
+- - -
+
 ## [v0.5.0](https://github.com/Ku6epXBOCTuK/easy-png-tools/compare/76039f7bf3247ef9711113608f5ec2d01a7fa56f..v0.5.0) - 2026-10-09
 #### Features
 - add show mask chip for tools - ([c22c6e5](https://github.com/Ku6epXBOCTuK/easy-png-tools/commit/c22c6e55741f99a6c8a79a82b7b3deadd33fa3dc)) - Ku6epXBOCTuK
