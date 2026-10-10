@@ -9,11 +9,8 @@
 	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
 	import { ToolError } from "$lib/core/errors";
-	import {
-		decodeFile,
-		outputFormatByMime,
-		type OutputMime,
-	} from "$lib/core/io";
+	import { decodeFile, type OutputMime } from "$lib/core/io";
+	import { outputFormatByMime } from "$lib/output-formats";
 	import type { PixelImage } from "$lib/core/types";
 	import { baseName, uniqueName, type ChainWarning } from "$lib/run-chain";
 	import {

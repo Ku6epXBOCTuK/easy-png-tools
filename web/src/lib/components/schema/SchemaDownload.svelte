@@ -1,11 +1,8 @@
 <script lang="ts">
 	import RangeControl from "$lib/components/fields/schema/RangeControl.svelte";
 	import Icon from "$lib/components/ui/Icon.svelte";
-	import {
-		OUTPUT_FORMATS,
-		outputFormatByMime,
-		type OutputMime,
-	} from "$lib/core/io";
+	import type { OutputMime } from "$lib/core/io";
+	import { OUTPUT_FORMATS, outputFormatByMime } from "$lib/output-formats";
 	import type { SliderSpec } from "$lib/registry-schema";
 	import { t } from "$lib/i18n/t";
 	import { ChevronDown, Download } from "@lucide/svelte";

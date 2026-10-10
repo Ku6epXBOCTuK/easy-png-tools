@@ -3,9 +3,9 @@ import {
 	downloadBlob,
 	encode,
 	fitWithinBytes,
-	outputFormatByMime,
 	type OutputMime,
 } from "$lib/core/io";
+import { outputFormatByMime } from "$lib/output-formats";
 import type { PixelImage } from "$lib/core/types";
 import { execute } from "$lib/executor";
 import { chainStepTitle, verdictText } from "$lib/i18n/schema-tool-strings";

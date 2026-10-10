@@ -83,11 +83,13 @@ aligned, ontogglealign).
 `sanitizeSchemaParams(stepSchema, step.params, { source: input })` — тот же
 контракт, что в `executor/executor.ts` (вход шага как source-контекст).
 
-### M5. UI-метаданные дропдауна скачивания в core-слое
+### M5. UI-метаданные дропдауна скачивания в core-слое — СДЕЛАНО (2026-10)
 
-`web/src/lib/core/io.ts:10-47`: `OUTPUT_FORMATS`/`OutputFormatOption` содержат
-`label` и `settings.quality` — конфигурацию презентационного дропдауна кнопки
-Download. Core по канону «не знает ни о ком».
+`OutputFormatOption`/`OUTPUT_FORMATS`/`outputFormatByMime` вынесены из
+`core/io.ts` в `web/src/lib/output-formats.ts` (UI-слой: label и
+`settings.quality` дропдауна кнопки Download). В core остался только
+mime-контракт `OutputMime`; сам `io.ts` таблицу не использовал. Потребители (4
+файла) переведены на новый путь.
 
 ### M6. Доменная политика сжатия в IO-модуле
 

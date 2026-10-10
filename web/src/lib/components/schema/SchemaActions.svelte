@@ -2,7 +2,7 @@
 	import DownloadButton from "$lib/components/ui/DownloadButton.svelte";
 	import UploadButton from "$lib/components/ui/UploadButton.svelte";
 	import type { OutputMime } from "$lib/core/io";
-	import { outputFormatByMime } from "$lib/core/io";
+	import { outputFormatByMime } from "$lib/output-formats";
 	import { t } from "$lib/i18n/t";
 	import type { ResultKind } from "$lib/registry";
 	import SchemaDownload from "./SchemaDownload.svelte";
