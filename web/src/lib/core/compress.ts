@@ -1,3 +1,7 @@
+import type { OutputMime } from "./io";
+import { quantizeImage } from "./quantize";
+import type { PixelImage } from "./types";
+
 /** Compression presets: level -> number of quantization colors. */
 export const COMPRESSION_LEVELS = {
 	light: 192,
@@ -79,4 +83,34 @@ export async function findQualityWithin(
 		else b = mid;
 	}
 	return ok;
+}
+
+export type EncodeFn = (
+	img: PixelImage,
+	mime: OutputMime,
+	quality?: number,
+) => Promise<Blob>;
+
+/** Encodes img to fit targetBytes (quality search for lossy, color count for
+ *  PNG; BMP as-is). `encodeFn` injected (core/io.encode): policy stays DOM-free. */
+export async function fitWithinBytes(
+	img: PixelImage,
+	mime: OutputMime,
+	targetBytes: number,
+	quality: number | undefined,
+	encodeFn: EncodeFn,
+): Promise<Blob> {
+	if (mime === "image/bmp") return encodeFn(img, mime);
+	const initial = await encodeFn(img, mime, quality);
+	if (initial.size <= targetBytes) return initial;
+	if (mime === "image/png") {
+		const encodeSize = async (k: number) =>
+			(await encodeFn(quantizeImage(img, k).image, mime)).size;
+		const k = await findMaxColorsWithin(targetBytes, 256, encodeSize);
+		return encodeFn(quantizeImage(img, k).image, mime);
+	}
+	const encodeSize = async (q: number) =>
+		(await encodeFn(img, mime, q / 100)).size;
+	const q = await findQualityWithin(targetBytes, encodeSize);
+	return encodeFn(img, mime, q / 100);
 }

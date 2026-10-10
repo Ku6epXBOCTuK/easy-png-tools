@@ -1,10 +1,6 @@
+import { fitWithinBytes } from "$lib/core/compress";
 import { ToolError, type ErrorVars } from "$lib/core/errors";
-import {
-	downloadBlob,
-	encode,
-	fitWithinBytes,
-	type OutputMime,
-} from "$lib/core/io";
+import { downloadBlob, encode, type OutputMime } from "$lib/core/io";
 import { outputFormatByMime } from "$lib/output-formats";
 import type { PixelImage } from "$lib/core/types";
 import { execute } from "$lib/executor";
@@ -155,7 +151,7 @@ async function download(s: RunnerState, ctx: SchemaToolRunnerCtx) {
 		const limit = ctx.limitKb();
 		const quality = q !== undefined ? q / 100 : undefined;
 		const blob = limit
-			? await fitWithinBytes(s.result, out.mime, limit * 1024, quality)
+			? await fitWithinBytes(s.result, out.mime, limit * 1024, quality, encode)
 			: await encode(s.result, out.mime, quality);
 		downloadBlob(blob, `${ctx.pageSlug()}.${out.ext}`);
 	} catch (e) {

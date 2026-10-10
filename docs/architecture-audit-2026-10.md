@@ -91,12 +91,14 @@ aligned, ontogglealign).
 mime-контракт `OutputMime`; сам `io.ts` таблицу не использовал. Потребители (4
 файла) переведены на новый путь.
 
-### M6. Доменная политика сжатия в IO-модуле
+### M6. Доменная политика сжатия в IO-модуле — СДЕЛАНО (2026-10)
 
-`web/src/lib/core/io.ts:191-210`: `fitWithinBytes` — стратегия «бинарный поиск
-по quality / по числу цветов квантизации» поверх `quantizeImage`,
-`findMaxColorsWithin`, `findQualityWithin`. Это доменная логика, не ввод-вывод
-(у файла 19 экспортов).
+`fitWithinBytes` перенесён из `core/io.ts` в `core/compress.ts` (дом стратегий
+сжатия). Сигнатура с инъекцией:
+`fitWithinBytes(img, mime, targetBytes, quality, encodeFn)` — вызывающий
+(`schema-tool-runner`) передаёт `io.encode`, поэтому `compress.ts` остаётся
+DOM-free и node-тестируемым (попутно `fitWithinBytes` теперь можно
+юнит-тестировать с фейковым encode). `io.ts` вернулся к чистому IO.
 
 ### M7. `clamp` продублирован 5 раз — СДЕЛАНО (2026-10)
 
