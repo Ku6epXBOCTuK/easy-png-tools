@@ -1,5 +1,4 @@
 import {
-	AppWindow,
 	Binary,
 	Blend,
 	CalendarDays,
@@ -15,7 +14,6 @@ import {
 	FileImage,
 	FileOutput,
 	FilePlus2,
-	Film,
 	FlipHorizontal2,
 	Focus,
 	Frame,
@@ -27,7 +25,6 @@ import {
 	Layers,
 	Link2,
 	Maximize2,
-	Minimize2,
 	Moon,
 	PaintBucket,
 	Palette,
@@ -49,8 +46,13 @@ import {
 	ZoomIn,
 	ZoomOut,
 } from "@lucide/svelte";
+import type { Component } from "svelte";
+import type { PageSlug } from "./registry";
 
-export const TOOL_ICONS: Record<string, typeof AppWindow> = {
+type IconComponent = Component<{ size?: number; class?: string }>;
+
+// Keyed by page slug: a renamed/missing page is a compile error here.
+export const TOOL_ICONS: Record<PageSlug, IconComponent> = {
 	"resize-png": Scaling,
 	"crop-png": Crop,
 	"rotate-png": RotateCw,
@@ -61,12 +63,6 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	"convert-png-to-jpg": FileImage,
 	"convert-png-to-webp": FileImage,
 	"remove-color-from-png": Scissors,
-	"png-info": Info,
-	"jpg-to-png": FileImage,
-	"webp-to-png": FileImage,
-	"gif-to-png": Film,
-	"bmp-to-png": FileImage,
-	"ico-to-png": AppWindow,
 	"png-to-bmp": FileOutput,
 	"png-to-base64": Binary,
 	"base64-to-png": ClipboardPaste,
@@ -134,8 +130,6 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	"change-aspect-ratio-png": Scaling,
 	"swap-orientation-png": RotateCw,
 	"symmetric-copy-png": FlipHorizontal2,
-	"compress-png": Minimize2,
-	"reduce-to-size-png": Scaling,
 	"png-file-size": Info,
 	"png-to-bytes": Binary,
 	"bytes-to-png": Binary,
@@ -153,7 +147,6 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	"star-mask-png": Star,
 	"wavy-mask-png": WavesHorizontal,
 	"watermark-tile-png": Stamp,
-	"watermark-image-png": FileImage,
 	"color-wheel-png": Rainbow,
 	"complementary-png": Contrast,
 	"triadic-png": Hash,
@@ -183,3 +176,9 @@ export const TOOL_ICONS: Record<string, typeof AppWindow> = {
 	"tint-png": Droplet,
 	"svg-to-png": FileImage,
 };
+
+// Slugs come from the registry at runtime (Page.slug is string there), so the
+// lookup widens; completeness is guaranteed by the Record<PageSlug, _> above.
+export function toolIcon(slug: string): IconComponent {
+	return TOOL_ICONS[slug as PageSlug];
+}

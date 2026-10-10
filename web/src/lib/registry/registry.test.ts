@@ -48,7 +48,9 @@ describe("registry-new (migrated tools)", () => {
 	});
 
 	it("every tool is used by at least one page", () => {
-		const used = new Set(PAGES.flatMap((page) => page.steps.map((s) => s.id)));
+		const used = new Set<string>(
+			PAGES.flatMap((page) => page.steps.map((s) => s.id)),
+		);
 		const orphans = TOOLS.map((tool) => tool.id).filter((id) => !used.has(id));
 		expect(orphans, `tools without pages:\n${orphans.join("\n")}`).toEqual([]);
 	});

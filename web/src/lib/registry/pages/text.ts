@@ -1,6 +1,6 @@
 import type { Page } from "../types";
 
-export const textPages: Page[] = [
+export const textPages = [
 	{
 		slug: "add-text-png",
 		title: "Add text to PNG",
@@ -25,4 +25,4 @@ export const textPages: Page[] = [
 		category: "text",
 		steps: [{ id: "watermark-tile" }],
 	},
-];
+] as const satisfies readonly Page[];

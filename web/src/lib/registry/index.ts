@@ -50,7 +50,9 @@ export const TOOLS: Tool[] = [
 	...textTools,
 ] as unknown as Tool[];
 
-export const PAGES: Page[] = [
+// Not annotated as Page[] on purpose: the literal slug types must survive
+// for PageSlug below; every consumer treats PAGES as a readonly Page list.
+export const PAGES = [
 	...geometryPages,
 	...alphaPages,
 	...convertPages,
@@ -59,7 +61,10 @@ export const PAGES: Page[] = [
 	...colorPages,
 	...generatePages,
 	...textPages,
-] as unknown as Page[];
+];
+
+/** Union of existing page slugs (groups use `satisfies Page[]`, so literals survive). */
+export type PageSlug = (typeof PAGES)[number]["slug"];
 
 export function getTool(id: string): Tool | undefined {
 	return TOOLS.find((tool) => tool.id === id);

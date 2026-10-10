@@ -1,6 +1,6 @@
 import type { Page } from "../types";
 
-export const analyzePages: Page[] = [
+export const analyzePages = [
 	{
 		slug: "extract-color-from-png",
 		title: "Extract Color from PNG",
@@ -93,4 +93,4 @@ export const analyzePages: Page[] = [
 		category: "analyze",
 		steps: [{ id: "orientation" }],
 	},
-];
+] as const satisfies readonly Page[];

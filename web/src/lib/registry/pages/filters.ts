@@ -1,6 +1,6 @@
 import type { Page } from "../types";
 
-export const filtersPages: Page[] = [
+export const filtersPages = [
 	{
 		slug: "blur-png",
 		title: "Blur PNG",
@@ -65,4 +65,4 @@ export const filtersPages: Page[] = [
 		category: "filters",
 		steps: [{ id: "jpeg-artifacts" }],
 	},
-];
+] as const satisfies readonly Page[];

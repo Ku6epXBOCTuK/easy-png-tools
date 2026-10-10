@@ -76,7 +76,7 @@ describe("dictionary completeness for the new registry", () => {
 	});
 
 	it("the pages section has no extra pages", () => {
-		const slugs = new Set(PAGES.map((page) => page.slug));
+		const slugs = new Set<string>(PAGES.map((page) => page.slug));
 		for (const [locale, dict] of [
 			["ru", ru],
 			["en", en],

@@ -104,7 +104,7 @@ describe("docs/tools-map.md vs registry pages", () => {
 	const markdown = readFileSync(MAP_PATH, "utf8");
 	const mentioned = mentionedIds(markdown);
 	const planned = plannedIds(markdown);
-	const registrySlugs = new Set(PAGES.map((page) => page.slug));
+	const registrySlugs = new Set<string>(PAGES.map((page) => page.slug));
 
 	it("parses a non-empty slug list (parser did not silently break)", () => {
 		expect(mentioned.length).toBeGreaterThan(0);

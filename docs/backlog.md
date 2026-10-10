@@ -194,6 +194,7 @@
 
 ## Тесты и lint
 
+- [ ] линтер на deprecated иконки возможен? 'FilePlus2' is deprecated.
 - [ ] `tseslint.config(...)` deprecated: сигнатура
       `(...configs: InfiniteDepthConfigWithExtends[]): ConfigArray` помечена
       устаревшей, нужен переход на `defineConfig` из `eslint/config` (ESLint

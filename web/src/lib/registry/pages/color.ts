@@ -1,6 +1,6 @@
 import type { Page } from "../types";
 
-export const colorPages: Page[] = [
+export const colorPages = [
 	{
 		slug: "two-colors-png",
 		title: "Two colors PNG",
@@ -199,4 +199,4 @@ export const colorPages: Page[] = [
 		category: "color",
 		steps: [{ id: "to-lab" }],
 	},
-];
+] as const satisfies readonly Page[];

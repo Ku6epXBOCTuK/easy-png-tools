@@ -1,6 +1,6 @@
 import type { Page } from "../types";
 
-export const geometryPages: Page[] = [
+export const geometryPages = [
 	{
 		slug: "add-border-png",
 		title: "Add border to PNG",
@@ -149,4 +149,4 @@ export const geometryPages: Page[] = [
 		category: "geometry",
 		steps: [{ id: "shift" }],
 	},
-];
+] as const satisfies readonly Page[];

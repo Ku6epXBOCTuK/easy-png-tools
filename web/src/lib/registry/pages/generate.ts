@@ -1,6 +1,6 @@
 import type { Page } from "../types";
 
-export const generatePages: Page[] = [
+export const generatePages = [
 	{
 		slug: "create-empty-png",
 		title: "Create empty PNG",
@@ -164,4 +164,4 @@ export const generatePages: Page[] = [
 		category: "generate",
 		steps: [{ id: "from-text" }],
 	},
-];
+] as const satisfies readonly Page[];

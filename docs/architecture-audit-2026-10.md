@@ -180,12 +180,19 @@ round-семантика `clampByte` и trunc-семантика `clampInt` со
 - `executor.ts` `as unknown as WorkerLike` оставлен намеренно: несовместимость
   `onerror` (ErrorEvent vs Event) в типах lib.dom; добавлен комментарий-причина.
 
-### L5. Хардкод slug-ов вне registry
+### L5. Хардкод slug-ов вне registry — СДЕЛАНО (2026-10)
 
-`tool-icons.ts:54-142` — карта slug→icon без типизации по slug-union
-(переименование slug ломает иконки молча); `kit/+page.svelte:40` — захардкожены
-`["linear-gradient-png","resize-png","quantize-png"]` (kit — витрина, не
-production).
+`Page` стал readonly, группы `registry/pages/*` —
+`as const satisfies readonly Page[]`; в `registry/index.ts` добавлен union
+`PageSlug`. `TOOL_ICONS` типизирован `Record<PageSlug, IconComponent>` —
+переименование или удаление страницы теперь ломает компиляцию, а не падает
+молча. Чтение с внешней строкой — через аксессор `toolIcon(slug)`. Попутно
+найдены и удалены 9 мёртвых ключей иконок (страницы уже не существуют:
+`png-info`, `jpg-to-png`, `webp-to-png`, `gif-to-png`, `bmp-to-png`,
+`ico-to-png`, `compress-png`, `reduce-to-size-png`, `watermark-image-png`).
+Добавлен runtime-тест `web/src/lib/tool-icons.test.ts` (оба направления: сироты
+и страницы без иконки). Хардкод в `kit/+page.svelte` оставлен — витрина, не
+production.
 
 ### L6. Дублирование CSS-значения превью-тайла — СДЕЛАНО (2026-10)
 

@@ -1,6 +1,6 @@
 import type { Page } from "../types";
 
-export const alphaPages: Page[] = [
+export const alphaPages = [
 	{
 		slug: "add-stroke-png",
 		title: "Outline PNG",
@@ -157,4 +157,4 @@ export const alphaPages: Page[] = [
 		category: "alpha",
 		steps: [{ id: "close-holes" }],
 	},
-];
+] as const satisfies readonly Page[];

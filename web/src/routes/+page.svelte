@@ -13,7 +13,7 @@
 	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
 	import { PAGES } from "$lib/registry";
-	import { TOOL_ICONS } from "$lib/tool-icons";
+	import { toolIcon } from "$lib/tool-icons";
 
 	let query = $state("");
 	let category = $state<string>("all");
@@ -52,7 +52,7 @@
 						slug={page.slug}
 						description={pageDescription(page)}
 						index={i + 1}
-						icon={TOOL_ICONS[page.slug]}
+						icon={toolIcon(page.slug)}
 					/>
 				{/each}
 			</CatalogGroup>
@@ -65,7 +65,7 @@
 						slug={page.slug}
 						description={pageDescription(page)}
 						index={i + 1}
-						icon={TOOL_ICONS[page.slug]}
+						icon={toolIcon(page.slug)}
 					/>
 				{/each}
 			</CatalogGroup>

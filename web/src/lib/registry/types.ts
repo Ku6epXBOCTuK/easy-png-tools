@@ -80,12 +80,12 @@ export type PageStep = {
 /** Page: unique address, strings, and the ordered tool list in `steps` (a page may be a ready-made chain run by `SchemaToolView`). */
 export type Page = {
 	/** Address `/tools/<slug>`, downloaded file name, and icon key. */
-	slug: string;
+	readonly slug: string;
 	/** EN string; the translation lives in the dictionary by slug. */
-	title: string;
-	description: string;
-	category: CategoryId;
-	steps: PageStep[];
+	readonly title: string;
+	readonly description: string;
+	readonly category: CategoryId;
+	readonly steps: readonly PageStep[];
 };
 
 export function requireSource<P>(ctx: ToolContext<P>): PixelImage {

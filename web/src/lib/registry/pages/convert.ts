@@ -1,6 +1,6 @@
 import type { Page } from "../types";
 
-export const convertPages: Page[] = [
+export const convertPages = [
 	{
 		slug: "convert-png-to-jpg",
 		title: "Convert PNG to JPG",
@@ -112,4 +112,4 @@ export const convertPages: Page[] = [
 		category: "convert",
 		steps: [{ id: "from-svg" }],
 	},
-];
+] as const satisfies readonly Page[];
