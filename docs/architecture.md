@@ -12,7 +12,10 @@ web/src/lib/
   registry/            # источник истины: инструменты и страницы
   registry/tools/      # Tool: реализации (id), без адресов и текстов
   registry/pages/      # Page: адрес, тексты, категория, список шагов
-  registry-schema.ts   # декларативная схема параметров + санитизация дефолтов
+  registry-schema/   # декларативная схема параметров: specs (типы полей),
+                     # field (builder DSL), layout (группы), aspect (aspect-lock
+                     # и кэпы от source), values (дефолты и санитизация);
+                     # index.ts — баррель, импорты идут по `registry-schema`
   catalog.ts           # группировка страниц и счётчики для /list-tools
   categories.ts        # id/названия категорий
   tool-icons.ts        # slug страницы → иконка
@@ -170,7 +173,11 @@ registry/{tools,pages}/*.ts
 
 ## 4. Схема параметров
 
-`registry-schema.ts` — единственное место, где описаны виды полей.
+`registry-schema/` — единственное место, где описаны виды полей. Модули:
+`specs.ts` (типы полей и `ToolSchema`), `field.ts` (фабрика `field.*` и
+`toolSchema`), `layout.ts` (`resolveLayoutGroups`), `aspect.ts` (`effectiveMax`,
+`clampSourceAwareMaxes`, `withAspectLock`), `values.ts` (`defaultSchemaParams`,
+`applySourceDefaults`, `sanitizeSchemaParams`).
 
 - **Виды поля** (`fieldSpecs`): `number`, `slider`, `color`, `select`, `text`,
   `checkbox`, `dimension`, `color-pair`, `colors`, `offset`, `position9`,

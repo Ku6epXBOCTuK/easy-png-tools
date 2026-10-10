@@ -42,13 +42,15 @@ handleFiles, эффекты, workspace-разметка). Декомпозици
 `running` (`finally` сбрасывает только актуальный); `init()` инкрементом
 инвалидирует прогоны прошлого хоста.
 
-### H3. `registry-schema.ts` — 723 строки, 45 экспортов, 5 ответственностей
+### H3. `registry-schema.ts` — 5 ответственностей — СДЕЛАНО (2026-10)
 
-`web/src/lib/registry-schema.ts` смешивает: (а) типы 15 видов полей (:14-233),
-(б) builder-DSL `field.*` (:273-360), (в) layout engine `resolveLayoutGroups`
-(:380-406), (г) семантику значений `defaultSchemaParams`/`sanitizeSchemaParams`
-(:503-770), (д) aspect-lock геометрию `withAspectLock`/`clampSourceAwareMaxes`
-(:434-489). Каждая из (в)-(д) — отдельный модуль.
+Файл (769 строк) разрезан на директорию `web/src/lib/registry-schema/`:
+`specs.ts` (типы полей, `fieldSpecs`, `ToolSchema`), `field.ts` (builder DSL +
+`toolSchema`), `layout.ts` (`resolveLayoutGroups`), `aspect.ts` (`effectiveMax`,
+`clampSourceAwareMaxes`, `withAspectLock`), `values.ts` (дефолты и санитизация);
+`index.ts` — баррель, пути импортов не менялись. `docs/architecture.md` (разделы
+1, 4) обновлён. JSDoc в `specs.ts` сжат до однострочников — лимит плотности
+комментариев (`conventions/comment-format`, 15%).
 
 ## Med
 
