@@ -21,26 +21,19 @@
 
 ## High
 
-### H1. `SchemaToolView.svelte` — god-component — В РАБОТЕ
+### H1. `SchemaToolView.svelte` — god-component — СДЕЛАНО (2026-10)
 
-План декомпозиции (подшаги, каждый отдельным ревью-коммитом):
+Компонент уменьшен со 1115 до ~660 строк (оркестратор: derived-связки, init,
+handleFiles, эффекты, workspace-разметка). Декомпозиция:
 
-- **H1a — СДЕЛАНО (2026-10):** aligned-раскладка вынесена в
-  `SchemaAlignedLayout.svelte` (view-only: разметка + scoped-стили, сниппет
-  `stepCard` остался в родителе и передаётся пропсом). Родитель уменьшился
-  примерно на 200 строк.
-- **H1b — СДЕЛАНО (2026-10):** runner вынесен в `schema-tool-runner.svelte.ts`
-  (`createSchemaToolRunner(ctx)`: состояние в `$state`-объекте `RunnerState`,
-  действия — модульные функции run/download/
-  copyText/downloadText/assignResult/toDisplayError, геттеры наружу; лимит
-  `max-lines-per-function` не даёт держать всё в одной фабрике). Компонент
-  читает состояние через `$derived`-алиасы.
-- **H1c (далее):** стейт шагов (мутации `steps`, `touchedByStep`, `lastAxis`) →
-  `schema-tool-state.svelte.ts`.
-
-Исходная формулировка: ~10 ответственностей в одном компоненте — состояние
-цепочки шагов, загрузка файлов, оркестрация запуска, политика скачивания,
-clipboard, paste-listener, mask-превью, drag&drop, aspect-lock, две раскладки.
+- **H1a:** aligned-раскладка вынесена в `SchemaAlignedLayout.svelte` (view-only:
+  разметка + scoped-стили, сниппет `stepCard` передаётся пропсом).
+- **H1b:** runner вынесен в `schema-tool-runner.svelte.ts`
+  (`createSchemaToolRunner(ctx)`); идиома «`$state`-объект + модульные функции»
+  зафиксирована в `docs/architecture.md`, раздел 9.
+- **H1c:** стейт шагов вынесен в `schema-tool-state.svelte.ts`
+  (`createSchemaToolState(ctx)`: steps, touchedByStep/lastAxis, все мутации,
+  DnD; `toolSchemaOf` — модульный экспорт).
 
 ### H2. Race condition превью — СДЕЛАНО (2026-10)
 

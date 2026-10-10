@@ -32,11 +32,7 @@
 	} from "$lib/chains.svelte";
 	import {
 		createChain,
-		createStep,
-		insertStep,
 		isStructuralDefault,
-		moveStep,
-		removeStep,
 		type ChainStep,
 	} from "$lib/pipeline.svelte";
 	import {
@@ -48,19 +44,20 @@
 	import {
 		applySourceDefaults,
 		clampSourceAwareMaxes,
-		defaultSchemaParams,
-		withAspectLock,
-		type Dimension,
 		type ToolSchema,
 	} from "$lib/registry-schema";
 	import { onMount } from "svelte";
-	import { SvelteMap, SvelteSet } from "svelte/reactivity";
+	import { SvelteSet } from "svelte/reactivity";
 	import AddStepButton from "./AddStepButton.svelte";
 	import SchemaAlignedLayout from "./SchemaAlignedLayout.svelte";
 	import SchemaFields from "./SchemaFields.svelte";
 	import SchemaPreview from "./SchemaPreview.svelte";
 	import ToolPickerButton from "./ToolPickerButton.svelte";
 	import { createSchemaToolRunner } from "./schema-tool-runner.svelte";
+	import {
+		createSchemaToolState,
+		toolSchemaOf,
+	} from "./schema-tool-state.svelte";
 
 	interface Props {
 		page: Page;
@@ -76,12 +73,6 @@
 
 	const inputMode = $derived(tool.input);
 
-	let steps = $state<ChainStep[]>([]);
-	// Fields edited by the user (per step): on new file load they must not be
-	// overwritten by source defaults. Step reset clears the mark.
-	const touchedByStep = new SvelteMap<string, SvelteSet<string>>();
-	// Last edited axis of a dimension field; leads under lockAspect.
-	const lastAxis: Record<string, "width" | "height"> = {};
 	let aligned = $state(false);
 	let source = $state<PixelImage | null>(null);
 	// The full named input set (multi-upload); `source` above is the first
@@ -119,7 +110,22 @@
 		});
 		return next;
 	});
-	let dragFrom = $state<number | null>(null);
+
+	const stepState = createSchemaToolState({
+		source: () => source,
+		stepDims: () => runner.stepDims,
+		clearResults: () => runner.clearResults(),
+	});
+	const {
+		setStepValue,
+		resetStep,
+		addStepAt,
+		removeStepAt,
+		toggleStep,
+		replaceStepTool,
+		onStepDrop,
+	} = stepState;
+	const steps = $derived(stepState.steps);
 
 	const runner = createSchemaToolRunner({
 		pageSlug: () => page.slug,
@@ -206,19 +212,6 @@
 
 	const debouncedRun = debounce(() => run(), 200);
 
-	function touchedFor(key: string): SvelteSet<string> {
-		let set = touchedByStep.get(key);
-		if (!set) {
-			set = new SvelteSet();
-			touchedByStep.set(key, set);
-		}
-		return set;
-	}
-
-	function toolSchemaOf(step: ChainStep) {
-		return getTool(step.id)?.schema as ToolSchema<Record<string, unknown>>;
-	}
-
 	function stepTitle(toolId: string): string {
 		return chainStepTitle(toolId);
 	}
@@ -232,7 +225,7 @@
 		runner.resetForHost();
 		if (chainId) {
 			const handoff = takeHandoff(chainId);
-			steps = getChain(chainId)?.steps ?? createChain(page);
+			stepState.steps = getChain(chainId)?.steps ?? createChain(page);
 			source = handoff?.source ?? null;
 			sourceFiles =
 				handoff?.sourceFiles ??
@@ -244,7 +237,7 @@
 			else format = lastTool.output?.mime ?? "image/png";
 			limitKb = handoff?.limitKb;
 		} else {
-			steps = createChain(page);
+			stepState.steps = createChain(page);
 			format = lastTool.output?.mime ?? "image/png";
 			limitKb = undefined;
 			source = null;
@@ -253,105 +246,7 @@
 		}
 		sourceWarnings = [];
 		maskOnKeys.clear();
-		// Marks are keyed by step.key from the previous host; keep them and
-		// stale keys leak into the new chain's fields.
-		touchedByStep.clear();
-		for (const k of Object.keys(lastAxis)) delete lastAxis[k];
-	}
-
-	function setStepValue(
-		index: number,
-		id: string,
-		value: unknown,
-		axis?: "width" | "height" | "both",
-	) {
-		const step = steps[index];
-		if (!step) return;
-		touchedFor(step.key).add(id);
-		const axisKey = `${step.key}:${id}`;
-		if (axis) lastAxis[axisKey] = axis === "both" ? "width" : axis;
-		const next: Record<string, unknown> = { ...step.params, [id]: value };
-		const stepSchema = toolSchemaOf(step);
-		const spec = stepSchema?.fields[id]?.spec;
-		// Aspect derives from the step input: source for the first step,
-		// previous step's result for the rest (dims known after the run).
-		const dims = index === 0 ? (source ?? undefined) : stepDims[index - 1];
-		if (dims && stepSchema && spec) {
-			const aspect = dims.width / dims.height;
-			if (
-				spec.kind === "dimension" &&
-				spec.lockAspectWith &&
-				axis !== "both" &&
-				next[spec.lockAspectWith] === true
-			) {
-				next[id] = withAspectLock(
-					value as Dimension,
-					lastAxis[axisKey] ?? "width",
-					aspect,
-				);
-			} else if (spec.kind === "checkbox" && value === true) {
-				// lockAspect just enabled: snap bound fields to the aspect at once.
-				for (const [fid, f] of Object.entries(stepSchema.fields)) {
-					const fs = f.spec;
-					if (fs.kind === "dimension" && fs.lockAspectWith === id) {
-						next[fid] = withAspectLock(
-							next[fid] as Dimension,
-							lastAxis[`${step.key}:${fid}`] ?? "width",
-							aspect,
-						);
-					}
-				}
-			}
-		}
-		const clamped = dims ? clampSourceAwareMaxes(stepSchema, next, dims) : next;
-		steps = steps.with(index, { ...step, params: clamped });
-	}
-
-	function resetStep(index: number) {
-		const step = steps[index];
-		if (!step) return;
-		touchedFor(step.key).clear();
-		const stepSchema = toolSchemaOf(step);
-		const dims = index === 0 ? (source ?? undefined) : stepDims[index - 1];
-		const params = stepSchema
-			? defaultSchemaParams(stepSchema, { source: dims })
-			: {};
-		steps = steps.with(index, { ...step, params });
-		runner.clearResults();
-	}
-
-	function addStepAt(index: number, toolId: string) {
-		steps = insertStep(steps, index, toolId);
-	}
-
-	function removeStepAt(key: string) {
-		steps = removeStep(steps, key);
-	}
-
-	function toggleStep(index: number) {
-		const step = steps[index];
-		if (!step) return;
-		steps = steps.with(index, { ...step, collapsed: !step.collapsed });
-	}
-
-	// In-place tool swap: step key and collapsed state are kept, params become
-	// the new tool's defaults, input is recomputed on run.
-	function replaceStepTool(index: number, toolId: string) {
-		const step = steps[index];
-		const next = createStep(toolId);
-		if (!step || !next) return;
-		touchedFor(step.key).clear();
-		steps = steps.with(index, {
-			...next,
-			key: step.key,
-			collapsed: step.collapsed,
-		});
-	}
-
-	function onStepDrop(e: DragEvent, to: number) {
-		e.preventDefault();
-		if (dragFrom !== null) steps = moveStep(steps, dragFrom, to);
-		dragFrom = null;
+		stepState.clearMarks();
 	}
 
 	async function handleFiles(files: File[]) {
@@ -382,7 +277,7 @@
 		const first = steps[0];
 		const firstSchema = first ? toolSchemaOf(first) : undefined;
 		if (first && firstSchema) {
-			steps = steps.with(0, {
+			stepState.steps = steps.with(0, {
 				...first,
 				params: clampSourceAwareMaxes(
 					firstSchema,
@@ -390,7 +285,7 @@
 						firstSchema,
 						first.params,
 						{ source: firstImage },
-						touchedFor(first.key),
+						stepState.touchedFor(first.key),
 					),
 					firstImage,
 				),
@@ -553,7 +448,7 @@
 				ontoggle={() => toggleStep(i)}
 				onremove={steps.length > 1 ? () => removeStepAt(step.key) : undefined}
 				ondragstart={(e) => {
-					dragFrom = i;
+					stepState.dragFrom = i;
 					if (e.dataTransfer) {
 						e.dataTransfer.effectAllowed = "move";
 						e.dataTransfer.setData("text/plain", String(i));
@@ -564,7 +459,7 @@
 					if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
 				}}
 				ondrop={(e) => onStepDrop(e, i)}
-				ondragend={() => (dragFrom = null)}
+				ondragend={() => (stepState.dragFrom = null)}
 			>
 				{#snippet tools()}
 					<ToolPickerButton
