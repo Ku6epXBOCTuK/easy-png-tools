@@ -1,5 +1,6 @@
 import type { Page } from "$lib/registry";
 import { PAGES } from "../registry";
+import type { ChainWarning } from "$lib/run-chain";
 import type { Field } from "$lib/registry-schema";
 import { getMergedDict } from "./locale.svelte";
 import { normalizeForSearch, scoreDoc, type SearchDoc } from "./matching";
@@ -65,6 +66,21 @@ export function verdictTone(key: string): "success" | "danger" | "info" {
 	if (/[Yy]es$|[Tt]rue$/.test(key)) return "success";
 	if (/[Nn]o$|[Ff]alse$/.test(key)) return "danger";
 	return "info";
+}
+
+/** Human-readable text for a chain run/source warning. */
+export function chainWarningText(w: ChainWarning): string {
+	switch (w.kind) {
+		case "partial":
+			return t("chain.warnPartial", { n: w.step, ok: w.ok, total: w.total });
+		case "firstOnly":
+			return t("chain.warnFirstOnly", { n: w.step, total: w.total });
+		case "sourceSkip":
+			return t("chain.warnSourceSkip", {
+				skipped: w.skipped,
+				total: w.total,
+			});
+	}
 }
 
 function dedupe(values: string[]): string[] {

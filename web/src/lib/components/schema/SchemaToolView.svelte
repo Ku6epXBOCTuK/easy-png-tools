@@ -1,53 +1,23 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { resolve } from "$app/paths";
 	import Button from "$lib/components/ui/Button.svelte";
 	import { ButtonVariantDefine } from "$lib/components/ui/define";
 	import { isFav, toggleFav } from "$lib/favorites.svelte";
 	import { Star } from "@lucide/svelte";
 	import { DragDropProvider } from "@dnd-kit/svelte";
-	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
-	import { ToolError } from "$lib/core/errors";
-	import { decodeFile, toDataUrl, type OutputMime } from "$lib/core/io";
-	import { outputFormatByMime } from "$lib/output-formats";
+	import { toDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
-	import { baseName, uniqueName, type ChainWarning } from "$lib/run-chain";
 	import {
+		chainStepTitle,
+		chainWarningText,
 		pageDescription,
 		pageTitle,
-		chainStepTitle,
 	} from "$lib/i18n/schema-tool-strings";
 	import { t } from "$lib/i18n/t";
-	import {
-		autoChainName,
-		createNamedChain,
-		getChain,
-		stashHandoff,
-		takeHandoff,
-		updateChainSteps,
-	} from "$lib/chains.svelte";
-	import {
-		createChain,
-		isStructuralDefault,
-		moveStep,
-		type ChainStep,
-	} from "$lib/pipeline.svelte";
-	import {
-		getTool,
-		type Page,
-		type Tool,
-		type ToolImageFile,
-	} from "$lib/registry";
-	import {
-		applySourceDefaults,
-		clampSourceAwareMaxes,
-		sanitizeSchemaParams,
-	} from "$lib/registry-schema";
+	import { moveStep, type ChainStep } from "$lib/pipeline.svelte";
+	import { getTool, type Page, type Tool } from "$lib/registry";
 	import ChipButton from "$lib/components/ui/ChipButton.svelte";
 	import Toggle from "$lib/components/ui/Toggle.svelte";
-	import { onMount } from "svelte";
-	import { SvelteSet } from "svelte/reactivity";
 	import AddStepButton from "./AddStepButton.svelte";
 	import PartsGrid from "./PartsGrid.svelte";
 	import PreviewTile from "./PreviewTile.svelte";
@@ -58,13 +28,17 @@
 	import SortableStepCard from "./SortableStepCard.svelte";
 	import StepReorderOverlay from "./StepReorderOverlay.svelte";
 	import ToolPickerButton from "./ToolPickerButton.svelte";
+	import { createChainHost } from "./chain-host.svelte";
+	import { createOutputControls } from "./output-controls.svelte";
 	import { hasPreviewResult } from "./schema-preview-model";
 	import { createSchemaToolRunner } from "./schema-tool-runner.svelte";
-	import { createStepDnd } from "./step-dnd.svelte";
 	import {
 		createSchemaToolState,
 		toolSchemaOf,
 	} from "./schema-tool-state.svelte";
+	import { createSourceUpload } from "./source-upload.svelte";
+	import { createStepDnd } from "./step-dnd.svelte";
+	import { createStepMasks } from "./step-mask.svelte";
 
 	interface Props {
 		page: Page;
@@ -79,48 +53,21 @@
 	const inputMode = $derived(tool.input);
 
 	let aligned = $state(false);
-	let source = $state<PixelImage | null>(null);
-	// The full named input set (multi-upload); `source` above is the first
-	// image for preview/defaults. Single upload = one element.
-	let sourceFiles = $state<ToolImageFile[]>([]);
-	let textSource = $state("");
-	let sourceWarnings = $state<ChainWarning[]>([]);
-	let initedFor = $state("");
-	let format = $state<OutputMime>("image/png");
-	// Lossy-format quality for tools without a quality param in the schema.
-	let formatQuality = $state<Record<string, number>>({});
-	// Optional download size limit (KB); undefined = no limit.
-	let limitKb = $state<number | undefined>(undefined);
-	// Mask preview per step (keyed by step.key): the toggle lives on every
-	// step result tile, not just the final one.
-	const maskOnKeys = new SvelteSet<string>();
-	// Mask preview: recomputed on the main thread per toggled step from that
-	// step's input; a mask never enters the chain itself.
-	const maskResults = $derived.by(() => {
-		const next: Record<string, PixelImage | null> = {};
-		steps.forEach((step, i) => {
-			if (!maskOnKeys.has(step.key)) return;
-			const stepTool = getTool(step.id);
-			if (!stepTool?.runMask) return;
-			const input = i === 0 ? source : stepResults[i - 1];
-			if (!input) return;
-			// Same contract as executor.ts: params are sanitized against the
-			// schema with the step input as the source context.
-			const stepSchema = toolSchemaOf(step);
-			const params = stepSchema
-				? sanitizeSchemaParams(stepSchema, step.params, { source: input })
-				: step.params;
-			try {
-				next[step.key] = stepTool.runMask({ params, source: input });
-			} catch {
-				next[step.key] = null;
-			}
-		});
-		return next;
+
+	// Composition root: feature state lives in sibling composables
+	// (source-upload, output-controls, step-mask, chain-host); execution in
+	// schema-tool-runner, step state in schema-tool-state.
+	const upload = createSourceUpload({
+		inputMode: () => inputMode,
+		steps: () => stepState.steps,
+		setSteps: (v) => (stepState.steps = v),
+		touchedFor: (key) => stepState.touchedFor(key),
+		reportError: (e) => runner.reportError(e),
+		clearError: () => (runner.displayError = null),
 	});
 
 	const stepState = createSchemaToolState({
-		source: () => source,
+		source: () => upload.source,
 		stepDims: () => runner.stepDims,
 		clearResults: () => runner.clearResults(),
 	});
@@ -139,16 +86,28 @@
 		},
 	});
 
+	const lastTool = $derived(
+		(steps.length > 0 ? getTool(steps[steps.length - 1].id) : undefined) ??
+			tool,
+	);
+
+	const output = createOutputControls({
+		lastTool: () => lastTool,
+		steps: () => steps,
+		result: () => runner.result,
+		setStepValue,
+	});
+
 	const runner = createSchemaToolRunner({
 		pageSlug: () => page.slug,
 		schema: () => schema,
 		steps: () => steps,
-		source: () => source,
-		sourceFiles: () => sourceFiles,
-		textSource: () => textSource,
-		format: () => format,
-		quality: () => currentQuality,
-		limitKb: () => limitKb,
+		source: () => upload.source,
+		sourceFiles: () => upload.sourceFiles,
+		textSource: () => upload.textSource,
+		format: () => output.format,
+		quality: () => output.quality,
+		limitKb: () => output.limitKb,
 		lastTool: () => lastTool,
 	});
 	const { run, download, copyText, downloadText } = runner;
@@ -164,12 +123,27 @@
 	const stepFileSets = $derived(runner.stepFileSets);
 	const runWarnings = $derived(runner.runWarnings);
 	const displayError = $derived(runner.displayError);
-	const allWarnings = $derived([...sourceWarnings, ...runWarnings]);
+	const allWarnings = $derived([...upload.sourceWarnings, ...runWarnings]);
 
-	const lastTool = $derived(
-		(steps.length > 0 ? getTool(steps[steps.length - 1].id) : undefined) ??
-			tool,
-	);
+	const masks = createStepMasks({
+		steps: () => steps,
+		source: () => upload.source,
+		stepResults: () => runner.stepResults,
+	});
+
+	const host = createChainHost({
+		page: () => page,
+		chainId: () => chainId,
+		schema: () => schema,
+		lastTool: () => lastTool,
+		steps: () => steps,
+		stepState,
+		source: upload,
+		output,
+		resetRun: () => runner.resetForHost(),
+		clearMasks: () => masks.clear(),
+	});
+
 	const resultKind = $derived(lastTool.result ?? "image");
 	// Display kind follows the actual output: a batch run of an image tool
 	// produces a file set, not a single image.
@@ -191,35 +165,12 @@
 		}),
 	);
 
-	const alphaLoss = $derived(
-		resultKind === "image" &&
-			result !== null &&
-			!outputFormatByMime(format).supportsAlpha &&
-			hasTransparency(result),
-	);
-	// If the last step's schema has a quality param (convert tools), it is the
-	// single source of quality; the dropdown edits the same value.
-	const qualityParamId = $derived(lastTool.output?.qualityParamId);
 	const lastParams = $derived(steps.at(-1)?.params);
 	const resultNote = $derived(
 		result && lastTool.resultNote
 			? lastTool.resultNote(lastParams ?? {}, result)
 			: null,
 	);
-	const currentQuality = $derived.by(() => {
-		const setting = outputFormatByMime(format).settings?.quality;
-		if (!setting) return undefined;
-		if (qualityParamId && lastParams) return Number(lastParams[qualityParamId]);
-		return formatQuality[format] ?? setting.default;
-	});
-
-	function setFormatQuality(q: number) {
-		if (qualityParamId) {
-			setStepValue(steps.length - 1, qualityParamId, q);
-		} else {
-			formatQuality = { ...formatQuality, [format]: q };
-		}
-	}
 
 	const errorText = $derived.by(() => {
 		const current = displayError;
@@ -229,200 +180,20 @@
 			: current.text;
 	});
 
-	const stepMaskable = $derived(steps.map((s) => !!getTool(s.id)?.runMask));
-	const stepMaskOn = $derived(steps.map((s) => maskOnKeys.has(s.key)));
-	const stepMasks = $derived(steps.map((s) => maskResults[s.key] ?? null));
-
 	const debouncedRun = debounce(() => run(), 200);
 
-	function stepTitle(toolId: string): string {
-		return chainStepTitle(toolId);
-	}
-
-	function init() {
-		if (!schema) return;
-		const host = chainId ? `chain:${chainId}` : page.slug;
-		if (host === initedFor) return;
-		initedFor = host;
-		// Invalidate any in-flight run from the previous host.
-		runner.resetForHost();
-		if (chainId) {
-			const handoff = takeHandoff(chainId);
-			stepState.steps = getChain(chainId)?.steps ?? createChain(page);
-			source = handoff?.source ?? null;
-			sourceFiles =
-				handoff?.sourceFiles ??
-				(handoff?.source
-					? [{ name: `${baseName(page.slug)}.png`, image: handoff.source }]
-					: []);
-			textSource = handoff?.textSource ?? "";
-			if (handoff?.format) format = handoff.format;
-			else format = lastTool.output?.mime ?? "image/png";
-			limitKb = handoff?.limitKb;
-		} else {
-			stepState.steps = createChain(page);
-			format = lastTool.output?.mime ?? "image/png";
-			limitKb = undefined;
-			source = null;
-			sourceFiles = [];
-			textSource = "";
-		}
-		sourceWarnings = [];
-		maskOnKeys.clear();
-		stepState.clearMarks();
-	}
-
-	async function handleFiles(files: File[]) {
-		runner.displayError = null;
-		sourceWarnings = [];
-		const decoded: ToolImageFile[] = [];
-		const usedNames = new SvelteSet<string>();
-		let skipped = 0;
-		for (const file of files) {
-			try {
-				const name = uniqueName(`${baseName(file.name)}.png`, usedNames);
-				usedNames.add(name);
-				decoded.push({ name, image: await decodeFile(file) });
-			} catch {
-				skipped++;
-			}
-		}
-		if (decoded.length === 0) {
-			runner.reportError(new ToolError("errors.imageDecode"));
-			return;
-		}
-		if (skipped > 0) {
-			sourceWarnings = [{ kind: "sourceSkip", skipped, total: files.length }];
-		}
-		const firstImage = decoded[0].image;
-		source = firstImage;
-		sourceFiles = decoded;
-		const first = steps[0];
-		const firstSchema = first ? toolSchemaOf(first) : undefined;
-		if (first && firstSchema) {
-			stepState.steps = steps.with(0, {
-				...first,
-				params: clampSourceAwareMaxes(
-					firstSchema,
-					applySourceDefaults(
-						firstSchema,
-						first.params,
-						{ source: firstImage },
-						stepState.touchedFor(first.key),
-					),
-					firstImage,
-				),
-			});
-		}
-	}
-
-	async function handleFile(file: File) {
-		await handleFiles([file]);
-	}
-
 	$effect(() => {
-		init();
-	});
-
-	// Named-chain mode autosaves into the chains store; a plain tool page
-	// persists nothing -- it becomes a named chain on structural change below.
-	$effect(() => {
-		if (!initedFor || !chainId) return;
+		if (!host.inited) return;
+		if (inputMode === "image" && !upload.source) return;
+		if (inputMode === "text" && !upload.textSource.trim()) return;
 		void steps;
-		updateChainSteps(chainId, steps);
-	});
-
-	// A tool page turns into a pipeline on the first structural change (step
-	// added, first tool swapped): create the named chain and swap routes
-	// seamlessly -- steps persist via the store, the source via the handoff.
-	$effect(() => {
-		if (!initedFor || chainId) return;
-		void steps;
-		if (isStructuralDefault(page, steps)) return;
-		const chain = createNamedChain(autoChainName(), steps);
-		stashHandoff(chain.id, {
-			source,
-			sourceFiles,
-			textSource,
-			format,
-			limitKb,
-		});
-		goto(resolve(`/pipeline?id=${chain.id}`), {
-			replaceState: true,
-			keepFocus: true,
-			noScroll: true,
-		});
-	});
-
-	onMount(() => {
-		if (inputMode !== "image") return;
-		function onPaste(e: ClipboardEvent) {
-			const target = e.target as HTMLElement | null;
-			if (target?.closest("input, textarea, [contenteditable]")) return;
-			for (const item of e.clipboardData?.items ?? []) {
-				if (item.kind !== "file" || !item.type.startsWith("image/")) continue;
-				const file = item.getAsFile();
-				if (file) {
-					e.preventDefault();
-					void handleFile(file);
-				}
-				return;
-			}
-		}
-		window.addEventListener("paste", onPaste);
-		return () => window.removeEventListener("paste", onPaste);
-	});
-
-	$effect(() => {
-		if (!initedFor) return;
-		if (inputMode === "image" && !source) return;
-		if (inputMode === "text" && !textSource.trim()) return;
-		void steps;
-		void source;
+		void upload.source;
 		debouncedRun();
 		return () => debouncedRun.cancel();
 	});
 
-	function toggleStepMask(key: string) {
-		if (maskOnKeys.has(key)) maskOnKeys.delete(key);
-		else maskOnKeys.add(key);
-	}
-
-	function toggleStepMaskByIndex(i: number) {
-		const step = steps[i];
-		if (step) toggleStepMask(step.key);
-	}
-
-	function warningText(w: ChainWarning): string {
-		switch (w.kind) {
-			case "partial":
-				return t("chain.warnPartial", { n: w.step, ok: w.ok, total: w.total });
-			case "firstOnly":
-				return t("chain.warnFirstOnly", { n: w.step, total: w.total });
-			case "sourceSkip":
-				return t("chain.warnSourceSkip", {
-					skipped: w.skipped,
-					total: w.total,
-				});
-		}
-	}
-
-	// Explicit save for a structurally default chain (single tuned step): the
-	// auto-create effect only fires on structural change.
-	function saveAsChain() {
-		const chain = createNamedChain(autoChainName(), steps);
-		stashHandoff(chain.id, {
-			source,
-			sourceFiles,
-			textSource,
-			format,
-			limitKb,
-		});
-		goto(resolve(`/pipeline?id=${chain.id}`), {
-			replaceState: true,
-			keepFocus: true,
-			noScroll: true,
-		});
+	function stepTitle(toolId: string): string {
+		return chainStepTitle(toolId);
 	}
 </script>
 
@@ -457,7 +228,7 @@
 					label={t("savedChains.saveAs")}
 					variant={ButtonVariantDefine.OUTLINE}
 					size="s"
-					onclick={saveAsChain}
+					onclick={host.saveAsChain}
 				/>
 			{/if}
 		</header>
@@ -484,7 +255,9 @@
 						schema={stepSchema}
 						values={step.params}
 						toolId={step.id}
-						sourceDims={i === 0 ? (source ?? undefined) : stepDims[i - 1]}
+						sourceDims={i === 0
+							? (upload.source ?? undefined)
+							: stepDims[i - 1]}
 						onchange={(id, v, axis) => setStepValue(i, id, v, axis)}
 						onreset={() => resetStep(i)}
 					/>
@@ -493,11 +266,11 @@
 		{/snippet}
 
 		{#snippet maskChip(i: number)}
-			{#if stepMaskable[i]}
+			{#if masks.maskable[i]}
 				<ChipButton
 					label={t("resultCard.maskToggle")}
-					active={stepMaskOn[i] ?? false}
-					onclick={() => toggleStepMaskByIndex(i)}
+					active={masks.maskOn[i] ?? false}
+					onclick={() => masks.toggleByIndex(i)}
 				/>
 			{/if}
 		{/snippet}
@@ -506,15 +279,15 @@
 			{#if i === 0}
 				<SchemaSourceTile
 					mode={inputMode}
-					{source}
-					sources={sourceFiles}
-					{textSource}
+					source={upload.source}
+					sources={upload.sourceFiles}
+					textSource={upload.textSource}
 					running={busy}
-					fileCount={sourceFiles.length}
-					ontextinput={(v) => (textSource = v)}
+					fileCount={upload.sourceFiles.length}
+					ontextinput={(v) => (upload.textSource = v)}
 					onrendertext={run}
-					onupload={handleFile}
-					onuploadmany={handleFiles}
+					onupload={upload.handleFile}
+					onuploadmany={upload.handleFiles}
 				/>
 			{:else}
 				{@const input = stepResults[i - 1]}
@@ -548,10 +321,10 @@
 					textVars={verdictVars}
 					toolId={lastTool.id}
 					running={busy}
-					mask={stepMasks[i] ?? null}
-					maskOn={stepMaskOn[i] ?? false}
-					ontogglemask={stepMaskable[i]
-						? () => toggleStepMaskByIndex(i)
+					mask={masks.masks[i] ?? null}
+					maskOn={masks.maskOn[i] ?? false}
+					ontogglemask={masks.maskable[i]
+						? () => masks.toggleByIndex(i)
 						: undefined}
 					oncopy={copyText}
 					ondownloadtxt={downloadText}
@@ -567,13 +340,13 @@
 					{#snippet actions()}
 						{@render maskChip(i)}
 					{/snippet}
-					{#if outSet.length > 1 && !stepMaskOn[i]}
+					{#if outSet.length > 1 && !masks.maskOn[i]}
 						<PartsGrid files={outSet} />
 					{:else if out}
 						<img
 							src={toDataUrl(
-								stepMaskOn[i] && stepMasks[i]
-									? (stepMasks[i] as PixelImage)
+								masks.maskOn[i] && masks.masks[i]
+									? (masks.masks[i] as PixelImage)
 									: out,
 							)}
 							alt=""
@@ -599,15 +372,15 @@
 					resultKind={displayResultKind}
 					canDownload={hasResult}
 					running={busy}
-					{format}
-					quality={currentQuality}
-					{limitKb}
-					{alphaLoss}
-					onupload={handleFile}
+					format={output.format}
+					quality={output.quality}
+					limitKb={output.limitKb}
+					alphaLoss={output.alphaLoss}
+					onupload={upload.handleFile}
 					ondownload={download}
-					onformat={(v) => (format = v)}
-					onquality={setFormatQuality}
-					onlimit={(v) => (limitKb = v)}
+					onformat={(v) => (output.format = v)}
+					onquality={output.setQuality}
+					onlimit={(v) => (output.limitKb = v)}
 				/>
 			</div>
 		{/snippet}
@@ -667,8 +440,8 @@
 			{#if errorText}
 				<p class="error" role="alert">{errorText}</p>
 			{/if}
-			{#each allWarnings as w (warningText(w))}
-				<p class="warn" role="status">{warningText(w)}</p>
+			{#each allWarnings as w (chainWarningText(w))}
+				<p class="warn" role="status">{chainWarningText(w)}</p>
 			{/each}
 			<StepReorderOverlay {steps} dnd={stepDnd} />
 		</DragDropProvider>
