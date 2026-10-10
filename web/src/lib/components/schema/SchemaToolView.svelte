@@ -9,7 +9,7 @@
 	import { hasTransparency } from "$lib/core/analyze";
 	import { debounce } from "$lib/core/debounce";
 	import { ToolError } from "$lib/core/errors";
-	import { decodeFile, type OutputMime } from "$lib/core/io";
+	import { decodeFile, toDataUrl, type OutputMime } from "$lib/core/io";
 	import { outputFormatByMime } from "$lib/output-formats";
 	import type { PixelImage } from "$lib/core/types";
 	import { baseName, uniqueName, type ChainWarning } from "$lib/run-chain";
@@ -44,15 +44,21 @@
 		clampSourceAwareMaxes,
 		sanitizeSchemaParams,
 	} from "$lib/registry-schema";
+	import ChipButton from "$lib/components/ui/ChipButton.svelte";
+	import Toggle from "$lib/components/ui/Toggle.svelte";
 	import { onMount } from "svelte";
 	import { SvelteSet } from "svelte/reactivity";
 	import AddStepButton from "./AddStepButton.svelte";
-	import SchemaAlignedLayout from "./SchemaAlignedLayout.svelte";
+	import PartsGrid from "./PartsGrid.svelte";
+	import PreviewTile from "./PreviewTile.svelte";
+	import SchemaActions from "./SchemaActions.svelte";
 	import SchemaFields from "./SchemaFields.svelte";
-	import SchemaPreview from "./SchemaPreview.svelte";
+	import SchemaResultTile from "./SchemaResultTile.svelte";
+	import SchemaSourceTile from "./SchemaSourceTile.svelte";
 	import SortableStepCard from "./SortableStepCard.svelte";
 	import StepDropIndicator from "./StepDropIndicator.svelte";
 	import ToolPickerButton from "./ToolPickerButton.svelte";
+	import { hasPreviewResult } from "./schema-preview-model";
 	import { createSchemaToolRunner } from "./schema-tool-runner.svelte";
 	import { createStepDnd } from "./step-dnd.svelte";
 	import {
@@ -174,6 +180,15 @@
 	);
 	const alignedMode = $derived(
 		aligned && resultKind === "image" && steps.length > 1,
+	);
+	const hasResult = $derived(
+		hasPreviewResult({
+			inputMode,
+			resultKind: displayResultKind,
+			result,
+			fileResult,
+			textResult,
+		}),
 	);
 
 	const alphaLoss = $derived(
@@ -477,132 +492,199 @@
 			</SortableStepCard>
 		{/snippet}
 
+		{#snippet maskChip(i: number)}
+			{#if stepMaskable[i]}
+				<ChipButton
+					label={t("resultCard.maskToggle")}
+					active={stepMaskOn[i] ?? false}
+					onclick={() => toggleStepMaskByIndex(i)}
+				/>
+			{/if}
+		{/snippet}
+
+		{#snippet inputTile(i: number)}
+			{#if i === 0}
+				<SchemaSourceTile
+					mode={inputMode}
+					{source}
+					sources={sourceFiles}
+					{textSource}
+					running={busy}
+					fileCount={sourceFiles.length}
+					ontextinput={(v) => (textSource = v)}
+					onrendertext={run}
+					onupload={handleFile}
+					onuploadmany={handleFiles}
+				/>
+			{:else}
+				{@const input = stepResults[i - 1]}
+				{@const inSet = stepFileSets[i - 1] ?? []}
+				<PreviewTile
+					label={t("chain.inputLegend")}
+					viewMode="image"
+					dims={input ? `${input.width} × ${input.height}` : undefined}
+					parts={inSet.length > 1 ? inSet.length : undefined}
+				>
+					{#if inSet.length > 1}
+						<PartsGrid files={inSet} />
+					{:else if input}
+						<img src={toDataUrl(input)} alt="" />
+					{:else}
+						<span class="empty">{t("resultCard.noResult")}</span>
+					{/if}
+				</PreviewTile>
+			{/if}
+		{/snippet}
+
+		{#snippet outputTile(i: number)}
+			{@const out = stepResults[i]}
+			{#if i === steps.length - 1}
+				<SchemaResultTile
+					resultKind={displayResultKind}
+					result={out}
+					{resultNote}
+					{fileResult}
+					{textResult}
+					textVars={verdictVars}
+					toolId={lastTool.id}
+					running={busy}
+					mask={stepMasks[i] ?? null}
+					maskOn={stepMaskOn[i] ?? false}
+					ontogglemask={stepMaskable[i]
+						? () => toggleStepMaskByIndex(i)
+						: undefined}
+					oncopy={copyText}
+					ondownloadtxt={downloadText}
+				/>
+			{:else}
+				{@const outSet = stepFileSets[i] ?? []}
+				<PreviewTile
+					label={t("chain.stepResult", { n: i + 1 })}
+					viewMode="image"
+					dims={out ? `${out.width} × ${out.height}` : undefined}
+					parts={outSet.length > 1 ? outSet.length : undefined}
+				>
+					{#snippet actions()}
+						{@render maskChip(i)}
+					{/snippet}
+					{#if outSet.length > 1 && !stepMaskOn[i]}
+						<PartsGrid files={outSet} />
+					{:else if out}
+						<img
+							src={toDataUrl(
+								stepMaskOn[i] && stepMasks[i]
+									? (stepMasks[i] as PixelImage)
+									: out,
+							)}
+							alt=""
+						/>
+					{:else}
+						<span class="empty">{t("resultCard.noResult")}</span>
+					{/if}
+				</PreviewTile>
+			{/if}
+		{/snippet}
+
+		{#snippet panelHead()}
+			<div class="panel-head">
+				<span class="label">{t("resultCard.previewPanel")}</span>
+				{#if resultKind === "image" && steps.length > 1}
+					<label class="align-toggle">
+						<Toggle bind:checked={aligned} label={t("chain.alignToggle")} />
+						<span>{t("chain.alignToggle")}</span>
+					</label>
+				{/if}
+				<SchemaActions
+					{inputMode}
+					resultKind={displayResultKind}
+					canDownload={hasResult}
+					running={busy}
+					{format}
+					quality={currentQuality}
+					{limitKb}
+					{alphaLoss}
+					onupload={handleFile}
+					ondownload={download}
+					onformat={(v) => (format = v)}
+					onquality={setFormatQuality}
+					onlimit={(v) => (limitKb = v)}
+				/>
+			</div>
+		{/snippet}
+
+		{#snippet addRow(index: number)}
+			{#if canExtend && !stepDnd.active}
+				<div class="add-row">
+					<AddStepButton onadd={(id) => addStepAt(index, id)} />
+					{#if alignedMode}
+						<div class="row-bridge" aria-hidden="true"></div>
+					{/if}
+				</div>
+			{/if}
+		{/snippet}
+
+		{#snippet indicator(slot: number)}
+			{#if stepDnd.isIndicatorAt(slot)}
+				<div class="indicator-row">
+					<StepDropIndicator height={stepDnd.dragHeight} />
+					{#if alignedMode}
+						<div class="row-bridge" aria-hidden="true"></div>
+					{/if}
+				</div>
+			{/if}
+		{/snippet}
+
 		<DragDropProvider
 			onDragStart={stepDnd.onDragStart}
 			onDragMove={stepDnd.onDragOver}
 			onDragOver={stepDnd.onDragOver}
 			onDragEnd={stepDnd.onDragEnd}
 		>
-			{#if !alignedMode}
-				<div class="workspace">
+			{#if alignedMode}
+				<div class="workspace aligned" class:dnd-active={stepDnd.active}>
+					<div class="head-spacer" aria-hidden="true"></div>
+					{@render panelHead()}
+					{@render addRow(0)}
+					{#each steps as step, i (step.key)}
+						{@render indicator(i)}
+						{@render stepCard(step, i)}
+						<div class="pair">
+							{@render inputTile(i)}
+							{@render outputTile(i)}
+						</div>
+						{@render addRow(i + 1)}
+					{/each}
+					{@render indicator(steps.length)}
+					<div class="panel-foot" aria-hidden="true"></div>
+				</div>
+			{:else}
+				<div class="workspace" class:dnd-active={stepDnd.active}>
 					<section class="settings">
-						{#if canExtend && !stepDnd.active}
-							<AddStepButton onadd={(id) => addStepAt(0, id)} />
-						{/if}
+						{@render addRow(0)}
 						{#each steps as step, i (step.key)}
-							{#if stepDnd.isIndicatorAt(i)}
-								<StepDropIndicator height={stepDnd.dragHeight} />
-							{/if}
+							{@render indicator(i)}
 							{@render stepCard(step, i)}
-							{#if canExtend && !stepDnd.active}
-								<AddStepButton onadd={(id) => addStepAt(i + 1, id)} />
-							{/if}
+							{@render addRow(i + 1)}
 						{/each}
-						{#if stepDnd.isIndicatorAt(steps.length)}
-							<StepDropIndicator height={stepDnd.dragHeight} />
-						{/if}
+						{@render indicator(steps.length)}
 					</section>
-
 					<section class="panel">
-						<SchemaPreview
-							toolId={lastTool.id}
-							{inputMode}
-							resultKind={displayResultKind}
-							running={busy}
-							error={errorText}
-							bind:aligned
-							head={{
-								format,
-								quality: currentQuality,
-								limitKb,
-								alphaLoss,
-								onupload: handleFile,
-								ondownload: download,
-								onformat: (v) => (format = v),
-								onquality: setFormatQuality,
-								onlimit: (v) => (limitKb = v),
-							}}
-							source={{
-								source,
-								sources: sourceFiles,
-								fileCount: sourceFiles.length,
-								textSource,
-								ontextinput: (v) => (textSource = v),
-								onrendertext: run,
-								onuploadmany: handleFiles,
-							}}
-							steps={{
-								results: stepResults,
-								fileSets: stepFileSets,
-								maskable: stepMaskable,
-								maskOn: stepMaskOn,
-								masks: stepMasks,
-								ontogglestepmask: toggleStepMaskByIndex,
-							}}
-							result={{
-								result,
-								resultNote,
-								fileResult,
-								textResult,
-								textVars: verdictVars,
-								mask: stepMasks.at(-1) ?? null,
-								maskOn: stepMaskOn.at(-1) ?? false,
-								ontogglemask: stepMaskable.at(-1)
-									? () => toggleStepMask(steps[steps.length - 1].key)
-									: undefined,
-								oncopy: copyText,
-								ondownloadtxt: downloadText,
-							}}
-						/>
+						{@render panelHead()}
+						<div class="pair-grid">
+							<div class="cell">{@render inputTile(0)}</div>
+							{#each steps as step, i (step.key)}
+								<div class="cell">{@render outputTile(i)}</div>
+							{/each}
+						</div>
 					</section>
 				</div>
-				{#each allWarnings as w (warningText(w))}
-					<p class="warn" role="status">{warningText(w)}</p>
-				{/each}
-			{:else}
-				<SchemaAlignedLayout
-					{steps}
-					{stepCard}
-					{canExtend}
-					{stepDnd}
-					bind:aligned
-					{inputMode}
-					{source}
-					{sourceFiles}
-					{textSource}
-					running={busy}
-					resultKind={displayResultKind}
-					{result}
-					{resultNote}
-					{fileResult}
-					{textResult}
-					textVars={verdictVars}
-					toolId={lastTool.id}
-					{format}
-					quality={currentQuality}
-					{limitKb}
-					{alphaLoss}
-					{errorText}
-					warnings={allWarnings.map(warningText)}
-					{stepResults}
-					{stepFileSets}
-					{stepMasks}
-					{stepMaskOn}
-					{stepMaskable}
-					onaddstep={addStepAt}
-					ontogglestepmask={toggleStepMaskByIndex}
-					ontextinput={(v) => (textSource = v)}
-					onrendertext={run}
-					onupload={handleFile}
-					onuploadmany={handleFiles}
-					ondownload={download}
-					oncopy={copyText}
-					ondownloadtxt={downloadText}
-					onformat={(v) => (format = v)}
-					onquality={setFormatQuality}
-					onlimit={(v) => (limitKb = v)}
-				/>
 			{/if}
+			{#if errorText}
+				<p class="error" role="alert">{errorText}</p>
+			{/if}
+			{#each allWarnings as w (warningText(w))}
+				<p class="warn" role="status">{warningText(w)}</p>
+			{/each}
 			{#if stepDnd.activeData && stepDnd.pointer}
 				<div
 					class="step-ghost"
@@ -678,6 +760,11 @@
 		font-size: var(--font-size-s);
 		line-height: 1.5;
 	}
+	/* Two scaffoldings over shared snippets: normal mode keeps two independent
+	   columns (cards pack under each other, tiles pack two per row inside one
+	   panel); aligned mode is a flat 3-column grid where each card shares its
+	   grid row with the input/output pair and the right side reads as one
+	   continuous panel. */
 	.workspace {
 		display: grid;
 		grid-template-columns: minmax(var(--size-workspace-min), 1fr) minmax(
@@ -687,23 +774,157 @@
 		gap: var(--space-xxl);
 		align-items: start;
 	}
+	.settings {
+		display: flex;
+		flex-direction: column;
+	}
 	.panel {
+		padding: var(--space-xl);
 		border: var(--size-border) solid var(--color-border);
 		border-radius: var(--radius-m);
 		background: var(--color-panel);
+	}
+	.panel-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: var(--space-m);
+		padding-bottom: var(--space-l);
+		border-bottom: var(--size-border) solid var(--color-border);
+		margin-bottom: var(--space-xl);
+	}
+	.label {
+		font: var(--font-size-s) var(--font-mono);
+		letter-spacing: var(--space-text-l);
+		text-transform: uppercase;
+		color: var(--color-main);
+	}
+	.align-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-m);
+		margin-right: auto;
+		color: var(--color-text-muted);
+		font: var(--font-size-s) var(--font-mono);
+		cursor: pointer;
+	}
+	.pair-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-l);
+	}
+	.cell {
+		min-width: 0;
+	}
+
+	/* Aligned mode: cards in column 1, each step's input/output pair spans
+	   columns 2-3 on the card's row. The right side forms one panel: head and
+	   foot carry the top/bottom borders, pairs and row bridges carry the side
+	   borders, so rows have no vertical gaps. */
+	.workspace.aligned {
+		grid-template-columns: minmax(var(--size-workspace-min), 1fr) 1fr 1fr;
+		gap: 0 var(--space-xxl);
+	}
+	.aligned > :global(.step-card) {
+		grid-column: 1;
+	}
+	.aligned .head-spacer {
+		grid-column: 1;
+	}
+	.aligned .panel-head {
+		grid-column: 2 / -1;
+		padding: var(--space-l) var(--space-xl);
+		border: var(--size-border) solid var(--color-border);
+		border-bottom: none;
+		border-radius: var(--radius-m) var(--radius-m) 0 0;
+		background: var(--color-panel);
+		margin-bottom: 0;
+	}
+	.aligned .pair {
+		grid-column: 2 / -1;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-l);
 		padding: var(--space-xl);
+		border-right: var(--size-border) solid var(--color-border);
+		border-left: var(--size-border) solid var(--color-border);
+		background: var(--color-panel);
+	}
+	/* The workspace has align-items: start; panel pieces must stretch to the
+	   row height or the side borders break when a card is taller than its
+	   pair. */
+	.aligned .panel-head,
+	.aligned .pair,
+	.aligned .row-bridge,
+	.aligned .panel-foot {
+		align-self: stretch;
+	}
+	.aligned .add-row,
+	.aligned .indicator-row {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: subgrid;
+	}
+	.aligned .row-bridge {
+		grid-column: 2 / -1;
+		border-right: var(--size-border) solid var(--color-border);
+		border-left: var(--size-border) solid var(--color-border);
+		background: var(--color-panel);
+	}
+	.aligned .panel-foot {
+		grid-column: 2 / -1;
+		min-height: var(--space-xl);
+		border: var(--size-border) solid var(--color-border);
+		border-top: none;
+		border-radius: 0 0 var(--radius-m) var(--radius-m);
+		background: var(--color-panel);
+	}
+	/* Compact drag: while a step is dragged, cards collapse to headers so the
+	   reorder happens in a tight list; aligned additionally drops the preview
+	   panel (its rows are too tall to drag across). */
+	.dnd-active :global(.step-body) {
+		display: none;
+	}
+	.aligned.dnd-active .panel-head,
+	.aligned.dnd-active .pair,
+	.aligned.dnd-active .row-bridge,
+	.aligned.dnd-active .panel-foot,
+	.aligned.dnd-active .head-spacer {
+		display: none;
+	}
+	.error {
+		margin: var(--space-l) 0 0;
+		color: var(--color-danger);
+		font: var(--font-size-s) var(--font-mono);
+	}
+	.empty {
+		font: var(--font-size-s) var(--font-mono);
 	}
 	.no-schema {
 		font: var(--font-size-s) var(--font-mono);
 	}
 	.warn {
-		margin: 0;
+		margin: var(--space-s) 0 0;
 		color: var(--color-warning);
 		font: var(--font-size-s) var(--font-mono);
 	}
 	@media (--bp-tablet) {
-		.workspace {
+		.workspace,
+		.workspace.aligned {
 			grid-template-columns: 1fr;
+		}
+		.pair-grid,
+		.aligned .pair {
+			grid-template-columns: 1fr;
+		}
+		.aligned .head-spacer,
+		.aligned .row-bridge {
+			display: none;
+		}
+		.aligned .panel-head,
+		.aligned .pair,
+		.aligned .panel-foot {
+			grid-column: 1 / -1;
 		}
 	}
 </style>

@@ -20,14 +20,17 @@ interface DndEvent {
 }
 
 // Count the slot the pointer is over: how many non-source cards have their
-// vertical midpoint above the pointer.
+// vertical midpoint above the pointer. Also reports the height of the first
+// visible card: during drag all cards collapse to headers, so the indicator
+// takes that uniform height rather than the hidden source's stale height.
 function indexAtPosition(
 	source: SortableDraggable<StepDragData>,
 	pointerY: number,
-): number {
+): { index: number; cardHeight: number } {
 	const manager = source.sortable.manager;
 	let index = 0;
-	if (!manager) return index;
+	let cardHeight = 0;
+	if (!manager) return { index, cardHeight };
 	for (const droppable of manager.registry.droppables) {
 		if (!isSortable(droppable)) continue;
 		if (droppable.sortable.id === source.id) continue;
@@ -35,9 +38,10 @@ function indexAtPosition(
 		if (!el) continue;
 		const rect = el.getBoundingClientRect();
 		if (rect.height === 0) continue;
+		if (!cardHeight) cardHeight = rect.height;
 		if (pointerY > rect.top + rect.height / 2) index++;
 	}
-	return index;
+	return { index, cardHeight };
 }
 
 // Step-reorder state for SchemaToolView, single list. The dragged card is
@@ -65,10 +69,12 @@ export function createStepDnd({ onMove }: StepDndOptions) {
 		const position = event.operation?.position?.current;
 		if (!position || !sourceX) return null;
 		if (position.x < sourceX.left || position.x > sourceX.right) return null;
-		return indexAtPosition(
+		const { index, cardHeight } = indexAtPosition(
 			source as SortableDraggable<StepDragData>,
 			position.y,
 		);
+		if (cardHeight) dragHeight = cardHeight;
+		return index;
 	}
 
 	function onDragStart(event: DndEvent) {
