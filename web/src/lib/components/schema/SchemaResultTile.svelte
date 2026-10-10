@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { toDataUrl } from "$lib/core/io";
+	import { cachedDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import { t } from "$lib/i18n/t";
 	import type { FileResult, ResultKind, ResultNote } from "$lib/registry";
@@ -41,7 +41,7 @@
 	}: Props = $props();
 
 	const shown = $derived(maskOn && mask ? mask : result);
-	const resultUrl = $derived(shown ? toDataUrl(shown) : null);
+	const resultUrl = $derived(shown ? cachedDataUrl(shown) : null);
 	const resultDims = $derived(
 		resultKind === "image" && result
 			? `${result.width} × ${result.height}`

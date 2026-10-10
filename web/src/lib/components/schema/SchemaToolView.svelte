@@ -5,7 +5,7 @@
 	import { Star } from "@lucide/svelte";
 	import { DragDropProvider } from "@dnd-kit/svelte";
 	import { debounce } from "$lib/core/debounce";
-	import { toDataUrl } from "$lib/core/io";
+	import { cachedDataUrl } from "$lib/core/io";
 	import type { PixelImage } from "$lib/core/types";
 	import {
 		chainStepTitle,
@@ -301,7 +301,7 @@
 					{#if inSet.length > 1}
 						<PartsGrid files={inSet} />
 					{:else if input}
-						<img src={toDataUrl(input)} alt="" />
+						<img src={cachedDataUrl(input)} alt="" />
 					{:else}
 						<span class="empty">{t("resultCard.noResult")}</span>
 					{/if}
@@ -344,7 +344,7 @@
 						<PartsGrid files={outSet} />
 					{:else if out}
 						<img
-							src={toDataUrl(
+							src={cachedDataUrl(
 								masks.maskOn[i] && masks.masks[i]
 									? (masks.masks[i] as PixelImage)
 									: out,
